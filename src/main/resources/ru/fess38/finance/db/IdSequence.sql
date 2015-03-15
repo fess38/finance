@@ -1,0 +1,5 @@
+CREATE TABLE IdSequence (
+	id INT NOT NULL
+);
+
+INSERT INTO IdSequence(id) VALUES (1000);

@@ -21,6 +21,7 @@ public class Main {
 	@Transactional(propagation=Propagation.REQUIRES_NEW)
 	public void test() {
 		JdbcTemplate j = new JdbcTemplate(dataSource);
+		System.out.println(j.queryForObject("SELECT datetime('now');", String.class));
 	}
 
 	public void setDataSource(BasicDataSource dataSource) {
