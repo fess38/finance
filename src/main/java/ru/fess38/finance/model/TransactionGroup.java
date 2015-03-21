@@ -1,13 +1,14 @@
 package ru.fess38.finance.model;
 
-public class User extends Entity {
-	public User() { }
-
-	private String name;
+public class TransactionGroup extends Entity {
+	public TransactionGroup() { }
 	
+	private String name;
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}

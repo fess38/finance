@@ -9,9 +9,9 @@
     http://www.springframework.org/schema/aop
     http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-	<bean id="financeDB"
+	<bean id="dbConnection"
 		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-		<property name="targetClass" value="ru.fess38.finance.db.FinanceDB" />
+		<property name="targetClass" value="ru.fess38.finance.db.DbConnection" />
 		<property name="targetMethod" value="getInstance" />
 	</bean>
 	
@@ -20,11 +20,11 @@
  
     <bean id="transactionManager"
         class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="financeDB" />
+        <property name="dataSource" ref="dbConnection" />
     </bean>
     
     <bean id="main" class="ru.fess38.finance.Main">
-   		<property name="dataSource" ref="financeDB" />
+   		<property name="dataSource" ref="dbConnection" />
     </bean>
 
 </beans>

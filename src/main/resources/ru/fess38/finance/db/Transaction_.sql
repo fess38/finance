@@ -1,14 +1,14 @@
 CREATE TABLE Transaction_ (
-	id INT NOT NULL PRIMARY KEY,
-	rubricId INT NOT NULL REFERENCES Rubric(id),
-	amount INT NOT NULL,
+	id INTEGER NOT NULL PRIMARY KEY,
+	rubricId INTEGER NOT NULL REFERENCES Rubric(id),
+	amount INTEGER NOT NULL,
 	dayRef DATE NOT NULL,
-	accountIdFrom INT NULL REFERENCES Account(id),
-	accountIdTo INT NULL REFERENCES Account(id),
+	accountIdFrom INTEGER NULL REFERENCES Account(id),
+	accountIdTo INTEGER NULL REFERENCES Account(id),
 	exchangeRate DECIMAL(10,2) NOT NULL DEFAULT 1,
-	userId INT REFERENCES User(id),
-	transactionGroupId INT REFERENCES TransactionGroup(id),
-	isUseForStat BOOLEAN NOT NULL DEFAULT TRUE,
-	comment NVARCHAR(255),
-	isDeleted BOOLEAN NOT NULL DEFAULT FALSE
+	userId INTEGER REFERENCES User(id),
+	transactionGroupId INTEGER REFERENCES TransactionGroup(id),
+	isUseForStat INTEGER NOT NULL DEFAULT 1 CHECK(isUseForStat IN (0, 1)),
+	comment TEXT,
+	isDeleted INTEGER NOT NULL DEFAULT 0 CHECK(isDeleted IN (0, 1))
 );
