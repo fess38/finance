@@ -3,88 +3,139 @@ package ru.fess38.finance.model;
 import java.util.Date;
 
 public class Transaction extends Entity {
-	public Transaction() { }
-	
 	private Integer rubricId;
-	private Integer amount;
+	private Rubric rubric;
 	private Date dayRef;
 	private Integer accountIdFrom;
+	private Account accountFrom;
 	private Integer accountIdTo;
-	private Float exchangeRate;
+	private Account accountTo;
+	private Integer amountFrom;
+	private Integer amountTo;
 	private Integer userId;
+	private User user;
 	private Integer transactionGroupId;
-	private Integer isUseForStat;
+	private TransactionGroup transactionGroup;
+	private Boolean isUseForStat;
 	private String comment;
-	
-	public Integer getRubricId() {
-		return rubricId;
+
+	public Account getAccountFrom() {
+		return accountFrom;
 	}
-	public void setRubricId(Integer rubricId) {
-		this.rubricId = rubricId;
+
+	public void setAccountFrom(Account accountFrom) {
+		this.accountFrom = accountFrom;
 	}
-	public Integer getAmount() {
-		return amount;
-	}
-	public void setAmount(Integer amount) {
-		this.amount = amount;
-	}
-	public Date getDayRef() {
-		return dayRef;
-	}
-	public void setDayRef(Date dayRef) {
-		this.dayRef = dayRef;
-	}
+
 	public Integer getAccountIdFrom() {
 		return accountIdFrom;
 	}
+
 	public void setAccountIdFrom(Integer accountIdFrom) {
 		this.accountIdFrom = accountIdFrom;
 	}
+
 	public Integer getAccountIdTo() {
 		return accountIdTo;
 	}
+
 	public void setAccountIdTo(Integer accountIdTo) {
 		this.accountIdTo = accountIdTo;
 	}
-	public Float getExchangeRate() {
-		return exchangeRate;
+
+	public Account getAccountTo() {
+		return accountTo;
 	}
-	public void setExchangeRate(Float exchangeRate) {
-		this.exchangeRate = exchangeRate;
+
+	public void setAccountTo(Account accountTo) {
+		this.accountTo = accountTo;
 	}
-	public Integer getUserId() {
-		return userId;
+
+	public Integer getAmountFrom() {
+		return amountFrom;
 	}
-	public void setUserId(Integer userId) {
-		this.userId = userId;
+
+	public void setAmountFrom(Integer amountFrom) {
+		this.amountFrom = amountFrom;
 	}
-	public Integer getTransactionGroupId() {
-		return transactionGroupId;
+
+	public Integer getAmountTo() {
+		return amountTo;
 	}
-	public void setTransactionGroupId(Integer transactionGroupId) {
-		this.transactionGroupId = transactionGroupId;
+
+	public void setAmountTo(Integer amountTo) {
+		this.amountTo = amountTo;
 	}
-	public Integer getIsUseForStat() {
-		return isUseForStat;
-	}
-	public void setIsUseForStat(Integer isUseForStat) {
-		this.isUseForStat = isUseForStat;
-	}
+
 	public String getComment() {
 		return comment;
 	}
+
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-	
-	@Override
-	public String toString() {
-		return String.format("id: %s, rubricId: %s, amount: %s, dayRef: %s,"
-				+ " accountIdFrom: %s, accountIdTo: %s,"
-				+ " exchangeRate: %s, userId: %s, transactionGroupId: %s,"
-				+ " isUseForStat: %s, comment: %s, isDeleted: %s",
-				id, rubricId, amount, dayRef, accountIdFrom, accountIdTo,
-				exchangeRate, userId, transactionGroupId, isUseForStat,
-				comment, isDeleted);
+
+	public Date getDayRef() {
+		return dayRef;
+	}
+
+	public void setDayRef(Date dayRef) {
+		this.dayRef = dayRef;
+	}
+
+	public Boolean getIsUseForStat() {
+		return isUseForStat;
+	}
+
+	public void setIsUseForStat(Boolean isUseForStat) {
+		this.isUseForStat = isUseForStat;
+	}
+
+	public Rubric getRubric() {
+		return rubric;
+	}
+
+	public void setRubric(Rubric rubric) {
+		this.rubric = rubric;
+	}
+
+	public Integer getRubricId() {
+		return rubricId;
+	}
+
+	public void setRubricId(Integer rubricId) {
+		this.rubricId = rubricId;
+	}
+
+	public TransactionGroup getTransactionGroup() {
+		return transactionGroup;
+	}
+
+	public void setTransactionGroup(TransactionGroup transactionGroup) {
+		this.transactionGroup = transactionGroup;
+	}
+
+	public Integer getTransactionGroupId() {
+		return transactionGroupId;
+	}
+
+	public void setTransactionGroupId(Integer transactionGroupId) {
+		this.transactionGroupId = transactionGroupId;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 }

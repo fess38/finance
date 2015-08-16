@@ -2,21 +2,30 @@ package ru.fess38.finance.model;
 
 public abstract class Entity {
 	protected Integer id;
-	protected Integer isDeleted;
+	protected String name;
+	protected Boolean isDeleted;
 
-	public Integer getId() {
+	public final String getName() {
+		return name;
+	}
+
+	public final void setName(String name) {
+		this.name = name;
+	}
+
+	public final Integer getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public final void setId(Integer id) {
 		this.id = id;
 	}
 
-	public Integer getIsDeleted() {
+	public final Boolean getIsDeleted() {
 		return isDeleted;
 	}
 
-	public void setIsDeleted(Integer isDeleted) {
+	public final void setIsDeleted(Boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
 }

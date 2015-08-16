@@ -1,19 +1,19 @@
 package ru.fess38.finance.db;
 
-import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
+import javax.sql.DataSource;
+
 public final class StartUp {
-	public StartUp(BasicDataSource dataSource) {
+	public StartUp(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
 	
-	private BasicDataSource dataSource;
-	private ResourceDatabasePopulator rdp = new ResourceDatabasePopulator();
+	private DataSource dataSource;
+	private final ResourceDatabasePopulator rdp = new ResourceDatabasePopulator();
 
 	public void createTables() {
-		turnOnForeignKey();
 		rdp.setScripts(
 				new ClassPathResource("ru/fess38/finance/db/Rubric.sql"),
 				new ClassPathResource("ru/fess38/finance/db/Currency.sql"),
