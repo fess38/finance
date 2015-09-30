@@ -8,7 +8,7 @@ public final class IdGenerator {
     private final static String updateSql = "UPDATE IdSequence SET id = id + 1";
     private final static String selectSql = "SELECT id FROM IdSequence";
 
-    public static int getId() {
+    public static int next() {
         getJdbcTemplate().update(updateSql);
         return getJdbcTemplate().queryForObject(selectSql, Integer.class);
     }

@@ -20,8 +20,8 @@ public class IdGeneratorTest {
 
 	@Test
 	public void testGetId() {
-		Integer currentId = IdGenerator.getId();
-		Integer nextId = IdGenerator.getId();
+		Integer currentId = IdGenerator.next();
+		Integer nextId = IdGenerator.next();
 		Assert.assertEquals(++currentId, nextId);
 	}
 

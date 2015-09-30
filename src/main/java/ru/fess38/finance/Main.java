@@ -1,7 +1,8 @@
-package ru.fess38.finance.servlets;
+package ru.fess38.finance;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
+import ru.fess38.finance.servlets.*;
 
 
 public class Main {

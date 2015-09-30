@@ -4,6 +4,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import ru.fess38.finance.model.User;
 
+import java.util.Collections;
 import java.util.List;
 
 import static ru.fess38.finance.db.DbConnection.getJdbcTemplate;

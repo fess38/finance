@@ -1,5 +1,6 @@
 package ru.fess38.finance.model;
 
+
 public final class Currency extends Entity {
 	private String symbol;
 	

@@ -25,7 +25,7 @@ public class TransactionService extends EntityService {
                        Integer userId, Integer transactionGroupId,
                        Boolean isUseForStat, String comment) {
         Transaction transaction = new Transaction();
-        transaction.setId(IdGenerator.getId());
+        transaction.setId(IdGenerator.next());
         transaction.setRubricId(rubricId);
         transaction.setDayRef(dayRef);
         transaction.setAccountIdFrom(accountIdFrom);

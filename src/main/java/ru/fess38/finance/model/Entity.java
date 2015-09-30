@@ -1,9 +1,9 @@
 package ru.fess38.finance.model;
 
 public abstract class Entity {
-	protected Integer id;
-	protected String name;
-	protected Boolean isDeleted;
+	private Integer id;
+	private String name;
+	private Boolean isDeleted;
 
 	public final String getName() {
 		return name;

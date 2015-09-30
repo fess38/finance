@@ -4,9 +4,6 @@ import ru.fess38.finance.TemplateConfig;
 import ru.fess38.finance.db.IdGenerator;
 import ru.fess38.finance.model.Account;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by admin on 05.07.15.
  */
@@ -19,7 +16,7 @@ public final class AccountService extends EntityService {
 
     public void create(String name, Integer currencyId, Boolean isCredit) {
         Account account = new Account();
-        account.setId(IdGenerator.getId());
+        account.setId(IdGenerator.next());
         account.setName(name);
         account.setCurrencyId(currencyId);
         account.setIsCredit(isCredit);
