@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="ru.fess38.finance.model.Currency" table="${currencyTable}">
+    <id name="id" column="id">
+      <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+        <param name="sequence_name">${sequence}</param>
+      </generator>
+    </id>
+    <property name="name" column="name"/>
+    <property name="symbol" column="symbol"/>
+  </class>
+
+  <query name="currencyDeleteById">
+    <![CDATA[update Currency set isDeleted = TRUE where id = :id]]>
+  </query>
+
+  <query name="currencyFindAll">
+    <![CDATA[from Currency where isDeleted = FALSE]]>
+  </query>
+
+  <query name="currencyFindById">
+    <![CDATA[from Currency where id = :id]]>
+  </query>
+</hibernate-mapping>

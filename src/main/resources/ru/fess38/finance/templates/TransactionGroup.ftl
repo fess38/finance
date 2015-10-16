@@ -8,7 +8,7 @@
 
 <h3>Добавить новую группу транзакций</h3>
 
-<form action="transactionGroups" method="post">
+<form action="${transactionGroupPath}" method="post">
     Название:
     <input type="text" required name="name" width="20"/>
     <input type="submit" name="create" value="Добавить"/>
@@ -17,13 +17,13 @@
 <#if transactionGroups?has_content>
 
 <h3>Удалить пользователя</h3>
-<form action="transactionGroups" method="post">
-    <select name="delete">
+<form action="${transactionGroupPath}" method="post">
+    <select name="deleteEntityId">
         <#list transactionGroups as transactionGroup>
             <option value="${transactionGroup.id?c}">${transactionGroup.id?c}. ${transactionGroup.name}</option>
         </#list>
     </select>
-    <input type="submit" value="Удалить"/>
+    <input type="submit" name="delete" value="Удалить"/>
 </form>
 
 <h3>Список групп транзакций</h3>

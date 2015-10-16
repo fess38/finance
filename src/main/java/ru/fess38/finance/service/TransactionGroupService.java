@@ -1,21 +1,22 @@
 package ru.fess38.finance.service;
 
 import ru.fess38.finance.TemplateConfig;
-import ru.fess38.finance.db.IdGenerator;
 import ru.fess38.finance.model.TransactionGroup;
 
-/**
- * Created by admin on 05.07.15.
- */
+import java.util.HashMap;
+import java.util.Map;
+
+
 public class TransactionGroupService extends EntityService {
-    public String getTransactionGroups() {
-        templateData.put("transactionGroups", getTransactionGroupDao().getTransactionGroups());
-        return TemplateConfig.procces(templateData, "ru/fess38/finance/templates/TransactionGroup.ftl");
+    @Override
+    public String makeHtmlForGET() {
+        Map<String, Object> data = new HashMap<>();
+        data.put("transactionGroups", getTransactionGroupDao().findAll());
+        return TemplateConfig.procces(data, getFtlTemplatePath());
     }
 
     public void create(String name) {
         TransactionGroup transactionGroup = new TransactionGroup();
-        transactionGroup.setId(IdGenerator.next());
         transactionGroup.setName(name);
         getTransactionGroupDao().create(transactionGroup);
     }

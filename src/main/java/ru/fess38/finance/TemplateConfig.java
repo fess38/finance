@@ -9,12 +9,13 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
+
 public final class TemplateConfig {
     private TemplateConfig() { }
 
     private static Configuration config;
 
-    public static Configuration getInstance() {
+    private static Configuration getInstance() {
         if (config == null) {
             initConfig();
         }

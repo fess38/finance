@@ -1,24 +1,26 @@
 package ru.fess38.finance.db;
 
-import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-
 import org.junit.After;
 import org.junit.Test;
 
-public class DbConnectionTest {
-	private File dbFile = new File("Test.db");
+import java.io.File;
+import java.util.ArrayList;
 
-	@Test
-	public void testDbFileCreation() {
-		DbConnection.getDataSource(dbFile.getName());
-		assertTrue("Db file created", dbFile.exists());
-	}
-	
-	@After
-	public void tearDown() {
-		dbFile.delete();
-	}
+import static org.junit.Assert.assertTrue;
+
+
+public class DbConnectionTest {
+    private File dbFile = new File("Test.db");
+
+    @Test
+    public void testDatabaseCreation() {
+        DbConnection.getDataSource(dbFile.getName(), new ArrayList<>());
+        assertTrue(dbFile.exists());
+    }
+
+    @After
+    public void tearDown() {
+        dbFile.delete();
+    }
 
 }

@@ -8,7 +8,7 @@
 
 <h3>Добавить новую рубрику</h3>
 
-<form action="rubrics" method="post">
+<form action="${rubricPath}" method="post">
     Название:
     <input type="text" required name="name" width="20"/>
     <input type="radio" name="isIncome" value="true" checked>Доход
@@ -18,20 +18,20 @@
 
 <#if rubrics?has_content>
 
-<h3>Удалить пользователя</h3>
+<h3>Удалить рубрику</h3>
 
-<form action="rubrics" method="post">
-    <select name="delete">
+<form action="${rubricPath}" method="post">
+    <select name="deleteEntityId">
         <#list rubrics as rubric>
             <option value="${rubric.id?c}">
                 ${rubric.id?c}. ${rubric.name}
             </option>
         </#list>
     </select>
-    <input type="submit" value="Удалить"/>
+    <input type="submit" name="delete" value="Удалить"/>
 </form>
 
-<h3>Список пользователей</h3>
+<h3>Список рубрик</h3>
 <table border="1px">
     <tr>
         <th>ID</th>

@@ -1,53 +1,85 @@
 package ru.fess38.finance.dao;
 
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.fess38.finance.model.Entity;
+import ru.fess38.finance.model.User;
 
-import static ru.fess38.finance.db.DbConnection.getJdbcTemplate;
-import static ru.fess38.finance.db.DbConnection.getNpJdbcTemplate;
+import java.util.List;
 
-public abstract class EntityDao {
-    public static final String SQL_SELECT_TEMPLATE = "SELECT * FROM %s WHERE isDeleted = 0";
-    public static final String SQL_DELETE_TEMPLATE = "UPDATE %s SET isDeleted = 1 WHERE ID = ?";
-    private String tableName;
-    private String sqlSelect;
-    private String sqlInsert;
 
-    public final void create(Entity entity) {
-        createBySql(entity, getSqlInsert());
+public abstract class EntityDao<T extends Entity> {
+    private JdbcTemplate jdbcTemplate;
+    private Session session;
+    private String deleteByIdQuery;
+    private String findAllQuery;
+    private String findByIdQuery;
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void create(T entity) {
+        session.save(entity);
+        session.flush();
+        session.clear();
     }
 
-    private void createBySql(Entity entity, String sql) {
-        SqlParameterSource[] params = {new BeanPropertySqlParameterSource(entity)};
-        getNpJdbcTemplate().batchUpdate(sql, params);
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void update(T entity) {
+        session.update(entity);
+        session.flush();
+        session.clear();
     }
 
-    public final void deleteById(int id) {
-        getJdbcTemplate().update(String.format(SQL_DELETE_TEMPLATE, getTableName()), id);
+    public void delete(T entity) {
+        deleteById(entity.getId());
     }
 
-    public final String getSqlInsert() {
-        return sqlInsert;
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteById(Integer id) {
+        session.getNamedQuery(deleteByIdQuery).setInteger("id", id).executeUpdate();
+        session.flush();
+        session.clear();
     }
 
-    public final void setSqlInsert(String sqlInsert) {
-        this.sqlInsert = sqlInsert;
+    @SuppressWarnings("unchecked")
+    public List<T> findAll() {
+        return session.getNamedQuery(findAllQuery).list();
     }
 
-    public final String getSqlSelect() {
-        return sqlSelect;
+    @SuppressWarnings("unchecked")
+    public T findById(Integer id) {
+        Query query = session.getNamedQuery(findByIdQuery).setInteger("id", id);
+        return (T) query.list().get(0);
     }
 
-    public final void setSqlSelect(String sqlSelect) {
-        this.sqlSelect = sqlSelect;
+    public JdbcTemplate getJdbcTemplate() {
+        return jdbcTemplate;
     }
 
-    public final String getTableName() {
-        return tableName;
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
-    public final void setTableName(String tableName) {
-        this.tableName = tableName;
+    public Session getSession() {
+        return session;
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
+
+    public void setDeleteByIdQuery(String deleteByIdQuery) {
+        this.deleteByIdQuery = deleteByIdQuery;
+    }
+
+    public void setFindAllQuery(String findAllQuery) {
+        this.findAllQuery = findAllQuery;
+    }
+
+    public void setFindByIdQuery(String findByIdQuery) {
+        this.findByIdQuery = findByIdQuery;
     }
 }

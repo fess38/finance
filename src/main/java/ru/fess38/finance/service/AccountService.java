@@ -1,28 +1,31 @@
 package ru.fess38.finance.service;
 
 import ru.fess38.finance.TemplateConfig;
-import ru.fess38.finance.db.IdGenerator;
 import ru.fess38.finance.model.Account;
 
-/**
- * Created by admin on 05.07.15.
- */
+import java.util.HashMap;
+import java.util.Map;
+
+
 public final class AccountService extends EntityService {
-    public String getAccounts() {
-        templateData.put("accounts", getAccountDao().getAccounts());
-        templateData.put("currencies", getCurrencyDao().getCurrencies());
-        return TemplateConfig.procces(templateData, "ru/fess38/finance/templates/Account.ftl");
+    @Override
+    public String makeHtmlForGET() {
+        getAccountDao().updateAmount();
+        Map<String, Object> data = new HashMap<>();
+        data.put("accounts", getAccountDao().findAll());
+        data.put("currencies", getCurrencyDao().findAll());
+        return TemplateConfig.procces(data, getFtlTemplatePath());
+
     }
 
-    public void create(String name, Integer currencyId, Boolean isCredit) {
+    public void create(String name, Integer currencyId) {
         Account account = new Account();
-        account.setId(IdGenerator.next());
         account.setName(name);
         account.setCurrencyId(currencyId);
-        account.setIsCredit(isCredit);
         getAccountDao().create(account);
     }
 
+    @Override
     public void delete(Integer id) {
         getAccountDao().deleteById(id);
     }

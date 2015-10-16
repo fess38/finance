@@ -1,42 +1,57 @@
 package ru.fess38.finance.service;
 
 import ru.fess38.finance.TemplateConfig;
-import ru.fess38.finance.db.IdGenerator;
+import ru.fess38.finance.model.Account;
 import ru.fess38.finance.model.Transaction;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
-/**
- * Created by admin on 05.07.15.
- */
+
 public class TransactionService extends EntityService {
-    public String getTransactions() {
-        templateData.put("transactions", getTransactionDao().getAllTransactions());
-        templateData.put("rubrics", getRubricDao().getRubrics());
-        templateData.put("accounts", getAccountDao().getAccounts());
-        templateData.put("transactionGroups", getTransactionGroupDao().getTransactionGroups());
-        templateData.put("users", getUserDao().getUsers());
-        templateData.put("today", new Date());
-        return TemplateConfig.procces(templateData, "ru/fess38/finance/templates/Transaction.ftl");
+    @Override
+    public String makeHtmlForGET() {
+        Map<String, Object> data = new HashMap<>();
+        data.put("transactions", getTransactionDao().findAll());
+        data.put("incomeRubrics", getRubricDao().findIncomeRubrics());
+        data.put("expenceRubrics", getRubricDao().findExpenceRubrics());
+        data.put("accounts", getAccountDao().findAll());
+        data.put("transactionGroups", getTransactionGroupDao().findAll());
+        data.put("users", getUserDao().findAll());
+        data.put("today", new Date());
+        return TemplateConfig.procces(data, getFtlTemplatePath());
     }
 
-    public void create(Integer rubricId, Date dayRef, Integer accountIdFrom,
-                       Integer accountIdTo, Integer amountFrom, Integer amountTo,
-                       Integer userId, Integer transactionGroupId,
-                       Boolean isUseForStat, String comment) {
+    public void create(Integer rubricId, Date dayRef, Integer accountFromId,
+                       Integer accountToId, Integer amountFrom, Integer amountTo,
+                       Integer userId, Integer transactionGroupId, String comment) {
         Transaction transaction = new Transaction();
-        transaction.setId(IdGenerator.next());
         transaction.setRubricId(rubricId);
         transaction.setDayRef(dayRef);
-        transaction.setAccountIdFrom(accountIdFrom);
-        transaction.setAccountIdTo(accountIdTo);
+        transaction.setAccountFromId(accountFromId);
+        transaction.setAccountToId(accountToId);
         transaction.setAmountFrom(amountFrom);
         transaction.setAmountTo(amountTo);
         transaction.setUserId(userId);
         transaction.setTransactionGroupId(transactionGroupId);
-        transaction.setIsUseForStat(isUseForStat);
         transaction.setComment(comment);
+        setServiceAccount(transaction);
         getTransactionDao().create(transaction);
+    }
+
+    private void setServiceAccount(Transaction transaction) {
+        if (transaction.getAccountFromId() == null) {
+            Account accountTo = transaction.getAccountTo();
+            Account accountFrom = getAccountDao().findServiceAccountByAnother(accountTo);
+            transaction.setAccountFrom(accountFrom);
+            transaction.setAmountFrom(transaction.getAmountTo());
+        } else if (transaction.getAccountToId() == null) {
+            Account accountFrom = transaction.getAccountFrom();
+            Account accountTo = getAccountDao().findServiceAccountByAnother(accountFrom);
+            transaction.setAccountTo(accountTo);
+            transaction.setAmountTo(transaction.getAmountFrom());
+        }
     }
 
     @Override

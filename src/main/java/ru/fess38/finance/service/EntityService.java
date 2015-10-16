@@ -2,44 +2,79 @@ package ru.fess38.finance.service;
 
 import ru.fess38.finance.dao.*;
 
-import java.util.HashMap;
-import java.util.Map;
 
-/**
- * Created by admin on 08.08.15.
- */
 public abstract class EntityService {
-    private final AccountDao accountDao = new AccountDao();
-    private final CurrencyDao currencyDao = new CurrencyDao();
-    private final RubricDao rubricDao = new RubricDao();
-    private final TransactionGroupDao transactionGroupDao = new TransactionGroupDao();
-    private final UserDao userDao = new UserDao();
-    private final TransactionDao transactionDao = new TransactionDao();
-    protected final Map<String, Object> templateData = new HashMap<>();
+    private AccountDao accountDao;
+    private CurrencyDao currencyDao;
+    private RubricDao rubricDao;
+    private TransactionDao transactionDao;
+    private TransactionGroupDao transactionGroupDao;
+    private UserDao userDao;
+    private String ftlTemplatePath;
 
-    protected abstract void delete(Integer id);
+    public abstract String makeHtmlForGET();
 
-    public final TransactionDao getTransactionDao() {
+    public void deleteEntity(Integer id) {
+        if (!getTransactionDao().isEntityUsed(id)) {
+            delete(id);
+        }
+    }
+
+    public abstract void delete(Integer id);
+
+    public TransactionDao getTransactionDao() {
         return transactionDao;
     }
 
-    public final RubricDao getRubricDao() {
+    public void setTransactionDao(TransactionDao transactionDao) {
+        this.transactionDao = transactionDao;
+    }
+
+    public RubricDao getRubricDao() {
         return rubricDao;
     }
 
-    public final TransactionGroupDao getTransactionGroupDao() {
+    public void setRubricDao(RubricDao rubricDao) {
+        this.rubricDao = rubricDao;
+    }
+
+    public TransactionGroupDao getTransactionGroupDao() {
         return transactionGroupDao;
     }
 
-    public final UserDao getUserDao() {
+    public void setTransactionGroupDao(TransactionGroupDao transactionGroupDao) {
+        this.transactionGroupDao = transactionGroupDao;
+    }
+
+    public UserDao getUserDao() {
         return userDao;
     }
 
-    public final AccountDao getAccountDao() {
+    public void setUserDao(UserDao userDao) {
+        this.userDao = userDao;
+    }
+
+    public AccountDao getAccountDao() {
         return accountDao;
     }
 
-    public final CurrencyDao getCurrencyDao() {
+    public void setAccountDao(AccountDao accountDao) {
+        this.accountDao = accountDao;
+    }
+
+    public CurrencyDao getCurrencyDao() {
         return currencyDao;
+    }
+
+    public void setCurrencyDao(CurrencyDao currencyDao) {
+        this.currencyDao = currencyDao;
+    }
+
+    public String getFtlTemplatePath() {
+        return ftlTemplatePath;
+    }
+
+    public void setFtlTemplatePath(String ftlTemplatePath) {
+        this.ftlTemplatePath = ftlTemplatePath;
     }
 }

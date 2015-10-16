@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <bean id="entityService" class="ru.fess38.finance.service.EntityService" abstract="true">
+    <property name="accountDao" ref="accountDao"/>
+    <property name="currencyDao" ref="currencyDao"/>
+    <property name="rubricDao" ref="rubricDao"/>
+    <property name="transactionDao" ref="transactionDao"/>
+    <property name="transactionGroupDao" ref="transactionGroupDao"/>
+    <property name="userDao" ref="userDao"/>
+  </bean>
+
+  <bean id="accountService" class="ru.fess38.finance.service.AccountService" parent="entityService">
+    <property name="ftlTemplatePath" value="ru/fess38/finance/templates/Account.ftl"/>
+  </bean>
+
+  <bean id="rubricService" class="ru.fess38.finance.service.RubricService" parent="entityService">
+    <property name="ftlTemplatePath" value="ru/fess38/finance/templates/Rubric.ftl"/>
+  </bean>
+
+  <bean id="transactionService" class="ru.fess38.finance.service.TransactionService" parent="entityService">
+    <property name="ftlTemplatePath" value="ru/fess38/finance/templates/Transaction.ftl"/>
+  </bean>
+
+  <bean id="transactionGroupService" class="ru.fess38.finance.service.TransactionGroupService" parent="entityService">
+    <property name="ftlTemplatePath" value="ru/fess38/finance/templates/TransactionGroup.ftl"/>
+  </bean>
+
+  <bean id="userService" class="ru.fess38.finance.service.UserService" parent="entityService">
+    <property name="ftlTemplatePath" value="ru/fess38/finance/templates/User.ftl"/>
+  </bean>
+</beans>

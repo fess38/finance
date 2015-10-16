@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <bean id="server" class="org.eclipse.jetty.server.Server">
+    <constructor-arg name="port" value="8080"/>
+    <property name="handler" ref="handler"/>
+  </bean>
+
+  <bean id="handler" class="org.eclipse.jetty.server.handler.HandlerCollection">
+    <property name="handlers">
+      <array>
+        <ref bean="servletHandler"/>
+      </array>
+    </property>
+  </bean>
+
+  <bean id="servletHandler" class="org.eclipse.jetty.servlet.ServletHandler">
+    <property name="servletMappings">
+      <array>
+        <bean class="org.eclipse.jetty.servlet.ServletMapping">
+          <property name="servletName" value="accounts"/>
+          <property name="pathSpec" value="${accountPath}"/>
+        </bean>
+        <bean class="org.eclipse.jetty.servlet.ServletMapping">
+          <property name="servletName" value="rubrics"/>
+          <property name="pathSpec" value="${rubricPath}"/>
+        </bean>
+        <bean class="org.eclipse.jetty.servlet.ServletMapping">
+          <property name="servletName" value="transactions"/>
+          <property name="pathSpec" value="${transactionPath}"/>
+        </bean>
+        <bean class="org.eclipse.jetty.servlet.ServletMapping">
+          <property name="servletName" value="transactionGroups"/>
+          <property name="pathSpec" value="${transactionGroupPath}"/>
+        </bean>
+        <bean class="org.eclipse.jetty.servlet.ServletMapping">
+          <property name="servletName" value="users"/>
+          <property name="pathSpec" value="${userPath}"/>
+        </bean>
+      </array>
+    </property>
+    <property name="servlets">
+      <array>
+        <bean class="org.eclipse.jetty.servlet.ServletHolder">
+          <property name="name" value="accounts"/>
+          <property name="servlet" ref="accountServlet"/>
+        </bean>
+        <bean class="org.eclipse.jetty.servlet.ServletHolder">
+          <property name="name" value="rubrics"/>
+          <property name="servlet" ref="rubricServlet"/>
+        </bean>
+        <bean class="org.eclipse.jetty.servlet.ServletHolder">
+          <property name="name" value="transactions"/>
+          <property name="servlet" ref="transactionServlet"/>
+        </bean>
+        <bean class="org.eclipse.jetty.servlet.ServletHolder">
+          <property name="name" value="transactionGroups"/>
+          <property name="servlet" ref="transactionGroupServlet"/>
+        </bean>
+        <bean class="org.eclipse.jetty.servlet.ServletHolder">
+          <property name="name" value="users"/>
+          <property name="servlet" ref="userServlet"/>
+        </bean>
+      </array>
+    </property>
+  </bean>
+</beans>

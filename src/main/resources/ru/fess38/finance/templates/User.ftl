@@ -8,7 +8,7 @@
 
 <h3>Добавить нового пользователя</h3>
 
-<form action="users" method="post">
+<form action="${userPath}" method="post">
     Имя:
     <input type="text" required name="name" width="20"/>
     <input type="submit" name="create" value="Добавить"/>
@@ -17,13 +17,13 @@
 <#if users?has_content>
 
 <h3>Удалить пользователя</h3>
-<form action="users" method="post">
-    <select name="delete">
+<form action="${userPath}" method="post">
+    <select name="deleteEntityId">
         <#list users as user>
-            <option value="${user.id?c}">${user.id?c}. ${user.name}</option>
+            <option value="${user.id?c}">${user.id?c}. ${user.getName()}</option>
         </#list>
     </select>
-    <input type="submit" value="Удалить"/>
+    <input type="submit" name="delete" value="Удалить"/>
 </form>
 
 <h3>Список пользователей</h3>
@@ -35,7 +35,7 @@
     <#list users as user>
         <tr>
             <td>${user.id?c}</td>
-            <td>${user.name}</td>
+            <td>${user.getName()}</td>
         </tr>
     </#list>
 </table>

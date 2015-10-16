@@ -1,85 +1,271 @@
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Транзакции</title>
+  <meta charset="UTF-8">
+  <title>Транзакции</title>
+  <script type="text/javascript">
+    function checkAccounts() {
+      var form = document.forms["accountTransfer"];
+      var accountFromId = form["accountFromId"].value;
+      var accountToId = form["accountToId"].value;
+      if (accountFromId == accountToId) {
+        window.alert("Счета для перевода - одинаковые!");
+        return false;
+      } else {
+        return true;
+      }
+    }
+  </script>
 </head>
 <body>
 <#include "Header.ftl">
 
-<h3>Добавить новую транзакцию</h3>
-
-<form action="transactions" method="post">
-    Рубрика:
-    <select name="rubricId">
-    <#list rubrics as rubric>
-        <option value="${rubric.id?c}">${rubric.name}</option>
-    </#list>
-    </select><br/>
-    Дата:
-    <input type="datetime" name="dayRef" value="${today?date}"
-           pattern="\d{2}\.\d{2}\.\d{4}" title="DD.MM.YYYY"/><br/>
-    Счет 1:
-    <select name="accountIdFrom">
-    <#list accounts as account>
-        <option value="${account.id?c}">${account.name}</option>
-    </#list>
-    </select><br/>
-    Сумма со счета 1: <input type="number" required min="1" name="amountFrom" /><br/>
-    Счет 2:
-    <select name="accountIdTo">
-    <#list accounts as account>
-        <option value="${account.id?c}">${account.name}</option>
-    </#list>
-    </select><br/>
-    Сумма на счет 2: <input type="number" required min="1" name="amountTo" /><br/>
-    Пользователь:
-    <select name="userId">
-        <option/>
-    <#list users as user>
-        <option value="${user.id?c}">${user.name}</option>
-    </#list>
-    </select><br/>
-    Группа транзакций:
-    <select name="transactionGroupId">
-        <option/>
-    <#list transactionGroups as transactionGroup>
-        <option value="${transactionGroup.id?c}">${transactionGroup.name}</option>
-    </#list>
-    </select><br/>
-    Использовать для статистики?
-    <input type="radio" name="isUseForStat" value="true" checked>Да
-    <input type="radio" name="isUseForStat" value="false">Нет<br/>
-    Комментарий: <input type="text" name="comment" /><br/>
-    <input type="submit" name="create" value="Добавить"/>
-</form>
-
-<#if transactions?has_content>
-
-<h3>Удалить </h3>
-
-<form action="transactions" method="post">
-    <select name="delete">
-        <#list transactions as transaction>
-            <option value="${transaction.id?c}">${transaction.id?c}</option>
-        </#list>
-    </select>
-    <input type="submit" value="Удалить"/>
-</form>
-
-<h3>Список транзакций</h3>
-<table border="1px">
+<div>
+  <h3>Список транзакций</h3>
+  <table border="1px">
     <tr>
-        <th>ID</th>
-        <th>Рубрика</th>
+      <th>ID</th>
+      <th>Рубрика</th>
+      <th>Дата</th>
+      <th>Списано со счета</th>
+      <th>Сумма списания</th>
+      <th>Переведено на счет</th>
+      <th>Сумма получения</th>
+      <th>Пользователь</th>
+      <th>Группа транзакций</th>
+      <th>Комментарий</th>
     </tr>
-    <#list transactions as transaction>
-        <tr>
-            <td>${transaction.id?c}</td>
-            <td>${transaction.rubric.name}</td>
-        </tr>
-    </#list>
-</table>
+  <#list transactions as transaction>
+    <tr>
+      <td>${transaction.id?c}</td>
+      <td>${transaction.rubric.name}</td>
+      <td>${transaction.dayRef?string["dd.MM.yyyy"]}</td>
+      <td>${transaction.accountFrom.name}</td>
+      <td>${transaction.amountFrom}</td>
+      <td>${transaction.accountTo.name}</td>
+      <td>${transaction.amountTo}</td>
+      <td><#if transaction.user??>${transaction.user.name}</#if></td>
+      <td><#if transaction.transactionGroup??>${transaction.transactionGroup.name}</#if></td>
+      <td>${transaction.comment!}</td>
+    </tr>
+  </#list>
+  </table>
+</div>
 
-</#if>
+<div>
+  <h3>Добавить доход</h3>
+
+  <form action="${transactionPath}" method="post">
+    <div>
+      <span>Дата:</span>
+      <input type="datetime" name="dayRef" value="${today?date}"
+          pattern="\d{2}\.\d{2}\.\d{4}" title="DD.MM.YYYY"/>
+    </div>
+
+    <div>
+      <span>Рубрика:</span>
+      <select name="rubricId">
+      <#list incomeRubrics?sort_by("name") as rubric>
+        <option value="${rubric.id?c}">${rubric.name}</option>
+      </#list>
+      </select>
+    </div>
+
+    <div>
+      <span>Счет дохода:</span>
+      <select name="accountToId">
+      <#list accounts as account>
+        <option value="${account.id?c}">${account.name}</option>
+      </#list>
+      </select>
+    </div>
+
+    <div>
+      <span>Сумма дохода:</span>
+      <input type="number" required min="1" name="amountTo"/>
+    </div>
+
+    <div>
+      <span>Пользователь:</span>
+      <select name="userId">
+        <option/>
+      <#list users?sort_by("name") as user>
+        <option value="${user.id?c}">${user.getName()}</option>
+      </#list>
+      </select>
+    </div>
+
+    <div>
+      <span>Группа транзакций:</span>
+      <select name="transactionGroupId">
+        <option></option>
+      <#list transactionGroups?sort_by("name") as transactionGroup>
+        <option
+            value="${transactionGroup.id?c}">${transactionGroup.name}</option>
+      </#list>
+      </select>
+    </div>
+
+    <div>
+      <span>Комментарий:</span>
+      <input type="text" name="comment"/>
+    </div>
+
+    <input type="submit" name="create" value="Добавить"/>
+
+  </form>
+</div>
+
+<div>
+  <h3>Добавить расход</h3>
+
+  <form action="${transactionPath}" method="post">
+
+    <div>
+      <span>Дата:</span>
+      <input type="datetime" name="dayRef" value="${today?date}"
+          pattern="\d{2}\.\d{2}\.\d{4}" title="DD.MM.YYYY"/>
+    </div>
+
+    <div>
+      <span>Рубрика:</span>
+      <select name="rubricId">
+      <#list expenceRubrics?sort_by("name") as rubric>
+        <option value="${rubric.id?c}">${rubric.name}</option>
+      </#list>
+      </select>
+    </div>
+
+    <div>
+      <span>Счет расхода:</span>
+      <select name="accountFromId">
+      <#list accounts as account>
+        <option value="${account.id?c}">${account.name}</option>
+      </#list>
+      </select>
+    </div>
+
+    <div>
+      <span>Сумма расхода:</span>
+      <input type="number" required min="1" name="amountFrom"/>
+    </div>
+
+    <div>
+      <span>Пользователь:</span>
+      <select name="userId">
+        <option></option>
+      <#list users?sort_by("name") as user>
+        <option value="${user.id?c}">${user.getName()}</option>
+      </#list>
+      </select>
+    </div>
+
+    <div>
+      <span>Группа транзакций:</span>
+      <select name="transactionGroupId">
+        <option></option>
+      <#list transactionGroups?sort_by("name") as transactionGroup>
+        <option
+            value="${transactionGroup.id?c}">${transactionGroup.name}</option>
+      </#list>
+      </select>
+    </div>
+
+    <div>
+      <span>Комментарий:</span>
+      <input type="text" name="comment"/>
+    </div>
+
+    <input type="submit" name="create" value="Добавить"/>
+  </form>
+</div>
+
+<div>
+  <h3>Перевод между счетами</h3>
+
+  <form name="accountTransfer" action="${transactionPath}" method="post"
+      onsubmit="return checkAccounts()">
+
+    <div>
+      <span>Дата:</span>
+      <input type="datetime" name="dayRef" value="${today?date}"
+          pattern="\d{2}\.\d{2}\.\d{4}" title="DD.MM.YYYY"/>
+    </div>
+
+    <div hidden="true">
+      <select name="rubricId">
+        <option value="${accountTransferRubricId}"></option>
+      </select>
+    </div>
+
+    <div>
+      <span>Счет 1:</span>
+      <select name="accountFromId">
+      <#list accounts as account>
+        <option value="${account.id?c}">${account.name}</option>
+      </#list>
+      </select>
+    </div>
+
+    <div>
+      <span>Счет 2:</span>
+      <select name="accountToId">
+      <#list accounts as account>
+        <option value="${account.id?c}">${account.name}</option>
+      </#list>
+      </select>
+    </div>
+
+    <div>
+      <span>Сумма отправить:</span>
+      <input type="number" required min="1" name="amountFrom"/>
+    </div>
+
+    <div>
+      <span>Сумма получить:</span>
+      <input type="number" required min="1" name="amountTo"/>
+    </div>
+
+    <div>
+      <span>Пользователь:</span>
+      <select name="userId">
+        <option></option>
+      <#list users?sort_by("name") as user>
+        <option value="${user.id?c}">${user.getName()}</option>
+      </#list>
+      </select>
+    </div>
+
+    <div>
+      <span>Группа транзакций:</span>
+      <select name="transactionGroupId">
+        <option></option>
+      <#list transactionGroups?sort_by("name") as transactionGroup>
+        <option
+            value="${transactionGroup.id?c}">${transactionGroup.name}</option>
+      </#list>
+      </select>
+    </div>
+
+    <div>
+      <span>Комментарий:</span>
+      <input type="text" name="comment"/>
+    </div>
+
+    <input type="submit" name="create" value="Добавить""/>
+  </form>
+</div>
+
+<div>
+  <h3>Удалить транзакцию</h3>
+
+  <form action="${transactionPath}" method="post">
+    <select name="deleteEntityId">
+    <#list transactions as transaction>
+      <option value="${transaction.id?c}">${transaction.id?c}</option>
+    </#list>
+    </select>
+    <input type="submit" name="delete" value="Удалить"/>
+  </form>
+</div>
 </body>
 </html>

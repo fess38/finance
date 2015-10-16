@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="ru.fess38.finance.model.TransactionGroup" table="${transactionGroupTable}">
+    <id name="id" column="id">
+      <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+        <param name="sequence_name">${sequence}</param>
+      </generator>
+    </id>
+    <property name="name" column="name"/>
+  </class>
+
+  <query name="transactionGroupDeleteById">
+    <![CDATA[update TransactionGroup set isDeleted = TRUE where id = :id]]>
+  </query>
+
+  <query name="transactionGroupFindAll">
+    <![CDATA[from TransactionGroup where isDeleted = FALSE]]>
+  </query>
+
+  <query name="transactionGroupFindById">
+    <![CDATA[from TransactionGroup where id = :id]]>
+  </query>
+</hibernate-mapping>

@@ -1,141 +1,163 @@
 package ru.fess38.finance.model;
 
 import java.util.Date;
+import java.util.Objects;
 
-public class Transaction extends Entity {
-	private Integer rubricId;
-	private Rubric rubric;
-	private Date dayRef;
-	private Integer accountIdFrom;
-	private Account accountFrom;
-	private Integer accountIdTo;
-	private Account accountTo;
-	private Integer amountFrom;
-	private Integer amountTo;
-	private Integer userId;
-	private User user;
-	private Integer transactionGroupId;
-	private TransactionGroup transactionGroup;
-	private Boolean isUseForStat;
-	private String comment;
 
-	public Account getAccountFrom() {
-		return accountFrom;
-	}
+public final class Transaction extends Entity {
+    private Rubric rubric;
+    private Date dayRef;
+    private Account accountFrom;
+    private Account accountTo;
+    private Integer amountFrom;
+    private Integer amountTo;
+    private User user;
+    private TransactionGroup transactionGroup;
+    private String comment;
 
-	public void setAccountFrom(Account accountFrom) {
-		this.accountFrom = accountFrom;
-	}
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (object == null || getClass() != object.getClass()) {
+            return false;
+        }
 
-	public Integer getAccountIdFrom() {
-		return accountIdFrom;
-	}
+        Transaction that = (Transaction) object;
+        return Objects.equals(this.getId(), that.getId())
+                && Objects.equals(this.getName(), that.getName())
+                && Objects.equals(this.getRubric(), that.getRubric())
+                && Objects.equals(this.getDayRef(), that.getDayRef())
+                && Objects.equals(this.getAccountFrom(), that.getAccountFrom())
+                && Objects.equals(this.getAccountTo(), that.getAccountTo())
+                && Objects.equals(this.getAmountFrom(), that.getAmountFrom())
+                && Objects.equals(this.getAmountTo(), that.getAmountTo())
+                && Objects.equals(this.getUser(), that.getUser())
+                && Objects.equals(this.getTransactionGroup(), that.getTransactionGroup())
+                && Objects.equals(this.getComment(), that.getComment());
+    }
 
-	public void setAccountIdFrom(Integer accountIdFrom) {
-		this.accountIdFrom = accountIdFrom;
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getRubric(),
+                getDayRef(), getAccountFrom(), getAccountTo(), getAmountFrom(),
+                getAmountTo(), getUser(), getTransactionGroup(), this.getComment());
+    }
 
-	public Integer getAccountIdTo() {
-		return accountIdTo;
-	}
+    public Account getAccountFrom() {
+        return accountFrom;
+    }
 
-	public void setAccountIdTo(Integer accountIdTo) {
-		this.accountIdTo = accountIdTo;
-	}
+    public void setAccountFrom(Account accountFrom) {
+        this.accountFrom = accountFrom;
+    }
 
-	public Account getAccountTo() {
-		return accountTo;
-	}
+    public Account getAccountTo() {
+        return accountTo;
+    }
 
-	public void setAccountTo(Account accountTo) {
-		this.accountTo = accountTo;
-	}
+    public void setAccountTo(Account accountTo) {
+        this.accountTo = accountTo;
+    }
 
-	public Integer getAmountFrom() {
-		return amountFrom;
-	}
+    public Integer getAmountFrom() {
+        return amountFrom;
+    }
 
-	public void setAmountFrom(Integer amountFrom) {
-		this.amountFrom = amountFrom;
-	}
+    public void setAmountFrom(Integer amountFrom) {
+        this.amountFrom = amountFrom;
+    }
 
-	public Integer getAmountTo() {
-		return amountTo;
-	}
+    public Integer getAmountTo() {
+        return amountTo;
+    }
 
-	public void setAmountTo(Integer amountTo) {
-		this.amountTo = amountTo;
-	}
+    public void setAmountTo(Integer amountTo) {
+        this.amountTo = amountTo;
+    }
 
-	public String getComment() {
-		return comment;
-	}
+    public String getComment() {
+        return comment;
+    }
 
-	public void setComment(String comment) {
-		this.comment = comment;
-	}
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 
-	public Date getDayRef() {
-		return dayRef;
-	}
+    public Date getDayRef() {
+        return dayRef;
+    }
 
-	public void setDayRef(Date dayRef) {
-		this.dayRef = dayRef;
-	}
+    public void setDayRef(Date dayRef) {
+        this.dayRef = dayRef;
+    }
 
-	public Boolean getIsUseForStat() {
-		return isUseForStat;
-	}
+    public Rubric getRubric() {
+        return rubric;
+    }
 
-	public void setIsUseForStat(Boolean isUseForStat) {
-		this.isUseForStat = isUseForStat;
-	}
+    public void setRubric(Rubric rubric) {
+        this.rubric = rubric;
+    }
 
-	public Rubric getRubric() {
-		return rubric;
-	}
+    public TransactionGroup getTransactionGroup() {
+        return transactionGroup;
+    }
 
-	public void setRubric(Rubric rubric) {
-		this.rubric = rubric;
-	}
+    public void setTransactionGroup(TransactionGroup transactionGroup) {
+        this.transactionGroup = transactionGroup;
+    }
 
-	public Integer getRubricId() {
-		return rubricId;
-	}
+    public User getUser() {
+        return user;
+    }
 
-	public void setRubricId(Integer rubricId) {
-		this.rubricId = rubricId;
-	}
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-	public TransactionGroup getTransactionGroup() {
-		return transactionGroup;
-	}
+    public Integer getAccountFromId() {
+        return accountFrom.getId();
+    }
 
-	public void setTransactionGroup(TransactionGroup transactionGroup) {
-		this.transactionGroup = transactionGroup;
-	}
+    public void setAccountFromId(Integer accountFromId) {
+        setAccountFrom(new Account(accountFromId));
+    }
 
-	public Integer getTransactionGroupId() {
-		return transactionGroupId;
-	}
+    public Integer getAccountToId() {
+        return accountTo.getId();
+    }
 
-	public void setTransactionGroupId(Integer transactionGroupId) {
-		this.transactionGroupId = transactionGroupId;
-	}
+    public void setAccountToId(Integer accountToId) {
+        setAccountTo(new Account(accountToId));
+    }
 
-	public User getUser() {
-		return user;
-	}
+    public Integer getRubricId() {
+        return rubric.getId();
+    }
 
-	public void setUser(User user) {
-		this.user = user;
-	}
+    public void setRubricId(Integer rubricId) {
+        setRubric(new Rubric(rubricId));
+    }
 
-	public Integer getUserId() {
-		return userId;
-	}
+    public Integer getTransactionGroupId() {
+        return transactionGroup.getId();
+    }
 
-	public void setUserId(Integer userId) {
-		this.userId = userId;
-	}
+    public void setTransactionGroupId(Integer transactionGroupId) {
+        if (transactionGroupId != null) {
+            setTransactionGroup(new TransactionGroup(transactionGroupId));
+        }
+    }
+
+    public Integer getUserId() {
+        return user.getId();
+    }
+
+    public void setUserId(Integer userId) {
+        if (userId != null) {
+            setUser(new User(userId));
+        }
+    }
 }

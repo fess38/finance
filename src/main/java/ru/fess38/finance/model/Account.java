@@ -1,21 +1,44 @@
 package ru.fess38.finance.model;
 
-import java.util.Date;
+import java.util.Objects;
 
-public class Account extends Entity {
-    private Integer currencyId;
+
+public final class Account extends Entity {
+    public Account() { }
+
+    public Account(Integer id) {
+        super(id);
+    }
+
     private Currency currency;
-    private Integer amount;
-    private Boolean isCredit;
-    private Boolean isClosed;
-    private Date startDate;
-    private Date finishDate;
+    private int amount;
 
-    public Integer getAmount() {
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (object == null || getClass() != object.getClass()) {
+            return false;
+        }
+
+        Account that = (Account) object;
+        return Objects.equals(this.getId(), that.getId())
+                && Objects.equals(this.getName(), that.getName())
+                && Objects.equals(this.getCurrency(), that.getCurrency())
+                && Objects.equals(this.getAmount(), that.getAmount());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getCurrency(), getAmount());
+    }
+
+    public int getAmount() {
         return amount;
     }
 
-    public void setAmount(Integer amount) {
+    public void setAmount(int amount) {
         this.amount = amount;
     }
 
@@ -28,42 +51,10 @@ public class Account extends Entity {
     }
 
     public Integer getCurrencyId() {
-        return currencyId;
+        return currency.getId();
     }
 
     public void setCurrencyId(Integer currencyId) {
-        this.currencyId = currencyId;
-    }
-
-    public Date getFinishDate() {
-        return finishDate;
-    }
-
-    public void setFinishDate(Date finishDate) {
-        this.finishDate = finishDate;
-    }
-
-    public Boolean getIsClosed() {
-        return isClosed;
-    }
-
-    public void setIsClosed(boolean isClosed) {
-        this.isClosed = isClosed;
-    }
-
-    public Boolean getIsCredit() {
-        return isCredit;
-    }
-
-    public void setIsCredit(Boolean isCredit) {
-        this.isCredit = isCredit;
-    }
-
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
+        setCurrency(new Currency(currencyId));
     }
 }

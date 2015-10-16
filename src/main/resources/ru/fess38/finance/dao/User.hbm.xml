@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="ru.fess38.finance.model.User" table="${userTable}">
+    <id name="id" column="id">
+      <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+        <param name="sequence_name">${sequence}</param>
+      </generator>
+    </id>
+    <property name="name" column="name"/>
+  </class>
+
+  <query name="userDeleteById">
+    <![CDATA[update User set isDeleted = TRUE where id = :id]]>
+  </query>
+
+  <query name="userFindAll">
+    <![CDATA[from User where isDeleted = FALSE]]>
+  </query>
+
+  <query name="userFindById">
+    <![CDATA[from User where id = :id]]>
+  </query>
+</hibernate-mapping>

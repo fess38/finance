@@ -1,31 +1,59 @@
 package ru.fess38.finance.model;
 
+import java.util.Objects;
+
+
 public abstract class Entity {
-	private Integer id;
-	private String name;
-	private Boolean isDeleted;
+    public Entity() { }
 
-	public final String getName() {
-		return name;
-	}
+    public Entity(Integer id) {
+        this.id = id;
+    }
 
-	public final void setName(String name) {
-		this.name = name;
-	}
+    private Integer id;
+    private String name;
 
-	public final Integer getId() {
-		return id;
-	}
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (object == null || getClass() != object.getClass()) {
+            return false;
+        }
 
-	public final void setId(Integer id) {
-		this.id = id;
-	}
+        Entity that = (Entity) object;
+        return Objects.equals(this.getId(), that.getId())
+                && Objects.equals(this.getName(), that.getName());
+    }
 
-	public final Boolean getIsDeleted() {
-		return isDeleted;
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName());
+    }
 
-	public final void setIsDeleted(Boolean isDeleted) {
-		this.isDeleted = isDeleted;
-	}
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("Entity{");
+        sb.append("id=").append(id);
+        sb.append(", name='").append(name).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
+
+    public final String getName() {
+        return name;
+    }
+
+    public final void setName(String name) {
+        this.name = name;
+    }
+
+    public final Integer getId() {
+        return id;
+    }
+
+    public final void setId(Integer id) {
+        this.id = id;
+    }
 }

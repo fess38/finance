@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="ru.fess38.finance.model.Rubric" table="${rubricTable}">
+    <id name="id" column="id">
+      <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+        <param name="sequence_name">${sequence}</param>
+      </generator>
+    </id>
+    <property name="name" column="name"/>
+    <property name="isIncome" column="isIncome"/>
+  </class>
+
+  <query name="rubricDeleteById">
+    <![CDATA[update Rubric set isDeleted = TRUE where id = :id]]>
+  </query>
+
+  <query name="rubricFindAll">
+    <![CDATA[from Rubric where isService = FALSE and isDeleted = FALSE]]>
+  </query>
+
+  <query name="rubricFindById">
+    <![CDATA[from Rubric where id = :id]]>
+  </query>
+</hibernate-mapping>

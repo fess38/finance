@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="ru.fess38.finance.model.Transaction" table="${transactionTable}">
+    <id name="id" column="id">
+      <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+        <param name="sequence_name">${sequence}</param>
+      </generator>
+    </id>
+    <property name="amountFrom" column="amountFrom"/>
+    <property name="amountTo" column="amountTo"/>
+    <property name="dayRef" column="dayRef"/>
+    <property name="comment" column="comment"/>
+    <many-to-one name="accountFrom" class="ru.fess38.finance.model.Account" column="accountFromId"/>
+    <many-to-one name="accountTo" class="ru.fess38.finance.model.Account" column="accountToId"/>
+    <many-to-one name="rubric" class="ru.fess38.finance.model.Rubric" column="rubricId"/>
+    <many-to-one name="transactionGroup" class="ru.fess38.finance.model.TransactionGroup" column="transactionGroupId"/>
+    <many-to-one name="user" class="ru.fess38.finance.model.User" column="userId"/>
+  </class>
+
+  <query name="transactionDeleteById">
+    <![CDATA[update Transaction set isDeleted = TRUE where id = :id]]>
+  </query>
+
+  <query name="transactionFindAll">
+    <![CDATA[from Transaction where isDeleted = FALSE]]>
+  </query>
+
+  <query name="transactionFindById">
+    <![CDATA[from Transaction where id = :id]]>
+  </query>
+</hibernate-mapping>

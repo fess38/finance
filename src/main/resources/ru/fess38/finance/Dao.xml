@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
+  <bean id="dataSource" class="ru.fess38.finance.db.DbConnection" factory-method="getDataSource">
+    <constructor-arg name="dbFilepath" value="db/Finance"/>
+    <constructor-arg name="createTablesSql">
+      <list>
+        <value>ru/fess38/finance/db/IdSequence.sql</value>
+        <value>ru/fess38/finance/db/Rubric.sql</value>
+        <value>ru/fess38/finance/db/Currency.sql</value>
+        <value>ru/fess38/finance/db/Account.sql</value>
+        <value>ru/fess38/finance/db/User.sql</value>
+        <value>ru/fess38/finance/db/TransactionGroup.sql</value>
+        <value>ru/fess38/finance/db/Transaction.sql</value>
+      </list>
+    </constructor-arg>
+  </bean>
+
+  <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+    <constructor-arg name="dataSource" ref="dataSource"/>
+  </bean>
+
+  <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="dataSource"/>
+  </bean>
+
+  <tx:annotation-driven transaction-manager="transactionManager"/>
+
+  <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+    <property name="dataSource" ref="dataSource"/>
+    <property name="mappingResources">
+      <list>
+        <value>ru/fess38/finance/dao/Account.hbm.xml</value>
+        <value>ru/fess38/finance/dao/Currency.hbm.xml</value>
+        <value>ru/fess38/finance/dao/Rubric.hbm.xml</value>
+        <value>ru/fess38/finance/dao/Transaction.hbm.xml</value>
+        <value>ru/fess38/finance/dao/TransactionGroup.hbm.xml</value>
+        <value>ru/fess38/finance/dao/User.hbm.xml</value>
+      </list>
+    </property>
+    <property name="hibernateProperties">
+      <props>
+        <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
+        <prop key="hibernate.format_sql">true</prop>
+        <prop key="hibernate.jdbc.batch_size">1000</prop>
+        <prop key="hibernate.jdbc.order_inserts">true</prop>
+        <prop key="hibernate.jdbc.order_updates">true</prop>
+      </props>
+    </property>
+  </bean>
+
+  <bean id="session" factory-bean="sessionFactory" factory-method="openSession"/>
+
+  <bean id="entityDao" class="ru.fess38.finance.dao.EntityDao" abstract="true">
+    <property name="session" ref="session"/>
+    <property name="jdbcTemplate" ref="jdbcTemplate"/>
+  </bean>
+
+  <bean id="accountDao" class="ru.fess38.finance.dao.AccountDao" parent="entityDao">
+    <property name="deleteByIdQuery" value="accountDeleteById"/>
+    <property name="findAllQuery" value="accountFindAll"/>
+    <property name="findByIdQuery" value="accountFindById"/>
+    <property name="updateAmountSqlpath" value="ru/fess38/finance/sql/AccountUpdateAmount.sql"/>
+  </bean>
+
+  <bean id="currencyDao" class="ru.fess38.finance.dao.CurrencyDao" parent="entityDao">
+    <property name="deleteByIdQuery" value="currencyDeleteById"/>
+    <property name="findAllQuery" value="currencyFindAll"/>
+    <property name="findByIdQuery" value="currencyFindById"/>
+  </bean>
+
+
+  <bean id="rubricDao" class="ru.fess38.finance.dao.RubricDao" parent="entityDao">
+    <property name="deleteByIdQuery" value="rubricDeleteById"/>
+    <property name="findAllQuery" value="rubricFindAll"/>
+    <property name="findByIdQuery" value="rubricFindById"/>
+  </bean>
+
+  <bean id="transactionDao" class="ru.fess38.finance.dao.TransactionDao" parent="entityDao">
+    <property name="deleteByIdQuery" value="transactionDeleteById"/>
+    <property name="findAllQuery" value="transactionFindAll"/>
+    <property name="findByIdQuery" value="transactionFindById"/>
+  </bean>
+
+  <bean id="transactionGroupDao" class="ru.fess38.finance.dao.TransactionGroupDao" parent="entityDao">
+    <property name="deleteByIdQuery" value="transactionGroupDeleteById"/>
+    <property name="findAllQuery" value="transactionGroupFindAll"/>
+    <property name="findByIdQuery" value="transactionGroupFindById"/>
+  </bean>
+
+  <bean id="userDao" class="ru.fess38.finance.dao.UserDao" parent="entityDao">
+    <property name="deleteByIdQuery" value="userDeleteById"/>
+    <property name="findAllQuery" value="userFindAll"/>
+    <property name="findByIdQuery" value="userFindById"/>
+  </bean>
+</beans>

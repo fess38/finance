@@ -1,39 +1,34 @@
 package ru.fess38.finance.dao;
 
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.RowMapper;
+import org.hibernate.Query;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import ru.fess38.finance.Utils;
 import ru.fess38.finance.model.Account;
 import ru.fess38.finance.model.Currency;
+import ru.fess38.finance.model.User;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static ru.fess38.finance.db.DbConnection.getJdbcTemplate;
 
-public final class AccountDao extends EntityDao {
-    private final RowMapper<Account> rowMapper = new BeanPropertyRowMapper<>(Account.class);
+public class AccountDao extends EntityDao<Account> {
+    private String updateAmountSqlpath;
 
-    public AccountDao() {
-        setTableName("Account");
-        setSqlSelect(String.format(SQL_SELECT_TEMPLATE, getTableName()));
-        setSqlInsert(String.format("INSERT INTO %s(id, name, currencyId, isCredit, startDate, finishDate)"
-                + " VALUES (:id, :name, :currencyId, :isCredit, :startDate, :finishDate)", getTableName()));
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateAmount() {
+        getJdbcTemplate().update(Utils.readFile(updateAmountSqlpath));
     }
 
-    public List<Account> getAccounts() {
-        List<Account> accounts = getJdbcTemplate().query(getSqlSelect(), rowMapper);
-        setCurrencies(accounts);
-        return accounts;
+    public Account findServiceAccountByAnother(Account account) {
+        Account accountWithAtributes = findById(account.getId());
+        Integer currencyId = accountWithAtributes.getCurrencyId();
+        Query query = getSession().getNamedQuery("accountFindServiceByCurrencyId")
+                .setInteger("id", currencyId);
+        return (Account) query.list().get(0);
     }
 
-    private void setCurrencies(List<Account> accounts) {
-        List<Currency> currencies = new CurrencyDao().getCurrencies();
-        accounts.stream().forEach(a -> {
-            Currency currency = currencies.stream()
-                    .filter(c -> c.getId().equals(a.getCurrencyId()))
-                    .findFirst()
-                    .get();
-            a.setCurrency(currency);
-        });
+    public void setUpdateAmountSqlpath(String updateAmountSqlpath) {
+        this.updateAmountSqlpath = updateAmountSqlpath;
     }
-
 }
