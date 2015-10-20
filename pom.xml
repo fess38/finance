@@ -64,11 +64,6 @@
       <version>${spring.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-tx</artifactId>
-      <version>${spring.version}</version>
-    </dependency>
-    <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-dbcp2</artifactId>
       <version>2.1</version>
@@ -109,6 +104,12 @@
       <artifactId>hsqldb</artifactId>
       <version>2.3.3</version>
     </dependency>
+    <dependency>
+      <groupId>com.akathist.maven.plugins.launch4j</groupId>
+      <artifactId>launch4j-maven-plugin</artifactId>
+      <version>1.7.8</version>
+      <type>maven-plugin</type>
+    </dependency>
   </dependencies>
 
   <build>
@@ -129,6 +130,94 @@
           <target>${java.version}</target>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>2.6</version>
+      </plugin>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>ru.fess38.finance.Main</mainClass>
+            </manifest>
+          </archive>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>windows-deploy</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.bluestemsoftware.open.maven.plugin</groupId>
+            <artifactId>launch4j-plugin</artifactId>
+            <version>1.5.0.0</version>
+            <executions>
+              <execution>
+                <id>launch4j</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>launch4j</goal>
+                </goals>
+                <configuration>
+                  <headerType>gui</headerType>
+                  <outfile>target/encc.exe</outfile>
+                  <jar>target/finance-0.0.1-jar-with-dependencies.jar</jar>
+                  <errTitle>encc</errTitle>
+                  <classPath>
+                    <mainClass>ru.fess38.finance.Main</mainClass>
+                    <addDependencies>true</addDependencies>
+                    <preCp>anything</preCp>
+                  </classPath>
+                  <jre>
+                    <minVersion>${java.version}.0</minVersion>
+                  </jre>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>mac-deploy</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>sh.tak.appbundler</groupId>
+            <artifactId>appbundle-maven-plugin</artifactId>
+            <version>1.0.4</version>
+            <configuration>
+              <mainClass>ru.fess38.finance.Main</mainClass>
+            </configuration>
+            <executions>
+              <execution>
+                <phase>package</phase>
+                <goals>
+                  <goal>bundle</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
