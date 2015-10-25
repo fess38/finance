@@ -30,4 +30,9 @@
   <query name="transactionFindById">
     <![CDATA[from Transaction where id = :id]]>
   </query>
+
+  <query name="transactionFindByYearMonth">
+    <![CDATA[from Transaction where YEAR(dayRef) = :year and MONTH(dayRef) = :month
+    and accountFrom.currencyId = :currencyId and isDeleted = FALSE and rubric.isService = FALSE]]>
+  </query>
 </hibernate-mapping>

@@ -2,12 +2,9 @@ package ru.fess38.finance.dao;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import ru.fess38.finance.model.Entity;
-import ru.fess38.finance.model.User;
 
 import java.util.List;
 
@@ -19,29 +16,50 @@ public abstract class EntityDao<T extends Entity> {
     private String findAllQuery;
     private String findByIdQuery;
 
-    @Transactional(propagation = Propagation.REQUIRED)
     public void create(T entity) {
-        session.save(entity);
-        session.flush();
-        session.clear();
+        Transaction transaction = session.beginTransaction();
+        try {
+            session.save(entity);
+            session.flush();
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+            throw new RuntimeException(e);
+        } finally {
+            session.clear();
+        }
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
     public void update(T entity) {
-        session.update(entity);
-        session.flush();
-        session.clear();
+        Transaction transaction = session.beginTransaction();
+        try {
+            session.update(entity);
+            session.flush();
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+            throw new RuntimeException(e);
+        } finally {
+            session.clear();
+        }
     }
 
     public void delete(T entity) {
         deleteById(entity.getId());
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
     public void deleteById(Integer id) {
-        session.getNamedQuery(deleteByIdQuery).setInteger("id", id).executeUpdate();
-        session.flush();
-        session.clear();
+        Transaction transaction = session.beginTransaction();
+        try {
+            session.getNamedQuery(deleteByIdQuery).setInteger("id", id).executeUpdate();
+            session.flush();
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+            throw new RuntimeException(e);
+        } finally {
+            session.clear();
+        }
     }
 
     @SuppressWarnings("unchecked")

@@ -45,6 +45,24 @@ public final class Transaction extends Entity {
                 getAmountTo(), getUser(), getTransactionGroup(), this.getComment());
     }
 
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("Transaction{");
+        sb.append("id=").append(getId());
+        sb.append(", name=").append(getName());
+        sb.append(", rubric=").append(rubric);
+        sb.append(", dayRef=").append(dayRef);
+        sb.append(", accountFrom=").append(accountFrom);
+        sb.append(", amountFrom=").append(amountFrom);
+        sb.append(", accountTo=").append(accountTo);
+        sb.append(", amountTo=").append(amountTo);
+        sb.append(", user=").append(user);
+        sb.append(", transactionGroup=").append(transactionGroup);
+        sb.append(", comment=").append(comment);
+        sb.append('}');
+        return sb.toString();
+    }
+
     public Account getAccountFrom() {
         return accountFrom;
     }

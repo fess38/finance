@@ -3,9 +3,11 @@ package ru.fess38.finance.service;
 import ru.fess38.finance.TemplateConfig;
 import ru.fess38.finance.model.Account;
 import ru.fess38.finance.model.Transaction;
+import ru.fess38.finance.view.MonthTransactionsByRubric;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -20,6 +22,11 @@ public class TransactionService extends EntityService {
         data.put("transactionGroups", getTransactionGroupDao().findAll());
         data.put("users", getUserDao().findAll());
         data.put("today", new Date());
+
+        MonthTransactionsByRubric transactionsByRubric = new MonthTransactionsByRubric(2015, 10);
+        List<Transaction> transactions = getTransactionDao().findByYearMonth(2015, 10);
+        transactionsByRubric.add(transactions);
+        data.put("test", transactionsByRubric);
         return TemplateConfig.procces(data, getFtlTemplatePath());
     }
 

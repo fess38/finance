@@ -63,7 +63,7 @@
 
     <div>
       <span>Рубрика:</span>
-      <select name="rubricId">
+      <select name="rubricId" required>
       <#list incomeRubrics?sort_by("name") as rubric>
         <option value="${rubric.id?c}">${rubric.name}</option>
       </#list>
@@ -72,7 +72,7 @@
 
     <div>
       <span>Счет дохода:</span>
-      <select name="accountToId">
+      <select name="accountToId" required>
       <#list accounts as account>
         <option value="${account.id?c}">${account.name}</option>
       </#list>
@@ -128,7 +128,7 @@
 
     <div>
       <span>Рубрика:</span>
-      <select name="rubricId">
+      <select name="rubricId" required>
       <#list expenceRubrics?sort_by("name") as rubric>
         <option value="${rubric.id?c}">${rubric.name}</option>
       </#list>
@@ -137,7 +137,7 @@
 
     <div>
       <span>Счет расхода:</span>
-      <select name="accountFromId">
+      <select name="accountFromId" required>
       <#list accounts as account>
         <option value="${account.id?c}">${account.name}</option>
       </#list>
@@ -192,14 +192,14 @@
     </div>
 
     <div hidden="true">
-      <select name="rubricId">
+      <select name="rubricId" required>
         <option value="${accountTransferRubricId}"></option>
       </select>
     </div>
 
     <div>
       <span>Счет 1:</span>
-      <select name="accountFromId">
+      <select name="accountFromId" required>
       <#list accounts as account>
         <option value="${account.id?c}">${account.name}</option>
       </#list>
@@ -208,7 +208,7 @@
 
     <div>
       <span>Счет 2:</span>
-      <select name="accountToId">
+      <select name="accountToId" required>
       <#list accounts as account>
         <option value="${account.id?c}">${account.name}</option>
       </#list>
@@ -259,13 +259,35 @@
   <h3>Удалить транзакцию</h3>
 
   <form action="${transactionPath}" method="post">
-    <select name="deleteEntityId">
+    <select name="deleteEntityId" required>
     <#list transactions as transaction>
       <option value="${transaction.id?c}">${transaction.id?c}</option>
     </#list>
     </select>
     <input type="submit" name="delete" value="Удалить"/>
   </form>
+</div>
+
+<div>
+  <table border="1px">
+    <tr>
+      <th>Рубрика</th>
+    <#list 1..31 as day>
+      <th>${day}</th>
+    </#list>
+      <th>Всего</th>
+    </tr>
+  <#list test.rubrics as rubric>
+    <tr>
+      <td>${rubric.name}</td>
+        <#list 1..31 as day>
+          <td>1000</td>
+        </#list>
+      <td>10000</td>
+    </tr>
+  </#list>
+  </table>
+
 </div>
 </body>
 </html>
