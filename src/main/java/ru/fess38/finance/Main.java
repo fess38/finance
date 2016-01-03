@@ -11,5 +11,6 @@ public class Main {
         Server server = ctx.getBean("server", Server.class);
         server.start();
         server.join();
+        ctx.close();
     }
 }

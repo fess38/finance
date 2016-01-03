@@ -1,30 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
   <bean id="accountServlet" class="ru.fess38.finance.servlets.AccountServlet">
-    <property name="service" ref="accountService"/>
-    <property name="pathSpec" value="${accountPath}"/>
+    <property name="service" ref="accountService" />
+    <property name="pathSpec" value="${accountPath}" />
   </bean>
 
   <bean id="rubricServlet" class="ru.fess38.finance.servlets.RubricServlet">
-    <property name="service" ref="rubricService"/>
-    <property name="pathSpec" value="${rubricPath}"/>
+    <property name="service" ref="rubricService" />
+    <property name="pathSpec" value="${rubricPath}" />
   </bean>
 
   <bean id="transactionServlet" class="ru.fess38.finance.servlets.TransactionServlet">
-    <property name="service" ref="transactionService"/>
-    <property name="pathSpec" value="${transactionPath}"/>
+    <property name="service" ref="transactionService" />
+    <property name="pathSpec" value="${transactionPath}" />
   </bean>
 
   <bean id="transactionGroupServlet" class="ru.fess38.finance.servlets.TransactionGroupServlet">
-    <property name="service" ref="transactionGroupService"/>
-    <property name="pathSpec" value="${transactionGroupPath}"/>
+    <property name="service" ref="transactionGroupService" />
+    <property name="pathSpec" value="${transactionGroupPath}" />
   </bean>
 
   <bean id="userServlet" class="ru.fess38.finance.servlets.UserServlet">
-    <property name="service" ref="userService"/>
-    <property name="pathSpec" value="${userPath}"/>
+    <property name="service" ref="userService" />
+    <property name="pathSpec" value="${userPath}" />
   </bean>
 </beans>

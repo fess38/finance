@@ -10,6 +10,7 @@
     </id>
     <property name="name" column="name"/>
     <property name="isIncome" column="isIncome"/>
+    <property name="isService" column="isService" />
   </class>
 
   <query name="rubricDeleteById">
@@ -22,5 +23,9 @@
 
   <query name="rubricFindById">
     <![CDATA[from Rubric where id = :id]]>
+  </query>
+  
+  <query name="getTransferRubric">
+    <![CDATA[from Rubric where isService = True and isDeleted = FALSE]]>
   </query>
 </hibernate-mapping>

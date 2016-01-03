@@ -269,23 +269,24 @@
 </div>
 
 <div>
-  <table border="1px">
+  <table style="text-align: center" border="1px">
     <tr>
       <th>Рубрика</th>
-    <#list 1..31 as day>
-      <th>${day}</th>
-    </#list>
+      <#list 1..rublesIncome.daysInMonth() as dayOfMonth><th style="width: 25px">${dayOfMonth}</th></#list>
       <th>Всего</th>
     </tr>
-  <#list test.rubrics as rubric>
+  <#list rublesIncome.getRubrics() as rubric>
     <tr>
       <td>${rubric.name}</td>
-        <#list 1..31 as day>
-          <td>1000</td>
-        </#list>
-      <td>10000</td>
+      <#list 1..rublesIncome.daysInMonth() as dayOfMonth>
+        <td>${rublesIncome.getTransactions(rubric, dayOfMonth).getAmount()?replace("^0$", "", "r")}</td>
+      </#list>
+      <td>${rublesIncome.getAmountByRubric(rubric)}</td>
     </tr>
   </#list>
+    <tr>
+      <td>Всего</td>
+    </tr>
   </table>
 
 </div>

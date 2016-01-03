@@ -1,14 +1,13 @@
 package ru.fess38.finance.service;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import ru.fess38.finance.TemplateConfig;
 import ru.fess38.finance.model.Account;
 import ru.fess38.finance.model.Transaction;
-import ru.fess38.finance.view.MonthTransactionsByRubric;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import ru.fess38.finance.view.Transactions;
 
 
 public class TransactionService extends EntityService {
@@ -16,17 +15,15 @@ public class TransactionService extends EntityService {
     public String makeHtmlForGET() {
         Map<String, Object> data = new HashMap<>();
         data.put("transactions", getTransactionDao().findAll());
-        data.put("incomeRubrics", getRubricDao().findIncomeRubrics());
-        data.put("expenceRubrics", getRubricDao().findExpenceRubrics());
+        data.put("incomeRubrics", getRubricDao().findRubrics(true));
+        data.put("expenceRubrics", getRubricDao().findRubrics(false));
         data.put("accounts", getAccountDao().findAll());
         data.put("transactionGroups", getTransactionGroupDao().findAll());
         data.put("users", getUserDao().findAll());
         data.put("today", new Date());
 
-        MonthTransactionsByRubric transactionsByRubric = new MonthTransactionsByRubric(2015, 10);
-        List<Transaction> transactions = getTransactionDao().findByYearMonth(2015, 10);
-        transactionsByRubric.add(transactions);
-        data.put("test", transactionsByRubric);
+        Transactions transactionsByRubric = null;// = new MonthTransactionsByRubric(2015, 10, transactions);
+        data.put("rublesIncome", transactionsByRubric);
         return TemplateConfig.procces(data, getFtlTemplatePath());
     }
 

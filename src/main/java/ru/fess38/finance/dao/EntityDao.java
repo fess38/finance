@@ -1,16 +1,16 @@
 package ru.fess38.finance.dao;
 
+import java.util.List;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.support.JdbcDaoSupport;
+
 import ru.fess38.finance.model.Entity;
 
-import java.util.List;
 
-
-public abstract class EntityDao<T extends Entity> {
-    private JdbcTemplate jdbcTemplate;
+public abstract class EntityDao<T extends Entity> extends JdbcDaoSupport {
     private Session session;
     private String deleteByIdQuery;
     private String findAllQuery;
@@ -68,17 +68,9 @@ public abstract class EntityDao<T extends Entity> {
     }
 
     @SuppressWarnings("unchecked")
-    public T findById(Integer id) {
+    public T findById(int id) {
         Query query = session.getNamedQuery(findByIdQuery).setInteger("id", id);
         return (T) query.list().get(0);
-    }
-
-    public JdbcTemplate getJdbcTemplate() {
-        return jdbcTemplate;
-    }
-
-    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
     }
 
     public Session getSession() {

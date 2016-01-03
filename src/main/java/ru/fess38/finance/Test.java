@@ -1,17 +1,19 @@
 package ru.fess38.finance;
 
-import org.apache.commons.lang3.time.DateUtils;
-import ru.fess38.finance.model.TransactionGroup;
-import ru.fess38.finance.model.User;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-import java.text.ParseException;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 
-/**
- * Created by admin on 02.10.15.
- */
 public class Test {
-    public static void main(String[] args) throws ParseException {
-        System.out.println("f".equals(null));
-    }
+	public static void main(String[] args) throws Exception {
+		System.out.println(DateTimeFormatter.ofPattern("LLLL yyyy").format(YearMonth.now()));
+		
+	}
 }

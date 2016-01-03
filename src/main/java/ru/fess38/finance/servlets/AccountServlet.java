@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletResponse;
 
 
 public final class AccountServlet extends AbstractServlet<AccountService> {
-    @Override
+	private static final long serialVersionUID = -6553462573322127180L;
+
+	@Override
     protected void createEntity(HttpServletRequest req, HttpServletResponse resp) {
         getService().create(parameterToString(req, "name"), parameterToInteger(req, "currencyId"));
     }

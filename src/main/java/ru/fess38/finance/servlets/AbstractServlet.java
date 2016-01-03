@@ -16,7 +16,8 @@ import java.util.Date;
 
 
 public abstract class AbstractServlet<T extends EntityService> extends HttpServlet {
-    private static final String DATE_FORMAT = "dd.MM.yyyy";
+	private static final long serialVersionUID = 1716568825184255135L;
+	private static final String DATE_FORMAT = "dd.MM.yyyy";
     private T service;
     private String pathSpec;
 

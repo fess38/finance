@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletResponse;
 
 
 public class RubricServlet extends AbstractServlet<RubricService> {
-    @Override
+	private static final long serialVersionUID = 4222685988701701191L;
+
+	@Override
     protected void createEntity(HttpServletRequest req, HttpServletResponse resp) {
         getService().create(parameterToString(req, "name"), "true".equals(req.getParameter("isIncome")));
     }

@@ -1,31 +1,61 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+                                   "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
   <class name="ru.fess38.finance.model.Account" table="${accountTable}">
-    <id name="id" column="id">
+    <id column="id" name="id" type="integer">
       <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
         <param name="sequence_name">${sequence}</param>
       </generator>
     </id>
-    <property name="name" column="name"/>
-    <property name="amount" column="amount"/>
-    <many-to-one name="currency" class="ru.fess38.finance.model.Currency" column="currencyId"/>
+    <property column="name" name="name" />
+    <property column="amount" name="amount" />
+    <many-to-one class="ru.fess38.finance.model.Currency" column="currencyId" name="currency" />
   </class>
-
-  <query name="accountDeleteById">
-    <![CDATA[update Account set isDeleted = TRUE where id = :id]]>
+  <query name="accountDeleteById">update Account set isDeleted = TRUE where id = :id</query>
+  <query name="accountFindAll">from Account where isService = FALSE and isDeleted = FALSE</query>
+  <query name="accountFindById">from Account where id = :id</query>
+  <query name="accountFindServiceByCurrencyId">from Account
+    where currencyId = :id and isService = TRUE and isDeleted = FALSE
   </query>
 
-  <query name="accountFindAll">
-    <![CDATA[from Account where isService = FALSE and isDeleted = FALSE]]>
-  </query>
-
-  <query name="accountFindById">
-    <![CDATA[from Account where id = :id]]>
-  </query>
-
-  <query name="accountFindServiceByCurrencyId">
-    <![CDATA[from Account where currencyId = :id and isService = TRUE and isDeleted = FALSE]]>
-  </query>
+  <sql-query name="updateAccountAmount">
+    <![CDATA[ UPDATE ${accountTable}
+    SET amount = (
+      SELECT a.amount
+      FROM (
+             SELECT t.id, SUM(t.amount) amount
+             FROM (
+                    SELECT -amountFrom amount, accountFromId id
+                    FROM ${transactionTable}
+                    WHERE isDeleted = FALSE
+                    UNION ALL
+                    SELECT amountTo amount, accountToId id
+                    FROM ${transactionTable}
+                    WHERE isDeleted = FALSE
+                    UNION ALL
+                    SELECT 0 amount, accountFromId id
+                    FROM ${transactionTable}
+                    WHERE isDeleted = TRUE
+                    UNION ALL
+                    SELECT 0 amount, accountToId id
+                    FROM ${transactionTable}
+                    WHERE isDeleted = TRUE
+                  ) t
+             GROUP BY t.id
+           ) a
+      WHERE a.id = ${accountTable}.id
+    )
+    WHERE isDeleted = FALSE AND EXISTS(
+        SELECT 1
+        FROM (
+               SELECT accountFromId id
+               FROM ${transactionTable}
+               UNION ALL
+               SELECT accountToId id
+               FROM ${transactionTable}
+             ) a
+        WHERE a.id = ${accountTable}.id
+    ) ]]>
+  </sql-query>
 </hibernate-mapping>

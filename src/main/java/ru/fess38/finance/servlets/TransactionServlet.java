@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletResponse;
 
 
 public final class TransactionServlet extends AbstractServlet<TransactionService> {
-    @Override
+	private static final long serialVersionUID = 3664646270305708817L;
+
+	@Override
     protected void createEntity(HttpServletRequest req, HttpServletResponse resp) {
         getService().create(
                 parameterToInteger(req, "rubricId"),

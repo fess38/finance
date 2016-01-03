@@ -12,6 +12,7 @@ public final class Rubric extends Entity {
     }
 
     private boolean isIncome;
+    private boolean isService;
 
     @Override
     public boolean equals(Object object) {
@@ -39,5 +40,13 @@ public final class Rubric extends Entity {
 
     public void setIsIncome(boolean isIncome) {
         this.isIncome = isIncome;
+    }
+
+    public boolean getIsService() {
+        return isService;
+    }
+
+    public void setIsService(boolean isService) {
+        this.isService = isService;
     }
 }
