@@ -4,19 +4,18 @@ import javafx.scene.control.Label;
 
 
 public class TransactionLabel extends Label {
-	public TransactionLabel(String text, Transactions transactions) {
-		super(text);
+	public TransactionLabel(Transactions transactions) {
 		this.transactions = transactions;
-		if (ZERO.equals(text)) {
+		setText(String.valueOf(transactions.summary(Transactions.sumAmount())));
+		if (ZERO.equals(getText())) {
 			setText("");
 		}
 	}
 	
 	public TransactionLabel(String text) {
-		this(text, Transactions.EMPTY);
+		this(Transactions.EMPTY);
 	}
 	
 	private final static String ZERO = "0";
 	private final Transactions transactions;
-
 }

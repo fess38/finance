@@ -11,8 +11,8 @@ import javafx.scene.layout.GridPane;
 import ru.fess38.finance.Utils;
 
 
-public class ViewRegistry {
-	private ViewRegistry() { }
+public class ViewFactory {
+	private ViewFactory() { }
 
 	private static final String PACKAGE = "ru/fess38/finance/view/";
 
@@ -40,7 +40,7 @@ public class ViewRegistry {
 		GridPane gridPane = new GridPane();
 		gridPane.setHgap(5);
 		gridPane.setVgap(5);
-		gridPane.setAlignment(Pos.TOP_CENTER);
+		gridPane.setAlignment(Pos.TOP_LEFT);
 		gridPane.setPadding(new Insets(5));
 		return gridPane;
 	}

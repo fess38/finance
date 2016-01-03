@@ -5,9 +5,9 @@
 
   <import resource="classpath*:ru/fess38/finance/Dao.xml" />
 
-  <bean id="root" class="ru.fess38.finance.view.ViewRegistry" factory-method="mainWindow" />
-  <bean id="transactionAdderWindow" class="ru.fess38.finance.view.ViewRegistry" factory-method="transactionAdderWindow" />
-  <bean id="transferAdderWindow" class="ru.fess38.finance.view.ViewRegistry" factory-method="transferAdderWindow" />
+  <bean id="root" class="ru.fess38.finance.view.ViewFactory" factory-method="mainWindow" />
+  <bean id="transactionAdderWindow" class="ru.fess38.finance.view.ViewFactory" factory-method="transactionAdderWindow" />
+  <bean id="transferAdderWindow" class="ru.fess38.finance.view.ViewFactory" factory-method="transferAdderWindow" />
 
   <bean id="abstractController" class="ru.fess38.finance.controller.AbstractController" abstract="true"
     init-method="init">

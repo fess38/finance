@@ -41,7 +41,7 @@ public class Transactions {
 		return t.stream().filter(x -> !x.getRubric().getIsService())
 				.collect(Collectors.toSet());
 	};
-	
+
 	public static final Transactions EMPTY = new Transactions(new ArrayList<>());
 	private final YearMonth yearMonth;
 	private final Set<Transaction> transactions;
@@ -58,23 +58,23 @@ public class Transactions {
 	public static final Predicate<Transaction> currency(Currency currency) {
 		return t -> t.getAccountFrom().getCurrency().equals(currency);
 	}
-	
+
 	public static final Predicate<Transaction> isIncome(boolean isIncome) {
 		return t -> t.getRubric().getIsIncome() == isIncome;
 	}
-	
+
 	public static final Predicate<Transaction> rubric(Rubric rubric) {
 		return t -> t.getRubric().equals(rubric);
 	}
-	
+
 	public static final Predicate<Transaction> dayOfMonth(int dayOfMonth) {
 		return x -> Utils.dayOfMonth(x.getDayRef()) == dayOfMonth;
 	}
-	
+
 	public static final Predicate<Transaction> sumAmount() {
 		return x -> x != null;
 	}
-	
+
 	public Transactions with(Transaction transaction) {
 		transactions.add(transaction);
 		return this;
@@ -89,13 +89,13 @@ public class Transactions {
 				.filter(predicate)
 				.collect(Collectors.toSet()));
 	}
-	
+
 	public int summary(Predicate<Transaction> predicate) {
 		return transactions.stream()
 				.filter(predicate)
 				.collect(Collectors.summingInt(Transaction::getAmountFrom));
 	}
-	
+
 	public Transactions filter(Rubric rubric, int dayOfMonth) {
 		if (rubricDayOfMonth == null) {
 			rubricDayOfMonth = new HashMap<>();
@@ -108,7 +108,7 @@ public class Transactions {
 		}
 		return rubricDayOfMonth.getOrDefault(Pair.of(rubric, dayOfMonth), EMPTY);
 	}
-	
+
 	public List<Currency> currencies() {
 		return transactions.stream()
 				.map(Transaction::getAccountFrom)
@@ -117,7 +117,7 @@ public class Transactions {
 				.sorted(Comparator.comparing(Currency::getId))
 				.collect(Collectors.toList());
 	}
-	
+
 	public List<Rubric> rubrics() {
 		return transactions.stream()
 				.map(Transaction::getRubric)
@@ -125,13 +125,17 @@ public class Transactions {
 				.sorted(Comparator.comparing(Rubric::getName))
 				.collect(Collectors.toList());
 	}
-	
+
 	public List<Integer> daysOfMonth() {
 		List<Integer> result = new ArrayList<>();
 		for (int i = 1; i <= yearMonth.lengthOfMonth(); i++) {
 			result.add(i);
 		}
 		return result;
+	}
+
+	public boolean isEmpty() {
+		return transactions.isEmpty();
 	}
 
 	public YearMonth getYearMonth() {

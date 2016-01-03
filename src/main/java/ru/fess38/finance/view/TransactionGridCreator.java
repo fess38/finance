@@ -3,145 +3,172 @@ package ru.fess38.finance.view;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.function.Predicate;
 
 import javafx.geometry.HPos;
+import javafx.geometry.Orientation;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.GridPane;
 import ru.fess38.finance.model.Rubric;
-import ru.fess38.finance.model.Transaction;
 
 
 public class TransactionGridCreator {
 	public TransactionGridCreator(Transactions transactions) {
 		this.transactions = transactions;
 		this.yearMonth = transactions.getYearMonth();
-		init();
-	}
-
-	private final GridPane gridPane = ViewRegistry.transactionWindow();
-	private final Transactions transactions;
-	private final YearMonth yearMonth;
-	private Transactions incomes;
-	private Transactions expences;
-	private int monthDaysRowIndex = 0;
-
-	private int notDaysColumns = 2;
-	private int dayOfMonthColumns;
-	private int columnsAmount;
-
-	private int incomeRowIndex = 2;
-	private int incomeDayOfMonthSummaryRowIndex;
-	private int incomeExpenceSpace = 3;
-	private int expenceRowIndex;
-	private int rubricSummaryColumnIndex;
-
-	private void init() {
 		incomes = transactions.filter(Transactions.isIncome(true));
 		expences = transactions.filter(Transactions.isIncome(false));
+
 		dayOfMonthColumns = yearMonth.lengthOfMonth();
-		columnsAmount = notDaysColumns + dayOfMonthColumns;
-		rubricSummaryColumnIndex = columnsAmount - 1;
-		incomeDayOfMonthSummaryRowIndex = incomeRowIndex + incomes.rubrics().size();
-		expenceRowIndex = incomeDayOfMonthSummaryRowIndex + incomeExpenceSpace;
+		amountOfColumns = notDayOfMonthColumns + dayOfMonthColumns;
+		amountOfRows = notRubricRows + transactions.rubrics().size();
+		expenceRowIndex = incomeRowIndex + incomes.rubrics().size() + incomeExpenceSpace;
 	}
+
+	private final GridPane gridPane = ViewFactory.transactionWindow();
+	private final Transactions transactions;
+	private final YearMonth yearMonth;
+	private final Transactions incomes;
+	private final Transactions expences;
+
+	/** Рубрика, разделитель, разделитель, итого по рубрикам */
+	private final int notDayOfMonthColumns = 4;
+	private final int dayOfMonthColumns;
+	/** Итого по дням доходов, разделитель */
+	private final int incomeExpenceSpace = 2;
+	/** Дни месяца, разделитель, итого по дням расходов */
+	private final int notRubricRows = incomeExpenceSpace + 3;
+	private final int dayOfMonthMinColumnIndex = 2;
+
+	private final int amountOfRows;
+	private final int amountOfColumns;
+
+	private final int incomeRowIndex = 2;
+	private final int expenceRowIndex;
 
 	public GridPane create() {
 		addHeader();
 		addMonthDays();
+		addHorizontalSeparators();
+		addVerticalSeparators();
 		addCells(incomes, incomeRowIndex);
 		addCells(expences, expenceRowIndex);
-		addSeparator();
-
-		int separatorRowIndex = 1;
-		int columnAmount = columnsAmount;
-		for (int columnIndex = 0; columnIndex <= columnAmount; columnIndex++) {
-			Separator separator = new Separator();
-			gridPane.add(separator, columnIndex, separatorRowIndex);
-		}
 		return gridPane;
 	}
 
 	private void addHeader() {
 		String labelText = DateTimeFormatter.ofPattern("LLLL yyyy").format(yearMonth);
-		Label label = new Label(labelText);
-		addBoldCell(label, 0, 0);
+		addCell(new Label(labelText), 0, 0);
 	}
 
 	private void addMonthDays() {
+		int rowIndex = 0;
 		for (int dayOfMonth: transactions.daysOfMonth()) {
-			int columnIndex = dayOfMonth;
+			int columnIndex = dayOfMonthColumnIndex(dayOfMonth);
 			Label label = new Label(String.valueOf(dayOfMonth));
-			addCell(label, columnIndex, monthDaysRowIndex);
-		}
-	}
-
-	private void addCells(Transactions t, int startRowIndex) {
-		addRubrics(t.rubrics(), startRowIndex);
-		addRubricSummary(t, startRowIndex);
-		addDayOfMonthSummary(t, startRowIndex + t.rubrics().size());
-		for (int dayOfMonth: t.daysOfMonth()) {
-			int columnIndex = dayOfMonth;
-			for (Rubric rubric: t.rubrics()) {
-				int rowIndex = startRowIndex + t.rubrics().indexOf(rubric);
-				Transactions transactions = t.filter(rubric, dayOfMonth);
-				addCell(transactions, Transactions.sumAmount(), columnIndex, rowIndex);
-			}
-		}
-	}
-
-	private void addRubrics(List<Rubric> rubrics, int startRowIndex) {
-		int columnIndex = 0;
-		for (Rubric rubric: rubrics) {
-			Label label = new Label(rubric.getName());
-			int rowIndex = startRowIndex + rubrics.indexOf(rubric);
 			addCell(label, columnIndex, rowIndex);
 		}
 	}
 
-	private void addRubricSummary(Transactions transactions, int startRowIndex) {
+	private void addHorizontalSeparators() {
+		gridPane.add(new Separator(), 0, 1, amountOfColumns, 1);
+		// Если нет доходов или расходов, то разделитель не нужен
+		if (!(incomes.isEmpty() || expences.isEmpty())) {
+			int columnIndex = expenceRowIndex - 1;
+			gridPane.add(new Separator(), 0, columnIndex, amountOfColumns, 1);
+		}
+	}
+
+	private void addVerticalSeparators() {
+		int leftSeparatorColumnIndex = 1;
+		gridPane.add(new Separator(Orientation.VERTICAL), leftSeparatorColumnIndex, 0, 1, amountOfRows);
+		int rightSeparatorColumnIndex = leftSeparatorColumnIndex + dayOfMonthColumns + 1;
+		gridPane.add(new Separator(Orientation.VERTICAL), rightSeparatorColumnIndex, 0, 1, amountOfRows);
+	}
+
+	private void addCells(Transactions transactions, int minRowIndex) {
+		addRubrics(transactions.rubrics(), minRowIndex);
+		addRubricSummary(transactions, minRowIndex);
+		addDayOfMonthSummary(transactions, minRowIndex);
+		addAllSummary(transactions, minRowIndex);
+		addBasicCells(transactions, minRowIndex);
+	}
+
+	private void addRubrics(List<Rubric> rubrics, int minRowIndex) {
+		int columnIndex = 0;
+		for (Rubric rubric: rubrics) {
+			Label label = new Label(rubric.getName());
+			int rowIndex = minRowIndex + rubrics.indexOf(rubric);
+			addCell(label, columnIndex, rowIndex);
+		}
+	}
+
+	private void addRubricSummary(Transactions transactions, int minRowIndex) {
+		int columnIndex = amountOfColumns - 1;
 		for (Rubric rubric: transactions.rubrics()) {
-			int rowIndex = startRowIndex + transactions.rubrics().indexOf(rubric);
-			addBoldCell(transactions, Transactions.rubric(rubric), rubricSummaryColumnIndex, rowIndex);
+			int rowIndex = minRowIndex + transactions.rubrics().indexOf(rubric);
+			Transactions rubricTransactions = transactions.filter(Transactions.rubric(rubric));
+			addCell(rubricTransactions, columnIndex, rowIndex, CellStyle.BOLD);
 		}
-		int rowIndex = startRowIndex + transactions.rubrics().size();
-		addBoldCell(transactions, Transactions.sumAmount(), rubricSummaryColumnIndex, rowIndex);
 	}
 
-	private void addDayOfMonthSummary(Transactions transactions, int rowIndex) {
+	private void addDayOfMonthSummary(Transactions transactions, int minRowIndex) {
 		for (int dayOfMonth: transactions.daysOfMonth()) {
-			int columnIndex = dayOfMonth;
-			addBoldCell(transactions, Transactions.dayOfMonth(dayOfMonth), columnIndex, rowIndex);
+			int columnIndex = dayOfMonthColumnIndex(dayOfMonth);
+			int rowIndex = minRowIndex + transactions.rubrics().size();
+			addCell(transactions.filter(Transactions.dayOfMonth(dayOfMonth)), columnIndex, rowIndex, CellStyle.BOLD);
 		}
 	}
 
-	private void addSeparator() {
-		int separatorRowIndex = incomeDayOfMonthSummaryRowIndex + 1;
-		int columnAmount = columnsAmount;
-		for (int columnIndex = 0; columnIndex <= columnAmount; columnIndex++) {
-			Separator separator = new Separator();
-			gridPane.add(separator, columnIndex, separatorRowIndex);
+	private void addAllSummary(Transactions transactions, int minRowIndex) {
+		int columnIndex = amountOfColumns - 1;
+		int rowIndex = minRowIndex + transactions.rubrics().size();
+		addCell(transactions, columnIndex, rowIndex, CellStyle.BOLD);
+	}
+
+	private void addBasicCells(Transactions transactions, int minRowIndex) {
+		for (int dayOfMonth: transactions.daysOfMonth()) {
+			int columnIndex = dayOfMonthColumnIndex(dayOfMonth);
+			for (Rubric rubric: transactions.rubrics()) {
+				int rowIndex = minRowIndex + transactions.rubrics().indexOf(rubric);
+				Transactions rubricTransactions = transactions.filter(rubric, dayOfMonth);
+				addCell(rubricTransactions, columnIndex, rowIndex);
+			}
 		}
 	}
 
-	private void addCell(Label label, int columnIndex, int rowIndex) {
+	/** dayOfMonth начинается с 1, поэтому -1 */
+	private int dayOfMonthColumnIndex(int dayOfMonth) {
+		return dayOfMonthMinColumnIndex - 1 + dayOfMonth;
+	}
+
+	private void addCell(Label label, int columnIndex, int rowIndex, CellStyle cellStyle) {
+		label.setStyle(cellStyle.value);
 		gridPane.add(label, columnIndex, rowIndex);
 		GridPane.setHalignment(label, HPos.CENTER);
 	}
 
-	private void addBoldCell(Label label, int columnIndex, int rowIndex) {
-		label.setStyle("-fx-font-weight: bold;");
-		addCell(label, columnIndex, rowIndex);
+	private void addCell(Label label, int columnIndex, int rowIndex) {
+		addCell(label, columnIndex, rowIndex, CellStyle.DEFAULT);
 	}
 
-	private void addBoldCell(Transactions t, Predicate<Transaction> predicate, int columnIndex, int rowIndex) {
-		TransactionLabel label = new TransactionLabel(String.valueOf(t.summary(predicate)), t);
-		addBoldCell(label, columnIndex, rowIndex);
+	private void addCell(Transactions transactions, int columnIndex, int rowIndex, CellStyle cellStyle) {
+		TransactionLabel label = new TransactionLabel(transactions);
+		addCell(label, columnIndex, rowIndex, cellStyle);
 	}
 
-	private void addCell(Transactions t, Predicate<Transaction> predicate, int columnIndex, int rowIndex) {
-		TransactionLabel label = new TransactionLabel(String.valueOf(t.summary(predicate)), t);
-		addCell(label, columnIndex, rowIndex);
+	private void addCell(Transactions transactions, int columnIndex, int rowIndex) {
+		addCell(transactions, columnIndex, rowIndex, CellStyle.DEFAULT);
+	}
+
+	private enum CellStyle {
+		DEFAULT(""),
+		BOLD("-fx-font-weight: bold;");
+
+		private CellStyle(String value) {
+			this.value = value;
+		}
+
+		private String value;
 	}
 }
