@@ -36,7 +36,7 @@ public class ViewFactory {
 		return loadWrapper("TransferAdder.fxml");
 	}
 
-	public static GridPane transactionWindow() {
+	public static GridPane transactionViewerWindow() {
 		GridPane gridPane = new GridPane();
 		gridPane.setHgap(5);
 		gridPane.setVgap(5);

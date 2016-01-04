@@ -37,13 +37,11 @@ public class Transactions {
 	}
 
 	public static final Function<Set<Transaction>, Set<Transaction>> TRANSFERS = t -> {
-		return t.stream().filter(x -> x.getRubric().getIsService())
-				.collect(Collectors.toSet());
+		return t.stream().filter(x -> x.getRubric().getIsService()).collect(Collectors.toSet());
 	};
 
 	public static final Function<Set<Transaction>, Set<Transaction>> TRANSACTIONS = t -> {
-		return t.stream().filter(x -> !x.getRubric().getIsService())
-				.collect(Collectors.toSet());
+		return t.stream().filter(x -> !x.getRubric().getIsService()).collect(Collectors.toSet());
 	};
 
 	public static final Transactions EMPTY = new Transactions(new ArrayList<>());
@@ -79,7 +77,6 @@ public class Transactions {
 		};
 	}
 
-
 	public Transactions with(Transaction transaction) {
 		transactions.add(transaction);
 		return this;
@@ -90,9 +87,8 @@ public class Transactions {
 	}
 
 	public Transactions filter(Predicate<Transaction> predicate) {
-		return new Transactions(yearMonth, transactions.stream()
-				.filter(predicate)
-				.collect(Collectors.toSet()));
+		return new Transactions(yearMonth,
+				transactions.stream().filter(predicate).collect(Collectors.toSet()));
 	}
 
 	public int summary() {
@@ -102,7 +98,10 @@ public class Transactions {
 	public Transactions filter(Rubric rubric, int dayOfMonth) {
 		if (rubricDayOfMonth.isEmpty()) {
 			for (Transaction t: transactions) {
-				LocalDate date = t.getDayRef().toInstant().atZone(ZoneId.of("UTC")).toLocalDate();
+				LocalDate date = t.getDayRef()
+					.toInstant()
+					.atZone(ZoneId.systemDefault())
+					.toLocalDate();
 				Pair<Rubric, LocalDate> pair = Pair.of(t.getRubric(), date);
 				rubricDayOfMonth.putIfAbsent(pair, Transactions.of(yearMonth, new ArrayList<>()));
 				rubricDayOfMonth.get(pair).with(t);
@@ -114,20 +113,20 @@ public class Transactions {
 
 	public List<Currency> currencies() {
 		return transactions.stream()
-				.map(Transaction::getAccountFrom)
-				.map(Account::getCurrency)
-				.distinct()
-				.sorted(Comparator.comparing(Currency::getId))
-				.collect(Collectors.toList());
+			.map(Transaction::getAccountFrom)
+			.map(Account::getCurrency)
+			.distinct()
+			.sorted(Comparator.comparing(Currency::getId))
+			.collect(Collectors.toList());
 	}
 
 	public List<Rubric> rubrics() {
 		if (rubrics.isEmpty() && !this.isEmpty()) {
 			rubrics.addAll(transactions.stream()
-					.map(Transaction::getRubric)
-					.distinct()
-					.sorted(Comparator.comparing(Rubric::getName))
-					.collect(Collectors.toList()));
+				.map(Transaction::getRubric)
+				.distinct()
+				.sorted(Comparator.comparing(Rubric::getName))
+				.collect(Collectors.toList()));
 		}
 		return rubrics;
 	}

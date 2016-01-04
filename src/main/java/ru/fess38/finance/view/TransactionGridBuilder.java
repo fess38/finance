@@ -2,18 +2,20 @@ package ru.fess38.finance.view;
 
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javafx.geometry.HPos;
 import javafx.geometry.Orientation;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.GridPane;
+import javafx.util.Builder;
 import ru.fess38.finance.model.Rubric;
 
-
-public class TransactionGridCreator {
-	public TransactionGridCreator(Transactions transactions) {
+public class TransactionGridBuilder implements Builder<GridPane> {
+	public TransactionGridBuilder(Transactions transactions) {
 		this.transactions = transactions;
 		this.yearMonth = transactions.getYearMonth();
 		incomes = transactions.filter(Transactions.isIncome(true));
@@ -25,11 +27,12 @@ public class TransactionGridCreator {
 		expenceRowIndex = incomeRowIndex + incomes.rubrics().size() + incomeExpenceSpace;
 	}
 
-	private final GridPane gridPane = ViewFactory.transactionWindow();
+	private final GridPane gridPane = ViewFactory.transactionViewerWindow();
 	private final Transactions transactions;
 	private final YearMonth yearMonth;
 	private final Transactions incomes;
 	private final Transactions expences;
+	private final Set<TransactionLabel> transactionLabels = new HashSet<>();
 
 	/** Рубрика, разделитель, разделитель, итого по рубрикам */
 	private final int notDayOfMonthColumns = 4;
@@ -46,7 +49,8 @@ public class TransactionGridCreator {
 	private final int incomeRowIndex = 2;
 	private final int expenceRowIndex;
 
-	public GridPane create() {
+	@Override
+	public GridPane build() {
 		addHeader();
 		addMonthDays();
 		addHorizontalSeparators();
@@ -81,9 +85,11 @@ public class TransactionGridCreator {
 
 	private void addVerticalSeparators() {
 		int leftSeparatorColumnIndex = 1;
-		gridPane.add(new Separator(Orientation.VERTICAL), leftSeparatorColumnIndex, 0, 1, amountOfRows);
+		gridPane.add(new Separator(Orientation.VERTICAL), leftSeparatorColumnIndex, 0, 1,
+				amountOfRows);
 		int rightSeparatorColumnIndex = leftSeparatorColumnIndex + dayOfMonthColumns + 1;
-		gridPane.add(new Separator(Orientation.VERTICAL), rightSeparatorColumnIndex, 0, 1, amountOfRows);
+		gridPane.add(new Separator(Orientation.VERTICAL), rightSeparatorColumnIndex, 0, 1,
+				amountOfRows);
 	}
 
 	private void addCells(Transactions transactions, int minRowIndex) {
@@ -116,7 +122,8 @@ public class TransactionGridCreator {
 		for (int dayOfMonth: transactions.daysOfMonth()) {
 			int columnIndex = dayOfMonthColumnIndex(dayOfMonth);
 			int rowIndex = minRowIndex + transactions.rubrics().size();
-			addCell(transactions.filter(Transactions.dayOfMonth(dayOfMonth)), columnIndex, rowIndex, CellStyle.BOLD);
+			addCell(transactions.filter(Transactions.dayOfMonth(dayOfMonth)), columnIndex, rowIndex,
+					CellStyle.BOLD);
 		}
 	}
 
@@ -143,18 +150,24 @@ public class TransactionGridCreator {
 	}
 
 	private void addCell(Label label, int columnIndex, int rowIndex, CellStyle cellStyle) {
-		label.setStyle(cellStyle.value);
-		gridPane.add(label, columnIndex, rowIndex);
-		GridPane.setHalignment(label, HPos.CENTER);
+		if (label.getText() != null && !label.getText().isEmpty()) {
+			label.setStyle(cellStyle.value);
+			gridPane.add(label, columnIndex, rowIndex);
+			GridPane.setHalignment(label, HPos.CENTER);
+		}
 	}
 
 	private void addCell(Label label, int columnIndex, int rowIndex) {
 		addCell(label, columnIndex, rowIndex, CellStyle.DEFAULT);
 	}
 
-	private void addCell(Transactions transactions, int columnIndex, int rowIndex, CellStyle cellStyle) {
-		TransactionLabel label = new TransactionLabel(transactions);
-		addCell(label, columnIndex, rowIndex, cellStyle);
+	private void addCell(Transactions transactions, int columnIndex, int rowIndex,
+			CellStyle cellStyle) {
+		if (!transactions.isEmpty()) {
+			TransactionLabel label = new TransactionLabel(transactions);
+			transactionLabels.add(label);
+			addCell(label, columnIndex, rowIndex, cellStyle);
+		}
 	}
 
 	private void addCell(Transactions transactions, int columnIndex, int rowIndex) {
@@ -162,13 +175,16 @@ public class TransactionGridCreator {
 	}
 
 	private enum CellStyle {
-		DEFAULT(""),
-		BOLD("-fx-font-weight: bold;");
+		DEFAULT(""), BOLD("-fx-font-weight: bold;");
 
 		private CellStyle(String value) {
 			this.value = value;
 		}
 
 		private String value;
+	}
+
+	public Set<TransactionLabel> transactionLabels() {
+		return transactionLabels;
 	}
 }

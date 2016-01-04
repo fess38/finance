@@ -5,7 +5,7 @@ import java.time.YearMonth;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import ru.fess38.finance.model.Currency;
-import ru.fess38.finance.view.TransactionGridCreator;
+import ru.fess38.finance.view.TransactionGridBuilder;
 import ru.fess38.finance.view.Transactions;
 
 
@@ -15,13 +15,13 @@ public class TransactionWindowController extends AbstractController {
 	}
 
 	private final TabPane mainWindow;
-	private YearMonth yearMonth = YearMonth.now(); 
+	private YearMonth yearMonth = YearMonth.now();
 
 	@Override
 	public void init() {
 		handle();
 	}
-	
+
 	@Override
 	public void handle() {
 		transactionWindow().getTabs().clear();
@@ -29,19 +29,19 @@ public class TransactionWindowController extends AbstractController {
 		addTransactions(allTransactions.filter(Transactions.TRANSACTIONS));
 		addTransfers(allTransactions.filter(Transactions.TRANSFERS));
 	}
-	
+
 	private void addTransactions(Transactions transactions) {
-		for (Currency currency: transactions.currencies()) {
+		for (Currency currency : transactions.currencies()) {
 			Tab tab = new Tab(currency.getName());
 			Transactions t = transactions.filter(Transactions.currency(currency));
-			TransactionGridCreator gridCreator = new TransactionGridCreator(t);
-			tab.setContent(gridCreator.create());
+			TransactionGridBuilder gridBuilder = new TransactionGridBuilder(t);
+			tab.setContent(gridBuilder.build());
 			transactionWindow().getTabs().add(tab);
-		}	
+		}
 	}
-	
+
 	private void addTransfers(Transactions transfers) {
-		
+
 	}
 
 	public void nextMonth() {
