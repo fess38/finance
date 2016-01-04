@@ -11,7 +11,6 @@ import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-
 public class GuiMain extends Application {
 	public static void main(String[] args) {
 		Application.launch(GuiMain.class, args);

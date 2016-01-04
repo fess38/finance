@@ -6,7 +6,7 @@ import javafx.scene.control.Label;
 public class TransactionLabel extends Label {
 	public TransactionLabel(Transactions transactions) {
 		this.transactions = transactions;
-		setText(String.valueOf(transactions.summary(Transactions.sumAmount())));
+		setText(String.valueOf(transactions.summary()));
 		if (ZERO.equals(getText())) {
 			setText("");
 		}

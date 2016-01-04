@@ -1,9 +1,13 @@
 package ru.fess38.finance.view;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -13,9 +17,9 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
-import ru.fess38.finance.Utils;
 import ru.fess38.finance.model.Account;
 import ru.fess38.finance.model.Currency;
 import ru.fess38.finance.model.Rubric;
@@ -45,7 +49,8 @@ public class Transactions {
 	public static final Transactions EMPTY = new Transactions(new ArrayList<>());
 	private final YearMonth yearMonth;
 	private final Set<Transaction> transactions;
-	private Map<Pair<Rubric, Integer>, Transactions> rubricDayOfMonth;
+	private final Map<Pair<Rubric, LocalDate>, Transactions> rubricDayOfMonth = new HashMap<>();
+	private final List<Rubric> rubrics = new ArrayList<>();
 
 	public static Transactions of(YearMonth yearMonth, Collection<Transaction> transactions) {
 		return new Transactions(yearMonth, transactions);
@@ -68,12 +73,12 @@ public class Transactions {
 	}
 
 	public static final Predicate<Transaction> dayOfMonth(int dayOfMonth) {
-		return x -> Utils.dayOfMonth(x.getDayRef()) == dayOfMonth;
+		return x -> {
+			Date date = x.getDayRef();
+			return (int) DateUtils.getFragmentInDays(date, Calendar.MONTH) == dayOfMonth;
+		};
 	}
 
-	public static final Predicate<Transaction> sumAmount() {
-		return x -> x != null;
-	}
 
 	public Transactions with(Transaction transaction) {
 		transactions.add(transaction);
@@ -90,23 +95,21 @@ public class Transactions {
 				.collect(Collectors.toSet()));
 	}
 
-	public int summary(Predicate<Transaction> predicate) {
-		return transactions.stream()
-				.filter(predicate)
-				.collect(Collectors.summingInt(Transaction::getAmountFrom));
+	public int summary() {
+		return transactions.stream().collect(Collectors.summingInt(Transaction::getAmountFrom));
 	}
 
 	public Transactions filter(Rubric rubric, int dayOfMonth) {
-		if (rubricDayOfMonth == null) {
-			rubricDayOfMonth = new HashMap<>();
+		if (rubricDayOfMonth.isEmpty()) {
 			for (Transaction t: transactions) {
-				int dayOfMonthPos = Utils.dayOfMonth(t.getDayRef());
-				Pair<Rubric, Integer> pair = Pair.of(t.getRubric(), dayOfMonthPos);
+				LocalDate date = t.getDayRef().toInstant().atZone(ZoneId.of("UTC")).toLocalDate();
+				Pair<Rubric, LocalDate> pair = Pair.of(t.getRubric(), date);
 				rubricDayOfMonth.putIfAbsent(pair, Transactions.of(yearMonth, new ArrayList<>()));
 				rubricDayOfMonth.get(pair).with(t);
 			}
 		}
-		return rubricDayOfMonth.getOrDefault(Pair.of(rubric, dayOfMonth), EMPTY);
+		LocalDate date = LocalDate.of(yearMonth.getYear(), yearMonth.getMonth(), dayOfMonth);
+		return rubricDayOfMonth.getOrDefault(Pair.of(rubric, date), EMPTY);
 	}
 
 	public List<Currency> currencies() {
@@ -119,11 +122,14 @@ public class Transactions {
 	}
 
 	public List<Rubric> rubrics() {
-		return transactions.stream()
-				.map(Transaction::getRubric)
-				.distinct()
-				.sorted(Comparator.comparing(Rubric::getName))
-				.collect(Collectors.toList());
+		if (rubrics.isEmpty() && !this.isEmpty()) {
+			rubrics.addAll(transactions.stream()
+					.map(Transaction::getRubric)
+					.distinct()
+					.sorted(Comparator.comparing(Rubric::getName))
+					.collect(Collectors.toList()));
+		}
+		return rubrics;
 	}
 
 	public List<Integer> daysOfMonth() {
