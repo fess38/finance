@@ -2,7 +2,6 @@ package ru.fess38.finance.view;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -10,6 +9,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,7 +26,7 @@ import ru.fess38.finance.model.Rubric;
 import ru.fess38.finance.model.Transaction;
 
 
-public class Transactions {
+public class Transactions implements Iterable<Transaction> {
 	private Transactions(YearMonth yearMonth, Collection<Transaction> transactions) {
 		this.yearMonth = yearMonth;
 		this.transactions = new HashSet<>(transactions);
@@ -98,11 +98,7 @@ public class Transactions {
 	public Transactions filter(Rubric rubric, int dayOfMonth) {
 		if (rubricDayOfMonth.isEmpty()) {
 			for (Transaction t: transactions) {
-				LocalDate date = t.getDayRef()
-					.toInstant()
-					.atZone(ZoneId.systemDefault())
-					.toLocalDate();
-				Pair<Rubric, LocalDate> pair = Pair.of(t.getRubric(), date);
+				Pair<Rubric, LocalDate> pair = Pair.of(t.getRubric(), t.getLocalDate());
 				rubricDayOfMonth.putIfAbsent(pair, Transactions.of(yearMonth, new ArrayList<>()));
 				rubricDayOfMonth.get(pair).with(t);
 			}
@@ -145,5 +141,10 @@ public class Transactions {
 
 	public YearMonth getYearMonth() {
 		return yearMonth;
+	}
+
+	@Override
+	public Iterator<Transaction> iterator() {
+		return transactions.iterator();
 	}
 }

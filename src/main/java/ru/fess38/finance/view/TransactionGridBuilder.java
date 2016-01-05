@@ -14,6 +14,7 @@ import javafx.scene.layout.GridPane;
 import javafx.util.Builder;
 import ru.fess38.finance.model.Rubric;
 
+
 public class TransactionGridBuilder implements Builder<GridPane> {
 	public TransactionGridBuilder(Transactions transactions) {
 		this.transactions = transactions;
@@ -84,10 +85,10 @@ public class TransactionGridBuilder implements Builder<GridPane> {
 	}
 
 	private void addVerticalSeparators() {
-		int leftSeparatorColumnIndex = 1;
+		int leftSeparatorColumnIndex = dayOfMonthMinColumnIndex - 1;
 		gridPane.add(new Separator(Orientation.VERTICAL), leftSeparatorColumnIndex, 0, 1,
 				amountOfRows);
-		int rightSeparatorColumnIndex = leftSeparatorColumnIndex + dayOfMonthColumns + 1;
+		int rightSeparatorColumnIndex = dayOfMonthMinColumnIndex + dayOfMonthColumns;
 		gridPane.add(new Separator(Orientation.VERTICAL), rightSeparatorColumnIndex, 0, 1,
 				amountOfRows);
 	}

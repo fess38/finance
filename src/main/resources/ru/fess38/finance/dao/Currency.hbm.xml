@@ -10,11 +10,8 @@
     </id>
     <property name="name" column="name"/>
     <property name="symbol" column="symbol"/>
+    <sql-delete><![CDATA[update ${currencyTable} set isDeleted = TRUE where id = :id]]></sql-delete>
   </class>
-
-  <query name="currencyDeleteById">
-    <![CDATA[update Currency set isDeleted = TRUE where id = :id]]>
-  </query>
 
   <query name="currencyFindAll">
     <![CDATA[from Currency where isDeleted = FALSE]]>

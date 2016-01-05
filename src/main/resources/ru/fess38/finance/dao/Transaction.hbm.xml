@@ -17,6 +17,7 @@
     <many-to-one name="rubric" class="ru.fess38.finance.model.Rubric" column="rubricId" />
     <many-to-one name="transactionGroup" class="ru.fess38.finance.model.TransactionGroup" column="transactionGroupId" />
     <many-to-one name="user" class="ru.fess38.finance.model.User" column="userId" />
+    <sql-delete><![CDATA[ update ${transactionTable} set isDeleted = TRUE where id = :id ]]></sql-delete>
   </class>
 
   <query name="transactionDeleteById">
@@ -31,9 +32,9 @@
     <![CDATA[ from Transaction where id = :id ]]>
   </query>
 
-  <query name="transactionFindByYearMonthRuble">
+  <query name="transactionFindByYearMonth">
     <![CDATA[ from Transaction where YEAR(dayRef) = :year and MONTH(dayRef) = :month
-    and accountFrom.currency.id = 1 and isDeleted = FALSE and rubric.isService = FALSE ]]>
+    and isDeleted = FALSE and rubric.isService = FALSE ]]>
   </query>
   
   <sql-query name="isEntityUsed" read-only="true">

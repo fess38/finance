@@ -11,11 +11,8 @@
     <property name="name" column="name"/>
     <property name="isIncome" column="isIncome"/>
     <property name="isService" column="isService" />
+    <sql-delete><![CDATA[update ${rubricTable} set isDeleted = TRUE where id = :id]]></sql-delete>
   </class>
-
-  <query name="rubricDeleteById">
-    <![CDATA[update Rubric set isDeleted = TRUE where id = :id]]>
-  </query>
 
   <query name="rubricFindAll">
     <![CDATA[from Rubric where isService = FALSE and isDeleted = FALSE]]>

@@ -7,12 +7,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.GridPane;
 import ru.fess38.finance.Utils;
+import ru.fess38.finance.model.Transaction;
 
 
 public class ViewFactory {
-	private ViewFactory() { }
+	private ViewFactory() {}
 
 	private static final String PACKAGE = "ru/fess38/finance/view/";
 
@@ -43,5 +45,9 @@ public class ViewFactory {
 		gridPane.setAlignment(Pos.TOP_LEFT);
 		gridPane.setPadding(new Insets(5));
 		return gridPane;
+	}
+
+	public static TableView<Transaction> transactionEditorWindow() {
+		return new TransactionEditorBuilder().build();
 	}
 }

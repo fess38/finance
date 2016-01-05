@@ -16,6 +16,7 @@ public class TransactionWindowController extends AbstractController {
 
 	private final TabPane mainWindow;
 	private YearMonth yearMonth = YearMonth.now();
+	private TransactionEditorController transactionEditorController;
 
 	@Override
 	public void init() {
@@ -31,18 +32,19 @@ public class TransactionWindowController extends AbstractController {
 	}
 
 	private void addTransactions(Transactions transactions) {
-		for (Currency currency : transactions.currencies()) {
+		for (Currency currency: transactions.currencies()) {
 			Tab tab = new Tab(currency.getName());
 			Transactions t = transactions.filter(Transactions.currency(currency));
 			TransactionGridBuilder gridBuilder = new TransactionGridBuilder(t);
 			tab.setContent(gridBuilder.build());
+			gridBuilder.transactionLabels().forEach(x -> {
+				x.setOnMouseClicked(e -> transactionEditorController.handle(x));
+			});
 			transactionWindow().getTabs().add(tab);
 		}
 	}
 
-	private void addTransfers(Transactions transfers) {
-
-	}
+	private void addTransfers(Transactions transfers) {}
 
 	public void nextMonth() {
 		yearMonth = yearMonth.plusMonths(1);
@@ -54,5 +56,10 @@ public class TransactionWindowController extends AbstractController {
 
 	private TabPane transactionWindow() {
 		return (TabPane) mainWindow.lookup("#transactionWindow");
+	}
+
+	public void setTransactionEditorController(
+			TransactionEditorController transactionEditorController) {
+		this.transactionEditorController = transactionEditorController;
 	}
 }
