@@ -1,5 +1,6 @@
 package ru.fess38.finance.view;
 
+
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
@@ -7,13 +8,12 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.util.Builder;
 import ru.fess38.finance.model.Transaction;
 import ru.fess38.finance.model.TransactionGroup;
 import ru.fess38.finance.model.User;
 
 
-public class TransactionEditorBuilder implements Builder<TableView<Transaction>> {
+public class TransactionEditorBuilder {
 	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM");
 	private TableView<Transaction> tableView = new TableView<Transaction>();
 	private TableColumn<Transaction, String> localDateColumn = new TableColumn<>("Дата");
@@ -23,8 +23,7 @@ public class TransactionEditorBuilder implements Builder<TableView<Transaction>>
 	private TableColumn<Transaction, String> transactionGroupColumn = new TableColumn<>(
 			"Группа транзакций");
 
-	@Override
-	public TableView<Transaction> build() {
+	public TableView<Transaction> build(Transactions transactions) {
 		localDateColumn.setCellValueFactory(x -> {
 			return new SimpleStringProperty(x.getValue().getLocalDate().format(formatter));
 		});
@@ -42,9 +41,11 @@ public class TransactionEditorBuilder implements Builder<TableView<Transaction>>
 			TransactionGroup tg = x.getValue().getTransactionGroup();
 			return new SimpleStringProperty(tg == null ? null : tg.getName());
 		});
-		tableView.getSortOrder().addAll(Arrays.asList(localDateColumn, rubricColumn));
 		tableView.getColumns().addAll(Arrays.asList(localDateColumn, rubricColumn, amountColumn,
 				userColumn, transactionGroupColumn));
+		transactions.forEach(tableView.getItems()::add);
+		tableView.getSortOrder().addAll(Arrays.asList(localDateColumn, rubricColumn));
+		tableView.sort();
 		return tableView;
 	}
 }

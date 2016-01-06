@@ -42,8 +42,8 @@ public class ViewFactory {
 		return gridPane;
 	}
 
-	public static TableView<Transaction> transactionEditorWindow() {
-		return new TransactionEditorBuilder().build();
+	public static TableView<Transaction> transactionEditorWindow(Transactions transactions) {
+		return new TransactionEditorBuilder().build(transactions);
 	}
 
 	private static <T> T loadWrapper(String url) {

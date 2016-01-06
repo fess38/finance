@@ -53,26 +53,25 @@
   </bean>
 
   <bean id="accountDao" class="ru.fess38.finance.dao.AccountDao" parent="entityDao">
-    <property name="findAllQuery" value="accountFindAll" />
+    <property name="clazz" value="ru.fess38.finance.model.Account" />
   </bean>
 
   <bean id="currencyDao" class="ru.fess38.finance.dao.CurrencyDao" parent="entityDao">
-    <property name="findAllQuery" value="currencyFindAll" />
+    <property name="clazz" value="ru.fess38.finance.model.Currency" />
   </bean>
 
   <bean id="rubricDao" class="ru.fess38.finance.dao.RubricDao" parent="entityDao">
-    <property name="findAllQuery" value="rubricFindAll" />
+    <property name="clazz" value="ru.fess38.finance.model.Rubric" />
   </bean>
-
   <bean id="transactionDao" class="ru.fess38.finance.dao.TransactionDao" parent="entityDao">
-    <property name="findAllQuery" value="transactionFindAll" />
+    <property name="clazz" value="ru.fess38.finance.model.Transaction" />
   </bean>
 
   <bean id="transactionGroupDao" class="ru.fess38.finance.dao.TransactionGroupDao" parent="entityDao">
-    <property name="findAllQuery" value="transactionGroupFindAll" />
+    <property name="clazz" value="ru.fess38.finance.model.TransactionGroup" />
   </bean>
 
   <bean id="userDao" class="ru.fess38.finance.dao.UserDao" parent="entityDao">
-    <property name="findAllQuery" value="userFindAll" />
+    <property name="clazz" value="ru.fess38.finance.model.User" />
   </bean>
 </beans>

@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import ru.fess38.finance.controller.MainWindow;
 
 
 public class Main extends Application {
@@ -24,7 +25,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws IOException {
 		ctx = new ClassPathXmlApplicationContext(path);
-		Parent root = ctx.getBean("root", Parent.class);
+		Parent root = ctx.getBean("mainWindow", MainWindow.class).getMainWindowView();
 		Scene scene = new Scene(root);
 		primaryStage.setScene(scene);
 		setWindowFullscreen(primaryStage);

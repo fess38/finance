@@ -18,16 +18,13 @@
     <many-to-one name="transactionGroup" class="ru.fess38.finance.model.TransactionGroup" column="transactionGroupId"
       lazy="false" />
     <many-to-one name="user" class="ru.fess38.finance.model.User" column="userId" lazy="false" />
+    <property name="isDeleted" column="isDeleted" access="noop" insert="false" update="false" />
     <sql-delete><![CDATA[ update ${transactionTable} set isDeleted = TRUE where id = :id ]]></sql-delete>
   </class>
 
-  <query name="transactionFindAll">
-    <![CDATA[ from Transaction where isDeleted = FALSE ]]>
-  </query>
-
   <query name="transactionFindByYearMonth">
     <![CDATA[ from Transaction where YEAR(dayRef) = :year and MONTH(dayRef) = :month
-    and isDeleted = FALSE and rubric.isService = FALSE ]]>
+    and isDeleted = FALSE]]>
   </query>
 
   <sql-query name="isEntityUsed" read-only="true">

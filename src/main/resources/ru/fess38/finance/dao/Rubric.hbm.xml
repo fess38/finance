@@ -11,14 +11,7 @@
     <property name="name" column="name"/>
     <property name="isIncome" column="isIncome"/>
     <property name="isService" column="isService" />
+    <property name="isDeleted" column="isDeleted" access="noop" insert="false" update="false" />
     <sql-delete><![CDATA[update ${rubricTable} set isDeleted = TRUE where id = :id]]></sql-delete>
   </class>
-
-  <query name="rubricFindAll">
-    <![CDATA[from Rubric where isService = FALSE and isDeleted = FALSE]]>
-  </query>
-  
-  <query name="getTransferRubric">
-    <![CDATA[from Rubric where isService = True and isDeleted = FALSE]]>
-  </query>
 </hibernate-mapping>

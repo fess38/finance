@@ -9,34 +9,41 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ru.fess38.finance.model.Transaction;
-import ru.fess38.finance.view.TransactionLabel;
+import ru.fess38.finance.view.Transactions;
 import ru.fess38.finance.view.ViewFactory;
 
 
-public class TransactionEditorController extends AbstractController {
-	private TransactionLabel transactionLabel;
-	private TransactionWindowController transactionWindowController;
+public class TransactionEditor extends AbstractController {
+	public TransactionEditor(ControllersFactory factory) {
+		super(factory);
+		factory.setTransactionEditor(this);
+	}
+
+	private Transactions transactions;
 	private boolean isEdited;
+
+	public void handle(Transactions transactions) {
+		this.transactions = transactions;
+		handle();
+	}
 
 	@Override
 	public void handle() {
 		isEdited = false;
-		TableView<Transaction> tableView = ViewFactory.transactionEditorWindow();
-		transactionLabel.getTransactions().forEach(tableView.getItems()::add);
-		tableView.sort();
+		TableView<Transaction> tableView = ViewFactory.transactionEditorWindow(transactions);
 		tableView.setOnKeyPressed(e -> {
 			if (e.getCode() == KeyCode.BACK_SPACE) {
 				removeTransaction(tableView);
 			}
 		});
-		transactionLabel = null;
+		transactions = null;
 		Scene scene = new Scene(tableView);
 		Stage stage = new Stage();
 		stage.setScene(scene);
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.showAndWait();
 		if (isEdited) {
-			transactionWindowController.handle();
+			getTransactionWindow().handle();
 		}
 	}
 
@@ -50,15 +57,5 @@ public class TransactionEditorController extends AbstractController {
 			getTransactionDao().delete(transaction);
 			isEdited = true;
 		}
-	}
-
-	public void handle(TransactionLabel transactionLabel) {
-		this.transactionLabel = transactionLabel;
-		handle();
-	}
-
-	public void setTransactionWindowController(
-			TransactionWindowController transactionWindowController) {
-		this.transactionWindowController = transactionWindowController;
 	}
 }

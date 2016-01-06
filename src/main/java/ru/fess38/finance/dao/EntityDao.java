@@ -5,15 +5,16 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 
 import ru.fess38.finance.model.Entity;
 
 
 public abstract class EntityDao<T extends Entity> {
+	private Class<T> clazz;
 	private Session session;
-	private String findAllQuery;
 
-	public void create(T entity) {
+	public void save(T entity) {
 		Transaction transaction = session.beginTransaction();
 		try {
 			session.save(entity);
@@ -42,8 +43,8 @@ public abstract class EntityDao<T extends Entity> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<T> findAll() {
-		return session.getNamedQuery(findAllQuery).list();
+	public List<T> find() {
+		return session.createCriteria(clazz).add(Restrictions.eq("isDeleted", false)).list();
 	}
 
 	public Session getSession() {
@@ -54,7 +55,11 @@ public abstract class EntityDao<T extends Entity> {
 		this.session = session;
 	}
 
-	public void setFindAllQuery(String findAllQuery) {
-		this.findAllQuery = findAllQuery;
+	public void setClazz(Class<T> clazz) {
+		this.clazz = clazz;
+	}
+
+	public Class<T> getClazz() {
+		return clazz;
 	}
 }

@@ -25,17 +25,17 @@ import ru.fess38.finance.model.Rubric;
 import ru.fess38.finance.model.Transaction;
 import ru.fess38.finance.model.TransactionGroup;
 import ru.fess38.finance.model.User;
+import ru.fess38.finance.view.ViewFactory;
 
 
-public class TransactionAdderController extends AbstractController {
-	public TransactionAdderController(GridPane form) {
-		this.form = form;
-		scene = new Scene(form);
+public class TransactionAdder extends AbstractController {
+	public TransactionAdder(ControllersFactory factory) {
+		super(factory);
+		factory.setTransactionAdder(this);
 	}
 
-	private final GridPane form;
-	private final Scene scene;
-	private TransactionWindowController transactionWindowController;
+	private final GridPane gridPane = ViewFactory.transactionAdderWindow();
+	private final Scene scene = new Scene(gridPane);
 
 	@Override
 	public void init() {
@@ -73,12 +73,12 @@ public class TransactionAdderController extends AbstractController {
 		datePicker().setValue(LocalDate.now());
 		expence().selectedProperty().set(true);
 		rubric().getSelectionModel().selectFirst();
-		account().getItems().setAll(getAccountDao().findAll());
+		account().getItems().setAll(getAccountDao().find());
 		account().getSelectionModel().selectFirst();
 		amount().clear();
-		user().getItems().setAll(getUserDao().findAll());
+		user().getItems().setAll(getUserDao().find());
 		user().setValue(null);
-		transactionGroup().getItems().setAll(getTransactionGroupDao().findAll());
+		transactionGroup().getItems().setAll(getTransactionGroupDao().find());
 		transactionGroup().setValue(null);
 		comment().clear();
 	}
@@ -122,9 +122,9 @@ public class TransactionAdderController extends AbstractController {
 				t.setAccountFrom(account);
 				t.setAccountTo(getAccountDao().findServiceAccountByAnother(account));
 			}
-			getTransactionDao().create(t);
+			getTransactionDao().save(t);
 			((Stage) scene.getWindow()).close();
-			transactionWindowController.handle();
+			getTransactionWindow().handle();
 		}
 	}
 
@@ -146,51 +146,46 @@ public class TransactionAdderController extends AbstractController {
 	}
 
 	private DatePicker datePicker() {
-		return (DatePicker) form.lookup("#date");
+		return (DatePicker) gridPane.lookup("#date");
 	}
 
 	private RadioButton income() {
-		return (RadioButton) form.lookup("#income");
+		return (RadioButton) gridPane.lookup("#income");
 	}
 
 	private RadioButton expence() {
-		return (RadioButton) form.lookup("#expence");
+		return (RadioButton) gridPane.lookup("#expence");
 	}
 
 	@SuppressWarnings("unchecked")
 	private ComboBox<Rubric> rubric() {
-		return (ComboBox<Rubric>) form.lookup("#rubric");
+		return (ComboBox<Rubric>) gridPane.lookup("#rubric");
 	}
 
 	@SuppressWarnings("unchecked")
 	private ComboBox<Account> account() {
-		return (ComboBox<Account>) form.lookup("#account");
+		return (ComboBox<Account>) gridPane.lookup("#account");
 	}
 
 	private TextField amount() {
-		return (TextField) form.lookup("#amount");
+		return (TextField) gridPane.lookup("#amount");
 	}
 
 	@SuppressWarnings("unchecked")
 	private ComboBox<User> user() {
-		return (ComboBox<User>) form.lookup("#user");
+		return (ComboBox<User>) gridPane.lookup("#user");
 	}
 
 	@SuppressWarnings("unchecked")
 	private ComboBox<TransactionGroup> transactionGroup() {
-		return (ComboBox<TransactionGroup>) form.lookup("#transactionGroup");
+		return (ComboBox<TransactionGroup>) gridPane.lookup("#transactionGroup");
 	}
 
 	private TextField comment() {
-		return (TextField) form.lookup("#comment");
+		return (TextField) gridPane.lookup("#comment");
 	}
 
 	private Button saveButton() {
-		return (Button) form.lookup("#saveButton");
-	}
-
-	public void setTransactionWindowController(
-			TransactionWindowController transactionWindowController) {
-		this.transactionWindowController = transactionWindowController;
+		return (Button) gridPane.lookup("#saveButton");
 	}
 }

@@ -9,10 +9,7 @@
       </generator>
     </id>
     <property name="name" column="name"/>
+    <property name="isDeleted" column="isDeleted" access="noop" insert="false" update="false" />
     <sql-delete><![CDATA[update ${userTable} set isDeleted = TRUE where id = :id]]></sql-delete>
   </class>
-
-  <query name="userFindAll">
-    <![CDATA[from User where isDeleted = FALSE]]>
-  </query>
 </hibernate-mapping>

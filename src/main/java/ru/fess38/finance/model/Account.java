@@ -7,6 +7,7 @@ import java.util.Objects;
 public class Account extends Entity {
 	private Currency currency;
 	private int amount;
+	private boolean isService;
 
 	@Override
 	public boolean equals(Object object) {
@@ -43,5 +44,13 @@ public class Account extends Entity {
 
 	public void setCurrency(Currency currency) {
 		this.currency = currency;
+	}
+
+	public boolean getIsService() {
+		return isService;
+	}
+
+	public void setIsService(boolean isService) {
+		this.isService = isService;
 	}
 }

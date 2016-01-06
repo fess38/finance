@@ -10,10 +10,7 @@
     </id>
     <property name="name" column="name"/>
     <property name="symbol" column="symbol"/>
+    <property name="isDeleted" column="isDeleted" access="noop" insert="false" update="false" />
     <sql-delete><![CDATA[update ${currencyTable} set isDeleted = TRUE where id = :id]]></sql-delete>
   </class>
-
-  <query name="currencyFindAll">
-    <![CDATA[from Currency where isDeleted = FALSE]]>
-  </query>
 </hibernate-mapping>

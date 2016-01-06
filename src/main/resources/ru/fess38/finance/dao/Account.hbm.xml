@@ -11,11 +11,10 @@
     <property column="name" name="name" />
     <property column="amount" name="amount" />
     <many-to-one class="ru.fess38.finance.model.Currency" column="currencyId" name="currency" lazy="false" />
+    <property name="isService" column="isService" />
+    <property name="isDeleted" column="isDeleted" access="noop" insert="false" update="false" />
     <sql-delete><![CDATA[ update ${accountTable} set isDeleted = TRUE where id = :id ]]></sql-delete>
   </class>
-
-  <query name="accountFindAll">
-    <![CDATA[ from Account where isService = FALSE and isDeleted = FALSE ]]></query>
 
   <query name="accountFindServiceByCurrencyId">
     <![CDATA[ from Account where currencyId = :id and isService = TRUE and isDeleted = FALSE ]]>
