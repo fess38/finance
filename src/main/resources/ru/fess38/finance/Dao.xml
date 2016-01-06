@@ -53,38 +53,26 @@
   </bean>
 
   <bean id="accountDao" class="ru.fess38.finance.dao.AccountDao" parent="entityDao">
-    <property name="deleteByIdQuery" value="accountDeleteById" />
     <property name="findAllQuery" value="accountFindAll" />
-    <property name="findByIdQuery" value="accountFindById" />
   </bean>
 
   <bean id="currencyDao" class="ru.fess38.finance.dao.CurrencyDao" parent="entityDao">
-    <property name="deleteByIdQuery" value="currencyDeleteById" />
     <property name="findAllQuery" value="currencyFindAll" />
-    <property name="findByIdQuery" value="currencyFindById" />
   </bean>
 
   <bean id="rubricDao" class="ru.fess38.finance.dao.RubricDao" parent="entityDao">
-    <property name="deleteByIdQuery" value="rubricDeleteById" />
     <property name="findAllQuery" value="rubricFindAll" />
-    <property name="findByIdQuery" value="rubricFindById" />
   </bean>
 
   <bean id="transactionDao" class="ru.fess38.finance.dao.TransactionDao" parent="entityDao">
-    <property name="deleteByIdQuery" value="transactionDeleteById" />
     <property name="findAllQuery" value="transactionFindAll" />
-    <property name="findByIdQuery" value="transactionFindById" />
   </bean>
 
   <bean id="transactionGroupDao" class="ru.fess38.finance.dao.TransactionGroupDao" parent="entityDao">
-    <property name="deleteByIdQuery" value="transactionGroupDeleteById" />
     <property name="findAllQuery" value="transactionGroupFindAll" />
-    <property name="findByIdQuery" value="transactionGroupFindById" />
   </bean>
 
   <bean id="userDao" class="ru.fess38.finance.dao.UserDao" parent="entityDao">
-    <property name="deleteByIdQuery" value="userDeleteById" />
     <property name="findAllQuery" value="userFindAll" />
-    <property name="findByIdQuery" value="userFindById" />
   </bean>
 </beans>

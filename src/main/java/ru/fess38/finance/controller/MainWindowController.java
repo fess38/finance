@@ -1,5 +1,6 @@
 package ru.fess38.finance.controller;
 
+
 import javafx.scene.control.Button;
 import javafx.scene.control.TabPane;
 import javafx.scene.input.KeyCode;
@@ -13,7 +14,7 @@ public class MainWindowController extends AbstractController {
 	private final TabPane mainWindow;
 	private TransactionAdderController transactionAdderController;
 	private TransferAdderController transferAdderController;
-	private TransactionWindowController transactionWindowController; 
+	private TransactionWindowController transactionWindowController;
 
 	@Override
 	public void init() {
@@ -26,29 +27,29 @@ public class MainWindowController extends AbstractController {
 
 	@Override
 	public void handle() {
-		
+
 	}
-	
+
 	private void addKeyEventHandler() {
 		mainWindow.setOnKeyPressed(e -> {
 			if (e.getCode() == KeyCode.LEFT) {
 				prevMonth();
-            } else if (e.getCode() == KeyCode.RIGHT) {
-            	nextMonth();
-            } 
+			} else if (e.getCode() == KeyCode.RIGHT) {
+				nextMonth();
+			}
 		});
 	}
-	
+
 	private void prevMonth() {
 		transactionWindowController.prevMonth();
 		transactionWindowController.handle();
 	}
-	
+
 	private void nextMonth() {
 		transactionWindowController.nextMonth();
 		transactionWindowController.handle();
 	}
-	
+
 	private Button transactionAdderButton() {
 		return (Button) mainWindow.lookup("#transactionAdder");
 	}
@@ -56,7 +57,7 @@ public class MainWindowController extends AbstractController {
 	private Button transferAdderButton() {
 		return (Button) mainWindow.lookup("#transferAdder");
 	}
-	
+
 	private Button prevMonthButton() {
 		return (Button) mainWindow.lookup("#prevMonth");
 	}
@@ -65,11 +66,13 @@ public class MainWindowController extends AbstractController {
 		return (Button) mainWindow.lookup("#nextMonth");
 	}
 
-	public void setTransactionWindowController(TransactionWindowController transactionWindowController) {
+	public void setTransactionWindowController(
+			TransactionWindowController transactionWindowController) {
 		this.transactionWindowController = transactionWindowController;
 	}
 
-	public void setTransactionAdderController(TransactionAdderController transactionAdderController) {
+	public void setTransactionAdderController(
+			TransactionAdderController transactionAdderController) {
 		this.transactionAdderController = transactionAdderController;
 	}
 

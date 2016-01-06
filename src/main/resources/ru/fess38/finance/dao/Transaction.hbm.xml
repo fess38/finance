@@ -12,31 +12,24 @@
     <property name="amountTo" column="amountTo" />
     <property name="dayRef" column="dayRef" />
     <property name="comment" column="comment" />
-    <many-to-one name="accountFrom" class="ru.fess38.finance.model.Account" column="accountFromId" />
-    <many-to-one name="accountTo" class="ru.fess38.finance.model.Account" column="accountToId" />
-    <many-to-one name="rubric" class="ru.fess38.finance.model.Rubric" column="rubricId" />
-    <many-to-one name="transactionGroup" class="ru.fess38.finance.model.TransactionGroup" column="transactionGroupId" />
-    <many-to-one name="user" class="ru.fess38.finance.model.User" column="userId" />
+    <many-to-one name="accountFrom" class="ru.fess38.finance.model.Account" column="accountFromId" lazy="false" />
+    <many-to-one name="accountTo" class="ru.fess38.finance.model.Account" column="accountToId" lazy="false" />
+    <many-to-one name="rubric" class="ru.fess38.finance.model.Rubric" column="rubricId" lazy="false" />
+    <many-to-one name="transactionGroup" class="ru.fess38.finance.model.TransactionGroup" column="transactionGroupId"
+      lazy="false" />
+    <many-to-one name="user" class="ru.fess38.finance.model.User" column="userId" lazy="false" />
     <sql-delete><![CDATA[ update ${transactionTable} set isDeleted = TRUE where id = :id ]]></sql-delete>
   </class>
 
-  <query name="transactionDeleteById">
-    <![CDATA[update Transaction set isDeleted = TRUE where id = :id ]]>
-  </query>
-
   <query name="transactionFindAll">
     <![CDATA[ from Transaction where isDeleted = FALSE ]]>
-  </query>
-
-  <query name="transactionFindById">
-    <![CDATA[ from Transaction where id = :id ]]>
   </query>
 
   <query name="transactionFindByYearMonth">
     <![CDATA[ from Transaction where YEAR(dayRef) = :year and MONTH(dayRef) = :month
     and isDeleted = FALSE and rubric.isService = FALSE ]]>
   </query>
-  
+
   <sql-query name="isEntityUsed" read-only="true">
     <![CDATA[ SELECT COUNT(*)
     FROM (
@@ -62,5 +55,4 @@
       ) t
     WHERE t.id = :id ]]>
   </sql-query>
-
 </hibernate-mapping>

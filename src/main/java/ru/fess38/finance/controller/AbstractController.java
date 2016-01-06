@@ -1,5 +1,6 @@
 package ru.fess38.finance.controller;
 
+
 import ru.fess38.finance.dao.AccountDao;
 import ru.fess38.finance.dao.CurrencyDao;
 import ru.fess38.finance.dao.RubricDao;
@@ -16,7 +17,7 @@ public abstract class AbstractController {
 	private TransactionGroupDao transactionGroupDao;
 	private UserDao userDao;
 
-	public abstract void init();
+	public void init() {}
 
 	public abstract void handle();
 

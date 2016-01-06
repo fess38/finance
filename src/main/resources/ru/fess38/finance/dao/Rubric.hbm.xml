@@ -17,10 +17,6 @@
   <query name="rubricFindAll">
     <![CDATA[from Rubric where isService = FALSE and isDeleted = FALSE]]>
   </query>
-
-  <query name="rubricFindById">
-    <![CDATA[from Rubric where id = :id]]>
-  </query>
   
   <query name="getTransferRubric">
     <![CDATA[from Rubric where isService = True and isDeleted = FALSE]]>

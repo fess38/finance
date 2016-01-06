@@ -1,42 +1,37 @@
 package ru.fess38.finance.model;
 
+
 import java.util.Objects;
 
 
-public final class Currency extends Entity {
-    public Currency() { }
+public class Currency extends Entity {
+	private String symbol;
 
-    public Currency(Integer id) {
-        super(id);
-    }
+	@Override
+	public boolean equals(Object object) {
+		if (this == object) {
+			return true;
+		}
+		if (object == null || getClass() != object.getClass()) {
+			return false;
+		}
 
-    private String symbol;
+		Currency that = (Currency) object;
+		return Objects.equals(this.getId(), that.getId())
+				&& Objects.equals(this.getName(), that.getName())
+				&& Objects.equals(this.getSymbol(), that.getSymbol());
+	}
 
-    @Override
-    public boolean equals(Object object) {
-        if (this == object) {
-            return true;
-        }
-        if (object == null || getClass() != object.getClass()) {
-            return false;
-        }
+	@Override
+	public int hashCode() {
+		return Objects.hash(getId(), getName(), getSymbol());
+	}
 
-        Currency that = (Currency) object;
-        return Objects.equals(this.getId(), that.getId())
-                && Objects.equals(this.getName(), that.getName())
-                && Objects.equals(this.getSymbol(), that.getSymbol());
-    }
+	public String getSymbol() {
+		return symbol;
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getName(), getSymbol());
-    }
-
-    public String getSymbol() {
-        return symbol;
-    }
-
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
-    }
+	public void setSymbol(String symbol) {
+		this.symbol = symbol;
+	}
 }

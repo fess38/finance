@@ -1,5 +1,6 @@
 package ru.fess38.finance.controller;
 
+
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -16,9 +17,6 @@ public class TransactionEditorController extends AbstractController {
 	private TransactionLabel transactionLabel;
 	private TransactionWindowController transactionWindowController;
 	private boolean isEdited;
-
-	@Override
-	public void init() {}
 
 	@Override
 	public void handle() {
@@ -45,7 +43,7 @@ public class TransactionEditorController extends AbstractController {
 	private void removeTransaction(TableView<Transaction> tableView) {
 		Transaction transaction = tableView.getSelectionModel().getSelectedItem();
 		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setHeaderText("Удалить транзакцию");
+		alert.setHeaderText("Удалить транзакцию?");
 		alert.showAndWait();
 		if (alert.getResult().getButtonData().isDefaultButton()) {
 			tableView.getItems().remove(transaction);

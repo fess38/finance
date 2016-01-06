@@ -1,59 +1,54 @@
 package ru.fess38.finance.model;
 
+
 import java.util.Objects;
 
 
 public abstract class Entity {
-    public Entity() { }
+	private Integer id;
+	private String name;
 
-    public Entity(Integer id) {
-        this.id = id;
-    }
+	@Override
+	public boolean equals(Object object) {
+		if (this == object) {
+			return true;
+		}
+		if (object == null || getClass() != object.getClass()) {
+			return false;
+		}
 
-    private Integer id;
-    private String name;
+		Entity that = (Entity) object;
+		return Objects.equals(this.getId(), that.getId())
+				&& Objects.equals(this.getName(), that.getName());
+	}
 
-    @Override
-    public boolean equals(Object object) {
-        if (this == object) {
-            return true;
-        }
-        if (object == null || getClass() != object.getClass()) {
-            return false;
-        }
+	@Override
+	public int hashCode() {
+		return Objects.hash(getId(), getName());
+	}
 
-        Entity that = (Entity) object;
-        return Objects.equals(this.getId(), that.getId())
-                && Objects.equals(this.getName(), that.getName());
-    }
+	@Override
+	public String toString() {
+		final StringBuffer sb = new StringBuffer("Entity{");
+		sb.append("id=").append(id);
+		sb.append(", name='").append(name).append('\'');
+		sb.append('}');
+		return sb.toString();
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getName());
-    }
+	public String getName() {
+		return name;
+	}
 
-    @Override
-    public String toString() {
-        final StringBuffer sb = new StringBuffer("Entity{");
-        sb.append("id=").append(id);
-        sb.append(", name='").append(name).append('\'');
-        sb.append('}');
-        return sb.toString();
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public final String getName() {
-        return name;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public final void setName(String name) {
-        this.name = name;
-    }
-
-    public final Integer getId() {
-        return id;
-    }
-
-    public final void setId(Integer id) {
-        this.id = id;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 }

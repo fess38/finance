@@ -1,7 +1,11 @@
 package ru.fess38.finance.view;
 
+
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.net.URL;
+
+import org.springframework.core.io.ClassPathResource;
 
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -9,7 +13,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.GridPane;
-import ru.fess38.finance.Utils;
 import ru.fess38.finance.model.Transaction;
 
 
@@ -17,14 +20,6 @@ public class ViewFactory {
 	private ViewFactory() {}
 
 	private static final String PACKAGE = "ru/fess38/finance/view/";
-
-	private static <T> T loadWrapper(String url) {
-		try {
-			return FXMLLoader.load(Utils.getClassPathUrl(PACKAGE + url));
-		} catch (IOException e) {
-			throw new UncheckedIOException(e);
-		}
-	}
 
 	public static TabPane mainWindow() {
 		return loadWrapper("MainWindow.fxml");
@@ -50,4 +45,22 @@ public class ViewFactory {
 	public static TableView<Transaction> transactionEditorWindow() {
 		return new TransactionEditorBuilder().build();
 	}
+
+	private static <T> T loadWrapper(String url) {
+		try {
+			return FXMLLoader.load(getClassPathUrl(PACKAGE + url));
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
+
+	private static URL getClassPathUrl(String classpath) {
+		ClassPathResource resource = new ClassPathResource(classpath);
+		try {
+			return resource.getURL();
+		} catch (Exception e) {
+			throw new IllegalArgumentException("Unknown resource: " + classpath);
+		}
+	}
+
 }

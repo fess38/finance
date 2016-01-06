@@ -1,12 +1,13 @@
 package ru.fess38.finance.model;
 
+
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.Objects;
 
 
-public final class Transaction extends Entity {
+public class Transaction extends Entity {
 	private Rubric rubric;
 	private Date dayRef;
 	private Account accountFrom;
@@ -125,52 +126,14 @@ public final class Transaction extends Entity {
 		this.user = user;
 	}
 
-	public Integer getAccountFromId() {
-		return accountFrom.getId();
-	}
-
-	public void setAccountFromId(Integer accountFromId) {
-		setAccountFrom(new Account(accountFromId));
-	}
-
-	public Integer getAccountToId() {
-		return accountTo.getId();
-	}
-
-	public void setAccountToId(Integer accountToId) {
-		setAccountTo(new Account(accountToId));
-	}
-
-	public Integer getRubricId() {
-		return rubric.getId();
-	}
-
-	public void setRubricId(Integer rubricId) {
-		setRubric(new Rubric(rubricId));
-	}
-
-	public Integer getTransactionGroupId() {
-		return transactionGroup.getId();
-	}
-
-	public void setTransactionGroupId(Integer transactionGroupId) {
-		if (transactionGroupId != null) {
-			setTransactionGroup(new TransactionGroup(transactionGroupId));
-		}
-	}
-
-	public Integer getUserId() {
-		return user.getId();
-	}
-
-	public void setUserId(Integer userId) {
-		if (userId != null) {
-			setUser(new User(userId));
-		}
-	}
-
 	public LocalDate getLocalDate() {
 		Objects.requireNonNull(dayRef);
 		return dayRef.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+	}
+
+	public void setLocalDate(LocalDate localDate) {
+		Objects.requireNonNull(localDate);
+		Date date = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+		setDayRef(date);
 	}
 }

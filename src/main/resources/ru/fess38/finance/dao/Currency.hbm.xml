@@ -16,8 +16,4 @@
   <query name="currencyFindAll">
     <![CDATA[from Currency where isDeleted = FALSE]]>
   </query>
-
-  <query name="currencyFindById">
-    <![CDATA[from Currency where id = :id]]>
-  </query>
 </hibernate-mapping>

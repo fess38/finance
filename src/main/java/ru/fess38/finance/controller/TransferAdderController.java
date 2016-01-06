@@ -1,5 +1,6 @@
 package ru.fess38.finance.controller;
 
+
 import java.time.LocalDate;
 
 import org.apache.commons.lang3.StringUtils;
@@ -15,7 +16,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import ru.fess38.finance.Utils;
 import ru.fess38.finance.model.Account;
 import ru.fess38.finance.model.Rubric;
 import ru.fess38.finance.model.Transaction;
@@ -28,6 +28,7 @@ public class TransferAdderController extends AbstractController {
 		this.form = form;
 		scene = new Scene(form);
 	}
+
 	private final GridPane form;
 	private final Scene scene;
 
@@ -78,7 +79,7 @@ public class TransferAdderController extends AbstractController {
 
 	private Transaction getTransaction() {
 		Transaction transaction = new Transaction();
-		transaction.setDayRef(Utils.toDate(datePicker().getValue()));
+		transaction.setLocalDate(datePicker().getValue());
 		transaction.setRubric(rubric().getValue());
 		transaction.setAccountFrom(accountFrom().getValue());
 		transaction.setAccountTo(accountTo().getValue());
@@ -105,7 +106,7 @@ public class TransferAdderController extends AbstractController {
 		if (validateAmount(amountFrom()) && validateAmount(amountTo())) {
 			Transaction transaction = getTransaction();
 			getTransactionDao().create(transaction);
-			((Stage)scene.getWindow()).close();
+			((Stage) scene.getWindow()).close();
 		}
 	}
 

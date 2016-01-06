@@ -15,8 +15,4 @@
   <query name="userFindAll">
     <![CDATA[from User where isDeleted = FALSE]]>
   </query>
-
-  <query name="userFindById">
-    <![CDATA[from User where id = :id]]>
-  </query>
 </hibernate-mapping>

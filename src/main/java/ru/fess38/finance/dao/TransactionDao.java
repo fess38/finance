@@ -1,16 +1,17 @@
 package ru.fess38.finance.dao;
 
-import java.time.YearMonth;
-import java.util.List;
 
+import java.time.YearMonth;
+
+import ru.fess38.finance.model.Entity;
 import ru.fess38.finance.model.Transaction;
 import ru.fess38.finance.view.Transactions;
 
 
 public class TransactionDao extends EntityDao<Transaction> {
-	public boolean isEntityUsed(Integer id) {
+	public boolean isEntityUsed(Entity entity) {
 		return !getSession().getNamedQuery("isEntityUsed")
-			.setInteger("id", id)
+			.setInteger("id", entity.getId())
 			.uniqueResult()
 			.equals(0);
 	}
@@ -22,13 +23,5 @@ public class TransactionDao extends EntityDao<Transaction> {
 					.setInteger("year", yearMonth.getYear())
 					.setInteger("month", yearMonth.getMonthValue())
 					.list());
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Transaction> findByYearMonthRuble(int year, int month) {
-		return getSession().getNamedQuery("transactionFindByYearMonthRuble")
-			.setInteger("year", year)
-			.setInteger("month", month)
-			.list();
 	}
 }

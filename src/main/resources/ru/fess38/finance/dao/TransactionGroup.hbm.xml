@@ -15,8 +15,4 @@
   <query name="transactionGroupFindAll">
     <![CDATA[from TransactionGroup where isDeleted = FALSE]]>
   </query>
-
-  <query name="transactionGroupFindById">
-    <![CDATA[from TransactionGroup where id = :id]]>
-  </query>
 </hibernate-mapping>
