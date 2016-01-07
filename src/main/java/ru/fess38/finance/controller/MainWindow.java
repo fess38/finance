@@ -19,17 +19,13 @@ public class MainWindow extends AbstractController {
 	private final TabPane mainWindowView = ViewFactory.mainWindow();
 
 	@Override
-	public void init() {
+	public void handle() {
 		transactionAdderButton().setOnAction(e -> getTransactionAdder().handle());
 		transferAdderButton().setOnAction(e -> getTransferAdder().handle());
 		prevMonthButton().setOnAction(e -> prevMonth());
 		nextMonthButton().setOnAction(e -> nextMonth());
 		addKeyEventHandler();
-	}
-
-	@Override
-	public void handle() {
-
+		getTransactionWindow().handle();
 	}
 
 	private void addKeyEventHandler() {

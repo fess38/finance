@@ -10,9 +10,13 @@ import org.springframework.core.io.ClassPathResource;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import ru.fess38.finance.model.Transaction;
 
 
@@ -20,6 +24,15 @@ public class ViewFactory {
 	private ViewFactory() {}
 
 	private static final String PACKAGE = "ru/fess38/finance/view/";
+
+	public static void buildModalWindow(Parent parent) {
+		Scene scene = new Scene(parent);
+		Stage stage = new Stage();
+		stage.setScene(scene);
+		stage.setResizable(false);
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.showAndWait();
+	}
 
 	public static TabPane mainWindow() {
 		return loadWrapper("MainWindow.fxml");
@@ -43,7 +56,11 @@ public class ViewFactory {
 	}
 
 	public static TableView<Transaction> transactionEditorWindow(Transactions transactions) {
-		return new TransactionEditorBuilder().build(transactions);
+		return new TransactionEditorBuilder().transactionEditorWindow(transactions);
+	}
+
+	public static TableView<Transaction> transferEditorWindow(Transactions transactions) {
+		return new TransactionEditorBuilder().transferEditorWindow(transactions);
 	}
 
 	private static <T> T loadWrapper(String url) {

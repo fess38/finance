@@ -186,7 +186,7 @@ public class TransactionGridBuilder implements Builder<GridPane> {
 		private String value;
 	}
 
-	public Set<TransactionLabel> transactionLabels() {
+	public Set<TransactionLabel> getTransactionLabels() {
 		return transactionLabels;
 	}
 }

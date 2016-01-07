@@ -1,7 +1,6 @@
 package ru.fess38.finance.model;
 
 
-import java.util.Comparator;
 import java.util.Objects;
 
 
@@ -10,10 +9,6 @@ public abstract class Entity {
 	private String name;
 	@SuppressWarnings("unused")
 	private boolean isDeleted;
-
-	public static Comparator<Entity> nameComparator() {
-		return Comparator.comparing(Entity::getName);
-	}
 
 	@Override
 	public boolean equals(Object object) {

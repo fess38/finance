@@ -1,4 +1,4 @@
-package ru.fess38.finance.controller;
+package ru.fess38.finance.view;
 
 import javafx.event.EventHandler;
 import javafx.scene.control.ComboBox;

@@ -23,8 +23,6 @@ public abstract class AbstractController {
 	private TransactionGroupDao transactionGroupDao;
 	private UserDao userDao;
 
-	public void init() {}
-
 	public abstract void handle();
 
 	public AccountDao getAccountDao() {
@@ -85,10 +83,6 @@ public abstract class AbstractController {
 
 	public TransactionAdder getTransactionAdder() {
 		return factory().getTransactionAdder();
-	}
-
-	public TransactionEditor getTransactionEditor() {
-		return factory().getTransactionEditor();
 	}
 
 	public TransactionWindow getTransactionWindow() {

@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -14,13 +13,15 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ru.fess38.finance.model.Account;
 import ru.fess38.finance.model.Rubric;
 import ru.fess38.finance.model.Transaction;
 import ru.fess38.finance.model.TransactionGroup;
 import ru.fess38.finance.model.User;
+import ru.fess38.finance.view.ComboBoxCleanEventHandler;
+import ru.fess38.finance.view.EntityStringConverter;
+import ru.fess38.finance.view.NumberInputListener;
 import ru.fess38.finance.view.ViewFactory;
 
 
@@ -30,23 +31,14 @@ public class TransferAdder extends AbstractController {
 		factory.setTransferAdder(this);
 	}
 
-	private final GridPane gridPane = ViewFactory.transferAdderWindow();
-	private final Scene scene = new Scene(gridPane);
-
-	@Override
-	public void init() {
-		setViewRules();
-		refreshValues();
-	}
+	private GridPane gridPane;
 
 	@Override
 	public void handle() {
+		gridPane = ViewFactory.transferAdderWindow();
+		setViewRules();
 		refreshValues();
-		Stage stage = new Stage();
-		stage.setScene(scene);
-		stage.sizeToScene();
-		stage.initModality(Modality.APPLICATION_MODAL);
-		stage.showAndWait();
+		ViewFactory.buildModalWindow(gridPane);
 	}
 
 	private void setViewRules() {
@@ -59,7 +51,7 @@ public class TransferAdder extends AbstractController {
 		user().setOnKeyPressed(new ComboBoxCleanEventHandler(user()));
 		transactionGroup().setConverter(new EntityStringConverter<TransactionGroup>());
 		transactionGroup().setOnKeyPressed(new ComboBoxCleanEventHandler(transactionGroup()));
-		saveButton().setOnAction(e -> this.saveFromInput());
+		saveButton().setOnAction(e -> save());
 	}
 
 	private void refreshValues() {
@@ -69,13 +61,8 @@ public class TransferAdder extends AbstractController {
 		accountFrom().getSelectionModel().selectFirst();
 		accountTo().getItems().setAll(getAccountDao().find());
 		accountTo().getSelectionModel().selectFirst();
-		amountFrom().clear();
-		amountTo().clear();
 		user().getItems().setAll(getUserDao().find());
-		user().setValue(null);
 		transactionGroup().getItems().setAll(getTransactionGroupDao().find());
-		transactionGroup().setValue(null);
-		comment().clear();
 	}
 
 	private Transaction getTransaction() {
@@ -103,11 +90,12 @@ public class TransferAdder extends AbstractController {
 		return true;
 	}
 
-	private void saveFromInput() {
+	private void save() {
 		if (validateAmount(amountFrom()) && validateAmount(amountTo())) {
 			Transaction transaction = getTransaction();
 			getTransactionDao().save(transaction);
-			((Stage) scene.getWindow()).close();
+			((Stage) gridPane.getScene().getWindow()).close();
+			getTransactionWindow().handle();
 		}
 	}
 

@@ -1,13 +1,10 @@
 package ru.fess38.finance;
 
 
-import java.io.IOException;
-
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -23,10 +20,11 @@ public class Main extends Application {
 	private ClassPathXmlApplicationContext ctx;
 
 	@Override
-	public void start(Stage primaryStage) throws IOException {
+	public void start(Stage primaryStage) {
 		ctx = new ClassPathXmlApplicationContext(path);
-		Parent root = ctx.getBean("mainWindow", MainWindow.class).getMainWindowView();
-		Scene scene = new Scene(root);
+		MainWindow mainWindowController = ctx.getBean("mainWindow", MainWindow.class);
+		mainWindowController.handle();
+		Scene scene = new Scene(mainWindowController.getMainWindowView());
 		primaryStage.setScene(scene);
 		setWindowFullscreen(primaryStage);
 		primaryStage.show();

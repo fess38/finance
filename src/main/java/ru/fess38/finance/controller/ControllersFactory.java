@@ -4,7 +4,6 @@ package ru.fess38.finance.controller;
 public class ControllersFactory {
 	private MainWindow mainWindow;
 	private TransactionAdder transactionAdder;
-	private TransactionEditor transactionEditor;
 	private TransactionWindow transactionWindow;
 	private TransferAdder transferAdder;
 
@@ -22,14 +21,6 @@ public class ControllersFactory {
 
 	public void setTransactionAdder(TransactionAdder transactionAdder) {
 		this.transactionAdder = transactionAdder;
-	}
-
-	public TransactionEditor getTransactionEditor() {
-		return transactionEditor;
-	}
-
-	public void setTransactionEditor(TransactionEditor transactionEditor) {
-		this.transactionEditor = transactionEditor;
 	}
 
 	public TransactionWindow getTransactionWindow() {

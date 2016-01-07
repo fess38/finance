@@ -1,4 +1,4 @@
-package ru.fess38.finance.controller;
+package ru.fess38.finance.view;
 
 
 import javafx.beans.value.ChangeListener;

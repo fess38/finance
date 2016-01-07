@@ -5,8 +5,7 @@
 
   <import resource="classpath*:ru/fess38/finance/Dao.xml" />
 
-  <bean id="abstractController" class="ru.fess38.finance.controller.AbstractController" abstract="true"
-    init-method="init">
+  <bean id="abstractController" class="ru.fess38.finance.controller.AbstractController" abstract="true">
     <constructor-arg name="factory" ref="controllersFactory" />
     <property name="rubricDao" ref="rubricDao" />
     <property name="accountDao" ref="accountDao" />
@@ -25,7 +24,5 @@
   <bean id="transferAdder" class="ru.fess38.finance.controller.TransferAdder" parent="abstractController" />
 
   <bean id="transactionWindow" class="ru.fess38.finance.controller.TransactionWindow" parent="abstractController" />
-
-  <bean id="transactionEditor" class="ru.fess38.finance.controller.TransactionEditor" parent="abstractController" />
 
 </beans>
