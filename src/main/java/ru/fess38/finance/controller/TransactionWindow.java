@@ -30,7 +30,6 @@ public class TransactionWindow extends AbstractController {
 	private YearMonth yearMonth = YearMonth.now();
 	private List<Tab> tabs = new ArrayList<>();
 
-	@Override
 	public void handle() {
 		tabs.clear();
 		Transactions allTransactions = getTransactionDao().find(yearMonth);

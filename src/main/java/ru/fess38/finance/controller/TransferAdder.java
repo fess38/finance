@@ -33,7 +33,6 @@ public class TransferAdder extends AbstractController {
 
 	private GridPane gridPane;
 
-	@Override
 	public void handle() {
 		gridPane = ViewFactory.transferAdderWindow();
 		setViewRules();

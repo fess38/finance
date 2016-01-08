@@ -37,7 +37,6 @@ public class TransactionAdder extends AbstractController {
 
 	private GridPane gridPane;
 
-	@Override
 	public void handle() {
 		gridPane = ViewFactory.transactionAdderWindow();
 		setViewRules();

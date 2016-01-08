@@ -15,15 +15,12 @@ public abstract class AbstractController {
 	}
 
 	private final ControllersFactory factory;
-
 	private AccountDao accountDao;
 	private CurrencyDao currencyDao;
 	private RubricDao rubricDao;
 	private TransactionDao transactionDao;
 	private TransactionGroupDao transactionGroupDao;
 	private UserDao userDao;
-
-	public abstract void handle();
 
 	public AccountDao getAccountDao() {
 		return accountDao;
@@ -91,5 +88,9 @@ public abstract class AbstractController {
 
 	public TransferAdder getTransferAdder() {
 		return factory().getTransferAdder();
+	}
+
+	public RubricController getRubricController() {
+		return factory().getRubricController();
 	}
 }

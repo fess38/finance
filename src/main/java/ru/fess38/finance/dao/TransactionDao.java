@@ -10,10 +10,10 @@ import ru.fess38.finance.view.Transactions;
 
 public class TransactionDao extends EntityDao<Transaction> {
 	public boolean isEntityUsed(Entity entity) {
-		return !getSession().getNamedQuery("isEntityUsed")
+		Object usageAmount = getSession().getNamedQuery("isEntityUsed")
 			.setInteger("id", entity.getId())
-			.uniqueResult()
-			.equals(0);
+			.uniqueResult();
+		return Integer.parseInt(usageAmount.toString()) != 0;
 	}
 
 	@SuppressWarnings("unchecked")

@@ -6,6 +6,7 @@ public class ControllersFactory {
 	private TransactionAdder transactionAdder;
 	private TransactionWindow transactionWindow;
 	private TransferAdder transferAdder;
+	private RubricController rubricController;
 
 	public MainWindow getMainWindow() {
 		return mainWindow;
@@ -37,5 +38,13 @@ public class ControllersFactory {
 
 	public void setTransferAdder(TransferAdder transferAdder) {
 		this.transferAdder = transferAdder;
+	}
+
+	public RubricController getRubricController() {
+		return rubricController;
+	}
+
+	public void setRubricController(RubricController rubricController) {
+		this.rubricController = rubricController;
 	}
 }

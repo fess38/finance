@@ -18,12 +18,13 @@ public class MainWindow extends AbstractController {
 
 	private final TabPane mainWindowView = ViewFactory.mainWindow();
 
-	@Override
 	public void handle() {
 		transactionAdderButton().setOnAction(e -> getTransactionAdder().handle());
 		transferAdderButton().setOnAction(e -> getTransferAdder().handle());
 		prevMonthButton().setOnAction(e -> prevMonth());
 		nextMonthButton().setOnAction(e -> nextMonth());
+		getRubricController().init();
+		mainWindowView.getTabs().add(getRubricController().getTab());
 		addKeyEventHandler();
 		getTransactionWindow().handle();
 	}

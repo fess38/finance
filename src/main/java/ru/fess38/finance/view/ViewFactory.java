@@ -26,7 +26,7 @@ public class ViewFactory {
 	private static final String PACKAGE = "ru/fess38/finance/view/";
 
 	public static void buildModalWindow(Parent parent) {
-		Scene scene = new Scene(parent);
+		Scene scene = parent.getScene() == null ? new Scene(parent) : parent.getScene();
 		Stage stage = new Stage();
 		stage.setScene(scene);
 		stage.setResizable(false);
