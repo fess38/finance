@@ -4,33 +4,15 @@ package ru.fess38.finance.view;
 import org.apache.commons.lang3.BooleanUtils;
 
 import javafx.beans.property.SimpleStringProperty;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.layout.HBox;
 import ru.fess38.finance.model.Rubric;
 
 
-public class RubricView {
-	public RubricView() {
-		initTableView();
-		initAdder();
-		tab.setContent(tableView);
-	}
-
-	private final Tab tab = new Tab("Рубрики");
-	private final TableView<Rubric> tableView = new TableView<>();
-	private final TableColumn<Rubric, String> nameColumn = new TableColumn<>("Название");
-	private final TableColumn<Rubric, String> isIncomeColumn = new TableColumn<>("Тип");
-	private final HBox rubricAdder = new HBox();
-	private final TextField rubricAdderName = new TextField();
-	private final ComboBox<String> rubricType = new ComboBox<>();
-	private final Button createRubricButton = new Button("Сохранить");
+public class RubricView extends SimpleEntityView<Rubric> {
+	private TableColumn<Rubric, String> isIncomeColumn;
+	private ComboBox<String> isIncomeComboBox;
 
 	public static boolean isIncomeToBoolean(String value) {
 		return BooleanUtils.toBoolean(value, isIncome.TRUE.value, isIncome.FALSE.value);
@@ -50,54 +32,31 @@ public class RubricView {
 		protected final String value;
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
-	private void initTableView() {
-		nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-		nameColumn.setCellValueFactory(e -> {
-			return new SimpleStringProperty(e.getValue().getName());
-		});
-		nameColumn.setEditable(true);
+	protected void initTableView() {
+		super.initTableView();
+		isIncomeColumn = new TableColumn<>("Тип");
 		isIncomeColumn.setCellValueFactory(e -> {
 			String result = isIncomeToString(e.getValue().getIsIncome());
 			return new SimpleStringProperty(result);
 		});
-		tableView.getColumns().addAll(isIncomeColumn, nameColumn);
-		tableView.getSortOrder().addAll(isIncomeColumn, nameColumn);
-		tableView.setEditable(true);
+		getTableView().getColumns().setAll(isIncomeColumn, getNameColumn());
+		getTableView().getSortOrder().setAll(isIncomeColumn, getNameColumn());
+		getTab().setText("Рубрики");
 	}
 
-	private void initAdder() {
-		rubricType.getItems().addAll(isIncome.TRUE.value, isIncome.FALSE.value);
-		rubricType.getSelectionModel().selectFirst();
-		rubricAdder.getChildren().addAll(new Label("Название:"), rubricAdderName, new Label("Тип:"),
-				rubricType, createRubricButton);
+	@Override
+	protected void initAdder() {
+		super.initAdder();
+		isIncomeComboBox = new ComboBox<>();
+		isIncomeComboBox.getItems().addAll(isIncome.TRUE.value, isIncome.FALSE.value);
+		isIncomeComboBox.getSelectionModel().selectFirst();
+		getEntityAdder().getChildren().setAll(new Label("Название:"), getEntityAdderName(),
+				new Label("Тип:"), isIncomeComboBox, getCreateEntityButton());
 	}
 
-	public Tab getTab() {
-		return tab;
-	}
-
-	public TableView<Rubric> getTableView() {
-		return tableView;
-	}
-
-	public TableColumn<Rubric, String> getNameColumn() {
-		return nameColumn;
-	}
-
-	public TextField getRubricAdderName() {
-		return rubricAdderName;
-	}
-
-	public ComboBox<String> getRubricType() {
-		return rubricType;
-	}
-
-	public HBox getRubricAdder() {
-		return rubricAdder;
-	}
-
-	public Button getCreateRubricButton() {
-		return createRubricButton;
+	public ComboBox<String> getIsIncomeComboBox() {
+		return isIncomeComboBox;
 	}
 }

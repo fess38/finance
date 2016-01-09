@@ -31,7 +31,7 @@ public abstract class Entity {
 
 	@Override
 	public String toString() {
-		final StringBuffer sb = new StringBuffer("Entity{");
+		final StringBuffer sb = new StringBuffer(this.getClass().getName() + "{");
 		sb.append("id=").append(id);
 		sb.append(", name='").append(name).append('\'');
 		sb.append('}');

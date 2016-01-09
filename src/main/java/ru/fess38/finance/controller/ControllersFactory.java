@@ -7,6 +7,9 @@ public class ControllersFactory {
 	private TransactionWindow transactionWindow;
 	private TransferAdder transferAdder;
 	private RubricController rubricController;
+	private UserController userController;
+	private TransactionGroupController transactionGroupController;
+	private CurrencyController currencyController;
 
 	public MainWindow getMainWindow() {
 		return mainWindow;
@@ -46,5 +49,30 @@ public class ControllersFactory {
 
 	public void setRubricController(RubricController rubricController) {
 		this.rubricController = rubricController;
+	}
+
+	public UserController getUserController() {
+		return userController;
+	}
+
+	public void setUserController(UserController userController) {
+		this.userController = userController;
+	}
+
+	public TransactionGroupController getTransactionGroupController() {
+		return transactionGroupController;
+	}
+
+	public void setTransactionGroupController(
+			TransactionGroupController transactionGroupController) {
+		this.transactionGroupController = transactionGroupController;
+	}
+
+	public CurrencyController getCurrencyController() {
+		return currencyController;
+	}
+
+	public void setCurrencyController(CurrencyController currencyController) {
+		this.currencyController = currencyController;
 	}
 }

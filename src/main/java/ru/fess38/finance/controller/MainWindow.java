@@ -25,6 +25,12 @@ public class MainWindow extends AbstractController {
 		nextMonthButton().setOnAction(e -> nextMonth());
 		getRubricController().init();
 		mainWindowView.getTabs().add(getRubricController().getTab());
+		getUserController().init();
+		mainWindowView.getTabs().add(getUserController().getTab());
+		getTransactionGroupController().init();
+		mainWindowView.getTabs().add(getTransactionGroupController().getTab());
+		getCurrencyController().init();
+		mainWindowView.getTabs().add(getCurrencyController().getTab());
 		addKeyEventHandler();
 		getTransactionWindow().handle();
 	}

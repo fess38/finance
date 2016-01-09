@@ -17,15 +17,21 @@
 
   <bean id="mainWindow" class="ru.fess38.finance.controller.MainWindow" parent="abstractController" />
 
-  <bean id ="controllersFactory" class="ru.fess38.finance.controller.ControllersFactory" />
+  <bean id="controllersFactory" class="ru.fess38.finance.controller.ControllersFactory" />
 
   <bean class="ru.fess38.finance.controller.TransactionAdder" parent="abstractController" />
 
   <bean class="ru.fess38.finance.controller.TransferAdder" parent="abstractController" />
 
   <bean class="ru.fess38.finance.controller.TransactionWindow" parent="abstractController" />
-  
+
   <bean class="ru.fess38.finance.controller.TransactionWindow" parent="abstractController" />
 
   <bean class="ru.fess38.finance.controller.RubricController" parent="abstractController" />
+
+  <bean class="ru.fess38.finance.controller.UserController" parent="abstractController" />
+
+  <bean class="ru.fess38.finance.controller.TransactionGroupController" parent="abstractController" />
+
+  <bean class="ru.fess38.finance.controller.CurrencyController" parent="abstractController" />
 </beans>

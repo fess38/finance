@@ -93,4 +93,16 @@ public abstract class AbstractController {
 	public RubricController getRubricController() {
 		return factory().getRubricController();
 	}
+
+	public UserController getUserController() {
+		return factory().getUserController();
+	}
+
+	public TransactionGroupController getTransactionGroupController() {
+		return factory().getTransactionGroupController();
+	}
+
+	public CurrencyController getCurrencyController() {
+		return factory().getCurrencyController();
+	}
 }

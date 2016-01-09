@@ -38,8 +38,13 @@ public abstract class EntityDao<T extends Entity> {
 
 	public void delete(T entity) {
 		Transaction transaction = session.beginTransaction();
-		getSession().delete(entity);
-		transaction.commit();
+		try {
+			session.delete(entity);
+			transaction.commit();
+		} catch (Exception e) {
+			transaction.rollback();
+			throw new RuntimeException(e);
+		}
 	}
 
 	@SuppressWarnings("unchecked")

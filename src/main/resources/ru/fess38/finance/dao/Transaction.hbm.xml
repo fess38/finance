@@ -30,26 +30,24 @@
   <sql-query name="isEntityUsed" read-only="true">
     <![CDATA[ SELECT COUNT(*)
     FROM (
-      SELECT rubricId id
+      SELECT rubricId id, isDeleted
       FROM ${transactionTable}
-      WHERE isDeleted = FALSE
       UNION ALL
-      SELECT accountFromId
+      SELECT accountFromId, isDeleted
       FROM ${transactionTable}
-      WHERE isDeleted = FALSE
       UNION ALL
-      SELECT accountToId
+      SELECT accountToId, isDeleted
       FROM ${transactionTable}
-      WHERE isDeleted = FALSE
       UNION ALL
-      SELECT userId
+      SELECT userId, isDeleted
       FROM ${transactionTable}
-      WHERE isDeleted = FALSE
       UNION ALL
-      SELECT transactionGroupId
+      SELECT transactionGroupId, isDeleted
       FROM ${transactionTable}
-      WHERE isDeleted = FALSE
+      UNION ALL
+      SELECT currencyId, isDeleted
+      FROM ${accountTable}
       ) t
-    WHERE t.id = :id ]]>
+    WHERE t.id = :id and t.isDeleted = FALSE ]]>
   </sql-query>
 </hibernate-mapping>
