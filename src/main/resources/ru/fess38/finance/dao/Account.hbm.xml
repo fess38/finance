@@ -2,18 +2,18 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
                                    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-  <class name="ru.fess38.finance.model.Account" table="${accountTable}">
+  <class name="ru.fess38.finance.model.Account" table="Account">
     <id column="id" name="id" type="integer">
       <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
-        <param name="sequence_name">${sequence}</param>
+        <param name="sequence_name">IdSequence</param>
       </generator>
     </id>
     <property column="name" name="name" />
     <property column="amount" name="amount" />
     <many-to-one class="ru.fess38.finance.model.Currency" column="currencyId" name="currency" lazy="false" />
-    <property name="isService" column="isService" />
+    <property name="isService" column="isService"  />
     <property name="isDeleted" column="isDeleted" access="noop" insert="false" update="false" />
-    <sql-delete><![CDATA[ update ${accountTable} set isDeleted = TRUE where id = :id ]]></sql-delete>
+    <sql-delete><![CDATA[ update Account set isDeleted = TRUE where id = :id ]]></sql-delete>
   </class>
 
   <query name="accountFindServiceByCurrencyId">
@@ -21,42 +21,41 @@
   </query>
 
   <sql-query name="updateAccountAmount">
-    <![CDATA[ UPDATE ${accountTable}
+    <![CDATA[ UPDATE Account
     SET amount = (
       SELECT a.amount
       FROM (
              SELECT t.id, SUM(t.amount) amount
              FROM (
                     SELECT -amountFrom amount, accountFromId id
-                    FROM ${transactionTable}
+                    FROM Transaction
                     WHERE isDeleted = FALSE
                     UNION ALL
                     SELECT amountTo amount, accountToId id
-                    FROM ${transactionTable}
+                    FROM Transaction
                     WHERE isDeleted = FALSE
                     UNION ALL
                     SELECT 0 amount, accountFromId id
-                    FROM ${transactionTable}
+                    FROM Transaction
                     WHERE isDeleted = TRUE
                     UNION ALL
                     SELECT 0 amount, accountToId id
-                    FROM ${transactionTable}
+                    FROM Transaction
                     WHERE isDeleted = TRUE
                   ) t
              GROUP BY t.id
            ) a
-      WHERE a.id = ${accountTable}.id
+      WHERE a.id = Account.id
     )
     WHERE isDeleted = FALSE AND EXISTS(
         SELECT 1
         FROM (
                SELECT accountFromId id
-               FROM ${transactionTable}
+               FROM Transaction
                UNION ALL
                SELECT accountToId id
-               FROM ${transactionTable}
+               FROM Transaction
              ) a
-        WHERE a.id = ${accountTable}.id
-    ) ]]>
+        WHERE a.id = Account.id) ]]>
   </sql-query>
 </hibernate-mapping>

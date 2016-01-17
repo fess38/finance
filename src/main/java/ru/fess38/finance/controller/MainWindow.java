@@ -38,8 +38,10 @@ public class MainWindow extends AbstractController {
 	private void addKeyEventHandler() {
 		mainWindowView.setOnKeyPressed(e -> {
 			if (e.getCode() == KeyCode.LEFT) {
+				e.consume();
 				prevMonth();
 			} else if (e.getCode() == KeyCode.RIGHT) {
+				e.consume();
 				nextMonth();
 			}
 		});

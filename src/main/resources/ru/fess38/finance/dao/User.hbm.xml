@@ -2,14 +2,14 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-  <class name="ru.fess38.finance.model.User" table="${userTable}">
+  <class name="ru.fess38.finance.model.User" table="User">
     <id name="id" column="id">
       <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
-        <param name="sequence_name">${sequence}</param>
+        <param name="sequence_name">IdSequence</param>
       </generator>
     </id>
     <property name="name" column="name"/>
     <property name="isDeleted" column="isDeleted" access="noop" insert="false" update="false" />
-    <sql-delete><![CDATA[update ${userTable} set isDeleted = TRUE where id = :id]]></sql-delete>
+    <sql-delete><![CDATA[update User set isDeleted = TRUE where id = :id]]></sql-delete>
   </class>
 </hibernate-mapping>

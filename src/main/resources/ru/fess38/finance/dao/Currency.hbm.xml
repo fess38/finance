@@ -2,15 +2,15 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-  <class name="ru.fess38.finance.model.Currency" table="${currencyTable}">
+  <class name="ru.fess38.finance.model.Currency" table="Currency">
     <id name="id" column="id">
       <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
-        <param name="sequence_name">${sequence}</param>
+        <param name="sequence_name">IdSequence</param>
       </generator>
     </id>
     <property name="name" column="name"/>
     <property name="symbol" column="symbol"/>
     <property name="isDeleted" column="isDeleted" access="noop" insert="false" update="false" />
-    <sql-delete><![CDATA[update ${currencyTable} set isDeleted = TRUE where id = :id]]></sql-delete>
+    <sql-delete><![CDATA[update Currency set isDeleted = TRUE where id = :id]]></sql-delete>
   </class>
 </hibernate-mapping>

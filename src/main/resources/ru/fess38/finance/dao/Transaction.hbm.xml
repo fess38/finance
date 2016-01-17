@@ -2,10 +2,10 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-  <class name="ru.fess38.finance.model.Transaction" table="${transactionTable}">
+  <class name="ru.fess38.finance.model.Transaction" table="Transaction">
     <id name="id" column="id">
       <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
-        <param name="sequence_name">${sequence}</param>
+        <param name="sequence_name">IdSequence</param>
       </generator>
     </id>
     <property name="amountFrom" column="amountFrom" />
@@ -19,7 +19,7 @@
       lazy="false" />
     <many-to-one name="user" class="ru.fess38.finance.model.User" column="userId" lazy="false" />
     <property name="isDeleted" column="isDeleted" access="noop" insert="false" update="false" />
-    <sql-delete><![CDATA[ update ${transactionTable} set isDeleted = TRUE where id = :id ]]></sql-delete>
+    <sql-delete><![CDATA[ update Transaction set isDeleted = TRUE where id = :id ]]></sql-delete>
   </class>
 
   <query name="transactionFindByYearMonth">
@@ -31,22 +31,22 @@
     <![CDATA[ SELECT COUNT(*)
     FROM (
       SELECT rubricId id, isDeleted
-      FROM ${transactionTable}
+      FROM Transaction
       UNION ALL
       SELECT accountFromId, isDeleted
-      FROM ${transactionTable}
+      FROM Transaction
       UNION ALL
       SELECT accountToId, isDeleted
-      FROM ${transactionTable}
+      FROM Transaction
       UNION ALL
       SELECT userId, isDeleted
-      FROM ${transactionTable}
+      FROM Transaction
       UNION ALL
       SELECT transactionGroupId, isDeleted
-      FROM ${transactionTable}
+      FROM Transaction
       UNION ALL
       SELECT currencyId, isDeleted
-      FROM ${accountTable}
+      FROM Account
       ) t
     WHERE t.id = :id and t.isDeleted = FALSE ]]>
   </sql-query>

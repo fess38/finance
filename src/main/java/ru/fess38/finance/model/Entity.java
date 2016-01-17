@@ -20,13 +20,12 @@ public abstract class Entity {
 		}
 
 		Entity that = (Entity) object;
-		return Objects.equals(this.getId(), that.getId())
-				&& Objects.equals(this.getName(), that.getName());
+		return Objects.equals(this.getId(), that.getId());
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(getId(), getName());
+		return Objects.hash(getId());
 	}
 
 	@Override

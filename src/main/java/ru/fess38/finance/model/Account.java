@@ -6,8 +6,8 @@ import java.util.Objects;
 
 public class Account extends Entity {
 	private Currency currency;
-	private int amount;
-	private boolean isService;
+	private Integer amount;
+	private Boolean isService;
 
 	@Override
 	public boolean equals(Object object) {
@@ -30,11 +30,11 @@ public class Account extends Entity {
 		return Objects.hash(getId(), getName(), getCurrency(), getAmount());
 	}
 
-	public int getAmount() {
+	public Integer getAmount() {
 		return amount;
 	}
 
-	public void setAmount(int amount) {
+	public void setAmount(Integer amount) {
 		this.amount = amount;
 	}
 
