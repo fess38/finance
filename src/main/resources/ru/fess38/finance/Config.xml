@@ -32,6 +32,4 @@
   <bean class="ru.fess38.finance.controller.UserController" parent="abstractController" />
 
   <bean class="ru.fess38.finance.controller.TransactionGroupController" parent="abstractController" />
-
-  <bean class="ru.fess38.finance.controller.CurrencyController" parent="abstractController" />
 </beans>

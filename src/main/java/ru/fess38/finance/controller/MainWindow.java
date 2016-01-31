@@ -29,8 +29,6 @@ public class MainWindow extends AbstractController {
 		mainWindowView.getTabs().add(getUserController().getTab());
 		getTransactionGroupController().init();
 		mainWindowView.getTabs().add(getTransactionGroupController().getTab());
-		getCurrencyController().init();
-		mainWindowView.getTabs().add(getCurrencyController().getTab());
 		addKeyEventHandler();
 		getTransactionWindow().handle();
 	}

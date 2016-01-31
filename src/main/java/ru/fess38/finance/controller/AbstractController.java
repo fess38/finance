@@ -101,8 +101,4 @@ public abstract class AbstractController {
 	public TransactionGroupController getTransactionGroupController() {
 		return factory().getTransactionGroupController();
 	}
-
-	public CurrencyController getCurrencyController() {
-		return factory().getCurrencyController();
-	}
 }

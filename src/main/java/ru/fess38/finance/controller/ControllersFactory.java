@@ -9,7 +9,6 @@ public class ControllersFactory {
 	private RubricController rubricController;
 	private UserController userController;
 	private TransactionGroupController transactionGroupController;
-	private CurrencyController currencyController;
 
 	public MainWindow getMainWindow() {
 		return mainWindow;
@@ -66,13 +65,5 @@ public class ControllersFactory {
 	public void setTransactionGroupController(
 			TransactionGroupController transactionGroupController) {
 		this.transactionGroupController = transactionGroupController;
-	}
-
-	public CurrencyController getCurrencyController() {
-		return currencyController;
-	}
-
-	public void setCurrencyController(CurrencyController currencyController) {
-		this.currencyController = currencyController;
 	}
 }
