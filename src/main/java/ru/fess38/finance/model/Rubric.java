@@ -5,8 +5,8 @@ import java.util.Objects;
 
 
 public class Rubric extends Entity {
-	private Boolean isIncome;
-	private Boolean isService;
+	private boolean isIncome;
+	private boolean isService;
 
 	@Override
 	public boolean equals(Object object) {
@@ -28,19 +28,19 @@ public class Rubric extends Entity {
 		return Objects.hash(getId(), getName(), getIsIncome());
 	}
 
-	public Boolean getIsIncome() {
+	public boolean getIsIncome() {
 		return isIncome;
 	}
 
-	public void setIsIncome(Boolean isIncome) {
+	public void setIsIncome(boolean isIncome) {
 		this.isIncome = isIncome;
 	}
 
-	public Boolean getIsService() {
+	public boolean getIsService() {
 		return isService;
 	}
 
-	public void setIsService(Boolean isService) {
+	public void setIsService(boolean isService) {
 		this.isService = isService;
 	}
 }

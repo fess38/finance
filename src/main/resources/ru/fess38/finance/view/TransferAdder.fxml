@@ -7,7 +7,7 @@
 
 <GridPane alignment="CENTER" maxHeight="-Infinity" vgap="5.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
-    <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" />
+    <ColumnConstraints hgrow="SOMETIMES" />
     <ColumnConstraints hgrow="SOMETIMES" />
   </columnConstraints>
   <rowConstraints>
@@ -15,10 +15,7 @@
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -39,87 +36,57 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </GridPane.margin>
       </DatePicker>
-      <Label text="Рубрика:" GridPane.halignment="LEFT" GridPane.rowIndex="2">
+      <Label text="Счет 1:" GridPane.halignment="LEFT" GridPane.rowIndex="2">
          <GridPane.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </GridPane.margin>
       </Label>
-      <Label text="Счет 1:" GridPane.halignment="LEFT" GridPane.rowIndex="3">
+      <Label text="Сумма 1:" GridPane.halignment="LEFT" GridPane.rowIndex="4">
          <GridPane.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </GridPane.margin>
       </Label>
-      <ComboBox id="rubric" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2">
-         <GridPane.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </GridPane.margin>
-      </ComboBox>
-      <Label text="Сумма 1:" GridPane.halignment="LEFT" GridPane.rowIndex="5">
-         <GridPane.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </GridPane.margin>
-      </Label>
-      <TextField id="amountFrom" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="5">
+      <TextField id="amountFrom" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="4">
          <GridPane.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </GridPane.margin>
       </TextField>
-      <Label text="Пользователь:" GridPane.halignment="LEFT" GridPane.rowIndex="7">
+      <Label text="Комментарий" GridPane.halignment="LEFT" GridPane.rowIndex="6">
          <GridPane.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </GridPane.margin>
       </Label>
-      <Label text="Группа транзакций:" GridPane.halignment="LEFT" GridPane.rowIndex="8">
-         <GridPane.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </GridPane.margin>
-      </Label>
-      <Label text="Комментарий" GridPane.halignment="LEFT" GridPane.rowIndex="9">
-         <GridPane.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </GridPane.margin>
-      </Label>
-      <TextField id="comment" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="9">
+      <TextField id="comment" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="6">
          <GridPane.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </GridPane.margin>
       </TextField>
-      <ComboBox id="transactionGroup" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="8">
-         <GridPane.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </GridPane.margin>
-      </ComboBox>
-      <ComboBox id="user" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="7">
-         <GridPane.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </GridPane.margin>
-      </ComboBox>
-      <Button id="saveButton" mnemonicParsing="false" text="Сохранить" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="10">
+      <Button id="saveButton" mnemonicParsing="false" text="Сохранить" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="7">
          <GridPane.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </GridPane.margin>
       </Button>
-      <ComboBox id="accountFrom" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="3">
+      <ComboBox id="accountFrom" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2">
          <GridPane.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </GridPane.margin>
       </ComboBox>
-      <Label text="Счет 2:" GridPane.halignment="LEFT" GridPane.rowIndex="4">
+      <Label text="Счет 2:" GridPane.halignment="LEFT" GridPane.rowIndex="3">
          <GridPane.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </GridPane.margin>
       </Label>
-      <ComboBox id="accountTo" GridPane.columnIndex="1" GridPane.rowIndex="4">
+      <ComboBox id="accountTo" GridPane.columnIndex="1" GridPane.rowIndex="3">
          <GridPane.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </GridPane.margin>
       </ComboBox>
-      <Label text="Сумма 2:" GridPane.rowIndex="6">
+      <Label text="Сумма 2:" GridPane.rowIndex="5">
          <GridPane.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </GridPane.margin>
       </Label>
-      <TextField id="amountTo" GridPane.columnIndex="1" GridPane.rowIndex="6">
+      <TextField id="amountTo" GridPane.columnIndex="1" GridPane.rowIndex="5">
          <GridPane.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </GridPane.margin>

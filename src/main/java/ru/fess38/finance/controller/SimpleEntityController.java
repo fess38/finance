@@ -18,10 +18,6 @@ import ru.fess38.finance.view.ViewFactory;
 
 
 public abstract class SimpleEntityController<T extends Entity> extends AbstractController {
-	public SimpleEntityController(ControllersFactory factory) {
-		super(factory);
-	}
-
 	private SimpleEntityView<T> entityView;
 
 	public void init() {

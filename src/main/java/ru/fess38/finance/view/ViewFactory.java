@@ -13,6 +13,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
@@ -35,7 +36,10 @@ public class ViewFactory {
 	}
 
 	public static TabPane mainWindow() {
-		return loadWrapper("MainWindow.fxml");
+		TabPane tabPane = new TabPane();
+		tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+		tabPane.setPadding(new Insets(10));
+		return tabPane;
 	}
 
 	public static GridPane transactionAdderWindow() {

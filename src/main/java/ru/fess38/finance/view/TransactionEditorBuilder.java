@@ -54,13 +54,10 @@ public class TransactionEditorBuilder {
 		initAccountToColumn();
 		initAmountFromColumn();
 		initAmountToColumn();
-		initUserColumn();
-		initTransactionGroupColumn();
 		initCommentColumn();
 
 		tableView.getColumns().addAll(localDateColumn, accountFromColumn, accountToColumn,
-				amountFromColumn, amountToColumn, userColumn, transactionGroupColumn,
-				commentColumn);
+				amountFromColumn, amountToColumn, commentColumn);
 		setDataAndSort(transactions, localDateColumn, accountFromColumn);
 		return tableView;
 	}

@@ -8,9 +8,7 @@ import ru.fess38.finance.view.UserView;
 
 
 public class UserController extends SimpleEntityController<User> {
-	public UserController(ControllersFactory factory) {
-		super(factory);
-		factory.setUserController(this);
+	public UserController() {
 		setEntityView(new UserView());
 	}
 

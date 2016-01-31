@@ -8,9 +8,7 @@ import ru.fess38.finance.view.TransactionGroupView;
 
 
 public class TransactionGroupController extends SimpleEntityController<TransactionGroup> {
-	public TransactionGroupController(ControllersFactory factory) {
-		super(factory);
-		factory.setTransactionGroupController(this);
+	public TransactionGroupController() {
 		setEntityView(new TransactionGroupView());
 	}
 

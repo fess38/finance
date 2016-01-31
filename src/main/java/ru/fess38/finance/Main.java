@@ -8,7 +8,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import ru.fess38.finance.controller.MainWindow;
+import ru.fess38.finance.controller.MainWindowController;
 
 
 public class Main extends Application {
@@ -22,9 +22,10 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		ctx = new ClassPathXmlApplicationContext(path);
-		MainWindow mainWindowController = ctx.getBean("mainWindow", MainWindow.class);
+		MainWindowController mainWindowController = ctx.getBean("mainWindow",
+				MainWindowController.class);
 		mainWindowController.handle();
-		Scene scene = new Scene(mainWindowController.getMainWindowView());
+		Scene scene = new Scene(mainWindowController.getMainWindow());
 		primaryStage.setScene(scene);
 		setWindowFullscreen(primaryStage);
 		primaryStage.show();

@@ -10,11 +10,6 @@ import ru.fess38.finance.dao.UserDao;
 
 
 public abstract class AbstractController {
-	public AbstractController(ControllersFactory factory) {
-		this.factory = factory;
-	}
-
-	private final ControllersFactory factory;
 	private AccountDao accountDao;
 	private CurrencyDao currencyDao;
 	private RubricDao rubricDao;
@@ -68,37 +63,5 @@ public abstract class AbstractController {
 
 	public void setUserDao(UserDao userDao) {
 		this.userDao = userDao;
-	}
-
-	public ControllersFactory factory() {
-		return factory;
-	}
-
-	public MainWindow getMainWindow() {
-		return factory().getMainWindow();
-	}
-
-	public TransactionAdder getTransactionAdder() {
-		return factory().getTransactionAdder();
-	}
-
-	public TransactionWindow getTransactionWindow() {
-		return factory().getTransactionWindow();
-	}
-
-	public TransferAdder getTransferAdder() {
-		return factory().getTransferAdder();
-	}
-
-	public RubricController getRubricController() {
-		return factory().getRubricController();
-	}
-
-	public UserController getUserController() {
-		return factory().getUserController();
-	}
-
-	public TransactionGroupController getTransactionGroupController() {
-		return factory().getTransactionGroupController();
 	}
 }

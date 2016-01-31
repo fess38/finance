@@ -29,12 +29,7 @@ import ru.fess38.finance.view.NumberInputListener;
 import ru.fess38.finance.view.ViewFactory;
 
 
-public class TransactionAdder extends AbstractController {
-	public TransactionAdder(ControllersFactory factory) {
-		super(factory);
-		factory.setTransactionAdder(this);
-	}
-
+public class TransactionAdderController extends AbstractController {
 	private GridPane gridPane;
 
 	public void handle() {
@@ -51,7 +46,6 @@ public class TransactionAdder extends AbstractController {
 		income().selectedProperty().addListener(new RubricChangeListener(true));
 		expence().selectedProperty().addListener(new RubricChangeListener(false));
 		rubric().setConverter(new EntityStringConverter<Rubric>());
-		account().setConverter(new EntityStringConverter<Account>());
 		amount().textProperty().addListener(new NumberInputListener(amount()));
 		user().setConverter(new EntityStringConverter<User>());
 		user().setOnKeyPressed(new ComboBoxCleanEventHandler(user()));
@@ -64,8 +58,6 @@ public class TransactionAdder extends AbstractController {
 		datePicker().setValue(LocalDate.now());
 		expence().selectedProperty().set(true);
 		rubric().getSelectionModel().selectFirst();
-		account().getItems().setAll(getAccountDao().find());
-		account().getSelectionModel().selectFirst();
 		user().getItems().setAll(getUserDao().find());
 		transactionGroup().getItems().setAll(getTransactionGroupDao().find());
 	}
@@ -74,8 +66,6 @@ public class TransactionAdder extends AbstractController {
 		Transaction transaction = new Transaction();
 		transaction.setLocalDate(datePicker().getValue());
 		transaction.setRubric(rubric().getValue());
-		transaction.setAccountFrom(account().getValue());
-		transaction.setAccountTo(account().getValue());
 
 		int amount = NumberUtils.createInteger(amount().getText());
 		transaction.setAmountFrom(amount);
@@ -98,20 +88,32 @@ public class TransactionAdder extends AbstractController {
 		return true;
 	}
 
+	private boolean validateRubric() {
+		if (rubric().getValue() == null) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setHeaderText("Введите рубрику");
+			alert.showAndWait();
+			rubric().requestFocus();
+			return false;
+		}
+		return true;
+	}
+
 	private void save() {
-		if (validateAmount()) {
+		if (validateAmount() && validateRubric()) {
 			Transaction t = getTransaction();
-			Account account = account().getValue();
+			Account masterAccount = getAccountDao().getMasterAccount();
+			Account outerAccount = getAccountDao().getOuterAccount();
+
 			if (t.getRubric().getIsIncome()) {
-				t.setAccountTo(account);
-				t.setAccountFrom(getAccountDao().findServiceAccountByAnother(account));
+				t.setAccountFrom(outerAccount);
+				t.setAccountTo(masterAccount);
 			} else {
-				t.setAccountFrom(account);
-				t.setAccountTo(getAccountDao().findServiceAccountByAnother(account));
+				t.setAccountFrom(masterAccount);
+				t.setAccountTo(outerAccount);
 			}
 			getTransactionDao().save(t);
 			((Stage) gridPane.getScene().getWindow()).close();
-			getTransactionWindow().handle();
 		}
 	}
 
@@ -147,11 +149,6 @@ public class TransactionAdder extends AbstractController {
 	@SuppressWarnings("unchecked")
 	private ComboBox<Rubric> rubric() {
 		return (ComboBox<Rubric>) gridPane.lookup("#rubric");
-	}
-
-	@SuppressWarnings("unchecked")
-	private ComboBox<Account> account() {
-		return (ComboBox<Account>) gridPane.lookup("#account");
 	}
 
 	private TextField amount() {
