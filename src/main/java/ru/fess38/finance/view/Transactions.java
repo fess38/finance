@@ -38,11 +38,11 @@ public class Transactions implements Iterable<Transaction> {
 	}
 
 	public static final Function<Set<Transaction>, Set<Transaction>> TRANSFERS = t -> {
-		return t.stream().filter(x -> x.getRubric().getIsService()).collect(Collectors.toSet());
+		return t.stream().filter(x -> x.getRubric().isService()).collect(Collectors.toSet());
 	};
 
 	public static final Function<Set<Transaction>, Set<Transaction>> TRANSACTIONS = t -> {
-		return t.stream().filter(x -> !x.getRubric().getIsService()).collect(Collectors.toSet());
+		return t.stream().filter(x -> !x.getRubric().isService()).collect(Collectors.toSet());
 	};
 
 	public static final Transactions EMPTY = new Transactions(new ArrayList<>());
@@ -64,7 +64,7 @@ public class Transactions implements Iterable<Transaction> {
 	}
 
 	public static final Predicate<Transaction> isIncome(boolean isIncome) {
-		return t -> t.getRubric().getIsIncome() == isIncome;
+		return t -> t.getRubric().isIncome() == isIncome;
 	}
 
 	public static final Predicate<Transaction> rubric(Rubric rubric) {

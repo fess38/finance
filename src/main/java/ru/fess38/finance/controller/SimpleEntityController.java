@@ -12,12 +12,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-import ru.fess38.finance.model.Entity;
 import ru.fess38.finance.view.SimpleEntityView;
 import ru.fess38.finance.view.ViewFactory;
 
 
-public abstract class SimpleEntityController<T extends Entity> extends AbstractController {
+public abstract class SimpleEntityController<T> extends AbstractController {
 	private SimpleEntityView<T> entityView;
 
 	public void init() {
@@ -42,7 +41,7 @@ public abstract class SimpleEntityController<T extends Entity> extends AbstractC
 		getTableView().addEventHandler(KeyEvent.KEY_PRESSED, e -> {
 			T entity = getTableView().getSelectionModel().getSelectedItem();
 			if (e.getCode() == KeyCode.BACK_SPACE && entity != null) {
-				boolean isEntityUsed = getTransactionDao().isEntityUsed(entity);
+				boolean isEntityUsed = false;// getTransactionDao().isEntityUsed(entity);
 				if (!isEntityUsed) {
 					deleteEntity(entity);
 					setEntitiesToTableView();
@@ -69,7 +68,7 @@ public abstract class SimpleEntityController<T extends Entity> extends AbstractC
 		Button createEntityButton = entityView.getCreateEntityButton();
 		createEntityButton.setOnAction(e -> {
 			T entity = readEntityFromView();
-			if (validInputName(entity.getName())) {
+			if (validInputName("" /* entity.getName() */)) {
 				saveEntity(entity);
 				entityView.getEntityAdderName().setText("");
 				setEntitiesToTableView();
@@ -98,10 +97,10 @@ public abstract class SimpleEntityController<T extends Entity> extends AbstractC
 			String newName = e.getNewValue();
 			T entity = e.getRowValue();
 			if (validInputName(newName)) {
-				entity.setName(newName);
+				// entity.setName(newName);
 				updateEntity(entity);
 			} else {
-				entity.setName(e.getOldValue());
+				// entity.setName(e.getOldValue());
 			}
 		});
 	}

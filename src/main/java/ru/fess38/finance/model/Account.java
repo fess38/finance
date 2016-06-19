@@ -1,40 +1,79 @@
 package ru.fess38.finance.model;
 
 
-import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 
-public class Account extends Entity {
+@Entity
+public class Account {
+	@Id
+	@GeneratedValue(generator = "IdSequence", strategy = GenerationType.SEQUENCE)
+	@SequenceGenerator(name = "IdSequence")
+	private Long id;
+	@Column(length = 100, nullable = false)
+	private String name;
+	@Column(nullable = false)
+	private int amount = 0;
+	@ManyToOne(fetch = FetchType.EAGER, optional = false, targetEntity = Currency.class)
+	@JoinColumn(name = "currencyId", nullable = false)
 	private Currency currency;
-	private Integer amount;
-	private Boolean isService;
+	@Column(length = 100, nullable = false)
+	@Enumerated(EnumType.STRING)
+	private AccountType type = AccountType.DEFAULT;
+	@Column(nullable = false)
+	private boolean isDeleted = false;
 
 	@Override
 	public boolean equals(Object object) {
-		if (this == object) {
-			return true;
-		}
-		if (object == null || getClass() != object.getClass()) {
-			return false;
-		}
-
-		Account that = (Account) object;
-		return Objects.equals(this.getId(), that.getId())
-				&& Objects.equals(this.getName(), that.getName())
-				&& Objects.equals(this.getCurrency(), that.getCurrency())
-				&& Objects.equals(this.getAmount(), that.getAmount());
+		return EqualsBuilder.reflectionEquals(this, object, true);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(getId(), getName(), getCurrency(), getAmount());
+		return HashCodeBuilder.reflectionHashCode(this, true);
 	}
 
-	public Integer getAmount() {
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getAmount() {
 		return amount;
 	}
 
-	public void setAmount(Integer amount) {
+	public void setAmount(int amount) {
 		this.amount = amount;
 	}
 
@@ -46,11 +85,19 @@ public class Account extends Entity {
 		this.currency = currency;
 	}
 
-	public boolean getIsService() {
-		return isService;
+	public boolean isDeleted() {
+		return isDeleted;
 	}
 
-	public void setIsService(boolean isService) {
-		this.isService = isService;
+	public void setDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+
+	public AccountType getType() {
+		return type;
+	}
+
+	public void setType(AccountType type) {
+		this.type = type;
 	}
 }

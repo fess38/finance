@@ -1,6 +1,8 @@
 package ru.fess38.finance.controller;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import ru.fess38.finance.dao.AccountDao;
 import ru.fess38.finance.dao.CurrencyDao;
 import ru.fess38.finance.dao.RubricDao;
@@ -21,6 +23,7 @@ public abstract class AbstractController {
 		return accountDao;
 	}
 
+	@Autowired
 	public void setAccountDao(AccountDao accountDao) {
 		this.accountDao = accountDao;
 	}
@@ -29,6 +32,7 @@ public abstract class AbstractController {
 		return currencyDao;
 	}
 
+	@Autowired
 	public void setCurrencyDao(CurrencyDao currencyDao) {
 		this.currencyDao = currencyDao;
 	}
@@ -37,6 +41,7 @@ public abstract class AbstractController {
 		return rubricDao;
 	}
 
+	@Autowired
 	public void setRubricDao(RubricDao rubricDao) {
 		this.rubricDao = rubricDao;
 	}
@@ -45,6 +50,7 @@ public abstract class AbstractController {
 		return transactionDao;
 	}
 
+	@Autowired
 	public void setTransactionDao(TransactionDao transactionDao) {
 		this.transactionDao = transactionDao;
 	}
@@ -53,6 +59,7 @@ public abstract class AbstractController {
 		return transactionGroupDao;
 	}
 
+	@Autowired
 	public void setTransactionGroupDao(TransactionGroupDao transactionGroupDao) {
 		this.transactionGroupDao = transactionGroupDao;
 	}
@@ -61,6 +68,7 @@ public abstract class AbstractController {
 		return userDao;
 	}
 
+	@Autowired
 	public void setUserDao(UserDao userDao) {
 		this.userDao = userDao;
 	}

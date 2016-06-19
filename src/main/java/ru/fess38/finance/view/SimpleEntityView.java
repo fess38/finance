@@ -10,10 +10,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.HBox;
-import ru.fess38.finance.model.Entity;
 
 
-public abstract class SimpleEntityView<T extends Entity> {
+public abstract class SimpleEntityView<T> {
 	public SimpleEntityView() {
 		initTableView();
 		initAdder();
@@ -30,7 +29,7 @@ public abstract class SimpleEntityView<T extends Entity> {
 	protected void initTableView() {
 		nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
 		nameColumn.setCellValueFactory(e -> {
-			return new SimpleStringProperty(e.getValue().getName());
+			return new SimpleStringProperty("" /* e.getValue().getName() */);
 		});
 		nameColumn.setEditable(true);
 		tableView.getColumns().add(nameColumn);

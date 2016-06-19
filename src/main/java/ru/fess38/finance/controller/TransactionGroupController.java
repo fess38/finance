@@ -3,6 +3,8 @@ package ru.fess38.finance.controller;
 
 import java.util.List;
 
+import org.hibernate.criterion.DetachedCriteria;
+
 import ru.fess38.finance.model.TransactionGroup;
 import ru.fess38.finance.view.TransactionGroupView;
 
@@ -14,7 +16,7 @@ public class TransactionGroupController extends SimpleEntityController<Transacti
 
 	@Override
 	protected List<TransactionGroup> findEntities() {
-		return getTransactionGroupDao().find();
+		return getTransactionGroupDao().find(DetachedCriteria.forClass(TransactionGroup.class));
 	}
 
 	@Override

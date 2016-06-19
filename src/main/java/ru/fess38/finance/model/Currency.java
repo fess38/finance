@@ -1,30 +1,45 @@
 package ru.fess38.finance.model;
 
 
-import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 
-public class Currency extends Entity {
+@Entity
+public class Currency {
+	@Id
+	@GeneratedValue(generator = "IdSequence", strategy = GenerationType.SEQUENCE)
+	@SequenceGenerator(name = "IdSequence")
+	private Long id;
+	@Column(length = 100, nullable = false)
+	private String name;
+	@Column(length = 1, nullable = false)
 	private String symbol;
+	@Column(nullable = false)
+	private boolean isDeleted = false;
 
 	@Override
 	public boolean equals(Object object) {
-		if (this == object) {
-			return true;
-		}
-		if (object == null || getClass() != object.getClass()) {
-			return false;
-		}
-
-		Currency that = (Currency) object;
-		return Objects.equals(this.getId(), that.getId())
-				&& Objects.equals(this.getName(), that.getName())
-				&& Objects.equals(this.getSymbol(), that.getSymbol());
+		return EqualsBuilder.reflectionEquals(this, object, true);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(getId(), getName(), getSymbol());
+		return HashCodeBuilder.reflectionHashCode(this, true);
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
 	}
 
 	public String getSymbol() {
@@ -33,5 +48,29 @@ public class Currency extends Entity {
 
 	public void setSymbol(String symbol) {
 		this.symbol = symbol;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public boolean isDeleted() {
+		return isDeleted;
+	}
+
+	public void setDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
 	}
 }

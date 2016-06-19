@@ -6,52 +6,69 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.Objects;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 
-public class Transaction extends Entity {
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import org.springframework.format.annotation.DateTimeFormat;
+
+
+@Entity
+public class Transaction {
+	@Id
+	@GeneratedValue(generator = "IdSequence", strategy = GenerationType.SEQUENCE)
+	@SequenceGenerator(name = "IdSequence")
+	private Long id;
+	@Column(nullable = false)
+	private boolean isDeleted = false;
+	@ManyToOne(fetch = FetchType.EAGER, optional = false, targetEntity = Rubric.class)
+	@JoinColumn(name = "rubricId", nullable = false)
 	private Rubric rubric;
+	@Column(nullable = false)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dayRef;
+	@ManyToOne(fetch = FetchType.EAGER, optional = false, targetEntity = Account.class)
+	@JoinColumn(name = "accountFromId", nullable = false)
 	private Account accountFrom;
+	@ManyToOne(fetch = FetchType.EAGER, optional = false, targetEntity = Account.class)
+	@JoinColumn(name = "accountToId", nullable = false)
 	private Account accountTo;
+	@Column(nullable = false)
 	private Integer amountFrom;
+	@Column(nullable = false)
 	private Integer amountTo;
+	@ManyToOne(fetch = FetchType.EAGER, optional = true, targetEntity = User.class)
+	@JoinColumn(name = "userId", nullable = true)
 	private User user;
+	@ManyToOne(fetch = FetchType.EAGER, optional = true, targetEntity = TransactionGroup.class)
+	@JoinColumn(name = "transactionGroupId", nullable = true)
 	private TransactionGroup transactionGroup;
+	@Column(length = 200)
 	private String comment;
 
 	@Override
 	public boolean equals(Object object) {
-		if (this == object) {
-			return true;
-		}
-		if (object == null || getClass() != object.getClass()) {
-			return false;
-		}
-
-		Transaction that = (Transaction) object;
-		return Objects.equals(this.getId(), that.getId());
+		return EqualsBuilder.reflectionEquals(this, object, true);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(getId());
+		return HashCodeBuilder.reflectionHashCode(this, true);
 	}
 
 	@Override
 	public String toString() {
-		final StringBuffer sb = new StringBuffer("Transaction{");
-		sb.append("id=").append(getId());
-		sb.append(", name=").append(getName());
-		sb.append(", rubric=").append(rubric);
-		sb.append(", dayRef=").append(dayRef);
-		sb.append(", accountFrom=").append(accountFrom);
-		sb.append(", amountFrom=").append(amountFrom);
-		sb.append(", accountTo=").append(accountTo);
-		sb.append(", amountTo=").append(amountTo);
-		sb.append(", user=").append(user);
-		sb.append(", transactionGroup=").append(transactionGroup);
-		sb.append(", comment=").append(comment);
-		sb.append('}');
-		return sb.toString();
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
 	}
 
 	public Account getAccountFrom() {
@@ -135,5 +152,21 @@ public class Transaction extends Entity {
 		Objects.requireNonNull(localDate);
 		Date date = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
 		setDayRef(date);
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public boolean isDeleted() {
+		return isDeleted;
+	}
+
+	public void setDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
 	}
 }

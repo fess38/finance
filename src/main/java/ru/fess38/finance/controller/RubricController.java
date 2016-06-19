@@ -3,6 +3,8 @@ package ru.fess38.finance.controller;
 
 import java.util.List;
 
+import org.hibernate.criterion.DetachedCriteria;
+
 import ru.fess38.finance.model.Rubric;
 import ru.fess38.finance.view.RubricView;
 
@@ -14,7 +16,7 @@ public class RubricController extends SimpleEntityController<Rubric> {
 
 	@Override
 	protected List<Rubric> findEntities() {
-		return getRubricDao().find();
+		return getRubricDao().find(DetachedCriteria.forClass(Rubric.class));
 	}
 
 	@Override
@@ -27,8 +29,7 @@ public class RubricController extends SimpleEntityController<Rubric> {
 		RubricView rubricView = (RubricView) getEntityView();
 		Rubric rubric = new Rubric();
 		rubric.setName(getEntityView().getEntityAdderName().getText());
-		rubric
-			.setIsIncome(RubricView.isIncomeToBoolean(rubricView.getIsIncomeComboBox().getValue()));
+		rubric.setIsIncome(RubricView.isIncomeToBoolean(rubricView.getIsIncomeComboBox().getValue()));
 		return rubric;
 	}
 

@@ -3,6 +3,8 @@ package ru.fess38.finance.controller;
 
 import java.util.List;
 
+import org.hibernate.criterion.DetachedCriteria;
+
 import ru.fess38.finance.model.User;
 import ru.fess38.finance.view.UserView;
 
@@ -14,7 +16,7 @@ public class UserController extends SimpleEntityController<User> {
 
 	@Override
 	protected List<User> findEntities() {
-		return getUserDao().find();
+		return getUserDao().find(DetachedCriteria.forClass(User.class));
 	}
 
 	@Override

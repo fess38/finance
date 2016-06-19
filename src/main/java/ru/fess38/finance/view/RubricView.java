@@ -38,7 +38,7 @@ public class RubricView extends SimpleEntityView<Rubric> {
 		super.initTableView();
 		isIncomeColumn = new TableColumn<>("Тип");
 		isIncomeColumn.setCellValueFactory(e -> {
-			String result = isIncomeToString(e.getValue().getIsIncome());
+			String result = isIncomeToString(e.getValue().isIncome());
 			return new SimpleStringProperty(result);
 		});
 		getTableView().getColumns().setAll(isIncomeColumn, getNameColumn());

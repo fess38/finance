@@ -5,6 +5,7 @@ import java.time.LocalDate;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.hibernate.criterion.DetachedCriteria;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -58,8 +59,9 @@ public class TransactionAdderController extends AbstractController {
 		datePicker().setValue(LocalDate.now());
 		expence().selectedProperty().set(true);
 		rubric().getSelectionModel().selectFirst();
-		user().getItems().setAll(getUserDao().find());
-		transactionGroup().getItems().setAll(getTransactionGroupDao().find());
+		user().getItems().setAll(getUserDao().find(DetachedCriteria.forClass(User.class)));
+		transactionGroup().getItems().setAll(getTransactionGroupDao().find(
+				DetachedCriteria.forClass(TransactionGroup.class)));
 	}
 
 	private Transaction getTransaction() {
@@ -105,7 +107,7 @@ public class TransactionAdderController extends AbstractController {
 			Account masterAccount = getAccountDao().getMasterAccount();
 			Account outerAccount = getAccountDao().getOuterAccount();
 
-			if (t.getRubric().getIsIncome()) {
+			if (t.getRubric().isIncome()) {
 				t.setAccountFrom(outerAccount);
 				t.setAccountTo(masterAccount);
 			} else {
@@ -128,7 +130,7 @@ public class TransactionAdderController extends AbstractController {
 		public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue,
 				Boolean newValue) {
 			if (newValue) {
-				rubric().getItems().setAll(getRubricDao().findRubrics(isIncome));
+				rubric().getItems().setAll(getRubricDao().findByType(isIncome));
 				rubric().getSelectionModel().selectFirst();
 			}
 		}

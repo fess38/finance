@@ -5,6 +5,7 @@ import java.time.LocalDate;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.hibernate.criterion.DetachedCriteria;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -41,9 +42,11 @@ public class TransferAdderController extends AbstractController {
 
 	private void refreshValues() {
 		datePicker().setValue(LocalDate.now());
-		accountFrom().getItems().setAll(getAccountDao().find());
+		accountFrom().getItems()
+			.setAll(getAccountDao().find(DetachedCriteria.forClass(Account.class)));
 		accountFrom().getSelectionModel().selectFirst();
-		accountTo().getItems().setAll(getAccountDao().find());
+		accountTo().getItems()
+			.setAll(getAccountDao().find(DetachedCriteria.forClass(Account.class)));
 		accountTo().getSelectionModel().selectFirst();
 	}
 

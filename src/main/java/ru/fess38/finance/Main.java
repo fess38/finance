@@ -1,44 +1,29 @@
 package ru.fess38.finance;
 
 
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.PropertySource;
 
-import javafx.application.Application;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Scene;
-import javafx.stage.Screen;
-import javafx.stage.Stage;
-import ru.fess38.finance.controller.MainWindowController;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 
-public class Main extends Application {
+@SpringBootApplication
+@EnableAutoConfiguration
+@ComponentScan(basePackages = { "ru.fess38.finance" })
+@PropertySource("classpath:/ru/fess38/finance/application.properties")
+public class Main {
 	public static void main(String[] args) {
-		Application.launch(Main.class, args);
+		SpringApplication.run(Main.class, args);
 	}
 
-	private final String path = "ru/fess38/finance/Config.xml";
-	private ClassPathXmlApplicationContext ctx;
-
-	@Override
-	public void start(Stage primaryStage) {
-		ctx = new ClassPathXmlApplicationContext(path);
-		MainWindowController mainWindowController = ctx.getBean("mainWindow",
-				MainWindowController.class);
-		mainWindowController.handle();
-		Scene scene = new Scene(mainWindowController.getMainWindow());
-		primaryStage.setScene(scene);
-		setWindowFullscreen(primaryStage);
-		primaryStage.show();
-	}
-
-	@Override
-	public void stop() {
-		ctx.close();
-	}
-
-	private void setWindowFullscreen(Stage stage) {
-		Rectangle2D primScreenBounds = Screen.getPrimary().getBounds();
-		stage.setWidth(primScreenBounds.getWidth());
-		stage.setHeight(primScreenBounds.getHeight());
+	@Bean
+	public Gson getGson() {
+		return new GsonBuilder().setPrettyPrinting()
+			.create();
 	}
 }
