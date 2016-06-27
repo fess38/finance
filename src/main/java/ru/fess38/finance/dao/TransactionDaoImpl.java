@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import ru.fess38.finance.model.Transaction;
-import ru.fess38.finance.view.Transactions;
+import ru.fess38.finance.model.Transactions;
 
 
 @Repository

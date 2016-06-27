@@ -1,4 +1,4 @@
-package ru.fess38.finance.temp;
+package ru.fess38.finance.controller;
 
 
 import java.util.List;
@@ -65,21 +65,17 @@ public class DefaultService {
 		rubricDao.delete(rubric);
 	}
 
-	public void saveIncome(Transaction transaction, Long rubricId) {
+	public void saveIncome(Transaction transaction) {
 		transaction.setAccountFrom(accountDao.getOuterAccount());
 		transaction.setAccountTo(accountDao.getMasterAccount());
-		save(transaction, rubricId);
+		transaction.setAmountTo(transaction.getAmountFrom());
+		transactionDao.save(transaction);
 	}
 
-	public void saveExpense(Transaction transaction, Long rubricId) {
+	public void saveExpense(Transaction transaction) {
 		transaction.setAccountFrom(accountDao.getMasterAccount());
 		transaction.setAccountTo(accountDao.getOuterAccount());
-		save(transaction, rubricId);
-	}
-
-	private void save(Transaction transaction, Long rubricId) {
 		transaction.setAmountTo(transaction.getAmountFrom());
-		transaction.setRubric(rubricDao.get(rubricId));
 		transactionDao.save(transaction);
 	}
 

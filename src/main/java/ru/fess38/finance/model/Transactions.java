@@ -1,4 +1,4 @@
-package ru.fess38.finance.view;
+package ru.fess38.finance.model;
 
 
 import java.time.LocalDate;
@@ -20,11 +20,6 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.lang3.tuple.Pair;
-
-import ru.fess38.finance.model.Account;
-import ru.fess38.finance.model.Currency;
-import ru.fess38.finance.model.Rubric;
-import ru.fess38.finance.model.Transaction;
 
 
 public class Transactions implements Iterable<Transaction> {

@@ -1,4 +1,4 @@
-package ru.fess38.finance.temp;
+package ru.fess38.finance.controller;
 
 
 import java.util.Map;
@@ -55,17 +55,16 @@ public class DefaultController {
 
 	@RequestMapping(value = "/transaction/income/add", method = RequestMethod.POST)
 	public String addIncomeTransaction(
-			@ModelAttribute("income-transaction") Transaction transaction,
-			@ModelAttribute("rubric-id") long rubricId) {
-		service.saveIncome(transaction, rubricId);
+			@ModelAttribute("income-transaction") Transaction transaction) {
+		System.out.println(transaction);
+		service.saveIncome(transaction);
 		return "redirect:/";
 	}
 
 	@RequestMapping(value = "/transaction/expense/add", method = RequestMethod.POST)
 	public String addExpenseTransaction(
-			@ModelAttribute("expense-transaction") Transaction transaction,
-			@ModelAttribute("rubric-id") long rubricId) {
-		service.saveExpense(transaction, rubricId);
+			@ModelAttribute("expense-transaction") Transaction transaction) {
+		service.saveExpense(transaction);
 		return "redirect:/";
 	}
 

@@ -5,7 +5,7 @@ import java.time.YearMonth;
 
 import ru.fess38.finance.GenericDao;
 import ru.fess38.finance.model.Transaction;
-import ru.fess38.finance.view.Transactions;
+import ru.fess38.finance.model.Transactions;
 
 
 public interface TransactionDao extends GenericDao<Transaction, Long> {

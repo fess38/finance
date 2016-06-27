@@ -6,7 +6,7 @@
 <body>
     <form name="income-transaction" method="post" action="/transaction/income/add">
         Дата: <input type="date" name="dayRef" required></br>
-        Рубрика: <select size="1" name="rubric-id">
+        Рубрика: <select size="1" name="rubric.id">
         <#list incomeRubrics as rubric>
         <option value="${rubric.id?c}">${rubric.name}</option>
         </#list>
@@ -14,7 +14,7 @@
         Сумма: <input name="amountFrom" type="number" min="1" required></br>
         Пользователь: <select size="1" name="userId">
         <#list users as user_>
-            <option value="${user_.id?c}">${user_.name}</option>
+            <option value="${user_.id}">${user_.name}</option>
         </#list>
         </select></br>
         Комментарий: <input name="comment" type="text" size="25"></br>
@@ -23,7 +23,7 @@
     -----
     <form name="expense-transaction" method="post" action="/transaction/expense/add">
         Дата: <input type="date" name="dayRef" required></br>
-        Рубрика: <select size="1" name="rubric-id">
+        Рубрика: <select size="1" name="rubric.id">
         <#list expenseRubrics as rubric>
         <option value="${rubric.id?c}">${rubric.name}</option>
         </#list>
