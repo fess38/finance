@@ -1,19 +1,17 @@
 package ru.fess38.finance;
 
+import org.hibernate.criterion.DetachedCriteria;
 
 import java.util.List;
 
-import org.hibernate.criterion.DetachedCriteria;
-
-
 public interface GenericDao<T, V> {
-	V save(T object);
+  V save(T object);
 
-	T get(V id);
+  T get(V id);
 
-	void update(T account);
+  void update(T account);
 
-	void delete(T account);
+  void delete(T account);
 
-	List<T> find(DetachedCriteria detachedCriteria);
+  List<T> find(DetachedCriteria detachedCriteria);
 }

@@ -1,13 +1,15 @@
 package ru.fess38.finance.dao;
 
-
-import java.time.YearMonth;
-
 import ru.fess38.finance.GenericDao;
+import ru.fess38.finance.model.MonthTransactions;
 import ru.fess38.finance.model.Transaction;
-import ru.fess38.finance.model.Transactions;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.util.List;
 
 public interface TransactionDao extends GenericDao<Transaction, Long> {
-	Transactions find(YearMonth yearMonth);
+  MonthTransactions find(YearMonth yearMonth);
+
+  List<Transaction> find(LocalDate localDate, long rubricId);
 }
