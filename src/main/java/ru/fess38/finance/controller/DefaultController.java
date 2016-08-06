@@ -103,12 +103,17 @@ public class DefaultController {
   }
 
   @RequestMapping(value = "/transactions/add", method = RequestMethod.POST)
-  public void addTransaction(@RequestBody Transaction transaction) {
+  public void save(@RequestBody Transaction transaction) {
     transactionDao.save(transaction);
   }
 
+  @RequestMapping(value = "/transactions/update", method = RequestMethod.POST)
+  public void update(@RequestBody Transaction transaction) {
+    transactionDao.update(transaction);
+  }
+
   @RequestMapping(value = "/transactions/delete", method = RequestMethod.POST)
-  public void deleteTransaction(@RequestBody Transaction transaction) {
+  public void delete(@RequestBody Transaction transaction) {
     transactionDao.delete(transaction);
   }
 

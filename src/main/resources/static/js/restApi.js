@@ -37,16 +37,25 @@ angular.module('app.restApi').service('RestApi', function($http) {
 		});
 	}
 
-	this.transactions = function(year, month) {
-		return $http.get("/transactions?year=" + year + "&month=" + month).then(function(response) {
-			return response.data;
-		});
+	this.findYearMonthTransactions = function(year, month) {
+		return $http.get("/transactions?year=" + year + "&month=" + month);
 	}
 
-	this.transactionsForCell = function(year, month, day, rubric) {
-		return $http.get("/transactions?year=" + year + "&month=" + month + "&day=" + day
-				+ "&rubric-id=" + rubric.id).then(function(response) {
-			return response.data;
-		});
+	this.findCellTransactions = function(rubric, year, month, day) {
+	  var query = "/transactions?rubric-id=" + rubric.id + "&year=" + year + "&month=" + month
+	  + "&day=" + day;
+		return $http.get(query);
 	}
+	
+	this.saveTransaction = function(transaction) {
+    return $http.post("/transactions/add", transaction);
+  }
+	
+	this.updateTransaction = function(transaction) {
+    return $http.post("/transactions/update", transaction);
+  }
+	
+	this.deleteTransaction = function(transaction) {
+    return $http.post("/transactions/delete", transaction);
+  }
 });

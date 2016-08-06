@@ -1,94 +1,104 @@
 <!doctype html>
 <html>
 <head>
-<title>Финансы</title>
-<link href="css/angular-bootstrap.css" rel="stylesheet">
-<script src="js/angular-bootstrap.js" type="text/javascript"></script>
-<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
-<script src="js/app.js"></script>
-<script src="js/transactions.js"></script>
-<script src="js/restApi.js"></script>
-<script>
-  $(function() {
-    $(".datepicker").datepicker({dateFormat: 'yy-mm-dd'});
-  });
-</script>
-<style type="text/css">
-body {
-  padding: 20px;
-} 
-.ng-cloak {
-  display: none;
-}
-
-tr th, td {
-  width: 30px;
-  text-align: center;
-  border: 1px solid black;
-}
-</style>
+  <title>Финансы</title>
+  <link href="css/angular-bootstrap.css" rel="stylesheet">
+  <script src="js/angular-bootstrap.js" type="text/javascript"></script>
+  <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
+  <script src="js/app.js"></script>
+  <script src="js/transactions.js"></script>
+  <script src="js/restApi.js"></script>
+  <script>
+    $(function() {
+      $(".datepicker").datepicker({dateFormat: 'yy-mm-dd'});
+    });
+  </script>
+  <style type="text/css">
+  body {
+    padding: 20px;
+  } 
+  .ng-cloak {
+    display: none;
+  }
+  
+  tr th, td {
+    width: 30px;
+    text-align: center;
+    border: 1px solid black;
+  }
+  </style>
 </head>
 
-<body ng-app="app">
-  <div ng-controller="show-transactions" ng-cloak>
-    <h4>{{yearMonth}}</h4>
+<body ng-app="app" ng-cloak>
+  <div ng-controller="show-transactions">
+    <h4>{{transactions.yearMonth}}</h4>
     <button ng-click="previousMonth()">Предыдущий месяц</button>
     <button ng-click="nextMonth()">Следующий месяц</button>
     <table>
       <tr>
         <th></th>
-        <th ng-repeat="day in daysOfMonth">{{day}}</th>
+        <th ng-repeat="day in transactions.daysOfMonth">{{day}}</th>
         <th>Итого</th>
       </tr>
-      <tr ng-repeat="rubric in rubrics | filter:filterIncomeRubrics | orderBy:'name'">
+      <tr ng-repeat="rubric in transactions.rubrics | filter:filterIncomeRubrics | orderBy:'name'">
         <td>{{rubric.name}}</td>
-        <td ng-repeat="day in daysOfMonth" ng-click="transactionsForCell(rubric, day)">
-          {{findRubricByDaySummary(rubric, day)}}
-        </td>
+        <td ng-repeat="day in transactions.daysOfMonth" ng-click="updateCellTransactions(rubric, day)">
+          {{findRubricByDaySummary(rubric, day)}}</td>
         <td>{{findRubricSummary(rubric)}}</td>
       </tr>
       <tr>
-        <td></td>
+        <td/>
       </tr>
-      <tr ng-repeat="rubric in rubrics | filter:filterExpenceRubrics | orderBy:'name'">
+      <tr ng-repeat="rubric in transactions.rubrics | filter:filterExpenceRubrics | orderBy:'name'">
         <td>{{rubric.name}}</td>
-        <td ng-repeat="day in daysOfMonth" ng-click="transactionsForCell(rubric, day)">
-          {{findRubricByDaySummary(rubric, day)}}
-        </td>
+        <td ng-repeat="day in transactions.daysOfMonth" ng-click="updateCellTransactions(rubric, day)">
+          {{findRubricByDaySummary(rubric, day)}}</td>
         <td>{{findRubricSummary(rubric)}}</td>
       </tr>
       <tr>
-        <td></td>
+        <td/>
       </tr>
       <tr>
         <th>Итого</th>
-        <td ng-repeat="day in daysOfMonth">{{findDaySummary(day)}}</td>
-        <td>{{monthSummary}}</td>
+        <td ng-repeat="day in transactions.daysOfMonth">{{findDaySummary(day)}}</td>
+        <td>{{transactions.monthSummary}}</td>
+      </tr>
+    </table><br/>
+  </div>
+
+  <div ng-controller="edit-transactions" ng-show="editor.show">
+    <table>
+      <tr>
+        <th>Пользователь</th>
+        <th>Сумма</th>
+        <th>Комментарий</th>
+        <th>Действие</th>
+      </tr>
+      <tr ng-repeat="t in editor.cellTransactions | orderBy:id:true">
+        <td>
+          <select ng-model="t.user" ng-change="updateTransaction(t)"
+            ng-options="user as user.name for user in editor.users track by user.id">
+            <option value="">
+          </select>
+        </td>
+        <td>
+          <input ng-model="t.amountFrom" type="number" min="1" required ng-change="updateTransaction(t)"
+            ng-model-options="{debounce: 2000}">
+        </td>
+        <td>
+          <input ng-model="t.comment" type="text" size="25" ng-change="updateTransaction(t)"
+            ng-model-options="{debounce: 2000}">
+        </td>
+        <td>
+          <input type="submit" value="Удалить" ng-click="deleteTransaction(t)">
+        </td>
       </tr>
     </table>
-    <br/>
-    <div>
-      <table>
-        <tr>
-          <td>Рубрика</td>
-          <td>Сумма</td>
-          <td>Пользователь</td>
-          <td>Комментарий</td>
-        </tr>
-        <tr ng-repeat="t in cellTransactions | orderBy:'id':true">
-          <td>{{t.rubric.name}}</td>
-          <td>{{t.amountFrom}}</td>
-          <td>{{t.user.name}}</td>
-          <td>{{t.comment}}</td>
-          <td>{{t}}</td>
-        </tr>
-      </table>
-    
-    </div>
+    <div>{{log}}</div>
   </div>
-  
-  <div ng-controller="add-transaction" ng-cloak>
+
+  <div ng-controller="add-transaction">
     <h4>Добавить транзакцию</h4>
     <form ng-submit="addTransaction()">
     <table>
@@ -104,7 +114,6 @@ tr th, td {
         <td>Рубрика:</td>
         <td>
           <select ng-model="rubric" size="1" required>
-            <option value=""></option>
             <option ng-repeat="rubric in rubrics" value="{{rubric.id}}">{{rubric.name}}</option>
           </select>
         </td>
@@ -126,11 +135,11 @@ tr th, td {
         <td><input ng-model="comment" type="text" size="25"></td>
       </tr>
       <tr>
-        <td colspan="2"><input type="submit" value="Добавить доход"></td>
+        <td colspan="2"><input type="submit" value="Добавить"></td>
       </tr>      
     </table>
     </form>
-    <div>{{adderLabel}}</div>
+    <div>{{log}}</div>
   </div>
 </body>
 </html>

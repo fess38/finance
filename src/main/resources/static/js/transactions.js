@@ -1,69 +1,119 @@
 angular.module("app.transactions", []);
 
 angular.module("app.transactions").service("YearMonthService", function() {
-	var monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август",
-	                  "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
-	var year = new Date().getFullYear();
-	var month = new Date().getMonth() + 1;
-	
+	var date = new Date();
 	this.getYear = function() {
-		return year;
+		return date.getFullYear();
 	}
 	this.getMonth = function() {
-		return month;
+		return date.getMonth() + 1;
 	}
 	this.toString = function() {
-		return monthNames[month - 1] + " " + year;
+		return date.toLocaleString("ru", { month: 'long', year: 'numeric'});
 	}
 	this.incrementMonth = function() {
-		if (month != 12) {
-			month++;
-		} else {
-			month = 1;
-			year++;
-		}
+		date.setMonth(date.getMonth() + 1);
 	}
 	this.decrementMonth = function() {
-		if (month != 1) {
-			month--;
-		} else {
-			month = 12;
-			year--;
-		}
+	  date.setMonth(date.getMonth() - 1);
 	}
 });
+
 
 angular.module("app.transactions").service("MonthTransactionsService", function(RestApi, YearMonthService) {
-	var defaultScope;
-	this.show = function(scope) {
-		if (!defaultScope) {
-			defaultScope = scope;
-		}
-		RestApi.transactions(YearMonthService.getYear(), YearMonthService.getMonth()).then(function(response) {
-			defaultScope.yearMonth = YearMonthService.toString();
-			defaultScope.daysOfMonth = response.daysOfMonth;
-			defaultScope.rubrics = response.rubrics;
-			defaultScope.monthSummary = response.monthSummary;
-			defaultScope.daySummary = response.daySummary;
-			defaultScope.rubricSummary = response.rubricSummary;
-			defaultScope.rubricByDaySummary = response.rubricDaySummary;
+	var transactions = {};
+	this.refresh = function() {
+		var year = YearMonthService.getYear();
+		var month = YearMonthService.getMonth();
+		RestApi.findYearMonthTransactions(year, month).then(function(response) {
+		  transactions.yearMonth = YearMonthService.toString();
+		  transactions.daysOfMonth = response.data.daysOfMonth;
+		  transactions.rubrics = response.data.rubrics;
+		  transactions.monthSummary = response.data.monthSummary;
+		  transactions.daySummary = response.data.daySummary;
+		  transactions.rubricSummary = response.data.rubricSummary;
+		  transactions.rubricByDaySummary = response.data.rubricDaySummary;
 		});
+		return transactions;
 	}
 });
 
-angular.module("app.transactions").controller("show-transactions", function($scope, MonthTransactionsService, YearMonthService,
-		RestApi) {
-	// При запуске приложения
-	MonthTransactionsService.show($scope);
+
+angular.module("app.transactions").service("EditTransactionsService", function(RestApi) {
+  var scope = function() {
+    var show = false;
+    var cellTransactions = {};
+    var users = [];
+  };
+  this.refresh = function(rubric, year, month, day) {
+    if (angular.isDefined(rubric) && angular.isDefined(year) && angular.isDefined(month) &&
+        angular.isDefined(day)) {
+      scope.rubric = rubric;
+      scope.year = year;
+      scope.month = month;
+      scope.day = day
+    }
+    RestApi.findCellTransactions(scope.rubric, scope.year, scope.month, scope.day).then(function(response) {
+      scope.show = angular.isDefined(response.data[0]);
+      scope.cellTransactions = response.data;
+    });
+    RestApi.users().then(function(response) {
+      scope.users = response;
+    });
+  }
+  
+  this.clear = function() {
+    scope.show = false;
+  }
+  
+  this.init = function() {
+    return scope;
+  }
+});
+
+
+angular.module("app.transactions").controller("edit-transactions", function($scope, $timeout, 
+    EditTransactionsService, RestApi, MonthTransactionsService) {
+  $scope.editor = EditTransactionsService.init();
+  
+  $scope.updateTransaction = function(transaction) {
+    // TODO Неявное поведение при обновлении транзации
+    transaction.amountTo = transaction.amountFrom;
+    RestApi.updateTransaction(transaction).then(function(response) {
+      MonthTransactionsService.refresh();
+      $scope.log = "Транзация обновлена";
+    }, function(response) {
+      $scope.log = "Ошибка обновления транзакции";
+    });
+    $timeout(function() { $scope.log = null; }, 3000);
+  }
+  
+  $scope.deleteTransaction = function(transaction) {
+    RestApi.deleteTransaction(transaction).then(function(response) {
+      MonthTransactionsService.refresh();
+      EditTransactionsService.refresh()
+      $scope.log = "Транзация удалена";
+    }, function(response) {
+      $scope.log = "Ошибка удаления транзакции";
+    });
+  }
+});
+
+
+angular.module("app.transactions").controller("show-transactions", function($scope, MonthTransactionsService,
+    YearMonthService, RestApi, EditTransactionsService) {
+  $scope.transactions = MonthTransactionsService.refresh();
 
 	$scope.nextMonth = function() {
 		YearMonthService.incrementMonth();
-		MonthTransactionsService.show();
+		MonthTransactionsService.refresh();
+		EditTransactionsService.clear();
 	}
 	
 	$scope.previousMonth = function() {
 		YearMonthService.decrementMonth();
-		MonthTransactionsService.show();
+		MonthTransactionsService.refresh();
+		EditTransactionsService.clear();
 	}
 	
 	$scope.filterIncomeRubrics = function(rubric) {
@@ -75,9 +125,8 @@ angular.module("app.transactions").controller("show-transactions", function($sco
     } 
 	
 	$scope.findRubricByDaySummary = function(rubric, day) {
-		var cell;
-		for (rd in $scope.rubricByDaySummary) {
-			cell = $scope.rubricByDaySummary[rd]; 
+		for (rd in $scope.transactions.rubricByDaySummary) {
+		  var cell = $scope.transactions.rubricByDaySummary[rd]; 
 			if (cell.rubric.id == rubric.id && cell.date.day == day) {
 				return cell.amount;
 			}
@@ -85,31 +134,29 @@ angular.module("app.transactions").controller("show-transactions", function($sco
 	}
 	
 	$scope.findRubricSummary = function(rubric) {
-		for (r in $scope.rubricSummary) {
-			if ($scope.rubricSummary[r].rubric.id == rubric.id) {
-				return $scope.rubricSummary[r].amount;
+		for (r in $scope.transactions.rubricSummary) {
+			if ($scope.transactions.rubricSummary[r].rubric.id == rubric.id) {
+				return $scope.transactions.rubricSummary[r].amount;
 			}
 		}
 	}
 	
 	$scope.findDaySummary = function(day) {
-		for (d in $scope.daySummary) {
-			if ($scope.daySummary[d].date.day == day) {
-				return $scope.daySummary[d].amount;
+		for (d in $scope.transactions.daySummary) {
+			if ($scope.transactions.daySummary[d].date.day == day) {
+				return $scope.transactions.daySummary[d].amount;
 			}
 		}
 	}
 	
-	$scope.transactionsForCell = function(rubric, day) {
+	$scope.updateCellTransactions = function(rubric, day) {
 		var year = YearMonthService.getYear();
 		var month = YearMonthService.getMonth();
-		RestApi.transactionsForCell(year, month, day, rubric).then(function(response) {
-			$scope.cellTransactions = response;
-		});
+		EditTransactionsService.refresh(rubric, year, month, day);
 	}
 });
 
-angular.module("app.transactions").controller("add-transaction", function($scope, $http, $window, $timeout,
+angular.module("app.transactions").controller("add-transaction", function($scope, $timeout,
 		RestApi, MonthTransactionsService) {
 	var masterAccount, outerAccount;
 	RestApi.masterAccount().then(function(response) {
@@ -161,18 +208,14 @@ angular.module("app.transactions").controller("add-transaction", function($scope
 		$scope.comment = null;
 	}
 	
-	function afterTransactionSave(message) {
-		clearTransactionFields();
-		$scope.adderLabel = message;
-		$timeout(function() { $scope.adderLabel = null; }, 3000);
-	}
-	
 	$scope.addTransaction = function() {
-		$http.post("/transactions/add", readTransaction()).then(function(response) {
-			afterTransactionSave("Транзакция добавлена");
-			MonthTransactionsService.show();
+	  RestApi.saveTransaction(readTransaction()).then(function(response) {
+		  $scope.log = "Транзакция добавлена";
+			MonthTransactionsService.refresh();
 		}, function(response) {
-			afterTransactionSave("Ошибка добавления транзакции");
+		  $scope.log = "Ошибка добавления транзакции";
 		});
+		clearTransactionFields();
+		$timeout(function() { $scope.log = null; }, 3000);
 	}
 });
