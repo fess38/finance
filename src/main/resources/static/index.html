@@ -76,7 +76,7 @@
         <th>Комментарий</th>
         <th>Действие</th>
       </tr>
-      <tr ng-repeat="t in editor.cellTransactions | orderBy:id:true">
+      <tr ng-repeat="t in editor.cellTransactions | orderBy:'id':true">
         <td>
           <select ng-model="t.user" ng-change="updateTransaction(t)"
             ng-options="user as user.name for user in editor.users track by user.id">
@@ -144,38 +144,32 @@
   </div>
   
   <div ng-controller="show-rubrics">
-    <br/>
+    <h4>Рубрики</h4>
     <table>
       <tr>
         <th>Название</th>
         <th>Доход?</th>
+        <th>Удалить</th>
       </tr>
-      <tr ng-repeat="rubric in rubrics| orderBy:'name'">
+      <tr ng-repeat="rubric in rubrics| orderBy:['isIncome','name']">
         <td>
           <input ng-model="rubric.name" type="text" size="25" ng-change="updateRubric(rubric)"
             ng-model-options="{debounce: 2000}">
         </td>
         <td>
-          <input ng-model="rubric.isIncome" type="checkbox" ng-change="updateRubric(rubric)">
-        </td>
-      </tr>
-      <tr>
-        <td/>
-      </tr>
-      <tr>
-        <td>
-          <input ng-model="newRubric.name" type="text" size="25">
+          <input ng-model="rubric.isIncome" type="checkbox" disabled>
         </td>
         <td>
-          <input ng-model="newRubric.isIncome" type="checkbox">
+          <button ng-click="deleteRubric(rubric)" ng-disabled="rubric.hasTransactions">Удалить</button>
         </td>
       </tr>
-      <tr>
-        <td colspan="2">
-          <button ng-click="save()">Добавить</button>
-         </td>
-      </tr> 
     </table>
+    <br>
+    <form>
+      Название: <input ng-model="newRubric.name" type="text" maxlength="25" required>
+      Доход: <input ng-model="newRubric.isIncome" type="checkbox"><br>
+      <button ng-click="save({name:newRubric.name, isIncome:newRubric.isIncome})">Добавить</button>
+    </form>
     {{log}}
   </div>
 </body>

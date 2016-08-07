@@ -35,7 +35,6 @@ public class DbConfiguration {
   @Autowired
   public SessionFactory getSessionFactory(DataSource dataSource) throws Exception {
     LocalSessionFactoryBean factoryBean = new LocalSessionFactoryBean();
-
     factoryBean.setDataSource(dataSource);
     factoryBean.setAnnotatedClasses(Account.class, Currency.class, Rubric.class, Transaction.class,
         TransactionGroup.class, User.class);
