@@ -79,12 +79,17 @@ public class DefaultController {
   }
 
   @RequestMapping(value = "/rubrics/add", method = RequestMethod.POST)
-  public void addRubric(Rubric rubric) {
+  public void addRubric(@RequestBody Rubric rubric) {
     rubricDao.save(rubric);
   }
 
+  @RequestMapping(value = "/rubrics/update", method = RequestMethod.POST)
+  public void updateRubric(@RequestBody Rubric rubric) {
+    rubricDao.update(rubric);
+  }
+
   @RequestMapping(value = "/rubrics/delete", method = RequestMethod.POST)
-  public void deleteRubric(Rubric rubric) {
+  public void deleteRubric(@RequestBody Rubric rubric) {
     rubricDao.delete(rubric);
   }
 

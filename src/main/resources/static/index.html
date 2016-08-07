@@ -7,8 +7,9 @@
   <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
   <script src="js/app.js"></script>
-  <script src="js/transactions.js"></script>
   <script src="js/restApi.js"></script>
+  <script src="js/transactions.js"></script>
+  <script src="js/rubrics.js"></script>
   <script>
     $(function() {
       $(".datepicker").datepicker({dateFormat: 'yy-mm-dd'});
@@ -114,7 +115,7 @@
         <td>Рубрика:</td>
         <td>
           <select ng-model="rubric" size="1" required>
-            <option ng-repeat="rubric in rubrics" value="{{rubric.id}}">{{rubric.name}}</option>
+            <option ng-repeat="rubric in rubrics | orderBy:'name'" value="{{rubric.id}}">{{rubric.name}}</option>
           </select>
         </td>
       </tr>
@@ -140,6 +141,42 @@
     </table>
     </form>
     <div>{{log}}</div>
+  </div>
+  
+  <div ng-controller="show-rubrics">
+    <br/>
+    <table>
+      <tr>
+        <th>Название</th>
+        <th>Доход?</th>
+      </tr>
+      <tr ng-repeat="rubric in rubrics| orderBy:'name'">
+        <td>
+          <input ng-model="rubric.name" type="text" size="25" ng-change="updateRubric(rubric)"
+            ng-model-options="{debounce: 2000}">
+        </td>
+        <td>
+          <input ng-model="rubric.isIncome" type="checkbox" ng-change="updateRubric(rubric)">
+        </td>
+      </tr>
+      <tr>
+        <td/>
+      </tr>
+      <tr>
+        <td>
+          <input ng-model="newRubric.name" type="text" size="25">
+        </td>
+        <td>
+          <input ng-model="newRubric.isIncome" type="checkbox">
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <button ng-click="save()">Добавить</button>
+         </td>
+      </tr> 
+    </table>
+    {{log}}
   </div>
 </body>
 </html>
