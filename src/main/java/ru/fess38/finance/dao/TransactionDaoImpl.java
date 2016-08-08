@@ -21,6 +21,7 @@ import java.util.List;
 @Repository
 @Transactional
 public class TransactionDaoImpl implements TransactionDao {
+  @Autowired
   private SessionFactory sessionFactory;
 
   @Override
@@ -49,8 +50,13 @@ public class TransactionDaoImpl implements TransactionDao {
   @SuppressWarnings("unchecked")
   @Override
   public List<Transaction> find(DetachedCriteria detachedCriteria) {
-    return detachedCriteria.add(Restrictions.eq("isDeleted", false))
-        .getExecutableCriteria(sessionFactory.getCurrentSession()).list();
+    return commonFind(notDeleted(detachedCriteria), sessionFactory);
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Transaction> findDeleted(DetachedCriteria detachedCriteria) {
+    return commonFind(deleted(detachedCriteria), sessionFactory);
   }
 
   @Override
@@ -67,12 +73,8 @@ public class TransactionDaoImpl implements TransactionDao {
   public List<Transaction> find(LocalDate localDate, long rubricId) {
     Date date = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
     DetachedCriteria criteria = DetachedCriteria.forClass(Transaction.class)
-        .add(Restrictions.eq("dayRef", date)).add(Restrictions.eq("rubric.id", rubricId));
+        .add(Restrictions.eq("dayRef", date))
+        .add(Restrictions.eq("rubric.id", rubricId));
     return find(criteria);
-  }
-
-  @Autowired
-  public void setSessionFactory(SessionFactory sessionFactory) {
-    this.sessionFactory = sessionFactory;
   }
 }

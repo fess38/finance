@@ -9,10 +9,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import ru.fess38.finance.dao.RubricDao;
 import ru.fess38.finance.dao.TransactionDao;
 import ru.fess38.finance.model.MonthTransactions;
-import ru.fess38.finance.model.Rubric;
 import ru.fess38.finance.model.Transaction;
 
 import java.time.LocalDate;
@@ -23,8 +21,6 @@ import java.util.List;
 public class TransactionController {
   @Autowired
   private TransactionDao transactionDao;
-  @Autowired
-  private RubricDao rubricDao;
 
   @RequestMapping(value = "/transactions", method = RequestMethod.GET, params = {"year", "month"})
   public @ResponseBody MonthTransactions getTransactions(@RequestParam("year") int year,
@@ -44,16 +40,6 @@ public class TransactionController {
   @Transactional
   public void save(@RequestBody Transaction transaction) {
     transactionDao.save(transaction);
-    markRubricAsWithTransaction(transaction.getRubric());
-  }
-
-  private void markRubricAsWithTransaction(Rubric rubric) {
-    Long id = rubric.getId();
-    Rubric persistedRubric = rubricDao.get(id);
-    if (!persistedRubric.isHasTransactions()) {
-      persistedRubric.setHasTransactions(true);
-      rubricDao.update(persistedRubric);
-    }
   }
 
   @RequestMapping(value = "/transactions/update", method = RequestMethod.POST)

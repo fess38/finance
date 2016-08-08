@@ -14,6 +14,7 @@ import java.util.List;
 @Repository
 @Transactional
 public class RubricDaoImpl implements RubricDao {
+  @Autowired
   private SessionFactory sessionFactory;
 
   @Override
@@ -42,27 +43,32 @@ public class RubricDaoImpl implements RubricDao {
   @SuppressWarnings("unchecked")
   @Override
   public List<Rubric> find(DetachedCriteria detachedCriteria) {
-    detachedCriteria.add(Restrictions.eq("isService", false))
-        .add(Restrictions.eq("isDeleted", false));
-    return detachedCriteria.getExecutableCriteria(sessionFactory.getCurrentSession()).list();
+    notDeleted(notService(detachedCriteria));
+    return commonFind(detachedCriteria, sessionFactory);
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Rubric> findDeleted(DetachedCriteria detachedCriteria) {
+    deleted(notService(detachedCriteria));
+    return commonFind(detachedCriteria, sessionFactory);
   }
 
   @Override
   public List<Rubric> findByType(boolean isIncome) {
-    DetachedCriteria criteria =
-        DetachedCriteria.forClass(Rubric.class).add(Restrictions.eq("isIncome", isIncome));
+    DetachedCriteria criteria = DetachedCriteria.forClass(Rubric.class)
+        .add(Restrictions.eq("isIncome", isIncome));
     return find(criteria);
   }
 
   @Override
   public Rubric getTransferRubric() {
-    DetachedCriteria criteria =
-        DetachedCriteria.forClass(Rubric.class).add(Restrictions.eq("isService", true));
+    DetachedCriteria criteria = DetachedCriteria.forClass(Rubric.class)
+        .add(Restrictions.eq("isService", true));
     return find(criteria).get(0);
   }
 
-  @Autowired
-  public void setSessionFactory(SessionFactory sessionFactory) {
-    this.sessionFactory = sessionFactory;
+  private DetachedCriteria notService(DetachedCriteria detachedCriteria) {
+    return detachedCriteria.add(Restrictions.eq("isService", false));
   }
 }

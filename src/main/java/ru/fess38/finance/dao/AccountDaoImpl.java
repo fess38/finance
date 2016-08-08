@@ -15,6 +15,7 @@ import java.util.List;
 @Repository
 @Transactional
 public class AccountDaoImpl implements AccountDao {
+  @Autowired
   private SessionFactory sessionFactory;
 
   @Override
@@ -42,25 +43,34 @@ public class AccountDaoImpl implements AccountDao {
   @SuppressWarnings("unchecked")
   @Override
   public List<Account> find(DetachedCriteria detachedCriteria) {
-    detachedCriteria.add(Restrictions.eq("type", AccountType.DEFAULT))
-        .add(Restrictions.eq("isDeleted", false));
-    return detachedCriteria.getExecutableCriteria(sessionFactory.getCurrentSession()).list();
+    notDeleted(findSimpleAccounts(detachedCriteria));
+    return commonFind(detachedCriteria, sessionFactory);
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Account> findDeleted(DetachedCriteria detachedCriteria) {
+    deleted(findSimpleAccounts(detachedCriteria));
+    return commonFind(detachedCriteria, sessionFactory);
   }
 
   @Override
   public Account getMasterAccount() {
-    return (Account) sessionFactory.getCurrentSession().createCriteria(Account.class)
-        .add(Restrictions.eq("type", AccountType.MASTER)).uniqueResult();
+    return (Account) sessionFactory.getCurrentSession()
+        .createCriteria(Account.class)
+        .add(Restrictions.eq("type", AccountType.MASTER))
+        .uniqueResult();
   }
 
   @Override
   public Account getOuterAccount() {
-    return (Account) sessionFactory.getCurrentSession().createCriteria(Account.class)
-        .add(Restrictions.eq("type", AccountType.OUTER)).uniqueResult();
+    return (Account) sessionFactory.getCurrentSession()
+        .createCriteria(Account.class)
+        .add(Restrictions.eq("type", AccountType.OUTER))
+        .uniqueResult();
   }
 
-  @Autowired
-  public void setSessionFactory(SessionFactory sessionFactory) {
-    this.sessionFactory = sessionFactory;
+  private DetachedCriteria findSimpleAccounts(DetachedCriteria detachedCriteria) {
+    return detachedCriteria.add(Restrictions.eq("type", AccountType.DEFAULT));
   }
 }
