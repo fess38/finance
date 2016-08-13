@@ -34,6 +34,8 @@ public class Account {
   private AccountType type = AccountType.DEFAULT;
   @Column(nullable = false)
   private boolean isDeleted = false;
+  @Column(nullable = false)
+  private boolean hasTransactions = false;
 
   @Override
   public boolean equals(Object object) {
@@ -96,5 +98,13 @@ public class Account {
 
   public void setType(AccountType type) {
     this.type = type;
+  }
+
+  public boolean isHasTransactions() {
+    return hasTransactions;
+  }
+
+  public void setHasTransactions(boolean hasTransactions) {
+    this.hasTransactions = hasTransactions;
   }
 }

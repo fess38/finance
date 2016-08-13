@@ -12,8 +12,8 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import ru.fess38.finance.model.Account;
 import ru.fess38.finance.model.Currency;
 import ru.fess38.finance.model.Rubric;
+import ru.fess38.finance.model.Tag;
 import ru.fess38.finance.model.Transaction;
-import ru.fess38.finance.model.TransactionGroup;
 import ru.fess38.finance.model.User;
 
 import java.util.Properties;
@@ -37,7 +37,7 @@ public class DbConfiguration {
     LocalSessionFactoryBean factoryBean = new LocalSessionFactoryBean();
     factoryBean.setDataSource(dataSource);
     factoryBean.setAnnotatedClasses(Account.class, Currency.class, Rubric.class, Transaction.class,
-        TransactionGroup.class, User.class);
+        Tag.class, User.class);
     factoryBean.setHibernateProperties(getHibernateProperties());
     factoryBean.afterPropertiesSet();
     return factoryBean.getObject();

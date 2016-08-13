@@ -63,8 +63,10 @@ public class MonthTransactions {
   }
 
   private List<Rubric> processRubrics() {
-    return transactions.stream().map(Transaction::getRubric).distinct()
-        .sorted(Comparator.comparing(Rubric::getName)).collect(Collectors.toList());
+    return transactions.stream()
+        .map(Transaction::getRubric)
+        .distinct()
+        .collect(Collectors.toList());
   }
 
   private List<Integer> processDaysOfMonth() {
@@ -77,7 +79,8 @@ public class MonthTransactions {
 
   private int processMonthSummary() {
     return transactions.stream()
-        .mapToInt(x -> (x.getRubric().isIncome()) ? x.getAmountFrom() : -x.getAmountFrom()).sum();
+        .mapToInt(x -> (x.getRubric().isIncome()) ? x.getAmountFrom() : -x.getAmountFrom())
+        .sum();
   }
 
   private List<DaySummary> processDaySummary() {
@@ -115,8 +118,8 @@ public class MonthTransactions {
       map.computeIfPresent(pair, (key, value) -> value + amount);
       map.putIfAbsent(pair, amount);
     });
-    map.forEach(
-        (key, value) -> result.add(new RubricDaySummary(key.getLeft(), key.getRight(), value)));
+    map.forEach((key, value) -> result
+        .add(new RubricDaySummary(key.getLeft(), key.getRight(), value)));
     return result;
   }
 
@@ -135,8 +138,12 @@ public class MonthTransactions {
   }
 
   public List<Currency> currencies() {
-    return transactions.stream().map(Transaction::getAccountFrom).map(Account::getCurrency)
-        .distinct().sorted(Comparator.comparing(Currency::getId)).collect(Collectors.toList());
+    return transactions.stream()
+        .map(Transaction::getAccountFrom)
+        .map(Account::getCurrency)
+        .distinct()
+        .sorted(Comparator.comparing(Currency::getId))
+        .collect(Collectors.toList());
   }
 
   public YearMonth getYearMonth() {
@@ -167,7 +174,7 @@ public class MonthTransactions {
     return rubricDaySummary;
   }
 
-  class DaySummary {
+  private class DaySummary {
     public DaySummary(LocalDate date, int amount) {
       this.date = date;
       this.amount = amount;
@@ -176,16 +183,18 @@ public class MonthTransactions {
     private final LocalDate date;
     private final int amount;
 
+    @SuppressWarnings("unused")
     public LocalDate getDate() {
       return date;
     }
 
+    @SuppressWarnings("unused")
     public int getAmount() {
       return amount;
     }
   }
 
-  class RubricSummary {
+  private class RubricSummary {
     public RubricSummary(Rubric rubric, int amount) {
       this.rubric = rubric;
       this.amount = amount;
@@ -194,16 +203,18 @@ public class MonthTransactions {
     private final Rubric rubric;
     private final int amount;
 
+    @SuppressWarnings("unused")
     public Rubric getRubric() {
       return rubric;
     }
 
+    @SuppressWarnings("unused")
     public int getAmount() {
       return amount;
     }
   }
 
-  class RubricDaySummary extends RubricSummary {
+  private class RubricDaySummary extends RubricSummary {
     public RubricDaySummary(Rubric rubric, LocalDate date, int amount) {
       super(rubric, amount);
       this.date = date;
@@ -211,6 +222,7 @@ public class MonthTransactions {
 
     private final LocalDate date;
 
+    @SuppressWarnings("unused")
     public LocalDate getDate() {
       return date;
     }

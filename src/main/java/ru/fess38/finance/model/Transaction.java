@@ -46,9 +46,9 @@ public class Transaction {
   @ManyToOne(fetch = FetchType.EAGER, optional = true, targetEntity = User.class)
   @JoinColumn(name = "userId", nullable = true)
   private User user;
-  @ManyToOne(fetch = FetchType.EAGER, optional = true, targetEntity = TransactionGroup.class)
-  @JoinColumn(name = "transactionGroupId", nullable = true)
-  private TransactionGroup transactionGroup;
+  @ManyToOne(fetch = FetchType.EAGER, optional = true, targetEntity = Tag.class)
+  @JoinColumn(name = "tagId", nullable = true)
+  private Tag tag;
   @Column(length = 200)
   private String comment;
 
@@ -123,12 +123,12 @@ public class Transaction {
     this.rubric = rubric;
   }
 
-  public TransactionGroup getTransactionGroup() {
-    return transactionGroup;
+  public Tag getTag() {
+    return tag;
   }
 
-  public void setTransactionGroup(TransactionGroup transactionGroup) {
-    this.transactionGroup = transactionGroup;
+  public void setTag(Tag tag) {
+    this.tag = tag;
   }
 
   public User getUser() {

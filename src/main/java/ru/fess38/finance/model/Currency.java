@@ -23,6 +23,8 @@ public class Currency {
   private String symbol;
   @Column(nullable = false)
   private boolean isDeleted = false;
+  @Column(nullable = false)
+  private boolean hasAccounts = false;
 
   @Override
   public boolean equals(Object object) {
@@ -69,5 +71,13 @@ public class Currency {
 
   public void setDeleted(boolean isDeleted) {
     this.isDeleted = isDeleted;
+  }
+
+  public boolean isHasAccounts() {
+    return hasAccounts;
+  }
+
+  public void setHasAccounts(boolean hasAccounts) {
+    this.hasAccounts = hasAccounts;
   }
 }
