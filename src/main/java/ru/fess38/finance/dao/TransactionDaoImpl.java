@@ -2,6 +2,7 @@ package ru.fess38.finance.dao;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.Type;
@@ -10,7 +11,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import ru.fess38.finance.model.MonthTransactions;
+import ru.fess38.finance.model.Rubric;
+import ru.fess38.finance.model.Tag;
 import ru.fess38.finance.model.Transaction;
+import ru.fess38.finance.model.User;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -76,5 +80,28 @@ public class TransactionDaoImpl implements TransactionDao {
         .add(Restrictions.eq("dayRef", date))
         .add(Restrictions.eq("rubric.id", rubricId));
     return find(criteria);
+  }
+
+  @Override
+  public int countByRubric(Rubric rubric) {
+    return countByProperty("rubric.id", rubric.getId());
+  }
+
+  @Override
+  public int countByTag(Tag tag) {
+    return countByProperty("tag.id", tag.getId());
+  }
+
+  @Override
+  public int countByUser(User user) {
+    return countByProperty("user.id", user.getId());
+  }
+
+  private int countByProperty(String propertyName, long id) {
+    return ((Long) notDeleted(DetachedCriteria.forClass(Transaction.class))
+        .add(Restrictions.eq(propertyName, id))
+        .setProjection(Projections.rowCount())
+        .getExecutableCriteria(sessionFactory.getCurrentSession())
+        .uniqueResult()).intValue();
   }
 }

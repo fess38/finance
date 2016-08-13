@@ -1,6 +1,6 @@
-angular.module("app.transactions", []);
+angular.module("app.transaction", []);
 
-angular.module("app.transactions").service("YearMonthService", function() {
+angular.module("app.transaction").service("YearMonthService", function() {
 	var date = new Date();
 	this.getYear = function() {
 		return date.getFullYear();
@@ -20,7 +20,7 @@ angular.module("app.transactions").service("YearMonthService", function() {
 });
 
 
-angular.module("app.transactions").service("MonthTransactionsService", function(RestApi, YearMonthService) {
+angular.module("app.transaction").service("MonthTransactionsService", function(RestApi, YearMonthService) {
 	var transactions = {};
 	this.refresh = function() {
 		var year = YearMonthService.getYear();
@@ -39,7 +39,7 @@ angular.module("app.transactions").service("MonthTransactionsService", function(
 });
 
 
-angular.module("app.transactions").service("EditTransactionsService", function(RestApi) {
+angular.module("app.transaction").service("EditTransactionsService", function(RestApi) {
   var scope = function() {
     var show = false;
     var cellTransactions = {};
@@ -58,7 +58,10 @@ angular.module("app.transactions").service("EditTransactionsService", function(R
       scope.cellTransactions = response.data;
     });
     RestApi.users().then(function(response) {
-      scope.users = response;
+      scope.users = response.data;
+    });
+    RestApi.tags().then(function(response) {
+      scope.tags = response.data;
     });
   }
   
@@ -72,7 +75,7 @@ angular.module("app.transactions").service("EditTransactionsService", function(R
 });
 
 
-angular.module("app.transactions").controller("edit-transactions", function($scope, $timeout, 
+angular.module("app.transaction").controller("edit-transactions", function($scope, $timeout, 
     EditTransactionsService, RestApi, MonthTransactionsService) {
   $scope.editor = EditTransactionsService.init();
   
@@ -100,7 +103,7 @@ angular.module("app.transactions").controller("edit-transactions", function($sco
 });
 
 
-angular.module("app.transactions").controller("show-transactions", function($scope, MonthTransactionsService,
+angular.module("app.transaction").controller("show-transactions", function($scope, MonthTransactionsService,
     YearMonthService, RestApi, EditTransactionsService) {
   $scope.transactions = MonthTransactionsService.refresh();
 
@@ -156,31 +159,35 @@ angular.module("app.transactions").controller("show-transactions", function($sco
 	}
 });
 
-angular.module("app.transactions").controller("add-transaction", function($scope, $timeout,
+angular.module("app.transaction").controller("add-transaction", function($scope, $timeout,
 		RestApi, MonthTransactionsService) {
 	var masterAccount, outerAccount;
 	RestApi.masterAccount().then(function(response) {
-		masterAccount = response;
+		masterAccount = response.data;
 	});
 	RestApi.outerAccount().then(function(response) {
-		outerAccount = response;
+		outerAccount = response.data;
 	});
 	
 	$scope.changeType = function(type) {
 		if (type == "income") {
 			RestApi.incomeRubrics().then(function(response) {
-				$scope.rubrics = response;
+				$scope.rubrics = response.data;
 			});
 		} else if (type == "expense") {
 			RestApi.expenseRubrics().then(function(response) {
-				$scope.rubrics = response;
+				$scope.rubrics = response.data;
 			});
 		}
 	};
 
 	RestApi.users().then(function(response) {
-		$scope.users = response;
+		$scope.users = response.data;
 	});
+	
+	RestApi.tags().then(function(response) {
+    $scope.tags = response.data;
+  });
 	
 	function readTransaction() {
 		var transaction = {};
@@ -199,6 +206,10 @@ angular.module("app.transactions").controller("add-transaction", function($scope
 		if ($scope.user) {
 			transaction.user = {id: $scope.user};
 		}
+		
+		if ($scope.tag) {
+      transaction.tag = {id: $scope.tag};
+    }
 		return transaction;
 	}
 	

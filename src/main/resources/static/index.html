@@ -8,8 +8,10 @@
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
   <script src="js/app.js"></script>
   <script src="js/restApi.js"></script>
-  <script src="js/transactions.js"></script>
-  <script src="js/rubrics.js"></script>
+  <script src="js/transaction.js"></script>
+  <script src="js/rubric.js"></script>
+  <script src="js/tag.js"></script>
+  <script src="js/user.js"></script>
   <script>
     $(function() {
       $(".datepicker").datepicker({dateFormat: 'yy-mm-dd'});
@@ -72,6 +74,7 @@
     <table>
       <tr>
         <th>Пользователь</th>
+        <th>Тэг</th>
         <th>Сумма</th>
         <th>Комментарий</th>
         <th>Действие</th>
@@ -80,6 +83,12 @@
         <td>
           <select ng-model="t.user" ng-change="updateTransaction(t)"
             ng-options="user as user.name for user in editor.users track by user.id">
+            <option value="">
+          </select>
+        </td>
+        <td>
+          <select ng-model="t.tag" ng-change="updateTransaction(t)"
+            ng-options="tag as tag.name for tag in editor.tags track by tag.id">
             <option value="">
           </select>
         </td>
@@ -104,12 +113,12 @@
     <form ng-submit="addTransaction()">
     <table>
       <tr>
-        <td><input type="radio" ng-model="type" value="income" ng-click='changeType(type)'> Доход</td>
-        <td><input type="radio" ng-model="type" value="expense" ng-click='changeType(type)'> Расход</td>
-      </tr>
-      <tr>
         <td>Дата:</td>
         <td><input ng-model="dayRef" type="text" class="datepicker" required></td>
+      </tr>
+      <tr>
+        <td><input type="radio" ng-model="type" value="income" ng-click='changeType(type)'> Доход</td>
+        <td><input type="radio" ng-model="type" value="expense" ng-click='changeType(type)'> Расход</td>
       </tr>
       <tr>
         <td>Рубрика:</td>
@@ -124,6 +133,14 @@
         <td>
           <select ng-model="user" size="1">
             <option ng-repeat="user in users" value="{{user.id}}">{{user.name}}</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>Тэг:</td>
+        <td>
+          <select ng-model="tag" size="1">
+            <option ng-repeat="tag in tags" value="{{tag.id}}">{{tag.name}}</option>
           </select>
         </td>
       </tr>
@@ -165,10 +182,60 @@
       </tr>
     </table>
     <br>
-    <form>
+    <form ng-submit="save({name:newRubric.name, isIncome:newRubric.isIncome})">
       Название: <input ng-model="newRubric.name" type="text" maxlength="25" required>
       Доход: <input ng-model="newRubric.isIncome" type="checkbox"><br>
-      <button ng-click="save({name:newRubric.name, isIncome:newRubric.isIncome})">Добавить</button>
+      <button>Добавить</button>
+    </form>
+    {{log}}
+  </div>
+  
+  <div ng-controller="tag">
+    <h4>Тэги</h4>
+    <table>
+      <tr>
+        <th>Название</th>
+        <th>Удалить</th>
+      </tr>
+      <tr ng-repeat="tag in tags | orderBy:'name'">
+        <td>
+          <input ng-model="tag.name" type="text" size="25" ng-change="updateTag(tag)"
+            ng-model-options="{debounce: 2000}">
+        </td>
+        <td>
+          <button ng-click="deleteTag(tag)" ng-disabled="tag.hasTransactions">Удалить</button>
+        </td>
+      </tr>
+    </table>
+    <br>
+    <form ng-submit="saveTag({name:newTag.name})">
+      Название: <input ng-model="newTag.name" type="text" maxlength="25" required>
+      <button>Добавить</button>
+    </form>
+    {{log}}
+  </div>
+  
+  <div ng-controller="user">
+    <h4>Пользователи</h4>
+    <table>
+      <tr>
+        <th>Название</th>
+        <th>Удалить</th>
+      </tr>
+      <tr ng-repeat="user in users | orderBy:'name'">
+        <td>
+          <input ng-model="user.name" type="text" size="25" ng-change="updateUser(user)"
+            ng-model-options="{debounce: 2000}">
+        </td>
+        <td>
+          <button ng-click="deleteUser(user)" ng-disabled="user.hasTransactions">Удалить</button>
+        </td>
+      </tr>
+    </table>
+    <br>
+    <form ng-submit="saveUser({name:newUser.name})">
+      Название: <input ng-model="newUser.name" type="text" maxlength="25" required>
+      <button>Добавить</button>
     </form>
     {{log}}
   </div>

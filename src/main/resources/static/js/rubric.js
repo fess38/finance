@@ -1,6 +1,6 @@
-angular.module("app.rubrics", []);
+angular.module("app.rubric", []);
 
-angular.module("app.rubrics").controller("show-rubrics", function($scope, $timeout, RestApi,
+angular.module("app.rubric").controller("show-rubrics", function($scope, $timeout, RestApi,
     MonthTransactionsService) {
   $scope.refresh = function() {
     RestApi.rubrics().then(function(response) {
@@ -10,7 +10,6 @@ angular.module("app.rubrics").controller("show-rubrics", function($scope, $timeo
   $scope.refresh();
   
   $scope.updateRubric = function(rubric) {
-    console.log(rubric);
     RestApi.updateRubric(rubric).then(function(response) {
       MonthTransactionsService.refresh();
       $scope.log = "Рубрика обновлена";
@@ -21,7 +20,7 @@ angular.module("app.rubrics").controller("show-rubrics", function($scope, $timeo
   }
   
   $scope.save = function(rubric) {
-    RestApi.addRubric(rubric).then(function(response) {
+    RestApi.saveRubric(rubric).then(function(response) {
       $scope.log = "Рубрика добавлена";
       $scope.refresh();
     }, function(response) {

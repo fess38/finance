@@ -1,1 +1,1 @@
-angular.module("app", ["app.restApi", "app.transactions", "app.rubrics"]);
+angular.module("app", ["app.restApi", "app.transaction", "app.rubric", "app.tag", "app.user"]);

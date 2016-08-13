@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import ru.fess38.finance.dao.RubricDao;
+import ru.fess38.finance.dao.TransactionDao;
 import ru.fess38.finance.model.Rubric;
 
 import java.util.List;
@@ -17,34 +18,38 @@ import java.util.List;
 public class RubricController {
   @Autowired
   private RubricDao rubricDao;
+  @Autowired
+  private TransactionDao transactionDao;
 
-  @RequestMapping(value = "/rubrics", method = RequestMethod.GET)
-  public @ResponseBody List<Rubric> getRubrics() {
+  @RequestMapping(value = "/rubric/get", method = RequestMethod.GET)
+  public @ResponseBody List<Rubric> get() {
     return rubricDao.find(DetachedCriteria.forClass(Rubric.class));
   }
 
-  @RequestMapping(value = "/rubrics/income", method = RequestMethod.GET)
-  public @ResponseBody List<Rubric> getIncomeRubrics() {
+  @RequestMapping(value = "/rubric/income", method = RequestMethod.GET)
+  public @ResponseBody List<Rubric> findIncomeRubrics() {
     return rubricDao.findByType(true);
   }
 
-  @RequestMapping(value = "/rubrics/expense", method = RequestMethod.GET)
-  public @ResponseBody List<Rubric> getExpenseRubrics() {
+  @RequestMapping(value = "/rubric/expense", method = RequestMethod.GET)
+  public @ResponseBody List<Rubric> findExpenseRubrics() {
     return rubricDao.findByType(false);
   }
 
-  @RequestMapping(value = "/rubrics/add", method = RequestMethod.POST)
-  public void addRubric(@RequestBody Rubric rubric) {
+  @RequestMapping(value = "/rubric/save", method = RequestMethod.POST)
+  public void save(@RequestBody Rubric rubric) {
     rubricDao.save(rubric);
   }
 
-  @RequestMapping(value = "/rubrics/update", method = RequestMethod.POST)
-  public void updateRubric(@RequestBody Rubric rubric) {
+  @RequestMapping(value = "/rubric/update", method = RequestMethod.POST)
+  public void update(@RequestBody Rubric rubric) {
     rubricDao.update(rubric);
   }
 
-  @RequestMapping(value = "/rubrics/delete", method = RequestMethod.POST)
-  public void deleteRubric(@RequestBody Rubric rubric) {
-    rubricDao.delete(rubric);
+  @RequestMapping(value = "/rubric/delete", method = RequestMethod.POST)
+  public void delete(@RequestBody Rubric rubric) {
+    if (transactionDao.countByRubric(rubric) == 0) {
+      rubricDao.delete(rubric);
+    }
   }
 }
