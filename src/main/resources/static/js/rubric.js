@@ -19,7 +19,7 @@ angular.module("app.rubric").controller("show-rubrics", function($scope, $timeou
     $timeout(function() { $scope.log = null; }, 3000);
   }
   
-  $scope.save = function(rubric) {
+  $scope.saveRubric = function(rubric) {
     RestApi.saveRubric(rubric).then(function(response) {
       $scope.log = "Рубрика добавлена";
       $scope.refresh();

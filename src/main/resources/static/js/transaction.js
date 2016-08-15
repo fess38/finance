@@ -190,43 +190,34 @@ angular.module("app.transaction").controller("add-transaction", function($scope,
   });
 	
 	function readTransaction() {
-		var transaction = {};
-		transaction.dayRef = $scope.dayRef;
-		transaction.rubric = {id: $scope.rubric};
-		transaction.amountFrom = $scope.amount;
-		transaction.amountTo = $scope.amount;
-		transaction.comment = $scope.comment;
+	  var newTransaction = $scope.newTransaction;
+	  newTransaction.amountTo = $scope.newTransaction.amountFrom;
+	  newTransaction.amountTo = newTransaction.amountFrom;
 		if ($scope.type == "income") {
-			transaction.accountFrom = outerAccount;
-			transaction.accountTo = masterAccount;
+		  newTransaction.accountFrom = outerAccount;
+		  newTransaction.accountTo = masterAccount;
 		} else if ($scope.type == "expense") {
-			transaction.accountFrom = masterAccount;
-			transaction.accountTo = outerAccount;
+		  newTransaction.accountFrom = masterAccount;
+		  newTransaction.accountTo = outerAccount;
 		}
-		if ($scope.user) {
-			transaction.user = {id: $scope.user};
-		}
-		
-		if ($scope.tag) {
-      transaction.tag = {id: $scope.tag};
-    }
-		return transaction;
+		return newTransaction;
 	}
 	
 	function clearTransactionFields() {
-		$scope.amount = null;
-		$scope.user = null;
-		$scope.comment = null;
+		$scope.newTransaction.amountFrom = null;
+		$scope.newTransaction.tag = null;
+		$scope.newTransaction.user = null;
+		$scope.newTransaction.comment = null;
 	}
 	
 	$scope.addTransaction = function() {
 	  RestApi.saveTransaction(readTransaction()).then(function(response) {
 		  $scope.log = "Транзакция добавлена";
+		  clearTransactionFields();
 			MonthTransactionsService.refresh();
 		}, function(response) {
 		  $scope.log = "Ошибка добавления транзакции";
 		});
-		clearTransactionFields();
 		$timeout(function() { $scope.log = null; }, 3000);
 	}
 });

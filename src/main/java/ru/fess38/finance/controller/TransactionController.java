@@ -8,15 +8,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import ru.fess38.finance.dao.RubricDao;
-import ru.fess38.finance.dao.TagDao;
 import ru.fess38.finance.dao.TransactionDao;
-import ru.fess38.finance.dao.UserDao;
 import ru.fess38.finance.model.MonthTransactions;
-import ru.fess38.finance.model.Rubric;
-import ru.fess38.finance.model.Tag;
 import ru.fess38.finance.model.Transaction;
-import ru.fess38.finance.model.User;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -27,11 +21,7 @@ public class TransactionController {
   @Autowired
   private TransactionDao transactionDao;
   @Autowired
-  private RubricDao rubricDao;
-  @Autowired
-  private TagDao tagDao;
-  @Autowired
-  private UserDao userDao;
+  private TransactionLinkedEntityUpdater updater;
 
   @RequestMapping(value = "/transaction/find", method = RequestMethod.GET,
       params = {"year", "month"})
@@ -52,9 +42,10 @@ public class TransactionController {
   public void save(@RequestBody Transaction transaction) {
     transactionDao.save(transaction);
 
-    updateLinkedRubric(transaction.getRubric());
-    updateLinkedTag(transaction.getTag());
-    updateLinkedUser(transaction.getUser());
+    updater.updateAccountOnSave(transaction);
+    updater.updateRubricOnSave(transaction);
+    updater.updateTagOnSave(transaction);
+    updater.updateUserOnSave(transaction);
   }
 
   @RequestMapping(value = "/transaction/update", method = RequestMethod.POST)
@@ -62,61 +53,19 @@ public class TransactionController {
     Transaction persistedTransaction = transactionDao.get(transaction.getId());
     transactionDao.update(transaction);
 
-    updateLinkedTag(persistedTransaction.getTag());
-    updateLinkedUser(persistedTransaction.getUser());
-    updateLinkedTag(transaction.getTag());
-    updateLinkedUser(transaction.getUser());
+    updater.updateAccountOnUpdate(persistedTransaction, transaction);
+    updater.updateTagOnUpdate(persistedTransaction, transaction);
+    updater.updateUserOnUpdate(persistedTransaction, transaction);
   }
 
   @RequestMapping(value = "/transaction/delete", method = RequestMethod.POST)
   public void delete(@RequestBody Transaction transaction) {
     transactionDao.delete(transaction);
 
-    updateLinkedRubric(transaction.getRubric());
-    updateLinkedTag(transaction.getTag());
-    updateLinkedUser(transaction.getUser());
+    updater.updateAccountOnDelete(transaction);
+    updater.updateRubricOnDelete(transaction);
+    updater.updateTagOnDelete(transaction);
+    updater.updateUserOnDelete(transaction);
   }
 
-  private void updateLinkedRubric(Rubric rubric) {
-    Rubric persistedRubric = rubricDao.get(rubric.getId());
-    int amount = transactionDao.countByRubric(persistedRubric);
-    if (amount == 0 && persistedRubric.isHasTransactions()) {
-      persistedRubric.setHasTransactions(false);
-      rubricDao.update(persistedRubric);
-    } else if (amount > 0 && !persistedRubric.isHasTransactions()) {
-      persistedRubric.setHasTransactions(true);
-      rubricDao.update(persistedRubric);
-    }
-  }
-
-  private void updateLinkedTag(Tag tag) {
-    if (tag == null) {
-      return;
-    }
-    Tag persistedTag = tagDao.get(tag.getId());
-    int amount = transactionDao.countByTag(persistedTag);
-    if (amount == 0 && persistedTag.isHasTransactions()) {
-      persistedTag.setHasTransactions(false);
-      tagDao.update(persistedTag);
-    } else if (amount > 0 && !persistedTag.isHasTransactions()) {
-      persistedTag.setHasTransactions(true);
-      tagDao.update(persistedTag);
-    }
-  }
-
-  private void updateLinkedUser(User user) {
-    if (user == null) {
-      return;
-    }
-    User persistedUser = userDao.get(user.getId());
-    int amount = transactionDao.countByUser(persistedUser);
-
-    if (amount == 0 && persistedUser.isHasTransactions()) {
-      persistedUser.setHasTransactions(false);
-      userDao.update(persistedUser);
-    } else if (amount > 0 && !persistedUser.isHasTransactions()) {
-      persistedUser.setHasTransactions(true);
-      userDao.update(persistedUser);
-    }
-  }
 }

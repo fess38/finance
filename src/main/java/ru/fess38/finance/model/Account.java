@@ -25,7 +25,7 @@ public class Account {
   @Column(length = 100, nullable = false)
   private String name;
   @Column(nullable = false)
-  private int amount = 0;
+  private int balance = 0;
   @ManyToOne(fetch = FetchType.EAGER, optional = false, targetEntity = Currency.class)
   @JoinColumn(name = "currencyId", nullable = false)
   private Currency currency;
@@ -34,6 +34,8 @@ public class Account {
   private AccountType type = AccountType.DEFAULT;
   @Column(nullable = false)
   private boolean isDeleted = false;
+  @Column(nullable = false)
+  private int amountTransactions = 0;
   @Column(nullable = false)
   private boolean hasTransactions = false;
 
@@ -68,14 +70,6 @@ public class Account {
     this.name = name;
   }
 
-  public int getAmount() {
-    return amount;
-  }
-
-  public void setAmount(int amount) {
-    this.amount = amount;
-  }
-
   public Currency getCurrency() {
     return currency;
   }
@@ -100,11 +94,29 @@ public class Account {
     this.type = type;
   }
 
-  public boolean isHasTransactions() {
+  public boolean hasTransactions() {
     return hasTransactions;
   }
 
-  public void setHasTransactions(boolean hasTransactions) {
-    this.hasTransactions = hasTransactions;
+  public int getBalance() {
+    return balance;
+  }
+
+  public void addMoney(int amount) {
+    balance += amount;
+  }
+
+  public int getAmountTransactions() {
+    return amountTransactions;
+  }
+
+  public void addTransaction() {
+    amountTransactions++;
+    hasTransactions = amountTransactions > 0;
+  }
+
+  public void substractTransaction() {
+    amountTransactions--;
+    hasTransactions = amountTransactions > 0;
   }
 }

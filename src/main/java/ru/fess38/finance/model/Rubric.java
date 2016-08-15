@@ -26,6 +26,8 @@ public class Rubric {
   @Column(nullable = false)
   private boolean isDeleted = false;
   @Column(nullable = false)
+  private int amountTransactions = 0;
+  @Column(nullable = false)
   private boolean hasTransactions = false;
 
   @Override
@@ -83,11 +85,21 @@ public class Rubric {
     this.isDeleted = isDeleted;
   }
 
-  public boolean isHasTransactions() {
+  public boolean hasTransactions() {
     return hasTransactions;
   }
 
-  public void setHasTransactions(boolean hasTransactions) {
-    this.hasTransactions = hasTransactions;
+  public int getAmountTransactions() {
+    return amountTransactions;
+  }
+
+  public void addTransaction() {
+    amountTransactions++;
+    hasTransactions = amountTransactions > 0;
+  }
+
+  public void substractTransaction() {
+    amountTransactions--;
+    hasTransactions = amountTransactions > 0;
   }
 }

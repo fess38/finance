@@ -12,6 +12,7 @@
   <script src="js/rubric.js"></script>
   <script src="js/tag.js"></script>
   <script src="js/user.js"></script>
+  <script src="js/account.js"></script>
   <script>
     $(function() {
       $(".datepicker").datepicker({dateFormat: 'yy-mm-dd'});
@@ -114,7 +115,7 @@
     <table>
       <tr>
         <td>Дата:</td>
-        <td><input ng-model="dayRef" type="text" class="datepicker" required></td>
+        <td><input ng-model="newTransaction.dayRef" type="text" class="datepicker" required></td>
       </tr>
       <tr>
         <td><input type="radio" ng-model="type" value="income" ng-click='changeType(type)'> Доход</td>
@@ -123,7 +124,7 @@
       <tr>
         <td>Рубрика:</td>
         <td>
-          <select ng-model="rubric" size="1" required>
+          <select ng-model="newTransaction.rubric.id" size="1" required>
             <option ng-repeat="rubric in rubrics | orderBy:'name'" value="{{rubric.id}}">{{rubric.name}}</option>
           </select>
         </td>
@@ -131,7 +132,7 @@
       <tr>
         <td>Пользователь:</td>
         <td>
-          <select ng-model="user" size="1">
+          <select ng-model="newTransaction.user.id" size="1">
             <option ng-repeat="user in users" value="{{user.id}}">{{user.name}}</option>
           </select>
         </td>
@@ -139,18 +140,18 @@
       <tr>
         <td>Тэг:</td>
         <td>
-          <select ng-model="tag" size="1">
+          <select ng-model="newTransaction.tag.id" size="1">
             <option ng-repeat="tag in tags" value="{{tag.id}}">{{tag.name}}</option>
           </select>
         </td>
       </tr>
       <tr>
         <td>Сумма:</td>
-        <td><input ng-model="amount" type="number" min="1" required></td>
+        <td><input ng-model="newTransaction.amountFrom" type="number" min="1" required></td>
       </tr>
       <tr>
         <td>Комментарий:</td>
-        <td><input ng-model="comment" type="text" size="25"></td>
+        <td><input ng-model="newTransaction.comment" type="text" size="25"></td>
       </tr>
       <tr>
         <td colspan="2"><input type="submit" value="Добавить"></td>
@@ -182,7 +183,7 @@
       </tr>
     </table>
     <br>
-    <form ng-submit="save({name:newRubric.name, isIncome:newRubric.isIncome})">
+    <form ng-submit="saveRubric({name:newRubric.name, isIncome:newRubric.isIncome})">
       Название: <input ng-model="newRubric.name" type="text" maxlength="25" required>
       Доход: <input ng-model="newRubric.isIncome" type="checkbox"><br>
       <button>Добавить</button>
@@ -235,6 +236,36 @@
     <br>
     <form ng-submit="saveUser({name:newUser.name})">
       Название: <input ng-model="newUser.name" type="text" maxlength="25" required>
+      <button>Добавить</button>
+    </form>
+    {{log}}
+  </div>
+  
+  <div ng-controller="show-accounts">
+    <h4>Счета</h4>
+    <table>
+      <tr>
+        <th>Название</th>
+        <th>Валюта</th>
+        <th>Удалить</th>
+      </tr>
+      <tr ng-repeat="account in accounts | orderBy:'name'">
+        <td>
+          <input ng-model="account.name" type="text" size="25" ng-change="updateAccount(account)"
+            ng-model-options="{debounce: 2000}">
+        </td>
+        <td>{{account.currency.name}}({{account.currency.symbol}})</td>
+        <td>
+          <button ng-click="deleteAccount(account)" ng-disabled="account.hasTransactions">Удалить</button>
+        </td>
+      </tr>
+    </table>
+    <br>
+    <form ng-submit="saveAccount()">
+      Название: <input ng-model="newAccount.name" type="text" maxlength="25" required>
+      Валюта: <select ng-model="newAccount.currency"
+            ng-options="currency as currency.name for currency in currencies track by currency.id">
+          </select>
       <button>Добавить</button>
     </form>
     {{log}}

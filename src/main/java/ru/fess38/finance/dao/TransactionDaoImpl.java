@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import ru.fess38.finance.model.Account;
 import ru.fess38.finance.model.MonthTransactions;
 import ru.fess38.finance.model.Rubric;
 import ru.fess38.finance.model.Tag;
@@ -80,6 +81,12 @@ public class TransactionDaoImpl implements TransactionDao {
         .add(Restrictions.eq("dayRef", date))
         .add(Restrictions.eq("rubric.id", rubricId));
     return find(criteria);
+  }
+
+  @Override
+  public int countByAccount(Account account) {
+    return countByProperty("accountFrom.id", account.getId())
+        + countByProperty("accountTo.id", account.getId());
   }
 
   @Override

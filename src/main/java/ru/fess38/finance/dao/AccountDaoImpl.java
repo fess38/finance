@@ -54,6 +54,10 @@ public class AccountDaoImpl implements AccountDao {
     return commonFind(detachedCriteria, sessionFactory);
   }
 
+  private DetachedCriteria findSimpleAccounts(DetachedCriteria detachedCriteria) {
+    return detachedCriteria.add(Restrictions.eq("type", AccountType.DEFAULT));
+  }
+
   @Override
   public Account getMasterAccount() {
     return (Account) sessionFactory.getCurrentSession()
@@ -68,9 +72,5 @@ public class AccountDaoImpl implements AccountDao {
         .createCriteria(Account.class)
         .add(Restrictions.eq("type", AccountType.OUTER))
         .uniqueResult();
-  }
-
-  private DetachedCriteria findSimpleAccounts(DetachedCriteria detachedCriteria) {
-    return detachedCriteria.add(Restrictions.eq("type", AccountType.DEFAULT));
   }
 }

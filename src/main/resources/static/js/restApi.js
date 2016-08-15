@@ -6,16 +6,16 @@ angular.module('app.restApi').service('RestApi', function($http) {
     return $http.get("/account/get");
   }
   
-  this.saveAccount = function() {
-    return $http.get("/account/save");
+  this.saveAccount = function(account) {
+    return $http.post("/account/save", account);
   }
   
-  this.updateAccount = function() {
-    return $http.get("/account/update");
+  this.updateAccount = function(account) {
+    return $http.post("/account/update", account);
   }
   
-  this.deleteAccount = function() {
-    return $http.get("/account/delete");
+  this.deleteAccount = function(account) {
+    return $http.post("/account/delete", account);
   }
   
   this.masterAccount = function() {
@@ -31,16 +31,16 @@ angular.module('app.restApi').service('RestApi', function($http) {
     return $http.get("/currency/get");
   }
   
-  this.saveCurrency = function() {
-    return $http.get("/currency/save");
+  this.saveCurrency = function(currency) {
+    return $http.post("/currency/save", currency);
   }
   
-  this.updateCurrency = function() {
-    return $http.get("/currency/update");
+  this.updateCurrency = function(currency) {
+    return $http.post("/currency/update", currency);
   }
   
-  this.deleteCurrency = function() {
-    return $http.get("/currency/delete");
+  this.deleteCurrency = function(currency) {
+    return $http.post("/currency/delete", currency);
   }
   
   // Rubric
