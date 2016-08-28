@@ -1,22 +1,18 @@
 package ru.fess38.finance.model;
 
-import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("unused")
 public class MonthTransactions {
   private MonthTransactions(YearMonth yearMonth, List<Transaction> transactions) {
     this.yearMonth = yearMonth;
@@ -43,25 +39,6 @@ public class MonthTransactions {
     return new MonthTransactions(yearMonth, transactions);
   }
 
-  public static final Predicate<Transaction> currency(Currency currency) {
-    return t -> t.getAccountFrom().getCurrency().equals(currency);
-  }
-
-  public static final Predicate<Transaction> isIncome(boolean isIncome) {
-    return t -> t.getRubric().isIncome() == isIncome;
-  }
-
-  public static final Predicate<Transaction> rubric(Rubric rubric) {
-    return t -> t.getRubric().equals(rubric);
-  }
-
-  public static final Predicate<Transaction> dayOfMonth(int dayOfMonth) {
-    return x -> {
-      Date date = x.getDayRef();
-      return (int) DateUtils.getFragmentInDays(date, Calendar.MONTH) == dayOfMonth;
-    };
-  }
-
   private List<Rubric> processRubrics() {
     return transactions.stream()
         .map(Transaction::getRubric)
@@ -86,7 +63,7 @@ public class MonthTransactions {
   private List<DaySummary> processDaySummary() {
     List<DaySummary> result = new ArrayList<>();
     Map<LocalDate, Integer> map = new HashMap<>();
-    transactions.stream().forEach(x -> {
+    transactions.forEach(x -> {
       LocalDate date = x.getLocalDate();
       int amount = x.getRubric().isIncome() ? x.getAmountFrom() : -x.getAmountFrom();
       map.computeIfPresent(date, (key, value) -> value + amount);
@@ -99,7 +76,7 @@ public class MonthTransactions {
   private List<RubricSummary> processRubricSummary() {
     List<RubricSummary> result = new ArrayList<>();
     Map<Rubric, Integer> map = new HashMap<>();
-    transactions.stream().forEach(x -> {
+    transactions.forEach(x -> {
       Rubric rubric = x.getRubric();
       int amount = x.getAmountFrom();
       map.computeIfPresent(rubric, (key, value) -> value + amount);
@@ -112,29 +89,15 @@ public class MonthTransactions {
   private List<RubricDaySummary> processRubricByDaySummary() {
     List<RubricDaySummary> result = new ArrayList<>();
     Map<Pair<Rubric, LocalDate>, Integer> map = new HashMap<>();
-    transactions.stream().forEach(x -> {
+    transactions.forEach(x -> {
       Pair<Rubric, LocalDate> pair = Pair.of(x.getRubric(), x.getLocalDate());
       int amount = x.getAmountFrom();
       map.computeIfPresent(pair, (key, value) -> value + amount);
       map.putIfAbsent(pair, amount);
     });
-    map.forEach((key, value) -> result
-        .add(new RubricDaySummary(key.getLeft(), key.getRight(), value)));
+    map.forEach((key, value) -> result.add(new RubricDaySummary(key.getLeft(), key.getRight(),
+        value)));
     return result;
-  }
-
-  public MonthTransactions with(Transaction transaction) {
-    transactions.add(transaction);
-    return this;
-  }
-
-  public MonthTransactions filter(Function<List<Transaction>, List<Transaction>> function) {
-    return new MonthTransactions(yearMonth, function.apply(transactions));
-  }
-
-  public MonthTransactions filter(Predicate<Transaction> predicate) {
-    return new MonthTransactions(yearMonth,
-        transactions.stream().filter(predicate).collect(Collectors.toList()));
   }
 
   public List<Currency> currencies() {
@@ -175,7 +138,7 @@ public class MonthTransactions {
   }
 
   private class DaySummary {
-    public DaySummary(LocalDate date, int amount) {
+    DaySummary(LocalDate date, int amount) {
       this.date = date;
       this.amount = amount;
     }
@@ -183,19 +146,17 @@ public class MonthTransactions {
     private final LocalDate date;
     private final int amount;
 
-    @SuppressWarnings("unused")
     public LocalDate getDate() {
       return date;
     }
 
-    @SuppressWarnings("unused")
     public int getAmount() {
       return amount;
     }
   }
 
   private class RubricSummary {
-    public RubricSummary(Rubric rubric, int amount) {
+    RubricSummary(Rubric rubric, int amount) {
       this.rubric = rubric;
       this.amount = amount;
     }
@@ -203,19 +164,17 @@ public class MonthTransactions {
     private final Rubric rubric;
     private final int amount;
 
-    @SuppressWarnings("unused")
     public Rubric getRubric() {
       return rubric;
     }
 
-    @SuppressWarnings("unused")
     public int getAmount() {
       return amount;
     }
   }
 
   private class RubricDaySummary extends RubricSummary {
-    public RubricDaySummary(Rubric rubric, LocalDate date, int amount) {
+    RubricDaySummary(Rubric rubric, LocalDate date, int amount) {
       super(rubric, amount);
       this.date = date;
     }

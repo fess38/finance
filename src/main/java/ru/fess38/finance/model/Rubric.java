@@ -30,6 +30,10 @@ public class Rubric {
   @Column(nullable = false)
   private boolean hasTransactions = false;
 
+  public boolean isTransfer() {
+    return isService();
+  }
+
   @Override
   public boolean equals(Object object) {
     return EqualsBuilder.reflectionEquals(this, object, true);

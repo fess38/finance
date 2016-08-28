@@ -6,7 +6,7 @@ angular.module("app.tag").controller("tag", function($scope, $timeout, RestApi,
     RestApi.tags().then(function(response) {
       $scope.tags = response.data;
     });
-  }
+  };
   $scope.refresh();
   
   $scope.updateTag = function(tag) {
@@ -17,7 +17,7 @@ angular.module("app.tag").controller("tag", function($scope, $timeout, RestApi,
       $scope.log = "Ошибка обновления тэга";
     });
     $timeout(function() { $scope.log = null; }, 3000);
-  }
+  };
   
   $scope.saveTag = function(tag) {
     RestApi.saveTag(tag).then(function(response) {
@@ -28,7 +28,7 @@ angular.module("app.tag").controller("tag", function($scope, $timeout, RestApi,
     });
     $scope.newTag.name = null;
     $timeout(function() { $scope.log = null; }, 3000);
-  }
+  };
   
   $scope.deleteTag = function(tag) {
     RestApi.deleteTag(tag).then(function(response) {

@@ -5,7 +5,7 @@ angular.module("app.user").controller("user", function($scope, $timeout, RestApi
     RestApi.users().then(function(response) {
       $scope.users = response.data;
     });
-  }
+  };
   $scope.refresh();
   
   $scope.updateUser = function(user) {
@@ -15,7 +15,7 @@ angular.module("app.user").controller("user", function($scope, $timeout, RestApi
       $scope.log = "Ошибка обновления пользователя";
     });
     $timeout(function() { $scope.log = null; }, 3000);
-  }
+  };
   
   $scope.saveUser = function(user) {
     RestApi.saveUser(user).then(function(response) {
@@ -26,7 +26,7 @@ angular.module("app.user").controller("user", function($scope, $timeout, RestApi
     });
     $scope.newUser.name = null;
     $timeout(function() { $scope.log = null; }, 3000);
-  }
+  };
   
   $scope.deleteUser = function(user) {
     RestApi.deleteUser(user).then(function(response) {

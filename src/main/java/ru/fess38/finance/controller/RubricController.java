@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import ru.fess38.finance.dao.RubricDao;
 import ru.fess38.finance.dao.TransactionDao;
 import ru.fess38.finance.model.Rubric;
@@ -18,6 +17,7 @@ import java.util.List;
 public class RubricController {
   @Autowired
   private RubricDao rubricDao;
+
   @Autowired
   private TransactionDao transactionDao;
 
@@ -51,5 +51,10 @@ public class RubricController {
     if (transactionDao.countByRubric(rubric) == 0) {
       rubricDao.delete(rubric);
     }
+  }
+
+  @RequestMapping(value = "/rubric/transfer", method = RequestMethod.GET)
+  public @ResponseBody Rubric findTransferRubrics() {
+    return rubricDao.getTransferRubric();
   }
 }

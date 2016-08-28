@@ -13,7 +13,7 @@ import java.time.YearMonth;
 import java.util.List;
 
 public interface TransactionDao extends GenericDao<Transaction, Long> {
-  MonthTransactions find(YearMonth yearMonth);
+  MonthTransactions find(YearMonth yearMonth, Transaction.Group group);
 
   List<Transaction> find(LocalDate localDate, long rubricId);
 

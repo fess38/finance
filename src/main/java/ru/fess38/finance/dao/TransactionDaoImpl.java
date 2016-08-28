@@ -9,7 +9,6 @@ import org.hibernate.type.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 import ru.fess38.finance.model.Account;
 import ru.fess38.finance.model.MonthTransactions;
 import ru.fess38.finance.model.Rubric;
@@ -22,6 +21,7 @@ import java.time.YearMonth;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 @Transactional
@@ -64,14 +64,16 @@ public class TransactionDaoImpl implements TransactionDao {
     return commonFind(deleted(detachedCriteria), sessionFactory);
   }
 
-  @Override
-  public MonthTransactions find(YearMonth yearMonth) {
+  public MonthTransactions find(YearMonth yearMonth, Transaction.Group group) {
     String sql = "YEAR({alias}.dayRef) = ? AND MONTH({alias}.dayRef) = ?";
-    Object[] values = new Object[] {yearMonth.getYear(), yearMonth.getMonthValue()};
-    Type[] types = new Type[] {IntegerType.INSTANCE, IntegerType.INSTANCE};
+    Object[] values = new Object[]{yearMonth.getYear(), yearMonth.getMonthValue()};
+    Type[] types = new Type[]{IntegerType.INSTANCE, IntegerType.INSTANCE};
     DetachedCriteria criteria = DetachedCriteria.forClass(Transaction.class)
         .add(Restrictions.sqlRestriction(sql, values, types));
-    return MonthTransactions.of(yearMonth, find(criteria));
+    List<Transaction> transactions = find(criteria).stream()
+        .filter(x -> x.group() == group)
+        .collect(Collectors.toList());
+    return MonthTransactions.of(yearMonth, transactions);
   }
 
   @Override
@@ -85,8 +87,8 @@ public class TransactionDaoImpl implements TransactionDao {
 
   @Override
   public int countByAccount(Account account) {
-    return countByProperty("accountFrom.id", account.getId())
-        + countByProperty("accountTo.id", account.getId());
+    return countByProperty("accountFrom.id", account.getId()) + countByProperty("accountTo.id",
+        account.getId());
   }
 
   @Override

@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
-
 import ru.fess38.finance.model.Account;
 import ru.fess38.finance.model.Currency;
 import ru.fess38.finance.model.Rubric;
@@ -16,15 +15,14 @@ import ru.fess38.finance.model.Tag;
 import ru.fess38.finance.model.Transaction;
 import ru.fess38.finance.model.User;
 
-import java.util.Properties;
-
 import javax.sql.DataSource;
+import java.util.Properties;
 
 @Configuration
 public class DbConfiguration {
   @Bean(name = "dataSource")
   public DataSource getDataSource(@Value("${jdbc.driver}") String driver,
-      @Value("${jdbc.url}") String url, @Value("${db.filepath}") String filepath) {
+                                  @Value("${jdbc.url}") String url, @Value("${db.filepath}") String filepath) {
     BasicDataSource dataSource = new BasicDataSource();
     dataSource.setDriverClassName(driver);
     dataSource.setUrl(url + filepath);

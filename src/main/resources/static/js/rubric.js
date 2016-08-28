@@ -6,7 +6,7 @@ angular.module("app.rubric").controller("show-rubrics", function($scope, $timeou
     RestApi.rubrics().then(function(response) {
       $scope.rubrics = response.data;
     });
-  }
+  };
   $scope.refresh();
   
   $scope.updateRubric = function(rubric) {
@@ -17,7 +17,7 @@ angular.module("app.rubric").controller("show-rubrics", function($scope, $timeou
       $scope.log = "Ошибка обновления рубрики";
     });
     $timeout(function() { $scope.log = null; }, 3000);
-  }
+  };
   
   $scope.saveRubric = function(rubric) {
     RestApi.saveRubric(rubric).then(function(response) {
@@ -29,7 +29,7 @@ angular.module("app.rubric").controller("show-rubrics", function($scope, $timeou
     $scope.newRubric.name = null;
     $scope.newRubric.isIncome = null;
     $timeout(function() { $scope.log = null; }, 3000);
-  }
+  };
   
   $scope.deleteRubric = function(rubric) {
     RestApi.deleteRubric(rubric).then(function(response) {

@@ -6,7 +6,6 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 import ru.fess38.finance.model.Account;
 import ru.fess38.finance.model.AccountType;
 
@@ -43,19 +42,15 @@ public class AccountDaoImpl implements AccountDao {
   @SuppressWarnings("unchecked")
   @Override
   public List<Account> find(DetachedCriteria detachedCriteria) {
-    notDeleted(findSimpleAccounts(detachedCriteria));
+    notDeleted(detachedCriteria);
     return commonFind(detachedCriteria, sessionFactory);
   }
 
   @SuppressWarnings("unchecked")
   @Override
   public List<Account> findDeleted(DetachedCriteria detachedCriteria) {
-    deleted(findSimpleAccounts(detachedCriteria));
+    deleted(detachedCriteria);
     return commonFind(detachedCriteria, sessionFactory);
-  }
-
-  private DetachedCriteria findSimpleAccounts(DetachedCriteria detachedCriteria) {
-    return detachedCriteria.add(Restrictions.eq("type", AccountType.DEFAULT));
   }
 
   @Override

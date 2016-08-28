@@ -1,5 +1,7 @@
 package ru.fess38.finance.controller;
 
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -7,10 +9,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import ru.fess38.finance.dao.TransactionDao;
 import ru.fess38.finance.model.MonthTransactions;
 import ru.fess38.finance.model.Transaction;
+import ru.fess38.finance.model.Transaction.Group;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -27,7 +29,7 @@ public class TransactionController {
       params = {"year", "month"})
   public @ResponseBody MonthTransactions find(@RequestParam("year") int year,
       @RequestParam("month") int month) {
-    return transactionDao.find(YearMonth.of(year, month));
+    return transactionDao.find(YearMonth.of(year, month), Group.EXTERNAL);
   }
 
   @RequestMapping(value = "/transaction/find", method = RequestMethod.GET,
@@ -68,4 +70,10 @@ public class TransactionController {
     updater.updateUserOnDelete(transaction);
   }
 
+  @RequestMapping(value = "/transfer/get", method = RequestMethod.GET)
+  public @ResponseBody List<Transaction> find() {
+    return transactionDao.find(DetachedCriteria.forClass(Transaction.class)
+        .createAlias("rubric", "r")
+        .add(Restrictions.eq("r.isService", true)));
+  }
 }

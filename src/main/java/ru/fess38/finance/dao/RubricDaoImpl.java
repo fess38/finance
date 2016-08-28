@@ -6,7 +6,6 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 import ru.fess38.finance.model.Rubric;
 
 import java.util.List;
@@ -30,7 +29,6 @@ public class RubricDaoImpl implements RubricDao {
   @Override
   public void update(Rubric rubric) {
     sessionFactory.getCurrentSession().update(rubric);
-
   }
 
   @Override
@@ -65,7 +63,7 @@ public class RubricDaoImpl implements RubricDao {
   public Rubric getTransferRubric() {
     DetachedCriteria criteria = DetachedCriteria.forClass(Rubric.class)
         .add(Restrictions.eq("isService", true));
-    return find(criteria).get(0);
+    return (Rubric) commonFind(criteria, sessionFactory).get(0);
   }
 
   private DetachedCriteria notService(DetachedCriteria detachedCriteria) {
