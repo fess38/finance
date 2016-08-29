@@ -22,17 +22,13 @@ public class Rubric {
   @Column(nullable = false)
   private boolean isIncome = false;
   @Column(nullable = false)
-  private boolean isService = false;
+  private boolean isTransfer = false;
   @Column(nullable = false)
   private boolean isDeleted = false;
   @Column(nullable = false)
   private int amountTransactions = 0;
   @Column(nullable = false)
   private boolean hasTransactions = false;
-
-  public boolean isTransfer() {
-    return isService();
-  }
 
   @Override
   public boolean equals(Object object) {
@@ -73,12 +69,12 @@ public class Rubric {
     this.isIncome = isIncome;
   }
 
-  public boolean isService() {
-    return isService;
+  public boolean isTransfer() {
+    return isTransfer;
   }
 
-  public void setService(boolean isService) {
-    this.isService = isService;
+  public void setIsTransfer(boolean isTransfer) {
+    this.isTransfer = isTransfer;
   }
 
   public boolean isDeleted() {

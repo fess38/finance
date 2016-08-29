@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.Check;
 import org.springframework.format.annotation.DateTimeFormat;
+import ru.fess38.finance.model.Account.AccountType;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

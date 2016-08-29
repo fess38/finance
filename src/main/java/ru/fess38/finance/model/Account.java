@@ -119,4 +119,10 @@ public class Account {
     amountTransactions--;
     hasTransactions = amountTransactions > 0;
   }
+
+  public enum AccountType {
+    DEFAULT,
+    MASTER,
+    OUTER
+  }
 }

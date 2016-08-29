@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration SYSTEM
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <property name="hibernate.dialect">org.hibernate.dialect.HSQLDialect</property>
+    <property name="hibernate.hbm2ddl.auto">update</property>
+    <property name="hibernate.jdbc.batch_size">100</property>
+    <property name="hibernate.jdbc.fetch_size">10</property>
+    <property name="hibernate.default_batch_fetch_size">10</property>
+    <property name="hibernate.jdbc.order_inserts">true</property>
+    <property name="hibernate.jdbc.order_updates">true</property>
+    <property name="hibernate.cache.use_query_cache">false</property>
+    <property name="hibernate.cache.use_second_level_cache">false</property>
+    <property name="hibernate.show_sql">false</property>
+    <property name="hibernate.format_sql">false</property>
+
+    <mapping class="ru.fess38.finance.model.Account"/>
+    <mapping class="ru.fess38.finance.model.Currency"/>
+    <mapping class="ru.fess38.finance.model.Rubric"/>
+    <mapping class="ru.fess38.finance.model.Tag"/>
+    <mapping class="ru.fess38.finance.model.Transaction"/>
+    <mapping class="ru.fess38.finance.model.User"/>
+  </session-factory>
+</hibernate-configuration>
+
+
+
+

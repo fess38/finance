@@ -62,11 +62,11 @@ public class RubricDaoImpl implements RubricDao {
   @Override
   public Rubric getTransferRubric() {
     DetachedCriteria criteria = DetachedCriteria.forClass(Rubric.class)
-        .add(Restrictions.eq("isService", true));
+        .add(Restrictions.eq("isTransfer", true));
     return (Rubric) commonFind(criteria, sessionFactory).get(0);
   }
 
   private DetachedCriteria notService(DetachedCriteria detachedCriteria) {
-    return detachedCriteria.add(Restrictions.eq("isService", false));
+    return detachedCriteria.add(Restrictions.eq("isTransfer", false));
   }
 }

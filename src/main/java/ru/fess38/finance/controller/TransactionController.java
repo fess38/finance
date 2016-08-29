@@ -28,15 +28,15 @@ public class TransactionController {
   @RequestMapping(value = "/transaction/find", method = RequestMethod.GET,
       params = {"year", "month"})
   public @ResponseBody MonthTransactions find(@RequestParam("year") int year,
-      @RequestParam("month") int month) {
+                                              @RequestParam("month") int month) {
     return transactionDao.find(YearMonth.of(year, month), Group.EXTERNAL);
   }
 
   @RequestMapping(value = "/transaction/find", method = RequestMethod.GET,
       params = {"year", "month", "day", "rubric-id"})
   public @ResponseBody List<Transaction> find(@RequestParam("year") int year,
-      @RequestParam("month") int month, @RequestParam("day") int day,
-      @RequestParam("rubric-id") long rubricId) {
+                                              @RequestParam("month") int month, @RequestParam("day") int day,
+                                              @RequestParam("rubric-id") long rubricId) {
     return transactionDao.find(LocalDate.of(year, month, day), rubricId);
   }
 
@@ -73,7 +73,6 @@ public class TransactionController {
   @RequestMapping(value = "/transfer/get", method = RequestMethod.GET)
   public @ResponseBody List<Transaction> find() {
     return transactionDao.find(DetachedCriteria.forClass(Transaction.class)
-        .createAlias("rubric", "r")
-        .add(Restrictions.eq("r.isService", true)));
+        .createAlias("rubric", "r").add(Restrictions.eq("r.isTransfer", true)));
   }
 }
