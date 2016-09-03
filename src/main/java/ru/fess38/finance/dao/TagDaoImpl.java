@@ -5,7 +5,6 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 import ru.fess38.finance.model.Tag;
 
 import java.util.List;
@@ -34,8 +33,10 @@ public class TagDaoImpl implements TagDao {
   @Override
   public void delete(Tag tag) {
     Tag savedTag = get(tag.getId());
-    savedTag.setDeleted(true);
-    update(savedTag);
+    if (!savedTag.hasTransactions()) {
+      savedTag.setDeleted(true);
+      update(savedTag);
+    }
   }
 
   @SuppressWarnings("unchecked")

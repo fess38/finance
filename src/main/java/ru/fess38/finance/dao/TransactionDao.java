@@ -1,6 +1,5 @@
 package ru.fess38.finance.dao;
 
-import ru.fess38.finance.GenericDao;
 import ru.fess38.finance.model.Account;
 import ru.fess38.finance.model.MonthTransactions;
 import ru.fess38.finance.model.Rubric;

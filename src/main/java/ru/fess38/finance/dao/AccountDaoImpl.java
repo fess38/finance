@@ -35,8 +35,10 @@ public class AccountDaoImpl implements AccountDao {
   @Override
   public void delete(Account account) {
     Account savedAccount = get(account.getId());
-    savedAccount.setDeleted(true);
-    update(savedAccount);
+    if (!savedAccount.hasTransactions() && savedAccount.getType() == AccountType.DEFAULT) {
+      savedAccount.setDeleted(true);
+      update(savedAccount);
+    }
   }
 
   @SuppressWarnings("unchecked")

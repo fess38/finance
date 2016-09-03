@@ -34,8 +34,10 @@ public class RubricDaoImpl implements RubricDao {
   @Override
   public void delete(Rubric rubric) {
     Rubric savedRubric = get(rubric.getId());
-    savedRubric.setDeleted(true);
-    update(savedRubric);
+    if (!savedRubric.hasTransactions()) {
+      savedRubric.setDeleted(true);
+      update(savedRubric);
+    }
   }
 
   @SuppressWarnings("unchecked")

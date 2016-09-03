@@ -28,9 +28,12 @@ import java.util.stream.Collectors;
 public class TransactionDaoImpl implements TransactionDao {
   @Autowired
   private SessionFactory sessionFactory;
+  @Autowired
+  private TransactionChangeService changeService;
 
   @Override
   public Long save(Transaction transaction) {
+    changeService.save(transaction);
     return (Long) sessionFactory.getCurrentSession().save(transaction);
   }
 
@@ -41,8 +44,9 @@ public class TransactionDaoImpl implements TransactionDao {
 
   @Override
   public void update(Transaction transaction) {
+    Transaction persistedTransaction = get(transaction.getId());
+    changeService.update(persistedTransaction, transaction);
     sessionFactory.getCurrentSession().update(transaction);
-
   }
 
   @Override
@@ -50,6 +54,7 @@ public class TransactionDaoImpl implements TransactionDao {
     Transaction savedTransaction = get(transaction.getId());
     savedTransaction.setDeleted(true);
     update(savedTransaction);
+    changeService.delete(transaction);
   }
 
   @SuppressWarnings("unchecked")

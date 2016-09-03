@@ -1,4 +1,4 @@
-package ru.fess38.finance;
+package ru.fess38.finance.dao;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;

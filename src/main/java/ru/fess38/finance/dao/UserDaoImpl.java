@@ -5,7 +5,6 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 import ru.fess38.finance.model.User;
 
 import java.util.List;
@@ -29,14 +28,15 @@ public class UserDaoImpl implements UserDao {
   @Override
   public void update(User user) {
     sessionFactory.getCurrentSession().update(user);
-
   }
 
   @Override
   public void delete(User user) {
     User savedUser = get(user.getId());
-    savedUser.setDeleted(true);
-    update(savedUser);
+    if (!savedUser.hasTransactions()) {
+      savedUser.setDeleted(true);
+      update(savedUser);
+    }
   }
 
   @SuppressWarnings("unchecked")
