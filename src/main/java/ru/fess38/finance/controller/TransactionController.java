@@ -26,6 +26,11 @@ public class TransactionController {
   @Autowired
   private TransactionChangeService persistService;
 
+  @RequestMapping(value = "/transaction/get", method = RequestMethod.GET)
+  public @ResponseBody List<Transaction> get() {
+    return transactionDao.find(DetachedCriteria.forClass(Transaction.class));
+  }
+
   @RequestMapping(value = "/transaction/find", method = RequestMethod.GET,
       params = {"year", "month"})
   public @ResponseBody MonthTransactions find(@RequestParam("year") int year,
@@ -48,7 +53,6 @@ public class TransactionController {
 
   @RequestMapping(value = "/transaction/update", method = RequestMethod.POST)
   public void update(@RequestBody Transaction transaction) {
-    Transaction persistedTransaction = transactionDao.get(transaction.getId());
     transactionDao.update(transaction);
   }
 

@@ -137,7 +137,7 @@ public class MonthTransactions {
     return rubricDaySummary;
   }
 
-  private class DaySummary {
+  private static class DaySummary {
     DaySummary(LocalDate date, int amount) {
       this.date = date;
       this.amount = amount;

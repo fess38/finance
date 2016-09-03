@@ -21,7 +21,6 @@ public class AccountController {
   @Autowired
   private TransactionDao transactionDao;
 
-
   @RequestMapping(value = "/account/get", method = RequestMethod.GET)
   public @ResponseBody List<Account> get() {
     return accountDao.find(DetachedCriteria.forClass(Account.class));

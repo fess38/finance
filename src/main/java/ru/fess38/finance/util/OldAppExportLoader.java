@@ -98,7 +98,7 @@ public class OldAppExportLoader {
     return Arrays.asList("Зарплата", "Иной доход");
   }
 
-  private class SimpleTransaction {
+  private static class SimpleTransaction {
     public SimpleTransaction(Date date, String rubric, int amountFrom, String comment) {
       this.date = date;
       this.rubric = rubric;

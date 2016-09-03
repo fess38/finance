@@ -5,7 +5,6 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 import ru.fess38.finance.model.Currency;
 
 import java.util.List;
@@ -36,7 +35,6 @@ public class CurrencyDaoImpl implements CurrencyDao {
     Currency savedCurrency = get(currency.getId());
     savedCurrency.setDeleted(true);
     update(savedCurrency);
-
   }
 
   @SuppressWarnings("unchecked")
