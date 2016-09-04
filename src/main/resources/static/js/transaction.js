@@ -199,7 +199,6 @@ angular.module("app.transaction").controller("add-transaction", function($scope,
       newTransaction.accountFrom = masterAccount;
       newTransaction.accountTo = outerAccount;
     }
-    console.log(newTransaction);
     return newTransaction;
   }
 

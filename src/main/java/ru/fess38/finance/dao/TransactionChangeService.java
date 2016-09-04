@@ -61,10 +61,10 @@ public class TransactionChangeService {
     }
   }
 
-  public void update(Transaction persistedTransaction, Transaction transaction) {
-    updateAccountOnUpdate(persistedTransaction, transaction);
-    updateTagOnUpdate(persistedTransaction, transaction);
-    updateUserOnUpdate(persistedTransaction, transaction);
+  public void update(Transaction savedTransaction, Transaction transaction) {
+    updateAccountOnUpdate(savedTransaction, transaction);
+    updateTagOnUpdate(savedTransaction, transaction);
+    updateUserOnUpdate(savedTransaction, transaction);
   }
 
   private void updateAccountOnUpdate(Transaction persistedTransaction, Transaction transaction) {

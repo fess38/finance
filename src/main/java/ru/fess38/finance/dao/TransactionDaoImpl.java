@@ -44,8 +44,10 @@ public class TransactionDaoImpl implements TransactionDao {
 
   @Override
   public void update(Transaction transaction) {
-    Transaction persistedTransaction = get(transaction.getId());
-    changeService.update(persistedTransaction, transaction);
+    Transaction savedTransaction = get(transaction.getId());
+    changeService.update(savedTransaction, transaction);
+    sessionFactory.getCurrentSession().flush();
+    sessionFactory.getCurrentSession().clear();
     sessionFactory.getCurrentSession().update(transaction);
   }
 
