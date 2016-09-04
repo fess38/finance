@@ -79,7 +79,7 @@ angular.module("app.transaction").controller("edit-transactions", function($scop
 
   $scope.updateTransaction = function(transaction) {
     if (angular.isUndefined(transaction.amountTo)) {
-    transaction.amountTo = transaction.amountFrom;
+      transaction.amountTo = transaction.amountFrom;
     }
     RestApi.updateTransaction(transaction).then(function(response) {
       MonthTransactionsService.refresh();
