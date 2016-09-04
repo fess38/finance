@@ -1,10 +1,10 @@
 package ru.fess38.finance;
 
-import org.apache.commons.dbcp2.BasicDataSource;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -23,11 +23,6 @@ import javax.sql.DataSource;
 
 @Configuration
 public class AppConfiguration {
-  @Value("${jdbc.driver}")
-  private String driver;
-  @Value("${jdbc.url}")
-  private String url;
-
   @Autowired
   private RubricDao rubricDao;
   @Autowired
@@ -82,10 +77,8 @@ public class AppConfiguration {
 
   @Bean
   public DataSource dataSource() {
-    BasicDataSource dataSource = new BasicDataSource();
-    dataSource.setDriverClassName(driver);
-    dataSource.setUrl(url + "db/Finance");
-    return dataSource;
+    HikariConfig config = new HikariConfig("/ru/fess38/finance/hikari.properties");
+    return new HikariDataSource(config);
   }
 
   @Bean
