@@ -1,24 +1,31 @@
 <div ng-controller="user">
-  <h4>Пользователи</h4>
   <table>
     <tr>
-      <th>Название</th>
-      <th>Удалить</th>
+      <th>Пользователь</th>
+      <th>Транзакций</th>
+      <th></th>
+    </tr>
+    <tr>
+      <td>
+        <input ng-model="newUser.name" type="text" maxlength="25" required form="add-user">
+      </td>
+      <td></td>
+      <td>
+        <button form="add-user">Добавить</button>
+      </td>
     </tr>
     <tr ng-repeat="user in users | orderBy:'name'">
       <td>
         <input ng-model="user.name" type="text" size="25" ng-change="updateUser(user)"
             ng-model-options="{debounce: 2000}">
       </td>
+      <td>{{user.amountTransactions}}</td>
       <td>
         <button ng-click="deleteUser(user)" ng-disabled="user.hasTransactions">Удалить</button>
       </td>
     </tr>
   </table>
   <br>
-  <form ng-submit="saveUser({name:newUser.name})">
-    Название: <input ng-model="newUser.name" type="text" maxlength="25" required>
-    <button>Добавить</button>
-  </form>
+  <form ng-submit="saveUser({name:newUser.name})" id="add-user"></form>
   {{log}}
 </div>

@@ -1,24 +1,31 @@
 <div ng-controller="tag">
-  <h4>Тэги</h4>
+  <form ng-submit="saveTag({name:newTag.name})" id="add-tag"></form>
   <table>
     <tr>
-      <th>Название</th>
-      <th>Удалить</th>
+      <th>Тэг</th>
+      <th>Транзакций</th>
+      <th></th>
+    </tr>
+    <tr>
+      <td>
+        <input ng-model="newTag.name" type="text" maxlength="25" required form="add-tag">
+      </td>
+      <td></td>
+      <td>
+        <button form="add-tag">Добавить</button>
+      </td>
     </tr>
     <tr ng-repeat="tag in tags | orderBy:'name'">
       <td>
         <input ng-model="tag.name" type="text" size="25" ng-change="updateTag(tag)"
             ng-model-options="{debounce: 2000}">
       </td>
+      <td>{{tag.amountTransactions}}</td>
       <td>
         <button ng-click="deleteTag(tag)" ng-disabled="tag.hasTransactions">Удалить</button>
       </td>
     </tr>
   </table>
   <br>
-  <form ng-submit="saveTag({name:newTag.name})">
-    Название: <input ng-model="newTag.name" type="text" maxlength="25" required>
-    <button>Добавить</button>
-  </form>
   {{log}}
 </div>

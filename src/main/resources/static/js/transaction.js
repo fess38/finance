@@ -8,8 +8,8 @@ angular.module("app.transaction").service("YearMonthService", function() {
   this.getMonth = function() {
     return date.getMonth() + 1;
   };
-  this.toString = function() {
-    return date.toLocaleString("ru", {month: "long", year: "numeric"});
+  this.getDate = function() {
+    return date;
   };
   this.incrementMonth = function() {
     date.setMonth(date.getMonth() + 1);
@@ -26,7 +26,7 @@ angular.module("app.transaction").service("MonthTransactionsService", function(R
     var year = YearMonthService.getYear();
     var month = YearMonthService.getMonth();
     RestApi.findYearMonthTransactions(year, month).then(function(response) {
-      transactions.yearMonth = YearMonthService.toString();
+      transactions.yearMonth = YearMonthService.getDate();
       transactions.daysOfMonth = response.data.daysOfMonth;
       transactions.rubrics = response.data.rubrics;
       transactions.monthSummary = response.data.monthSummary;
@@ -159,8 +159,8 @@ angular.module("app.transaction").controller("show-transactions", function($scop
   };
 });
 
-angular.module("app.transaction").controller("add-transaction", function($scope, $timeout, RestApi,
-    MonthTransactionsService) {
+angular.module("app.transaction").controller("add-transaction", function($scope, $timeout,
+    RestApi) {
   var masterAccount, outerAccount;
   RestApi.masterAccount().then(function(response) {
     masterAccount = response.data;
@@ -213,7 +213,6 @@ angular.module("app.transaction").controller("add-transaction", function($scope,
     RestApi.saveTransaction(readTransaction()).then(function(response) {
       $scope.log = "Транзакция добавлена";
       clearTransactionFields();
-      MonthTransactionsService.refresh();
     }, function(response) {
       $scope.log = "Ошибка добавления транзакции";
     });

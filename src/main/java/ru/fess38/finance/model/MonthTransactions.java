@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class MonthTransactions {
   private MonthTransactions(YearMonth yearMonth, List<Transaction> transactions) {
     this.yearMonth = yearMonth;
-    this.transactions = Collections.unmodifiableList(transactions);
+    this.transactions = transactions;
     this.rubrics = Collections.unmodifiableList(processRubrics());
     this.daysOfMonth = Collections.unmodifiableList(processDaysOfMonth());
     this.monthSummary = processMonthSummary();
@@ -56,19 +56,22 @@ public class MonthTransactions {
 
   private int processMonthSummary() {
     return transactions.stream()
-        .mapToInt(x -> (x.getRubric().isIncome()) ? x.getAmountFrom() : -x.getAmountFrom())
+        .filter(x -> !x.getRubric().isIncome())
+        .mapToInt(Transaction::getAmountFrom)
         .sum();
   }
 
   private List<DaySummary> processDaySummary() {
     List<DaySummary> result = new ArrayList<>();
     Map<LocalDate, Integer> map = new HashMap<>();
-    transactions.forEach(x -> {
-      LocalDate date = x.getLocalDate();
-      int amount = x.getRubric().isIncome() ? x.getAmountFrom() : -x.getAmountFrom();
-      map.computeIfPresent(date, (key, value) -> value + amount);
-      map.putIfAbsent(date, amount);
-    });
+    transactions.stream()
+        .filter(x -> !x.getRubric().isIncome())
+        .forEach(x -> {
+          LocalDate date = x.getLocalDate();
+          int amount = x.getAmountFrom();
+          map.computeIfPresent(date, (key, value) -> value + amount);
+          map.putIfAbsent(date, amount);
+        });
     map.forEach((key, value) -> result.add(new DaySummary(key, value)));
     return result;
   }
@@ -181,7 +184,6 @@ public class MonthTransactions {
 
     private final LocalDate date;
 
-    @SuppressWarnings("unused")
     public LocalDate getDate() {
       return date;
     }

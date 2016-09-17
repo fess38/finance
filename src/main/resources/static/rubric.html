@@ -1,10 +1,22 @@
 <div ng-controller="show-rubrics">
-  <h4>Рубрики</h4>
   <table>
     <tr>
-      <th>Название</th>
+      <th>Рубрика</th>
       <th>Доход?</th>
-      <th>Удалить</th>
+      <th>Транзакций</th>
+      <th></th>
+    </tr>
+    <tr>
+      <td>
+        <input ng-model="newRubric.name" type="text" maxlength="25" required form="add-rubric">
+      </td>
+      <td>
+        <input ng-model="newRubric.isIncome" type="checkbox" form="add-rubric">
+      </td>
+      <td></td>
+      <td>
+        <button form="add-rubric">Добавить</button>
+      </td>
     </tr>
     <tr ng-repeat="rubric in rubrics | orderBy:['isIncome','name']">
       <td>
@@ -14,21 +26,15 @@
       <td>
         <input ng-model="rubric.isIncome" type="checkbox" disabled>
       </td>
+      <td>{{rubric.amountTransactions}}</td>
       <td>
-        <button ng-click="deleteRubric(rubric)" ng-disabled="rubric.hasTransactions">Удалить
+        <button ng-click="deleteRubric(rubric)" ng-disabled="rubric.hasTransactions">
+          Удалить
         </button>
       </td>
     </tr>
   </table>
   <br>
-  <form ng-submit="saveRubric({name:newRubric.name, isIncome:newRubric.isIncome})">
-    Название:
-    <input ng-model="newRubric.name" type="text" maxlength="25" required>
-
-    Доход:
-    <input ng-model="newRubric.isIncome" type="checkbox">
-    <br>
-    <button>Добавить</button>
-  </form>
+  <form ng-submit="saveRubric({name:newRubric.name, isIncome:newRubric.isIncome})" id="add-rubric"></form>
   {{log}}
 </div>

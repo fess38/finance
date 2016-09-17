@@ -9,7 +9,7 @@ import org.springframework.context.annotation.PropertySource;
 @ComponentScan(basePackages = {"ru.fess38.finance"})
 @PropertySource("classpath:/ru/fess38/finance/application.properties")
 public class Main {
-  public static void main(String[] args) throws InterruptedException {
+  public static void main(String[] args) throws Exception {
     SpringApplication.run(Main.class, args);
   }
 }

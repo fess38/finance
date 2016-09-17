@@ -1,0 +1,60 @@
+<div ng-controller="show-transfers">
+  <table>
+    <tr>
+      <th>Дата</th>
+      <th>Списать со счета</th>
+      <th>Пополнить счет</th>
+      <th>Сумма списания</th>
+      <th>Сумма пополнения</th>
+      <th>Комментарий</th>
+      <th></th>
+    </tr>
+    <tr>
+      <td>
+        <input ng-model="newTransfer.dayRef" type="text" required title="YYYY-MM-DD" form="add-transfer"
+            pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])">
+      </td>
+      <td>
+        <select ng-model="newTransfer.accountFrom" ng-change="checkEquals()" form="add-transfer"
+            ng-options="account as account.name for account in accounts | orderBy:'name' | filter:{type:'!OUTER'}
+                  track by account.id">
+        </select>
+      </td>
+      <td>
+        <select ng-model="newTransfer.accountTo" ng-change="checkEquals()" form="add-transfer"
+            ng-options="account as account.name for account in accounts | orderBy:'name' | filter:{type:'!OUTER'}
+                  track by account.id">
+        </select>
+      </td>
+      <td>
+        <input ng-model="newTransfer.amountFrom" type="number" min="1" required form="add-transfer">
+      </td>
+      <td><input ng-model="newTransfer.amountTo" type="number" min="1" required form="add-transfer">
+      </td>
+      <td><input ng-model="newTransfer.comment" type="text" size="25" form="add-transfer"></td>
+      <td><input type="submit" value="Добавить" form="add-transfer"></td>
+    </tr>
+    <tr ng-repeat="t in transfers | orderBy:'dayRef':true">
+      <td>{{t.dayRef | date:"d MMM yyyy"}}</td>
+      <td>{{t.accountFrom.name}}({{t.accountFrom.currency.symbol}})</td>
+      <td>{{t.accountTo.name}}({{t.accountTo.currency.symbol}})</td>
+      <td>
+        <input ng-model="t.amountFrom" type="number" min="1" required
+            ng-change="updateTransaction(t)" ng-model-options="{debounce: 2000}">
+      </td>
+      <td>
+        <input ng-model="t.amountTo" type="number" min="1" required
+            ng-change="updateTransaction(t)" ng-model-options="{debounce: 2000}">
+      </td>
+      <td>
+        <input ng-model="t.comment" type="text" size="25" ng-change="updateTransaction(t)"
+            ng-model-options="{debounce: 2000}">
+      </td>
+      <td>
+        <input type="submit" value="Удалить" ng-click="deleteTransfer(t)">
+      </td>
+    </tr>
+  </table>
+  <form ng-submit="addTransfer()" id="add-transfer"></form>
+  <div>{{log}}</div>
+</div>

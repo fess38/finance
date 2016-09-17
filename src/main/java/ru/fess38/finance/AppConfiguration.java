@@ -1,5 +1,7 @@
 package ru.fess38.finance;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.hibernate.SessionFactory;
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import ru.fess38.finance.dao.AccountDao;
 import ru.fess38.finance.dao.CurrencyDao;
@@ -89,5 +92,13 @@ public class AppConfiguration {
     factoryBean.setConfigLocation(new ClassPathResource("ru/fess38/finance/hibernate.cfg.xml"));
     factoryBean.afterPropertiesSet();
     return factoryBean.getObject();
+  }
+
+  @Bean
+  public GsonHttpMessageConverter gsonHttpMessageConverter() {
+    GsonHttpMessageConverter gsonHttpMessageConverter = new GsonHttpMessageConverter();
+    Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+    gsonHttpMessageConverter.setGson(gson);
+    return gsonHttpMessageConverter;
   }
 }

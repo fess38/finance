@@ -1,9 +1,11 @@
 <div ng-controller="show-transactions">
-  <md-button ng-click="previousMonth()">Предыдущий месяц</md-button>
-  <md-button ng-click="nextMonth()">Следующий месяц</md-button>
+  <button ng-click="previousMonth()">Предыдущий месяц</button>
+  <button ng-click="add()">Добавить транзакцию</button>
+  <button ng-click="nextMonth()">Следующий месяц</button>
+  <br><br>
   <table>
     <tr>
-      <th>{{transactions.yearMonth}}</th>
+      <th>{{transactions.yearMonth | date:"MMM yyyy"}}</th>
       <th ng-repeat="day in transactions.daysOfMonth">{{day}}</th>
       <th>Итого</th>
     </tr>
@@ -30,7 +32,7 @@
       <td></td>
     </tr>
     <tr>
-      <th>Итого</th>
+      <th>Расходы</th>
       <td ng-repeat="day in transactions.daysOfMonth">{{findDaySummary(day)}}</td>
       <td>{{transactions.monthSummary}}</td>
     </tr>
@@ -75,7 +77,6 @@
 </div>
 
 <div ng-controller="add-transaction">
-  <h4>Добавить транзакцию</h4>
   <form ng-submit="addTransaction()">
     <table>
       <tr>
@@ -124,7 +125,7 @@
         <td><input ng-model="newTransaction.comment" type="text" size="25"></td>
       </tr>
       <tr>
-        <td colspan="2"><input type="submit" value="Добавить"></td>
+        <td colspan="2"><input type="submit" value="Добавить транзакцию"></td>
       </tr>
     </table>
   </form>
