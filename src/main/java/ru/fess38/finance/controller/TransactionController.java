@@ -3,13 +3,14 @@ package ru.fess38.finance.controller;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import ru.fess38.finance.dao.TransactionChangeService;
 import ru.fess38.finance.dao.TransactionDao;
 import ru.fess38.finance.model.MonthTransactions;
 import ru.fess38.finance.model.Transaction;
@@ -23,8 +24,6 @@ import java.util.List;
 public class TransactionController {
   @Autowired
   private TransactionDao transactionDao;
-  @Autowired
-  private TransactionChangeService persistService;
 
   @RequestMapping(value = "/transaction/get", method = RequestMethod.GET)
   public @ResponseBody List<Transaction> get() {
@@ -39,11 +38,10 @@ public class TransactionController {
   }
 
   @RequestMapping(value = "/transaction/find", method = RequestMethod.GET,
-      params = {"year", "month", "day", "rubric-id"})
-  public @ResponseBody List<Transaction> find(@RequestParam("year") int year,
-      @RequestParam("month") int month, @RequestParam("day") int day,
-      @RequestParam("rubric-id") long rubricId) {
-    return transactionDao.find(LocalDate.of(year, month, day), rubricId);
+      params = {"rubric-id", "date"})
+  public @ResponseBody List<Transaction> find(@RequestParam("rubric-id") long rubricId,
+      @RequestParam("date") @DateTimeFormat(iso = ISO.DATE) LocalDate localDate) {
+    return transactionDao.find(rubricId, localDate);
   }
 
   @RequestMapping(value = "/transaction/save", method = RequestMethod.POST)

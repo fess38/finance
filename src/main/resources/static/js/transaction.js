@@ -27,12 +27,12 @@ angular.module("app.transaction").service("MonthTransactionsService", function(R
     var month = YearMonthService.getMonth();
     RestApi.findYearMonthTransactions(year, month).then(function(response) {
       transactions.yearMonth = YearMonthService.getDate();
-      transactions.daysOfMonth = response.data.daysOfMonth;
+      transactions.dates = response.data.dates;
       transactions.rubrics = response.data.rubrics;
       transactions.monthSummary = response.data.monthSummary;
       transactions.daySummary = response.data.daySummary;
       transactions.rubricSummary = response.data.rubricSummary;
-      transactions.rubricByDaySummary = response.data.rubricDaySummary;
+      transactions.rubricDaySummary = response.data.rubricDaySummary;
     });
     return transactions;
   };
@@ -44,15 +44,12 @@ angular.module("app.transaction").service("EditTransactionsService", function(Re
     var cellTransactions = [];
     var users = [];
   };
-  this.refresh = function(rubric, year, month, day) {
-    if (angular.isDefined(rubric) && angular.isDefined(year) && angular.isDefined(month) &&
-        angular.isDefined(day)) {
+  this.refresh = function(rubric, date) {
+    if (angular.isDefined(rubric) && angular.isDefined(date)) {
       scope.rubric = rubric;
-      scope.year = year;
-      scope.month = month;
-      scope.day = day;
+      scope.date = date;
     }
-    RestApi.findCellTransactions(scope.rubric, scope.year, scope.month, scope.day).then(function(response) {
+    RestApi.findCellTransactions(scope.rubric, scope.date).then(function(response) {
       scope.show = angular.isDefined(response.data[0]);
       scope.cellTransactions = response.data;
     });
@@ -78,9 +75,7 @@ angular.module("app.transaction").controller("edit-transactions", function($scop
   $scope.editor = EditTransactionsService.init();
 
   $scope.updateTransaction = function(transaction) {
-    if (angular.isUndefined(transaction.amountTo)) {
-      transaction.amountTo = transaction.amountFrom;
-    }
+    transaction.amountTo = transaction.amountFrom;
     RestApi.updateTransaction(transaction).then(function(response) {
       MonthTransactionsService.refresh();
       $scope.log = "Транзация обновлена";
@@ -127,35 +122,34 @@ angular.module("app.transaction").controller("show-transactions", function($scop
     return !rubric.isIncome;
   };
 
-  $scope.findRubricByDaySummary = function(rubric, day) {
-    for (rd in $scope.transactions.rubricByDaySummary) {
-      cell = $scope.transactions.rubricByDaySummary[rd];
-      if (cell.rubric.id == rubric.id && cell.date.day == day) {
+  $scope.findRubricDaySummary = function(rubric, date) {
+    for (var i in $scope.transactions.rubricDaySummary) {
+      var cell = $scope.transactions.rubricDaySummary[i];
+      if (cell.rubric.id == rubric.id && cell.date == date) {
         return cell.amount;
       }
     }
   };
 
   $scope.findRubricSummary = function(rubric) {
-    for (r in $scope.transactions.rubricSummary) {
-      if ($scope.transactions.rubricSummary[r].rubric.id == rubric.id) {
-        return $scope.transactions.rubricSummary[r].amount;
+    for (var i in $scope.transactions.rubricSummary) {
+      if ($scope.transactions.rubricSummary[i].rubric.id == rubric.id) {
+        return $scope.transactions.rubricSummary[i].amount;
       }
     }
   };
 
-  $scope.findDaySummary = function(day) {
-    for (d in $scope.transactions.daySummary) {
-      if ($scope.transactions.daySummary[d].date.day == day) {
-        return $scope.transactions.daySummary[d].amount;
+  $scope.findDaySummary = function(date) {
+    for (var i in $scope.transactions.daySummary) {
+      var cell = $scope.transactions.daySummary[i];
+      if (cell.date == date) {
+        return cell.amount;
       }
     }
   };
 
-  $scope.updateCellTransactions = function(rubric, day) {
-    var year = YearMonthService.getYear();
-    var month = YearMonthService.getMonth();
-    EditTransactionsService.refresh(rubric, year, month, day);
+  $scope.updateCellTransactions = function(rubric, date) {
+    EditTransactionsService.refresh(rubric, date);
   };
 });
 

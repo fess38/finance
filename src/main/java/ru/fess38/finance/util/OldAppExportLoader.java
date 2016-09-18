@@ -15,10 +15,10 @@ import ru.fess38.finance.model.Transaction;
 
 import java.io.File;
 import java.io.FileReader;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -70,10 +70,10 @@ public class OldAppExportLoader {
 
   private SimpleTransaction toSimpleTransaction(String row) {
     List<String> rowList = Arrays.asList(row.split("\t"));
-    Date date = null;
+    LocalDate date = null;
     try {
-      date = sdf.parse(rowList.get(1));
-    } catch (ParseException e) {
+      date = LocalDate.parse(rowList.get(1), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    } catch (Exception e) {
       e.printStackTrace();
     }
     String rubric = rowList.get(2);
@@ -99,14 +99,14 @@ public class OldAppExportLoader {
   }
 
   private static class SimpleTransaction {
-    public SimpleTransaction(Date date, String rubric, int amountFrom, String comment) {
+    public SimpleTransaction(LocalDate date, String rubric, int amountFrom, String comment) {
       this.date = date;
       this.rubric = rubric;
       this.amountFrom = amountFrom;
       this.comment = comment;
     }
 
-    private final Date date;
+    private final LocalDate date;
     private final String rubric;
     private final int amountFrom;
     private final String comment;
@@ -126,7 +126,7 @@ public class OldAppExportLoader {
       return ToStringBuilder.reflectionToString(this);
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
       return date;
     }
 

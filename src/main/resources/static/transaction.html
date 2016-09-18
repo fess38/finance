@@ -1,19 +1,17 @@
 <div ng-controller="show-transactions">
   <button ng-click="previousMonth()">Предыдущий месяц</button>
-  <button ng-click="add()">Добавить транзакцию</button>
   <button ng-click="nextMonth()">Следующий месяц</button>
   <br><br>
   <table>
     <tr>
       <th>{{transactions.yearMonth | date:"MMM yyyy"}}</th>
-      <th ng-repeat="day in transactions.daysOfMonth">{{day}}</th>
+      <th ng-repeat="date in transactions.dates">{{date | date:"d"}}</th>
       <th>Итого</th>
     </tr>
     <tr ng-repeat="rubric in transactions.rubrics | filter:filterIncomeRubrics | orderBy:'name'">
       <td>{{rubric.name}}</td>
-      <td ng-repeat="day in transactions.daysOfMonth"
-          ng-click="updateCellTransactions(rubric, day)">
-        {{findRubricByDaySummary(rubric, day)}}
+      <td ng-repeat="date in transactions.dates" ng-click="updateCellTransactions(rubric, date)">
+        {{findRubricDaySummary(rubric, date)}}
       </td>
       <td>{{findRubricSummary(rubric)}}</td>
     </tr>
@@ -22,9 +20,8 @@
     </tr>
     <tr ng-repeat="rubric in transactions.rubrics | filter:filterExpenceRubrics | orderBy:'name'">
       <td>{{rubric.name}}</td>
-      <td ng-repeat="day in transactions.daysOfMonth"
-          ng-click="updateCellTransactions(rubric, day)">
-        {{findRubricByDaySummary(rubric, day)}}
+      <td ng-repeat="date in transactions.dates" ng-click="updateCellTransactions(rubric, date)">
+        {{findRubricDaySummary(rubric, date)}}
       </td>
       <td>{{findRubricSummary(rubric)}}</td>
     </tr>
@@ -33,7 +30,9 @@
     </tr>
     <tr>
       <th>Расходы</th>
-      <td ng-repeat="day in transactions.daysOfMonth">{{findDaySummary(day)}}</td>
+      <td ng-repeat="date in transactions.dates">
+        {{findDaySummary(date)}}
+      </td>
       <td>{{transactions.monthSummary}}</td>
     </tr>
   </table>
@@ -82,8 +81,7 @@
       <tr>
         <td>Дата:</td>
         <td>
-          <input ng-model="newTransaction.dayRef" type="date" required title="YYYY-MM-DD"
-              pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])">
+          <input ng-model="newTransaction.dayRef" type="text" placeholder="2016-01-31" required>
         </td>
       </tr>
       <tr>

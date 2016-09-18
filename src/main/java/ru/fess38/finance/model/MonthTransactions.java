@@ -18,7 +18,7 @@ public class MonthTransactions {
     this.yearMonth = yearMonth;
     this.transactions = transactions;
     this.rubrics = Collections.unmodifiableList(processRubrics());
-    this.daysOfMonth = Collections.unmodifiableList(processDaysOfMonth());
+    this.dates = Collections.unmodifiableList(processDates());
     this.monthSummary = processMonthSummary();
     this.daySummary = processDaySummary();
     this.rubricSummary = processRubricSummary();
@@ -29,7 +29,7 @@ public class MonthTransactions {
   private final YearMonth yearMonth;
   private final List<Transaction> transactions;
   private final List<Rubric> rubrics;
-  private final List<Integer> daysOfMonth;
+  private final List<LocalDate> dates;
   private final int monthSummary;
   private final List<DaySummary> daySummary;
   private final List<RubricSummary> rubricSummary;
@@ -46,10 +46,11 @@ public class MonthTransactions {
         .collect(Collectors.toList());
   }
 
-  private List<Integer> processDaysOfMonth() {
-    List<Integer> result = new ArrayList<>();
+  private List<LocalDate> processDates() {
+    List<LocalDate> result = new ArrayList<>();
     for (int i = 1; i <= yearMonth.lengthOfMonth(); i++) {
-      result.add(i);
+      LocalDate localDate = LocalDate.of(yearMonth.getYear(), yearMonth.getMonth(), i);
+      result.add(localDate);
     }
     return result;
   }
@@ -67,10 +68,9 @@ public class MonthTransactions {
     transactions.stream()
         .filter(x -> !x.getRubric().isIncome())
         .forEach(x -> {
-          LocalDate date = x.getLocalDate();
           int amount = x.getAmountFrom();
-          map.computeIfPresent(date, (key, value) -> value + amount);
-          map.putIfAbsent(date, amount);
+          map.computeIfPresent(x.getDayRef(), (key, value) -> value + amount);
+          map.putIfAbsent(x.getDayRef(), amount);
         });
     map.forEach((key, value) -> result.add(new DaySummary(key, value)));
     return result;
@@ -93,7 +93,7 @@ public class MonthTransactions {
     List<RubricDaySummary> result = new ArrayList<>();
     Map<Pair<Rubric, LocalDate>, Integer> map = new HashMap<>();
     transactions.forEach(x -> {
-      Pair<Rubric, LocalDate> pair = Pair.of(x.getRubric(), x.getLocalDate());
+      Pair<Rubric, LocalDate> pair = Pair.of(x.getRubric(), x.getDayRef());
       int amount = x.getAmountFrom();
       map.computeIfPresent(pair, (key, value) -> value + amount);
       map.putIfAbsent(pair, amount);
@@ -120,8 +120,8 @@ public class MonthTransactions {
     return rubrics;
   }
 
-  public List<Integer> getDaysOfMonth() {
-    return daysOfMonth;
+  public List<LocalDate> getDates() {
+    return dates;
   }
 
   public int getMonthSummary() {

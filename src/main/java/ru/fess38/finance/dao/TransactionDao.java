@@ -14,7 +14,7 @@ import java.util.List;
 public interface TransactionDao extends GenericDao<Transaction, Long> {
   MonthTransactions find(YearMonth yearMonth, Transaction.Group group);
 
-  List<Transaction> find(LocalDate localDate, long rubricId);
+  List<Transaction> find(long rubricId, LocalDate localDate);
 
   int countByAccount(Account account);
 

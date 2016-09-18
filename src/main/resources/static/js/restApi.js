@@ -94,9 +94,8 @@ angular.module("app.restApi").service("RestApi", function($http) {
     return $http.get("/transaction/find?year=" + year + "&month=" + month);
   };
 
-  this.findCellTransactions = function(rubric, year, month, day) {
-    var query = "/transaction/find?rubric-id=" + rubric.id + "&year=" + year + "&month=" + month
-        + "&day=" + day;
+  this.findCellTransactions = function(rubric, date) {
+    var query = "/transaction/find?rubric-id=" + rubric.id + "&date=" + date;
     return $http.get(query);
   };
 

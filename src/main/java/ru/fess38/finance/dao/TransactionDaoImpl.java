@@ -18,8 +18,6 @@ import ru.fess38.finance.model.User;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -84,10 +82,9 @@ public class TransactionDaoImpl implements TransactionDao {
   }
 
   @Override
-  public List<Transaction> find(LocalDate localDate, long rubricId) {
-    Date date = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+  public List<Transaction> find(long rubricId, LocalDate localDate) {
     DetachedCriteria criteria = DetachedCriteria.forClass(Transaction.class)
-        .add(Restrictions.eq("dayRef", date))
+        .add(Restrictions.eq("dayRef", localDate))
         .add(Restrictions.eq("rubric.id", rubricId));
     return find(criteria);
   }

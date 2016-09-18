@@ -4,9 +4,9 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.Check;
-import org.springframework.format.annotation.DateTimeFormat;
 import ru.fess38.finance.model.Account.AccountType;
 
+import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,9 +16,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 
 @Entity
 @Check(constraints = "accountFromId != accountToId")
@@ -32,9 +29,8 @@ public class Transaction {
   @ManyToOne(fetch = FetchType.EAGER, optional = false, targetEntity = Rubric.class)
   @JoinColumn(name = "rubricId", nullable = false)
   private Rubric rubric;
-  @Column(nullable = false)
-  @DateTimeFormat(pattern = "yyyy-MM-dd")
-  private Date dayRef;
+  @Column(nullable = false, columnDefinition = "DATE")
+  private LocalDate dayRef;
   @ManyToOne(fetch = FetchType.EAGER, optional = false, targetEntity = Account.class)
   @JoinColumn(name = "accountFromId", nullable = false)
   private Account accountFrom;
@@ -142,11 +138,11 @@ public class Transaction {
     this.comment = comment;
   }
 
-  public Date getDayRef() {
+  public LocalDate getDayRef() {
     return dayRef;
   }
 
-  public void setDayRef(Date dayRef) {
+  public void setDayRef(LocalDate dayRef) {
     this.dayRef = dayRef;
   }
 
@@ -172,15 +168,6 @@ public class Transaction {
 
   public void setUser(User user) {
     this.user = user;
-  }
-
-  public LocalDate getLocalDate() {
-    return dayRef.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-  }
-
-  public void setLocalDate(LocalDate localDate) {
-    Date date = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
-    setDayRef(date);
   }
 
   public Long getId() {

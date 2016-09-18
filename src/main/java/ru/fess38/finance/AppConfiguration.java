@@ -7,6 +7,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -19,7 +20,9 @@ import ru.fess38.finance.model.Account;
 import ru.fess38.finance.model.Account.AccountType;
 import ru.fess38.finance.model.Currency;
 import ru.fess38.finance.model.Rubric;
+import ru.fess38.finance.util.LocalDateConverter;
 
+import java.time.LocalDate;
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
@@ -97,8 +100,16 @@ public class AppConfiguration {
   @Bean
   public GsonHttpMessageConverter gsonHttpMessageConverter() {
     GsonHttpMessageConverter gsonHttpMessageConverter = new GsonHttpMessageConverter();
-    Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+    Gson gson = new GsonBuilder()
+        .registerTypeAdapter(LocalDate.class, new LocalDateConverter())
+        .create();
     gsonHttpMessageConverter.setGson(gson);
     return gsonHttpMessageConverter;
+  }
+
+  @Bean
+  @Autowired
+  public HttpMessageConverters convertersToBeUsed(GsonHttpMessageConverter converter) {
+    return new HttpMessageConverters(converter);
   }
 }
