@@ -17,8 +17,7 @@
     </tr>
     <tr ng-repeat="tag in tags | orderBy:'name'">
       <td>
-        <input ng-model="tag.name" type="text" size="25" ng-change="updateTag(tag)"
-            ng-model-options="{debounce: 2000}">
+        <input ng-model="tag.name" type="text" size="25" ng-blur="updateTag(tag)">
       </td>
       <td>{{tag.amountTransactions}}</td>
       <td>

@@ -20,8 +20,7 @@
     </tr>
     <tr ng-repeat="rubric in rubrics | orderBy:['isIncome','name']">
       <td>
-        <input ng-model="rubric.name" type="text" size="25" ng-change="updateRubric(rubric)"
-            ng-model-options="{debounce: 2000}">
+        <input ng-model="rubric.name" type="text" size="25" ng-blur="updateRubric(rubric)">
       </td>
       <td>
         <input ng-model="rubric.isIncome" type="checkbox" disabled>

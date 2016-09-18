@@ -60,12 +60,10 @@
         </select>
       </td>
       <td>
-        <input ng-model="t.amountFrom" type="number" min="1" required
-            ng-change="updateTransaction(t)" ng-model-options="{debounce: 2000}">
+        <input ng-model="t.amountFrom" type="number" min="1" required ng-blur="updateTransaction(t)">
       </td>
       <td>
-        <input ng-model="t.comment" type="text" size="25" ng-change="updateTransaction(t)"
-            ng-model-options="{debounce: 2000}">
+        <input ng-model="t.comment" type="text" size="25" ng-blur="updateTransaction(t)">
       </td>
       <td>
         <input type="submit" value="Удалить" ng-click="deleteTransaction(t)">

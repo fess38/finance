@@ -24,8 +24,7 @@
     </tr>
     <tr ng-repeat="account in accounts | filter:{type:'!OUTER'} | orderBy:['type', 'name']">
       <td>
-        <input ng-model="account.name" type="text" size="25" ng-change="updateAccount(account)"
-            ng-model-options="{debounce: 2000}">
+        <input ng-model="account.name" type="text" size="25" ng-blur="updateAccount(account)">
       </td>
       <td>{{account.currency.name}}({{account.currency.symbol}})</td>
       <td>{{account.balance}}</td>

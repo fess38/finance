@@ -16,8 +16,7 @@
     </tr>
     <tr ng-repeat="user in users | orderBy:'name'">
       <td>
-        <input ng-model="user.name" type="text" size="25" ng-change="updateUser(user)"
-            ng-model-options="{debounce: 2000}">
+        <input ng-model="user.name" type="text" size="25" ng-blur="updateUser(user)">
       </td>
       <td>{{user.amountTransactions}}</td>
       <td>
