@@ -83,16 +83,14 @@ public class TransactionChangeService {
     Tag oldTag = persistedTransaction.getTag();
     Tag newTag = transaction.getTag();
 
-    if ((oldTag == null && newTag == null) || oldTag.equals(newTag)) {
-      return;
-    } else {
+    if ((oldTag != null || newTag != null) && !Objects.equals(oldTag, newTag)) {
       if (oldTag != null) {
-        Tag persistedTag = tagDao.get(persistedTransaction.getTag().getId());
+        Tag persistedTag = tagDao.get(oldTag.getId());
         persistedTag.substractTransaction();
         tagDao.update(persistedTag);
       }
       if (newTag != null) {
-        Tag persistedTag = tagDao.get(transaction.getTag().getId());
+        Tag persistedTag = tagDao.get(newTag.getId());
         persistedTag.addTransaction();
         tagDao.update(persistedTag);
       }
@@ -103,16 +101,14 @@ public class TransactionChangeService {
     User oldUser = persistedTransaction.getUser();
     User newUser = transaction.getUser();
 
-    if ((oldUser == null && newUser == null) || Objects.equals(oldUser, newUser)) {
-      return;
-    } else {
+    if ((oldUser != null || newUser != null) && !Objects.equals(oldUser, newUser)) {
       if (oldUser != null) {
-        User persistedUser = userDao.get(persistedTransaction.getUser().getId());
+        User persistedUser = userDao.get(oldUser.getId());
         persistedUser.substractTransaction();
         userDao.update(persistedUser);
       }
       if (newUser != null) {
-        User persistedUser = userDao.get(transaction.getUser().getId());
+        User persistedUser = userDao.get(newUser.getId());
         persistedUser.addTransaction();
         userDao.update(persistedUser);
       }
