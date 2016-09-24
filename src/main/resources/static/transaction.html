@@ -1,4 +1,4 @@
-<div ng-controller="show-transactions">
+<div ng-controller="transaction">
   <button ng-click="previousMonth()">Предыдущий месяц</button>
   <button ng-click="nextMonth()">Следующий месяц</button>
   <br><br>
@@ -10,7 +10,7 @@
     </tr>
     <tr ng-repeat="rubric in transactions.rubrics | filter:filterIncomeRubrics | orderBy:'name'">
       <td>{{rubric.name}}</td>
-      <td ng-repeat="date in transactions.dates" ng-click="updateCellTransactions(rubric, date)">
+      <td ng-repeat="date in transactions.dates" ng-click="showRubricDateTransactions(rubric, date)">
         {{findRubricDaySummary(rubric, date)}}
       </td>
       <td>{{findRubricSummary(rubric)}}</td>
@@ -20,7 +20,7 @@
     </tr>
     <tr ng-repeat="rubric in transactions.rubrics | filter:filterExpenceRubrics | orderBy:'name'">
       <td>{{rubric.name}}</td>
-      <td ng-repeat="date in transactions.dates" ng-click="updateCellTransactions(rubric, date)">
+      <td ng-repeat="date in transactions.dates" ng-click="showRubricDateTransactions(rubric, date)">
         {{findRubricDaySummary(rubric, date)}}
       </td>
       <td>{{findRubricSummary(rubric)}}</td>
@@ -37,10 +37,7 @@
     </tr>
   </table>
   <br/>
-</div>
-
-<div ng-controller="edit-transactions" ng-show="editor.show">
-  <table>
+  <table ng-show="editTransactions.length > 0">
     <tr>
       <th>Пользователь</th>
       <th>Тэг</th>
@@ -48,16 +45,16 @@
       <th>Комментарий</th>
       <th>Действие</th>
     </tr>
-    <tr ng-repeat="t in editor.cellTransactions | orderBy:'id':true">
+    <tr ng-repeat="t in editTransactions | orderBy:'id':true">
       <td>
         <select ng-model="t.user" ng-change="updateTransaction(t)"
-            ng-options="user as user.name for user in editor.users track by user.id">
+            ng-options="user as user.name for user in users track by user.id">
           <option></option>
         </select>
       </td>
       <td>
         <select ng-model="t.tag" ng-change="updateTransaction(t)"
-            ng-options="tag as tag.name for tag in editor.tags track by tag.id">
+            ng-options="tag as tag.name for tag in tags track by tag.id">
           <option></option>
         </select>
       </td>
@@ -75,57 +72,66 @@
   <div>{{log}}</div>
 </div>
 
-<div ng-controller="add-transaction">
-  <form ng-submit="addTransaction()">
-    <table>
-      <tr>
-        <td>Дата:</td>
-        <td>
-          <input ng-model="newTransaction.dayRef" type="text" placeholder="2016-01-31" required>
-        </td>
-      </tr>
-      <tr>
-        <td><input type="radio" ng-model="type" value="income" ng-click='changeType(type)'> Доход
-        </td>
-        <td><input type="radio" ng-model="type" value="expense" ng-click='changeType(type)'> Расход
-        </td>
-      </tr>
-      <tr>
-        <td>Рубрика:</td>
-        <td>
-          <select ng-model="newTransaction.rubric" size="1" required
-              ng-options="rubric as rubric.name for rubric in rubrics | orderBy:'name' track by rubric.id">
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <td>Пользователь:</td>
-        <td>
-          <select ng-model="newTransaction.user" size="1"
-              ng-options="user as user.name for user in users | orderBy:'name' track by user.id">
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <td>Тэг:</td>
-        <td>
-          <select ng-model="newTransaction.tag" size="1"
-              ng-options="tag as tag.name for tag in tags | orderBy:'name' track by tag.id">
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <td>Сумма:</td>
-        <td><input ng-model="newTransaction.amountFrom" type="number" min="1" required></td>
-      </tr>
-      <tr>
-        <td>Комментарий:</td>
-        <td><input ng-model="newTransaction.comment" type="text" size="25"></td>
-      </tr>
-      <tr>
-        <td colspan="2"><input type="submit" value="Добавить транзакцию"></td>
-      </tr>
-    </table>
-  </form>
+<div ng-controller="saveTransaction">
+  <table>
+    <tr>
+      <td>Дата:</td>
+      <td>
+        <input ng-model="newTransaction.dayRef" type="text" placeholder="2016-01-31" required form="saveTransaction">
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Доход
+        <input type="radio" ng-model="type" value="income" ng-click='changeType(type)' form="saveTransaction">
+      </td>
+      <td>
+        Расход
+        <input type="radio" ng-model="type" value="expense" ng-click='changeType(type)' form="saveTransaction">
+      </td>
+    </tr>
+    <tr>
+      <td>Рубрика:</td>
+      <td>
+        <select ng-model="newTransaction.rubric" size="1" required form="saveTransaction"
+            ng-options="rubric as rubric.name for rubric in rubrics | orderBy:'name' track by rubric.id">
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>Пользователь:</td>
+      <td>
+        <select ng-model="newTransaction.user" size="1" form="saveTransaction"
+            ng-options="user as user.name for user in users | orderBy:'name' track by user.id">
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>Тэг:</td>
+      <td>
+        <select ng-model="newTransaction.tag" size="1" form="saveTransaction"
+            ng-options="tag as tag.name for tag in tags | orderBy:'name' track by tag.id">
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>Сумма:</td>
+      <td>
+        <input ng-model="newTransaction.amountFrom" type="number" min="1" required form="saveTransaction">
+      </td>
+    </tr>
+    <tr>
+      <td>Комментарий:</td>
+      <td>
+        <input ng-model="newTransaction.comment" type="text" size="25" form="saveTransaction">
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <input type="submit" value="Добавить транзакцию" form="saveTransaction">
+      </td>
+    </tr>
+  </table>
+  <form ng-submit="saveTransaction()" id="saveTransaction"></form>
   <div>{{log}}</div>
 </div>

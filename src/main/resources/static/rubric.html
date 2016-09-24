@@ -1,4 +1,4 @@
-<div ng-controller="show-rubrics">
+<div ng-controller="rubric">
   <table>
     <tr>
       <th>Рубрика</th>
@@ -8,14 +8,14 @@
     </tr>
     <tr>
       <td>
-        <input ng-model="newRubric.name" type="text" maxlength="25" required form="add-rubric">
+        <input ng-model="newRubric.name" type="text" maxlength="25" required form="saveRubric">
       </td>
       <td>
-        <input ng-model="newRubric.isIncome" type="checkbox" form="add-rubric">
+        <input ng-model="newRubric.isIncome" type="checkbox" form="saveRubric">
       </td>
       <td></td>
       <td>
-        <button form="add-rubric">Добавить</button>
+        <button form="saveRubric">Добавить</button>
       </td>
     </tr>
     <tr ng-repeat="rubric in rubrics | orderBy:['isIncome','name']">
@@ -34,6 +34,6 @@
     </tr>
   </table>
   <br>
-  <form ng-submit="saveRubric({name:newRubric.name, isIncome:newRubric.isIncome})" id="add-rubric"></form>
+  <form ng-submit="saveRubric()" id="saveRubric"></form>
   {{log}}
 </div>

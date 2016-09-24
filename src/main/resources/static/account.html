@@ -1,4 +1,4 @@
-<div ng-controller="show-accounts">
+<div ng-controller="account">
   <table>
     <tr>
       <th>Счет</th>
@@ -9,17 +9,17 @@
     </tr>
     <tr>
       <td>
-        <input ng-model="newAccount.name" type="text" maxlength="25" required form="add-account">
+        <input ng-model="newAccount.name" type="text" maxlength="25" required form="saveAccount">
       </td>
       <td>
-        <select ng-model="newAccount.currency" form="add-account"
+        <select ng-model="newAccount.currency" form="saveAccount"
             ng-options="currency as currency.name for currency in currencies track by currency.id">
         </select>
       </td>
       <td></td>
       <td></td>
       <td>
-        <button form="add-account">Добавить</button>
+        <button form="saveAccount">Добавить</button>
       </td>
     </tr>
     <tr ng-repeat="account in accounts | filter:{type:'!OUTER'} | orderBy:['type', 'name']">
@@ -35,6 +35,6 @@
       </td>
     </tr>
   </table>
-  <form ng-submit="saveAccount()" id="add-account"></form>
+  <form ng-submit="saveAccount()" id="saveAccount"></form>
   {{log}}
 </div>

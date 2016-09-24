@@ -1,4 +1,4 @@
-<div ng-controller="show-transfers">
+<div ng-controller="transfer">
   <table>
     <tr>
       <th>Дата</th>
@@ -11,46 +11,46 @@
     </tr>
     <tr>
       <td>
-        <input ng-model="newTransfer.dayRef" type="text" placeholder="2016-09-18" required form="add-transfer">
+        <input ng-model="newTransfer.dayRef" type="text" placeholder="2016-09-18" required form="saveTransfer">
       </td>
       <td>
-        <select ng-model="newTransfer.accountFrom" ng-change="checkEquals()" form="add-transfer"
+        <select ng-model="newTransfer.accountFrom" ng-change="checkEquals()" form="saveTransfer"
             ng-options="account as account.name for account in accounts | orderBy:'name' | filter:{type:'!OUTER'}
                   track by account.id">
         </select>
       </td>
       <td>
-        <select ng-model="newTransfer.accountTo" ng-change="checkEquals()" form="add-transfer"
+        <select ng-model="newTransfer.accountTo" ng-change="checkEquals()" form="saveTransfer"
             ng-options="account as account.name for account in accounts | orderBy:'name' | filter:{type:'!OUTER'}
                   track by account.id">
         </select>
       </td>
       <td>
-        <input ng-model="newTransfer.amountFrom" type="number" min="1" required form="add-transfer">
+        <input ng-model="newTransfer.amountFrom" type="number" min="1" required form="saveTransfer">
       </td>
-      <td><input ng-model="newTransfer.amountTo" type="number" min="1" required form="add-transfer">
+      <td><input ng-model="newTransfer.amountTo" type="number" min="1" required form="saveTransfer">
       </td>
-      <td><input ng-model="newTransfer.comment" type="text" size="25" form="add-transfer"></td>
-      <td><input type="submit" value="Добавить" form="add-transfer"></td>
+      <td><input ng-model="newTransfer.comment" type="text" size="25" form="saveTransfer"></td>
+      <td><input type="submit" value="Добавить" form="saveTransfer"></td>
     </tr>
     <tr ng-repeat="t in transfers | orderBy:'dayRef':true">
       <td>{{t.dayRef | date:"d MMM yyyy"}}</td>
       <td>{{t.accountFrom.name}}({{t.accountFrom.currency.symbol}})</td>
       <td>{{t.accountTo.name}}({{t.accountTo.currency.symbol}})</td>
       <td>
-        <input ng-model="t.amountFrom" type="number" min="1" required ng-blur="updateTransaction(t)">
+        <input ng-model="t.amountFrom" type="number" min="1" required ng-blur="updateTransfer(t)">
       </td>
       <td>
-        <input ng-model="t.amountTo" type="number" min="1" required ng-blur="updateTransaction(t)">
+        <input ng-model="t.amountTo" type="number" min="1" required ng-blur="updateTransfer(t)">
       </td>
       <td>
-        <input ng-model="t.comment" type="text" size="25" ng-blur="updateTransaction(t)">
+        <input ng-model="t.comment" type="text" size="25" ng-blur="updateTransfer(t)">
       </td>
       <td>
         <input type="submit" value="Удалить" ng-click="deleteTransfer(t)">
       </td>
     </tr>
   </table>
-  <form ng-submit="addTransfer()" id="add-transfer"></form>
+  <form ng-submit="saveTransfer()" id="saveTransfer"></form>
   <div>{{log}}</div>
 </div>

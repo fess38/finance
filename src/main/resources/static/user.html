@@ -7,11 +7,11 @@
     </tr>
     <tr>
       <td>
-        <input ng-model="newUser.name" type="text" maxlength="25" required form="add-user">
+        <input ng-model="newUser.name" type="text" maxlength="25" required form="saveUser">
       </td>
       <td></td>
       <td>
-        <button form="add-user">Добавить</button>
+        <button form="saveUser">Добавить</button>
       </td>
     </tr>
     <tr ng-repeat="user in users | orderBy:'name'">
@@ -25,6 +25,6 @@
     </tr>
   </table>
   <br>
-  <form ng-submit="saveUser({name:newUser.name})" id="add-user"></form>
+  <form ng-submit="saveUser()" id="saveUser"></form>
   {{log}}
 </div>

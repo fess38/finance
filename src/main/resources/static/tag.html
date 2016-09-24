@@ -1,5 +1,4 @@
 <div ng-controller="tag">
-  <form ng-submit="saveTag({name:newTag.name})" id="add-tag"></form>
   <table>
     <tr>
       <th>Тэг</th>
@@ -8,11 +7,11 @@
     </tr>
     <tr>
       <td>
-        <input ng-model="newTag.name" type="text" maxlength="25" required form="add-tag">
+        <input ng-model="newTag.name" type="text" maxlength="25" required form="saveTag">
       </td>
       <td></td>
       <td>
-        <button form="add-tag">Добавить</button>
+        <button form="saveTag">Добавить</button>
       </td>
     </tr>
     <tr ng-repeat="tag in tags | orderBy:'name'">
@@ -25,6 +24,7 @@
       </td>
     </tr>
   </table>
+  <form ng-submit="saveTag()" id="saveTag"></form>
   <br>
   {{log}}
 </div>

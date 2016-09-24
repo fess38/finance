@@ -2,18 +2,23 @@ angular.module("app.transaction", []);
 
 angular.module("app.transaction").service("YearMonthService", function() {
   var date = new Date();
+
   this.getYear = function() {
     return date.getFullYear();
   };
+
   this.getMonth = function() {
     return date.getMonth() + 1;
   };
+
   this.getDate = function() {
     return date;
   };
+
   this.incrementMonth = function() {
     date.setMonth(date.getMonth() + 1);
   };
+
   this.decrementMonth = function() {
     date.setMonth(date.getMonth() - 1);
   };
@@ -38,80 +43,32 @@ angular.module("app.transaction").service("MonthTransactionsService", function(R
   };
 });
 
-angular.module("app.transaction").service("EditTransactionsService", function(RestApi) {
-  var scope = function() {
-    var show = false;
-    var cellTransactions = [];
-    var users = [];
-  };
-  this.refresh = function(rubric, date) {
-    if (angular.isDefined(rubric) && angular.isDefined(date)) {
-      scope.rubric = rubric;
-      scope.date = date;
-    }
-    RestApi.findCellTransactions(scope.rubric, scope.date).then(function(response) {
-      scope.show = angular.isDefined(response.data[0]);
-      scope.cellTransactions = response.data;
-    });
-    RestApi.users().then(function(response) {
-      scope.users = response.data;
-    });
-    RestApi.tags().then(function(response) {
-      scope.tags = response.data;
-    });
-  };
-
-  this.clear = function() {
-    scope.show = false;
-  };
-
-  this.init = function() {
-    return scope;
+angular.module("app.transaction").controller("transaction", function($scope, $timeout,
+    MonthTransactionsService, YearMonthService, RestApi) {
+  function clearEditor() {
+    $scope.editTransactions = [];
   }
-});
 
-angular.module("app.transaction").controller("edit-transactions", function($scope, $timeout,
-    EditTransactionsService, RestApi, MonthTransactionsService) {
-  $scope.editor = EditTransactionsService.init();
+  RestApi.users().then(function(response) {
+    $scope.users = response.data;
+  });
 
-  $scope.updateTransaction = function(transaction) {
-    transaction.amountTo = transaction.amountFrom;
-    RestApi.updateTransaction(transaction).then(function(response) {
-      MonthTransactionsService.refresh();
-      $scope.log = "Транзация обновлена";
-    }, function(response) {
-      $scope.log = "Ошибка обновления транзакции";
-    });
-    $timeout(function() {
-      $scope.log = null;
-    }, 3000);
-  };
+  RestApi.tags().then(function(response) {
+    $scope.tags = response.data;
+  });
 
-  $scope.deleteTransaction = function(transaction) {
-    RestApi.deleteTransaction(transaction).then(function(response) {
-      MonthTransactionsService.refresh();
-      EditTransactionsService.refresh();
-      $scope.log = "Транзация удалена";
-    }, function(response) {
-      $scope.log = "Ошибка удаления транзакции";
-    });
-  };
-});
-
-angular.module("app.transaction").controller("show-transactions", function($scope,
-    MonthTransactionsService, YearMonthService, RestApi, EditTransactionsService) {
   $scope.transactions = MonthTransactionsService.refresh();
 
   $scope.nextMonth = function() {
     YearMonthService.incrementMonth();
     MonthTransactionsService.refresh();
-    EditTransactionsService.clear();
+    clearEditor();
   };
 
   $scope.previousMonth = function() {
     YearMonthService.decrementMonth();
     MonthTransactionsService.refresh();
-    EditTransactionsService.clear();
+    clearEditor();
   };
 
   $scope.filterIncomeRubrics = function(rubric) {
@@ -119,7 +76,7 @@ angular.module("app.transaction").controller("show-transactions", function($scop
   };
 
   $scope.filterExpenceRubrics = function(rubric) {
-    return !rubric.isIncome;
+    return !$scope.filterIncomeRubrics(rubric);
   };
 
   $scope.findRubricDaySummary = function(rubric, date) {
@@ -148,13 +105,41 @@ angular.module("app.transaction").controller("show-transactions", function($scop
     }
   };
 
-  $scope.updateCellTransactions = function(rubric, date) {
-    EditTransactionsService.refresh(rubric, date);
+  $scope.showRubricDateTransactions = function(rubric, date) {
+    RestApi.findRubricDayTransactions(rubric, date).then(function(response) {
+      $scope.editTransactions = response.data;
+    });
+  };
+
+  $scope.updateTransaction = function(transaction) {
+    transaction.amountTo = transaction.amountFrom;
+    RestApi.updateTransaction(transaction).then(function(response) {
+      MonthTransactionsService.refresh();
+      $scope.log = "Транзация обновлена";
+    }, function(response) {
+      $scope.log = "Ошибка обновления транзакции";
+    });
+    $timeout(function() {
+      $scope.log = null;
+    }, 3000);
+  };
+
+  $scope.deleteTransaction = function(transaction) {
+    RestApi.deleteTransaction(transaction).then(function(response) {
+      MonthTransactionsService.refresh();
+      $scope.editTransactions.splice($scope.editTransactions.indexOf(transaction), 1);
+      $scope.log = "Транзация удалена";
+    }, function(response) {
+      $scope.log = "Ошибка удаления транзакции";
+    });
+    $timeout(function() {
+      $scope.log = null;
+    }, 3000);
   };
 });
 
-angular.module("app.transaction").controller("add-transaction", function($scope, $timeout,
-    RestApi) {
+angular.module("app.transaction").controller("saveTransaction", function($scope, $timeout,
+    RestApi, MonthTransactionsService) {
   var masterAccount, outerAccount;
   RestApi.masterAccount().then(function(response) {
     masterAccount = response.data;
@@ -162,18 +147,6 @@ angular.module("app.transaction").controller("add-transaction", function($scope,
   RestApi.outerAccount().then(function(response) {
     outerAccount = response.data;
   });
-
-  $scope.changeType = function(type) {
-    if (type === "income") {
-      RestApi.incomeRubrics().then(function(response) {
-        $scope.rubrics = response.data;
-      });
-    } else if (type === "expense") {
-      RestApi.expenseRubrics().then(function(response) {
-        $scope.rubrics = response.data;
-      });
-    }
-  };
 
   RestApi.users().then(function(response) {
     $scope.users = response.data;
@@ -196,22 +169,31 @@ angular.module("app.transaction").controller("add-transaction", function($scope,
     return newTransaction;
   }
 
-  function clearTransactionFields() {
-    $scope.newTransaction.amountFrom = null;
-    $scope.newTransaction.tag = null;
-    $scope.newTransaction.user = null;
-    $scope.newTransaction.comment = null;
-  }
-
-  $scope.addTransaction = function() {
+  $scope.saveTransaction = function() {
     RestApi.saveTransaction(readTransaction()).then(function(response) {
+      $scope.newTransaction.amountFrom = null;
+      $scope.newTransaction.tag = null;
+      $scope.newTransaction.user = null;
+      $scope.newTransaction.comment = null;
+      MonthTransactionsService.refresh();
       $scope.log = "Транзакция добавлена";
-      clearTransactionFields();
     }, function(response) {
       $scope.log = "Ошибка добавления транзакции";
     });
     $timeout(function() {
       $scope.log = null;
     }, 3000);
+  };
+
+  $scope.changeType = function(type) {
+    if (type === "income") {
+      RestApi.incomeRubrics().then(function(response) {
+        $scope.rubrics = response.data;
+      });
+    } else if (type === "expense") {
+      RestApi.expenseRubrics().then(function(response) {
+        $scope.rubrics = response.data;
+      });
+    }
   };
 });

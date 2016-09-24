@@ -1,6 +1,6 @@
 angular.module("app.account", []);
 
-angular.module("app.account").controller("show-accounts", function($scope, $timeout, RestApi) {
+angular.module("app.account").controller("account", function($scope, $timeout, RestApi) {
   $scope.refresh = function() {
     RestApi.accounts().then(function(response) {
       $scope.accounts = response.data;
@@ -11,25 +11,25 @@ angular.module("app.account").controller("show-accounts", function($scope, $time
   };
   $scope.refresh();
 
-  $scope.updateAccount = function(account) {
-    RestApi.updateAccount(account).then(function(response) {
-      $scope.log = "Счет обновлен";
+  $scope.saveAccount = function() {
+    RestApi.saveAccount($scope.newAccount).then(function(response) {
+      $scope.newAccount.name = null;
+      $scope.newAccount.currency = null;
+      $scope.log = "Счет добавлен";
+      $scope.refresh();
     }, function(response) {
-      $scope.log = "Ошибка обновления счета";
+      $scope.log = "Ошибка добавления счета";
     });
     $timeout(function() {
       $scope.log = null;
     }, 3000);
   };
 
-  $scope.saveAccount = function() {
-    RestApi.saveAccount($scope.newAccount).then(function(response) {
-      $scope.log = "Счет добавлен";
-      $scope.newAccount.name = null;
-      $scope.newAccount.currency = null;
-      $scope.refresh();
+  $scope.updateAccount = function(account) {
+    RestApi.updateAccount(account).then(function(response) {
+      $scope.log = "Счет обновлен";
     }, function(response) {
-      $scope.log = "Ошибка добавления счета";
+      $scope.log = "Ошибка обновления счета";
     });
     $timeout(function() {
       $scope.log = null;

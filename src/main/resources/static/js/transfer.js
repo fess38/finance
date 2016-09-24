@@ -1,67 +1,65 @@
 angular.module("app.transfer", []);
 
-angular.module("app.transfer").controller("show-transfers", function($scope, $timeout, RestApi) {
-  RestApi.transfers().then(function(response) {
-    $scope.transfers = response.data;
-  });
-
-  $scope.updateTransaction = function(transaction) {
-    RestApi.updateTransaction(transaction).then(function(response) {
-      $scope.log = "Транзация обновлена";
-    }, function(response) {
-      $scope.log = "Ошибка обновления транзакции";
-    });
-    $timeout(function() {
-      $scope.log = null;
-    }, 3000);
-  };
-
-  $scope.deleteTransfer = function(transaction) {
-    RestApi.deleteTransaction(transaction).then(function(response) {
-      $scope.log = "Транзация удалена";
-    }, function(response) {
-      $scope.log = "Ошибка удаления транзакции";
-    });
-  };
-
+angular.module("app.transfer").controller("transfer", function($scope, $timeout, RestApi) {
   var transferRubric;
-  RestApi.transferRubric().then(function(response) {
-    transferRubric = response.data;
-  });
-  RestApi.accounts().then(function(response) {
-    $scope.accounts = response.data;
-  });
 
-  $scope.checkEquals = function() {
-    if ($scope.newTransfer.accountFrom && $scope.newTransfer.accountTo &&
-        $scope.newTransfer.accountFrom.id === $scope.newTransfer.accountTo.id) {
-      $scope.newTransfer.accountTo = null;
-    }
+  $scope.refresh = function() {
+    RestApi.transfers().then(function(response) {
+      $scope.transfers = response.data;
+    });
+
+    RestApi.transferRubric().then(function(response) {
+      transferRubric = response.data;
+    });
+
+    RestApi.accounts().then(function(response) {
+      $scope.accounts = response.data;
+    });
   };
+  $scope.refresh();
 
-  function readTransfer() {
-    var newTransfer = $scope.newTransfer;
-    newTransfer.rubric = transferRubric;
-    return newTransfer;
-  }
-
-  function clearTransferFields() {
-    $scope.newTransfer.aссountFrom = null;
-    $scope.newTransfer.accountTo = null;
-    $scope.newTransfer.amountFrom = null;
-    $scope.newTransfer.amountTo = null;
-    $scope.newTransfer.comment = null;
-  }
-
-  $scope.addTransfer = function() {
-    RestApi.saveTransaction(readTransfer()).then(function(response) {
+  $scope.saveTransfer = function() {
+    $scope.newTransfer.rubric = transferRubric;
+    RestApi.saveTransaction($scope.newTransfer).then(function(response) {
+      $scope.newTransfer.aссountFrom = null;
+      $scope.newTransfer.accountTo = null;
+      $scope.newTransfer.amountFrom = null;
+      $scope.newTransfer.amountTo = null;
+      $scope.newTransfer.comment = null;
+      $scope.refresh();
       $scope.log = "Перевод добавлен";
-      clearTransferFields();
     }, function(response) {
       $scope.log = "Ошибка добавления перевода";
     });
     $timeout(function() {
       $scope.log = null;
     }, 3000);
+  };
+
+  $scope.updateTransfer = function(transfer) {
+    RestApi.updateTransaction(transfer).then(function(response) {
+      $scope.log = "Перевод обновлен";
+    }, function(response) {
+      $scope.log = "Ошибка обновления перевода";
+    });
+    $timeout(function() {
+      $scope.log = null;
+    }, 3000);
+  };
+
+  $scope.deleteTransfer = function(transfer) {
+    RestApi.deleteTransaction(transfer).then(function(response) {
+      $scope.refresh();
+      $scope.log = "Перевод удален";
+    }, function(response) {
+      $scope.log = "Ошибка удаления перевода";
+    });
+  };
+
+  $scope.checkEquals = function() {
+    if ($scope.newTransfer.accountFrom && $scope.newTransfer.accountTo &&
+        $scope.newTransfer.accountFrom.id === $scope.newTransfer.accountTo.id) {
+      $scope.newTransfer.accountTo = null;
+    }
   };
 });
