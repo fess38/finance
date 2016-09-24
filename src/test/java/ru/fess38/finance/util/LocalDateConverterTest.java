@@ -17,7 +17,6 @@ public class LocalDateConverterTest {
   public void serialize() throws Exception {
     String expected = "\"2016-02-29\"";
     String actual = gson.toJson(LocalDate.of(2016, 2, 29));
-    System.out.println(actual);
     Assert.assertEquals(expected, actual);
   }
 

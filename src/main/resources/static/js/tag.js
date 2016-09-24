@@ -9,11 +9,11 @@ angular.module("app.tag").controller("tag", function($scope, $timeout, RestApi) 
   $scope.refresh();
 
   $scope.saveTag = function() {
-    RestApi.saveTag($scope.newTag).then(function(response) {
-      $scope.newTag.name = null;
+    RestApi.saveTag($scope.newTag).then(function() {
+      $scope.newTag = null;
       $scope.log = "Тэг добавлен";
       $scope.refresh();
-    }, function(response) {
+    }, function() {
       $scope.log = "Ошибка добавления тэга";
     });
     $timeout(function() {
@@ -22,9 +22,9 @@ angular.module("app.tag").controller("tag", function($scope, $timeout, RestApi) 
   };
 
   $scope.updateTag = function(tag) {
-    RestApi.updateTag(tag).then(function(response) {
+    RestApi.updateTag(tag).then(function() {
       $scope.log = "Тэг обновлен";
-    }, function(response) {
+    }, function() {
       $scope.log = "Ошибка обновления тэга";
     });
     $timeout(function() {
@@ -33,10 +33,10 @@ angular.module("app.tag").controller("tag", function($scope, $timeout, RestApi) 
   };
 
   $scope.deleteTag = function(tag) {
-    RestApi.deleteTag(tag).then(function(response) {
+    RestApi.deleteTag(tag).then(function() {
       $scope.log = "Тэг удален";
       $scope.refresh();
-    }, function(response) {
+    }, function() {
       $scope.log = "Ошибка удаления тэга";
     });
     $timeout(function() {

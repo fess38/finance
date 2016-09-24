@@ -31,14 +31,17 @@ angular.module("app.restApi").service("RestApi", function($http) {
     return $http.get("/currency/get");
   };
 
+  //noinspection JSUnusedGlobalSymbols
   this.saveCurrency = function(currency) {
     return $http.post("/currency/save", currency);
   };
 
+  //noinspection JSUnusedGlobalSymbols
   this.updateCurrency = function(currency) {
     return $http.post("/currency/update", currency);
   };
 
+  //noinspection JSUnusedGlobalSymbols
   this.deleteCurrency = function(currency) {
     return $http.post("/currency/delete", currency);
   };
@@ -90,8 +93,12 @@ angular.module("app.restApi").service("RestApi", function($http) {
   };
 
   // Transaction
-  this.findYearMonthTransactions = function(year, month) {
-    return $http.get("/transaction/find?year=" + year + "&month=" + month);
+  this.findTransactions = function(yearMonth) {
+    return $http.get("/transaction/find?year=" + yearMonth.year + "&month=" + yearMonth.month);
+  };
+
+  this.findTransfers = function(yearMonth) {
+    return $http.get("/transfer/find?year=" + yearMonth.year + "&month=" + yearMonth.month);
   };
 
   this.findRubricDayTransactions = function(rubric, date) {
@@ -109,10 +116,6 @@ angular.module("app.restApi").service("RestApi", function($http) {
 
   this.deleteTransaction = function(transaction) {
     return $http.post("/transaction/delete", transaction);
-  };
-
-  this.transfers = function() {
-    return $http.get("/transfer/get");
   };
 
   // User

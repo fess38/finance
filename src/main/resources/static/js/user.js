@@ -9,11 +9,11 @@ angular.module("app.user").controller("user", function($scope, $timeout, RestApi
   $scope.refresh();
 
   $scope.saveUser = function() {
-    RestApi.saveUser($scope.newUser).then(function(response) {
-      $scope.newUser.name = null;
+    RestApi.saveUser($scope.newUser).then(function() {
+      $scope.newUser = null;
       $scope.log = "Пользователь добавлен";
       $scope.refresh();
-    }, function(response) {
+    }, function() {
       $scope.log = "Ошибка добавления пользователя";
     });
 
@@ -23,9 +23,9 @@ angular.module("app.user").controller("user", function($scope, $timeout, RestApi
   };
 
   $scope.updateUser = function(user) {
-    RestApi.updateUser(user).then(function(response) {
+    RestApi.updateUser(user).then(function() {
       $scope.log = "Пользователь обновлен";
-    }, function(response) {
+    }, function() {
       $scope.log = "Ошибка обновления пользователя";
     });
     $timeout(function() {
@@ -34,10 +34,10 @@ angular.module("app.user").controller("user", function($scope, $timeout, RestApi
   };
 
   $scope.deleteUser = function(user) {
-    RestApi.deleteUser(user).then(function(response) {
+    RestApi.deleteUser(user).then(function() {
       $scope.log = "Пользователь удален";
       $scope.refresh();
-    }, function(response) {
+    }, function() {
       $scope.log = "Ошибка удаления пользователя";
     });
     $timeout(function() {

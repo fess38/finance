@@ -1,36 +1,10 @@
 angular.module("app.transaction", []);
 
-angular.module("app.transaction").service("YearMonthService", function() {
-  var date = new Date();
-
-  this.getYear = function() {
-    return date.getFullYear();
-  };
-
-  this.getMonth = function() {
-    return date.getMonth() + 1;
-  };
-
-  this.getDate = function() {
-    return date;
-  };
-
-  this.incrementMonth = function() {
-    date.setMonth(date.getMonth() + 1);
-  };
-
-  this.decrementMonth = function() {
-    date.setMonth(date.getMonth() - 1);
-  };
-});
-
 angular.module("app.transaction").service("MonthTransactionsService", function(RestApi,
     YearMonthService) {
   var transactions = {};
   this.refresh = function() {
-    var year = YearMonthService.getYear();
-    var month = YearMonthService.getMonth();
-    RestApi.findYearMonthTransactions(year, month).then(function(response) {
+    RestApi.findTransactions(YearMonthService.getYearMonth()).then(function(response) {
       transactions.yearMonth = YearMonthService.getDate();
       transactions.dates = response.data.dates;
       transactions.rubrics = response.data.rubrics;
@@ -113,10 +87,10 @@ angular.module("app.transaction").controller("transaction", function($scope, $ti
 
   $scope.updateTransaction = function(transaction) {
     transaction.amountTo = transaction.amountFrom;
-    RestApi.updateTransaction(transaction).then(function(response) {
+    RestApi.updateTransaction(transaction).then(function() {
       MonthTransactionsService.refresh();
       $scope.log = "Транзация обновлена";
-    }, function(response) {
+    }, function() {
       $scope.log = "Ошибка обновления транзакции";
     });
     $timeout(function() {
@@ -125,11 +99,11 @@ angular.module("app.transaction").controller("transaction", function($scope, $ti
   };
 
   $scope.deleteTransaction = function(transaction) {
-    RestApi.deleteTransaction(transaction).then(function(response) {
+    RestApi.deleteTransaction(transaction).then(function() {
       MonthTransactionsService.refresh();
       $scope.editTransactions.splice($scope.editTransactions.indexOf(transaction), 1);
       $scope.log = "Транзация удалена";
-    }, function(response) {
+    }, function() {
       $scope.log = "Ошибка удаления транзакции";
     });
     $timeout(function() {
@@ -170,14 +144,14 @@ angular.module("app.transaction").controller("saveTransaction", function($scope,
   }
 
   $scope.saveTransaction = function() {
-    RestApi.saveTransaction(readTransaction()).then(function(response) {
+    RestApi.saveTransaction(readTransaction()).then(function() {
       $scope.newTransaction.amountFrom = null;
       $scope.newTransaction.tag = null;
       $scope.newTransaction.user = null;
       $scope.newTransaction.comment = null;
       MonthTransactionsService.refresh();
       $scope.log = "Транзакция добавлена";
-    }, function(response) {
+    }, function() {
       $scope.log = "Ошибка добавления транзакции";
     });
     $timeout(function() {

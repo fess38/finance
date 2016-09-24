@@ -12,12 +12,11 @@ angular.module("app.account").controller("account", function($scope, $timeout, R
   $scope.refresh();
 
   $scope.saveAccount = function() {
-    RestApi.saveAccount($scope.newAccount).then(function(response) {
-      $scope.newAccount.name = null;
-      $scope.newAccount.currency = null;
+    RestApi.saveAccount($scope.newAccount).then(function() {
+      $scope.newAccount = null;
       $scope.log = "Счет добавлен";
       $scope.refresh();
-    }, function(response) {
+    }, function() {
       $scope.log = "Ошибка добавления счета";
     });
     $timeout(function() {
@@ -26,9 +25,9 @@ angular.module("app.account").controller("account", function($scope, $timeout, R
   };
 
   $scope.updateAccount = function(account) {
-    RestApi.updateAccount(account).then(function(response) {
+    RestApi.updateAccount(account).then(function() {
       $scope.log = "Счет обновлен";
-    }, function(response) {
+    }, function() {
       $scope.log = "Ошибка обновления счета";
     });
     $timeout(function() {
@@ -37,10 +36,10 @@ angular.module("app.account").controller("account", function($scope, $timeout, R
   };
 
   $scope.deleteAccount = function(account) {
-    RestApi.deleteAccount(account).then(function(response) {
+    RestApi.deleteAccount(account).then(function() {
       $scope.log = "Счет удален";
       $scope.refresh();
-    }, function(response) {
+    }, function() {
       $scope.log = "Ошибка удаления счета";
     });
     $timeout(function() {

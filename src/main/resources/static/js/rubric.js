@@ -9,12 +9,11 @@ angular.module("app.rubric").controller("rubric", function($scope, $timeout, Res
   $scope.refresh();
 
   $scope.saveRubric = function() {
-    RestApi.saveRubric($scope.newRubric).then(function(response) {
-      $scope.newRubric.name = null;
-      $scope.newRubric.isIncome = null;
+    RestApi.saveRubric($scope.newRubric).then(function() {
+      $scope.newRubric = null;
       $scope.log = "Рубрика добавлена";
       $scope.refresh();
-    }, function(response) {
+    }, function() {
       $scope.log = "Ошибка добавления рубрики";
     });
     $timeout(function() {
@@ -23,9 +22,9 @@ angular.module("app.rubric").controller("rubric", function($scope, $timeout, Res
   };
 
   $scope.updateRubric = function(rubric) {
-    RestApi.updateRubric(rubric).then(function(response) {
+    RestApi.updateRubric(rubric).then(function() {
       $scope.log = "Рубрика обновлена";
-    }, function(response) {
+    }, function() {
       $scope.log = "Ошибка обновления рубрики";
     });
     $timeout(function() {
@@ -34,10 +33,10 @@ angular.module("app.rubric").controller("rubric", function($scope, $timeout, Res
   };
 
   $scope.deleteRubric = function(rubric) {
-    RestApi.deleteRubric(rubric).then(function(response) {
+    RestApi.deleteRubric(rubric).then(function() {
       $scope.log = "Рубрика удалена";
       $scope.refresh();
-    }, function(response) {
+    }, function() {
       $scope.log = "Ошибка удаления рубрики";
     });
     $timeout(function() {

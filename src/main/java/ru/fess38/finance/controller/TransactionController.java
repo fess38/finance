@@ -1,7 +1,6 @@
 package ru.fess38.finance.controller;
 
 import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
@@ -32,9 +31,10 @@ public class TransactionController {
 
   @RequestMapping(value = "/transaction/find", method = RequestMethod.GET,
       params = {"year", "month"})
-  public @ResponseBody MonthTransactions find(@RequestParam("year") int year,
+  public @ResponseBody MonthTransactions findTransactions(@RequestParam("year") int year,
       @RequestParam("month") int month) {
-    return transactionDao.find(YearMonth.of(year, month), Group.EXTERNAL);
+    YearMonth yearMonth = YearMonth.of(year, month);
+    return MonthTransactions.of(yearMonth, transactionDao.find(yearMonth, Group.EXTERNAL));
   }
 
   @RequestMapping(value = "/transaction/find", method = RequestMethod.GET,
@@ -59,9 +59,9 @@ public class TransactionController {
     transactionDao.delete(transaction);
   }
 
-  @RequestMapping(value = "/transfer/get", method = RequestMethod.GET)
-  public @ResponseBody List<Transaction> find() {
-    return transactionDao.find(DetachedCriteria.forClass(Transaction.class)
-        .createAlias("rubric", "r").add(Restrictions.eq("r.isTransfer", true)));
+  @RequestMapping(value = "/transfer/find", method = RequestMethod.GET, params = {"year", "month"})
+  public @ResponseBody List<Transaction> findTransfers(@RequestParam("year") int year,
+      @RequestParam("month") int month) {
+    return transactionDao.find(YearMonth.of(year, month), Group.INTERNAL);
   }
 }

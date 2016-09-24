@@ -1,34 +1,42 @@
 angular.module("app.transfer", []);
 
-angular.module("app.transfer").controller("transfer", function($scope, $timeout, RestApi) {
+angular.module("app.transfer").controller("transfer", function($scope, $timeout, RestApi,
+    YearMonthService) {
   var transferRubric;
 
-  $scope.refresh = function() {
-    RestApi.transfers().then(function(response) {
+  RestApi.transferRubric().then(function(response) {
+    transferRubric = response.data;
+  });
+
+  RestApi.accounts().then(function(response) {
+    $scope.accounts = response.data;
+  });
+
+  function refresh() {
+    RestApi.findTransfers(YearMonthService.getYearMonth()).then(function(response) {
       $scope.transfers = response.data;
     });
+  }
 
-    RestApi.transferRubric().then(function(response) {
-      transferRubric = response.data;
-    });
+  refresh();
 
-    RestApi.accounts().then(function(response) {
-      $scope.accounts = response.data;
-    });
+  $scope.nextMonth = function() {
+    YearMonthService.incrementMonth();
+    refresh();
   };
-  $scope.refresh();
+
+  $scope.previousMonth = function() {
+    YearMonthService.decrementMonth();
+    refresh();
+  };
 
   $scope.saveTransfer = function() {
     $scope.newTransfer.rubric = transferRubric;
-    RestApi.saveTransaction($scope.newTransfer).then(function(response) {
-      $scope.newTransfer.aссountFrom = null;
-      $scope.newTransfer.accountTo = null;
-      $scope.newTransfer.amountFrom = null;
-      $scope.newTransfer.amountTo = null;
-      $scope.newTransfer.comment = null;
-      $scope.refresh();
+    RestApi.saveTransaction($scope.newTransfer).then(function() {
+      $scope.newTransfer = null;
+      refresh();
       $scope.log = "Перевод добавлен";
-    }, function(response) {
+    }, function() {
       $scope.log = "Ошибка добавления перевода";
     });
     $timeout(function() {
@@ -37,9 +45,9 @@ angular.module("app.transfer").controller("transfer", function($scope, $timeout,
   };
 
   $scope.updateTransfer = function(transfer) {
-    RestApi.updateTransaction(transfer).then(function(response) {
+    RestApi.updateTransaction(transfer).then(function() {
       $scope.log = "Перевод обновлен";
-    }, function(response) {
+    }, function() {
       $scope.log = "Ошибка обновления перевода";
     });
     $timeout(function() {
@@ -48,10 +56,10 @@ angular.module("app.transfer").controller("transfer", function($scope, $timeout,
   };
 
   $scope.deleteTransfer = function(transfer) {
-    RestApi.deleteTransaction(transfer).then(function(response) {
-      $scope.refresh();
+    RestApi.deleteTransaction(transfer).then(function() {
+      refresh();
       $scope.log = "Перевод удален";
-    }, function(response) {
+    }, function() {
       $scope.log = "Ошибка удаления перевода";
     });
   };
