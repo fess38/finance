@@ -3,11 +3,12 @@ angular.module("app", ["ngRoute", "ui.bootstrap",
 
 angular.module("app").config(function($routeProvider) {
   $routeProvider
-      .when("/", {templateUrl: "transaction.html"})
+      .when("/", {templateUrl: "transactionAdd.html"})
       .when("/account", {templateUrl: "account.html"})
       .when("/rubric", {templateUrl: "rubric.html"})
       .when("/tag", {templateUrl: "tag.html"})
       .when("/transaction", {templateUrl: "transaction.html"})
+      .when("/transactionAdd", {templateUrl: "transactionAdd.html"})
       .when("/transfer", {templateUrl: "transfer.html"})
       .when("/user", {templateUrl: "user.html"})
 });

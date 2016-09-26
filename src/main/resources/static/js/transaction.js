@@ -113,7 +113,7 @@ angular.module("app.transaction").controller("transaction", function($scope, $ti
 });
 
 angular.module("app.transaction").controller("saveTransaction", function($scope, $timeout,
-    RestApi, MonthTransactionsService) {
+    RestApi) {
   var masterAccount, outerAccount;
   RestApi.masterAccount().then(function(response) {
     masterAccount = response.data;
@@ -149,7 +149,6 @@ angular.module("app.transaction").controller("saveTransaction", function($scope,
       $scope.newTransaction.tag = null;
       $scope.newTransaction.user = null;
       $scope.newTransaction.comment = null;
-      MonthTransactionsService.refresh();
       $scope.log = "Транзакция добавлена";
     }, function() {
       $scope.log = "Ошибка добавления транзакции";
