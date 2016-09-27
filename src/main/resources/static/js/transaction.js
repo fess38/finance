@@ -113,7 +113,7 @@ angular.module("app.transaction").controller("transaction", function($scope, $ti
 });
 
 angular.module("app.transaction").controller("saveTransaction", function($scope, $timeout,
-    RestApi) {
+    RestApi, YearMonthService) {
   var masterAccount, outerAccount;
   RestApi.masterAccount().then(function(response) {
     masterAccount = response.data;
@@ -129,6 +129,8 @@ angular.module("app.transaction").controller("saveTransaction", function($scope,
   RestApi.tags().then(function(response) {
     $scope.tags = response.data;
   });
+
+  $scope.newTransaction = {dayRef: YearMonthService.getFormattedDate()};
 
   function readTransaction() {
     var newTransaction = $scope.newTransaction;

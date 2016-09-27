@@ -18,7 +18,10 @@ angular.module("app.transfer").controller("transfer", function($scope, $timeout,
     });
   }
 
-  refresh();
+  function clearForm() {
+    $scope.newTransfer = {dayRef: YearMonthService.getFormattedDate()};
+  }
+
 
   $scope.nextMonth = function() {
     YearMonthService.incrementMonth();
@@ -30,11 +33,14 @@ angular.module("app.transfer").controller("transfer", function($scope, $timeout,
     refresh();
   };
 
+  refresh();
+  clearForm();
+
   $scope.saveTransfer = function() {
     $scope.newTransfer.rubric = transferRubric;
     RestApi.saveTransaction($scope.newTransfer).then(function() {
-      $scope.newTransfer = null;
       refresh();
+      clearForm();
       $scope.log = "Перевод добавлен";
     }, function() {
       $scope.log = "Ошибка добавления перевода";

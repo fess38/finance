@@ -24,6 +24,14 @@ angular.module("app").service("YearMonthService", function() {
     return date;
   };
 
+  this.getFormattedDate = function() {
+    var month = date.getMonth() + 1;
+    if (month < 10) {
+      month = "0" + month;
+    }
+    return date.getFullYear() + "-" + month + "-" + date.getDate();
+  };
+
   this.incrementMonth = function() {
     date.setMonth(date.getMonth() + 1);
   };
