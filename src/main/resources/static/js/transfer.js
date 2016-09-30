@@ -1,7 +1,7 @@
 angular.module("app.transfer", []);
 
-angular.module("app.transfer").controller("transfer", function($scope, $timeout, RestApi,
-    YearMonthService) {
+angular.module("app.transfer").controller("transfer", function($scope, RestApi, YearMonthService,
+    AlertService) {
   var transferRubric;
 
   RestApi.transferRubric().then(function(response) {
@@ -22,7 +22,6 @@ angular.module("app.transfer").controller("transfer", function($scope, $timeout,
     $scope.newTransfer = {dayRef: YearMonthService.getFormattedDate()};
   }
 
-
   $scope.nextMonth = function() {
     YearMonthService.incrementMonth();
     refresh();
@@ -39,34 +38,28 @@ angular.module("app.transfer").controller("transfer", function($scope, $timeout,
   $scope.saveTransfer = function() {
     $scope.newTransfer.rubric = transferRubric;
     RestApi.saveTransaction($scope.newTransfer).then(function() {
+      $scope.alert = AlertService.success("Перевод добавлен");
       refresh();
       clearForm();
-      $scope.log = "Перевод добавлен";
     }, function() {
-      $scope.log = "Ошибка добавления перевода";
+      $scope.alert = AlertService.danger("Ошибка добавления перевода");
     });
-    $timeout(function() {
-      $scope.log = null;
-    }, 3000);
   };
 
   $scope.updateTransfer = function(transfer) {
     RestApi.updateTransaction(transfer).then(function() {
-      $scope.log = "Перевод обновлен";
+      $scope.alert = AlertService.success("Перевод обновлен");
     }, function() {
-      $scope.log = "Ошибка обновления перевода";
+      $scope.alert = AlertService.danger("Ошибка обновления перевода");
     });
-    $timeout(function() {
-      $scope.log = null;
-    }, 3000);
   };
 
   $scope.deleteTransfer = function(transfer) {
     RestApi.deleteTransaction(transfer).then(function() {
+      $scope.alert = AlertService.success("Перевод удален");
       refresh();
-      $scope.log = "Перевод удален";
     }, function() {
-      $scope.log = "Ошибка удаления перевода";
+      $scope.alert = AlertService.danger("Ошибка удаления перевода");
     });
   };
 

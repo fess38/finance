@@ -1,6 +1,6 @@
 angular.module("app.tag", []);
 
-angular.module("app.tag").controller("tag", function($scope, $timeout, RestApi) {
+angular.module("app.tag").controller("tag", function($scope, AlertService, RestApi) {
   $scope.refresh = function() {
     RestApi.tags().then(function(response) {
       $scope.tags = response.data;
@@ -10,37 +10,28 @@ angular.module("app.tag").controller("tag", function($scope, $timeout, RestApi) 
 
   $scope.saveTag = function() {
     RestApi.saveTag($scope.newTag).then(function() {
+      $scope.alert = AlertService.success("Тэг добавлен");
       $scope.newTag = null;
-      $scope.log = "Тэг добавлен";
       $scope.refresh();
     }, function() {
-      $scope.log = "Ошибка добавления тэга";
+      $scope.alert = AlertService.danger("Ошибка добавления тэга");
     });
-    $timeout(function() {
-      $scope.log = null;
-    }, 3000);
   };
 
   $scope.updateTag = function(tag) {
     RestApi.updateTag(tag).then(function() {
-      $scope.log = "Тэг обновлен";
+      $scope.alert = AlertService.success("Тэг обновлен");
     }, function() {
-      $scope.log = "Ошибка обновления тэга";
+      $scope.alert = AlertService.danger("Ошибка обновления тэга");
     });
-    $timeout(function() {
-      $scope.log = null;
-    }, 3000);
   };
 
   $scope.deleteTag = function(tag) {
     RestApi.deleteTag(tag).then(function() {
-      $scope.log = "Тэг удален";
+      $scope.alert = AlertService.success("Тэг удален");
       $scope.refresh();
     }, function() {
-      $scope.log = "Ошибка удаления тэга";
+      $scope.alert = AlertService.danger("Ошибка удаления тэга");
     });
-    $timeout(function() {
-      $scope.log = null;
-    }, 3000);
   }
 });

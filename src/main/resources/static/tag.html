@@ -26,5 +26,5 @@
   </table>
   <form ng-submit="saveTag()" id="saveTag"></form>
   <br>
-  {{log}}
+  <div ng-show="alert.show" class="{{alert.type}}">{{alert.msg}}</div>
 </div>

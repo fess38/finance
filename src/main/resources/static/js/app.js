@@ -40,3 +40,33 @@ angular.module("app").service("YearMonthService", function() {
     date.setMonth(date.getMonth() - 1);
   };
 });
+
+angular.module("app").service("AlertService", function($timeout) {
+  this.info = function(msg) {
+    return response("info", msg);
+  };
+
+  this.success = function(msg) {
+    return response("success", msg);
+  };
+
+  this.warning = function(msg) {
+    return response("warning", msg);
+  };
+
+  this.danger = function(msg) {
+    return response("danger", msg);
+  };
+
+  function response(type, msg) {
+    var alert = {type: "alert alert-" + type, msg: msg, show: true};
+    hide(alert);
+    return alert;
+  }
+
+  function hide(alert) {
+    $timeout(function() {
+      alert.show = false;
+    }, 3000);
+  }
+});

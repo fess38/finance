@@ -17,7 +17,7 @@ angular.module("app.transaction").service("MonthTransactionsService", function(R
   };
 });
 
-angular.module("app.transaction").controller("transaction", function($scope, $timeout,
+angular.module("app.transaction").controller("transaction", function($scope, AlertService,
     MonthTransactionsService, YearMonthService, RestApi) {
   function clearEditor() {
     $scope.editTransactions = [];
@@ -88,31 +88,25 @@ angular.module("app.transaction").controller("transaction", function($scope, $ti
   $scope.updateTransaction = function(transaction) {
     transaction.amountTo = transaction.amountFrom;
     RestApi.updateTransaction(transaction).then(function() {
+      $scope.alert = AlertService.success("Транзация обновлена");
       MonthTransactionsService.refresh();
-      $scope.log = "Транзация обновлена";
     }, function() {
-      $scope.log = "Ошибка обновления транзакции";
+      $scope.alert = AlertService.danger("Ошибка обновления транзакции");
     });
-    $timeout(function() {
-      $scope.log = null;
-    }, 3000);
   };
 
   $scope.deleteTransaction = function(transaction) {
     RestApi.deleteTransaction(transaction).then(function() {
+      $scope.alert = AlertService.success("Транзация удалена");
       MonthTransactionsService.refresh();
       $scope.editTransactions.splice($scope.editTransactions.indexOf(transaction), 1);
-      $scope.log = "Транзация удалена";
     }, function() {
-      $scope.log = "Ошибка удаления транзакции";
+      $scope.alert = AlertService.danger("Ошибка удаления транзакции");
     });
-    $timeout(function() {
-      $scope.log = null;
-    }, 3000);
   };
 });
 
-angular.module("app.transaction").controller("saveTransaction", function($scope, $timeout,
+angular.module("app.transaction").controller("saveTransaction", function($scope, AlertService,
     RestApi, YearMonthService) {
   var masterAccount, outerAccount;
   RestApi.masterAccount().then(function(response) {
@@ -147,17 +141,14 @@ angular.module("app.transaction").controller("saveTransaction", function($scope,
 
   $scope.saveTransaction = function() {
     RestApi.saveTransaction(readTransaction()).then(function() {
+      $scope.alert = AlertService.success("Транзакция добавлена");
       $scope.newTransaction.amountFrom = null;
       $scope.newTransaction.tag = null;
       $scope.newTransaction.user = null;
       $scope.newTransaction.comment = null;
-      $scope.log = "Транзакция добавлена";
     }, function() {
-      $scope.log = "Ошибка добавления транзакции";
+      $scope.alert = AlertService.danger("Ошибка добавления транзакции");
     });
-    $timeout(function() {
-      $scope.log = null;
-    }, 3000);
   };
 
   $scope.changeType = function(type) {

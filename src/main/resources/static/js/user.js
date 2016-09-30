@@ -1,6 +1,6 @@
 angular.module("app.user", []);
 
-angular.module("app.user").controller("user", function($scope, $timeout, RestApi) {
+angular.module("app.user").controller("user", function($scope, RestApi, AlertService) {
   $scope.refresh = function() {
     RestApi.users().then(function(response) {
       $scope.users = response.data;
@@ -11,37 +11,28 @@ angular.module("app.user").controller("user", function($scope, $timeout, RestApi
   $scope.saveUser = function() {
     RestApi.saveUser($scope.newUser).then(function() {
       $scope.newUser = null;
-      $scope.log = "Пользователь добавлен";
+      $scope.alert = AlertService.success("Пользователь добавлен");
       $scope.refresh();
     }, function() {
-      $scope.log = "Ошибка добавления пользователя";
+      $scope.alert = AlertService.danger("Ошибка добавления пользователя");
     });
-
-    $timeout(function() {
-      $scope.log = null;
-    }, 3000);
   };
 
   $scope.updateUser = function(user) {
     RestApi.updateUser(user).then(function() {
-      $scope.log = "Пользователь обновлен";
+      $scope.alert = AlertService.success("Пользователь обновлен");
     }, function() {
-      $scope.log = "Ошибка обновления пользователя";
+      $scope.alert = AlertService.danger("Ошибка обновления пользователя");
     });
-    $timeout(function() {
-      $scope.log = null;
-    }, 3000);
   };
 
   $scope.deleteUser = function(user) {
-    RestApi.deleteUser(user).then(function() {
-      $scope.log = "Пользователь удален";
+    RestApi.deleteUser(user).then(function(response) {
+      console.log(response.data);
+      $scope.alert = AlertService.success("Пользователь удален");
       $scope.refresh();
     }, function() {
-      $scope.log = "Ошибка удаления пользователя";
+      $scope.alert = AlertService.danger("Ошибка удаления пользователя");
     });
-    $timeout(function() {
-      $scope.log = null;
-    }, 3000);
   }
 });

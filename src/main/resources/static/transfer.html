@@ -55,5 +55,5 @@
     </tr>
   </table>
   <form ng-submit="saveTransfer()" id="saveTransfer"></form>
-  <div>{{log}}</div>
+  <div ng-show="alert.show" class="{{alert.type}}">{{alert.msg}}</div>
 </div>

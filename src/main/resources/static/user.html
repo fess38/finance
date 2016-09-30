@@ -26,5 +26,5 @@
   </table>
   <br>
   <form ng-submit="saveUser()" id="saveUser"></form>
-  {{log}}
+  <div ng-show="alert.show" class="{{alert.type}}">{{alert.msg}}</div>
 </div>

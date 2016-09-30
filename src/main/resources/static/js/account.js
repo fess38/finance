@@ -1,6 +1,6 @@
 angular.module("app.account", []);
 
-angular.module("app.account").controller("account", function($scope, $timeout, RestApi) {
+angular.module("app.account").controller("account", function($scope, AlertService, RestApi) {
   $scope.refresh = function() {
     RestApi.accounts().then(function(response) {
       $scope.accounts = response.data;
@@ -13,37 +13,28 @@ angular.module("app.account").controller("account", function($scope, $timeout, R
 
   $scope.saveAccount = function() {
     RestApi.saveAccount($scope.newAccount).then(function() {
+      $scope.alert = AlertService.success("Счет добавлен");
       $scope.newAccount = null;
-      $scope.log = "Счет добавлен";
       $scope.refresh();
     }, function() {
-      $scope.log = "Ошибка добавления счета";
+      $scope.alert = AlertService.danger("Ошибка добавления счета");
     });
-    $timeout(function() {
-      $scope.log = null;
-    }, 3000);
   };
 
   $scope.updateAccount = function(account) {
     RestApi.updateAccount(account).then(function() {
-      $scope.log = "Счет обновлен";
+      $scope.alert = AlertService.success("Счет обновлен");
     }, function() {
-      $scope.log = "Ошибка обновления счета";
+      $scope.alert = AlertService.danger("Ошибка обновления счета");
     });
-    $timeout(function() {
-      $scope.log = null;
-    }, 3000);
   };
 
   $scope.deleteAccount = function(account) {
     RestApi.deleteAccount(account).then(function() {
-      $scope.log = "Счет удален";
+      $scope.alert = AlertService.success("Счет удален");
       $scope.refresh();
     }, function() {
-      $scope.log = "Ошибка удаления счета";
+      $scope.alert = AlertService.danger("Ошибка удаления счета");
     });
-    $timeout(function() {
-      $scope.log = null;
-    }, 3000);
   }
 });

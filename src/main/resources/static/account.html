@@ -36,5 +36,5 @@
     </tr>
   </table>
   <form ng-submit="saveAccount()" id="saveAccount"></form>
-  {{log}}
+  <div ng-show="alert.show" class="{{alert.type}}">{{alert.msg}}</div>
 </div>
