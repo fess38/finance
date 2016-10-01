@@ -1,4 +1,4 @@
-angular.module("app", ["ngRoute", "ui.bootstrap",
+angular.module("app", ["ngRoute", "ui.bootstrap", "ngAnimate", "ngSanitize",
   "app.restApi", "app.transaction", "app.transfer", "app.rubric", "app.tag", "app.user", "app.account"]);
 
 angular.module("app").config(function($routeProvider) {
@@ -22,18 +22,6 @@ angular.module("app").service("YearMonthService", function() {
 
   this.getDate = function() {
     return date;
-  };
-
-  this.getFormattedDate = function() {
-    var month = date.getMonth() + 1;
-    var day = date.getDate();
-    if (month < 10) {
-      month = "0" + month;
-    }
-    if (day < 10) {
-      day = "0" + day;
-    }
-    return date.getFullYear() + "-" + month + "-" + day;
   };
 
   this.incrementMonth = function() {

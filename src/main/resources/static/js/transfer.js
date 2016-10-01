@@ -3,6 +3,7 @@ angular.module("app.transfer", []);
 angular.module("app.transfer").controller("transfer", function($scope, RestApi, YearMonthService,
     AlertService) {
   var transferRubric;
+  $scope.newTransfer = {dayRef: new Date()};
 
   RestApi.transferRubric().then(function(response) {
     transferRubric = response.data;
@@ -18,10 +19,6 @@ angular.module("app.transfer").controller("transfer", function($scope, RestApi, 
     });
   }
 
-  function clearForm() {
-    $scope.newTransfer = {dayRef: YearMonthService.getFormattedDate()};
-  }
-
   $scope.nextMonth = function() {
     YearMonthService.incrementMonth();
     refresh();
@@ -33,7 +30,6 @@ angular.module("app.transfer").controller("transfer", function($scope, RestApi, 
   };
 
   refresh();
-  clearForm();
 
   $scope.saveTransfer = function() {
     $scope.newTransfer.rubric = transferRubric;
@@ -68,5 +64,15 @@ angular.module("app.transfer").controller("transfer", function($scope, RestApi, 
         $scope.newTransfer.accountFrom.id === $scope.newTransfer.accountTo.id) {
       $scope.newTransfer.accountTo = null;
     }
+  };
+
+  // Календарь
+  $scope.calendar = {};
+  $scope.calendar.open = function() {
+    $scope.calendar.opened = !$scope.calendar.opened;
+  };
+  $scope.calendar.options = {
+    initDate: new Date(),
+    showWeeks: false
   };
 });

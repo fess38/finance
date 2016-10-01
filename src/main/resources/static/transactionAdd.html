@@ -3,7 +3,9 @@
     <tr>
       <td>Дата:</td>
       <td>
-        <input ng-model="newTransaction.dayRef" type="text" placeholder="2016-01-31" required form="saveTransaction">
+        <input uib-datepicker-popup="d MMM yyyy" ng-model="newTransaction.dayRef" is-open="calendar.opened"
+            ng-click="calendar.open()" form="saveTransaction" readonly required datepicker-options="calendar.options"
+            show-button-bar="false"/>
       </td>
     </tr>
     <tr>

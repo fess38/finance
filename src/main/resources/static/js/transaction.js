@@ -109,6 +109,8 @@ angular.module("app.transaction").controller("transaction", function($scope, Ale
 angular.module("app.transaction").controller("saveTransaction", function($scope, AlertService,
     RestApi, YearMonthService) {
   var masterAccount, outerAccount;
+  $scope.newTransaction = {dayRef: new Date()};
+
   RestApi.masterAccount().then(function(response) {
     masterAccount = response.data;
   });
@@ -123,8 +125,6 @@ angular.module("app.transaction").controller("saveTransaction", function($scope,
   RestApi.tags().then(function(response) {
     $scope.tags = response.data;
   });
-
-  $scope.newTransaction = {dayRef: YearMonthService.getFormattedDate()};
 
   function readTransaction() {
     var newTransaction = $scope.newTransaction;
@@ -161,5 +161,15 @@ angular.module("app.transaction").controller("saveTransaction", function($scope,
         $scope.rubrics = response.data;
       });
     }
+  };
+
+  // Календарь
+  $scope.calendar = {};
+  $scope.calendar.open = function() {
+    $scope.calendar.opened = !$scope.calendar.opened;
+  };
+  $scope.calendar.options = {
+    initDate: new Date(),
+    showWeeks: false
   };
 });

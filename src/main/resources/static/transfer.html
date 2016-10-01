@@ -14,7 +14,9 @@
     </tr>
     <tr>
       <td>
-        <input ng-model="newTransfer.dayRef" type="text" placeholder="2016-09-18" required form="saveTransfer">
+        <input uib-datepicker-popup="d MMM yyyy" ng-model="newTransfer.dayRef" is-open="calendar.opened"
+            ng-click="calendar.open()" form="saveTransfer" readonly required datepicker-options="calendar.options"
+            show-button-bar="false"/>
       </td>
       <td>
         <select ng-model="newTransfer.accountFrom" ng-change="checkEquals()" form="saveTransfer"

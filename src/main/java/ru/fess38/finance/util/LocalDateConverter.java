@@ -19,7 +19,7 @@ public class LocalDateConverter implements JsonSerializer<LocalDate>, JsonDeseri
 
   @Override
   public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
-    String localDate = json.getAsString().replace("\"", "");
+    String localDate = json.getAsString().replace("\"", "").substring(0, 10);
     return LocalDate.parse(localDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
   }
 }
