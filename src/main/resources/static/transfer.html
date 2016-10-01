@@ -33,10 +33,17 @@
       <td>
         <input ng-model="newTransfer.amountFrom" type="number" min="1" required form="saveTransfer">
       </td>
-      <td><input ng-model="newTransfer.amountTo" type="number" min="1" required form="saveTransfer">
+      <td>
+        <input ng-model="newTransfer.amountTo" type="number" min="1" required form="saveTransfer">
       </td>
-      <td><input ng-model="newTransfer.comment" type="text" size="25" form="saveTransfer"></td>
-      <td><input type="submit" value="Добавить" form="saveTransfer"></td>
+      <td>
+        <input ng-model="newTransfer.comment" type="text" size="25" form="saveTransfer">
+      </td>
+      <td>
+        <button form="saveTransfer">
+          <span class="glyphicon glyphicon-floppy-save"></span>
+        </button>
+      </td>
     </tr>
     <tr ng-repeat="t in transfers | orderBy:'dayRef':true">
       <td>{{t.dayRef | date:"d MMM yyyy"}}</td>
@@ -52,7 +59,9 @@
         <input ng-model="t.comment" type="text" size="25" ng-blur="updateTransfer(t)">
       </td>
       <td>
-        <input type="submit" value="Удалить" ng-click="deleteTransfer(t)">
+        <button ng-click="deleteTransfer(t)">
+          <span class="glyphicon glyphicon-remove"></span>
+        </button>
       </td>
     </tr>
   </table>

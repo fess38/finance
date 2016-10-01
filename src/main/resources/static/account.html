@@ -4,7 +4,6 @@
       <th>Счет</th>
       <th>Валюта</th>
       <th>Баланс</th>
-      <th>Транзакций</th>
       <th></th>
     </tr>
     <tr>
@@ -17,9 +16,10 @@
         </select>
       </td>
       <td></td>
-      <td></td>
       <td>
-        <button form="saveAccount">Добавить</button>
+        <button form="saveAccount">
+          <span class="glyphicon glyphicon-floppy-save"></span>
+        </button>
       </td>
     </tr>
     <tr ng-repeat="account in accounts | filter:{type:'!OUTER'} | orderBy:['type', 'name']">
@@ -28,9 +28,9 @@
       </td>
       <td>{{account.currency.name}}({{account.currency.symbol}})</td>
       <td>{{account.balance}}</td>
-      <td>{{account.amountTransactions}}</td>
       <td>
-        <button ng-click="deleteAccount(account)" ng-disabled="account.hasTransactions">Удалить
+        <button ng-click="deleteAccount(account)" ng-disabled="account.hasTransactions">
+          <span class="glyphicon glyphicon-remove"></span>
         </button>
       </td>
     </tr>

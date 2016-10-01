@@ -3,7 +3,6 @@
     <tr>
       <th>Рубрика</th>
       <th>Доход?</th>
-      <th>Транзакций</th>
       <th></th>
     </tr>
     <tr>
@@ -13,9 +12,10 @@
       <td>
         <input ng-model="newRubric.isIncome" type="checkbox" form="saveRubric">
       </td>
-      <td></td>
       <td>
-        <button form="saveRubric">Добавить</button>
+        <button form="saveRubric">
+          <span class="glyphicon glyphicon-floppy-save"></span>
+        </button>
       </td>
     </tr>
     <tr ng-repeat="rubric in rubrics | orderBy:['isIncome','name']">
@@ -23,12 +23,12 @@
         <input ng-model="rubric.name" type="text" size="25" ng-blur="updateRubric(rubric)">
       </td>
       <td>
-        <input ng-model="rubric.isIncome" type="checkbox" disabled>
+        <span ng-if="rubric.isIncome" class="glyphicon glyphicon-plus-sign"></span>
+        <span ng-if="!rubric.isIncome" class="glyphicon glyphicon-minus-sign"></span>
       </td>
-      <td>{{rubric.amountTransactions}}</td>
       <td>
         <button ng-click="deleteRubric(rubric)" ng-disabled="rubric.hasTransactions">
-          Удалить
+          <span class="glyphicon glyphicon-remove"></span>
         </button>
       </td>
     </tr>

@@ -43,7 +43,7 @@
       <th>Тэг</th>
       <th>Сумма</th>
       <th>Комментарий</th>
-      <th>Действие</th>
+      <th></th>
     </tr>
     <tr ng-repeat="t in editTransactions | orderBy:'id':true">
       <td>
@@ -65,7 +65,9 @@
         <input ng-model="t.comment" type="text" size="25" ng-blur="updateTransaction(t)">
       </td>
       <td>
-        <input type="submit" value="Удалить" ng-click="deleteTransaction(t)">
+        <button ng-click="deleteTransaction(t)">
+          <span class="glyphicon glyphicon-remove"></span>
+        </button>
       </td>
     </tr>
   </table>

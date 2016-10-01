@@ -2,25 +2,26 @@
   <table>
     <tr>
       <th>Тэг</th>
-      <th>Транзакций</th>
       <th></th>
     </tr>
     <tr>
       <td>
         <input ng-model="newTag.name" type="text" maxlength="25" required form="saveTag">
       </td>
-      <td></td>
       <td>
-        <button form="saveTag">Добавить</button>
+        <button form="saveTag">
+          <span class="glyphicon glyphicon-floppy-save"></span>
+        </button>
       </td>
     </tr>
     <tr ng-repeat="tag in tags | orderBy:'name'">
       <td>
         <input ng-model="tag.name" type="text" size="25" ng-blur="updateTag(tag)">
       </td>
-      <td>{{tag.amountTransactions}}</td>
       <td>
-        <button ng-click="deleteTag(tag)" ng-disabled="tag.hasTransactions">Удалить</button>
+        <button ng-click="deleteTag(tag)" ng-disabled="tag.hasTransactions">
+          <span class="glyphicon glyphicon-remove"></span>
+        </button>
       </td>
     </tr>
   </table>

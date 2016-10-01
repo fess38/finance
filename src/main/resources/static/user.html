@@ -2,25 +2,26 @@
   <table>
     <tr>
       <th>Пользователь</th>
-      <th>Транзакций</th>
       <th></th>
     </tr>
     <tr>
       <td>
         <input ng-model="newUser.name" type="text" maxlength="25" required form="saveUser">
       </td>
-      <td></td>
       <td>
-        <button form="saveUser">Добавить</button>
+        <button form="saveUser">
+          <span class="glyphicon glyphicon-floppy-save"></span>
+        </button>
       </td>
     </tr>
     <tr ng-repeat="user in users | orderBy:'name'">
       <td>
         <input ng-model="user.name" type="text" size="25" ng-blur="updateUser(user)">
       </td>
-      <td>{{user.amountTransactions}}</td>
       <td>
-        <button ng-click="deleteUser(user)" ng-disabled="user.hasTransactions">Удалить</button>
+        <button ng-click="deleteUser(user)" ng-disabled="user.hasTransactions">
+          <span class="glyphicon glyphicon-remove"></span>
+        </button>
       </td>
     </tr>
   </table>
