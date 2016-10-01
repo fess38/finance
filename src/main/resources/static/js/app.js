@@ -26,10 +26,14 @@ angular.module("app").service("YearMonthService", function() {
 
   this.getFormattedDate = function() {
     var month = date.getMonth() + 1;
+    var day = date.getDate();
     if (month < 10) {
       month = "0" + month;
     }
-    return date.getFullYear() + "-" + month + "-" + date.getDate();
+    if (day < 10) {
+      day = "0" + day;
+    }
+    return date.getFullYear() + "-" + month + "-" + day;
   };
 
   this.incrementMonth = function() {
