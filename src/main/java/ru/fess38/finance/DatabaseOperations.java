@@ -31,6 +31,6 @@ public class DatabaseOperations {
       Link link = restClient.getUploadLink(backupDir + "/" + filename, false);
       restClient.uploadFile(link, false, file, null);
     }
-    restClient.copy(backupDir, cloudDir, false);
+    restClient.copy(backupDir, cloudDir, true);
   }
 }
