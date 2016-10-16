@@ -2,17 +2,22 @@ package ru.fess38.finance;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.yandex.disk.rest.Credentials;
+import com.yandex.disk.rest.RestClient;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.scheduling.annotation.Scheduled;
 import ru.fess38.finance.dao.AccountDao;
 import ru.fess38.finance.dao.CurrencyDao;
 import ru.fess38.finance.dao.RubricDao;
@@ -35,6 +40,8 @@ public class AppConfiguration {
   private AccountDao accountDao;
   @Autowired
   private CurrencyDao currencyDao;
+  @Autowired
+  private RestClient restClient;
 
   @PostConstruct
   public void create() {
@@ -82,6 +89,20 @@ public class AppConfiguration {
   }
 
   @Bean
+  public RestClient restClient(@Value("${disk.user}") String user, @Value("${disk.token}") String
+      token) throws Exception {
+    RestClient restClient = new RestClient(new Credentials(user, token));
+    new DatabaseOperations().download(restClient);
+    return restClient;
+  }
+
+  @Scheduled(fixedRate = 300000, initialDelay = 60000)
+  public void uploadDatabase() throws Exception {
+    new DatabaseOperations().upload(restClient);
+  }
+
+  @Bean
+  @DependsOn("restClient")
   public DataSource dataSource() {
     HikariConfig config = new HikariConfig("/ru/fess38/finance/hikari.properties");
     return new HikariDataSource(config);

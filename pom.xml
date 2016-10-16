@@ -16,16 +16,15 @@
   </properties>
 
   <dependencies>
+    <!-- Test -->
     <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-core</artifactId>
-      <version>${hibernate.version}</version>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-java8</artifactId>
-      <version>${hibernate.version}</version>
-    </dependency>
+
+    <!-- Spring -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-core</artifactId>
@@ -46,22 +45,8 @@
       <artifactId>spring-tx</artifactId>
       <version>${spring.version}</version>
     </dependency>
-    <dependency>
-      <groupId>com.zaxxer</groupId>
-      <artifactId>HikariCP</artifactId>
-      <version>2.4.7</version>
-    </dependency>
-    <dependency>
-      <groupId>org.hsqldb</groupId>
-      <artifactId>hsqldb</artifactId>
-      <version>2.3.4</version>
-    </dependency>
-    <dependency>
-      <groupId>com.akathist.maven.plugins.launch4j</groupId>
-      <artifactId>launch4j-maven-plugin</artifactId>
-      <version>1.7.8</version>
-      <type>maven-plugin</type>
-    </dependency>
+
+    <!-- Spring Boot -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
@@ -82,10 +67,29 @@
       <artifactId>spring-boot-starter-jetty</artifactId>
       <version>${spring.boot.version}</version>
     </dependency>
+
+    <!-- Hibernate -->
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-freemarker</artifactId>
-      <version>${spring.boot.version}</version>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>${hibernate.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-java8</artifactId>
+      <version>${hibernate.version}</version>
+    </dependency>
+
+    <!-- Other -->
+    <dependency>
+      <groupId>com.zaxxer</groupId>
+      <artifactId>HikariCP</artifactId>
+      <version>2.4.7</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
+      <version>2.3.4</version>
     </dependency>
     <dependency>
       <groupId>com.google.code.gson</groupId>
@@ -98,10 +102,9 @@
       <version>3.4</version>
     </dependency>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.12</version>
-      <scope>test</scope>
+      <groupId>com.yandex.android</groupId>
+      <artifactId>disk-restapi-sdk</artifactId>
+      <version>1.03</version>
     </dependency>
   </dependencies>
 
