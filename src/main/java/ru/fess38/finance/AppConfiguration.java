@@ -89,9 +89,9 @@ public class AppConfiguration {
   }
 
   @Bean
-  public RestClient restClient(@Value("${disk.user}") String user, @Value("${disk.token}") String
+  public RestClient restClient(@Value("#{environment.disktoken}") String
       token) throws Exception {
-    RestClient restClient = new RestClient(new Credentials(user, token));
+    RestClient restClient = new RestClient(new Credentials("", token));
     new DatabaseOperations().download(restClient);
     return restClient;
   }
