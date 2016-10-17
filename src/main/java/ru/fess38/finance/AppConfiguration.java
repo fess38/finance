@@ -34,6 +34,8 @@ import javax.sql.DataSource;
 
 @Configuration
 public class AppConfiguration {
+  @Value("#{environment.mode}")
+  private String mode;
   @Autowired
   private RubricDao rubricDao;
   @Autowired
@@ -89,16 +91,17 @@ public class AppConfiguration {
   }
 
   @Bean
-  public RestClient restClient(@Value("#{environment.disktoken}") String
-      token) throws Exception {
+  public RestClient restClient(@Value("#{environment.disktoken}") String token) throws Exception {
     RestClient restClient = new RestClient(new Credentials("", token));
     new DatabaseOperations().download(restClient);
     return restClient;
   }
 
-  @Scheduled(fixedRate = 300000, initialDelay = 60000)
+  @Scheduled(fixedRate = 600000, initialDelay = 60000)
   public void uploadDatabase() throws Exception {
-    new DatabaseOperations().upload(restClient);
+    if ("write".equals(mode)) {
+      new DatabaseOperations().upload(restClient);
+    }
   }
 
   @Bean
