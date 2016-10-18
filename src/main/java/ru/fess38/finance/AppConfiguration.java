@@ -4,13 +4,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.yandex.disk.rest.Credentials;
 import com.yandex.disk.rest.RestClient;
+import com.yandex.disk.rest.json.Link;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -27,13 +27,20 @@ import ru.fess38.finance.model.Currency;
 import ru.fess38.finance.model.Rubric;
 import ru.fess38.finance.util.LocalDateConverter;
 
+import java.io.File;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 
 @Configuration
 public class AppConfiguration {
+  private final List<String> fileNames = Arrays.asList("Finance.script", "Finance.properties",
+      "Finance.log");
+  private final File localDir = new File("./db");
+  private final String cloudDir = "/finance/db/";
   @Value("#{environment.mode}")
   private String mode;
   @Autowired
@@ -93,15 +100,34 @@ public class AppConfiguration {
   @Bean
   public RestClient restClient(@Value("#{environment.disktoken}") String token) throws Exception {
     RestClient restClient = new RestClient(new Credentials("", token));
-    new DatabaseOperations().download(restClient);
+    download(restClient);
     return restClient;
   }
 
-  @Scheduled(fixedRate = 600000, initialDelay = 60000)
-  public void uploadDatabase() throws Exception {
-    if ("write".equals(mode)) {
-      new DatabaseOperations().upload(restClient);
+  private void download(RestClient restClient) throws Exception {
+    File[] files = localDir.listFiles() == null ? new File[]{} : localDir.listFiles();
+    Arrays.stream(files).forEach(File::delete);
+    localDir.mkdir();
+    for (String filename : fileNames) {
+      File file = new File(localDir, filename);
+      restClient.downloadFile(cloudDir + filename, file, null);
     }
+  }
+
+  @Scheduled(fixedRate = 600000, initialDelay = 60000)
+  public void upload() throws Exception {
+    if (!"write".equals(mode)) {
+      return;
+    }
+
+    String backupDir = "/finance/backup/" + String.valueOf(System.currentTimeMillis());
+    restClient.makeFolder(backupDir);
+    for (String filename : fileNames) {
+      File file = new File(localDir, filename);
+      Link link = restClient.getUploadLink(backupDir + "/" + filename, false);
+      restClient.uploadFile(link, false, file, null);
+    }
+    restClient.copy(backupDir, cloudDir, true);
   }
 
   @Bean
@@ -129,11 +155,5 @@ public class AppConfiguration {
         .create();
     gsonHttpMessageConverter.setGson(gson);
     return gsonHttpMessageConverter;
-  }
-
-  @Bean
-  @Autowired
-  public HttpMessageConverters convertersToBeUsed(GsonHttpMessageConverter converter) {
-    return new HttpMessageConverters(converter);
   }
 }

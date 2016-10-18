@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class UtilController {
   @Autowired
   private OldAppExportLoader exportLoader;
-  @Autowired
-  private DatabaseCleaner databaseCleaner;
 
   @RequestMapping(value = "/util/import", method = RequestMethod.GET, params = {"path"})
   @ResponseBody
@@ -24,12 +22,5 @@ public class UtilController {
       return ExceptionUtils.getStackTrace(e);
     }
     return "Loaded";
-  }
-
-  @RequestMapping(value = "/util/clean", method = RequestMethod.GET)
-  @ResponseBody
-  public String clean() {
-    databaseCleaner.clean();
-    return "Cleaned";
   }
 }
