@@ -31,12 +31,14 @@ import java.io.File;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 
 @Configuration
 public class AppConfiguration {
+  private static final AtomicBoolean IS_DATABASE_CHANGE = new AtomicBoolean(false);
   private final List<String> fileNames = Arrays.asList("Finance.script", "Finance.properties",
       "Finance.log");
   private final File localDir = new File("./db");
@@ -114,20 +116,19 @@ public class AppConfiguration {
     }
   }
 
-  @Scheduled(fixedRate = 600000, initialDelay = 60000)
+  @Scheduled(fixedRate = 60000, initialDelay = 60000)
   public void upload() throws Exception {
-    if (!"write".equals(mode)) {
-      return;
+    if ("write".equals(mode) && IS_DATABASE_CHANGE.get()) {
+      String backupDir = "/finance/backup/" + String.valueOf(System.currentTimeMillis());
+      restClient.makeFolder(backupDir);
+      for (String filename : fileNames) {
+        File file = new File(localDir, filename);
+        Link link = restClient.getUploadLink(backupDir + "/" + filename, false);
+        restClient.uploadFile(link, false, file, null);
+      }
+      restClient.copy(backupDir, cloudDir, true);
+      IS_DATABASE_CHANGE.set(false);
     }
-
-    String backupDir = "/finance/backup/" + String.valueOf(System.currentTimeMillis());
-    restClient.makeFolder(backupDir);
-    for (String filename : fileNames) {
-      File file = new File(localDir, filename);
-      Link link = restClient.getUploadLink(backupDir + "/" + filename, false);
-      restClient.uploadFile(link, false, file, null);
-    }
-    restClient.copy(backupDir, cloudDir, true);
   }
 
   @Bean
@@ -155,5 +156,9 @@ public class AppConfiguration {
         .create();
     gsonHttpMessageConverter.setGson(gson);
     return gsonHttpMessageConverter;
+  }
+
+  public static void databaseChanged() {
+    IS_DATABASE_CHANGE.set(true);
   }
 }

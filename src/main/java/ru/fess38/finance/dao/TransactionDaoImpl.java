@@ -9,6 +9,7 @@ import org.hibernate.type.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import ru.fess38.finance.AppConfiguration;
 import ru.fess38.finance.model.Account;
 import ru.fess38.finance.model.Rubric;
 import ru.fess38.finance.model.Tag;
@@ -32,7 +33,9 @@ public class TransactionDaoImpl implements TransactionDao {
   @Override
   public Long save(Transaction transaction) {
     changeService.save(transaction);
-    return (Long) sessionFactory.getCurrentSession().save(transaction);
+    Long id = (Long) sessionFactory.getCurrentSession().save(transaction);
+    AppConfiguration.databaseChanged();
+    return id;
   }
 
   @Override
@@ -47,6 +50,7 @@ public class TransactionDaoImpl implements TransactionDao {
     sessionFactory.getCurrentSession().flush();
     sessionFactory.getCurrentSession().clear();
     sessionFactory.getCurrentSession().update(transaction);
+    AppConfiguration.databaseChanged();
   }
 
   @Override

@@ -5,6 +5,7 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import ru.fess38.finance.AppConfiguration;
 import ru.fess38.finance.model.Currency;
 
 import java.util.List;
@@ -17,7 +18,9 @@ public class CurrencyDaoImpl implements CurrencyDao {
 
   @Override
   public Long save(Currency currency) {
-    return (Long) sessionFactory.getCurrentSession().save(currency);
+    Long id = (Long) sessionFactory.getCurrentSession().save(currency);
+    AppConfiguration.databaseChanged();
+    return id;
   }
 
   @Override
@@ -28,6 +31,7 @@ public class CurrencyDaoImpl implements CurrencyDao {
   @Override
   public void update(Currency currency) {
     sessionFactory.getCurrentSession().update(currency);
+    AppConfiguration.databaseChanged();
   }
 
   @Override

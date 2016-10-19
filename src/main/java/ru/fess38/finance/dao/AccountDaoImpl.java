@@ -6,6 +6,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import ru.fess38.finance.AppConfiguration;
 import ru.fess38.finance.model.Account;
 import ru.fess38.finance.model.Account.AccountType;
 
@@ -19,7 +20,9 @@ public class AccountDaoImpl implements AccountDao {
 
   @Override
   public Long save(Account account) {
-    return (Long) sessionFactory.getCurrentSession().save(account);
+    Long id = (Long) sessionFactory.getCurrentSession().save(account);
+    AppConfiguration.databaseChanged();
+    return id;
   }
 
   @Override
@@ -30,6 +33,7 @@ public class AccountDaoImpl implements AccountDao {
   @Override
   public void update(Account account) {
     sessionFactory.getCurrentSession().update(account);
+    AppConfiguration.databaseChanged();
   }
 
   @Override
