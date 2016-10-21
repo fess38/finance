@@ -129,10 +129,10 @@ angular.module("app.transaction").controller("saveTransaction", function($scope,
   function readTransaction() {
     var newTransaction = $scope.newTransaction;
     newTransaction.amountTo = newTransaction.amountFrom;
-    if ($scope.type === "income") {
+    if (newTransaction.rubric.isIncome) {
       newTransaction.accountFrom = outerAccount;
       newTransaction.accountTo = masterAccount;
-    } else if ($scope.type === "expense") {
+    } else {
       newTransaction.accountFrom = masterAccount;
       newTransaction.accountTo = outerAccount;
     }

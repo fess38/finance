@@ -1,65 +1,85 @@
-<div ng-controller="saveTransaction">
-  <table>
-    <tr>
-      <td>Дата:</td>
-      <td>
-        <input uib-datepicker-popup="d MMM yyyy" ng-model="newTransaction.dayRef" is-open="calendar.opened"
-            ng-click="calendar.open()" form="saveTransaction" readonly required datepicker-options="calendar.options"
-            show-button-bar="false"/>
-      </td>
-    </tr>
-    <tr>
-      <td>
+<div ng-controller="saveTransaction" class="container-fluid">
+  <form class="form-horizontal" ng-submit="saveTransaction()">
+    <div class="form-group">
+      <div class="col-xs-12 col-md-3 {{alert.type}}" ng-show="alert.show">
+        <p class="text-center"><strong>{{alert.msg}}</strong></p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-xs-4 col-md-1" for="transactionAddDate">Дата</label>
+      <div class="col-xs-8 col-md-2">
+        <input id="transactionAddDate"
+            class="form-control"
+            uib-datepicker-popup="d MMM yyyy"
+            ng-model="newTransaction.dayRef"
+            is-open="calendar.opened"
+            ng-click="calendar.open()"
+            readonly
+            required
+            datepicker-options="calendar.options"
+            show-button-bar="false">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-xs-4 col-md-1" for="transactionAddAmount">Сумма</label>
+      <div class="col-xs-8 col-md-2">
+        <input id="transactionAddAmount"
+            class="form-control"
+            ng-model="newTransaction.amountFrom"
+            type="number"
+            min="1"
+            required>
+      </div>
+    </div>
+    <div class="col-xs-6 col-md-1">
+      <label class="radio control-label">
+        <input type="radio" ng-model="type" value="income" ng-click='changeType(type)'>
         Доход
-        <input type="radio" ng-model="type" value="income" ng-click='changeType(type)' form="saveTransaction">
-      </td>
-      <td>
+      </label>
+    </div>
+    <div class="col-xs-6 col-md-1">
+      <label class="radio control-label">
+        <input type="radio" ng-model="type" value="expense" ng-click='changeType(type)'>
         Расход
-        <input type="radio" ng-model="type" value="expense" ng-click='changeType(type)' form="saveTransaction">
-      </td>
-    </tr>
-    <tr>
-      <td>Рубрика:</td>
-      <td>
-        <select ng-model="newTransaction.rubric" size="1" required form="saveTransaction"
+      </label>
+    </div>
+    <br><br>
+    <div class="form-group">
+      <label class="control-label col-xs-4 col-md-1">Рубрика</label>
+      <div class="col-xs-8 col-md-2">
+        <select ng-model="newTransaction.rubric" size="1" required class="form-control"
             ng-options="rubric as rubric.name for rubric in rubrics | orderBy:'name' track by rubric.id">
         </select>
-      </td>
-    </tr>
-    <tr>
-      <td>Пользователь:</td>
-      <td>
-        <select ng-model="newTransaction.user" size="1" form="saveTransaction"
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-xs-4 col-md-1">Пользователь</label>
+      <div class="col-xs-8 col-md-2">
+        <select class="form-control" ng-model="newTransaction.user" size="1"
             ng-options="user as user.name for user in users | orderBy:'name' track by user.id">
         </select>
-      </td>
-    </tr>
-    <tr>
-      <td>Тэг:</td>
-      <td>
-        <select ng-model="newTransaction.tag" size="1" form="saveTransaction"
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-xs-4 col-md-1">Тэг</label>
+      <div class="col-xs-8 col-md-2">
+        <select class="form-control" ng-model="newTransaction.tag" size="1"
             ng-options="tag as tag.name for tag in tags | orderBy:'name' track by tag.id">
         </select>
-      </td>
-    </tr>
-    <tr>
-      <td>Сумма:</td>
-      <td>
-        <input ng-model="newTransaction.amountFrom" type="number" min="1" required form="saveTransaction">
-      </td>
-    </tr>
-    <tr>
-      <td>Комментарий:</td>
-      <td>
-        <input ng-model="newTransaction.comment" type="text" size="25" form="saveTransaction">
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2">
-        <button form="saveTransaction">Сохранить</button>
-      </td>
-    </tr>
-  </table>
-  <form ng-submit="saveTransaction()" id="saveTransaction"></form>
-  <div ng-show="alert.show" class="{{alert.type}}">{{alert.msg}}</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-xs-4 col-md-1" for="transactionAddComment">Комментарий</label>
+      <div class="col-xs-8 col-md-2">
+        <input id="transactionAddComment"
+            class="form-control"
+            ng-model="newTransaction.comment"
+            type="text"
+            size="25">
+      </div>
+    </div>
+    <div class="col-xs-12 col-md-3">
+      <button class="btn btn-default form-control">Сохранить</button>
+    </div>
+  </form>
 </div>
