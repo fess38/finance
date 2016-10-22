@@ -48,13 +48,13 @@
     <tr ng-repeat="t in editTransactions | orderBy:'id':true">
       <td>
         <select ng-model="t.user" ng-change="updateTransaction(t)"
-            ng-options="user as user.name for user in users track by user.id">
+            ng-options="user as user.name for user in users | orderBy:'name' track by user.id">
           <option></option>
         </select>
       </td>
       <td>
         <select ng-model="t.tag" ng-change="updateTransaction(t)"
-            ng-options="tag as tag.name for tag in tags track by tag.id">
+            ng-options="tag as tag.name for tag in tags | orderBy:'name' track by tag.id">
           <option></option>
         </select>
       </td>
