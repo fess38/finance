@@ -2,18 +2,15 @@ package ru.fess38.finance;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.yandex.disk.rest.Credentials;
-import com.yandex.disk.rest.RestClient;
-import com.yandex.disk.rest.json.Link;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -25,12 +22,10 @@ import ru.fess38.finance.model.Account;
 import ru.fess38.finance.model.Account.AccountType;
 import ru.fess38.finance.model.Currency;
 import ru.fess38.finance.model.Rubric;
+import ru.fess38.finance.util.DiskUtil;
 import ru.fess38.finance.util.LocalDateConverter;
 
-import java.io.File;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
@@ -39,20 +34,18 @@ import javax.sql.DataSource;
 @Configuration
 public class AppConfiguration {
   private static final AtomicBoolean IS_DATABASE_CHANGE = new AtomicBoolean(false);
-  private final List<String> fileNames = Arrays.asList("Finance.script", "Finance.properties",
-      "Finance.log");
-  private final File localDir = new File("./db");
-  private final String cloudDir = "/finance/db/";
-  @Value("#{environment.mode}")
-  private String mode;
+  private final Config config = ConfigFactory.load();
+  private final DiskUtil diskUtil = new DiskUtil(config.getConfig("disk"));
   @Autowired
   private RubricDao rubricDao;
   @Autowired
   private AccountDao accountDao;
   @Autowired
   private CurrencyDao currencyDao;
-  @Autowired
-  private RestClient restClient;
+
+  public static void databaseChanged() {
+    IS_DATABASE_CHANGE.set(true);
+  }
 
   @PostConstruct
   public void create() {
@@ -99,43 +92,19 @@ public class AppConfiguration {
     rubricDao.save(transferRubric);
   }
 
-  @Bean
-  public RestClient restClient(@Value("#{environment.disktoken}") String token) throws Exception {
-    RestClient restClient = new RestClient(new Credentials("", token));
-    download(restClient);
-    return restClient;
-  }
-
-  private void download(RestClient restClient) throws Exception {
-    File[] files = localDir.listFiles() == null ? new File[]{} : localDir.listFiles();
-    Arrays.stream(files).forEach(File::delete);
-    localDir.mkdir();
-    for (String filename : fileNames) {
-      File file = new File(localDir, filename);
-      restClient.downloadFile(cloudDir + filename, file, null);
-    }
-  }
-
   @Scheduled(fixedRate = 600000, initialDelay = 60000)
   public void upload() throws Exception {
-    if ("write".equals(mode) && IS_DATABASE_CHANGE.get()) {
-      String backupDir = "/finance/backup/" + String.valueOf(System.currentTimeMillis());
-      restClient.makeFolder(backupDir);
-      for (String filename : fileNames) {
-        File file = new File(localDir, filename);
-        Link link = restClient.getUploadLink(backupDir + "/" + filename, false);
-        restClient.uploadFile(link, false, file, null);
-      }
-      restClient.copy(backupDir, cloudDir, true);
-      IS_DATABASE_CHANGE.set(false);
-    }
+    diskUtil.upload(IS_DATABASE_CHANGE.get());
+    IS_DATABASE_CHANGE.set(false);
   }
 
   @Bean
-  @DependsOn("restClient")
-  public DataSource dataSource() {
-    HikariConfig config = new HikariConfig("/ru/fess38/finance/hikari.properties");
-    return new HikariDataSource(config);
+  public DataSource dataSource() throws Exception {
+    diskUtil.download();
+    HikariConfig hikariConfig = new HikariConfig();
+    hikariConfig.setDataSourceClassName(config.getString("hikari.classname"));
+    hikariConfig.addDataSourceProperty("url", config.getString("hikari.url"));
+    return new HikariDataSource(hikariConfig);
   }
 
   @Bean
@@ -156,9 +125,5 @@ public class AppConfiguration {
         .create();
     gsonHttpMessageConverter.setGson(gson);
     return gsonHttpMessageConverter;
-  }
-
-  public static void databaseChanged() {
-    IS_DATABASE_CHANGE.set(true);
   }
 }
