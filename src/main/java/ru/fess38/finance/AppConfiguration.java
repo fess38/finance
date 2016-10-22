@@ -116,7 +116,7 @@ public class AppConfiguration {
     }
   }
 
-  @Scheduled(fixedRate = 60000, initialDelay = 60000)
+  @Scheduled(fixedRate = 600000, initialDelay = 60000)
   public void upload() throws Exception {
     if ("write".equals(mode) && IS_DATABASE_CHANGE.get()) {
       String backupDir = "/finance/backup/" + String.valueOf(System.currentTimeMillis());
