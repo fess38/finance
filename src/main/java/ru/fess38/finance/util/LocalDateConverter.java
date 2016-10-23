@@ -8,7 +8,9 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 import java.lang.reflect.Type;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 public class LocalDateConverter implements JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
@@ -19,7 +21,13 @@ public class LocalDateConverter implements JsonSerializer<LocalDate>, JsonDeseri
 
   @Override
   public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
-    String localDate = json.getAsString().replace("\"", "").substring(0, 10);
-    return LocalDate.parse(localDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    LocalDate result = null;
+    String jsonString = json.getAsString().replace("\"", "");
+    if (jsonString.contains("T")) {
+      result = Instant.parse(jsonString).atZone(ZoneId.systemDefault()).toLocalDate();
+    } else {
+      result = LocalDate.parse(jsonString, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+    return result;
   }
 }

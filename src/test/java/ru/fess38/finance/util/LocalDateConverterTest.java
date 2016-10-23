@@ -29,8 +29,8 @@ public class LocalDateConverterTest {
 
   @Test
   public void deserializeFulldate() throws Exception {
-    LocalDate expected = LocalDate.of(2016, 2, 29);
-    LocalDate actual = gson.fromJson(new JsonPrimitive("\"2016-02-29T09:19:13.632Z\""), LocalDate
+    LocalDate expected = LocalDate.of(2016, 3, 1);
+    LocalDate actual = gson.fromJson(new JsonPrimitive("\"2016-02-29T22:19:13.632Z\""), LocalDate
         .class);
     Assert.assertEquals(expected, actual);
   }
