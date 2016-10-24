@@ -45,14 +45,6 @@ angular.module("app.transaction").controller("transaction", function($scope, Ale
     clearEditor();
   };
 
-  $scope.filterIncomeRubrics = function(rubric) {
-    return rubric.isIncome;
-  };
-
-  $scope.filterExpenceRubrics = function(rubric) {
-    return !$scope.filterIncomeRubrics(rubric);
-  };
-
   $scope.findRubricDaySummary = function(rubric, date) {
     for (var i in $scope.transactions.rubricDaySummary) {
       var cell = $scope.transactions.rubricDaySummary[i];
