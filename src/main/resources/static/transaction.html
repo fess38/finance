@@ -10,21 +10,24 @@
       <span class="glyphicon glyphicon-arrow-right"></span>
     </button>
   </div>
-  <br>
-  <div class="table-responsive">
-    <table class="table table-bordered table-hover table-condense">
+
+  <div class="hidden-xs">
+    <table class="table table-bordered table-striped table-condense">
+      <thead>
       <tr>
         <th></th>
         <th ng-repeat="date in transactions.dates">{{date | date:"d"}}</th>
         <th>Итого</th>
       </tr>
+      </thead>
+      <tbody>
       <tr ng-repeat="rubric in transactions.rubrics | orderBy:['-isIncome', 'name']">
         <td class="small">{{rubric.name}}</td>
         <td class="small"
             ng-repeat="date in transactions.dates"
             ng-click="showRubricDateTransactions(rubric, date)"
             data-toggle="modal"
-            data-target="#transaction-editor">
+            data-target="#desktop-transaction-editor">
           {{findRubricDaySummary(rubric, date)}}
         </td>
         <td class="small">{{findRubricSummary(rubric)}}</td>
@@ -36,10 +39,11 @@
         </td>
         <td class="small">{{transactions.monthSummary}}</td>
       </tr>
+      </tbody>
     </table>
   </div>
-  <br>
-  <div id="transaction-editor" class="modal fade" tabindex="-1" role="dialog">
+
+  <div id="desktop-transaction-editor" class="modal fade" tabindex="-1" role="dialog" ng-show="editTransactions.length > 0">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <table class="table table-bordered table-condense">
@@ -82,4 +86,77 @@
       </div>
     </div>
   </div>
-</div>
+
+  <div class="visible-xs">
+    <table class="table table-bordered table-striped table-condense">
+      <thead>
+      <tr>
+        <th>Дата</th>
+        <th>Рубрика</th>
+        <th>Сумма</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="cell in transactions.rubricDaySummary | orderBy:['-date','rubric.name']"
+          ng-click="showRubricDateTransactions(cell.rubric, cell.date)"
+          data-toggle="modal"
+          data-target="#mobile-transaction-editor">
+        <td>{{cell.date | date:"dd MMM"}}</td>
+        <td>{{cell.rubric.name}}</td>
+        <td>{{cell.amount}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="mobile-transaction-editor" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div ng-show="alert.show" class="text-center {{alert.type}}">{{alert.msg}}</div>
+          <div ng-repeat="t in editTransactions | orderBy:'id':true">
+            <form class="form-horizontal">
+              <div class="form-group">
+                <label class="small control-label col-xs-5">Пользователь</label>
+                <div class="col-xs-7">
+                  <select class="input-sm form-control" ng-model="t.user" ng-change="updateTransaction(t)"
+                      ng-options="user as user.name for user in users | orderBy:'name' track by user.id">
+                    <option></option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="small control-label col-xs-5">Тэг</label>
+                <div class="col-xs-7">
+                  <select class="input-sm form-control" ng-model="t.tag" ng-change="updateTransaction(t)"
+                      ng-options="tag as tag.name for tag in tags | orderBy:'name' track by tag.id">
+                    <option></option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="small control-label col-xs-5">Сумма</label>
+                <div class="col-xs-7">
+                  <input class="form-control input-sm" ng-model="t.amountFrom" type="number" min="1"
+                      required ng-blur="updateTransaction(t)">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="small control-label col-xs-5">Комментарий</label>
+                <div class="col-xs-7">
+                  <input class="form-control input-sm" ng-model="t.comment" type="text" ng-blur="updateTransaction(t)">
+                </div>
+              </div>
+              <button type="button" class="btn btn-default form-control" ng-click="deleteTransaction(t)">
+                <span class="small">Удалить</span>
+              </button>
+            </form>
+            <br>
+          </div>
+          <button type="button" class="btn btn-primary form-control" data-dismiss="modal">Закрыть
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
