@@ -1,4 +1,5 @@
 <div class="container-fluid" ng-controller="transaction">
+  <br>
   <div class="btn-group btn-block">
     <button class="btn btn-default col-xs-3" ng-click="previousMonth()">
       <span class="glyphicon glyphicon-arrow-left"></span>
@@ -74,9 +75,7 @@
               <input class="form-control" ng-model="t.comment" type="text" ng-blur="updateTransaction(t)">
             </td>
             <td>
-              <button type="button" class="close" ng-click="deleteTransaction(t)">
-                <span>&times;</span>
-              </button>
+              <button type="button" class="close" ng-click="deleteTransaction(t)">&times;</button>
             </td>
           </tr>
         </table>

@@ -51,7 +51,7 @@ angular.module("app").service("AlertService", function($timeout) {
   };
 
   function response(type, msg) {
-    var alert = {type: "alert alert-" + type, msg: msg, show: true};
+    var alert = {type: "text-center alert alert-" + type, msg: msg, show: true};
     hide(alert);
     return alert;
   }

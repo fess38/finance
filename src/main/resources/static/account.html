@@ -1,40 +1,37 @@
-<div ng-controller="account">
-  <table>
-    <tr>
-      <th>Счет</th>
-      <th>Валюта</th>
-      <th>Баланс</th>
-      <th></th>
-    </tr>
-    <tr>
-      <td>
-        <input ng-model="newAccount.name" type="text" maxlength="25" required form="saveAccount">
-      </td>
-      <td>
-        <select ng-model="newAccount.currency" form="saveAccount"
-            ng-options="currency as currency.name for currency in currencies track by currency.id">
-        </select>
-      </td>
-      <td></td>
-      <td>
-        <button form="saveAccount">
-          <span class="glyphicon glyphicon-floppy-save"></span>
-        </button>
-      </td>
-    </tr>
-    <tr ng-repeat="account in accounts | filter:{type:'!OUTER'} | orderBy:['type', 'name']">
-      <td>
-        <input ng-model="account.name" type="text" size="25" ng-blur="updateAccount(account)">
-      </td>
-      <td>{{account.currency.name}}({{account.currency.symbol}})</td>
-      <td>{{account.balance}}</td>
-      <td>
-        <button ng-click="deleteAccount(account)" ng-disabled="account.hasTransactions">
-          <span class="glyphicon glyphicon-remove"></span>
-        </button>
-      </td>
-    </tr>
-  </table>
-  <form ng-submit="saveAccount()" id="saveAccount"></form>
-  <div ng-show="alert.show" class="{{alert.type}}">{{alert.msg}}</div>
+<div class="container-fluid" ng-controller="account">
+  <dv class="col-md-4">
+    <div class="{{alert.type}}" ng-show="alert.show">{{alert.msg}}</div>
+    <table class="table table-condense">
+      <tr>
+        <th>Счет</th>
+        <th>Валюта</th>
+        <th>Баланс</th>
+        <th></th>
+      </tr>
+      <tr>
+        <td>
+          <input class="form-control" ng-model="newAccount.name">
+        </td>
+        <td>
+          <select class="input-sm form-control" ng-model="newAccount.currency"
+              ng-options="currency as currency.symbol for currency in currencies track by currency.id">
+          </select>
+        </td>
+        <td></td>
+        <td>
+          <div ng-click="saveAccount()">&plus;</div>
+        </td>
+      </tr>
+      <tr ng-repeat="account in accounts | filter:{type:'!OUTER'} | orderBy:['-type', 'name']">
+        <td>
+          <input class="form-control" ng-model="account.name" ng-blur="updateAccount(account)">
+        </td>
+        <td>{{account.currency.symbol}}</td>
+        <td>{{account.balance}}</td>
+        <td>
+          <div ng-click="deleteAccount(account)" ng-disabled="account.hasTransactions">&times;</div>
+        </td>
+      </tr>
+    </table>
+</div>
 </div>

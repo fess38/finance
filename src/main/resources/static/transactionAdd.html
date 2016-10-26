@@ -1,9 +1,7 @@
 <div ng-controller="saveTransaction" class="container-fluid">
   <form class="form-horizontal" ng-submit="saveTransaction()">
     <div class="form-group">
-      <div class="col-xs-12 col-md-3 {{alert.type}}" ng-show="alert.show">
-        <p class="text-center"><strong>{{alert.msg}}</strong></p>
-      </div>
+      <div class="col-xs-12 col-md-3 {{alert.type}}" ng-show="alert.show">{{alert.msg}}</div>
     </div>
     <div class="form-group">
       <label class="control-label col-xs-4 col-md-1" for="transactionAddDate">Дата</label>
