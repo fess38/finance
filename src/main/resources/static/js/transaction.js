@@ -21,7 +21,10 @@ angular.module("app.transaction").controller("transaction", function($scope, Ale
     MonthTransactionsService, YearMonthService, RestApi) {
   function clearEditor() {
     $scope.editTransactions = [];
+    $scope.yearMonth = YearMonthService.getDate();
   }
+
+  clearEditor();
 
   RestApi.users().then(function(response) {
     $scope.users = response.data;

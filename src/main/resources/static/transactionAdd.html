@@ -13,7 +13,6 @@
             is-open="calendar.opened"
             ng-click="calendar.open()"
             readonly
-            required
             datepicker-options="calendar.options"
             show-button-bar="false">
       </div>
@@ -21,12 +20,7 @@
     <div class="form-group">
       <label class="control-label col-xs-4 col-md-1" for="transactionAddAmount">Сумма</label>
       <div class="col-xs-8 col-md-2">
-        <input id="transactionAddAmount"
-            class="form-control"
-            ng-model="newTransaction.amountFrom"
-            type="number"
-            min="1"
-            required>
+        <input id="transactionAddAmount" class="form-control" ng-model="newTransaction.amountFrom">
       </div>
     </div>
     <div class="col-xs-6 col-md-1">
@@ -45,7 +39,7 @@
     <div class="form-group">
       <label class="control-label col-xs-4 col-md-1">Рубрика</label>
       <div class="col-xs-8 col-md-2">
-        <select ng-model="newTransaction.rubric" size="1" required class="form-control"
+        <select ng-model="newTransaction.rubric" size="1" class="form-control"
             ng-options="rubric as rubric.name for rubric in rubrics | orderBy:'name' track by rubric.id">
         </select>
       </div>
@@ -69,11 +63,7 @@
     <div class="form-group">
       <label class="control-label col-xs-4 col-md-1" for="transactionAddComment">Комментарий</label>
       <div class="col-xs-8 col-md-2">
-        <input id="transactionAddComment"
-            class="form-control"
-            ng-model="newTransaction.comment"
-            type="text"
-            size="25">
+        <input id="transactionAddComment" class="form-control" ng-model="newTransaction.comment">
       </div>
     </div>
     <div class="col-xs-12 col-md-3">

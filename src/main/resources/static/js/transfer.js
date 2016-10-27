@@ -14,6 +14,7 @@ angular.module("app.transfer").controller("transfer", function($scope, RestApi, 
   });
 
   function refresh() {
+    $scope.yearMonth = YearMonthService.getDate();
     RestApi.findTransfers(YearMonthService.getYearMonth()).then(function(response) {
       $scope.transfers = response.data;
     });
@@ -36,7 +37,8 @@ angular.module("app.transfer").controller("transfer", function($scope, RestApi, 
     RestApi.saveTransaction($scope.newTransfer).then(function() {
       $scope.alert = AlertService.success("Перевод добавлен");
       refresh();
-      clearForm();
+      $scope.newTransfer.amountFrom = null;
+      $scope.newTransfer.amountTo = null;
     }, function() {
       $scope.alert = AlertService.danger("Ошибка добавления перевода");
     });

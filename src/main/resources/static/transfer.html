@@ -1,8 +1,18 @@
-<div ng-controller="transfer">
-  <button ng-click="previousMonth()">Предыдущий месяц</button>
-  <button ng-click="nextMonth()">Следующий месяц</button>
-  <br><br>
-  <table>
+<div class="container-fluid" ng-controller="transfer">
+  <div class="btn-group btn-block">
+    <button class="btn btn-default col-xs-3" ng-click="previousMonth()">
+      <span class="glyphicon glyphicon-arrow-left"></span>
+    </button>
+    <button class="btn btn-default col-xs-6">
+      <strong>{{yearMonth | date:"LLLL yyyy"}}</strong>
+    </button>
+    <button class="btn btn-default col-xs-3" ng-click="nextMonth()">
+      <span class="glyphicon glyphicon-arrow-right"></span>
+    </button>
+  </div>
+
+  <div class="{{alert.type}}" ng-show="alert.show">{{alert.msg}}</div>
+  <table class="table table-condense">
     <tr>
       <th>Дата</th>
       <th>Списать со счета</th>
@@ -14,57 +24,53 @@
     </tr>
     <tr>
       <td>
-        <input uib-datepicker-popup="d MMM yyyy" ng-model="newTransfer.dayRef" is-open="calendar.opened"
-            ng-click="calendar.open()" form="saveTransfer" readonly required datepicker-options="calendar.options"
-            show-button-bar="false"/>
+        <input class="form-control" uib-datepicker-popup="d MMM yyyy" ng-model="newTransfer.dayRef"
+            is-open="calendar.opened" ng-click="calendar.open()" readonly
+            datepicker-options="calendar.options" show-button-bar="false"/>
       </td>
       <td>
-        <select ng-model="newTransfer.accountFrom" ng-change="checkEquals()" form="saveTransfer"
+        <select class="form-control" ng-model="newTransfer.accountFrom" ng-change="checkEquals()"
             ng-options="account as account.name for account in accounts | orderBy:'name' | filter:{type:'!OUTER'}
                   track by account.id">
         </select>
       </td>
       <td>
-        <select ng-model="newTransfer.accountTo" ng-change="checkEquals()" form="saveTransfer"
+        <select class="form-control" ng-model="newTransfer.accountTo" ng-change="checkEquals()"
             ng-options="account as account.name for account in accounts | orderBy:'name' | filter:{type:'!OUTER'}
                   track by account.id">
         </select>
       </td>
       <td>
-        <input ng-model="newTransfer.amountFrom" type="number" min="1" required form="saveTransfer">
+        <input class="form-control" ng-model="newTransfer.amountFrom">
       </td>
       <td>
-        <input ng-model="newTransfer.amountTo" type="number" min="1" required form="saveTransfer">
+        <input class="form-control" ng-model="newTransfer.amountTo">
       </td>
       <td>
-        <input ng-model="newTransfer.comment" type="text" size="25" form="saveTransfer">
+        <input class="form-control" ng-model="newTransfer.comment">
       </td>
       <td>
-        <button form="saveTransfer">
-          <span class="glyphicon glyphicon-floppy-save"></span>
-        </button>
+        <button class="btn btn-default" ng-click="saveTransfer()">&plus;</button>
       </td>
     </tr>
-    <tr ng-repeat="t in transfers | orderBy:'dayRef':true">
-      <td>{{t.dayRef | date:"d MMM yyyy"}}</td>
-      <td>{{t.accountFrom.name}}({{t.accountFrom.currency.symbol}})</td>
-      <td>{{t.accountTo.name}}({{t.accountTo.currency.symbol}})</td>
+    <tr ng-repeat="transfer in transfers | orderBy:'dayRef':true">
+      <td>{{transfer.dayRef | date:"d MMM"}}</td>
+      <td>{{transfer.accountFrom.name}}</td>
+      <td>{{transfer.accountTo.name}}</td>
       <td>
-        <input ng-model="t.amountFrom" type="number" min="1" required ng-blur="updateTransfer(t)">
+        <input class="form-control" ng-model="transfer.amountFrom" ng-blur="updateTransfer(transfer)">
       </td>
       <td>
-        <input ng-model="t.amountTo" type="number" min="1" required ng-blur="updateTransfer(t)">
+        <input class="form-control" ng-model="transfer.amountTo" ng-blur="updateTransfer(transfer)">
       </td>
       <td>
-        <input ng-model="t.comment" type="text" size="25" ng-blur="updateTransfer(t)">
+        <input class="form-control" ng-model="transfer.comment" ng-blur="updateTransfer(transfer)">
       </td>
       <td>
-        <button ng-click="deleteTransfer(t)">
-          <span class="glyphicon glyphicon-remove"></span>
+        <button class="btn btn-default" ng-click="deleteTransfer(transfer)">
+          &times;
         </button>
       </td>
     </tr>
   </table>
-  <form ng-submit="saveTransfer()" id="saveTransfer"></form>
-  <div ng-show="alert.show" class="{{alert.type}}">{{alert.msg}}</div>
 </div>
