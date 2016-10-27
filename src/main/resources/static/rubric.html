@@ -1,39 +1,39 @@
-<div ng-controller="rubric">
-  <table>
-    <tr>
-      <th>Рубрика</th>
-      <th>Доход?</th>
-      <th></th>
-    </tr>
-    <tr>
-      <td>
-        <input ng-model="newRubric.name" type="text" maxlength="25" required form="saveRubric">
-      </td>
-      <td>
-        <input ng-model="newRubric.isIncome" type="checkbox" form="saveRubric">
-      </td>
-      <td>
-        <button form="saveRubric">
-          <span class="glyphicon glyphicon-floppy-save"></span>
-        </button>
-      </td>
-    </tr>
-    <tr ng-repeat="rubric in rubrics | orderBy:['isIncome','name']">
-      <td>
-        <input ng-model="rubric.name" type="text" size="25" ng-blur="updateRubric(rubric)">
-      </td>
-      <td>
-        <span ng-if="rubric.isIncome" class="glyphicon glyphicon-plus-sign"></span>
-        <span ng-if="!rubric.isIncome" class="glyphicon glyphicon-minus-sign"></span>
-      </td>
-      <td>
-        <button ng-click="deleteRubric(rubric)" ng-disabled="rubric.hasTransactions">
-          <span class="glyphicon glyphicon-remove"></span>
-        </button>
-      </td>
-    </tr>
-  </table>
-  <br>
-  <form ng-submit="saveRubric()" id="saveRubric"></form>
-  <div ng-show="alert.show" class="{{alert.type}}">{{alert.msg}}</div>
+<div class="container-fluid" ng-controller="rubric">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="{{alert.type}}" ng-show="alert.show">{{alert.msg}}</div>
+      <table class="table table-condense">
+        <tr>
+          <th>Рубрика</th>
+          <th>Доход?</th>
+          <th></th>
+        </tr>
+        <tr>
+          <td>
+            <input class="form-control" ng-model="newRubric.name">
+          </td>
+          <td>
+            <input class="form-control" ng-model="newRubric.isIncome" type="checkbox">
+          </td>
+          <td>
+            <button class="btn btn-default" ng-click="saveRubric()">&plus;</button>
+          </td>
+        </tr>
+        <tr ng-repeat="rubric in rubrics | orderBy:['-isIncome','name']">
+          <td>
+            <input class="form-control" ng-model="rubric.name" ng-blur="updateRubric(rubric)">
+          </td>
+          <td>
+            <span ng-if="rubric.isIncome">&plus;</span>
+            <span ng-if="!rubric.isIncome">&minus;</span>
+          </td>
+          <td>
+            <button class="btn btn-default" ng-click="deleteRubric(rubric)" ng-disabled="rubric.hasTransactions">
+              &times;
+            </button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
 </div>

@@ -1,31 +1,29 @@
-<div ng-controller="tag">
-  <table>
-    <tr>
-      <th>Тэг</th>
-      <th></th>
-    </tr>
-    <tr>
-      <td>
-        <input ng-model="newTag.name" type="text" maxlength="25" required form="saveTag">
-      </td>
-      <td>
-        <button form="saveTag">
-          <span class="glyphicon glyphicon-floppy-save"></span>
-        </button>
-      </td>
-    </tr>
-    <tr ng-repeat="tag in tags | orderBy:'name'">
-      <td>
-        <input ng-model="tag.name" type="text" size="25" ng-blur="updateTag(tag)">
-      </td>
-      <td>
-        <button ng-click="deleteTag(tag)" ng-disabled="tag.hasTransactions">
-          <span class="glyphicon glyphicon-remove"></span>
-        </button>
-      </td>
-    </tr>
-  </table>
-  <form ng-submit="saveTag()" id="saveTag"></form>
-  <br>
-  <div ng-show="alert.show" class="{{alert.type}}">{{alert.msg}}</div>
+<div class="container-fluid" ng-controller="tag">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="{{alert.type}}" ng-show="alert.show">{{alert.msg}}</div>
+      <table class="table table-condense">
+        <tr>
+          <th>Тэг</th>
+          <th></th>
+        </tr>
+        <tr>
+          <td>
+            <input class="form-control" ng-model="newTag.name">
+          </td>
+          <td>
+            <div ng-click="saveTag()">&plus;</div>
+          </td>
+        </tr>
+        <tr ng-repeat="tag in tags | orderBy:'name'">
+          <td>
+            <input class="form-control" ng-model="tag.name" ng-blur="updateTag(tag)">
+          </td>
+          <td>
+            <button class="btn btn-default" ng-click="deleteTag(tag)" ng-disabled="tag.hasTransactions">&times;</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
 </div>
