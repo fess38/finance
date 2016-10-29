@@ -2,23 +2,14 @@ angular.module("app.transfer", []);
 
 angular.module("app.transfer").controller("transfer", function($scope, RestApi, YearMonthService,
     AlertService) {
-  var transferRubric;
-  $scope.newTransfer = {dayRef: new Date()};
-
-  RestApi.transferRubric().then(function(response) {
-    transferRubric = response.data;
-  });
-
-  RestApi.accounts().then(function(response) {
-    $scope.accounts = response.data;
-  });
-
   function refresh() {
     $scope.yearMonth = YearMonthService.getDate();
     RestApi.findTransfers(YearMonthService.getYearMonth()).then(function(response) {
       $scope.transfers = response.data;
     });
   }
+
+  refresh();
 
   $scope.nextMonth = function() {
     YearMonthService.incrementMonth();
@@ -28,20 +19,6 @@ angular.module("app.transfer").controller("transfer", function($scope, RestApi, 
   $scope.previousMonth = function() {
     YearMonthService.decrementMonth();
     refresh();
-  };
-
-  refresh();
-
-  $scope.saveTransfer = function() {
-    $scope.newTransfer.rubric = transferRubric;
-    RestApi.saveTransaction($scope.newTransfer).then(function() {
-      $scope.alert = AlertService.success("Перевод добавлен");
-      refresh();
-      $scope.newTransfer.amountFrom = null;
-      $scope.newTransfer.amountTo = null;
-    }, function() {
-      $scope.alert = AlertService.danger("Ошибка добавления перевода");
-    });
   };
 
   $scope.updateTransfer = function(transfer) {
@@ -58,6 +35,32 @@ angular.module("app.transfer").controller("transfer", function($scope, RestApi, 
       refresh();
     }, function() {
       $scope.alert = AlertService.danger("Ошибка удаления перевода");
+    });
+  };
+});
+
+angular.module("app.transfer").controller("saveTransfer", function($scope, AlertService,
+    RestApi, YearMonthService) {
+  var transferRubric;
+  $scope.newTransfer = {dayRef: new Date()};
+
+  RestApi.transferRubric().then(function(response) {
+    transferRubric = response.data;
+  });
+
+  RestApi.accounts().then(function(response) {
+    $scope.accounts = response.data;
+  });
+
+  $scope.saveTransfer = function() {
+    $scope.newTransfer.rubric = transferRubric;
+    RestApi.saveTransaction($scope.newTransfer).then(function() {
+      $scope.alert = AlertService.success("Перевод добавлен");
+      refresh();
+      $scope.newTransfer.amountFrom = null;
+      $scope.newTransfer.amountTo = null;
+    }, function() {
+      $scope.alert = AlertService.danger("Ошибка добавления перевода");
     });
   };
 

@@ -1,0 +1,64 @@
+<div ng-controller="saveTransfer" class="container-fluid">
+  <form class="form-horizontal" ng-submit="saveTransfer()">
+    <div class="form-group">
+      <div class="col-xs-12 col-md-3 {{alert.type}}" ng-show="alert.show">{{alert.msg}}</div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-xs-4 col-md-1" for="transferAddDate">Дата</label>
+      <div class="col-xs-8 col-md-2">
+        <input id="transferAddDate"
+            class="form-control"
+            uib-datepicker-popup="d MMM yyyy"
+            ng-model="newTransfer.dayRef"
+            is-open="calendar.opened"
+            ng-click="calendar.open()"
+            readonly
+            datepicker-options="calendar.options"
+            show-button-bar="false">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-xs-4 col-md-1">Списать со счета</label>
+      <div class="col-xs-8 col-md-2">
+        <select class="form-control" ng-model="newTransfer.accountFrom" ng-change="checkEquals()"
+            ng-options="account as account.name for account in accounts | orderBy:'name' | filter:{type:'!OUTER'}
+                  track by account.id">
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-xs-4 col-md-1">Пополнить счет</label>
+      <div class="col-xs-8 col-md-2">
+        <select class="form-control" ng-model="newTransfer.accountTo" ng-change="checkEquals()"
+            ng-options="account as account.name for account in accounts | orderBy:'name' | filter:{type:'!OUTER'}
+                  track by account.id">
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-xs-4 col-md-1" for="transferAddAmountFrom">
+        Сумма списания
+      </label>
+      <div class="col-xs-8 col-md-2">
+        <input id="transferAddAmountFrom" class="form-control" pattern="\d*" ng-model="newTransfer.amountFrom">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-xs-4 col-md-1" for="transferAddAmountTo">
+        Сумма пополнения
+      </label>
+      <div class="col-xs-8 col-md-2">
+        <input id="transferAddAmountTo" class="form-control" pattern="\d*" ng-model="newTransfer.amountTo">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-xs-4 col-md-1" for="transferAddComment">Комментарий</label>
+      <div class="col-xs-8 col-md-2">
+        <input id="transferAddComment" class="form-control" ng-model="newTransfer.comment">
+      </div>
+    </div>
+    <div class="col-xs-12 col-md-3">
+      <button class="btn btn-default form-control">Сохранить</button>
+    </div>
+  </form>
+</div>

@@ -10,6 +10,7 @@ angular.module("app").config(function($routeProvider) {
       .when("/transaction", {templateUrl: "transaction.html"})
       .when("/transactionAdd", {templateUrl: "transactionAdd.html"})
       .when("/transfer", {templateUrl: "transfer.html"})
+      .when("/transferAdd", {templateUrl: "transferAdd.html"})
       .when("/user", {templateUrl: "user.html"})
 });
 
