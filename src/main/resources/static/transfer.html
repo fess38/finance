@@ -12,7 +12,7 @@
   </div>
 
   <div class="{{alert.type}}" ng-show="alert.show">{{alert.msg}}</div>
-  <table class="table table-condense hidden-xs">
+  <table class="table table-condense hidden-xs" ng-show="transfers.length > 0">
     <tr>
       <th>Дата</th>
       <th>Списать со счета</th>
@@ -41,7 +41,7 @@
     </tr>
   </table>
 
-  <div class="visible-xs">
+  <div class="visible-xs" ng-show="transfers.length > 0">
     <div ng-repeat="transfer in transfers | orderBy:'dayRef':true">
       <table class="table table-condense">
         <tr>
