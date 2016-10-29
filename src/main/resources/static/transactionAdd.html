@@ -20,7 +20,7 @@
     <div class="form-group">
       <label class="control-label col-xs-4 col-md-1" for="transactionAddAmount">Сумма</label>
       <div class="col-xs-8 col-md-2">
-        <input id="transactionAddAmount" class="form-control" ng-model="newTransaction.amountFrom">
+        <input id="transactionAddAmount" class="form-control" pattern="\d*" ng-model="newTransaction.amountFrom">
       </div>
     </div>
     <div class="col-xs-6 col-md-1">

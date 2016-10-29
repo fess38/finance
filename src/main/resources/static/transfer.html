@@ -41,10 +41,10 @@
         </select>
       </td>
       <td>
-        <input class="form-control" ng-model="newTransfer.amountFrom">
+        <input class="form-control" pattern="\d*" ng-model="newTransfer.amountFrom">
       </td>
       <td>
-        <input class="form-control" ng-model="newTransfer.amountTo">
+        <input class="form-control" pattern="\d*" ng-model="newTransfer.amountTo">
       </td>
       <td>
         <input class="form-control" ng-model="newTransfer.comment">
@@ -58,10 +58,10 @@
       <td>{{transfer.accountFrom.name}}</td>
       <td>{{transfer.accountTo.name}}</td>
       <td>
-        <input class="form-control" ng-model="transfer.amountFrom" ng-blur="updateTransfer(transfer)">
+        <input class="form-control" ng-model="transfer.amountFrom" pattern="\d*" ng-blur="updateTransfer(transfer)">
       </td>
       <td>
-        <input class="form-control" ng-model="transfer.amountTo" ng-blur="updateTransfer(transfer)">
+        <input class="form-control" ng-model="transfer.amountTo" pattern="\d*" ng-blur="updateTransfer(transfer)">
       </td>
       <td>
         <input class="form-control" ng-model="transfer.comment" ng-blur="updateTransfer(transfer)">
