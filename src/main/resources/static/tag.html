@@ -9,7 +9,7 @@
         </tr>
         <tr>
           <td>
-            <input class="form-control" ng-model="newTag.name">
+            <input class="form-control" type="text" ng-model="newTag.name">
           </td>
           <td>
             <span class="close" ng-click="saveTag()">&plus;</span>
@@ -17,7 +17,7 @@
         </tr>
         <tr ng-repeat="tag in tags | orderBy:'name'">
           <td>
-            <input class="form-control" ng-model="tag.name" ng-blur="updateTag(tag)">
+            <input class="form-control" type="text" ng-model="tag.name" ng-blur="updateTag(tag)">
           </td>
           <td>
             <span class="close" ng-click="deleteTag(tag)" ng-disabled="tag.hasTransactions">&times;</span>

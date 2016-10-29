@@ -6,8 +6,7 @@
     <div class="form-group">
       <label class="control-label col-xs-4 col-md-1" for="transferAddDate">Дата</label>
       <div class="col-xs-8 col-md-2">
-        <input id="transferAddDate"
-            class="form-control"
+        <input id="transferAddDate" class="form-control" type="date"
             uib-datepicker-popup="d MMM yyyy"
             ng-model="newTransfer.dayRef"
             is-open="calendar.opened"
@@ -40,7 +39,7 @@
         Сумма списания
       </label>
       <div class="col-xs-8 col-md-2">
-        <input id="transferAddAmountFrom" class="form-control" pattern="\d*" ng-model="newTransfer.amountFrom">
+        <input id="transferAddAmountFrom" class="form-control" type="number" pattern="\d*" ng-model="newTransfer.amountFrom">
       </div>
     </div>
     <div class="form-group">
@@ -48,13 +47,13 @@
         Сумма пополнения
       </label>
       <div class="col-xs-8 col-md-2">
-        <input id="transferAddAmountTo" class="form-control" pattern="\d*" ng-model="newTransfer.amountTo">
+        <input id="transferAddAmountTo" class="form-control" type="number" pattern="\d*" ng-model="newTransfer.amountTo">
       </div>
     </div>
     <div class="form-group">
       <label class="control-label col-xs-4 col-md-1" for="transferAddComment">Комментарий</label>
       <div class="col-xs-8 col-md-2">
-        <input id="transferAddComment" class="form-control" ng-model="newTransfer.comment">
+        <input id="transferAddComment" class="form-control" type="text" ng-model="newTransfer.comment">
       </div>
     </div>
     <div class="col-xs-12 col-md-3">

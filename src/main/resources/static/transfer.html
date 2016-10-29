@@ -27,13 +27,13 @@
       <td>{{transfer.accountFrom.name}}</td>
       <td>{{transfer.accountTo.name}}</td>
       <td>
-        <input class="form-control" ng-model="transfer.amountFrom" pattern="\d*" ng-blur="updateTransfer(transfer)">
+        <input class="form-control" type="number" pattern="\d*" ng-model="transfer.amountFrom" ng-blur="updateTransfer(transfer)">
       </td>
       <td>
-        <input class="form-control" ng-model="transfer.amountTo" pattern="\d*" ng-blur="updateTransfer(transfer)">
+        <input class="form-control" type="number" pattern="\d*" ng-model="transfer.amountTo" ng-blur="updateTransfer(transfer)">
       </td>
       <td>
-        <input class="form-control" ng-model="transfer.comment" ng-blur="updateTransfer(transfer)">
+        <input class="form-control" type="text" ng-model="transfer.comment" ng-blur="updateTransfer(transfer)">
       </td>
       <td>
         <span class="close" ng-click="deleteTransfer(transfer)">&times;</span>
@@ -59,19 +59,21 @@
         <tr>
           <td>Сумма списания</td>
           <td>
-            <input class="form-control" ng-model="transfer.amountFrom" pattern="\d*" ng-blur="updateTransfer(transfer)">
+            <input class="form-control" type="number" pattern="\d*" ng-model="transfer.amountFrom"
+                ng-blur="updateTransfer(transfer)">
           </td>
         </tr>
         <tr>
           <td>Сумма пополнения</td>
           <td>
-            <input class="form-control" ng-model="transfer.amountTo" pattern="\d*" ng-blur="updateTransfer(transfer)">
+            <input class="form-control" type="number" pattern="\d*" ng-model="transfer.amountTo"
+                ng-blur="updateTransfer(transfer)">
           </td>
         </tr>
         <tr>
           <td>Комментарий</td>
           <td>
-            <input class="form-control" ng-model="transfer.comment" ng-blur="updateTransfer(transfer)">
+            <input class="form-control" type="text" ng-model="transfer.comment" ng-blur="updateTransfer(transfer)">
           </td>
         </tr>
         <tr>

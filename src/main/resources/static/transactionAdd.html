@@ -6,8 +6,7 @@
     <div class="form-group">
       <label class="control-label col-xs-4 col-md-1" for="transactionAddDate">Дата</label>
       <div class="col-xs-8 col-md-2">
-        <input id="transactionAddDate"
-            class="form-control"
+        <input id="transactionAddDate" class="form-control" type="date"
             uib-datepicker-popup="d MMM yyyy"
             ng-model="newTransaction.dayRef"
             is-open="calendar.opened"
@@ -20,7 +19,7 @@
     <div class="form-group">
       <label class="control-label col-xs-4 col-md-1" for="transactionAddAmount">Сумма</label>
       <div class="col-xs-8 col-md-2">
-        <input id="transactionAddAmount" class="form-control" pattern="\d*" ng-model="newTransaction.amountFrom">
+        <input id="transactionAddAmount" class="form-control" type="number" pattern="\d*" ng-model="newTransaction.amountFrom">
       </div>
     </div>
     <div class="col-xs-6 col-md-1">
@@ -65,7 +64,7 @@
     <div class="form-group">
       <label class="control-label col-xs-4 col-md-1" for="transactionAddComment">Комментарий</label>
       <div class="col-xs-8 col-md-2">
-        <input id="transactionAddComment" class="form-control" ng-model="newTransaction.comment">
+        <input id="transactionAddComment" type="text" class="form-control" ng-model="newTransaction.comment">
       </div>
     </div>
     <div class="col-xs-12 col-md-3">
