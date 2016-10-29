@@ -23,7 +23,6 @@ angular.module("app.transaction").controller("transaction", function($scope, Ale
     $scope.editTransactions = [];
     $scope.yearMonth = YearMonthService.getDate();
   }
-
   clearEditor();
 
   RestApi.users().then(function(response) {
@@ -52,7 +51,7 @@ angular.module("app.transaction").controller("transaction", function($scope, Ale
     for (var i in $scope.transactions.rubricDaySummary) {
       var cell = $scope.transactions.rubricDaySummary[i];
       if (cell.rubric.id == rubric.id && cell.date == date) {
-        return cell.amount;
+        return cell;
       }
     }
   };
@@ -84,7 +83,7 @@ angular.module("app.transaction").controller("transaction", function($scope, Ale
     RestApi.findRubricMonthTransactions(rubric, YearMonthService.getYearMonth()).then(function(response) {
       $scope.editTransactions = response.data;
     });
-  }
+  };
 
   $scope.updateTransaction = function(transaction) {
     transaction.amountTo = transaction.amountFrom;
