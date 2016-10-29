@@ -12,7 +12,7 @@
   </div>
 
   <div class="{{alert.type}}" ng-show="alert.show">{{alert.msg}}</div>
-  <table class="table table-condense">
+  <table class="table table-condense hidden-xs">
     <tr>
       <th>Дата</th>
       <th>Списать со счета</th>
@@ -36,8 +36,52 @@
         <input class="form-control" ng-model="transfer.comment" ng-blur="updateTransfer(transfer)">
       </td>
       <td>
-        <button class="btn btn-default" ng-click="deleteTransfer(transfer)">&times;</button>
+        <span class="close" ng-click="deleteTransfer(transfer)">&times;</span>
       </td>
     </tr>
   </table>
+
+  <div class="visible-xs">
+    <div ng-repeat="transfer in transfers | orderBy:'dayRef':true">
+      <table class="table table-condense">
+        <tr>
+          <td>Дата</td>
+          <td>{{transfer.dayRef | date:"d MMM"}}</td>
+        </tr>
+        <tr>
+          <td>Списать со счета</td>
+          <td>{{transfer.accountFrom.name}}</td>
+        </tr>
+        <tr>
+          <td>Пополнить счет</td>
+          <td>{{transfer.accountTo.name}}</td>
+        </tr>
+        <tr>
+          <td>Сумма списания</td>
+          <td>
+            <input class="form-control" ng-model="transfer.amountFrom" pattern="\d*" ng-blur="updateTransfer(transfer)">
+          </td>
+        </tr>
+        <tr>
+          <td>Сумма пополнения</td>
+          <td>
+            <input class="form-control" ng-model="transfer.amountTo" pattern="\d*" ng-blur="updateTransfer(transfer)">
+          </td>
+        </tr>
+        <tr>
+          <td>Комментарий</td>
+          <td>
+            <input class="form-control" ng-model="transfer.comment" ng-blur="updateTransfer(transfer)">
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <button class="btn btn-danger form-control" ng-click="deleteTransfer(transfer)">
+              Удалить
+            </button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
 </div>

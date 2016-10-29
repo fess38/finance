@@ -20,7 +20,7 @@
           </td>
           <td></td>
           <td>
-            <button class="btn btn-default" ng-click="saveAccount()">&plus;</button>
+            <span class="close" ng-click="saveAccount()">&plus;</span>
           </td>
         </tr>
         <tr ng-repeat="account in accounts | filter:{type:'!OUTER'} | orderBy:['-type', 'name']">
@@ -30,9 +30,9 @@
           <td>{{account.currency.symbol}}</td>
           <td>{{account.balance}}</td>
           <td>
-            <button class="btn btn-default" ng-click="deleteAccount(account)" ng-disabled="account.hasTransactions">
+            <span class="close" ng-click="deleteAccount(account)" ng-disabled="account.hasTransactions">
               &times;
-            </button>
+            </span>
           </td>
         </tr>
       </table>

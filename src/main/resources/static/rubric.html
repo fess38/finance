@@ -13,10 +13,10 @@
             <input class="form-control" ng-model="newRubric.name">
           </td>
           <td>
-            <input class="form-control" ng-model="newRubric.isIncome" type="checkbox">
+            <input class="form-control input-sm" ng-model="newRubric.isIncome" type="checkbox">
           </td>
           <td>
-            <button class="btn btn-default" ng-click="saveRubric()">&plus;</button>
+            <span class="close" ng-click="saveRubric()">&plus;</span>
           </td>
         </tr>
         <tr ng-repeat="rubric in rubrics | orderBy:['-isIncome','name']">
@@ -24,13 +24,12 @@
             <input class="form-control" ng-model="rubric.name" ng-blur="updateRubric(rubric)">
           </td>
           <td>
-            <span ng-if="rubric.isIncome">&plus;</span>
-            <span ng-if="!rubric.isIncome">&minus;</span>
+            <input class="form-control input-sm" ng-checked="rubric.isIncome" type="checkbox" ng-disabled="true">
           </td>
           <td>
-            <button class="btn btn-default" ng-click="deleteRubric(rubric)" ng-disabled="rubric.hasTransactions">
+            <span class="close" ng-click="deleteRubric(rubric)" ng-disabled="rubric.hasTransactions">
               &times;
-            </button>
+            </span>
           </td>
         </tr>
       </table>

@@ -74,7 +74,7 @@
               <input class="form-control" ng-model="t.comment" ng-blur="updateTransaction(t)">
             </td>
             <td>
-              <button type="button" class="close" ng-click="deleteTransaction(t)">&times;</button>
+              <span class="close" ng-click="deleteTransaction(t)">&times;</span>
             </td>
           </tr>
         </table>
@@ -145,13 +145,14 @@
                   <input class="form-control input-sm" ng-model="t.comment" ng-blur="updateTransaction(t)">
                 </div>
               </div>
-              <button type="button" class="btn btn-default form-control" ng-click="deleteTransaction(t)">
+              <button type="button" class="btn btn-danger form-control" ng-click="deleteTransaction(t)">
                 <span class="small">Удалить</span>
               </button>
             </form>
             <br>
           </div>
-          <button type="button" class="btn btn-primary form-control" data-dismiss="modal">Закрыть
+          <button type="button" class="btn btn-primary form-control" data-dismiss="modal">
+            <span class="small">Закрыть</span>
           </button>
         </div>
       </div>

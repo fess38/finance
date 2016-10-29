@@ -56,7 +56,6 @@ angular.module("app.transfer").controller("saveTransfer", function($scope, Alert
     $scope.newTransfer.rubric = transferRubric;
     RestApi.saveTransaction($scope.newTransfer).then(function() {
       $scope.alert = AlertService.success("Перевод добавлен");
-      refresh();
       $scope.newTransfer.amountFrom = null;
       $scope.newTransfer.amountTo = null;
     }, function() {
