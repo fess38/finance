@@ -31,7 +31,7 @@ public class TransactionController {
 
   @RequestMapping(value = "/transaction/find", method = RequestMethod.GET,
       params = {"year", "month"})
-  public @ResponseBody MonthTransactions findTransactions(@RequestParam("year") int year,
+  public @ResponseBody MonthTransactions find(@RequestParam("year") int year,
       @RequestParam("month") int month) {
     YearMonth yearMonth = YearMonth.of(year, month);
     return MonthTransactions.of(yearMonth, transactionDao.find(yearMonth, Group.EXTERNAL));
@@ -42,6 +42,13 @@ public class TransactionController {
   public @ResponseBody List<Transaction> find(@RequestParam("rubric-id") long rubricId,
       @RequestParam("date") @DateTimeFormat(iso = ISO.DATE) LocalDate localDate) {
     return transactionDao.find(rubricId, localDate);
+  }
+
+  @RequestMapping(value = "/transaction/find", method = RequestMethod.GET,
+      params = {"rubric-id", "year", "month"})
+  public @ResponseBody List<Transaction> find(@RequestParam("rubric-id") long rubricId,
+      @RequestParam("year") int year, @RequestParam("month") int month) {
+    return transactionDao.find(rubricId, YearMonth.of(year, month));
   }
 
   @RequestMapping(value = "/transaction/save", method = RequestMethod.POST)

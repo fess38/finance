@@ -92,6 +92,17 @@ public class TransactionDaoImpl implements TransactionDao {
     return find(criteria);
   }
 
+  @Override public List<Transaction> find(long rubricId, YearMonth yearMonth) {
+    String sql = "YEAR({alias}.dayRef) = ? AND MONTH({alias}.dayRef) = ?";
+    Object[] values = new Object[]{yearMonth.getYear(), yearMonth.getMonthValue()};
+    Type[] types = new Type[]{IntegerType.INSTANCE, IntegerType.INSTANCE};
+    DetachedCriteria criteria = DetachedCriteria.forClass(Transaction.class)
+        .add(Restrictions.sqlRestriction(sql, values, types))
+        .add(Restrictions.eq("rubric.id", rubricId));
+    ;
+    return find(criteria).stream().collect(Collectors.toList());
+  }
+
   @Override
   public int countByAccount(Account account) {
     return countByProperty("accountFrom.id", account.getId()) + countByProperty("accountTo.id",

@@ -16,6 +16,8 @@ public interface TransactionDao extends GenericDao<Transaction, Long> {
 
   List<Transaction> find(long rubricId, LocalDate localDate);
 
+  List<Transaction> find(long rubricId, YearMonth yearMonth);
+
   int countByAccount(Account account);
 
   int countByRubric(Rubric rubric);

@@ -28,7 +28,6 @@ angular.module("app.user").controller("user", function($scope, RestApi, AlertSer
 
   $scope.deleteUser = function(user) {
     RestApi.deleteUser(user).then(function(response) {
-      console.log(response.data);
       $scope.alert = AlertService.success("Пользователь удален");
       $scope.refresh();
     }, function() {

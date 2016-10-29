@@ -80,6 +80,12 @@ angular.module("app.transaction").controller("transaction", function($scope, Ale
     });
   };
 
+  $scope.showRubricMonthTransactions = function(rubric) {
+    RestApi.findRubricMonthTransactions(rubric, YearMonthService.getYearMonth()).then(function(response) {
+      $scope.editTransactions = response.data;
+    });
+  }
+
   $scope.updateTransaction = function(transaction) {
     transaction.amountTo = transaction.amountFrom;
     RestApi.updateTransaction(transaction).then(function() {
