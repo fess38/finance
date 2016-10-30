@@ -7,7 +7,6 @@ import com.typesafe.config.ConfigFactory;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,13 +14,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.scheduling.annotation.Scheduled;
-import ru.fess38.finance.dao.AccountDao;
-import ru.fess38.finance.dao.CurrencyDao;
-import ru.fess38.finance.dao.RubricDao;
-import ru.fess38.finance.model.Account;
-import ru.fess38.finance.model.Account.AccountType;
-import ru.fess38.finance.model.Currency;
-import ru.fess38.finance.model.Rubric;
 import ru.fess38.finance.util.DiskUtil;
 import ru.fess38.finance.util.LocalDateConverter;
 
@@ -34,58 +26,12 @@ import javax.sql.DataSource;
 public class AppConfiguration {
   private final Config config = ConfigFactory.load();
   private final DiskUtil diskUtil = new DiskUtil(config.getConfig("disk"));
-  @Autowired
   private DatabaseChangeFlag databaseChangeFlag;
-  @Autowired
-  private RubricDao rubricDao;
-  @Autowired
-  private AccountDao accountDao;
-  @Autowired
-  private CurrencyDao currencyDao;
+  private DefaultEntitiesCreator defaultEntitiesCreator;
 
   @PostConstruct
-  public void create() {
-    if (currencyDao.find(DetachedCriteria.forClass(Currency.class)).isEmpty()) {
-      createCurrenciesAndAccounts();
-      createTransferRubric();
-    }
-  }
-
-  private void createCurrenciesAndAccounts() {
-    Currency ruble = new Currency();
-    ruble.setName("Рубль");
-    ruble.setSymbol("P");
-    currencyDao.save(ruble);
-
-    Currency dollar = new Currency();
-    dollar.setName("Доллар");
-    dollar.setSymbol("$");
-    currencyDao.save(dollar);
-
-    Currency euro = new Currency();
-    euro.setName("Евро");
-    euro.setSymbol("€");
-    currencyDao.save(euro);
-
-    Account masterAccount = new Account();
-    masterAccount.setName("Наличные средства");
-    masterAccount.setCurrency(ruble);
-    masterAccount.setType(AccountType.MASTER);
-    accountDao.save(masterAccount);
-
-    Account outerAccount = new Account();
-    outerAccount.setName("Внешний счет");
-    outerAccount.setCurrency(ruble);
-    outerAccount.setType(AccountType.OUTER);
-    accountDao.save(outerAccount);
-  }
-
-  private void createTransferRubric() {
-    Rubric transferRubric = new Rubric();
-    transferRubric.setName("Перевод между счетами");
-    transferRubric.setIsIncome(false);
-    transferRubric.setIsTransfer(true);
-    rubricDao.save(transferRubric);
+  public void createDefaultEntities() {
+    defaultEntitiesCreator.create();
   }
 
   @Scheduled(fixedRate = 600000, initialDelay = 60000)
@@ -121,5 +67,15 @@ public class AppConfiguration {
         .create();
     gsonHttpMessageConverter.setGson(gson);
     return gsonHttpMessageConverter;
+  }
+
+  @Autowired
+  public void setDatabaseChangeFlag(DatabaseChangeFlag databaseChangeFlag) {
+    this.databaseChangeFlag = databaseChangeFlag;
+  }
+
+  @Autowired
+  public void setDefaultEntitiesCreator(DefaultEntitiesCreator defaultEntitiesCreator) {
+    this.defaultEntitiesCreator = defaultEntitiesCreator;
   }
 }

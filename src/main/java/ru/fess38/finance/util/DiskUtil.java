@@ -24,7 +24,7 @@ public class DiskUtil {
   private final List<String> backupFiles;
 
   public void download() throws Exception {
-    if (isDiskAvailable()) {
+    if (hasToken()) {
       restClient = new RestClient(new Credentials("", config.getString("token")));
       recreateLocalDir();
       for (String filename : backupFiles) {
@@ -34,7 +34,7 @@ public class DiskUtil {
     }
   }
 
-  private boolean isDiskAvailable() {
+  private boolean hasToken() {
     return config.hasPath("token");
   }
 
