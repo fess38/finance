@@ -26,8 +26,8 @@
         <td class="small" ng-repeat="date in transactions.dates"
             ng-click="showRubricDateTransactions(rubric, date)"
             data-toggle="modal" data-target="#desktop-transaction-editor"
-            ng-class="{info: findRubricDaySummary(rubric, date).hasUncheckedTransactions == true}">
-          {{findRubricDaySummary(rubric, date).amount}}
+            ng-class="{info: findRubricDaySummary(rubric, date) > 2000}">
+          {{findRubricDaySummary(rubric, date)}}
         </td>
         <td class="small" ng-click="showRubricMonthTransactions(rubric)"
             data-toggle="modal" data-target="#desktop-transaction-editor">

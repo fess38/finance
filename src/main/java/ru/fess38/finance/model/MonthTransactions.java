@@ -91,20 +91,14 @@ public class MonthTransactions {
   private List<RubricDaySummary> processRubricByDaySummary() {
     List<RubricDaySummary> result = new ArrayList<>();
     Map<Pair<Rubric, LocalDate>, Integer> map = new HashMap<>();
-    Map<Pair<Rubric, LocalDate>, Boolean> mapIsHasUnchecked = new HashMap<>();
     transactions.forEach(x -> {
       Pair<Rubric, LocalDate> pair = Pair.of(x.getRubric(), x.getDayRef());
       int amount = x.getAmountFrom();
-      boolean isUnchecked = amount >= 1000 && x.getTag() == null && x.getUser() == null;
-
       map.computeIfPresent(pair, (key, value) -> value + amount);
       map.putIfAbsent(pair, amount);
-
-      mapIsHasUnchecked.computeIfPresent(pair, (key, value) -> value || isUnchecked);
-      mapIsHasUnchecked.putIfAbsent(pair, isUnchecked);
     });
     map.forEach((key, value) -> result.add(new RubricDaySummary(key.getLeft(), key.getRight(),
-        value, mapIsHasUnchecked.get(key))));
+        value)));
     return result;
   }
 
@@ -182,21 +176,15 @@ public class MonthTransactions {
   }
 
   private class RubricDaySummary extends RubricSummary {
-    RubricDaySummary(Rubric rubric, LocalDate date, int amount, boolean hasUncheckedTransactions) {
+    RubricDaySummary(Rubric rubric, LocalDate date, int amount) {
       super(rubric, amount);
       this.date = date;
-      this.hasUncheckedTransactions = hasUncheckedTransactions;
     }
 
     private final LocalDate date;
-    private final boolean hasUncheckedTransactions;
 
     public LocalDate getDate() {
       return date;
-    }
-
-    public boolean isHasUncheckedTransactions() {
-      return hasUncheckedTransactions;
     }
   }
 }

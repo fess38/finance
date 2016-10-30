@@ -51,7 +51,7 @@ angular.module("app.transaction").controller("transaction", function($scope, Ale
     for (var i in $scope.transactions.rubricDaySummary) {
       var cell = $scope.transactions.rubricDaySummary[i];
       if (cell.rubric.id == rubric.id && cell.date == date) {
-        return cell;
+        return cell.amount;
       }
     }
   };
