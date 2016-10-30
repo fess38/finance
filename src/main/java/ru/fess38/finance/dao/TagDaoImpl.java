@@ -5,7 +5,7 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import ru.fess38.finance.AppConfiguration;
+import ru.fess38.finance.DatabaseChangeFlag;
 import ru.fess38.finance.model.Tag;
 
 import java.util.List;
@@ -15,11 +15,13 @@ import java.util.List;
 public class TagDaoImpl implements TagDao {
   @Autowired
   private SessionFactory sessionFactory;
+  @Autowired
+  private DatabaseChangeFlag databaseChangeFlag;
 
   @Override
   public Long save(Tag tag) {
     Long id = (Long) sessionFactory.getCurrentSession().save(tag);
-    AppConfiguration.databaseChanged();
+    databaseChangeFlag.setTrue();
     return id;
   }
 
@@ -31,7 +33,7 @@ public class TagDaoImpl implements TagDao {
   @Override
   public void update(Tag tag) {
     sessionFactory.getCurrentSession().update(tag);
-    AppConfiguration.databaseChanged();
+    databaseChangeFlag.setTrue();
   }
 
   @Override

@@ -6,7 +6,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import ru.fess38.finance.AppConfiguration;
+import ru.fess38.finance.DatabaseChangeFlag;
 import ru.fess38.finance.model.Rubric;
 
 import java.util.List;
@@ -16,11 +16,13 @@ import java.util.List;
 public class RubricDaoImpl implements RubricDao {
   @Autowired
   private SessionFactory sessionFactory;
+  @Autowired
+  private DatabaseChangeFlag databaseChangeFlag;
 
   @Override
   public Long save(Rubric rubric) {
     Long id = (Long) sessionFactory.getCurrentSession().save(rubric);
-    AppConfiguration.databaseChanged();
+    databaseChangeFlag.setTrue();
     return id;
   }
 
@@ -32,7 +34,7 @@ public class RubricDaoImpl implements RubricDao {
   @Override
   public void update(Rubric rubric) {
     sessionFactory.getCurrentSession().update(rubric);
-    AppConfiguration.databaseChanged();
+    databaseChangeFlag.setTrue();
   }
 
   @Override

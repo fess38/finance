@@ -26,26 +26,22 @@ import ru.fess38.finance.util.DiskUtil;
 import ru.fess38.finance.util.LocalDateConverter;
 
 import java.time.LocalDate;
-import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 
 @Configuration
 public class AppConfiguration {
-  private static final AtomicBoolean IS_DATABASE_CHANGE = new AtomicBoolean(false);
   private final Config config = ConfigFactory.load();
   private final DiskUtil diskUtil = new DiskUtil(config.getConfig("disk"));
+  @Autowired
+  private DatabaseChangeFlag databaseChangeFlag;
   @Autowired
   private RubricDao rubricDao;
   @Autowired
   private AccountDao accountDao;
   @Autowired
   private CurrencyDao currencyDao;
-
-  public static void databaseChanged() {
-    IS_DATABASE_CHANGE.set(true);
-  }
 
   @PostConstruct
   public void create() {
@@ -94,8 +90,8 @@ public class AppConfiguration {
 
   @Scheduled(fixedRate = 600000, initialDelay = 60000)
   public void upload() throws Exception {
-    diskUtil.upload(IS_DATABASE_CHANGE.get());
-    IS_DATABASE_CHANGE.set(false);
+    diskUtil.upload(databaseChangeFlag.value());
+    databaseChangeFlag.setFalse();
   }
 
   @Bean
