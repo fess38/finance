@@ -56,7 +56,7 @@
             <th>Комментарий</th>
             <th></th>
           </tr>
-          <tr ng-repeat="t in editTransactions | orderBy:'id':true">
+          <tr ng-repeat="t in editTransactions | orderBy:['-dayRef', 'rubric.name']">
             <td>{{t.dayRef | date:"d MMM"}}</td>
             <td>
               <select class="form-control" ng-model="t.user" ng-change="updateTransaction(t)"
