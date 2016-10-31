@@ -14,7 +14,6 @@ import ru.fess38.finance.model.Account;
 import ru.fess38.finance.model.Rubric;
 import ru.fess38.finance.model.Tag;
 import ru.fess38.finance.model.Transaction;
-import ru.fess38.finance.model.Transaction.Group;
 import ru.fess38.finance.model.User;
 
 import java.time.LocalDate;
@@ -75,15 +74,13 @@ public class TransactionDaoImpl implements TransactionDao {
     return commonFind(deleted(detachedCriteria), sessionFactory);
   }
 
-  public List<Transaction> find(YearMonth yearMonth, Group group) {
+  public List<Transaction> find(YearMonth yearMonth) {
     String sql = "YEAR({alias}.dayRef) = ? AND MONTH({alias}.dayRef) = ?";
     Object[] values = new Object[]{yearMonth.getYear(), yearMonth.getMonthValue()};
     Type[] types = new Type[]{IntegerType.INSTANCE, IntegerType.INSTANCE};
     DetachedCriteria criteria = DetachedCriteria.forClass(Transaction.class)
         .add(Restrictions.sqlRestriction(sql, values, types));
-    return find(criteria).stream()
-        .filter(x -> x.group() == group)
-        .collect(Collectors.toList());
+    return find(criteria);
   }
 
   @Override

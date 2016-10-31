@@ -50,15 +50,13 @@ public class AccountDaoImpl implements AccountDao {
   @SuppressWarnings("unchecked")
   @Override
   public List<Account> find(DetachedCriteria detachedCriteria) {
-    notDeleted(detachedCriteria);
-    return commonFind(detachedCriteria, sessionFactory);
+    return commonFind(notDeleted(detachedCriteria), sessionFactory);
   }
 
   @SuppressWarnings("unchecked")
   @Override
   public List<Account> findDeleted(DetachedCriteria detachedCriteria) {
-    deleted(detachedCriteria);
-    return commonFind(detachedCriteria, sessionFactory);
+    return commonFind(deleted(detachedCriteria), sessionFactory);
   }
 
   @Override

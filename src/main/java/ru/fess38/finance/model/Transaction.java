@@ -4,7 +4,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.Check;
-import ru.fess38.finance.model.Account.AccountType;
 
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -49,39 +48,6 @@ public class Transaction {
   private Tag tag;
   @Column(length = 200)
   private String comment;
-
-  public Group group() {
-    Type type = type();
-    if (type == Type.UNKNOWN) {
-      return Group.UNKNOWN;
-    } else if (type == Type.INCOME || type == Type.EXPENSE) {
-      return Group.EXTERNAL;
-    } else if (type == Type.TRANSFER || type == Type.EXCHANGE) {
-      return Group.INTERNAL;
-    }
-    throw new IllegalStateException("Transaction in the unkwown state");
-  }
-
-  public Type type() {
-    if (accountFrom == null || accountTo == null || rubric == null) {
-      return Type.UNKNOWN;
-    } else if (rubric.isTransfer() && accountFrom.getType() != AccountType.OUTER
-        && accountTo.getType() != AccountType.OUTER) {
-      if (accountFrom.getCurrency().equals(accountTo.getCurrency())) {
-        return Type.TRANSFER;
-      } else {
-        return Type.EXCHANGE;
-      }
-    } else if (!rubric.isTransfer() && accountFrom.getCurrency().equals(accountTo.getCurrency())) {
-      if (accountFrom.getType() == AccountType.OUTER && accountTo.getType() == AccountType.MASTER) {
-        return Type.INCOME;
-      } else if (accountFrom.getType() == AccountType.MASTER
-          && accountTo.getType() == AccountType.OUTER) {
-        return Type.EXPENSE;
-      }
-    }
-    throw new IllegalStateException("Transaction in the unkwown state");
-  }
 
   @Override
   public boolean equals(Object object) {
@@ -184,19 +150,5 @@ public class Transaction {
 
   public void setDeleted(boolean isDeleted) {
     this.isDeleted = isDeleted;
-  }
-
-  public enum Group {
-    INTERNAL,
-    EXTERNAL,
-    UNKNOWN
-  }
-
-  public enum Type {
-    INCOME,
-    EXPENSE,
-    TRANSFER,
-    EXCHANGE,
-    UNKNOWN
   }
 }

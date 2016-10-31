@@ -49,15 +49,13 @@ public class RubricDaoImpl implements RubricDao {
   @SuppressWarnings("unchecked")
   @Override
   public List<Rubric> find(DetachedCriteria detachedCriteria) {
-    notDeleted(notService(detachedCriteria));
-    return commonFind(detachedCriteria, sessionFactory);
+    return commonFind(notDeleted(notTransfer(detachedCriteria)), sessionFactory);
   }
 
   @SuppressWarnings("unchecked")
   @Override
   public List<Rubric> findDeleted(DetachedCriteria detachedCriteria) {
-    deleted(notService(detachedCriteria));
-    return commonFind(detachedCriteria, sessionFactory);
+    return commonFind(deleted(notTransfer(detachedCriteria)), sessionFactory);
   }
 
   @Override
@@ -74,7 +72,7 @@ public class RubricDaoImpl implements RubricDao {
     return (Rubric) commonFind(criteria, sessionFactory).get(0);
   }
 
-  private DetachedCriteria notService(DetachedCriteria detachedCriteria) {
+  private DetachedCriteria notTransfer(DetachedCriteria detachedCriteria) {
     return detachedCriteria.add(Restrictions.eq("isTransfer", false));
   }
 }

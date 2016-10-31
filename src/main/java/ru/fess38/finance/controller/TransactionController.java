@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.fess38.finance.dao.TransactionDao;
 import ru.fess38.finance.model.MonthTransactions;
 import ru.fess38.finance.model.Transaction;
-import ru.fess38.finance.model.Transaction.Group;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class TransactionController {
@@ -34,7 +34,10 @@ public class TransactionController {
   public @ResponseBody MonthTransactions find(@RequestParam("year") int year,
       @RequestParam("month") int month) {
     YearMonth yearMonth = YearMonth.of(year, month);
-    return MonthTransactions.of(yearMonth, transactionDao.find(yearMonth, Group.EXTERNAL));
+    List<Transaction> transactions = transactionDao.find(yearMonth).stream()
+        .filter(x -> !x.getRubric().isTransfer())
+        .collect(Collectors.toList());
+    return MonthTransactions.of(yearMonth, transactions);
   }
 
   @RequestMapping(value = "/transaction/find", method = RequestMethod.GET,
@@ -69,6 +72,8 @@ public class TransactionController {
   @RequestMapping(value = "/transfer/find", method = RequestMethod.GET, params = {"year", "month"})
   public @ResponseBody List<Transaction> findTransfers(@RequestParam("year") int year,
       @RequestParam("month") int month) {
-    return transactionDao.find(YearMonth.of(year, month), Group.INTERNAL);
+    return transactionDao.find(YearMonth.of(year, month)).stream()
+        .filter(x -> x.getRubric().isTransfer())
+        .collect(Collectors.toList());
   }
 }
