@@ -19,7 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
 @Entity
-public class Account {
+public class Account extends TransactionEntity {
   @Id
   @GeneratedValue(generator = "IdSequence", strategy = GenerationType.SEQUENCE)
   @SequenceGenerator(name = "IdSequence")
@@ -37,10 +37,6 @@ public class Account {
   private AccountType type = AccountType.DEFAULT;
   @Column(nullable = false)
   private boolean isDeleted = false;
-  @Column(nullable = false)
-  private int amountTransactions = 0;
-  @Column(nullable = false)
-  private boolean hasTransactions = false;
 
   @Override
   public boolean equals(Object object) {
@@ -97,30 +93,12 @@ public class Account {
     this.type = type;
   }
 
-  public boolean hasTransactions() {
-    return hasTransactions;
-  }
-
   public int getBalance() {
     return balance;
   }
 
   public void addMoney(int amount) {
     balance += amount;
-  }
-
-  public int getAmountTransactions() {
-    return amountTransactions;
-  }
-
-  public void addTransaction() {
-    amountTransactions++;
-    hasTransactions = amountTransactions > 0;
-  }
-
-  public void substractTransaction() {
-    amountTransactions--;
-    hasTransactions = amountTransactions > 0;
   }
 
   public enum AccountType {

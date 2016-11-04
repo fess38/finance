@@ -12,7 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 
 @Entity
-public class Tag {
+public class Tag extends TransactionEntity {
   @Id
   @GeneratedValue(generator = "IdSequence", strategy = GenerationType.SEQUENCE)
   @SequenceGenerator(name = "IdSequence")
@@ -21,10 +21,6 @@ public class Tag {
   private String name;
   @Column(nullable = false)
   private boolean isDeleted = false;
-  @Column(nullable = false)
-  private int amountTransactions = 0;
-  @Column(nullable = false)
-  private boolean hasTransactions = false;
 
   @Override
   public boolean equals(Object object) {
@@ -63,23 +59,5 @@ public class Tag {
 
   public void setDeleted(boolean isDeleted) {
     this.isDeleted = isDeleted;
-  }
-
-  public boolean hasTransactions() {
-    return hasTransactions;
-  }
-
-  public int getAmountTransactions() {
-    return amountTransactions;
-  }
-
-  public void addTransaction() {
-    amountTransactions++;
-    hasTransactions = amountTransactions > 0;
-  }
-
-  public void substractTransaction() {
-    amountTransactions--;
-    hasTransactions = amountTransactions > 0;
   }
 }

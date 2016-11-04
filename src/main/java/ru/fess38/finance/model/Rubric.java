@@ -12,7 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 
 @Entity
-public class Rubric {
+public class Rubric extends TransactionEntity {
   @Id
   @GeneratedValue(generator = "IdSequence", strategy = GenerationType.SEQUENCE)
   @SequenceGenerator(name = "IdSequence")
@@ -25,10 +25,6 @@ public class Rubric {
   private boolean isTransfer = false;
   @Column(nullable = false)
   private boolean isDeleted = false;
-  @Column(nullable = false)
-  private int amountTransactions = 0;
-  @Column(nullable = false)
-  private boolean hasTransactions = false;
 
   @Override
   public boolean equals(Object object) {
@@ -83,23 +79,5 @@ public class Rubric {
 
   public void setDeleted(boolean isDeleted) {
     this.isDeleted = isDeleted;
-  }
-
-  public boolean hasTransactions() {
-    return hasTransactions;
-  }
-
-  public int getAmountTransactions() {
-    return amountTransactions;
-  }
-
-  public void addTransaction() {
-    amountTransactions++;
-    hasTransactions = amountTransactions > 0;
-  }
-
-  public void substractTransaction() {
-    amountTransactions--;
-    hasTransactions = amountTransactions > 0;
   }
 }
