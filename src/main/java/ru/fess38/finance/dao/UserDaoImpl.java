@@ -13,9 +13,7 @@ import java.util.List;
 @Repository
 @Transactional
 public class UserDaoImpl implements UserDao {
-  @Autowired
   private SessionFactory sessionFactory;
-  @Autowired
   private DatabaseChangeFlag databaseChangeFlag;
 
   @Override
@@ -55,5 +53,15 @@ public class UserDaoImpl implements UserDao {
   @Override
   public List<User> findDeleted(DetachedCriteria detachedCriteria) {
     return commonFind(deleted(detachedCriteria), sessionFactory);
+  }
+
+  @Autowired
+  public void setSessionFactory(SessionFactory sessionFactory) {
+    this.sessionFactory = sessionFactory;
+  }
+
+  @Autowired
+  public void setDatabaseChangeFlag(DatabaseChangeFlag databaseChangeFlag) {
+    this.databaseChangeFlag = databaseChangeFlag;
   }
 }

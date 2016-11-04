@@ -41,6 +41,11 @@ public class AppConfiguration {
   }
 
   @Bean
+  public DatabaseChangeFlag databaseChangeFlag() {
+    return new DatabaseChangeFlag();
+  }
+
+  @Bean
   public DataSource dataSource() throws Exception {
     diskUtil.download();
     HikariConfig hikariConfig = new HikariConfig();

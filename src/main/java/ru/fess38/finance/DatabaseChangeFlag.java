@@ -1,10 +1,7 @@
 package ru.fess38.finance;
 
-import org.springframework.stereotype.Component;
-
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@Component
 public class DatabaseChangeFlag {
   private final AtomicBoolean changeFlag = new AtomicBoolean(false);
 
