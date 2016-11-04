@@ -89,7 +89,7 @@ public class OldAppExportLoader {
   private Rubric toRubric(String rubricName) {
     Rubric rubric = new Rubric();
     rubric.setName(rubricName);
-    rubric.setIsIncome(incomeRubrics().contains(rubricName));
+    rubric.setIncome(incomeRubrics().contains(rubricName));
     rubricDao.save(rubric);
     return rubric;
   }

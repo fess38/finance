@@ -12,13 +12,9 @@ import java.util.Objects;
 
 @Repository
 public class TransactionChangeService {
-  @Autowired
   private AccountDao accountDao;
-  @Autowired
   private RubricDao rubricDao;
-  @Autowired
   private TagDao tagDao;
-  @Autowired
   private UserDao userDao;
 
   public void save(Transaction transaction) {
@@ -154,5 +150,25 @@ public class TransactionChangeService {
       persistedUser.substractTransaction();
       userDao.update(persistedUser);
     }
+  }
+
+  @Autowired
+  public void setAccountDao(AccountDao accountDao) {
+    this.accountDao = accountDao;
+  }
+
+  @Autowired
+  public void setRubricDao(RubricDao rubricDao) {
+    this.rubricDao = rubricDao;
+  }
+
+  @Autowired
+  public void setTagDao(TagDao tagDao) {
+    this.tagDao = tagDao;
+  }
+
+  @Autowired
+  public void setUserDao(UserDao userDao) {
+    this.userDao = userDao;
   }
 }

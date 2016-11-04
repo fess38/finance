@@ -23,32 +23,14 @@ public class UserDaoImplTest {
 
   @Test
   public void save() throws Exception {
-    User user = testUser();
+    User user = newUser();
     userDao.save(user);
     Assert.assertTrue(user.getId() != null);
   }
 
   @Test
-  public void get() throws Exception {
-    User user = testUser();
-    userDao.save(user);
-    User newUser = userDao.get(user.getId());
-    Assert.assertEquals(user, newUser);
-  }
-
-  @Test
-  public void update() throws Exception {
-    User user = testUser();
-    userDao.save(user);
-    user.setName("test");
-    userDao.update(user);
-    User newUser = userDao.get(user.getId());
-    Assert.assertEquals(user, newUser);
-  }
-
-  @Test
   public void delete() throws Exception {
-    User user = testUser();
+    User user = newUser();
     userDao.save(user);
     userDao.delete(user);
     Assert.assertTrue(user.isDeleted());
@@ -56,7 +38,7 @@ public class UserDaoImplTest {
 
   @Test
   public void deleteHasTransactions() throws Exception {
-    User user = testUser();
+    User user = newUser();
     user.addTransaction();
     userDao.save(user);
     userDao.delete(user);
@@ -65,9 +47,9 @@ public class UserDaoImplTest {
 
   @Test
   public void find() throws Exception {
-    User user1 = testUser();
-    User user2 = testUser();
-    User user3 = testUser();
+    User user1 = newUser();
+    User user2 = newUser();
+    User user3 = newUser();
     userDao.save(user1);
     userDao.save(user2);
     userDao.save(user3);
@@ -80,9 +62,9 @@ public class UserDaoImplTest {
 
   @Test
   public void findDeleted() throws Exception {
-    User user1 = testUser();
-    User user2 = testUser();
-    User user3 = testUser();
+    User user1 = newUser();
+    User user2 = newUser();
+    User user3 = newUser();
     userDao.save(user1);
     userDao.save(user2);
     userDao.save(user3);
@@ -92,7 +74,7 @@ public class UserDaoImplTest {
     Assert.assertEquals(user1, users.get(0));
   }
 
-  private User testUser() {
+  private User newUser() {
     User user = new User();
     user.setName(UUID.randomUUID().toString());
     return user;

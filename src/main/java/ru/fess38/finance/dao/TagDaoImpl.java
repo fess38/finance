@@ -13,9 +13,7 @@ import java.util.List;
 @Repository
 @Transactional
 public class TagDaoImpl implements TagDao {
-  @Autowired
   private SessionFactory sessionFactory;
-  @Autowired
   private DatabaseChangeFlag databaseChangeFlag;
 
   @Override
@@ -55,5 +53,15 @@ public class TagDaoImpl implements TagDao {
   @Override
   public List<Tag> findDeleted(DetachedCriteria detachedCriteria) {
     return commonFind(deleted(detachedCriteria), sessionFactory);
+  }
+
+  @Autowired
+  public void setSessionFactory(SessionFactory sessionFactory) {
+    this.sessionFactory = sessionFactory;
+  }
+
+  @Autowired
+  public void setDatabaseChangeFlag(DatabaseChangeFlag databaseChangeFlag) {
+    this.databaseChangeFlag = databaseChangeFlag;
   }
 }

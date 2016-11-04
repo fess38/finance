@@ -65,7 +65,7 @@ public class Rubric {
     return isIncome;
   }
 
-  public void setIsIncome(boolean isIncome) {
+  public void setIncome(boolean isIncome) {
     this.isIncome = isIncome;
   }
 
@@ -73,7 +73,7 @@ public class Rubric {
     return isTransfer;
   }
 
-  public void setIsTransfer(boolean isTransfer) {
+  public void setTransfer(boolean isTransfer) {
     this.isTransfer = isTransfer;
   }
 

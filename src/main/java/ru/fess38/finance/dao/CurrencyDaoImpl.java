@@ -13,9 +13,7 @@ import java.util.List;
 @Repository
 @Transactional
 public class CurrencyDaoImpl implements CurrencyDao {
-  @Autowired
   private SessionFactory sessionFactory;
-  @Autowired
   private DatabaseChangeFlag databaseChangeFlag;
 
   @Override
@@ -53,5 +51,15 @@ public class CurrencyDaoImpl implements CurrencyDao {
   @Override
   public List<Currency> findDeleted(DetachedCriteria detachedCriteria) {
     return commonFind(deleted(detachedCriteria), sessionFactory);
+  }
+
+  @Autowired
+  public void setSessionFactory(SessionFactory sessionFactory) {
+    this.sessionFactory = sessionFactory;
+  }
+
+  @Autowired
+  public void setDatabaseChangeFlag(DatabaseChangeFlag databaseChangeFlag) {
+    this.databaseChangeFlag = databaseChangeFlag;
   }
 }

@@ -14,9 +14,7 @@ import java.util.List;
 @Repository
 @Transactional
 public class RubricDaoImpl implements RubricDao {
-  @Autowired
   private SessionFactory sessionFactory;
-  @Autowired
   private DatabaseChangeFlag databaseChangeFlag;
 
   @Override
@@ -58,6 +56,10 @@ public class RubricDaoImpl implements RubricDao {
     return commonFind(deleted(notTransfer(detachedCriteria)), sessionFactory);
   }
 
+  private DetachedCriteria notTransfer(DetachedCriteria detachedCriteria) {
+    return detachedCriteria.add(Restrictions.eq("isTransfer", false));
+  }
+
   @Override
   public List<Rubric> findByType(boolean isIncome) {
     DetachedCriteria criteria = DetachedCriteria.forClass(Rubric.class)
@@ -67,12 +69,18 @@ public class RubricDaoImpl implements RubricDao {
 
   @Override
   public Rubric getTransferRubric() {
-    DetachedCriteria criteria = DetachedCriteria.forClass(Rubric.class)
-        .add(Restrictions.eq("isTransfer", true));
-    return (Rubric) commonFind(criteria, sessionFactory).get(0);
+    return (Rubric) sessionFactory.getCurrentSession().createCriteria(Rubric.class)
+        .add(Restrictions.eq("isTransfer", true))
+        .uniqueResult();
   }
 
-  private DetachedCriteria notTransfer(DetachedCriteria detachedCriteria) {
-    return detachedCriteria.add(Restrictions.eq("isTransfer", false));
+  @Autowired
+  public void setSessionFactory(SessionFactory sessionFactory) {
+    this.sessionFactory = sessionFactory;
+  }
+
+  @Autowired
+  public void setDatabaseChangeFlag(DatabaseChangeFlag databaseChangeFlag) {
+    this.databaseChangeFlag = databaseChangeFlag;
   }
 }

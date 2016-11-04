@@ -3,6 +3,8 @@ package ru.fess38.finance.model;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,6 +30,7 @@ public class Account {
   private int balance = 0;
   @ManyToOne(fetch = FetchType.EAGER, optional = false, targetEntity = Currency.class)
   @JoinColumn(name = "currencyId", nullable = false)
+  @Cascade(value = {CascadeType.SAVE_UPDATE})
   private Currency currency;
   @Column(length = 100, nullable = false)
   @Enumerated(EnumType.STRING)

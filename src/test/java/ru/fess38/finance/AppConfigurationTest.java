@@ -8,6 +8,17 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import ru.fess38.finance.dao.AccountDao;
+import ru.fess38.finance.dao.AccountDaoImpl;
+import ru.fess38.finance.dao.CurrencyDao;
+import ru.fess38.finance.dao.CurrencyDaoImpl;
+import ru.fess38.finance.dao.RubricDao;
+import ru.fess38.finance.dao.RubricDaoImpl;
+import ru.fess38.finance.dao.TagDao;
+import ru.fess38.finance.dao.TagDaoImpl;
+import ru.fess38.finance.dao.TransactionChangeService;
+import ru.fess38.finance.dao.TransactionDao;
+import ru.fess38.finance.dao.TransactionDaoImpl;
 import ru.fess38.finance.dao.UserDao;
 import ru.fess38.finance.dao.UserDaoImpl;
 
@@ -45,10 +56,81 @@ public class AppConfigurationTest {
 
   @Bean
   @Autowired
+  public DefaultEntitiesCreator defaultEntitiesCreator(AccountDao accountDao, CurrencyDao
+      currencyDao, RubricDao rubricDao) {
+    DefaultEntitiesCreator defaultEntitiesCreator = new DefaultEntitiesCreator();
+    defaultEntitiesCreator.setAccountDao(accountDao);
+    defaultEntitiesCreator.setCurrencyDao(currencyDao);
+    defaultEntitiesCreator.setRubricDao(rubricDao);
+    return defaultEntitiesCreator;
+  }
+
+  @Bean
+  @Autowired
+  public AccountDao accountDao(SessionFactory sessionFactory,
+      DatabaseChangeFlag databaseChangeFlag) {
+    AccountDaoImpl accountDao = new AccountDaoImpl();
+    accountDao.setSessionFactory(sessionFactory);
+    accountDao.setDatabaseChangeFlag(databaseChangeFlag);
+    return accountDao;
+  }
+
+  @Bean
+  @Autowired
+  public CurrencyDao currencyDao(SessionFactory sessionFactory,
+      DatabaseChangeFlag databaseChangeFlag) {
+    CurrencyDaoImpl currencyDao = new CurrencyDaoImpl();
+    currencyDao.setSessionFactory(sessionFactory);
+    currencyDao.setDatabaseChangeFlag(databaseChangeFlag);
+    return currencyDao;
+  }
+
+  @Bean
+  @Autowired
+  public RubricDao rubricDao(SessionFactory sessionFactory, DatabaseChangeFlag databaseChangeFlag) {
+    RubricDaoImpl rubricDao = new RubricDaoImpl();
+    rubricDao.setSessionFactory(sessionFactory);
+    rubricDao.setDatabaseChangeFlag(databaseChangeFlag);
+    return rubricDao;
+  }
+
+  @Bean
+  @Autowired
+  public TagDao tagDao(SessionFactory sessionFactory, DatabaseChangeFlag databaseChangeFlag) {
+    TagDaoImpl tagDao = new TagDaoImpl();
+    tagDao.setSessionFactory(sessionFactory);
+    tagDao.setDatabaseChangeFlag(databaseChangeFlag);
+    return tagDao;
+  }
+
+  @Bean
+  @Autowired
+  public TransactionDao transactionDao(SessionFactory sessionFactory, DatabaseChangeFlag
+      databaseChangeFlag, TransactionChangeService transactionChangeService) {
+    TransactionDaoImpl transactionDao = new TransactionDaoImpl();
+    transactionDao.setSessionFactory(sessionFactory);
+    transactionDao.setDatabaseChangeFlag(databaseChangeFlag);
+    return transactionDao;
+  }
+
+  @Bean
+  @Autowired
   public UserDao userDao(SessionFactory sessionFactory, DatabaseChangeFlag databaseChangeFlag) {
     UserDaoImpl userDao = new UserDaoImpl();
     userDao.setSessionFactory(sessionFactory);
     userDao.setDatabaseChangeFlag(databaseChangeFlag);
     return userDao;
+  }
+
+  @Bean
+  @Autowired
+  public TransactionChangeService transactionChangeService(AccountDao accountDao, RubricDao
+      rubricDao, TagDao tagDao, UserDao userDao) {
+    TransactionChangeService transactionChangeService = new TransactionChangeService();
+    transactionChangeService.setAccountDao(accountDao);
+    transactionChangeService.setRubricDao(rubricDao);
+    transactionChangeService.setTagDao(tagDao);
+    transactionChangeService.setUserDao(userDao);
+    return transactionChangeService;
   }
 }

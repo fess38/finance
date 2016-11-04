@@ -56,8 +56,8 @@ public class DefaultEntitiesCreator {
   private void createTransferRubric() {
     Rubric transferRubric = new Rubric();
     transferRubric.setName("Перевод между счетами");
-    transferRubric.setIsIncome(false);
-    transferRubric.setIsTransfer(true);
+    transferRubric.setIncome(false);
+    transferRubric.setTransfer(true);
     rubricDao.save(transferRubric);
   }
 

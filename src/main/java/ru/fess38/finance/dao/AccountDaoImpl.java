@@ -15,9 +15,7 @@ import java.util.List;
 @Repository
 @Transactional
 public class AccountDaoImpl implements AccountDao {
-  @Autowired
   private SessionFactory sessionFactory;
-  @Autowired
   private DatabaseChangeFlag databaseChangeFlag;
 
   @Override
@@ -73,5 +71,15 @@ public class AccountDaoImpl implements AccountDao {
         .createCriteria(Account.class)
         .add(Restrictions.eq("type", AccountType.OUTER))
         .uniqueResult();
+  }
+
+  @Autowired
+  public void setSessionFactory(SessionFactory sessionFactory) {
+    this.sessionFactory = sessionFactory;
+  }
+
+  @Autowired
+  public void setDatabaseChangeFlag(DatabaseChangeFlag databaseChangeFlag) {
+    this.databaseChangeFlag = databaseChangeFlag;
   }
 }

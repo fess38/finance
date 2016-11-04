@@ -24,11 +24,8 @@ import java.util.stream.Collectors;
 @Repository
 @Transactional
 public class TransactionDaoImpl implements TransactionDao {
-  @Autowired
   private SessionFactory sessionFactory;
-  @Autowired
   private TransactionChangeService changeService;
-  @Autowired
   private DatabaseChangeFlag databaseChangeFlag;
 
   @Override
@@ -129,5 +126,20 @@ public class TransactionDaoImpl implements TransactionDao {
         .setProjection(Projections.rowCount())
         .getExecutableCriteria(sessionFactory.getCurrentSession())
         .uniqueResult()).intValue();
+  }
+
+  @Autowired
+  public void setSessionFactory(SessionFactory sessionFactory) {
+    this.sessionFactory = sessionFactory;
+  }
+
+  @Autowired
+  public void setDatabaseChangeFlag(DatabaseChangeFlag databaseChangeFlag) {
+    this.databaseChangeFlag = databaseChangeFlag;
+  }
+
+  @Autowired
+  public void setChangeService(TransactionChangeService changeService) {
+    this.changeService = changeService;
   }
 }
