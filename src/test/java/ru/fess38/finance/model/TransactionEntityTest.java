@@ -14,11 +14,11 @@ public class TransactionEntityTest {
   }
 
   @Test
-  public void substractTransaction() throws Exception {
+  public void subtractTransaction() throws Exception {
     TestEntity testEntity = new TestEntity();
     testEntity.addTransaction();
-    testEntity.substractTransaction();
-    testEntity.substractTransaction();
+    testEntity.subtractTransaction();
+    testEntity.subtractTransaction();
     Assert.assertEquals(0, testEntity.getAmountTransactions());
     Assert.assertFalse(testEntity.hasTransactions());
   }

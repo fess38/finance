@@ -82,7 +82,7 @@ public class TransactionChangeService {
     if ((oldTag != null || newTag != null) && !Objects.equals(oldTag, newTag)) {
       if (oldTag != null) {
         Tag persistedTag = tagDao.get(oldTag.getId());
-        persistedTag.substractTransaction();
+        persistedTag.subtractTransaction();
         tagDao.update(persistedTag);
       }
       if (newTag != null) {
@@ -100,7 +100,7 @@ public class TransactionChangeService {
     if ((oldUser != null || newUser != null) && !Objects.equals(oldUser, newUser)) {
       if (oldUser != null) {
         User persistedUser = userDao.get(oldUser.getId());
-        persistedUser.substractTransaction();
+        persistedUser.subtractTransaction();
         userDao.update(persistedUser);
       }
       if (newUser != null) {
@@ -123,15 +123,15 @@ public class TransactionChangeService {
     Account persistedAccountTo = accountDao.get(transaction.getAccountTo().getId());
     persistedAccountFrom.addMoney(transaction.getAmountFrom());
     persistedAccountTo.addMoney(-transaction.getAmountTo());
-    persistedAccountFrom.substractTransaction();
-    persistedAccountTo.substractTransaction();
+    persistedAccountFrom.subtractTransaction();
+    persistedAccountTo.subtractTransaction();
     accountDao.update(persistedAccountFrom);
     accountDao.update(persistedAccountTo);
   }
 
   private void updateRubricOnDelete(Transaction transaction) {
     Rubric persistedRubric = rubricDao.get(transaction.getRubric().getId());
-    persistedRubric.substractTransaction();
+    persistedRubric.subtractTransaction();
     rubricDao.update(persistedRubric);
   }
 
@@ -139,7 +139,7 @@ public class TransactionChangeService {
   private void updateTagOnDelete(Transaction transaction) {
     if (transaction.getTag() != null) {
       Tag persistedTag = tagDao.get(transaction.getTag().getId());
-      persistedTag.substractTransaction();
+      persistedTag.subtractTransaction();
       tagDao.update(persistedTag);
     }
   }
@@ -147,7 +147,7 @@ public class TransactionChangeService {
   private void updateUserOnDelete(Transaction transaction) {
     if (transaction.getUser() != null) {
       User persistedUser = userDao.get(transaction.getUser().getId());
-      persistedUser.substractTransaction();
+      persistedUser.subtractTransaction();
       userDao.update(persistedUser);
     }
   }

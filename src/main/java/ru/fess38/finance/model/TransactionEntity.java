@@ -7,11 +7,9 @@ import javax.persistence.MappedSuperclass;
 public abstract class TransactionEntity {
   @Column(nullable = false)
   private int amountTransactions = 0;
-  @Column(nullable = false)
-  private boolean hasTransactions = false;
 
   public boolean hasTransactions() {
-    return hasTransactions;
+    return amountTransactions > 0;
   }
 
   public int getAmountTransactions() {
@@ -20,13 +18,11 @@ public abstract class TransactionEntity {
 
   public void addTransaction() {
     amountTransactions++;
-    hasTransactions = amountTransactions > 0;
   }
 
-  public void substractTransaction() {
+  public void subtractTransaction() {
     if (amountTransactions > 0) {
       amountTransactions--;
     }
-    hasTransactions = amountTransactions > 0;
   }
 }
