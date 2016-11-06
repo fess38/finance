@@ -118,12 +118,16 @@ angular.module("app.transaction").controller("saveTransaction", function($scope,
     outerAccount = response.data;
   });
 
-  RestApi.users().then(function(response) {
-    $scope.users = response.data;
+  RestApi.rubrics().then(function(response) {
+    $scope.rubrics = response.data;
   });
 
   RestApi.tags().then(function(response) {
     $scope.tags = response.data;
+  });
+
+  RestApi.users().then(function(response) {
+    $scope.users = response.data;
   });
 
   function readTransaction() {
@@ -149,18 +153,6 @@ angular.module("app.transaction").controller("saveTransaction", function($scope,
     }, function() {
       $scope.alert = AlertService.danger("Ошибка добавления транзакции");
     });
-  };
-
-  $scope.changeType = function(type) {
-    if (type === "income") {
-      RestApi.incomeRubrics().then(function(response) {
-        $scope.rubrics = response.data;
-      });
-    } else if (type === "expense") {
-      RestApi.expenseRubrics().then(function(response) {
-        $scope.rubrics = response.data;
-      });
-    }
   };
 
   // Календарь

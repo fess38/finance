@@ -22,24 +22,12 @@
         <input id="transactionAddAmount" class="form-control" type="number" pattern="\d*" ng-model="newTransaction.amountFrom">
       </div>
     </div>
-    <div class="col-xs-6 col-md-1">
-      <label class="radio control-label">
-        <input type="radio" ng-model="type" value="income" ng-click='changeType(type)'>
-        Доход
-      </label>
-    </div>
-    <div class="col-xs-6 col-md-1">
-      <label class="radio control-label">
-        <input type="radio" ng-model="type" value="expense" ng-click='changeType(type)'>
-        Расход
-      </label>
-    </div>
-    <br><br>
     <div class="form-group">
       <label class="control-label col-xs-4 col-md-1">Рубрика</label>
       <div class="col-xs-8 col-md-2">
         <select ng-model="newTransaction.rubric" size="1" class="form-control"
-            ng-options="rubric as rubric.name for rubric in rubrics | orderBy:'name' track by rubric.id">
+            ng-options="rubric as rubric.name for rubric in rubrics | orderBy:['-isIncome', 'name']
+              track by rubric.id">
         </select>
       </div>
     </div>

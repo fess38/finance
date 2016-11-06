@@ -26,16 +26,6 @@ public class RubricController {
     return rubricDao.find(DetachedCriteria.forClass(Rubric.class));
   }
 
-  @RequestMapping(value = "/rubric/income", method = RequestMethod.GET)
-  public @ResponseBody List<Rubric> findIncomeRubrics() {
-    return rubricDao.findByType(true);
-  }
-
-  @RequestMapping(value = "/rubric/expense", method = RequestMethod.GET)
-  public @ResponseBody List<Rubric> findExpenseRubrics() {
-    return rubricDao.findByType(false);
-  }
-
   @RequestMapping(value = "/rubric/save", method = RequestMethod.POST)
   public void save(@RequestBody Rubric rubric) {
     rubricDao.save(rubric);

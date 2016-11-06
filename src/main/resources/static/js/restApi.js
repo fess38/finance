@@ -31,17 +31,14 @@ angular.module("app.restApi").service("RestApi", function($http) {
     return $http.get("/currency/get");
   };
 
-  //noinspection JSUnusedGlobalSymbols
   this.saveCurrency = function(currency) {
     return $http.post("/currency/save", currency);
   };
 
-  //noinspection JSUnusedGlobalSymbols
   this.updateCurrency = function(currency) {
     return $http.post("/currency/update", currency);
   };
 
-  //noinspection JSUnusedGlobalSymbols
   this.deleteCurrency = function(currency) {
     return $http.post("/currency/delete", currency);
   };
@@ -49,14 +46,6 @@ angular.module("app.restApi").service("RestApi", function($http) {
   // Rubric
   this.rubrics = function() {
     return $http.get("/rubric/get");
-  };
-
-  this.incomeRubrics = function() {
-    return $http.get("/rubric/income");
-  };
-
-  this.expenseRubrics = function() {
-    return $http.get("/rubric/expense");
   };
 
   this.transferRubric = function() {

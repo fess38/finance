@@ -61,13 +61,6 @@ public class RubricDaoImpl implements RubricDao {
   }
 
   @Override
-  public List<Rubric> findByType(boolean isIncome) {
-    DetachedCriteria criteria = DetachedCriteria.forClass(Rubric.class)
-        .add(Restrictions.eq("isIncome", isIncome));
-    return find(criteria);
-  }
-
-  @Override
   public Rubric getTransferRubric() {
     return (Rubric) sessionFactory.getCurrentSession().createCriteria(Rubric.class)
         .add(Restrictions.eq("isTransfer", true))
