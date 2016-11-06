@@ -37,7 +37,7 @@ public class TransactionController {
     List<Transaction> transactions = transactionDao.find(yearMonth).stream()
         .filter(x -> !x.getRubric().isTransfer())
         .collect(Collectors.toList());
-    return MonthTransactions.of(yearMonth, transactions);
+    return new MonthTransactions(yearMonth, transactions);
   }
 
   @RequestMapping(value = "/transaction/find", method = RequestMethod.GET,

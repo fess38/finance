@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
 public class MonthTransactions {
-  private MonthTransactions(YearMonth yearMonth, List<Transaction> transactions) {
+  public MonthTransactions(YearMonth yearMonth, List<Transaction> transactions) {
     this.yearMonth = yearMonth;
     this.transactions = transactions;
     this.rubrics = processRubrics();
@@ -33,10 +33,6 @@ public class MonthTransactions {
   private final List<DaySummary> daySummary;
   private final List<RubricSummary> rubricSummary;
   private final List<RubricDaySummary> rubricDaySummary;
-
-  public static MonthTransactions of(YearMonth yearMonth, List<Transaction> transactions) {
-    return new MonthTransactions(yearMonth, transactions);
-  }
 
   private List<Rubric> processRubrics() {
     return transactions.stream()

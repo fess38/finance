@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.fess38.finance.AppConfigurationTest;
 import ru.fess38.finance.DefaultEntitiesCreator;
 import ru.fess38.finance.model.Account;
+import ru.fess38.finance.model.Account.AccountType;
 import ru.fess38.finance.model.Currency;
 
 import java.util.List;
@@ -44,6 +45,15 @@ public class AccountDaoImplTest {
   public void deleteHasTransactions() throws Exception {
     Account account = newAccount();
     account.addTransaction();
+    accountDao.save(account);
+    accountDao.delete(account);
+    Assert.assertFalse(account.isDeleted());
+  }
+
+  @Test
+  public void deleteMaster() throws Exception {
+    Account account = newAccount();
+    account.setType(AccountType.MASTER);
     accountDao.save(account);
     accountDao.delete(account);
     Assert.assertFalse(account.isDeleted());

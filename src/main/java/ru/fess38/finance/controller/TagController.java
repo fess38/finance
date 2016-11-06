@@ -7,9 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import ru.fess38.finance.dao.TagDao;
-import ru.fess38.finance.dao.TransactionDao;
 import ru.fess38.finance.model.Tag;
 
 import java.util.List;
@@ -18,8 +16,6 @@ import java.util.List;
 public class TagController {
   @Autowired
   private TagDao tagDao;
-  @Autowired
-  private TransactionDao transactionDao;
 
   @RequestMapping(value = "/tag/get", method = RequestMethod.GET)
   public @ResponseBody List<Tag> get() {
@@ -38,8 +34,6 @@ public class TagController {
 
   @RequestMapping(value = "/tag/delete", method = RequestMethod.POST)
   public void delete(@RequestBody Tag tag) {
-    if (transactionDao.countByTag(tag) == 0) {
-      tagDao.delete(tag);
-    }
+    tagDao.delete(tag);
   }
 }

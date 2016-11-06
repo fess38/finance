@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.fess38.finance.dao.RubricDao;
-import ru.fess38.finance.dao.TransactionDao;
 import ru.fess38.finance.model.Rubric;
 
 import java.util.List;
@@ -18,12 +17,14 @@ public class RubricController {
   @Autowired
   private RubricDao rubricDao;
 
-  @Autowired
-  private TransactionDao transactionDao;
-
   @RequestMapping(value = "/rubric/get", method = RequestMethod.GET)
   public @ResponseBody List<Rubric> get() {
     return rubricDao.find(DetachedCriteria.forClass(Rubric.class));
+  }
+
+  @RequestMapping(value = "/rubric/transfer", method = RequestMethod.GET)
+  public @ResponseBody Rubric findTransferRubrics() {
+    return rubricDao.getTransferRubric();
   }
 
   @RequestMapping(value = "/rubric/save", method = RequestMethod.POST)
@@ -38,13 +39,6 @@ public class RubricController {
 
   @RequestMapping(value = "/rubric/delete", method = RequestMethod.POST)
   public void delete(@RequestBody Rubric rubric) {
-    if (transactionDao.countByRubric(rubric) == 0) {
-      rubricDao.delete(rubric);
-    }
-  }
-
-  @RequestMapping(value = "/rubric/transfer", method = RequestMethod.GET)
-  public @ResponseBody Rubric findTransferRubrics() {
-    return rubricDao.getTransferRubric();
+    rubricDao.delete(rubric);
   }
 }

@@ -8,9 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.fess38.finance.dao.AccountDao;
-import ru.fess38.finance.dao.TransactionDao;
 import ru.fess38.finance.model.Account;
-import ru.fess38.finance.model.Account.AccountType;
 
 import java.util.List;
 
@@ -18,8 +16,6 @@ import java.util.List;
 public class AccountController {
   @Autowired
   private AccountDao accountDao;
-  @Autowired
-  private TransactionDao transactionDao;
 
   @RequestMapping(value = "/account/get", method = RequestMethod.GET)
   public @ResponseBody List<Account> get() {
@@ -48,9 +44,6 @@ public class AccountController {
 
   @RequestMapping(value = "/account/delete", method = RequestMethod.POST)
   public void delete(@RequestBody Account account) {
-    if (transactionDao.countByAccount(account) == 0 && account.getType() == AccountType.DEFAULT) {
-      accountDao.delete(account);
-    }
+    accountDao.delete(account);
   }
-
 }

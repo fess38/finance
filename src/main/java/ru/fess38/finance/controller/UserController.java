@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import ru.fess38.finance.dao.TransactionDao;
 import ru.fess38.finance.dao.UserDao;
 import ru.fess38.finance.model.User;
 
@@ -18,8 +16,6 @@ import java.util.List;
 public class UserController {
   @Autowired
   private UserDao userDao;
-  @Autowired
-  private TransactionDao transactionDao;
 
   @RequestMapping(value = "/user/get", method = RequestMethod.GET)
   public @ResponseBody List<User> get() {
@@ -38,8 +34,6 @@ public class UserController {
 
   @RequestMapping(value = "/user/delete", method = RequestMethod.POST)
   public void delete(@RequestBody User user) {
-    if (transactionDao.countByUser(user) == 0) {
-      userDao.delete(user);
-    }
+    userDao.delete(user);
   }
 }
