@@ -1,6 +1,7 @@
 package ru.fess38.finance.dao;
 
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -71,13 +72,26 @@ public class TransactionDaoImpl implements TransactionDao {
     return commonFind(deleted(detachedCriteria), sessionFactory);
   }
 
+  @Override
   public List<Transaction> find(YearMonth yearMonth) {
+    DetachedCriteria criteria = DetachedCriteria.forClass(Transaction.class)
+        .add(yearMonthCriterion(yearMonth));
+    return find(criteria);
+  }
+
+  @Override
+  public List<Transaction> find(long rubricId, YearMonth yearMonth) {
+    DetachedCriteria criteria = DetachedCriteria.forClass(Transaction.class)
+        .add(yearMonthCriterion(yearMonth))
+        .add(Restrictions.eq("rubric.id", rubricId));
+    return find(criteria).stream().collect(Collectors.toList());
+  }
+
+  private Criterion yearMonthCriterion(YearMonth yearMonth) {
     String sql = "YEAR({alias}.dayRef) = ? AND MONTH({alias}.dayRef) = ?";
     Object[] values = new Object[]{yearMonth.getYear(), yearMonth.getMonthValue()};
     Type[] types = new Type[]{IntegerType.INSTANCE, IntegerType.INSTANCE};
-    DetachedCriteria criteria = DetachedCriteria.forClass(Transaction.class)
-        .add(Restrictions.sqlRestriction(sql, values, types));
-    return find(criteria);
+    return Restrictions.sqlRestriction(sql, values, types);
   }
 
   @Override
@@ -86,17 +100,6 @@ public class TransactionDaoImpl implements TransactionDao {
         .add(Restrictions.eq("dayRef", localDate))
         .add(Restrictions.eq("rubric.id", rubricId));
     return find(criteria);
-  }
-
-  @Override public List<Transaction> find(long rubricId, YearMonth yearMonth) {
-    String sql = "YEAR({alias}.dayRef) = ? AND MONTH({alias}.dayRef) = ?";
-    Object[] values = new Object[]{yearMonth.getYear(), yearMonth.getMonthValue()};
-    Type[] types = new Type[]{IntegerType.INSTANCE, IntegerType.INSTANCE};
-    DetachedCriteria criteria = DetachedCriteria.forClass(Transaction.class)
-        .add(Restrictions.sqlRestriction(sql, values, types))
-        .add(Restrictions.eq("rubric.id", rubricId));
-    ;
-    return find(criteria).stream().collect(Collectors.toList());
   }
 
   @Override

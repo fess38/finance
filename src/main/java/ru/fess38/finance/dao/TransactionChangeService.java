@@ -57,27 +57,27 @@ public class TransactionChangeService {
     }
   }
 
-  public void update(Transaction savedTransaction, Transaction transaction) {
-    updateAccountOnUpdate(savedTransaction, transaction);
-    updateTagOnUpdate(savedTransaction, transaction);
-    updateUserOnUpdate(savedTransaction, transaction);
+  public void update(Transaction before, Transaction after) {
+    updateAccountOnUpdate(before, after);
+    updateTagOnUpdate(before, after);
+    updateUserOnUpdate(before, after);
   }
 
-  private void updateAccountOnUpdate(Transaction persistedTransaction, Transaction transaction) {
-    int persistedAmountFrom = persistedTransaction.getAmountFrom();
-    int persistedAmountTo = persistedTransaction.getAmountTo();
-    int newAmountFrom = transaction.getAmountFrom();
-    int newAmountTo = transaction.getAmountTo();
+  private void updateAccountOnUpdate(Transaction before, Transaction after) {
+    int persistedAmountFrom = before.getAmountFrom();
+    int persistedAmountTo = before.getAmountTo();
+    int newAmountFrom = after.getAmountFrom();
+    int newAmountTo = after.getAmountTo();
 
-    persistedTransaction.getAccountFrom().addMoney(-newAmountFrom + persistedAmountFrom);
-    persistedTransaction.getAccountTo().addMoney(newAmountTo - persistedAmountTo);
-    accountDao.update(persistedTransaction.getAccountFrom());
-    accountDao.update(persistedTransaction.getAccountTo());
+    before.getAccountFrom().addMoney(-newAmountFrom + persistedAmountFrom);
+    before.getAccountTo().addMoney(newAmountTo - persistedAmountTo);
+    accountDao.update(before.getAccountFrom());
+    accountDao.update(before.getAccountTo());
   }
 
-  private void updateTagOnUpdate(Transaction persistedTransaction, Transaction transaction) {
-    Tag oldTag = persistedTransaction.getTag();
-    Tag newTag = transaction.getTag();
+  private void updateTagOnUpdate(Transaction before, Transaction after) {
+    Tag oldTag = before.getTag();
+    Tag newTag = after.getTag();
 
     if ((oldTag != null || newTag != null) && !Objects.equals(oldTag, newTag)) {
       if (oldTag != null) {
@@ -93,9 +93,9 @@ public class TransactionChangeService {
     }
   }
 
-  private void updateUserOnUpdate(Transaction persistedTransaction, Transaction transaction) {
-    User oldUser = persistedTransaction.getUser();
-    User newUser = transaction.getUser();
+  private void updateUserOnUpdate(Transaction before, Transaction after) {
+    User oldUser = before.getUser();
+    User newUser = after.getUser();
 
     if ((oldUser != null || newUser != null) && !Objects.equals(oldUser, newUser)) {
       if (oldUser != null) {
