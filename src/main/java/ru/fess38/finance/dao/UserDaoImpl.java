@@ -38,12 +38,7 @@ public class UserDaoImpl implements UserDao {
 
   @Override
   public User delete(User user) {
-    User savedUser = get(user.id());
-    if (!savedUser.hasTransactions()) {
-      return update(savedUser.withIsDeleted(true));
-    } else {
-      return savedUser;
-    }
+    return update(user.withIsDeleted(true));
   }
 
   @Override

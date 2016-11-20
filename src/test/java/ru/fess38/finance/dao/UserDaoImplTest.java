@@ -33,11 +33,6 @@ public class UserDaoImplTest {
   }
 
   @Test
-  public void deleteHasTransactions() throws Exception {
-    Assert.assertFalse(userDao.delete(userDao.save(newUser().addTransaction())).isDeleted());
-  }
-
-  @Test
   public void find() throws Exception {
     User user1 = userDao.save(newUser());
     userDao.delete(userDao.save(newUser()));

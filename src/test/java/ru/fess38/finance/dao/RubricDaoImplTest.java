@@ -36,11 +36,6 @@ public class RubricDaoImplTest {
   }
 
   @Test
-  public void deleteHasTransactions() throws Exception {
-    Assert.assertFalse(rubricDao.delete(rubricDao.save(newRubric().addTransaction())).isDeleted());
-  }
-
-  @Test
   public void find() throws Exception {
     Rubric rubric1 = rubricDao.save(newRubric());
     rubricDao.delete(rubricDao.save(newRubric()));

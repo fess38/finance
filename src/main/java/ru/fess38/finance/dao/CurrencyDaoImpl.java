@@ -38,7 +38,7 @@ public class CurrencyDaoImpl implements CurrencyDao {
 
   @Override
   public Currency delete(Currency currency) {
-    return update(get(currency.id()).withIsDeleted(true));
+    return update(currency.withIsDeleted(true));
   }
 
   @SuppressWarnings("unchecked")

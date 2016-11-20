@@ -40,12 +40,6 @@ public class AccountDaoImplTest {
   }
 
   @Test
-  public void deleteHasTransactions() throws Exception {
-    Assert.assertFalse(
-        accountDao.delete(accountDao.save(newAccount().addTransaction())).isDeleted());
-  }
-
-  @Test
   public void deleteMaster() throws Exception {
     Assert.assertFalse(accountDao.delete(accountDao.save(newAccount().withType(Type.MASTER)))
         .isDeleted());

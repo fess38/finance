@@ -38,12 +38,7 @@ public class TagDaoImpl implements TagDao {
 
   @Override
   public Tag delete(Tag tag) {
-    Tag savedTag = get(tag.id());
-    if (!savedTag.hasTransactions()) {
-      return update(savedTag.withIsDeleted(true));
-    } else {
-      return savedTag;
-    }
+    return update(tag.withIsDeleted(true));
   }
 
   @Override

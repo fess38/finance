@@ -40,11 +40,10 @@ public class AccountDaoImpl implements AccountDao {
 
   @Override
   public Account delete(Account account) {
-    Account savedAccount = get(account.id());
-    if (!savedAccount.hasTransactions() && savedAccount.type() == Type.DEFAULT) {
-      return update(savedAccount.withIsDeleted(true));
+    if (account.type() == Type.DEFAULT) {
+      return update(account.withIsDeleted(true));
     } else {
-      return savedAccount;
+      return account;
     }
   }
 

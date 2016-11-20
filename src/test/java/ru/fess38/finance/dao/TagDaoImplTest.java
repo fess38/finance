@@ -33,11 +33,6 @@ public class TagDaoImplTest {
   }
 
   @Test
-  public void deleteHasTransactions() throws Exception {
-    Assert.assertFalse(tagDao.delete(tagDao.save(newTag().addTransaction())).isDeleted());
-  }
-
-  @Test
   public void find() throws Exception {
     Tag tag1 = tagDao.save(newTag());
     tagDao.delete(tagDao.save(newTag()));
