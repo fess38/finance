@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.fess38.finance.DatabaseChangeFlag;
+import ru.fess38.finance.model.ModifiableRubric;
 import ru.fess38.finance.model.Rubric;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 @Transactional
@@ -18,42 +20,49 @@ public class RubricDaoImpl implements RubricDao {
   private DatabaseChangeFlag databaseChangeFlag;
 
   @Override
-  public Long save(Rubric rubric) {
-    Long id = (Long) sessionFactory.getCurrentSession().save(rubric);
+  public Rubric save(Rubric rubric) {
+    return update(rubric);
+  }
+
+  @Override
+  public Rubric get(long id) {
+    return sessionFactory.getCurrentSession().get(ModifiableRubric.class, id).toImmutable();
+  }
+
+  @Override
+  public Rubric update(Rubric rubric) {
+    ModifiableRubric modifiableRubric = (ModifiableRubric) sessionFactory.getCurrentSession()
+        .merge(rubric.toModifiable());
     databaseChangeFlag.setTrue();
-    return id;
+    return modifiableRubric.toImmutable();
   }
 
   @Override
-  public Rubric get(Long id) {
-    return sessionFactory.getCurrentSession().get(Rubric.class, id);
-  }
-
-  @Override
-  public void update(Rubric rubric) {
-    sessionFactory.getCurrentSession().update(rubric);
-    databaseChangeFlag.setTrue();
-  }
-
-  @Override
-  public void delete(Rubric rubric) {
-    Rubric savedRubric = get(rubric.getId());
+  public Rubric delete(Rubric rubric) {
+    Rubric savedRubric = get(rubric.id());
     if (!savedRubric.hasTransactions()) {
-      savedRubric.setDeleted(true);
-      update(savedRubric);
+      return update(savedRubric.withIsDeleted(true));
+    } else {
+      return rubric;
     }
   }
 
   @SuppressWarnings("unchecked")
   @Override
   public List<Rubric> find(DetachedCriteria detachedCriteria) {
-    return commonFind(notDeleted(notTransfer(detachedCriteria)), sessionFactory);
+    return commonFind(notDeleted(notTransfer(detachedCriteria)), sessionFactory).stream()
+        .map(x -> (ModifiableRubric) x)
+        .map(ModifiableRubric::toImmutable)
+        .collect(Collectors.toList());
   }
 
   @SuppressWarnings("unchecked")
   @Override
   public List<Rubric> findDeleted(DetachedCriteria detachedCriteria) {
-    return commonFind(deleted(notTransfer(detachedCriteria)), sessionFactory);
+    return commonFind(deleted(notTransfer(detachedCriteria)), sessionFactory).stream()
+        .map(x -> (ModifiableRubric) x)
+        .map(ModifiableRubric::toImmutable)
+        .collect(Collectors.toList());
   }
 
   private DetachedCriteria notTransfer(DetachedCriteria detachedCriteria) {
@@ -62,9 +71,11 @@ public class RubricDaoImpl implements RubricDao {
 
   @Override
   public Rubric getTransferRubric() {
-    return (Rubric) sessionFactory.getCurrentSession().createCriteria(Rubric.class)
+    return ((ModifiableRubric) sessionFactory.getCurrentSession()
+        .createCriteria(ModifiableRubric.class)
         .add(Restrictions.eq("isTransfer", true))
-        .uniqueResult();
+        .uniqueResult())
+        .toImmutable();
   }
 
   @Autowired

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.fess38.finance.dao.UserDao;
+import ru.fess38.finance.model.ModifiableUser;
 import ru.fess38.finance.model.User;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class UserController {
 
   @RequestMapping(value = "/user/get", method = RequestMethod.GET)
   public @ResponseBody List<User> get() {
-    return userDao.find(DetachedCriteria.forClass(User.class));
+    return userDao.find(DetachedCriteria.forClass(ModifiableUser.class));
   }
 
   @RequestMapping(value = "/user/save", method = RequestMethod.POST)

@@ -10,9 +10,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 @Entity
-public class User extends TransactionEntity {
+@Table(name = "Tag")
+public class ModifiableTag {
   @Id
   @GeneratedValue(generator = "IdSequence", strategy = GenerationType.SEQUENCE)
   @SequenceGenerator(name = "IdSequence")
@@ -21,6 +23,8 @@ public class User extends TransactionEntity {
   private String name;
   @Column(nullable = false)
   private boolean isDeleted = false;
+  @Column(nullable = false)
+  private int amountTransactions = 0;
 
   @Override
   public boolean equals(Object object) {
@@ -35,6 +39,11 @@ public class User extends TransactionEntity {
   @Override
   public String toString() {
     return ToStringBuilder.reflectionToString(this);
+  }
+
+  public Tag toImmutable() {
+    return Tag.builder().id(id).name(name).isDeleted(isDeleted)
+        .amountTransactions(amountTransactions).build();
   }
 
   public Long getId() {
@@ -59,5 +68,13 @@ public class User extends TransactionEntity {
 
   public void setDeleted(boolean isDeleted) {
     this.isDeleted = isDeleted;
+  }
+
+  public int getAmountTransactions() {
+    return amountTransactions;
+  }
+
+  public void setAmountTransactions(int amountTransactions) {
+    this.amountTransactions = amountTransactions;
   }
 }

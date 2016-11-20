@@ -10,19 +10,25 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 @Entity
-public class Currency {
+@Table(name = "Rubric")
+public class ModifiableRubric {
   @Id
   @GeneratedValue(generator = "IdSequence", strategy = GenerationType.SEQUENCE)
   @SequenceGenerator(name = "IdSequence")
   private Long id;
   @Column(length = 100, nullable = false)
   private String name;
-  @Column(length = 1, nullable = false)
-  private String symbol;
+  @Column(nullable = false)
+  private boolean isIncome = false;
+  @Column(nullable = false)
+  private boolean isTransfer = false;
   @Column(nullable = false)
   private boolean isDeleted = false;
+  @Column(nullable = false)
+  private int amountTransactions = 0;
 
   @Override
   public boolean equals(Object object) {
@@ -39,12 +45,9 @@ public class Currency {
     return ToStringBuilder.reflectionToString(this);
   }
 
-  public String getSymbol() {
-    return symbol;
-  }
-
-  public void setSymbol(String symbol) {
-    this.symbol = symbol;
+  public Rubric toImmutable() {
+    return Rubric.builder().id(id).name(name).isTransfer(isTransfer()).isIncome(isIncome())
+        .isDeleted(isDeleted).amountTransactions(amountTransactions).build();
   }
 
   public Long getId() {
@@ -63,11 +66,35 @@ public class Currency {
     this.name = name;
   }
 
+  public boolean isIncome() {
+    return isIncome;
+  }
+
+  public void setIncome(boolean isIncome) {
+    this.isIncome = isIncome;
+  }
+
+  public boolean isTransfer() {
+    return isTransfer;
+  }
+
+  public void setTransfer(boolean isTransfer) {
+    this.isTransfer = isTransfer;
+  }
+
   public boolean isDeleted() {
     return isDeleted;
   }
 
   public void setDeleted(boolean isDeleted) {
     this.isDeleted = isDeleted;
+  }
+
+  public int getAmountTransactions() {
+    return amountTransactions;
+  }
+
+  public void setAmountTransactions(int amountTransactions) {
+    this.amountTransactions = amountTransactions;
   }
 }

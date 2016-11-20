@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.fess38.finance.DatabaseChangeFlag;
+import ru.fess38.finance.model.ModifiableTag;
 import ru.fess38.finance.model.Tag;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 @Transactional
@@ -17,42 +19,47 @@ public class TagDaoImpl implements TagDao {
   private DatabaseChangeFlag databaseChangeFlag;
 
   @Override
-  public Long save(Tag tag) {
-    Long id = (Long) sessionFactory.getCurrentSession().save(tag);
+  public Tag save(Tag tag) {
+    return update(tag);
+  }
+
+  @Override
+  public Tag get(long id) {
+    return sessionFactory.getCurrentSession().get(ModifiableTag.class, id).toImmutable();
+  }
+
+  @Override
+  public Tag update(Tag tag) {
+    ModifiableTag modifiableTag = (ModifiableTag) sessionFactory.getCurrentSession()
+        .merge(tag.toModifiable());
     databaseChangeFlag.setTrue();
-    return id;
+    return modifiableTag.toImmutable();
   }
 
   @Override
-  public Tag get(Long id) {
-    return sessionFactory.getCurrentSession().get(Tag.class, id);
-  }
-
-  @Override
-  public void update(Tag tag) {
-    sessionFactory.getCurrentSession().update(tag);
-    databaseChangeFlag.setTrue();
-  }
-
-  @Override
-  public void delete(Tag tag) {
-    Tag savedTag = get(tag.getId());
+  public Tag delete(Tag tag) {
+    Tag savedTag = get(tag.id());
     if (!savedTag.hasTransactions()) {
-      savedTag.setDeleted(true);
-      update(savedTag);
+      return update(savedTag.withIsDeleted(true));
+    } else {
+      return savedTag;
     }
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public List<Tag> find(DetachedCriteria detachedCriteria) {
-    return commonFind(notDeleted(detachedCriteria), sessionFactory);
+    return commonFind(notDeleted(detachedCriteria), sessionFactory).stream()
+        .map(x -> (ModifiableTag) x)
+        .map(ModifiableTag::toImmutable)
+        .collect(Collectors.toList());
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public List<Tag> findDeleted(DetachedCriteria detachedCriteria) {
-    return commonFind(deleted(detachedCriteria), sessionFactory);
+    return commonFind(deleted(detachedCriteria), sessionFactory).stream()
+        .map(x -> (ModifiableTag) x)
+        .map(ModifiableTag::toImmutable)
+        .collect(Collectors.toList());
   }
 
   @Autowired

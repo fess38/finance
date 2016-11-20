@@ -10,9 +10,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 import ru.fess38.finance.AppConfigurationTest;
 import ru.fess38.finance.DefaultEntitiesCreator;
+import ru.fess38.finance.model.AbstractAccount.Type;
 import ru.fess38.finance.model.Account;
-import ru.fess38.finance.model.Account.AccountType;
 import ru.fess38.finance.model.Currency;
+import ru.fess38.finance.model.ModifiableAccount;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,52 +25,38 @@ public class AccountDaoImplTest {
   @Autowired
   private AccountDao accountDao;
   @Autowired
+  private CurrencyDao currencyDao;
+  @Autowired
   private DefaultEntitiesCreator defaultEntitiesCreator;
 
   @Test
   public void save() throws Exception {
-    Account account = newAccount();
-    accountDao.save(account);
-    Assert.assertTrue(account.getId() != null);
+    Assert.assertTrue(accountDao.save(newAccount()).id() != 0);
   }
 
   @Test
   public void delete() throws Exception {
-    Account account = newAccount();
-    accountDao.save(account);
-    accountDao.delete(account);
-    Assert.assertTrue(account.isDeleted());
+    Assert.assertTrue(accountDao.delete(accountDao.save(newAccount())).isDeleted());
   }
 
   @Test
   public void deleteHasTransactions() throws Exception {
-    Account account = newAccount();
-    account.addTransaction();
-    accountDao.save(account);
-    accountDao.delete(account);
-    Assert.assertFalse(account.isDeleted());
+    Assert.assertFalse(
+        accountDao.delete(accountDao.save(newAccount().addTransaction())).isDeleted());
   }
 
   @Test
   public void deleteMaster() throws Exception {
-    Account account = newAccount();
-    account.setType(AccountType.MASTER);
-    accountDao.save(account);
-    accountDao.delete(account);
-    Assert.assertFalse(account.isDeleted());
+    Assert.assertFalse(accountDao.delete(accountDao.save(newAccount().withType(Type.MASTER)))
+        .isDeleted());
   }
 
   @Test
   public void find() throws Exception {
-    Account account1 = newAccount();
-    Account account2 = newAccount();
-    Account account3 = newAccount();
-    accountDao.save(account1);
-    accountDao.save(account2);
-    accountDao.save(account3);
-    accountDao.delete(account2);
-    accountDao.delete(account3);
-    List<Account> accounts = accountDao.find(DetachedCriteria.forClass(Account.class));
+    Account account1 = accountDao.save(newAccount());
+    accountDao.delete(accountDao.save(newAccount()));
+    accountDao.delete(accountDao.save(newAccount()));
+    List<Account> accounts = accountDao.find(DetachedCriteria.forClass(ModifiableAccount.class));
     Assert.assertEquals(1, accounts.size());
     Assert.assertEquals(account1, accounts.get(0));
 
@@ -77,14 +64,11 @@ public class AccountDaoImplTest {
 
   @Test
   public void findDeleted() throws Exception {
-    Account account1 = newAccount();
-    Account account2 = newAccount();
-    Account account3 = newAccount();
-    accountDao.save(account1);
-    accountDao.save(account2);
-    accountDao.save(account3);
-    accountDao.delete(account1);
-    List<Account> accounts = accountDao.findDeleted(DetachedCriteria.forClass(Account.class));
+    Account account1 = accountDao.delete(accountDao.save(newAccount()));
+    accountDao.save(newAccount());
+    accountDao.save(newAccount());
+    List<Account> accounts = accountDao.findDeleted(
+        DetachedCriteria.forClass(ModifiableAccount.class));
     Assert.assertEquals(1, accounts.size());
     Assert.assertEquals(account1, accounts.get(0));
   }
@@ -102,13 +86,7 @@ public class AccountDaoImplTest {
   }
 
   private Account newAccount() {
-    Currency currency = new Currency();
-    currency.setName("foo");
-    currency.setSymbol("b");
-
-    Account account = new Account();
-    account.setName(UUID.randomUUID().toString());
-    account.setCurrency(currency);
-    return account;
+    Currency currency = currencyDao.save(Currency.of("foo", "b"));
+    return Account.builder().name(UUID.randomUUID().toString()).currency(currency).build();
   }
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.fess38.finance.dao.AccountDao;
 import ru.fess38.finance.model.Account;
+import ru.fess38.finance.model.ModifiableAccount;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class AccountController {
 
   @RequestMapping(value = "/account/get", method = RequestMethod.GET)
   public @ResponseBody List<Account> get() {
-    return accountDao.find(DetachedCriteria.forClass(Account.class));
+    return accountDao.find(DetachedCriteria.forClass(ModifiableAccount.class));
   }
 
   @RequestMapping(value = "/account/master", method = RequestMethod.GET)

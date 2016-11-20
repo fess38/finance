@@ -10,19 +10,19 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 @Entity
-public class Rubric extends TransactionEntity {
+@Table(name = "Currency")
+public class ModifiableCurrency {
   @Id
   @GeneratedValue(generator = "IdSequence", strategy = GenerationType.SEQUENCE)
   @SequenceGenerator(name = "IdSequence")
   private Long id;
   @Column(length = 100, nullable = false)
   private String name;
-  @Column(nullable = false)
-  private boolean isIncome = false;
-  @Column(nullable = false)
-  private boolean isTransfer = false;
+  @Column(length = 1, nullable = false)
+  private String symbol;
   @Column(nullable = false)
   private boolean isDeleted = false;
 
@@ -41,6 +41,18 @@ public class Rubric extends TransactionEntity {
     return ToStringBuilder.reflectionToString(this);
   }
 
+  public Currency toImmutable() {
+    return Currency.builder().id(id).name(name).symbol(symbol).isDeleted(isDeleted).build();
+  }
+
+  public String getSymbol() {
+    return symbol;
+  }
+
+  public void setSymbol(String symbol) {
+    this.symbol = symbol;
+  }
+
   public Long getId() {
     return id;
   }
@@ -55,22 +67,6 @@ public class Rubric extends TransactionEntity {
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  public boolean isIncome() {
-    return isIncome;
-  }
-
-  public void setIncome(boolean isIncome) {
-    this.isIncome = isIncome;
-  }
-
-  public boolean isTransfer() {
-    return isTransfer;
-  }
-
-  public void setTransfer(boolean isTransfer) {
-    this.isTransfer = isTransfer;
   }
 
   public boolean isDeleted() {

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.fess38.finance.dao.TransactionDao;
+import ru.fess38.finance.model.ModifiableTransaction;
 import ru.fess38.finance.model.MonthTransactions;
 import ru.fess38.finance.model.Transaction;
 
@@ -26,7 +27,7 @@ public class TransactionController {
 
   @RequestMapping(value = "/transaction/get", method = RequestMethod.GET)
   public @ResponseBody List<Transaction> get() {
-    return transactionDao.find(DetachedCriteria.forClass(Transaction.class));
+    return transactionDao.find(DetachedCriteria.forClass(ModifiableTransaction.class));
   }
 
   @RequestMapping(value = "/transaction/find", method = RequestMethod.GET,
@@ -35,7 +36,7 @@ public class TransactionController {
       @RequestParam("month") int month) {
     YearMonth yearMonth = YearMonth.of(year, month);
     List<Transaction> transactions = transactionDao.find(yearMonth).stream()
-        .filter(x -> !x.getRubric().isTransfer())
+        .filter(x -> !x.rubric().isTransfer())
         .collect(Collectors.toList());
     return new MonthTransactions(yearMonth, transactions);
   }
@@ -73,7 +74,7 @@ public class TransactionController {
   public @ResponseBody List<Transaction> findTransfers(@RequestParam("year") int year,
       @RequestParam("month") int month) {
     return transactionDao.find(YearMonth.of(year, month)).stream()
-        .filter(x -> x.getRubric().isTransfer())
+        .filter(x -> x.rubric().isTransfer())
         .collect(Collectors.toList());
   }
 }

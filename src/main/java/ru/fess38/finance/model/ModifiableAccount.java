@@ -3,8 +3,7 @@ package ru.fess38.finance.model;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
+import ru.fess38.finance.model.AbstractAccount.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,9 +16,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 @Entity
-public class Account extends TransactionEntity {
+@Table(name = "Account")
+public class ModifiableAccount {
   @Id
   @GeneratedValue(generator = "IdSequence", strategy = GenerationType.SEQUENCE)
   @SequenceGenerator(name = "IdSequence")
@@ -28,15 +29,16 @@ public class Account extends TransactionEntity {
   private String name;
   @Column(nullable = false)
   private int balance = 0;
-  @ManyToOne(fetch = FetchType.EAGER, optional = false, targetEntity = Currency.class)
+  @ManyToOne(fetch = FetchType.EAGER, optional = false, targetEntity = ModifiableCurrency.class)
   @JoinColumn(name = "currencyId", nullable = false)
-  @Cascade(value = {CascadeType.SAVE_UPDATE})
-  private Currency currency;
+  private ModifiableCurrency currency;
   @Column(length = 100, nullable = false)
   @Enumerated(EnumType.STRING)
-  private AccountType type = AccountType.DEFAULT;
+  private Type type = Type.DEFAULT;
   @Column(nullable = false)
   private boolean isDeleted = false;
+  @Column(nullable = false)
+  private int amountTransactions = 0;
 
   @Override
   public boolean equals(Object object) {
@@ -51,6 +53,11 @@ public class Account extends TransactionEntity {
   @Override
   public String toString() {
     return ToStringBuilder.reflectionToString(this);
+  }
+
+  public Account toImmutable() {
+    return Account.builder().id(id).name(name).balance(balance).currency(currency.toImmutable())
+        .type(type).isDeleted(isDeleted).amountTransactions(amountTransactions).build();
   }
 
   public Long getId() {
@@ -69,11 +76,11 @@ public class Account extends TransactionEntity {
     this.name = name;
   }
 
-  public Currency getCurrency() {
+  public ModifiableCurrency getCurrency() {
     return currency;
   }
 
-  public void setCurrency(Currency currency) {
+  public void setCurrency(ModifiableCurrency currency) {
     this.currency = currency;
   }
 
@@ -85,11 +92,11 @@ public class Account extends TransactionEntity {
     this.isDeleted = isDeleted;
   }
 
-  public AccountType getType() {
+  public Type getType() {
     return type;
   }
 
-  public void setType(AccountType type) {
+  public void setType(Type type) {
     this.type = type;
   }
 
@@ -97,13 +104,15 @@ public class Account extends TransactionEntity {
     return balance;
   }
 
-  public void addMoney(int amount) {
-    balance += amount;
+  public void setBalance(int balance) {
+    this.balance = balance;
   }
 
-  public enum AccountType {
-    DEFAULT,
-    MASTER,
-    OUTER
+  public int getAmountTransactions() {
+    return amountTransactions;
+  }
+
+  public void setAmountTransactions(int amountTransactions) {
+    this.amountTransactions = amountTransactions;
   }
 }

@@ -9,6 +9,7 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 import ru.fess38.finance.AppConfigurationTest;
+import ru.fess38.finance.model.ModifiableUser;
 import ru.fess38.finance.model.User;
 
 import java.util.List;
@@ -23,60 +24,40 @@ public class UserDaoImplTest {
 
   @Test
   public void save() throws Exception {
-    User user = newUser();
-    userDao.save(user);
-    Assert.assertTrue(user.getId() != null);
+    Assert.assertTrue(userDao.save(newUser()).id() != 0);
   }
 
   @Test
   public void delete() throws Exception {
-    User user = newUser();
-    userDao.save(user);
-    userDao.delete(user);
-    Assert.assertTrue(user.isDeleted());
+    Assert.assertTrue(userDao.delete(userDao.save(newUser())).isDeleted());
   }
 
   @Test
   public void deleteHasTransactions() throws Exception {
-    User user = newUser();
-    user.addTransaction();
-    userDao.save(user);
-    userDao.delete(user);
-    Assert.assertFalse(user.isDeleted());
+    Assert.assertFalse(userDao.delete(userDao.save(newUser().addTransaction())).isDeleted());
   }
 
   @Test
   public void find() throws Exception {
-    User user1 = newUser();
-    User user2 = newUser();
-    User user3 = newUser();
-    userDao.save(user1);
-    userDao.save(user2);
-    userDao.save(user3);
-    userDao.delete(user2);
-    userDao.delete(user3);
-    List<User> users = userDao.find(DetachedCriteria.forClass(User.class));
+    User user1 = userDao.save(newUser());
+    userDao.delete(userDao.save(newUser()));
+    userDao.delete(userDao.save(newUser()));
+    List<User> users = userDao.find(DetachedCriteria.forClass(ModifiableUser.class));
     Assert.assertEquals(1, users.size());
     Assert.assertEquals(user1, users.get(0));
   }
 
   @Test
   public void findDeleted() throws Exception {
-    User user1 = newUser();
-    User user2 = newUser();
-    User user3 = newUser();
-    userDao.save(user1);
-    userDao.save(user2);
-    userDao.save(user3);
-    userDao.delete(user1);
-    List<User> users = userDao.findDeleted(DetachedCriteria.forClass(User.class));
+    User user1 = userDao.delete(userDao.save(newUser()));
+    userDao.save(newUser());
+    userDao.save(newUser());
+    List<User> users = userDao.findDeleted(DetachedCriteria.forClass(ModifiableUser.class));
     Assert.assertEquals(1, users.size());
     Assert.assertEquals(user1, users.get(0));
   }
 
   private User newUser() {
-    User user = new User();
-    user.setName(UUID.randomUUID().toString());
-    return user;
+    return User.of(UUID.randomUUID().toString());
   }
 }

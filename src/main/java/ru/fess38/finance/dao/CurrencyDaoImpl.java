@@ -7,8 +7,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.fess38.finance.DatabaseChangeFlag;
 import ru.fess38.finance.model.Currency;
+import ru.fess38.finance.model.ModifiableCurrency;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 @Transactional
@@ -17,40 +19,44 @@ public class CurrencyDaoImpl implements CurrencyDao {
   private DatabaseChangeFlag databaseChangeFlag;
 
   @Override
-  public Long save(Currency currency) {
-    Long id = (Long) sessionFactory.getCurrentSession().save(currency);
+  public Currency save(Currency currency) {
+    return update(currency);
+  }
+
+  @Override
+  public Currency get(long id) {
+    return sessionFactory.getCurrentSession().get(ModifiableCurrency.class, id).toImmutable();
+  }
+
+  @Override
+  public Currency update(Currency currency) {
+    ModifiableCurrency modifiableCurrency = (ModifiableCurrency) sessionFactory.getCurrentSession()
+        .merge(currency.toModifiable());
     databaseChangeFlag.setTrue();
-    return id;
+    return modifiableCurrency.toImmutable();
   }
 
   @Override
-  public Currency get(Long id) {
-    return sessionFactory.getCurrentSession().get(Currency.class, id);
-  }
-
-  @Override
-  public void update(Currency currency) {
-    sessionFactory.getCurrentSession().update(currency);
-    databaseChangeFlag.setTrue();
-  }
-
-  @Override
-  public void delete(Currency currency) {
-    Currency savedCurrency = get(currency.getId());
-    savedCurrency.setDeleted(true);
-    update(savedCurrency);
+  public Currency delete(Currency currency) {
+    return update(get(currency.id()).withIsDeleted(true));
   }
 
   @SuppressWarnings("unchecked")
   @Override
   public List<Currency> find(DetachedCriteria detachedCriteria) {
-    return commonFind(notDeleted(detachedCriteria), sessionFactory);
+    return commonFind(notDeleted(detachedCriteria), sessionFactory).stream()
+        .map(x -> (ModifiableCurrency) x)
+        .map(ModifiableCurrency::toImmutable)
+        .collect(Collectors.toList());
   }
 
   @SuppressWarnings("unchecked")
   @Override
   public List<Currency> findDeleted(DetachedCriteria detachedCriteria) {
-    return commonFind(deleted(detachedCriteria), sessionFactory);
+    return commonFind(deleted(detachedCriteria), sessionFactory).stream()
+        .map(x -> (ModifiableCurrency) x)
+        .map(ModifiableCurrency::toImmutable)
+        .collect(Collectors.toList());
   }
 
   @Autowired

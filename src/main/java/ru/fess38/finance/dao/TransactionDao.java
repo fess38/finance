@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
 
-public interface TransactionDao extends GenericDao<Transaction, Long> {
+public interface TransactionDao extends GenericDao<Transaction> {
   List<Transaction> find(YearMonth yearMonth);
 
   List<Transaction> find(long rubricId, LocalDate localDate);

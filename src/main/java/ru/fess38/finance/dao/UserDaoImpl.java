@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.fess38.finance.DatabaseChangeFlag;
+import ru.fess38.finance.model.ModifiableUser;
 import ru.fess38.finance.model.User;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 @Transactional
@@ -17,42 +19,48 @@ public class UserDaoImpl implements UserDao {
   private DatabaseChangeFlag databaseChangeFlag;
 
   @Override
-  public Long save(User user) {
-    Long id = (Long) sessionFactory.getCurrentSession().save(user);
+  public User save(User user) {
+    return update(user);
+  }
+
+  @Override
+  public User get(long id) {
+    return sessionFactory.getCurrentSession().get(ModifiableUser.class, id).toImmutable();
+  }
+
+  @Override
+  public User update(User user) {
+    ModifiableUser modifiableUser = (ModifiableUser) sessionFactory.getCurrentSession()
+        .merge(user.toModifiable());
     databaseChangeFlag.setTrue();
-    return id;
+    return modifiableUser.toImmutable();
   }
 
   @Override
-  public User get(Long id) {
-    return sessionFactory.getCurrentSession().get(User.class, id);
-  }
-
-  @Override
-  public void update(User user) {
-    sessionFactory.getCurrentSession().update(user);
-    databaseChangeFlag.setTrue();
-  }
-
-  @Override
-  public void delete(User user) {
-    User savedUser = get(user.getId());
+  public User delete(User user) {
+    User savedUser = get(user.id());
     if (!savedUser.hasTransactions()) {
-      savedUser.setDeleted(true);
-      update(savedUser);
+      return update(savedUser.withIsDeleted(true));
+    } else {
+      return savedUser;
     }
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public List<User> find(DetachedCriteria detachedCriteria) {
-    return commonFind(notDeleted(detachedCriteria), sessionFactory);
+    return commonFind(notDeleted(detachedCriteria), sessionFactory).stream()
+        .map(x -> (ModifiableUser) x)
+        .map(ModifiableUser::toImmutable)
+        .collect(Collectors.toList());
   }
 
   @SuppressWarnings("unchecked")
   @Override
   public List<User> findDeleted(DetachedCriteria detachedCriteria) {
-    return commonFind(deleted(detachedCriteria), sessionFactory);
+    return commonFind(deleted(detachedCriteria), sessionFactory).stream()
+        .map(x -> (ModifiableUser) x)
+        .map(ModifiableUser::toImmutable)
+        .collect(Collectors.toList());
   }
 
   @Autowired

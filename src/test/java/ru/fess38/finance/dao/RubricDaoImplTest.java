@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 import ru.fess38.finance.AppConfigurationTest;
 import ru.fess38.finance.DefaultEntitiesCreator;
+import ru.fess38.finance.model.ModifiableRubric;
 import ru.fess38.finance.model.Rubric;
 
 import java.util.List;
@@ -26,53 +27,35 @@ public class RubricDaoImplTest {
 
   @Test
   public void save() throws Exception {
-    Rubric rubric = newRubric();
-    rubricDao.save(rubric);
-    Assert.assertTrue(rubric.getId() != null);
+    Assert.assertTrue(rubricDao.save(newRubric()) != null);
   }
 
   @Test
   public void delete() throws Exception {
-    Rubric rubric = newRubric();
-    rubricDao.save(rubric);
-    rubricDao.delete(rubric);
-    Assert.assertTrue(rubric.isDeleted());
+    Assert.assertTrue(rubricDao.delete(rubricDao.save(newRubric())).isDeleted());
   }
 
   @Test
   public void deleteHasTransactions() throws Exception {
-    Rubric rubric = newRubric();
-    rubric.addTransaction();
-    rubricDao.save(rubric);
-    rubricDao.delete(rubric);
-    Assert.assertFalse(rubric.isDeleted());
+    Assert.assertFalse(rubricDao.delete(rubricDao.save(newRubric().addTransaction())).isDeleted());
   }
 
   @Test
   public void find() throws Exception {
-    Rubric rubric1 = newRubric();
-    Rubric rubric2 = newRubric();
-    Rubric rubric3 = newRubric();
-    rubricDao.save(rubric1);
-    rubricDao.save(rubric2);
-    rubricDao.save(rubric3);
-    rubricDao.delete(rubric2);
-    rubricDao.delete(rubric3);
-    List<Rubric> rubrics = rubricDao.find(DetachedCriteria.forClass(Rubric.class));
+    Rubric rubric1 = rubricDao.save(newRubric());
+    rubricDao.delete(rubricDao.save(newRubric()));
+    rubricDao.delete(rubricDao.save(newRubric()));
+    List<Rubric> rubrics = rubricDao.find(DetachedCriteria.forClass(ModifiableRubric.class));
     Assert.assertEquals(1, rubrics.size());
     Assert.assertEquals(rubric1, rubrics.get(0));
   }
 
   @Test
   public void findDeleted() throws Exception {
-    Rubric rubric1 = newRubric();
-    Rubric rubric2 = newRubric();
-    Rubric rubric3 = newRubric();
-    rubricDao.save(rubric1);
-    rubricDao.save(rubric2);
-    rubricDao.save(rubric3);
-    rubricDao.delete(rubric1);
-    List<Rubric> rubrics = rubricDao.findDeleted(DetachedCriteria.forClass(Rubric.class));
+    Rubric rubric1 = rubricDao.delete(rubricDao.save(newRubric()));
+    rubricDao.save(newRubric());
+    rubricDao.save(newRubric());
+    List<Rubric> rubrics = rubricDao.findDeleted(DetachedCriteria.forClass(ModifiableRubric.class));
     Assert.assertEquals(1, rubrics.size());
     Assert.assertEquals(rubric1, rubrics.get(0));
   }
@@ -84,8 +67,6 @@ public class RubricDaoImplTest {
   }
 
   private Rubric newRubric() {
-    Rubric rubric = new Rubric();
-    rubric.setName(UUID.randomUUID().toString());
-    return rubric;
+    return Rubric.of(UUID.randomUUID().toString());
   }
 }

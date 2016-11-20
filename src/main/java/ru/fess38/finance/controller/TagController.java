@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.fess38.finance.dao.TagDao;
+import ru.fess38.finance.model.ModifiableTag;
 import ru.fess38.finance.model.Tag;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class TagController {
 
   @RequestMapping(value = "/tag/get", method = RequestMethod.GET)
   public @ResponseBody List<Tag> get() {
-    return tagDao.find(DetachedCriteria.forClass(Tag.class));
+    return tagDao.find(DetachedCriteria.forClass(ModifiableTag.class));
   }
 
   @RequestMapping(value = "/tag/save", method = RequestMethod.POST)

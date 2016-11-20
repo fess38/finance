@@ -6,9 +6,10 @@ import org.springframework.stereotype.Component;
 import ru.fess38.finance.dao.AccountDao;
 import ru.fess38.finance.dao.CurrencyDao;
 import ru.fess38.finance.dao.RubricDao;
+import ru.fess38.finance.model.AbstractAccount.Type;
 import ru.fess38.finance.model.Account;
-import ru.fess38.finance.model.Account.AccountType;
 import ru.fess38.finance.model.Currency;
+import ru.fess38.finance.model.ModifiableCurrency;
 import ru.fess38.finance.model.Rubric;
 
 @Component
@@ -18,47 +19,14 @@ public class DefaultEntitiesCreator {
   private CurrencyDao currencyDao;
 
   public void create() {
-    if (currencyDao.find(DetachedCriteria.forClass(Currency.class)).isEmpty()) {
-      createCurrenciesAndAccounts();
-      createTransferRubric();
+    if (currencyDao.find(DetachedCriteria.forClass(ModifiableCurrency.class)).isEmpty()) {
+      Currency ruble = currencyDao.save(Currency.of("Рубль", "P"));
+      currencyDao.save(Currency.of("Доллар", "$"));
+      currencyDao.save(Currency.of("Евро", "€"));
+      accountDao.save(Account.of("Наличные средства", ruble).withType(Type.MASTER));
+      accountDao.save(Account.of("Внешний счет", ruble).withType(Type.OUTER));
+      rubricDao.save(Rubric.of("Перевод между счетами").withIsTransfer(true));
     }
-  }
-
-  private void createCurrenciesAndAccounts() {
-    Currency ruble = new Currency();
-    ruble.setName("Рубль");
-    ruble.setSymbol("P");
-    currencyDao.save(ruble);
-
-    Currency dollar = new Currency();
-    dollar.setName("Доллар");
-    dollar.setSymbol("$");
-    currencyDao.save(dollar);
-
-    Currency euro = new Currency();
-    euro.setName("Евро");
-    euro.setSymbol("€");
-    currencyDao.save(euro);
-
-    Account masterAccount = new Account();
-    masterAccount.setName("Наличные средства");
-    masterAccount.setCurrency(ruble);
-    masterAccount.setType(AccountType.MASTER);
-    accountDao.save(masterAccount);
-
-    Account outerAccount = new Account();
-    outerAccount.setName("Внешний счет");
-    outerAccount.setCurrency(ruble);
-    outerAccount.setType(AccountType.OUTER);
-    accountDao.save(outerAccount);
-  }
-
-  private void createTransferRubric() {
-    Rubric transferRubric = new Rubric();
-    transferRubric.setName("Перевод между счетами");
-    transferRubric.setIncome(false);
-    transferRubric.setTransfer(true);
-    rubricDao.save(transferRubric);
   }
 
   @Autowired

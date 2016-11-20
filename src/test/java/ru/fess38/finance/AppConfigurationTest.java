@@ -124,13 +124,7 @@ public class AppConfigurationTest {
 
   @Bean
   @Autowired
-  public TransactionChangeService transactionChangeService(AccountDao accountDao, RubricDao
-      rubricDao, TagDao tagDao, UserDao userDao) {
-    TransactionChangeService transactionChangeService = new TransactionChangeService();
-    transactionChangeService.setAccountDao(accountDao);
-    transactionChangeService.setRubricDao(rubricDao);
-    transactionChangeService.setTagDao(tagDao);
-    transactionChangeService.setUserDao(userDao);
-    return transactionChangeService;
+  public TransactionChangeService transactionChangeService(AccountDao accountDao) {
+    return new TransactionChangeService(accountDao);
   }
 }

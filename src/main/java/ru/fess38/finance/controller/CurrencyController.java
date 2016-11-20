@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import ru.fess38.finance.dao.CurrencyDao;
 import ru.fess38.finance.model.Currency;
+import ru.fess38.finance.model.ModifiableCurrency;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class CurrencyController {
 
   @RequestMapping(value = "/currency/get", method = RequestMethod.GET)
   public @ResponseBody List<Currency> get() {
-    return currencyDao.find(DetachedCriteria.forClass(Currency.class));
+    return currencyDao.find(DetachedCriteria.forClass(ModifiableCurrency.class));
   }
 
   @RequestMapping(value = "/currency/save", method = RequestMethod.POST)

@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.Check;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,37 +16,39 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 @Entity
 @Check(constraints = "accountFromId != accountToId")
-public class Transaction {
+@Table(name = "Transaction")
+public class ModifiableTransaction {
   @Id
   @GeneratedValue(generator = "IdSequence", strategy = GenerationType.SEQUENCE)
   @SequenceGenerator(name = "IdSequence")
   private Long id;
   @Column(nullable = false)
   private boolean isDeleted = false;
-  @ManyToOne(fetch = FetchType.EAGER, optional = false, targetEntity = Rubric.class)
+  @ManyToOne(fetch = FetchType.EAGER, optional = false, targetEntity = ModifiableRubric.class)
   @JoinColumn(name = "rubricId", nullable = false)
-  private Rubric rubric;
+  private ModifiableRubric rubric;
   @Column(nullable = false, columnDefinition = "DATE")
   private LocalDate dayRef;
-  @ManyToOne(fetch = FetchType.EAGER, optional = false, targetEntity = Account.class)
+  @ManyToOne(fetch = FetchType.EAGER, optional = false, targetEntity = ModifiableAccount.class)
   @JoinColumn(name = "accountFromId", nullable = false)
-  private Account accountFrom;
-  @ManyToOne(fetch = FetchType.EAGER, optional = false, targetEntity = Account.class)
+  private ModifiableAccount accountFrom;
+  @ManyToOne(fetch = FetchType.EAGER, optional = false, targetEntity = ModifiableAccount.class)
   @JoinColumn(name = "accountToId", nullable = false)
-  private Account accountTo;
+  private ModifiableAccount accountTo;
   @Column(nullable = false)
   private Integer amountFrom;
   @Column(nullable = false)
   private Integer amountTo;
-  @ManyToOne(fetch = FetchType.EAGER, targetEntity = User.class)
+  @ManyToOne(fetch = FetchType.EAGER, targetEntity = ModifiableUser.class)
   @JoinColumn(name = "userId")
-  private User user;
-  @ManyToOne(fetch = FetchType.EAGER, targetEntity = Tag.class)
+  private ModifiableUser user;
+  @ManyToOne(fetch = FetchType.EAGER, targetEntity = ModifiableTag.class)
   @JoinColumn(name = "tagId")
-  private Tag tag;
+  private ModifiableTag tag;
   @Column(length = 200)
   private String comment;
 
@@ -64,19 +67,35 @@ public class Transaction {
     return ToStringBuilder.reflectionToString(this);
   }
 
-  public Account getAccountFrom() {
+  public Transaction toImmutable() {
+    return Transaction.builder()
+        .id(id)
+        .isDeleted(isDeleted)
+        .rubric(rubric.toImmutable())
+        .dayRef(dayRef)
+        .accountFrom(accountFrom.toImmutable())
+        .accountTo(accountTo.toImmutable())
+        .amountFrom(amountFrom)
+        .amountTo(amountTo)
+        .tag(Optional.ofNullable(tag == null ? null : tag.toImmutable()))
+        .user(Optional.ofNullable(user == null ? null : user.toImmutable()))
+        .comment(Optional.ofNullable(comment))
+        .build();
+  }
+
+  public ModifiableAccount getAccountFrom() {
     return accountFrom;
   }
 
-  public void setAccountFrom(Account accountFrom) {
+  public void setAccountFrom(ModifiableAccount accountFrom) {
     this.accountFrom = accountFrom;
   }
 
-  public Account getAccountTo() {
+  public ModifiableAccount getAccountTo() {
     return accountTo;
   }
 
-  public void setAccountTo(Account accountTo) {
+  public void setAccountTo(ModifiableAccount accountTo) {
     this.accountTo = accountTo;
   }
 
@@ -112,27 +131,27 @@ public class Transaction {
     this.dayRef = dayRef;
   }
 
-  public Rubric getRubric() {
+  public ModifiableRubric getRubric() {
     return rubric;
   }
 
-  public void setRubric(Rubric rubric) {
+  public void setRubric(ModifiableRubric rubric) {
     this.rubric = rubric;
   }
 
-  public Tag getTag() {
+  public ModifiableTag getTag() {
     return tag;
   }
 
-  public void setTag(Tag tag) {
+  public void setTag(ModifiableTag tag) {
     this.tag = tag;
   }
 
-  public User getUser() {
+  public ModifiableUser getUser() {
     return user;
   }
 
-  public void setUser(User user) {
+  public void setUser(ModifiableUser user) {
     this.user = user;
   }
 

@@ -36,7 +36,7 @@ public class MonthTransactions {
 
   private List<Rubric> processRubrics() {
     return transactions.stream()
-        .map(Transaction::getRubric)
+        .map(Transaction::rubric)
         .distinct()
         .collect(Collectors.toList());
   }
@@ -52,8 +52,8 @@ public class MonthTransactions {
 
   private int processMonthSummary() {
     return transactions.stream()
-        .filter(x -> !x.getRubric().isIncome())
-        .mapToInt(Transaction::getAmountFrom)
+        .filter(x -> !x.rubric().isIncome())
+        .mapToInt(Transaction::amountFrom)
         .sum();
   }
 
@@ -61,11 +61,11 @@ public class MonthTransactions {
     List<DaySummary> result = new ArrayList<>();
     Map<LocalDate, Integer> map = new HashMap<>();
     transactions.stream()
-        .filter(x -> !x.getRubric().isIncome())
+        .filter(x -> !x.rubric().isIncome())
         .forEach(x -> {
-          int amount = x.getAmountFrom();
-          map.computeIfPresent(x.getDayRef(), (key, value) -> value + amount);
-          map.putIfAbsent(x.getDayRef(), amount);
+          int amount = x.amountFrom();
+          map.computeIfPresent(x.dayRef(), (key, value) -> value + amount);
+          map.putIfAbsent(x.dayRef(), amount);
         });
     map.forEach((key, value) -> result.add(new DaySummary(key, value)));
     return result;
@@ -75,8 +75,8 @@ public class MonthTransactions {
     List<RubricSummary> result = new ArrayList<>();
     Map<Rubric, Integer> map = new HashMap<>();
     transactions.forEach(x -> {
-      Rubric rubric = x.getRubric();
-      int amount = x.getAmountFrom();
+      Rubric rubric = x.rubric();
+      int amount = x.amountFrom();
       map.computeIfPresent(rubric, (key, value) -> value + amount);
       map.putIfAbsent(rubric, amount);
     });
@@ -88,8 +88,8 @@ public class MonthTransactions {
     List<RubricDaySummary> result = new ArrayList<>();
     Map<Pair<Rubric, LocalDate>, Integer> map = new HashMap<>();
     transactions.forEach(x -> {
-      Pair<Rubric, LocalDate> pair = Pair.of(x.getRubric(), x.getDayRef());
-      int amount = x.getAmountFrom();
+      Pair<Rubric, LocalDate> pair = Pair.of(x.rubric(), x.dayRef());
+      int amount = x.amountFrom();
       map.computeIfPresent(pair, (key, value) -> value + amount);
       map.putIfAbsent(pair, amount);
     });
@@ -100,10 +100,10 @@ public class MonthTransactions {
 
   public List<Currency> currencies() {
     return transactions.stream()
-        .map(Transaction::getAccountFrom)
-        .map(Account::getCurrency)
+        .map(Transaction::accountFrom)
+        .map(Account::currency)
         .distinct()
-        .sorted(Comparator.comparing(Currency::getId))
+        .sorted(Comparator.comparing(Currency::id))
         .collect(Collectors.toList());
   }
 

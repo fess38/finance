@@ -2,6 +2,7 @@ package ru.fess38.finance;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapterFactory;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import com.zaxxer.hikari.HikariConfig;
@@ -18,6 +19,7 @@ import ru.fess38.finance.util.DiskUtil;
 import ru.fess38.finance.util.LocalDateConverter;
 
 import java.time.LocalDate;
+import java.util.ServiceLoader;
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
@@ -66,10 +68,13 @@ public class AppConfiguration {
 
   @Bean
   public GsonHttpMessageConverter gsonHttpMessageConverter() {
+    GsonBuilder gsonBuilder = new GsonBuilder();
+    for (TypeAdapterFactory factory : ServiceLoader.load(TypeAdapterFactory.class)) {
+      gsonBuilder.registerTypeAdapterFactory(factory);
+    }
+    gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateConverter());
+    Gson gson = gsonBuilder.create();
     GsonHttpMessageConverter gsonHttpMessageConverter = new GsonHttpMessageConverter();
-    Gson gson = new GsonBuilder()
-        .registerTypeAdapter(LocalDate.class, new LocalDateConverter())
-        .create();
     gsonHttpMessageConverter.setGson(gson);
     return gsonHttpMessageConverter;
   }

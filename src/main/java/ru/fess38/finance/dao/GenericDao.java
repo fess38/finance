@@ -6,21 +6,20 @@ import org.hibernate.criterion.Restrictions;
 
 import java.util.List;
 
-public interface GenericDao<T, V> {
-  V save(T object);
+public interface GenericDao<T> {
+  T save(T object);
 
-  T get(V id);
+  T get(long id);
 
-  void update(T object);
+  T update(T object);
 
-  void delete(T object);
+  T delete(T object);
 
   List<T> find(DetachedCriteria detachedCriteria);
 
   List<T> findDeleted(DetachedCriteria detachedCriteria);
 
-  @SuppressWarnings("rawtypes")
-  default List commonFind(DetachedCriteria detachedCriteria, SessionFactory sessionFactory) {
+  default <T> List<T> commonFind(DetachedCriteria detachedCriteria, SessionFactory sessionFactory) {
     return detachedCriteria.getExecutableCriteria(sessionFactory.getCurrentSession()).list();
   }
 

@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.fess38.finance.DatabaseChangeFlag;
+import ru.fess38.finance.model.AbstractAccount.Type;
 import ru.fess38.finance.model.Account;
-import ru.fess38.finance.model.Account.AccountType;
+import ru.fess38.finance.model.ModifiableAccount;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 @Transactional
@@ -19,58 +21,67 @@ public class AccountDaoImpl implements AccountDao {
   private DatabaseChangeFlag databaseChangeFlag;
 
   @Override
-  public Long save(Account account) {
-    Long id = (Long) sessionFactory.getCurrentSession().save(account);
+  public Account save(Account account) {
+    return update(account);
+  }
+
+  @Override
+  public Account get(long id) {
+    return sessionFactory.getCurrentSession().get(ModifiableAccount.class, id).toImmutable();
+  }
+
+  @Override
+  public Account update(Account account) {
+    ModifiableAccount modifiableAccount = (ModifiableAccount) sessionFactory.getCurrentSession()
+        .merge(account.toModifiable());
     databaseChangeFlag.setTrue();
-    return id;
+    return modifiableAccount.toImmutable();
   }
 
   @Override
-  public Account get(Long id) {
-    return sessionFactory.getCurrentSession().get(Account.class, id);
-  }
-
-  @Override
-  public void update(Account account) {
-    sessionFactory.getCurrentSession().update(account);
-    databaseChangeFlag.setTrue();
-  }
-
-  @Override
-  public void delete(Account account) {
-    Account savedAccount = get(account.getId());
-    if (!savedAccount.hasTransactions() && savedAccount.getType() == AccountType.DEFAULT) {
-      savedAccount.setDeleted(true);
-      update(savedAccount);
+  public Account delete(Account account) {
+    Account savedAccount = get(account.id());
+    if (!savedAccount.hasTransactions() && savedAccount.type() == Type.DEFAULT) {
+      return update(savedAccount.withIsDeleted(true));
+    } else {
+      return savedAccount;
     }
   }
 
   @SuppressWarnings("unchecked")
   @Override
   public List<Account> find(DetachedCriteria detachedCriteria) {
-    return commonFind(notDeleted(detachedCriteria), sessionFactory);
+    return commonFind(notDeleted(detachedCriteria), sessionFactory).stream()
+        .map(x -> (ModifiableAccount) x)
+        .map(ModifiableAccount::toImmutable)
+        .collect(Collectors.toList());
   }
 
   @SuppressWarnings("unchecked")
   @Override
   public List<Account> findDeleted(DetachedCriteria detachedCriteria) {
-    return commonFind(deleted(detachedCriteria), sessionFactory);
+    return commonFind(deleted(detachedCriteria), sessionFactory).stream()
+        .map(x -> (ModifiableAccount) x)
+        .map(ModifiableAccount::toImmutable)
+        .collect(Collectors.toList());
   }
 
   @Override
   public Account getMasterAccount() {
-    return (Account) sessionFactory.getCurrentSession()
-        .createCriteria(Account.class)
-        .add(Restrictions.eq("type", AccountType.MASTER))
-        .uniqueResult();
+    return ((ModifiableAccount) sessionFactory.getCurrentSession()
+        .createCriteria(ModifiableAccount.class)
+        .add(Restrictions.eq("type", Type.MASTER))
+        .uniqueResult())
+        .toImmutable();
   }
 
   @Override
   public Account getOuterAccount() {
-    return (Account) sessionFactory.getCurrentSession()
-        .createCriteria(Account.class)
-        .add(Restrictions.eq("type", AccountType.OUTER))
-        .uniqueResult();
+    return ((ModifiableAccount) sessionFactory.getCurrentSession()
+        .createCriteria(ModifiableAccount.class)
+        .add(Restrictions.eq("type", Type.OUTER))
+        .uniqueResult())
+        .toImmutable();
   }
 
   @Autowired

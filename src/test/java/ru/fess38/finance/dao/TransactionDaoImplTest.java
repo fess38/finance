@@ -43,17 +43,24 @@ public class TransactionDaoImplTest {
   }
 
   @Test
-  public void findByYearMonth() throws Exception {
-    Transaction transaction1 = transaction();
-    transaction1.setDayRef(LocalDate.of(2016, 11, 1));
-    Transaction transaction2 = transaction();
-    transaction2.setDayRef(LocalDate.of(2016, 11, 30));
-    Transaction transaction3 = transaction();
-    transaction3.setDayRef(LocalDate.of(2016, 10, 1));
+  public void save() throws Exception {
+    Transaction transaction = transaction(rubricDao.save(rubric()));
+    Assert.assertTrue(transactionDao.save(transaction).id() != 0);
+  }
 
-    rubricDao.save(transaction1.getRubric());
-    rubricDao.save(transaction2.getRubric());
-    rubricDao.save(transaction3.getRubric());
+  @Test
+  public void delete() throws Exception {
+    Transaction transaction = transaction(rubricDao.save(rubric()));
+    Assert.assertTrue(transactionDao.delete(transactionDao.save(transaction)).isDeleted());
+  }
+
+  @Test
+  public void findByYearMonth() throws Exception {
+    Rubric rubric = rubricDao.save(rubric());
+
+    Transaction transaction1 = transaction(rubric).withDayRef(LocalDate.of(2016, 11, 1));
+    Transaction transaction2 = transaction(rubric).withDayRef(LocalDate.of(2016, 11, 30));
+    Transaction transaction3 = transaction(rubric).withDayRef(LocalDate.of(2016, 10, 1));
 
     transactionDao.save(transaction1);
     transactionDao.save(transaction2);
@@ -64,119 +71,100 @@ public class TransactionDaoImplTest {
 
   @Test
   public void findByYearMonthRubric() throws Exception {
-    Transaction transaction1 = transaction();
-    transaction1.setDayRef(LocalDate.of(2016, 11, 1));
-    Transaction transaction2 = transaction();
-    transaction2.setDayRef(LocalDate.of(2016, 11, 30));
-    transaction2.setRubric(transaction1.getRubric());
-    Transaction transaction3 = transaction();
-    transaction3.setDayRef(LocalDate.of(2016, 10, 1));
+    Rubric rubric = rubricDao.save(rubric());
 
-    rubricDao.save(transaction1.getRubric());
-    rubricDao.save(transaction3.getRubric());
+    Transaction transaction1 = transaction(rubric).withDayRef(LocalDate.of(2016, 11, 1));
+    Transaction transaction2 = transaction(rubric).withDayRef(LocalDate.of(2016, 11, 30));
+    Transaction transaction3 = transaction(rubricDao.save(rubric()))
+        .withDayRef(LocalDate.of(2016, 10, 1));
 
     transactionDao.save(transaction1);
     transactionDao.save(transaction2);
     transactionDao.save(transaction3);
 
-    Assert.assertEquals(2, transactionDao.find(transaction1.getRubric().getId(),
-        YearMonth.of(2016, 11)).size());
+    Assert.assertEquals(2, transactionDao.find(rubric.id(), YearMonth.of(2016, 11)).size());
   }
 
   @Test
   public void findByDateRubric() throws Exception {
-    Transaction transaction1 = transaction();
-    transaction1.setDayRef(LocalDate.of(2016, 11, 1));
-    Transaction transaction2 = transaction();
-    transaction2.setDayRef(LocalDate.of(2016, 11, 1));
-    transaction2.setRubric(transaction1.getRubric());
-    Transaction transaction3 = transaction();
-    transaction3.setDayRef(LocalDate.of(2016, 10, 1));
+    Rubric rubric = rubricDao.save(rubric());
 
-    rubricDao.save(transaction1.getRubric());
-    rubricDao.save(transaction3.getRubric());
+    Transaction transaction1 = transaction(rubric).withDayRef(LocalDate.of(2016, 11, 1));
+    Transaction transaction2 = transaction(rubric).withDayRef(LocalDate.of(2016, 11, 1));
+    Transaction transaction3 = transaction(rubricDao.save(rubric()))
+        .withDayRef(LocalDate.of(2016, 10, 1));
 
     transactionDao.save(transaction1);
     transactionDao.save(transaction2);
     transactionDao.save(transaction3);
 
-    Assert.assertEquals(2, transactionDao.find(transaction1.getRubric().getId(),
-        LocalDate.of(2016, 11, 1)).size());
+    Assert.assertEquals(2, transactionDao.find(rubric.id(), LocalDate.of(2016, 11, 1)).size());
   }
 
   @Test
   public void countByAccount() throws Exception {
-    Transaction transaction1 = transaction();
-    Transaction transaction2 = transaction();
-    Transaction transaction3 = transaction();
+    Rubric rubric = rubricDao.save(rubric());
 
-    rubricDao.save(transaction1.getRubric());
-    rubricDao.save(transaction2.getRubric());
-    rubricDao.save(transaction3.getRubric());
+    Transaction transaction1 = transaction(rubric);
+    Transaction transaction2 = transaction(rubric);
+    Transaction transaction3 = transaction(rubric);
+
+    rubricDao.save(transaction1.rubric());
+    rubricDao.save(transaction2.rubric());
+    rubricDao.save(transaction3.rubric());
 
     transactionDao.save(transaction1);
     transactionDao.save(transaction2);
     transactionDao.save(transaction3);
 
-    Assert.assertEquals(3, transactionDao.countByAccount(transaction1.getAccountFrom()));
+    Assert.assertEquals(3, transactionDao.countByAccount(transaction1.accountFrom()));
   }
 
   @Test
   public void countByRubric() throws Exception {
-    Transaction transaction1 = transaction();
-    Transaction transaction2 = transaction();
-    transaction2.setRubric(transaction1.getRubric());
-    Transaction transaction3 = transaction();
+    Rubric rubric = rubricDao.save(rubric());
 
-    rubricDao.save(transaction1.getRubric());
-    rubricDao.save(transaction3.getRubric());
+    Transaction transaction1 = transaction(rubric);
+    Transaction transaction2 = transaction(rubric);
+    Transaction transaction3 = transaction(rubricDao.save(rubric()));
 
     transactionDao.save(transaction1);
     transactionDao.save(transaction2);
     transactionDao.save(transaction3);
 
-    Assert.assertEquals(2, transactionDao.countByRubric(transaction1.getRubric()));
+    Assert.assertEquals(2, transactionDao.countByRubric(rubric));
   }
 
   @Test
   public void countByTag() throws Exception {
-    Transaction transaction1 = transaction();
-    transaction1.setTag(tag());
-    Transaction transaction2 = transaction();
-    transaction2.setRubric(transaction1.getRubric());
-    transaction2.setTag(transaction1.getTag());
-    Transaction transaction3 = transaction();
-    transaction3.setRubric(transaction1.getRubric());
+    Rubric rubric = rubricDao.save(rubric());
+    Tag tag = tagDao.save(tag());
 
-    rubricDao.save(transaction1.getRubric());
-    tagDao.save(transaction1.getTag());
+    Transaction transaction1 = transaction(rubric).withTag(tag);
+    Transaction transaction2 = transaction(rubric).withTag(tag);
+    Transaction transaction3 = transaction(rubric);
 
     transactionDao.save(transaction1);
     transactionDao.save(transaction2);
     transactionDao.save(transaction3);
 
-    Assert.assertEquals(2, transactionDao.countByTag(transaction1.getTag()));
+    Assert.assertEquals(2, transactionDao.countByTag(tag));
   }
 
   @Test
   public void countByUser() throws Exception {
-    Transaction transaction1 = transaction();
-    transaction1.setUser(user());
-    Transaction transaction2 = transaction();
-    transaction2.setRubric(transaction1.getRubric());
-    transaction2.setUser(transaction1.getUser());
-    Transaction transaction3 = transaction();
-    transaction3.setRubric(transaction1.getRubric());
-    transaction3.setUser(transaction1.getUser());
+    User user = userDao.save(user());
+    Rubric rubric = rubricDao.save(rubric());
 
-    rubricDao.save(transaction1.getRubric());
-    userDao.save(transaction1.getUser());
+    Transaction transaction1 = transaction(rubricDao.save(rubric())).withUser(user);
+    Transaction transaction2 = transaction(rubric).withUser(user);
+    Transaction transaction3 = transaction(rubric).withUser(user);
 
     transactionDao.save(transaction1);
     transactionDao.save(transaction2);
     transactionDao.save(transaction3);
 
-    Assert.assertEquals(3, transactionDao.countByUser(transaction1.getUser()));
+    Assert.assertEquals(3, transactionDao.countByUser(user));
   }
 
   private Account masterAccount() {
@@ -187,30 +175,26 @@ public class TransactionDaoImplTest {
     return accountDao.getOuterAccount();
   }
 
-  private Transaction transaction() {
-    Rubric rubric = new Rubric();
-    rubric.setName(UUID.randomUUID().toString());
-
-    Transaction transaction = new Transaction();
-    transaction.setAccountFrom(masterAccount());
-    transaction.setAccountTo(outerAccount());
-    transaction.setAmountFrom(100);
-    transaction.setAmountTo(100);
-    transaction.setRubric(rubric);
-    transaction.setDayRef(LocalDate.now());
-
-    return transaction;
+  private Transaction transaction(Rubric rubric) {
+    return Transaction.builder()
+        .accountFrom(masterAccount())
+        .accountTo(outerAccount())
+        .amountFrom(100)
+        .amountTo(100)
+        .dayRef(LocalDate.now())
+        .rubric(rubric)
+        .build();
   }
 
   private Tag tag() {
-    Tag tag = new Tag();
-    tag.setName("tag");
-    return tag;
+    return Tag.builder().name("tag").build();
   }
 
   private User user() {
-    User user = new User();
-    user.setName("user");
-    return user;
+    return User.builder().name("user").build();
+  }
+
+  private Rubric rubric() {
+    return Rubric.builder().name(UUID.randomUUID().toString()).build();
   }
 }
