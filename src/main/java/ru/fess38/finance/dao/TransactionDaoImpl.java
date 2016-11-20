@@ -10,7 +10,7 @@ import org.hibernate.type.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import ru.fess38.finance.DatabaseChangeFlag;
+import ru.fess38.finance.DatabaseEventListener;
 import ru.fess38.finance.model.Account;
 import ru.fess38.finance.model.ModifiableTransaction;
 import ru.fess38.finance.model.Rubric;
@@ -27,12 +27,11 @@ import java.util.stream.Collectors;
 @Transactional
 public class TransactionDaoImpl implements TransactionDao {
   private SessionFactory sessionFactory;
-  private TransactionChangeService changeService;
-  private DatabaseChangeFlag databaseChangeFlag;
+  private DatabaseEventListener databaseEventListener;
 
   @Override
   public Transaction save(Transaction transaction) {
-    return update(changeService.save(transaction));
+    return update(transaction);
   }
 
   @Override
@@ -42,19 +41,15 @@ public class TransactionDaoImpl implements TransactionDao {
 
   @Override
   public Transaction update(Transaction transaction) {
-    if (transaction.id() != 0) {
-      changeService.update(get(transaction.id()), transaction);
-    }
     ModifiableTransaction modifiableTransaction = (ModifiableTransaction) sessionFactory
         .getCurrentSession().merge(transaction.toModifiable());
-    databaseChangeFlag.setTrue();
+    databaseEventListener.setChangeTrue();
+    databaseEventListener.setCalculateBalanceTrue();
     return modifiableTransaction.toImmutable();
   }
 
   @Override
   public Transaction delete(Transaction transaction) {
-    changeService.delete(transaction);
-    databaseChangeFlag.setTrue();
     return update(get(transaction.id()).withIsDeleted(true));
   }
 
@@ -141,12 +136,7 @@ public class TransactionDaoImpl implements TransactionDao {
   }
 
   @Autowired
-  public void setDatabaseChangeFlag(DatabaseChangeFlag databaseChangeFlag) {
-    this.databaseChangeFlag = databaseChangeFlag;
-  }
-
-  @Autowired
-  public void setChangeService(TransactionChangeService changeService) {
-    this.changeService = changeService;
+  public void setDatabaseEventListener(DatabaseEventListener databaseEventListener) {
+    this.databaseEventListener = databaseEventListener;
   }
 }

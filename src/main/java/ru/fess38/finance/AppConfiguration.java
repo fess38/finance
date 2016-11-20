@@ -15,6 +15,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.scheduling.annotation.Scheduled;
+import ru.fess38.finance.dao.AccountBalanceCalculator;
 import ru.fess38.finance.util.DiskUtil;
 import ru.fess38.finance.util.LocalDateConverter;
 
@@ -28,8 +29,9 @@ import javax.sql.DataSource;
 public class AppConfiguration {
   private final Config config = ConfigFactory.load();
   private final DiskUtil diskUtil = new DiskUtil(config.getConfig("disk"));
-  private DatabaseChangeFlag databaseChangeFlag;
+  private DatabaseEventListener databaseEventListener;
   private DefaultEntitiesCreator defaultEntitiesCreator;
+  private AccountBalanceCalculator balanceCalculator;
 
   @PostConstruct
   public void createDefaultEntities() {
@@ -38,13 +40,21 @@ public class AppConfiguration {
 
   @Scheduled(fixedRate = 600000, initialDelay = 60000)
   public void upload() throws Exception {
-    diskUtil.upload(databaseChangeFlag.value());
-    databaseChangeFlag.setFalse();
+    diskUtil.upload(databaseEventListener.isChange());
+    databaseEventListener.setChangeFalse();
+  }
+
+  @Scheduled(fixedRate = 10000)
+  public void updateBalance() {
+    if (databaseEventListener.isCalculateBalance()) {
+      balanceCalculator.run();
+    }
+    databaseEventListener.setCalculateBalanceFalse();
   }
 
   @Bean
-  public DatabaseChangeFlag databaseChangeFlag() {
-    return new DatabaseChangeFlag();
+  public DatabaseEventListener databaseEventListener() {
+    return new DatabaseEventListener();
   }
 
   @Bean
@@ -80,12 +90,17 @@ public class AppConfiguration {
   }
 
   @Autowired
-  public void setDatabaseChangeFlag(DatabaseChangeFlag databaseChangeFlag) {
-    this.databaseChangeFlag = databaseChangeFlag;
+  public void setDatabaseEventListener(DatabaseEventListener databaseEventListener) {
+    this.databaseEventListener = databaseEventListener;
   }
 
   @Autowired
   public void setDefaultEntitiesCreator(DefaultEntitiesCreator defaultEntitiesCreator) {
     this.defaultEntitiesCreator = defaultEntitiesCreator;
+  }
+
+  @Autowired
+  public void setBalanceCalculator(AccountBalanceCalculator balanceCalculator) {
+    this.balanceCalculator = balanceCalculator;
   }
 }

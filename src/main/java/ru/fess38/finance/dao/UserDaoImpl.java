@@ -5,7 +5,7 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import ru.fess38.finance.DatabaseChangeFlag;
+import ru.fess38.finance.DatabaseEventListener;
 import ru.fess38.finance.model.ModifiableUser;
 import ru.fess38.finance.model.User;
 
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Transactional
 public class UserDaoImpl implements UserDao {
   private SessionFactory sessionFactory;
-  private DatabaseChangeFlag databaseChangeFlag;
+  private DatabaseEventListener databaseEventListener;
 
   @Override
   public User save(User user) {
@@ -32,7 +32,7 @@ public class UserDaoImpl implements UserDao {
   public User update(User user) {
     ModifiableUser modifiableUser = (ModifiableUser) sessionFactory.getCurrentSession()
         .merge(user.toModifiable());
-    databaseChangeFlag.setTrue();
+    databaseEventListener.setChangeTrue();
     return modifiableUser.toImmutable();
   }
 
@@ -69,7 +69,7 @@ public class UserDaoImpl implements UserDao {
   }
 
   @Autowired
-  public void setDatabaseChangeFlag(DatabaseChangeFlag databaseChangeFlag) {
-    this.databaseChangeFlag = databaseChangeFlag;
+  public void setDatabaseEventListener(DatabaseEventListener databaseEventListener) {
+    this.databaseEventListener = databaseEventListener;
   }
 }

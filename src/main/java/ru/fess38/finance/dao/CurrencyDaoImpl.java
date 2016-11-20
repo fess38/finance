@@ -5,7 +5,7 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import ru.fess38.finance.DatabaseChangeFlag;
+import ru.fess38.finance.DatabaseEventListener;
 import ru.fess38.finance.model.Currency;
 import ru.fess38.finance.model.ModifiableCurrency;
 
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Transactional
 public class CurrencyDaoImpl implements CurrencyDao {
   private SessionFactory sessionFactory;
-  private DatabaseChangeFlag databaseChangeFlag;
+  private DatabaseEventListener databaseEventListener;
 
   @Override
   public Currency save(Currency currency) {
@@ -32,7 +32,7 @@ public class CurrencyDaoImpl implements CurrencyDao {
   public Currency update(Currency currency) {
     ModifiableCurrency modifiableCurrency = (ModifiableCurrency) sessionFactory.getCurrentSession()
         .merge(currency.toModifiable());
-    databaseChangeFlag.setTrue();
+    databaseEventListener.setChangeTrue();
     return modifiableCurrency.toImmutable();
   }
 
@@ -65,7 +65,7 @@ public class CurrencyDaoImpl implements CurrencyDao {
   }
 
   @Autowired
-  public void setDatabaseChangeFlag(DatabaseChangeFlag databaseChangeFlag) {
-    this.databaseChangeFlag = databaseChangeFlag;
+  public void setDatabaseEventListener(DatabaseEventListener databaseEventListener) {
+    this.databaseEventListener = databaseEventListener;
   }
 }

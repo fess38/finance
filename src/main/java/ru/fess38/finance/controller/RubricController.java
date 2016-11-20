@@ -30,7 +30,6 @@ public class RubricController {
 
   @RequestMapping(value = "/rubric/save", method = RequestMethod.POST)
   public void save(@RequestBody Rubric rubric) {
-    System.out.println(rubric);
     rubricDao.save(rubric);
   }
 

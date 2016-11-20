@@ -6,7 +6,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import ru.fess38.finance.DatabaseChangeFlag;
+import ru.fess38.finance.DatabaseEventListener;
 import ru.fess38.finance.model.ModifiableRubric;
 import ru.fess38.finance.model.Rubric;
 
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @Transactional
 public class RubricDaoImpl implements RubricDao {
   private SessionFactory sessionFactory;
-  private DatabaseChangeFlag databaseChangeFlag;
+  private DatabaseEventListener databaseEventListener;
 
   @Override
   public Rubric save(Rubric rubric) {
@@ -33,7 +33,7 @@ public class RubricDaoImpl implements RubricDao {
   public Rubric update(Rubric rubric) {
     ModifiableRubric modifiableRubric = (ModifiableRubric) sessionFactory.getCurrentSession()
         .merge(rubric.toModifiable());
-    databaseChangeFlag.setTrue();
+    databaseEventListener.setChangeTrue();
     return modifiableRubric.toImmutable();
   }
 
@@ -84,7 +84,7 @@ public class RubricDaoImpl implements RubricDao {
   }
 
   @Autowired
-  public void setDatabaseChangeFlag(DatabaseChangeFlag databaseChangeFlag) {
-    this.databaseChangeFlag = databaseChangeFlag;
+  public void setDatabaseEventListener(DatabaseEventListener databaseEventListener) {
+    this.databaseEventListener = databaseEventListener;
   }
 }

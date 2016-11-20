@@ -5,7 +5,7 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import ru.fess38.finance.DatabaseChangeFlag;
+import ru.fess38.finance.DatabaseEventListener;
 import ru.fess38.finance.model.ModifiableTag;
 import ru.fess38.finance.model.Tag;
 
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Transactional
 public class TagDaoImpl implements TagDao {
   private SessionFactory sessionFactory;
-  private DatabaseChangeFlag databaseChangeFlag;
+  private DatabaseEventListener databaseEventListener;
 
   @Override
   public Tag save(Tag tag) {
@@ -32,7 +32,7 @@ public class TagDaoImpl implements TagDao {
   public Tag update(Tag tag) {
     ModifiableTag modifiableTag = (ModifiableTag) sessionFactory.getCurrentSession()
         .merge(tag.toModifiable());
-    databaseChangeFlag.setTrue();
+    databaseEventListener.setChangeTrue();
     return modifiableTag.toImmutable();
   }
 
@@ -68,7 +68,7 @@ public class TagDaoImpl implements TagDao {
   }
 
   @Autowired
-  public void setDatabaseChangeFlag(DatabaseChangeFlag databaseChangeFlag) {
-    this.databaseChangeFlag = databaseChangeFlag;
+  public void setDatabaseEventListener(DatabaseEventListener databaseEventListener) {
+    this.databaseEventListener = databaseEventListener;
   }
 }

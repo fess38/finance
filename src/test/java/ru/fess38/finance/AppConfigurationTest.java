@@ -16,7 +16,6 @@ import ru.fess38.finance.dao.RubricDao;
 import ru.fess38.finance.dao.RubricDaoImpl;
 import ru.fess38.finance.dao.TagDao;
 import ru.fess38.finance.dao.TagDaoImpl;
-import ru.fess38.finance.dao.TransactionChangeService;
 import ru.fess38.finance.dao.TransactionDao;
 import ru.fess38.finance.dao.TransactionDaoImpl;
 import ru.fess38.finance.dao.UserDao;
@@ -50,8 +49,8 @@ public class AppConfigurationTest {
   }
 
   @Bean
-  public DatabaseChangeFlag databaseChangeFlag() {
-    return new AppConfiguration().databaseChangeFlag();
+  public DatabaseEventListener databaseEventListener() {
+    return new AppConfiguration().databaseEventListener();
   }
 
   @Bean
@@ -68,63 +67,59 @@ public class AppConfigurationTest {
   @Bean
   @Autowired
   public AccountDao accountDao(SessionFactory sessionFactory,
-      DatabaseChangeFlag databaseChangeFlag) {
+      DatabaseEventListener databaseEventListener) {
     AccountDaoImpl accountDao = new AccountDaoImpl();
     accountDao.setSessionFactory(sessionFactory);
-    accountDao.setDatabaseChangeFlag(databaseChangeFlag);
+    accountDao.setDatabaseEventListener(databaseEventListener);
     return accountDao;
   }
 
   @Bean
   @Autowired
   public CurrencyDao currencyDao(SessionFactory sessionFactory,
-      DatabaseChangeFlag databaseChangeFlag) {
+      DatabaseEventListener databaseEventListener) {
     CurrencyDaoImpl currencyDao = new CurrencyDaoImpl();
     currencyDao.setSessionFactory(sessionFactory);
-    currencyDao.setDatabaseChangeFlag(databaseChangeFlag);
+    currencyDao.setDatabaseEventListener(databaseEventListener);
     return currencyDao;
   }
 
   @Bean
   @Autowired
-  public RubricDao rubricDao(SessionFactory sessionFactory, DatabaseChangeFlag databaseChangeFlag) {
+  public RubricDao rubricDao(SessionFactory sessionFactory,
+      DatabaseEventListener databaseEventListener) {
     RubricDaoImpl rubricDao = new RubricDaoImpl();
     rubricDao.setSessionFactory(sessionFactory);
-    rubricDao.setDatabaseChangeFlag(databaseChangeFlag);
+    rubricDao.setDatabaseEventListener(databaseEventListener);
     return rubricDao;
   }
 
   @Bean
   @Autowired
-  public TagDao tagDao(SessionFactory sessionFactory, DatabaseChangeFlag databaseChangeFlag) {
+  public TagDao tagDao(SessionFactory sessionFactory, DatabaseEventListener databaseEventListener) {
     TagDaoImpl tagDao = new TagDaoImpl();
     tagDao.setSessionFactory(sessionFactory);
-    tagDao.setDatabaseChangeFlag(databaseChangeFlag);
+    tagDao.setDatabaseEventListener(databaseEventListener);
     return tagDao;
   }
 
   @Bean
   @Autowired
-  public TransactionDao transactionDao(SessionFactory sessionFactory, DatabaseChangeFlag
-      databaseChangeFlag, TransactionChangeService transactionChangeService) {
+  public TransactionDao transactionDao(SessionFactory sessionFactory, DatabaseEventListener
+      databaseEventListener) {
     TransactionDaoImpl transactionDao = new TransactionDaoImpl();
     transactionDao.setSessionFactory(sessionFactory);
-    transactionDao.setDatabaseChangeFlag(databaseChangeFlag);
+    transactionDao.setDatabaseEventListener(databaseEventListener);
     return transactionDao;
   }
 
   @Bean
   @Autowired
-  public UserDao userDao(SessionFactory sessionFactory, DatabaseChangeFlag databaseChangeFlag) {
+  public UserDao userDao(SessionFactory sessionFactory,
+      DatabaseEventListener databaseEventListener) {
     UserDaoImpl userDao = new UserDaoImpl();
     userDao.setSessionFactory(sessionFactory);
-    userDao.setDatabaseChangeFlag(databaseChangeFlag);
+    userDao.setDatabaseEventListener(databaseEventListener);
     return userDao;
-  }
-
-  @Bean
-  @Autowired
-  public TransactionChangeService transactionChangeService(AccountDao accountDao) {
-    return new TransactionChangeService(accountDao);
   }
 }

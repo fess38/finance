@@ -6,7 +6,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import ru.fess38.finance.DatabaseChangeFlag;
+import ru.fess38.finance.DatabaseEventListener;
 import ru.fess38.finance.model.AbstractAccount.Type;
 import ru.fess38.finance.model.Account;
 import ru.fess38.finance.model.ModifiableAccount;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Transactional
 public class AccountDaoImpl implements AccountDao {
   private SessionFactory sessionFactory;
-  private DatabaseChangeFlag databaseChangeFlag;
+  private DatabaseEventListener databaseEventListener;
 
   @Override
   public Account save(Account account) {
@@ -34,7 +34,7 @@ public class AccountDaoImpl implements AccountDao {
   public Account update(Account account) {
     ModifiableAccount modifiableAccount = (ModifiableAccount) sessionFactory.getCurrentSession()
         .merge(account.toModifiable());
-    databaseChangeFlag.setTrue();
+    databaseEventListener.setChangeTrue();
     return modifiableAccount.toImmutable();
   }
 
@@ -90,7 +90,7 @@ public class AccountDaoImpl implements AccountDao {
   }
 
   @Autowired
-  public void setDatabaseChangeFlag(DatabaseChangeFlag databaseChangeFlag) {
-    this.databaseChangeFlag = databaseChangeFlag;
+  public void setDatabaseEventListener(DatabaseEventListener databaseEventListener) {
+    this.databaseEventListener = databaseEventListener;
   }
 }
