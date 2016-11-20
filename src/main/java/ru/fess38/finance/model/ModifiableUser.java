@@ -42,8 +42,12 @@ public class ModifiableUser {
   }
 
   public User toImmutable() {
-    return User.builder().id(id).name(name).isDeleted(isDeleted)
-        .amountTransactions(amountTransactions).build();
+    return User.builder()
+        .id(id == null ? 0 : id)
+        .name(name)
+        .isDeleted(isDeleted)
+        .amountTransactions(amountTransactions)
+        .build();
   }
 
   public Long getId() {

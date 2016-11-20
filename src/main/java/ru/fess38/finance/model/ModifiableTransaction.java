@@ -69,7 +69,7 @@ public class ModifiableTransaction {
 
   public Transaction toImmutable() {
     return Transaction.builder()
-        .id(id)
+        .id(id == null ? 0 : id)
         .isDeleted(isDeleted)
         .rubric(rubric.toImmutable())
         .dayRef(dayRef)

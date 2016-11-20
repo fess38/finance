@@ -46,8 +46,14 @@ public class ModifiableRubric {
   }
 
   public Rubric toImmutable() {
-    return Rubric.builder().id(id).name(name).isTransfer(isTransfer()).isIncome(isIncome())
-        .isDeleted(isDeleted).amountTransactions(amountTransactions).build();
+    return Rubric.builder()
+        .id(id == null ? 0 : id)
+        .name(name)
+        .isTransfer(isTransfer())
+        .isIncome(isIncome())
+        .isDeleted(isDeleted)
+        .amountTransactions(amountTransactions)
+        .build();
   }
 
   public Long getId() {

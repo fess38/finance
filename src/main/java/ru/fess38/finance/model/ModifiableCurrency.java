@@ -42,7 +42,12 @@ public class ModifiableCurrency {
   }
 
   public Currency toImmutable() {
-    return Currency.builder().id(id).name(name).symbol(symbol).isDeleted(isDeleted).build();
+    return Currency.builder()
+        .id(id == null ? 0 : id)
+        .name(name)
+        .symbol(symbol)
+        .isDeleted(isDeleted)
+        .build();
   }
 
   public String getSymbol() {

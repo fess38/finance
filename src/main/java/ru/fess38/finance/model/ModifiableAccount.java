@@ -56,8 +56,15 @@ public class ModifiableAccount {
   }
 
   public Account toImmutable() {
-    return Account.builder().id(id).name(name).balance(balance).currency(currency.toImmutable())
-        .type(type).isDeleted(isDeleted).amountTransactions(amountTransactions).build();
+    return Account.builder()
+        .id(id == null ? 0 : id)
+        .name(name)
+        .balance(balance)
+        .currency(currency.toImmutable())
+        .type(type)
+        .isDeleted(isDeleted)
+        .amountTransactions(amountTransactions)
+        .build();
   }
 
   public Long getId() {

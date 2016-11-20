@@ -42,8 +42,12 @@ public class ModifiableTag {
   }
 
   public Tag toImmutable() {
-    return Tag.builder().id(id).name(name).isDeleted(isDeleted)
-        .amountTransactions(amountTransactions).build();
+    return Tag.builder()
+        .id(id == null ? 0 : id)
+        .name(name)
+        .isDeleted(isDeleted)
+        .amountTransactions(amountTransactions)
+        .build();
   }
 
   public Long getId() {
