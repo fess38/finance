@@ -13,9 +13,6 @@ import ru.fess38.finance.model.Rubric;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ru.fess38.finance.dao.DaoHelper.deleted;
-import static ru.fess38.finance.dao.DaoHelper.notDeleted;
-
 @Repository
 @Transactional
 public class RubricDaoImpl implements RubricDao {
@@ -57,8 +54,8 @@ public class RubricDaoImpl implements RubricDao {
 
   @SuppressWarnings("unchecked")
   private List<Rubric> find(DetachedCriteria detachedCriteria, boolean isDeleted) {
-    detachedCriteria = isDeleted ? deleted(detachedCriteria) :
-        notDeleted(detachedCriteria);
+    detachedCriteria = isDeleted ? DaoHelper.deleted(detachedCriteria) :
+        DaoHelper.notDeleted(detachedCriteria);
     return (List<Rubric>) detachedCriteria
         .getExecutableCriteria(sessionFactory.getCurrentSession())
         .list()
@@ -69,7 +66,7 @@ public class RubricDaoImpl implements RubricDao {
 
   @Override
   public DetachedCriteria detachedCriteria() {
-    return null;
+    return DetachedCriteria.forClass(ModifiableRubric.class);
   }
 
   private DetachedCriteria notTransfer(DetachedCriteria detachedCriteria) {

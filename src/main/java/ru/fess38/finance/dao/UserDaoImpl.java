@@ -12,8 +12,6 @@ import ru.fess38.finance.model.User;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ru.fess38.finance.dao.DaoHelper.notDeleted;
-
 @Repository
 @Transactional
 public class UserDaoImpl implements UserDao {
@@ -56,7 +54,7 @@ public class UserDaoImpl implements UserDao {
   @SuppressWarnings("unchecked")
   private List<User> find(DetachedCriteria detachedCriteria, boolean isDeleted) {
     detachedCriteria = isDeleted ? DaoHelper.deleted(detachedCriteria) :
-        notDeleted(detachedCriteria);
+        DaoHelper.notDeleted(detachedCriteria);
     return (List<User>) detachedCriteria
         .getExecutableCriteria(sessionFactory.getCurrentSession())
         .list()
@@ -67,7 +65,7 @@ public class UserDaoImpl implements UserDao {
 
   @Override
   public DetachedCriteria detachedCriteria() {
-    return null;
+    return DetachedCriteria.forClass(ModifiableUser.class);
   }
 
   @Autowired

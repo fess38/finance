@@ -12,8 +12,6 @@ import ru.fess38.finance.model.Tag;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ru.fess38.finance.dao.DaoHelper.notDeleted;
-
 @Repository
 @Transactional
 public class TagDaoImpl implements TagDao {
@@ -56,7 +54,7 @@ public class TagDaoImpl implements TagDao {
   @SuppressWarnings("unchecked")
   private List<Tag> find(DetachedCriteria detachedCriteria, boolean isDeleted) {
     detachedCriteria = isDeleted ? DaoHelper.deleted(detachedCriteria) :
-        notDeleted(detachedCriteria);
+        DaoHelper.notDeleted(detachedCriteria);
     return (List<Tag>) detachedCriteria
         .getExecutableCriteria(sessionFactory.getCurrentSession())
         .list()
@@ -67,7 +65,7 @@ public class TagDaoImpl implements TagDao {
 
   @Override
   public DetachedCriteria detachedCriteria() {
-    return null;
+    return DetachedCriteria.forClass(ModifiableTag.class);
   }
 
   @Autowired
