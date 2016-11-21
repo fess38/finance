@@ -15,12 +15,12 @@
     <property name="hibernate.show_sql">false</property>
     <property name="hibernate.format_sql">false</property>
 
-    <mapping class="ru.fess38.finance.model.ModifiableAccount"/>
-    <mapping class="ru.fess38.finance.model.ModifiableCurrency"/>
-    <mapping class="ru.fess38.finance.model.ModifiableRubric"/>
-    <mapping class="ru.fess38.finance.model.ModifiableTag"/>
-    <mapping class="ru.fess38.finance.model.ModifiableTransaction"/>
-    <mapping class="ru.fess38.finance.model.ModifiableUser"/>
+    <mapping class="ru.fess38.finance.account.ModifiableAccount"/>
+    <mapping class="ru.fess38.finance.currency.ModifiableCurrency"/>
+    <mapping class="ru.fess38.finance.rubric.ModifiableRubric"/>
+    <mapping class="ru.fess38.finance.tag.ModifiableTag"/>
+    <mapping class="ru.fess38.finance.transaction.ModifiableTransaction"/>
+    <mapping class="ru.fess38.finance.user.ModifiableUser"/>
   </session-factory>
 </hibernate-configuration>
 
