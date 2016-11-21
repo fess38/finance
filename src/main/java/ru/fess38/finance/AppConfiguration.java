@@ -2,6 +2,7 @@ package ru.fess38.finance;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapterFactory;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import com.zaxxer.hikari.HikariConfig;
@@ -14,10 +15,14 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.scheduling.annotation.Scheduled;
+import ru.fess38.finance.account.AccountBalanceCalculator;
+import ru.fess38.finance.util.DatabaseEventListener;
+import ru.fess38.finance.util.DefaultEntitiesCreator;
 import ru.fess38.finance.util.DiskUtil;
 import ru.fess38.finance.util.LocalDateConverter;
 
 import java.time.LocalDate;
+import java.util.ServiceLoader;
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
@@ -26,8 +31,9 @@ import javax.sql.DataSource;
 public class AppConfiguration {
   private final Config config = ConfigFactory.load();
   private final DiskUtil diskUtil = new DiskUtil(config.getConfig("disk"));
-  private DatabaseChangeFlag databaseChangeFlag;
+  private DatabaseEventListener databaseEventListener;
   private DefaultEntitiesCreator defaultEntitiesCreator;
+  private AccountBalanceCalculator balanceCalculator;
 
   @PostConstruct
   public void createDefaultEntities() {
@@ -36,13 +42,21 @@ public class AppConfiguration {
 
   @Scheduled(fixedRate = 600000, initialDelay = 60000)
   public void upload() throws Exception {
-    diskUtil.upload(databaseChangeFlag.value());
-    databaseChangeFlag.setFalse();
+    diskUtil.upload(databaseEventListener.isChange());
+    databaseEventListener.setChangeFalse();
+  }
+
+  @Scheduled(fixedRate = 10000)
+  public void updateBalance() {
+    if (databaseEventListener.isCalculateBalance()) {
+      balanceCalculator.run();
+    }
+    databaseEventListener.setCalculateBalanceFalse();
   }
 
   @Bean
-  public DatabaseChangeFlag databaseChangeFlag() {
-    return new DatabaseChangeFlag();
+  public DatabaseEventListener databaseEventListener() {
+    return new DatabaseEventListener();
   }
 
   @Bean
@@ -66,21 +80,29 @@ public class AppConfiguration {
 
   @Bean
   public GsonHttpMessageConverter gsonHttpMessageConverter() {
+    GsonBuilder gsonBuilder = new GsonBuilder();
+    for (TypeAdapterFactory factory : ServiceLoader.load(TypeAdapterFactory.class)) {
+      gsonBuilder.registerTypeAdapterFactory(factory);
+    }
+    gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateConverter());
+    Gson gson = gsonBuilder.create();
     GsonHttpMessageConverter gsonHttpMessageConverter = new GsonHttpMessageConverter();
-    Gson gson = new GsonBuilder()
-        .registerTypeAdapter(LocalDate.class, new LocalDateConverter())
-        .create();
     gsonHttpMessageConverter.setGson(gson);
     return gsonHttpMessageConverter;
   }
 
   @Autowired
-  public void setDatabaseChangeFlag(DatabaseChangeFlag databaseChangeFlag) {
-    this.databaseChangeFlag = databaseChangeFlag;
+  public void setDatabaseEventListener(DatabaseEventListener databaseEventListener) {
+    this.databaseEventListener = databaseEventListener;
   }
 
   @Autowired
   public void setDefaultEntitiesCreator(DefaultEntitiesCreator defaultEntitiesCreator) {
     this.defaultEntitiesCreator = defaultEntitiesCreator;
+  }
+
+  @Autowired
+  public void setBalanceCalculator(AccountBalanceCalculator balanceCalculator) {
+    this.balanceCalculator = balanceCalculator;
   }
 }
