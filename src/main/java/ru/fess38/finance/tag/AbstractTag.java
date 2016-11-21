@@ -23,6 +23,11 @@ public abstract class AbstractTag {
     return false;
   }
 
+  @Default
+  public boolean isObsolete() {
+    return false;
+  }
+
   public ModifiableTag toModifiable() {
     ModifiableTag tag = new ModifiableTag();
     if (this.id() != 0) {
@@ -30,6 +35,7 @@ public abstract class AbstractTag {
     }
     tag.setName(this.name());
     tag.setDeleted(this.isDeleted());
+    tag.setObsolete(isObsolete());
     return tag;
   }
 }

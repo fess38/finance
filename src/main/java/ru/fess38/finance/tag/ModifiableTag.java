@@ -23,6 +23,8 @@ public class ModifiableTag {
   private String name;
   @Column(nullable = false)
   private boolean isDeleted = false;
+  @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
+  private boolean isObsolete = false;
 
   @Override
   public boolean equals(Object object) {
@@ -44,6 +46,7 @@ public class ModifiableTag {
         .id(id == null ? 0 : id)
         .name(name)
         .isDeleted(isDeleted)
+        .isObsolete(isObsolete)
         .build();
   }
 
@@ -69,5 +72,13 @@ public class ModifiableTag {
 
   public void setDeleted(boolean isDeleted) {
     this.isDeleted = isDeleted;
+  }
+
+  public boolean isObsolete() {
+    return isObsolete;
+  }
+
+  public void setObsolete(boolean obsolete) {
+    isObsolete = obsolete;
   }
 }

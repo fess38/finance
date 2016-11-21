@@ -5,11 +5,14 @@
       <table class="table table-condense">
         <tr>
           <th>Тэг</th>
+          <th>Старый?</th>
           <th></th>
         </tr>
         <tr>
           <td>
             <input class="form-control" type="text" ng-model="newTag.name">
+          </td>
+          <td>
           </td>
           <td>
             <span class="close" ng-click="saveTag()">&plus;</span>
@@ -20,7 +23,11 @@
             <input class="form-control" type="text" ng-model="tag.name" ng-blur="updateTag(tag)">
           </td>
           <td>
-            <span class="close" ng-click="deleteTag(tag)" ng-disabled="tag.hasTransactions">&times;</span>
+            <input class="form-control" type="checkbox" ng-model="tag.isObsolete"
+                ng-click="updateTag(tag)">
+          </td>
+          <td>
+            <span class="close" ng-click="deleteTag(tag)">&times;</span>
           </td>
         </tr>
       </table>

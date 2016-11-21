@@ -66,7 +66,8 @@
             </td>
             <td>
               <select class="form-control" ng-model="t.tag" ng-change="updateTransaction(t)"
-                  ng-options="tag as tag.name for tag in tags | orderBy:'name' track by tag.id">
+                  ng-options="tag as tag.name for tag in tags | filter : {isObsolete:'false'}
+                  | orderBy:'name' track by tag.id">
                 <option></option>
               </select>
             </td>
@@ -130,7 +131,8 @@
                 <label class="small control-label col-xs-5">Тэг</label>
                 <div class="col-xs-7">
                   <select class="input-sm form-control" ng-model="t.tag" ng-change="updateTransaction(t)"
-                      ng-options="tag as tag.name for tag in tags | orderBy:'name' track by tag.id">
+                      ng-options="tag as tag.name for tag in tags | filter : {isObsolete:'false'}
+                      | orderBy:'name' track by tag.id">
                     <option></option>
                   </select>
                 </div>

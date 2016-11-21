@@ -25,11 +25,11 @@ public abstract class AbstractUser {
 
   public ModifiableUser toModifiable() {
     ModifiableUser user = new ModifiableUser();
-    if (this.id() != 0) {
-      user.setId(this.id());
+    if (id() != 0) {
+      user.setId(id());
     }
-    user.setName(this.name());
-    user.setDeleted(this.isDeleted());
+    user.setName(name());
+    user.setDeleted(isDeleted());
     return user;
   }
 }
