@@ -38,8 +38,6 @@ public class ModifiableAccount {
   private Type type = Type.DEFAULT;
   @Column(nullable = false)
   private boolean isDeleted = false;
-  @Column(nullable = false)
-  private int amountTransactions = 0;
 
   @Override
   public boolean equals(Object object) {
@@ -64,7 +62,6 @@ public class ModifiableAccount {
         .currency(currency.toImmutable())
         .type(type)
         .isDeleted(isDeleted)
-        .amountTransactions(amountTransactions)
         .build();
   }
 
@@ -114,13 +111,5 @@ public class ModifiableAccount {
 
   public void setBalance(int balance) {
     this.balance = balance;
-  }
-
-  public int getAmountTransactions() {
-    return amountTransactions;
-  }
-
-  public void setAmountTransactions(int amountTransactions) {
-    this.amountTransactions = amountTransactions;
   }
 }

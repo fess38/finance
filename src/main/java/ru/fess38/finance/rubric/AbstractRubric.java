@@ -33,27 +33,6 @@ public abstract class AbstractRubric {
     return false;
   }
 
-  @Default
-  public int amountTransactions() {
-    return 0;
-  }
-
-  public Rubric addTransaction() {
-    return Rubric.builder().from(this).amountTransactions(amountTransactions() + 1).build();
-  }
-
-  public Rubric subtractTransaction() {
-    int amountTransactions = amountTransactions();
-    if (hasTransactions()) {
-      amountTransactions -= 1;
-    }
-    return Rubric.builder().from(this).amountTransactions(amountTransactions).build();
-  }
-
-  public boolean hasTransactions() {
-    return amountTransactions() > 0;
-  }
-
   public ModifiableRubric toModifiable() {
     ModifiableRubric rubric = new ModifiableRubric();
     if (this.id() != 0) {
@@ -63,7 +42,6 @@ public abstract class AbstractRubric {
     rubric.setIncome(isIncome());
     rubric.setTransfer(isTransfer());
     rubric.setDeleted(this.isDeleted());
-    rubric.setAmountTransactions(this.amountTransactions());
     return rubric;
   }
 }

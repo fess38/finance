@@ -23,27 +23,6 @@ public abstract class AbstractTag {
     return false;
   }
 
-  @Default
-  public int amountTransactions() {
-    return 0;
-  }
-
-  public Tag addTransaction() {
-    return Tag.builder().from(this).amountTransactions(amountTransactions() + 1).build();
-  }
-
-  public Tag subtractTransaction() {
-    int amountTransactions = amountTransactions();
-    if (hasTransactions()) {
-      amountTransactions -= 1;
-    }
-    return Tag.builder().from(this).amountTransactions(amountTransactions).build();
-  }
-
-  public boolean hasTransactions() {
-    return amountTransactions() > 0;
-  }
-
   public ModifiableTag toModifiable() {
     ModifiableTag tag = new ModifiableTag();
     if (this.id() != 0) {
@@ -51,7 +30,6 @@ public abstract class AbstractTag {
     }
     tag.setName(this.name());
     tag.setDeleted(this.isDeleted());
-    tag.setAmountTransactions(this.amountTransactions());
     return tag;
   }
 }

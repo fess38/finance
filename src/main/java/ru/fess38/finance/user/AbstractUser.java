@@ -23,27 +23,6 @@ public abstract class AbstractUser {
     return false;
   }
 
-  @Default
-  public int amountTransactions() {
-    return 0;
-  }
-
-  public User addTransaction() {
-    return User.builder().from(this).amountTransactions(amountTransactions() + 1).build();
-  }
-
-  public User subtractTransaction() {
-    int amountTransactions = amountTransactions();
-    if (hasTransactions()) {
-      amountTransactions -= 1;
-    }
-    return User.builder().from(this).amountTransactions(amountTransactions).build();
-  }
-
-  public boolean hasTransactions() {
-    return amountTransactions() > 0;
-  }
-
   public ModifiableUser toModifiable() {
     ModifiableUser user = new ModifiableUser();
     if (this.id() != 0) {
@@ -51,7 +30,6 @@ public abstract class AbstractUser {
     }
     user.setName(this.name());
     user.setDeleted(this.isDeleted());
-    user.setAmountTransactions(this.amountTransactions());
     return user;
   }
 }

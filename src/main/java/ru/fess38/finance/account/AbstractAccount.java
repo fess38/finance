@@ -37,27 +37,6 @@ public abstract class AbstractAccount {
     return false;
   }
 
-  @Default
-  public int amountTransactions() {
-    return 0;
-  }
-
-  public Account addTransaction() {
-    return Account.builder().from(this).amountTransactions(amountTransactions() + 1).build();
-  }
-
-  public Account subtractTransaction() {
-    int amountTransactions = amountTransactions();
-    if (hasTransactions()) {
-      amountTransactions -= 1;
-    }
-    return Account.builder().from(this).amountTransactions(amountTransactions).build();
-  }
-
-  public boolean hasTransactions() {
-    return amountTransactions() > 0;
-  }
-
   public Account addMoney(int value) {
     return Account.builder().from(this).balance(balance() + value).build();
   }
@@ -72,7 +51,6 @@ public abstract class AbstractAccount {
     account.setCurrency(currency().toModifiable());
     account.setType(type());
     account.setDeleted(isDeleted());
-    account.setAmountTransactions(amountTransactions());
     return account;
   }
 

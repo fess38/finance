@@ -27,8 +27,6 @@ public class ModifiableRubric {
   private boolean isTransfer = false;
   @Column(nullable = false)
   private boolean isDeleted = false;
-  @Column(nullable = false)
-  private int amountTransactions = 0;
 
   @Override
   public boolean equals(Object object) {
@@ -52,7 +50,6 @@ public class ModifiableRubric {
         .isTransfer(isTransfer())
         .isIncome(isIncome())
         .isDeleted(isDeleted)
-        .amountTransactions(amountTransactions)
         .build();
   }
 
@@ -94,13 +91,5 @@ public class ModifiableRubric {
 
   public void setDeleted(boolean isDeleted) {
     this.isDeleted = isDeleted;
-  }
-
-  public int getAmountTransactions() {
-    return amountTransactions;
-  }
-
-  public void setAmountTransactions(int amountTransactions) {
-    this.amountTransactions = amountTransactions;
   }
 }

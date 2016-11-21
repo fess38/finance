@@ -23,8 +23,6 @@ public class ModifiableTag {
   private String name;
   @Column(nullable = false)
   private boolean isDeleted = false;
-  @Column(nullable = false)
-  private int amountTransactions = 0;
 
   @Override
   public boolean equals(Object object) {
@@ -46,7 +44,6 @@ public class ModifiableTag {
         .id(id == null ? 0 : id)
         .name(name)
         .isDeleted(isDeleted)
-        .amountTransactions(amountTransactions)
         .build();
   }
 
@@ -72,13 +69,5 @@ public class ModifiableTag {
 
   public void setDeleted(boolean isDeleted) {
     this.isDeleted = isDeleted;
-  }
-
-  public int getAmountTransactions() {
-    return amountTransactions;
-  }
-
-  public void setAmountTransactions(int amountTransactions) {
-    this.amountTransactions = amountTransactions;
   }
 }
