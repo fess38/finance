@@ -1,6 +1,5 @@
 package ru.fess38.finance.controller;
 
-import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.fess38.finance.dao.AccountDao;
 import ru.fess38.finance.dao.TransactionDao;
 import ru.fess38.finance.model.Account;
-import ru.fess38.finance.model.ModifiableAccount;
 
 import java.util.List;
 
@@ -23,7 +21,7 @@ public class AccountController {
 
   @RequestMapping(value = "/account/get", method = RequestMethod.GET)
   public @ResponseBody List<Account> get() {
-    return accountDao.find(DetachedCriteria.forClass(ModifiableAccount.class));
+    return accountDao.find(accountDao.detachedCriteria());
   }
 
   @RequestMapping(value = "/account/master", method = RequestMethod.GET)

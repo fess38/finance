@@ -1,6 +1,22 @@
 package ru.fess38.finance.dao;
 
+import org.hibernate.criterion.DetachedCriteria;
 import ru.fess38.finance.model.Currency;
 
-public interface CurrencyDao extends GenericDao<Currency> {
+import java.util.List;
+
+public interface CurrencyDao {
+  Currency save(Currency currency);
+
+  Currency get(long id);
+
+  Currency update(Currency currency);
+
+  Currency delete(Currency currency);
+
+  List<Currency> find(DetachedCriteria detachedCriteria);
+
+  List<Currency> findDeleted(DetachedCriteria detachedCriteria);
+
+  DetachedCriteria detachedCriteria();
 }

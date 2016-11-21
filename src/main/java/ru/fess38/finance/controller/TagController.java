@@ -1,6 +1,5 @@
 package ru.fess38.finance.controller;
 
-import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,7 +8,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.fess38.finance.dao.TagDao;
 import ru.fess38.finance.dao.TransactionDao;
-import ru.fess38.finance.model.ModifiableTag;
 import ru.fess38.finance.model.Tag;
 
 import java.util.List;
@@ -23,7 +21,7 @@ public class TagController {
 
   @RequestMapping(value = "/tag/get", method = RequestMethod.GET)
   public @ResponseBody List<Tag> get() {
-    return tagDao.find(DetachedCriteria.forClass(ModifiableTag.class));
+    return tagDao.find(tagDao.detachedCriteria());
   }
 
   @RequestMapping(value = "/tag/save", method = RequestMethod.POST)

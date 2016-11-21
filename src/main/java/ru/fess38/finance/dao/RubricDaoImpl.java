@@ -13,6 +13,9 @@ import ru.fess38.finance.model.Rubric;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static ru.fess38.finance.dao.DaoHelper.deleted;
+import static ru.fess38.finance.dao.DaoHelper.notDeleted;
+
 @Repository
 @Transactional
 public class RubricDaoImpl implements RubricDao {
@@ -42,22 +45,31 @@ public class RubricDaoImpl implements RubricDao {
     return update(rubric.withIsDeleted(true));
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public List<Rubric> find(DetachedCriteria detachedCriteria) {
-    return commonFind(notDeleted(notTransfer(detachedCriteria)), sessionFactory).stream()
-        .map(x -> (ModifiableRubric) x)
-        .map(ModifiableRubric::toImmutable)
-        .collect(Collectors.toList());
+    return find(detachedCriteria, false);
+  }
+
+  @Override
+  public List<Rubric> findDeleted(DetachedCriteria detachedCriteria) {
+    return find(detachedCriteria, true);
   }
 
   @SuppressWarnings("unchecked")
-  @Override
-  public List<Rubric> findDeleted(DetachedCriteria detachedCriteria) {
-    return commonFind(deleted(notTransfer(detachedCriteria)), sessionFactory).stream()
-        .map(x -> (ModifiableRubric) x)
-        .map(ModifiableRubric::toImmutable)
+  private List<Rubric> find(DetachedCriteria detachedCriteria, boolean isDeleted) {
+    detachedCriteria = isDeleted ? deleted(detachedCriteria) :
+        notDeleted(detachedCriteria);
+    return (List<Rubric>) detachedCriteria
+        .getExecutableCriteria(sessionFactory.getCurrentSession())
+        .list()
+        .stream()
+        .map(x -> ((ModifiableRubric) x).toImmutable())
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public DetachedCriteria detachedCriteria() {
+    return null;
   }
 
   private DetachedCriteria notTransfer(DetachedCriteria detachedCriteria) {

@@ -47,22 +47,30 @@ public class AccountDaoImpl implements AccountDao {
     }
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public List<Account> find(DetachedCriteria detachedCriteria) {
-    return commonFind(notDeleted(detachedCriteria), sessionFactory).stream()
-        .map(x -> (ModifiableAccount) x)
-        .map(ModifiableAccount::toImmutable)
-        .collect(Collectors.toList());
+    return find(detachedCriteria, false);
+  }
+
+  @Override
+  public List<Account> findDeleted(DetachedCriteria detachedCriteria) {
+    return find(detachedCriteria, true);
   }
 
   @SuppressWarnings("unchecked")
-  @Override
-  public List<Account> findDeleted(DetachedCriteria detachedCriteria) {
-    return commonFind(deleted(detachedCriteria), sessionFactory).stream()
-        .map(x -> (ModifiableAccount) x)
-        .map(ModifiableAccount::toImmutable)
+  private List<Account> find(DetachedCriteria detachedCriteria, boolean isDeleted) {
+    detachedCriteria = isDeleted ? DaoHelper.deleted(detachedCriteria) :
+        DaoHelper.notDeleted(detachedCriteria);
+    return (List<Account>) detachedCriteria
+        .getExecutableCriteria(sessionFactory.getCurrentSession())
+        .list()
+        .stream()
+        .map(x -> ((ModifiableAccount) x).toImmutable())
         .collect(Collectors.toList());
+  }
+
+  @Override public DetachedCriteria detachedCriteria() {
+    return DetachedCriteria.forClass(ModifiableAccount.class);
   }
 
   @Override

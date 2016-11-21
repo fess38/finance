@@ -1,6 +1,5 @@
 package ru.fess38.finance;
 
-import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.fess38.finance.dao.AccountDao;
@@ -9,7 +8,6 @@ import ru.fess38.finance.dao.RubricDao;
 import ru.fess38.finance.model.AbstractAccount.Type;
 import ru.fess38.finance.model.Account;
 import ru.fess38.finance.model.Currency;
-import ru.fess38.finance.model.ModifiableCurrency;
 import ru.fess38.finance.model.Rubric;
 
 @Component
@@ -19,7 +17,7 @@ public class DefaultEntitiesCreator {
   private CurrencyDao currencyDao;
 
   public void create() {
-    if (currencyDao.find(DetachedCriteria.forClass(ModifiableCurrency.class)).isEmpty()) {
+    if (currencyDao.find(currencyDao.detachedCriteria()).isEmpty()) {
       Currency ruble = currencyDao.save(Currency.of("Рубль", "P"));
       currencyDao.save(Currency.of("Доллар", "$"));
       currencyDao.save(Currency.of("Евро", "€"));

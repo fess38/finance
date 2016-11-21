@@ -1,6 +1,5 @@
 package ru.fess38.finance.controller;
 
-import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,7 +8,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.fess38.finance.dao.RubricDao;
 import ru.fess38.finance.dao.TransactionDao;
-import ru.fess38.finance.model.ModifiableRubric;
 import ru.fess38.finance.model.Rubric;
 
 import java.util.List;
@@ -23,7 +21,7 @@ public class RubricController {
 
   @RequestMapping(value = "/rubric/get", method = RequestMethod.GET)
   public @ResponseBody List<Rubric> get() {
-    return rubricDao.find(DetachedCriteria.forClass(ModifiableRubric.class));
+    return rubricDao.find(rubricDao.detachedCriteria());
   }
 
   @RequestMapping(value = "/rubric/transfer", method = RequestMethod.GET)

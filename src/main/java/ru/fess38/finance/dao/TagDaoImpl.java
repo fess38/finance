@@ -12,6 +12,8 @@ import ru.fess38.finance.model.Tag;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static ru.fess38.finance.dao.DaoHelper.notDeleted;
+
 @Repository
 @Transactional
 public class TagDaoImpl implements TagDao {
@@ -43,18 +45,29 @@ public class TagDaoImpl implements TagDao {
 
   @Override
   public List<Tag> find(DetachedCriteria detachedCriteria) {
-    return commonFind(notDeleted(detachedCriteria), sessionFactory).stream()
-        .map(x -> (ModifiableTag) x)
-        .map(ModifiableTag::toImmutable)
-        .collect(Collectors.toList());
+    return find(detachedCriteria, false);
   }
 
   @Override
   public List<Tag> findDeleted(DetachedCriteria detachedCriteria) {
-    return commonFind(deleted(detachedCriteria), sessionFactory).stream()
-        .map(x -> (ModifiableTag) x)
-        .map(ModifiableTag::toImmutable)
+    return find(detachedCriteria, true);
+  }
+
+  @SuppressWarnings("unchecked")
+  private List<Tag> find(DetachedCriteria detachedCriteria, boolean isDeleted) {
+    detachedCriteria = isDeleted ? DaoHelper.deleted(detachedCriteria) :
+        notDeleted(detachedCriteria);
+    return (List<Tag>) detachedCriteria
+        .getExecutableCriteria(sessionFactory.getCurrentSession())
+        .list()
+        .stream()
+        .map(x -> ((ModifiableTag) x).toImmutable())
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public DetachedCriteria detachedCriteria() {
+    return null;
   }
 
   @Autowired

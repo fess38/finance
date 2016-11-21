@@ -41,22 +41,30 @@ public class CurrencyDaoImpl implements CurrencyDao {
     return update(currency.withIsDeleted(true));
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public List<Currency> find(DetachedCriteria detachedCriteria) {
-    return commonFind(notDeleted(detachedCriteria), sessionFactory).stream()
-        .map(x -> (ModifiableCurrency) x)
-        .map(ModifiableCurrency::toImmutable)
-        .collect(Collectors.toList());
+    return find(detachedCriteria, false);
+  }
+
+  @Override
+  public List<Currency> findDeleted(DetachedCriteria detachedCriteria) {
+    return find(detachedCriteria, true);
   }
 
   @SuppressWarnings("unchecked")
-  @Override
-  public List<Currency> findDeleted(DetachedCriteria detachedCriteria) {
-    return commonFind(deleted(detachedCriteria), sessionFactory).stream()
-        .map(x -> (ModifiableCurrency) x)
-        .map(ModifiableCurrency::toImmutable)
+  private List<Currency> find(DetachedCriteria detachedCriteria, boolean isDeleted) {
+    detachedCriteria = isDeleted ? DaoHelper.deleted(detachedCriteria) :
+        DaoHelper.notDeleted(detachedCriteria);
+    return (List<Currency>) detachedCriteria
+        .getExecutableCriteria(sessionFactory.getCurrentSession())
+        .list()
+        .stream()
+        .map(x -> ((ModifiableCurrency) x).toImmutable())
         .collect(Collectors.toList());
+  }
+
+  @Override public DetachedCriteria detachedCriteria() {
+    return DetachedCriteria.forClass(ModifiableCurrency.class);
   }
 
   @Autowired

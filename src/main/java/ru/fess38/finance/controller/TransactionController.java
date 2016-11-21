@@ -1,6 +1,5 @@
 package ru.fess38.finance.controller;
 
-import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.fess38.finance.dao.TransactionDao;
-import ru.fess38.finance.model.ModifiableTransaction;
 import ru.fess38.finance.model.MonthTransactions;
 import ru.fess38.finance.model.Transaction;
 
@@ -27,7 +25,7 @@ public class TransactionController {
 
   @RequestMapping(value = "/transaction/get", method = RequestMethod.GET)
   public @ResponseBody List<Transaction> get() {
-    return transactionDao.find(DetachedCriteria.forClass(ModifiableTransaction.class));
+    return transactionDao.find(transactionDao.detachedCriteria());
   }
 
   @RequestMapping(value = "/transaction/find", method = RequestMethod.GET,

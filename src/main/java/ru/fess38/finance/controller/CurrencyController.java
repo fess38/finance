@@ -1,6 +1,5 @@
 package ru.fess38.finance.controller;
 
-import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,7 +8,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.fess38.finance.dao.CurrencyDao;
 import ru.fess38.finance.model.Currency;
-import ru.fess38.finance.model.ModifiableCurrency;
 
 import java.util.List;
 
@@ -20,7 +18,7 @@ public class CurrencyController {
 
   @RequestMapping(value = "/currency/get", method = RequestMethod.GET)
   public @ResponseBody List<Currency> get() {
-    return currencyDao.find(DetachedCriteria.forClass(ModifiableCurrency.class));
+    return currencyDao.find(currencyDao.detachedCriteria());
   }
 
   @RequestMapping(value = "/currency/save", method = RequestMethod.POST)

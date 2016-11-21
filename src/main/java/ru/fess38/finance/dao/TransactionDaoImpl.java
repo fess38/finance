@@ -56,31 +56,40 @@ public class TransactionDaoImpl implements TransactionDao {
   @SuppressWarnings("unchecked")
   @Override
   public List<Transaction> find(DetachedCriteria detachedCriteria) {
-    return commonFind(notDeleted(detachedCriteria), sessionFactory).stream()
-        .map(x -> (ModifiableTransaction) x)
-        .map(ModifiableTransaction::toImmutable)
-        .collect(Collectors.toList());
+    return find(detachedCriteria, false);
   }
 
   @SuppressWarnings("unchecked")
   @Override
   public List<Transaction> findDeleted(DetachedCriteria detachedCriteria) {
-    return commonFind(deleted(detachedCriteria), sessionFactory).stream()
-        .map(x -> (ModifiableTransaction) x)
-        .map(ModifiableTransaction::toImmutable)
+    return find(detachedCriteria, true);
+  }
+
+  @SuppressWarnings("unchecked")
+  private List<Transaction> find(DetachedCriteria detachedCriteria, boolean isDeleted) {
+    detachedCriteria = isDeleted ? DaoHelper.deleted(detachedCriteria) :
+        DaoHelper.notDeleted(detachedCriteria);
+    return (List<Transaction>) detachedCriteria
+        .getExecutableCriteria(sessionFactory.getCurrentSession())
+        .list()
+        .stream()
+        .map(x -> ((ModifiableTransaction) x).toImmutable())
         .collect(Collectors.toList());
   }
 
   @Override
+  public DetachedCriteria detachedCriteria() {
+    return DetachedCriteria.forClass(ModifiableTransaction.class);
+  }
+
+  @Override
   public List<Transaction> find(YearMonth yearMonth) {
-    DetachedCriteria criteria = DetachedCriteria.forClass(ModifiableTransaction.class)
-        .add(yearMonthCriterion(yearMonth));
-    return find(criteria);
+    return find(detachedCriteria().add(yearMonthCriterion(yearMonth)));
   }
 
   @Override
   public List<Transaction> find(long rubricId, YearMonth yearMonth) {
-    DetachedCriteria criteria = DetachedCriteria.forClass(ModifiableTransaction.class)
+    DetachedCriteria criteria = detachedCriteria()
         .add(yearMonthCriterion(yearMonth))
         .add(Restrictions.eq("rubric.id", rubricId));
     return find(criteria).stream().collect(Collectors.toList());
@@ -95,7 +104,7 @@ public class TransactionDaoImpl implements TransactionDao {
 
   @Override
   public List<Transaction> find(long rubricId, LocalDate localDate) {
-    DetachedCriteria criteria = DetachedCriteria.forClass(ModifiableTransaction.class)
+    DetachedCriteria criteria = detachedCriteria()
         .add(Restrictions.eq("dayRef", localDate))
         .add(Restrictions.eq("rubric.id", rubricId));
     return find(criteria);
@@ -123,7 +132,7 @@ public class TransactionDaoImpl implements TransactionDao {
   }
 
   private int countByProperty(String propertyName, long id) {
-    return ((Long) notDeleted(DetachedCriteria.forClass(ModifiableTransaction.class))
+    return ((Long) DaoHelper.notDeleted(detachedCriteria())
         .add(Restrictions.eq(propertyName, id))
         .setProjection(Projections.rowCount())
         .getExecutableCriteria(sessionFactory.getCurrentSession())

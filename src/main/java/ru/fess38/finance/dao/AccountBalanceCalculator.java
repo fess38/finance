@@ -1,13 +1,10 @@
 package ru.fess38.finance.dao;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.fess38.finance.model.Account;
-import ru.fess38.finance.model.ModifiableAccount;
-import ru.fess38.finance.model.ModifiableTransaction;
 import ru.fess38.finance.model.Transaction;
 
 import java.util.Arrays;
@@ -24,7 +21,7 @@ public class AccountBalanceCalculator {
   @Transactional
   public void run() {
     Map<Account, Integer> accountBalanceMap = transactionDao
-        .find(DetachedCriteria.forClass(ModifiableTransaction.class))
+        .find(transactionDao.detachedCriteria())
         .stream()
         .map(this::convert)
         .flatMap(Collection::stream)
@@ -38,7 +35,7 @@ public class AccountBalanceCalculator {
   }
 
   private List<Account> accounts() {
-    List<Account> accounts = accountDao.find(DetachedCriteria.forClass(ModifiableAccount.class));
+    List<Account> accounts = accountDao.find(accountDao.detachedCriteria());
     accounts.add(accountDao.getMasterAccount());
     return accounts;
   }

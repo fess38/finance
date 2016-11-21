@@ -12,6 +12,8 @@ import ru.fess38.finance.model.User;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static ru.fess38.finance.dao.DaoHelper.notDeleted;
+
 @Repository
 @Transactional
 public class UserDaoImpl implements UserDao {
@@ -43,19 +45,29 @@ public class UserDaoImpl implements UserDao {
 
   @Override
   public List<User> find(DetachedCriteria detachedCriteria) {
-    return commonFind(notDeleted(detachedCriteria), sessionFactory).stream()
-        .map(x -> (ModifiableUser) x)
-        .map(ModifiableUser::toImmutable)
-        .collect(Collectors.toList());
+    return find(detachedCriteria, false);
+  }
+
+  @Override
+  public List<User> findDeleted(DetachedCriteria detachedCriteria) {
+    return find(detachedCriteria, true);
   }
 
   @SuppressWarnings("unchecked")
-  @Override
-  public List<User> findDeleted(DetachedCriteria detachedCriteria) {
-    return commonFind(deleted(detachedCriteria), sessionFactory).stream()
-        .map(x -> (ModifiableUser) x)
-        .map(ModifiableUser::toImmutable)
+  private List<User> find(DetachedCriteria detachedCriteria, boolean isDeleted) {
+    detachedCriteria = isDeleted ? DaoHelper.deleted(detachedCriteria) :
+        notDeleted(detachedCriteria);
+    return (List<User>) detachedCriteria
+        .getExecutableCriteria(sessionFactory.getCurrentSession())
+        .list()
+        .stream()
+        .map(x -> ((ModifiableUser) x).toImmutable())
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public DetachedCriteria detachedCriteria() {
+    return null;
   }
 
   @Autowired
