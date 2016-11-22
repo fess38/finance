@@ -55,6 +55,7 @@ public class RubricDaoImpl implements RubricDao {
   private List<Rubric> find(DetachedCriteria detachedCriteria, boolean isDeleted) {
     detachedCriteria = isDeleted ? DaoHelper.deleted(detachedCriteria) :
         DaoHelper.notDeleted(detachedCriteria);
+    detachedCriteria = notTransfer(detachedCriteria);
     return (List<Rubric>) detachedCriteria
         .getExecutableCriteria(sessionFactory.getCurrentSession())
         .list()
