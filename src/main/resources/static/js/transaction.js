@@ -1,10 +1,13 @@
 angular.module("app.transaction", []);
 
-angular.module("app.transaction").service("MonthTransactionsService", function(RestApi,
-    YearMonthService) {
-  var transactions = {};
-  this.refresh = function() {
+angular.module("app.transaction").controller("transaction-by-day-rubric", function($scope,
+    AlertService,
+    YearMonthService, RestApi) {
+  $scope.transactions = {};
+
+  function refreshTransactions() {
     RestApi.findTransactions(YearMonthService.getYearMonth()).then(function(response) {
+      var transactions = {};
       transactions.yearMonth = YearMonthService.getDate();
       transactions.dates = response.data.dates;
       transactions.rubrics = response.data.rubrics;
@@ -12,17 +15,16 @@ angular.module("app.transaction").service("MonthTransactionsService", function(R
       transactions.daySummary = response.data.daySummary;
       transactions.rubricSummary = response.data.rubricSummary;
       transactions.rubricDaySummary = response.data.rubricDaySummary;
+      $scope.transactions = transactions;
     });
-    return transactions;
-  };
-});
+  }
 
-angular.module("app.transaction").controller("transaction", function($scope, AlertService,
-    MonthTransactionsService, YearMonthService, RestApi) {
   function clearEditor() {
     $scope.editTransactions = [];
     $scope.yearMonth = YearMonthService.getDate();
   }
+
+  refreshTransactions();
   clearEditor();
 
   RestApi.users().then(function(response) {
@@ -33,17 +35,15 @@ angular.module("app.transaction").controller("transaction", function($scope, Ale
     $scope.tags = response.data;
   });
 
-  $scope.transactions = MonthTransactionsService.refresh();
-
   $scope.nextMonth = function() {
     YearMonthService.incrementMonth();
-    MonthTransactionsService.refresh();
+    refreshTransactions();
     clearEditor();
   };
 
   $scope.previousMonth = function() {
     YearMonthService.decrementMonth();
-    MonthTransactionsService.refresh();
+    refreshTransactions();
     clearEditor();
   };
 
@@ -89,7 +89,7 @@ angular.module("app.transaction").controller("transaction", function($scope, Ale
     transaction.amountTo = transaction.amountFrom;
     RestApi.updateTransaction(transaction).then(function() {
       $scope.alert = AlertService.success("Транзация обновлена");
-      MonthTransactionsService.refresh();
+      refreshTransactions();
     }, function() {
       $scope.alert = AlertService.danger("Ошибка обновления транзакции");
     });
@@ -98,7 +98,7 @@ angular.module("app.transaction").controller("transaction", function($scope, Ale
   $scope.deleteTransaction = function(transaction) {
     RestApi.deleteTransaction(transaction).then(function() {
       $scope.alert = AlertService.success("Транзация удалена");
-      MonthTransactionsService.refresh();
+      refreshTransactions();
       $scope.editTransactions.splice($scope.editTransactions.indexOf(transaction), 1);
     }, function() {
       $scope.alert = AlertService.danger("Ошибка удаления транзакции");
