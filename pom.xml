@@ -161,6 +161,14 @@
           <compilerVersion>${java.version}</compilerVersion>
           <source>${java.version}</source>
           <target>${java.version}</target>
+          <useIncrementalCompilation>false</useIncrementalCompilation>
+          <compilerArgs>
+            <arg>-verbose</arg>
+            <arg>-XprintRounds</arg>
+            <arg>-XprintProcessorInfo</arg>
+            <arg>-Xlint</arg>
+            <arg>-J-verbose</arg>
+          </compilerArgs>
         </configuration>
       </plugin>
       <plugin>
