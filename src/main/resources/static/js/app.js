@@ -30,12 +30,24 @@ angular.module("app").service("YearMonthService", function() {
     return date;
   };
 
+  this.getYear = function() {
+    return date.getFullYear();
+  };
+
   this.incrementMonth = function() {
     date.setMonth(date.getMonth() + 1);
   };
 
   this.decrementMonth = function() {
     date.setMonth(date.getMonth() - 1);
+  };
+
+  this.incrementYear = function() {
+    date.setYear(date.getFullYear() + 1);
+  };
+
+  this.decrementYear = function() {
+    date.setYear(date.getFullYear() - 1);
   };
 });
 

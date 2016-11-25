@@ -1,8 +1,7 @@
 angular.module("app.transaction", []);
 
 angular.module("app.transaction").controller("transaction-by-day-rubric", function($scope,
-    AlertService,
-    YearMonthService, RestApi) {
+    AlertService, YearMonthService, RestApi) {
   $scope.transactions = {};
 
   function refreshTransactions() {
@@ -163,5 +162,62 @@ angular.module("app.transaction").controller("saveTransaction", function($scope,
   $scope.calendar.options = {
     initDate: new Date(),
     showWeeks: false
+  };
+});
+
+angular.module("app.transaction").controller("transaction-by-month-rubric", function($scope,
+    AlertService, YearMonthService, RestApi) {
+  $scope.transactions = {};
+
+  function refreshTransactions() {
+    RestApi.findYearTransactions(YearMonthService.getYear()).then(function(response) {
+      var transactions = {};
+      transactions.year = YearMonthService.getYear();
+      transactions.rubrics = response.data.rubrics;
+      transactions.startOfMonths = response.data.startOfMonths;
+      transactions.yearSummary = response.data.yearSummary;
+      transactions.monthSummary = response.data.monthSummary;
+      transactions.rubricSummary = response.data.rubricSummary;
+      transactions.monthRubricSummary = response.data.monthRubricSummary;
+      $scope.transactions = transactions;
+    });
+  }
+
+  refreshTransactions();
+
+  $scope.nextYear = function() {
+    YearMonthService.incrementYear();
+    refreshTransactions();
+  };
+
+  $scope.previousYear = function() {
+    YearMonthService.decrementYear();
+    refreshTransactions();
+  };
+
+  $scope.findMonthRubricSummary = function(startOfMonth, rubric) {
+    for (var i in $scope.transactions.monthRubricSummary) {
+      var cell = $scope.transactions.monthRubricSummary[i];
+      if (cell.startOfMonth == startOfMonth && cell.rubric.id == rubric.id) {
+        return cell.amount;
+      }
+    }
+  };
+
+  $scope.findRubricSummary = function(rubric) {
+    for (var i in $scope.transactions.rubricSummary) {
+      if ($scope.transactions.rubricSummary[i].rubric.id == rubric.id) {
+        return $scope.transactions.rubricSummary[i].amount;
+      }
+    }
+  };
+
+  $scope.findMonthSummary = function(startOfMonth) {
+    for (var i in $scope.transactions.monthSummary) {
+      var cell = $scope.transactions.monthSummary[i];
+      if (cell.startOfMonth == startOfMonth) {
+        return cell.amount;
+      }
+    }
   };
 });
