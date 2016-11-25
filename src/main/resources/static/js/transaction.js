@@ -1,10 +1,12 @@
 angular.module("app.transaction", []);
 
-angular.module("app.transaction").service("MonthTransactionsService", function(RestApi,
-    YearMonthService) {
-  var transactions = {};
-  this.refresh = function() {
+angular.module("app.transaction").controller("transaction-by-day-rubric", function($scope,
+    AlertService, YearMonthService, RestApi) {
+  $scope.transactions = {};
+
+  function refreshTransactions() {
     RestApi.findTransactions(YearMonthService.getYearMonth()).then(function(response) {
+      var transactions = {};
       transactions.yearMonth = YearMonthService.getDate();
       transactions.dates = response.data.dates;
       transactions.rubrics = response.data.rubrics;
@@ -12,17 +14,16 @@ angular.module("app.transaction").service("MonthTransactionsService", function(R
       transactions.daySummary = response.data.daySummary;
       transactions.rubricSummary = response.data.rubricSummary;
       transactions.rubricDaySummary = response.data.rubricDaySummary;
+      $scope.transactions = transactions;
     });
-    return transactions;
-  };
-});
+  }
 
-angular.module("app.transaction").controller("transaction", function($scope, AlertService,
-    MonthTransactionsService, YearMonthService, RestApi) {
   function clearEditor() {
     $scope.editTransactions = [];
     $scope.yearMonth = YearMonthService.getDate();
   }
+
+  refreshTransactions();
   clearEditor();
 
   RestApi.users().then(function(response) {
@@ -33,17 +34,15 @@ angular.module("app.transaction").controller("transaction", function($scope, Ale
     $scope.tags = response.data;
   });
 
-  $scope.transactions = MonthTransactionsService.refresh();
-
   $scope.nextMonth = function() {
     YearMonthService.incrementMonth();
-    MonthTransactionsService.refresh();
+    refreshTransactions();
     clearEditor();
   };
 
   $scope.previousMonth = function() {
     YearMonthService.decrementMonth();
-    MonthTransactionsService.refresh();
+    refreshTransactions();
     clearEditor();
   };
 
@@ -89,7 +88,7 @@ angular.module("app.transaction").controller("transaction", function($scope, Ale
     transaction.amountTo = transaction.amountFrom;
     RestApi.updateTransaction(transaction).then(function() {
       $scope.alert = AlertService.success("Транзация обновлена");
-      MonthTransactionsService.refresh();
+      refreshTransactions();
     }, function() {
       $scope.alert = AlertService.danger("Ошибка обновления транзакции");
     });
@@ -98,7 +97,7 @@ angular.module("app.transaction").controller("transaction", function($scope, Ale
   $scope.deleteTransaction = function(transaction) {
     RestApi.deleteTransaction(transaction).then(function() {
       $scope.alert = AlertService.success("Транзация удалена");
-      MonthTransactionsService.refresh();
+      refreshTransactions();
       $scope.editTransactions.splice($scope.editTransactions.indexOf(transaction), 1);
     }, function() {
       $scope.alert = AlertService.danger("Ошибка удаления транзакции");
@@ -163,5 +162,62 @@ angular.module("app.transaction").controller("saveTransaction", function($scope,
   $scope.calendar.options = {
     initDate: new Date(),
     showWeeks: false
+  };
+});
+
+angular.module("app.transaction").controller("transaction-by-month-rubric", function($scope,
+    AlertService, YearMonthService, RestApi) {
+  $scope.transactions = {};
+
+  function refreshTransactions() {
+    RestApi.findYearTransactions(YearMonthService.getYear()).then(function(response) {
+      var transactions = {};
+      transactions.year = YearMonthService.getYear();
+      transactions.rubrics = response.data.rubrics;
+      transactions.startOfMonths = response.data.startOfMonths;
+      transactions.yearSummary = response.data.yearSummary;
+      transactions.monthSummary = response.data.monthSummary;
+      transactions.rubricSummary = response.data.rubricSummary;
+      transactions.monthRubricSummary = response.data.monthRubricSummary;
+      $scope.transactions = transactions;
+    });
+  }
+
+  refreshTransactions();
+
+  $scope.nextYear = function() {
+    YearMonthService.incrementYear();
+    refreshTransactions();
+  };
+
+  $scope.previousYear = function() {
+    YearMonthService.decrementYear();
+    refreshTransactions();
+  };
+
+  $scope.findMonthRubricSummary = function(startOfMonth, rubric) {
+    for (var i in $scope.transactions.monthRubricSummary) {
+      var cell = $scope.transactions.monthRubricSummary[i];
+      if (cell.startOfMonth == startOfMonth && cell.rubric.id == rubric.id) {
+        return cell.amount;
+      }
+    }
+  };
+
+  $scope.findRubricSummary = function(rubric) {
+    for (var i in $scope.transactions.rubricSummary) {
+      if ($scope.transactions.rubricSummary[i].rubric.id == rubric.id) {
+        return $scope.transactions.rubricSummary[i].amount;
+      }
+    }
+  };
+
+  $scope.findMonthSummary = function(startOfMonth) {
+    for (var i in $scope.transactions.monthSummary) {
+      var cell = $scope.transactions.monthSummary[i];
+      if (cell.startOfMonth == startOfMonth) {
+        return cell.amount;
+      }
+    }
   };
 });

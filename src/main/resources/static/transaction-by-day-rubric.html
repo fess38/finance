@@ -1,0 +1,91 @@
+<div class="container-fluid" ng-controller="transaction-by-day-rubric">
+  <div class="btn-group btn-block">
+    <button class="btn btn-default col-xs-3" ng-click="previousMonth()">
+      <span class="glyphicon glyphicon-arrow-left"></span>
+    </button>
+    <button class="btn btn-default col-xs-6">
+      <strong>{{yearMonth | date:"LLLL yyyy"}}</strong>
+    </button>
+    <button class="btn btn-default col-xs-3" ng-click="nextMonth()">
+      <span class="glyphicon glyphicon-arrow-right"></span>
+    </button>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped table-condense" ng-show="transactions.rubrics.length > 0">
+      <thead>
+      <tr>
+        <th></th>
+        <th ng-repeat="date in transactions.dates">{{date | date:"d"}}</th>
+        <th>Итого</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="rubric in transactions.rubrics | orderBy:['-isIncome', 'name']">
+        <td class="small">{{rubric.name}}</td>
+        <td class="small" ng-repeat="date in transactions.dates"
+            ng-click="showRubricDateTransactions(rubric, date)"
+            data-toggle="modal" data-target="#desktop-transaction-editor"
+            ng-class="{info: findRubricDaySummary(rubric, date) > 2000}">
+          {{findRubricDaySummary(rubric, date)}}
+        </td>
+        <td class="small" ng-click="showRubricMonthTransactions(rubric)"
+            data-toggle="modal" data-target="#desktop-transaction-editor">
+          {{findRubricSummary(rubric)}}
+        </td>
+      </tr>
+      <tr>
+        <th class="small">Расходы</th>
+        <td class="small" ng-repeat="date in transactions.dates">{{findDaySummary(date)}}</td>
+        <td class="small">{{transactions.monthSummary}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="desktop-transaction-editor" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document" ng-show="editTransactions.length > 0">
+      <div class="modal-content">
+        <div class="modal-header">{{editTransactions[0].rubric.name}}</div>
+        <table class="table table-bordered table-condense">
+          <tr>
+            <th>Дата</th>
+            <th>Пользователь</th>
+            <th>Тэг</th>
+            <th>Сумма</th>
+            <th>Комментарий</th>
+            <th></th>
+          </tr>
+          <tr ng-repeat="t in editTransactions | orderBy:['-dayRef', 'rubric.name']">
+            <td>{{t.dayRef | date:"d MMM"}}</td>
+            <td>
+              <select class="form-control" ng-model="t.user" ng-change="updateTransaction(t)"
+                  ng-options="user as user.name for user in users | orderBy:'name' track by user.id">
+                <option></option>
+              </select>
+            </td>
+            <td>
+              <select class="form-control" ng-model="t.tag" ng-change="updateTransaction(t)"
+                  ng-options="tag as tag.name for tag in tags | filter : {isObsolete:'false'}
+                  | orderBy:'name' track by tag.id">
+                <option></option>
+              </select>
+            </td>
+            <td>
+              <input class="form-control" type="number" pattern="\d*" ng-model="t.amountFrom" ng-blur="updateTransaction(t)">
+            </td>
+            <td>
+              <input class="form-control" type="text" ng-model="t.comment" ng-blur="updateTransaction(t)">
+            </td>
+            <td>
+              <span class="close" ng-click="deleteTransaction(t)">&times;</span>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <div ng-show="alert.show" class="text-center {{alert.type}}">{{alert.msg}}</div>
+      </div>
+    </div>
+  </div>
+</div>

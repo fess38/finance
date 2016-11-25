@@ -13,11 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.fess38.finance.account.Account;
 import ru.fess38.finance.rubric.Rubric;
 import ru.fess38.finance.tag.Tag;
+import ru.fess38.finance.transaction.statistic.YearTransactions;
 import ru.fess38.finance.user.User;
 import ru.fess38.finance.util.DaoHelper;
 import ru.fess38.finance.util.DatabaseEventListener;
 
 import java.time.LocalDate;
+import java.time.Year;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -84,6 +86,18 @@ public class TransactionDaoImpl implements TransactionDao {
   @Override
   public List<Transaction> find(YearMonth yearMonth) {
     return find(detachedCriteria().add(yearMonthCriterion(yearMonth)));
+  }
+
+  @Override
+  public YearTransactions find(Year year) {
+    String sql = "YEAR({alias}.dayRef) = ?";
+    Object[] value = new Object[]{year.getValue()};
+    Type[] type = new Type[]{IntegerType.INSTANCE};
+    Criterion criterion = Restrictions.sqlRestriction(sql, value, type);
+    List<Transaction> transactions = find(detachedCriteria().add(criterion)).stream()
+        .filter(x -> !x.rubric().isTransfer())
+        .collect(Collectors.toList());
+    return new YearTransactions(transactions);
   }
 
   @Override

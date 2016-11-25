@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import ru.fess38.finance.transaction.statistic.MonthTransactions;
+import ru.fess38.finance.transaction.statistic.YearTransactions;
 
 import java.time.LocalDate;
+import java.time.Year;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,6 +37,11 @@ public class TransactionController {
         .filter(x -> !x.rubric().isTransfer())
         .collect(Collectors.toList());
     return new MonthTransactions(yearMonth, transactions);
+  }
+
+  @RequestMapping(value = "/transaction/find", method = RequestMethod.GET, params = {"year"})
+  public @ResponseBody YearTransactions find(@RequestParam("year") int year) {
+    return transactionDao.find(Year.of(year));
   }
 
   @RequestMapping(value = "/transaction/find", method = RequestMethod.GET,

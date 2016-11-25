@@ -82,6 +82,10 @@ angular.module("app.restApi").service("RestApi", function($http) {
   };
 
   // Transaction
+  this.findYearTransactions = function(year) {
+    return $http.get("/transaction/find?year=" + year);
+  };
+
   this.findTransactions = function(yearMonth) {
     return $http.get("/transaction/find?year=" + yearMonth.year + "&month=" + yearMonth.month);
   };

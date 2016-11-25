@@ -7,9 +7,14 @@ angular.module("app").config(function($routeProvider) {
       .when("/account", {templateUrl: "account.html"})
       .when("/rubric", {templateUrl: "rubric.html"})
       .when("/tag", {templateUrl: "tag.html"})
-      .when("/transaction", {templateUrl: "transaction.html"})
+      .when("/transaction-by-day-rubric", {templateUrl: "transaction-by-day-rubric.html"})
+      .when("/transaction-by-day-rubric/m", {templateUrl: "transaction-by-day-rubric-mobile.html"})
+      .when("/transaction-by-month-rubric", {templateUrl: "transaction-by-month-rubric.html"})
+      .when("/transaction-by-month-tag", {templateUrl: "transaction-by-month-tag.html"})
+      .when("/transaction-by-year-rubric", {templateUrl: "transaction-by-year-rubric.html"})
       .when("/transactionAdd", {templateUrl: "transactionAdd.html"})
       .when("/transfer", {templateUrl: "transfer.html"})
+      .when("/transfer/m", {templateUrl: "transfer-mobile.html"})
       .when("/transferAdd", {templateUrl: "transferAdd.html"})
       .when("/user", {templateUrl: "user.html"})
 });
@@ -25,12 +30,24 @@ angular.module("app").service("YearMonthService", function() {
     return date;
   };
 
+  this.getYear = function() {
+    return date.getFullYear();
+  };
+
   this.incrementMonth = function() {
     date.setMonth(date.getMonth() + 1);
   };
 
   this.decrementMonth = function() {
     date.setMonth(date.getMonth() - 1);
+  };
+
+  this.incrementYear = function() {
+    date.setYear(date.getFullYear() + 1);
+  };
+
+  this.decrementYear = function() {
+    date.setYear(date.getFullYear() - 1);
   };
 });
 
