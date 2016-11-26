@@ -1,13 +1,13 @@
 angular.module("app.transaction", []);
 
 angular.module("app.transaction").controller("transaction-by-day-rubric", function($scope,
-    AlertService, YearMonthService, RestApi) {
+    AlertService, CurrentDateService, RestApi) {
   $scope.transactions = {};
 
   function refreshTransactions() {
-    RestApi.findTransactions(YearMonthService.getYearMonth()).then(function(response) {
+    RestApi.findTransactions(CurrentDateService.yearMonth()).then(function(response) {
       var transactions = {};
-      transactions.yearMonth = YearMonthService.getDate();
+      transactions.yearMonth = CurrentDateService.date();
       transactions.dates = response.data.dates;
       transactions.rubrics = response.data.rubrics;
       transactions.monthSummary = response.data.monthSummary;
@@ -20,7 +20,7 @@ angular.module("app.transaction").controller("transaction-by-day-rubric", functi
 
   function clearEditor() {
     $scope.editTransactions = [];
-    $scope.yearMonth = YearMonthService.getDate();
+    $scope.yearMonth = CurrentDateService.date();
   }
 
   refreshTransactions();
@@ -35,13 +35,13 @@ angular.module("app.transaction").controller("transaction-by-day-rubric", functi
   });
 
   $scope.nextMonth = function() {
-    YearMonthService.incrementMonth();
+    CurrentDateService.nextMonth();
     refreshTransactions();
     clearEditor();
   };
 
   $scope.previousMonth = function() {
-    YearMonthService.decrementMonth();
+    CurrentDateService.previousMonth();
     refreshTransactions();
     clearEditor();
   };
@@ -79,7 +79,7 @@ angular.module("app.transaction").controller("transaction-by-day-rubric", functi
   };
 
   $scope.showRubricMonthTransactions = function(rubric) {
-    RestApi.findRubricMonthTransactions(rubric, YearMonthService.getYearMonth()).then(function(response) {
+    RestApi.findRubricMonthTransactions(rubric, CurrentDateService.yearMonth()).then(function(response) {
       $scope.editTransactions = response.data;
     });
   };
@@ -106,7 +106,7 @@ angular.module("app.transaction").controller("transaction-by-day-rubric", functi
 });
 
 angular.module("app.transaction").controller("saveTransaction", function($scope, AlertService,
-    RestApi, YearMonthService) {
+    RestApi) {
   var masterAccount, outerAccount;
   $scope.newTransaction = {dayRef: new Date()};
 
@@ -166,13 +166,13 @@ angular.module("app.transaction").controller("saveTransaction", function($scope,
 });
 
 angular.module("app.transaction").controller("transaction-by-month-rubric", function($scope,
-    AlertService, YearMonthService, RestApi) {
+    AlertService, CurrentDateService, RestApi) {
   $scope.transactions = {};
 
   function refreshTransactions() {
-    RestApi.findMonthRubricTransactions(YearMonthService.getYear()).then(function(response) {
+    RestApi.findMonthRubricTransactions(CurrentDateService.year()).then(function(response) {
       var transactions = {};
-      transactions.year = YearMonthService.getYear();
+      transactions.year = CurrentDateService.year();
       transactions.rubrics = response.data.rubrics;
       transactions.startOfMonths = response.data.startOfMonths;
       transactions.yearSummary = response.data.yearSummary;
@@ -186,12 +186,12 @@ angular.module("app.transaction").controller("transaction-by-month-rubric", func
   refreshTransactions();
 
   $scope.nextYear = function() {
-    YearMonthService.incrementYear();
+    CurrentDateService.nextYear();
     refreshTransactions();
   };
 
   $scope.previousYear = function() {
-    YearMonthService.decrementYear();
+    CurrentDateService.previousYear();
     refreshTransactions();
   };
 
@@ -223,13 +223,13 @@ angular.module("app.transaction").controller("transaction-by-month-rubric", func
 });
 
 angular.module("app.transaction").controller("transaction-by-month-tag", function($scope,
-    AlertService, YearMonthService, RestApi) {
+    AlertService, CurrentDateService, RestApi) {
   $scope.transactions = {};
 
   function refreshTransactions() {
-    RestApi.findMonthTagTransactions(YearMonthService.getYear()).then(function(response) {
+    RestApi.findMonthTagTransactions(CurrentDateService.year()).then(function(response) {
       var transactions = {};
-      transactions.year = YearMonthService.getYear();
+      transactions.year = CurrentDateService.year();
       transactions.tags = response.data.tags;
       transactions.startOfMonths = response.data.startOfMonths;
       transactions.yearSummary = response.data.yearSummary;
@@ -243,12 +243,12 @@ angular.module("app.transaction").controller("transaction-by-month-tag", functio
   refreshTransactions();
 
   $scope.nextYear = function() {
-    YearMonthService.incrementYear();
+    CurrentDateService.nextYear();
     refreshTransactions();
   };
 
   $scope.previousYear = function() {
-    YearMonthService.decrementYear();
+    CurrentDateService.previousYear();
     refreshTransactions();
   };
 
@@ -280,13 +280,13 @@ angular.module("app.transaction").controller("transaction-by-month-tag", functio
 });
 
 angular.module("app.transaction").controller("transaction-by-year-rubric", function($scope,
-    AlertService, YearMonthService, RestApi) {
+    AlertService, CurrentDateService, RestApi) {
   $scope.transactions = {};
 
   function refreshTransactions() {
-    RestApi.findYearRubricTransactions(YearMonthService.getYear()).then(function(response) {
+    RestApi.findYearRubricTransactions(CurrentDateService.year()).then(function(response) {
       var transactions = {};
-      transactions.year = YearMonthService.getYear();
+      transactions.year = CurrentDateService.year();
       transactions.rubrics = response.data.rubrics;
       transactions.startOfYears = response.data.startOfYears;
       transactions.yearsSummary = response.data.yearsSummary;
