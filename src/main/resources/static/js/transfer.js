@@ -4,7 +4,7 @@ angular.module("app.transfer").controller("transfer", function($scope, RestApi, 
     AlertService) {
   function refresh() {
     $scope.yearMonth = CurrentDateService.date();
-    RestApi.findTransfers(CurrentDateService.yearMonth()).then(function(response) {
+    RestApi.transfers(CurrentDateService.yearMonth()).then(function(response) {
       $scope.transfers = response.data;
     });
   }

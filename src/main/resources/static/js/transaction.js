@@ -5,7 +5,7 @@ angular.module("app.transaction").controller("transaction-by-day-rubric", functi
   $scope.transactions = {};
 
   function refreshTransactions() {
-    RestApi.findTransactions(CurrentDateService.yearMonth()).then(function(response) {
+    RestApi.dayRubricTransactions(CurrentDateService.yearMonth()).then(function(response) {
       var transactions = {};
       transactions.yearMonth = CurrentDateService.date();
       transactions.dates = response.data.dates;
@@ -73,13 +73,13 @@ angular.module("app.transaction").controller("transaction-by-day-rubric", functi
   };
 
   $scope.showRubricDateTransactions = function(rubric, date) {
-    RestApi.findRubricDayTransactions(rubric, date).then(function(response) {
+    RestApi.cellDayRubricTransactions(date, rubric).then(function(response) {
       $scope.editTransactions = response.data;
     });
   };
 
   $scope.showRubricMonthTransactions = function(rubric) {
-    RestApi.findRubricMonthTransactions(rubric, CurrentDateService.yearMonth()).then(function(response) {
+    RestApi.cellMonthRubricTransactions(CurrentDateService.yearMonth(), rubric).then(function(response) {
       $scope.editTransactions = response.data;
     });
   };
@@ -170,7 +170,7 @@ angular.module("app.transaction").controller("transaction-by-month-rubric", func
   $scope.transactions = {};
 
   function refreshTransactions() {
-    RestApi.findMonthRubricTransactions(CurrentDateService.year()).then(function(response) {
+    RestApi.monthRubricTransactions(CurrentDateService.year()).then(function(response) {
       var transactions = {};
       transactions.year = CurrentDateService.year();
       transactions.rubrics = response.data.rubrics;
@@ -227,7 +227,7 @@ angular.module("app.transaction").controller("transaction-by-month-tag", functio
   $scope.transactions = {};
 
   function refreshTransactions() {
-    RestApi.findMonthTagTransactions(CurrentDateService.year()).then(function(response) {
+    RestApi.monthTagTransactions(CurrentDateService.year()).then(function(response) {
       var transactions = {};
       transactions.year = CurrentDateService.year();
       transactions.tags = response.data.tags;
@@ -284,7 +284,7 @@ angular.module("app.transaction").controller("transaction-by-year-rubric", funct
   $scope.transactions = {};
 
   function refreshTransactions() {
-    RestApi.findYearRubricTransactions(CurrentDateService.year()).then(function(response) {
+    RestApi.yearRubricTransactions(CurrentDateService.year()).then(function(response) {
       var transactions = {};
       transactions.year = CurrentDateService.year();
       transactions.rubrics = response.data.rubrics;

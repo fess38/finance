@@ -16,8 +16,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
-public class MonthTransactions {
-  public MonthTransactions(YearMonth yearMonth, List<Transaction> transactions) {
+public class DayRubricTransactions {
+  public DayRubricTransactions(YearMonth yearMonth, List<Transaction> transactions) {
     this.yearMonth = yearMonth;
     this.transactions = transactions;
     this.rubrics = processRubrics();

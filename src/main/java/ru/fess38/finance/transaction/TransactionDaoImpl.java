@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.fess38.finance.account.Account;
 import ru.fess38.finance.rubric.Rubric;
 import ru.fess38.finance.tag.Tag;
+import ru.fess38.finance.transaction.statistic.DayRubricTransactions;
 import ru.fess38.finance.transaction.statistic.MonthRubricTransactions;
 import ru.fess38.finance.transaction.statistic.MonthTagTransactions;
 import ru.fess38.finance.transaction.statistic.YearRubricTransactions;
@@ -86,12 +87,16 @@ public class TransactionDaoImpl implements TransactionDao {
   }
 
   @Override
-  public List<Transaction> find(YearMonth yearMonth) {
-    return find(detachedCriteria().add(yearMonthCriterion(yearMonth)));
+  public DayRubricTransactions dayRubricTransactions(YearMonth yearMonth) {
+    List<Transaction> transactions = find(detachedCriteria().add(yearMonthCriterion(yearMonth)))
+        .stream()
+        .filter(x -> !x.rubric().isTransfer())
+        .collect(Collectors.toList());
+    return new DayRubricTransactions(yearMonth, transactions);
   }
 
   @Override
-  public MonthRubricTransactions find(Year year) {
+  public MonthRubricTransactions monthRubricTransactions(Year year) {
     List<Transaction> transactions = find(detachedCriteria().add(yearCriterion(year))).stream()
         .filter(x -> !x.rubric().isTransfer())
         .collect(Collectors.toList());
@@ -116,11 +121,27 @@ public class TransactionDaoImpl implements TransactionDao {
   }
 
   @Override
-  public List<Transaction> find(long rubricId, YearMonth yearMonth) {
+  public List<Transaction> cellDayRubricTransactions(LocalDate localDate, long rubricId) {
+    DetachedCriteria criteria = detachedCriteria()
+        .add(Restrictions.eq("dayRef", localDate))
+        .add(Restrictions.eq("rubric.id", rubricId));
+    return find(criteria);
+  }
+
+  @Override
+  public List<Transaction> cellMonthRubricTransactions(YearMonth yearMonth, long rubricId) {
     DetachedCriteria criteria = detachedCriteria()
         .add(yearMonthCriterion(yearMonth))
         .add(Restrictions.eq("rubric.id", rubricId));
     return find(criteria).stream().collect(Collectors.toList());
+  }
+
+  @Override
+  public List<Transaction> transfers(YearMonth yearMonth) {
+    return find(detachedCriteria().add(yearMonthCriterion(yearMonth)))
+        .stream()
+        .filter(x -> x.rubric().isTransfer())
+        .collect(Collectors.toList());
   }
 
   private Criterion yearMonthCriterion(YearMonth yearMonth) {
@@ -135,14 +156,6 @@ public class TransactionDaoImpl implements TransactionDao {
     Object[] value = new Object[]{year.getValue()};
     Type[] type = new Type[]{IntegerType.INSTANCE};
     return Restrictions.sqlRestriction(sql, value, type);
-  }
-
-  @Override
-  public List<Transaction> find(long rubricId, LocalDate localDate) {
-    DetachedCriteria criteria = detachedCriteria()
-        .add(Restrictions.eq("dayRef", localDate))
-        .add(Restrictions.eq("rubric.id", rubricId));
-    return find(criteria);
   }
 
   @Override

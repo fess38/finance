@@ -58,21 +58,6 @@ public class TransactionDaoImplTest {
   }
 
   @Test
-  public void findByYearMonth() throws Exception {
-    Rubric rubric = rubricDao.save(rubric());
-
-    Transaction transaction1 = transaction(rubric).withDayRef(LocalDate.of(2016, 11, 1));
-    Transaction transaction2 = transaction(rubric).withDayRef(LocalDate.of(2016, 11, 30));
-    Transaction transaction3 = transaction(rubric).withDayRef(LocalDate.of(2016, 10, 1));
-
-    transactionDao.save(transaction1);
-    transactionDao.save(transaction2);
-    transactionDao.save(transaction3);
-
-    Assert.assertEquals(2, transactionDao.find(YearMonth.of(2016, 11)).size());
-  }
-
-  @Test
   public void findByYearMonthRubric() throws Exception {
     Rubric rubric = rubricDao.save(rubric());
 
@@ -85,7 +70,9 @@ public class TransactionDaoImplTest {
     transactionDao.save(transaction2);
     transactionDao.save(transaction3);
 
-    Assert.assertEquals(2, transactionDao.find(rubric.id(), YearMonth.of(2016, 11)).size());
+    int actual = transactionDao.cellMonthRubricTransactions(YearMonth.of(2016, 11), rubric.id())
+        .size();
+    Assert.assertEquals(2, actual);
   }
 
   @Test
@@ -101,7 +88,9 @@ public class TransactionDaoImplTest {
     transactionDao.save(transaction2);
     transactionDao.save(transaction3);
 
-    Assert.assertEquals(2, transactionDao.find(rubric.id(), LocalDate.of(2016, 11, 1)).size());
+    int actual = transactionDao.cellDayRubricTransactions(LocalDate.of(2016, 11, 1), rubric.id())
+        .size();
+    Assert.assertEquals(2, actual);
   }
 
   @Test

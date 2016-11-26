@@ -7,44 +7,34 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import ru.fess38.finance.transaction.statistic.DayRubricTransactions;
 import ru.fess38.finance.transaction.statistic.MonthRubricTransactions;
 import ru.fess38.finance.transaction.statistic.MonthTagTransactions;
-import ru.fess38.finance.transaction.statistic.MonthTransactions;
 import ru.fess38.finance.transaction.statistic.YearRubricTransactions;
 
 import java.time.LocalDate;
 import java.time.Year;
 import java.time.YearMonth;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 public class TransactionController {
   @Autowired
   private TransactionDao transactionDao;
 
-  @RequestMapping(value = "/transaction/get", method = RequestMethod.GET)
-  public @ResponseBody List<Transaction> get() {
-    return transactionDao.find(transactionDao.detachedCriteria());
+  @RequestMapping(value = "/transaction/year/{year}/month/{month}/rubric",
+                  method = RequestMethod.GET)
+  public @ResponseBody DayRubricTransactions dayRubricTransactions(@PathVariable("year") int year,
+      @PathVariable("month") int month) {
+    return transactionDao.dayRubricTransactions(YearMonth.of(year, month));
   }
 
-  @RequestMapping(value = "/transaction/find", method = RequestMethod.GET,
-      params = {"year", "month"})
-  public @ResponseBody MonthTransactions find(@RequestParam("year") int year,
-      @RequestParam("month") int month) {
-    YearMonth yearMonth = YearMonth.of(year, month);
-    List<Transaction> transactions = transactionDao.find(yearMonth).stream()
-        .filter(x -> !x.rubric().isTransfer())
-        .collect(Collectors.toList());
-    return new MonthTransactions(yearMonth, transactions);
-  }
-
-  @RequestMapping(value = "/transaction/find", method = RequestMethod.GET, params = {"year"})
-  public @ResponseBody MonthRubricTransactions find(@RequestParam("year") int year) {
-    return transactionDao.find(Year.of(year));
+  @RequestMapping(value = "/transaction/year/{year}/rubric", method = RequestMethod.GET)
+  public @ResponseBody MonthRubricTransactions monthRubricTransactions(
+      @PathVariable("year") int year) {
+    return transactionDao.monthRubricTransactions(Year.of(year));
   }
 
   @RequestMapping(value = "/transaction/year/{year}/tag")
@@ -57,18 +47,18 @@ public class TransactionController {
     return transactionDao.yearRubricTransactions();
   }
 
-  @RequestMapping(value = "/transaction/find", method = RequestMethod.GET,
-      params = {"rubric-id", "date"})
-  public @ResponseBody List<Transaction> find(@RequestParam("rubric-id") long rubricId,
-      @RequestParam("date") @DateTimeFormat(iso = ISO.DATE) LocalDate localDate) {
-    return transactionDao.find(rubricId, localDate);
+  @RequestMapping(value = "/transaction/day/{day}/rubric/{rubric}", method = RequestMethod.GET)
+  public @ResponseBody List<Transaction> cellDayRubricTransactions(
+      @PathVariable("day") @DateTimeFormat(iso = ISO.DATE) LocalDate localDate,
+      @PathVariable("rubric") long rubricId) {
+    return transactionDao.cellDayRubricTransactions(localDate, rubricId);
   }
 
-  @RequestMapping(value = "/transaction/find", method = RequestMethod.GET,
-      params = {"rubric-id", "year", "month"})
-  public @ResponseBody List<Transaction> find(@RequestParam("rubric-id") long rubricId,
-      @RequestParam("year") int year, @RequestParam("month") int month) {
-    return transactionDao.find(rubricId, YearMonth.of(year, month));
+  @RequestMapping(value = "/transaction/year/{year}/month/{month}/rubric/{rubric}",
+                  method = RequestMethod.GET)
+  public @ResponseBody List<Transaction> cellMonthRubricTransactions(@PathVariable("year") int year,
+      @PathVariable("month") int month, @PathVariable("rubric") long rubricId) {
+    return transactionDao.cellMonthRubricTransactions(YearMonth.of(year, month), rubricId);
   }
 
   @RequestMapping(value = "/transaction/save", method = RequestMethod.POST)
@@ -86,11 +76,9 @@ public class TransactionController {
     transactionDao.delete(transaction);
   }
 
-  @RequestMapping(value = "/transfer/find", method = RequestMethod.GET, params = {"year", "month"})
-  public @ResponseBody List<Transaction> findTransfers(@RequestParam("year") int year,
-      @RequestParam("month") int month) {
-    return transactionDao.find(YearMonth.of(year, month)).stream()
-        .filter(x -> x.rubric().isTransfer())
-        .collect(Collectors.toList());
+  @RequestMapping(value = "/transfer/year/{year}/month/{month}", method = RequestMethod.GET)
+  public @ResponseBody List<Transaction> transfers(@PathVariable("year") int year,
+      @PathVariable("month") int month) {
+    return transactionDao.transfers(YearMonth.of(year, month));
   }
 }
