@@ -44,14 +44,14 @@ public class YearRubricTransactions {
 
   private int yearsSummary(List<Transaction> transactions) {
     return transactions.stream()
-        .filter(x -> !x.rubric().isIncome())
+        .filter(Transaction::isExpence)
         .mapToInt(Transaction::amountFrom)
         .sum();
   }
 
   private List<YearSummary> yearSummary(List<Transaction> transactions) {
     return transactions.stream()
-        .filter(x -> !x.rubric().isIncome())
+        .filter(Transaction::isExpence)
         .map(x -> Pair.of(LocalDate.of(x.dayRef().getYear(), 1, 1), x.amountFrom()))
         .collect(Collectors.groupingBy(Pair::getKey, Collectors.summingInt(Pair::getRight)))
         .entrySet()

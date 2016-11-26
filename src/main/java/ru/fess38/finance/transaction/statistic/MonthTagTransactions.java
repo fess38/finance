@@ -46,14 +46,14 @@ public class MonthTagTransactions {
 
   private int yearSummary(List<Transaction> transactions) {
     return transactions.stream()
-        .filter(x -> !x.rubric().isIncome())
+        .filter(Transaction::isExpence)
         .mapToInt(Transaction::amountFrom)
         .sum();
   }
 
   private List<MonthSummary> monthSummary(List<Transaction> transactions) {
     return transactions.stream()
-        .filter(x -> !x.rubric().isIncome())
+        .filter(Transaction::isExpence)
         .map(x -> Pair.of(x.dayRef().withDayOfMonth(1), x.amountFrom()))
         .collect(Collectors.groupingBy(Pair::getKey, Collectors.summingInt(Pair::getRight)))
         .entrySet()

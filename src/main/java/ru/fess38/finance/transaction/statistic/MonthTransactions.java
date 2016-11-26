@@ -56,7 +56,7 @@ public class MonthTransactions {
 
   private int processMonthSummary() {
     return transactions.stream()
-        .filter(x -> !x.rubric().isIncome())
+        .filter(Transaction::isExpence)
         .mapToInt(Transaction::amountFrom)
         .sum();
   }
@@ -65,7 +65,7 @@ public class MonthTransactions {
     List<DaySummary> result = new ArrayList<>();
     Map<LocalDate, Integer> map = new HashMap<>();
     transactions.stream()
-        .filter(x -> !x.rubric().isIncome())
+        .filter(Transaction::isExpence)
         .forEach(x -> {
           int amount = x.amountFrom();
           map.computeIfPresent(x.dayRef(), (key, value) -> value + amount);
