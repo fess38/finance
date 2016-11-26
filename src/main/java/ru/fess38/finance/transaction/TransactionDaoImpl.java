@@ -13,7 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.fess38.finance.account.Account;
 import ru.fess38.finance.rubric.Rubric;
 import ru.fess38.finance.tag.Tag;
-import ru.fess38.finance.transaction.statistic.YearTransactions;
+import ru.fess38.finance.transaction.statistic.MonthRubricTransactions;
+import ru.fess38.finance.transaction.statistic.MonthTagTransactions;
 import ru.fess38.finance.user.User;
 import ru.fess38.finance.util.DaoHelper;
 import ru.fess38.finance.util.DatabaseEventListener;
@@ -89,15 +90,20 @@ public class TransactionDaoImpl implements TransactionDao {
   }
 
   @Override
-  public YearTransactions find(Year year) {
-    String sql = "YEAR({alias}.dayRef) = ?";
-    Object[] value = new Object[]{year.getValue()};
-    Type[] type = new Type[]{IntegerType.INSTANCE};
-    Criterion criterion = Restrictions.sqlRestriction(sql, value, type);
-    List<Transaction> transactions = find(detachedCriteria().add(criterion)).stream()
+  public MonthRubricTransactions find(Year year) {
+    List<Transaction> transactions = find(detachedCriteria().add(yearCriterion(year))).stream()
         .filter(x -> !x.rubric().isTransfer())
         .collect(Collectors.toList());
-    return new YearTransactions(transactions);
+    return new MonthRubricTransactions(transactions);
+  }
+
+  @Override
+  public MonthTagTransactions monthTagTransactions(Year year) {
+    List<Transaction> transactions = find(detachedCriteria().add(yearCriterion(year))).stream()
+        .filter(x -> !x.rubric().isTransfer())
+        .filter(x -> x.tag().isPresent())
+        .collect(Collectors.toList());
+    return new MonthTagTransactions(transactions);
   }
 
   @Override
@@ -113,6 +119,13 @@ public class TransactionDaoImpl implements TransactionDao {
     Object[] values = new Object[]{yearMonth.getYear(), yearMonth.getMonthValue()};
     Type[] types = new Type[]{IntegerType.INSTANCE, IntegerType.INSTANCE};
     return Restrictions.sqlRestriction(sql, values, types);
+  }
+
+  private Criterion yearCriterion(Year year) {
+    String sql = "YEAR({alias}.dayRef) = ?";
+    Object[] value = new Object[]{year.getValue()};
+    Type[] type = new Type[]{IntegerType.INSTANCE};
+    return Restrictions.sqlRestriction(sql, value, type);
   }
 
   @Override

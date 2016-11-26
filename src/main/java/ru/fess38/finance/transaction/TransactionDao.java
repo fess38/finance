@@ -4,7 +4,8 @@ import org.hibernate.criterion.DetachedCriteria;
 import ru.fess38.finance.account.Account;
 import ru.fess38.finance.rubric.Rubric;
 import ru.fess38.finance.tag.Tag;
-import ru.fess38.finance.transaction.statistic.YearTransactions;
+import ru.fess38.finance.transaction.statistic.MonthRubricTransactions;
+import ru.fess38.finance.transaction.statistic.MonthTagTransactions;
 import ru.fess38.finance.user.User;
 
 import java.time.LocalDate;
@@ -29,7 +30,9 @@ public interface TransactionDao {
 
   List<Transaction> find(YearMonth yearMonth);
 
-  YearTransactions find(Year year);
+  MonthRubricTransactions find(Year year);
+
+  MonthTagTransactions monthTagTransactions(Year year);
 
   List<Transaction> find(long rubricId, LocalDate localDate);
 

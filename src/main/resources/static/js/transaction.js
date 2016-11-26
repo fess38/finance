@@ -170,7 +170,7 @@ angular.module("app.transaction").controller("transaction-by-month-rubric", func
   $scope.transactions = {};
 
   function refreshTransactions() {
-    RestApi.findYearTransactions(YearMonthService.getYear()).then(function(response) {
+    RestApi.findMonthRubricTransactions(YearMonthService.getYear()).then(function(response) {
       var transactions = {};
       transactions.year = YearMonthService.getYear();
       transactions.rubrics = response.data.rubrics;
@@ -208,6 +208,63 @@ angular.module("app.transaction").controller("transaction-by-month-rubric", func
     for (var i in $scope.transactions.rubricSummary) {
       if ($scope.transactions.rubricSummary[i].rubric.id == rubric.id) {
         return $scope.transactions.rubricSummary[i].amount;
+      }
+    }
+  };
+
+  $scope.findMonthSummary = function(startOfMonth) {
+    for (var i in $scope.transactions.monthSummary) {
+      var cell = $scope.transactions.monthSummary[i];
+      if (cell.startOfMonth == startOfMonth) {
+        return cell.amount;
+      }
+    }
+  };
+});
+
+angular.module("app.transaction").controller("transaction-by-month-tag", function($scope,
+    AlertService, YearMonthService, RestApi) {
+  $scope.transactions = {};
+
+  function refreshTransactions() {
+    RestApi.findMonthTagTransactions(YearMonthService.getYear()).then(function(response) {
+      var transactions = {};
+      transactions.year = YearMonthService.getYear();
+      transactions.tags = response.data.tags;
+      transactions.startOfMonths = response.data.startOfMonths;
+      transactions.yearSummary = response.data.yearSummary;
+      transactions.monthSummary = response.data.monthSummary;
+      transactions.tagSummary = response.data.tagSummary;
+      transactions.monthTagSummary = response.data.monthTagSummary;
+      $scope.transactions = transactions;
+    });
+  }
+
+  refreshTransactions();
+
+  $scope.nextYear = function() {
+    YearMonthService.incrementYear();
+    refreshTransactions();
+  };
+
+  $scope.previousYear = function() {
+    YearMonthService.decrementYear();
+    refreshTransactions();
+  };
+
+  $scope.findMonthTagSummary = function(startOfMonth, tag) {
+    for (var i in $scope.transactions.monthTagSummary) {
+      var cell = $scope.transactions.monthTagSummary[i];
+      if (cell.startOfMonth == startOfMonth && cell.tag.id == tag.id) {
+        return cell.amount;
+      }
+    }
+  };
+
+  $scope.findTagSummary = function(tag) {
+    for (var i in $scope.transactions.tagSummary) {
+      if ($scope.transactions.tagSummary[i].tag.id == tag.id) {
+        return $scope.transactions.tagSummary[i].amount;
       }
     }
   };

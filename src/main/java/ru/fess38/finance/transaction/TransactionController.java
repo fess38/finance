@@ -3,14 +3,16 @@ package ru.fess38.finance.transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import ru.fess38.finance.transaction.statistic.MonthRubricTransactions;
+import ru.fess38.finance.transaction.statistic.MonthTagTransactions;
 import ru.fess38.finance.transaction.statistic.MonthTransactions;
-import ru.fess38.finance.transaction.statistic.YearTransactions;
 
 import java.time.LocalDate;
 import java.time.Year;
@@ -40,8 +42,14 @@ public class TransactionController {
   }
 
   @RequestMapping(value = "/transaction/find", method = RequestMethod.GET, params = {"year"})
-  public @ResponseBody YearTransactions find(@RequestParam("year") int year) {
+  public @ResponseBody MonthRubricTransactions find(@RequestParam("year") int year) {
     return transactionDao.find(Year.of(year));
+  }
+
+  @RequestMapping(value = "/transaction/year/{year}/tag")
+  public @ResponseBody MonthTagTransactions monthTagTransactions(@PathVariable("year") int year) {
+    System.out.println(year);
+    return transactionDao.monthTagTransactions(Year.of(year));
   }
 
   @RequestMapping(value = "/transaction/find", method = RequestMethod.GET,

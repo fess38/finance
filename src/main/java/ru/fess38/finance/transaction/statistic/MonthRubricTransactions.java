@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class YearTransactions {
-  public YearTransactions(List<Transaction> transactions) {
+public class MonthRubricTransactions {
+  public MonthRubricTransactions(List<Transaction> transactions) {
     rubrics = rubrics(transactions);
     startOfMonths = startOfMonths(transactions);
     yearSummary = yearSummary(transactions);
