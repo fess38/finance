@@ -15,6 +15,7 @@ import ru.fess38.finance.rubric.Rubric;
 import ru.fess38.finance.tag.Tag;
 import ru.fess38.finance.transaction.statistic.MonthRubricTransactions;
 import ru.fess38.finance.transaction.statistic.MonthTagTransactions;
+import ru.fess38.finance.transaction.statistic.YearRubricTransactions;
 import ru.fess38.finance.user.User;
 import ru.fess38.finance.util.DaoHelper;
 import ru.fess38.finance.util.DatabaseEventListener;
@@ -104,6 +105,14 @@ public class TransactionDaoImpl implements TransactionDao {
         .filter(x -> x.tag().isPresent())
         .collect(Collectors.toList());
     return new MonthTagTransactions(transactions);
+  }
+
+  @Override
+  public YearRubricTransactions yearRubricTransactions() {
+    List<Transaction> transactions = find(detachedCriteria()).stream()
+        .filter(x -> !x.rubric().isTransfer())
+        .collect(Collectors.toList());
+    return new YearRubricTransactions(transactions);
   }
 
   @Override

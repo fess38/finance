@@ -278,3 +278,50 @@ angular.module("app.transaction").controller("transaction-by-month-tag", functio
     }
   };
 });
+
+angular.module("app.transaction").controller("transaction-by-year-rubric", function($scope,
+    AlertService, YearMonthService, RestApi) {
+  $scope.transactions = {};
+
+  function refreshTransactions() {
+    RestApi.findYearRubricTransactions(YearMonthService.getYear()).then(function(response) {
+      var transactions = {};
+      transactions.year = YearMonthService.getYear();
+      transactions.rubrics = response.data.rubrics;
+      transactions.startOfYears = response.data.startOfYears;
+      transactions.yearsSummary = response.data.yearsSummary;
+      transactions.yearSummary = response.data.yearSummary;
+      transactions.rubricSummary = response.data.rubricSummary;
+      transactions.yearRubricSummary = response.data.yearRubricSummary;
+      $scope.transactions = transactions;
+    });
+  }
+
+  refreshTransactions();
+
+  $scope.findYearRubricSummary = function(startOfYear, rubric) {
+    for (var i in $scope.transactions.yearRubricSummary) {
+      var cell = $scope.transactions.yearRubricSummary[i];
+      if (cell.startOfYear == startOfYear && cell.rubric.id == rubric.id) {
+        return cell.amount;
+      }
+    }
+  };
+
+  $scope.findRubricSummary = function(rubric) {
+    for (var i in $scope.transactions.rubricSummary) {
+      if ($scope.transactions.rubricSummary[i].rubric.id == rubric.id) {
+        return $scope.transactions.rubricSummary[i].amount;
+      }
+    }
+  };
+
+  $scope.findYearSummary = function(startOfYear) {
+    for (var i in $scope.transactions.yearSummary) {
+      var cell = $scope.transactions.yearSummary[i];
+      if (cell.startOfYear == startOfYear) {
+        return cell.amount;
+      }
+    }
+  };
+});

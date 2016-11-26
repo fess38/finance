@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.fess38.finance.transaction.statistic.MonthRubricTransactions;
 import ru.fess38.finance.transaction.statistic.MonthTagTransactions;
 import ru.fess38.finance.transaction.statistic.MonthTransactions;
+import ru.fess38.finance.transaction.statistic.YearRubricTransactions;
 
 import java.time.LocalDate;
 import java.time.Year;
@@ -48,8 +49,12 @@ public class TransactionController {
 
   @RequestMapping(value = "/transaction/year/{year}/tag")
   public @ResponseBody MonthTagTransactions monthTagTransactions(@PathVariable("year") int year) {
-    System.out.println(year);
     return transactionDao.monthTagTransactions(Year.of(year));
+  }
+
+  @RequestMapping(value = "/transaction/year/all/rubric")
+  public @ResponseBody YearRubricTransactions yearRubricTransactions() {
+    return transactionDao.yearRubricTransactions();
   }
 
   @RequestMapping(value = "/transaction/find", method = RequestMethod.GET,
