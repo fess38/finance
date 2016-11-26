@@ -88,25 +88,22 @@ public class TransactionDaoImpl implements TransactionDao {
 
   @Override
   public DayRubricTransactions dayRubricTransactions(YearMonth yearMonth) {
-    List<Transaction> transactions = find(detachedCriteria().add(yearMonthCriterion(yearMonth)))
-        .stream()
-        .filter(x -> !x.rubric().isTransfer())
-        .collect(Collectors.toList());
+    List<Transaction> transactions = find(notTransfers(detachedCriteria())
+        .add(yearMonthCriterion(yearMonth)));
     return new DayRubricTransactions(transactions);
   }
 
   @Override
   public MonthRubricTransactions monthRubricTransactions(Year year) {
-    List<Transaction> transactions = find(detachedCriteria().add(yearCriterion(year))).stream()
-        .filter(x -> !x.rubric().isTransfer())
-        .collect(Collectors.toList());
+    List<Transaction> transactions = find(notTransfers(detachedCriteria())
+        .add(yearCriterion(year)));
     return new MonthRubricTransactions(transactions);
   }
 
   @Override
   public MonthTagTransactions monthTagTransactions(Year year) {
-    List<Transaction> transactions = find(detachedCriteria().add(yearCriterion(year))).stream()
-        .filter(x -> !x.rubric().isTransfer())
+    List<Transaction> transactions = find(notTransfers(detachedCriteria().add(yearCriterion(year))))
+        .stream()
         .filter(x -> x.tag().isPresent())
         .collect(Collectors.toList());
     return new MonthTagTransactions(transactions);
@@ -114,10 +111,7 @@ public class TransactionDaoImpl implements TransactionDao {
 
   @Override
   public YearRubricTransactions yearRubricTransactions() {
-    List<Transaction> transactions = find(detachedCriteria()).stream()
-        .filter(x -> !x.rubric().isTransfer())
-        .collect(Collectors.toList());
-    return new YearRubricTransactions(transactions);
+    return new YearRubricTransactions(find(notTransfers(detachedCriteria())));
   }
 
   @Override
@@ -138,24 +132,7 @@ public class TransactionDaoImpl implements TransactionDao {
 
   @Override
   public List<Transaction> transfers(YearMonth yearMonth) {
-    return find(detachedCriteria().add(yearMonthCriterion(yearMonth)))
-        .stream()
-        .filter(x -> x.rubric().isTransfer())
-        .collect(Collectors.toList());
-  }
-
-  private Criterion yearMonthCriterion(YearMonth yearMonth) {
-    String sql = "YEAR({alias}.dayRef) = ? AND MONTH({alias}.dayRef) = ?";
-    Object[] values = new Object[]{yearMonth.getYear(), yearMonth.getMonthValue()};
-    Type[] types = new Type[]{IntegerType.INSTANCE, IntegerType.INSTANCE};
-    return Restrictions.sqlRestriction(sql, values, types);
-  }
-
-  private Criterion yearCriterion(Year year) {
-    String sql = "YEAR({alias}.dayRef) = ?";
-    Object[] value = new Object[]{year.getValue()};
-    Type[] type = new Type[]{IntegerType.INSTANCE};
-    return Restrictions.sqlRestriction(sql, value, type);
+    return find(transfers(detachedCriteria().add(yearMonthCriterion(yearMonth))));
   }
 
   @Override
@@ -185,6 +162,30 @@ public class TransactionDaoImpl implements TransactionDao {
         .setProjection(Projections.rowCount())
         .getExecutableCriteria(sessionFactory.getCurrentSession())
         .uniqueResult()).intValue();
+  }
+
+  private Criterion yearMonthCriterion(YearMonth yearMonth) {
+    String sql = "YEAR({alias}.dayRef) = ? AND MONTH({alias}.dayRef) = ?";
+    Object[] values = new Object[]{yearMonth.getYear(), yearMonth.getMonthValue()};
+    Type[] types = new Type[]{IntegerType.INSTANCE, IntegerType.INSTANCE};
+    return Restrictions.sqlRestriction(sql, values, types);
+  }
+
+  private Criterion yearCriterion(Year year) {
+    String sql = "YEAR({alias}.dayRef) = ?";
+    Object[] value = new Object[]{year.getValue()};
+    Type[] type = new Type[]{IntegerType.INSTANCE};
+    return Restrictions.sqlRestriction(sql, value, type);
+  }
+
+  private DetachedCriteria notTransfers(DetachedCriteria detachedCriteria) {
+    return detachedCriteria.createAlias("rubric", "r")
+        .add(Restrictions.eq("r.isTransfer", false));
+  }
+
+  private DetachedCriteria transfers(DetachedCriteria detachedCriteria) {
+    return detachedCriteria.createAlias("rubric", "r")
+        .add(Restrictions.eq("r.isTransfer", true));
   }
 
   @Autowired
