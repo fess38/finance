@@ -3,6 +3,9 @@ package ru.fess38.finance.transaction.statistic;
 import org.apache.commons.lang3.tuple.Pair;
 import ru.fess38.finance.rubric.Rubric;
 import ru.fess38.finance.transaction.Transaction;
+import ru.fess38.finance.transaction.statistic.TransactionsHelper.MonthRubricSummary;
+import ru.fess38.finance.transaction.statistic.TransactionsHelper.MonthSummary;
+import ru.fess38.finance.transaction.statistic.TransactionsHelper.RubricSummary;
 
 import java.time.LocalDate;
 import java.time.Year;

@@ -92,7 +92,7 @@ public class TransactionDaoImpl implements TransactionDao {
         .stream()
         .filter(x -> !x.rubric().isTransfer())
         .collect(Collectors.toList());
-    return new DayRubricTransactions(yearMonth, transactions);
+    return new DayRubricTransactions(transactions);
   }
 
   @Override

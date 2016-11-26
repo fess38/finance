@@ -3,6 +3,9 @@ package ru.fess38.finance.transaction.statistic;
 import org.apache.commons.lang3.tuple.Pair;
 import ru.fess38.finance.tag.Tag;
 import ru.fess38.finance.transaction.Transaction;
+import ru.fess38.finance.transaction.statistic.TransactionsHelper.MonthSummary;
+import ru.fess38.finance.transaction.statistic.TransactionsHelper.MonthTagSummary;
+import ru.fess38.finance.transaction.statistic.TransactionsHelper.TagSummary;
 
 import java.time.LocalDate;
 import java.time.Year;

@@ -13,7 +13,7 @@ angular.module("app.transaction").controller("transaction-by-day-rubric", functi
       transactions.monthSummary = response.data.monthSummary;
       transactions.daySummary = response.data.daySummary;
       transactions.rubricSummary = response.data.rubricSummary;
-      transactions.rubricDaySummary = response.data.rubricDaySummary;
+      transactions.dayRubricSummary = response.data.dayRubricSummary;
       $scope.transactions = transactions;
     });
   }
@@ -47,8 +47,8 @@ angular.module("app.transaction").controller("transaction-by-day-rubric", functi
   };
 
   $scope.findRubricDaySummary = function(rubric, date) {
-    for (var i in $scope.transactions.rubricDaySummary) {
-      var cell = $scope.transactions.rubricDaySummary[i];
+    for (var i in $scope.transactions.dayRubricSummary) {
+      var cell = $scope.transactions.dayRubricSummary[i];
       if (cell.rubric.id == rubric.id && cell.date == date) {
         return cell.amount;
       }
