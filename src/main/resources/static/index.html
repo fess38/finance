@@ -29,12 +29,23 @@
   <style type="text/css">
     .table td, th {
       text-align: center;
+      white-space: nowrap;
+    }
+
+    .no-padding {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .no-nav-padding {
+      min-height: 0;
+      margin-bottom: 0;
     }
   </style>
 </head>
 
 <body ng-app="app" ng-cloak>
-<div class="container-fluid visible-xs">
+<div class="container-fluid visible-xs no-padding">
   <div class="dropdown col-xs-12">
     <button class="btn btn-default form-control dropdown-toggle small" type="button" data-toggle="dropdown">
       Меню <span class="caret"></span>
@@ -50,15 +61,14 @@
       <li><a href="#user">Пользователи</a></li>
     </ul>
   </div>
-  <br><br>
 </div>
-<nav class="navbar navbar-default hidden-xs">
+<nav class="navbar navbar-default hidden-xs no-nav-padding">
   <div class="container-fluid">
     <ul class="nav nav-tabs">
       <li><a class="active" href="#transactionAdd">Добавить транзакцию</a></li>
       <li><a href="#transferAdd">Добавить перевод</a></li>
       <li>
-        <a type="button" data-toggle="dropdown">Доходы и расходы</a>
+        <a type="button" data-toggle="dropdown">Доходы и расходы<span class="caret"></span></a>
         <ul class="dropdown-menu">
           <li><a href="#transaction-by-day-rubric">По дням и рубрикам</a></li>
           <li><a href="#transaction-by-month-rubric">По месяцам и рубрикам</a></li>

@@ -68,4 +68,12 @@ public abstract class AbstractTransaction {
     transaction.setComment(comment().orElse(null));
     return transaction;
   }
+
+  public boolean isIncome() {
+    return rubric().isIncome();
+  }
+
+  public boolean isExpence() {
+    return !isIncome();
+  }
 }

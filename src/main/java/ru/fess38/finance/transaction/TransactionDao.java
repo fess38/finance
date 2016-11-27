@@ -4,7 +4,10 @@ import org.hibernate.criterion.DetachedCriteria;
 import ru.fess38.finance.account.Account;
 import ru.fess38.finance.rubric.Rubric;
 import ru.fess38.finance.tag.Tag;
-import ru.fess38.finance.transaction.statistic.YearTransactions;
+import ru.fess38.finance.transaction.statistic.DayRubricTransactions;
+import ru.fess38.finance.transaction.statistic.MonthRubricTransactions;
+import ru.fess38.finance.transaction.statistic.MonthTagTransactions;
+import ru.fess38.finance.transaction.statistic.YearRubricTransactions;
 import ru.fess38.finance.user.User;
 
 import java.time.LocalDate;
@@ -27,13 +30,19 @@ public interface TransactionDao {
 
   DetachedCriteria detachedCriteria();
 
-  List<Transaction> find(YearMonth yearMonth);
+  DayRubricTransactions dayRubricTransactions(YearMonth yearMonth);
 
-  YearTransactions find(Year year);
+  MonthRubricTransactions monthRubricTransactions(Year year);
 
-  List<Transaction> find(long rubricId, LocalDate localDate);
+  MonthTagTransactions monthTagTransactions(Year year);
 
-  List<Transaction> find(long rubricId, YearMonth yearMonth);
+  YearRubricTransactions yearRubricTransactions();
+
+  List<Transaction> cellDayRubricTransactions(LocalDate localDate, long rubricId);
+
+  List<Transaction> cellMonthRubricTransactions(YearMonth yearMonth, long rubricId);
+
+  List<Transaction> transfers(YearMonth yearMonth);
 
   int countByAccount(Account account);
 

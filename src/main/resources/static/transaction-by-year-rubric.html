@@ -1,12 +1,12 @@
-<div class="container-fluid" ng-controller="transaction-by-month-rubric">
+<div class="container-fluid" ng-controller="transaction-by-year-rubric">
   <div class="btn-group btn-block">
-    <button class="btn btn-default col-lg-3" ng-click="previousYear()">
+    <button class="btn btn-default col-lg-3 disabled">
       <span class="glyphicon glyphicon-arrow-left"></span>
     </button>
     <button class="btn btn-default col-lg-6 disabled">
       <strong>{{transactions.year}}</strong>
     </button>
-    <button class="btn btn-default col-lg-3" ng-click="nextYear()">
+    <button class="btn btn-default col-lg-3 disabled">
       <span class="glyphicon glyphicon-arrow-right"></span>
     </button>
   </div>
@@ -16,7 +16,7 @@
       <thead>
       <tr>
         <th></th>
-        <th ng-repeat="startOfMonth in transactions.startOfMonths">{{startOfMonth | date:"LLLL"}}
+        <th ng-repeat="startOfYear in transactions.startOfYears">{{startOfYear | date:"yyyy"}}
         </th>
         <th>Итого</th>
       </tr>
@@ -24,22 +24,20 @@
       <tbody>
       <tr ng-repeat="rubric in transactions.rubrics | orderBy:['-isIncome', 'name']">
         <td>{{rubric.name}}</td>
-        <td ng-repeat="startOfMonth in transactions.startOfMonths">
-          {{findMonthRubricSummary(startOfMonth, rubric)}}
+        <td ng-repeat="startOfYear in transactions.startOfYears">
+          {{findYearRubricSummary(startOfYear, rubric)}}
         </td>
-        <td>
-          {{findRubricSummary(rubric)}}
-        </td>
+        <td>{{findRubricSummary(rubric)}}</td>
       </tr>
       <tr>
         <td>
           <strong>Расходы</strong>
         </td>
-        <td ng-repeat="startOfMonth in transactions.startOfMonths">
-          <strong>{{findMonthSummary(startOfMonth)}}</strong>
+        <td ng-repeat="startOfYear in transactions.startOfYears">
+          <strong>{{findYearSummary(startOfYear)}}</strong>
         </td>
         <td>
-          <strong>{{transactions.yearSummary}}</strong>
+          <strong>{{transactions.yearsSummary}}</strong>
         </td>
       </tr>
       </tbody>

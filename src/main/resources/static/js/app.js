@@ -19,34 +19,34 @@ angular.module("app").config(function($routeProvider) {
       .when("/user", {templateUrl: "user.html"})
 });
 
-angular.module("app").service("YearMonthService", function() {
+angular.module("app").service("CurrentDateService", function() {
   var date = new Date();
 
-  this.getYearMonth = function() {
+  this.yearMonth = function() {
     return {year: date.getFullYear(), month: date.getMonth() + 1};
   };
 
-  this.getDate = function() {
+  this.date = function() {
     return date;
   };
 
-  this.getYear = function() {
+  this.year = function() {
     return date.getFullYear();
   };
 
-  this.incrementMonth = function() {
+  this.nextMonth = function() {
     date.setMonth(date.getMonth() + 1);
   };
 
-  this.decrementMonth = function() {
+  this.previousMonth = function() {
     date.setMonth(date.getMonth() - 1);
   };
 
-  this.incrementYear = function() {
+  this.nextYear = function() {
     date.setYear(date.getFullYear() + 1);
   };
 
-  this.decrementYear = function() {
+  this.previousYear = function() {
     date.setYear(date.getFullYear() - 1);
   };
 });

@@ -1,10 +1,10 @@
 angular.module("app.transfer", []);
 
-angular.module("app.transfer").controller("transfer", function($scope, RestApi, YearMonthService,
+angular.module("app.transfer").controller("transfer", function($scope, RestApi, CurrentDateService,
     AlertService) {
   function refresh() {
-    $scope.yearMonth = YearMonthService.getDate();
-    RestApi.findTransfers(YearMonthService.getYearMonth()).then(function(response) {
+    $scope.yearMonth = CurrentDateService.date();
+    RestApi.transfers(CurrentDateService.yearMonth()).then(function(response) {
       $scope.transfers = response.data;
     });
   }
@@ -12,12 +12,12 @@ angular.module("app.transfer").controller("transfer", function($scope, RestApi, 
   refresh();
 
   $scope.nextMonth = function() {
-    YearMonthService.incrementMonth();
+    CurrentDateService.nextMonth();
     refresh();
   };
 
   $scope.previousMonth = function() {
-    YearMonthService.decrementMonth();
+    CurrentDateService.previousMonth();
     refresh();
   };
 
@@ -39,8 +39,7 @@ angular.module("app.transfer").controller("transfer", function($scope, RestApi, 
   };
 });
 
-angular.module("app.transfer").controller("saveTransfer", function($scope, AlertService,
-    RestApi, YearMonthService) {
+angular.module("app.transfer").controller("saveTransfer", function($scope, AlertService, RestApi) {
   var transferRubric;
   $scope.newTransfer = {dayRef: new Date()};
 

@@ -1,4 +1,4 @@
-<div class="container-fluid" ng-controller="transaction-by-month-rubric">
+<div class="container-fluid" ng-controller="transaction-by-month-tag">
   <div class="btn-group btn-block">
     <button class="btn btn-default col-lg-3" ng-click="previousYear()">
       <span class="glyphicon glyphicon-arrow-left"></span>
@@ -12,7 +12,7 @@
   </div>
 
   <div class="table-responsive">
-    <table class="table table-bordered table-striped table-condense" ng-show="transactions.rubrics.length > 0">
+    <table class="table table-bordered table-striped table-condense" ng-show="transactions.tags.length > 0">
       <thead>
       <tr>
         <th></th>
@@ -22,19 +22,17 @@
       </tr>
       </thead>
       <tbody>
-      <tr ng-repeat="rubric in transactions.rubrics | orderBy:['-isIncome', 'name']">
-        <td>{{rubric.name}}</td>
+      <tr ng-repeat="tag in transactions.tags | orderBy:'name'">
+        <td>{{tag.name}}</td>
         <td ng-repeat="startOfMonth in transactions.startOfMonths">
-          {{findMonthRubricSummary(startOfMonth, rubric)}}
+          {{findMonthTagSummary(startOfMonth, tag)}}
         </td>
-        <td>
-          {{findRubricSummary(rubric)}}
-        </td>
+        <td>{{findTagSummary(tag)}}</td>
       </tr>
       <tr>
-        <td>
+        <th>
           <strong>Расходы</strong>
-        </td>
+        </th>
         <td ng-repeat="startOfMonth in transactions.startOfMonths">
           <strong>{{findMonthSummary(startOfMonth)}}</strong>
         </td>

@@ -1,26 +1,26 @@
 angular.module("app.transaction", []);
 
 angular.module("app.transaction").controller("transaction-by-day-rubric", function($scope,
-    AlertService, YearMonthService, RestApi) {
+    AlertService, CurrentDateService, RestApi) {
   $scope.transactions = {};
 
   function refreshTransactions() {
-    RestApi.findTransactions(YearMonthService.getYearMonth()).then(function(response) {
+    RestApi.dayRubricTransactions(CurrentDateService.yearMonth()).then(function(response) {
       var transactions = {};
-      transactions.yearMonth = YearMonthService.getDate();
+      transactions.yearMonth = CurrentDateService.date();
       transactions.dates = response.data.dates;
       transactions.rubrics = response.data.rubrics;
       transactions.monthSummary = response.data.monthSummary;
       transactions.daySummary = response.data.daySummary;
       transactions.rubricSummary = response.data.rubricSummary;
-      transactions.rubricDaySummary = response.data.rubricDaySummary;
+      transactions.dayRubricSummary = response.data.dayRubricSummary;
       $scope.transactions = transactions;
     });
   }
 
   function clearEditor() {
     $scope.editTransactions = [];
-    $scope.yearMonth = YearMonthService.getDate();
+    $scope.yearMonth = CurrentDateService.date();
   }
 
   refreshTransactions();
@@ -35,20 +35,29 @@ angular.module("app.transaction").controller("transaction-by-day-rubric", functi
   });
 
   $scope.nextMonth = function() {
-    YearMonthService.incrementMonth();
+    CurrentDateService.nextMonth();
     refreshTransactions();
     clearEditor();
   };
 
   $scope.previousMonth = function() {
-    YearMonthService.decrementMonth();
+    CurrentDateService.previousMonth();
     refreshTransactions();
     clearEditor();
   };
 
-  $scope.findRubricDaySummary = function(rubric, date) {
-    for (var i in $scope.transactions.rubricDaySummary) {
-      var cell = $scope.transactions.rubricDaySummary[i];
+  $scope.findDayRubricSummary = function(date, rubric) {
+    for (var i in $scope.transactions.dayRubricSummary) {
+      var cell = $scope.transactions.dayRubricSummary[i];
+      if (cell.rubric.id == rubric.id && cell.date == date) {
+        return cell.formattedAmount;
+      }
+    }
+  };
+
+  $scope.findDayRubricSummaryNumber = function(date, rubric) {
+    for (var i in $scope.transactions.dayRubricSummary) {
+      var cell = $scope.transactions.dayRubricSummary[i];
       if (cell.rubric.id == rubric.id && cell.date == date) {
         return cell.amount;
       }
@@ -58,7 +67,7 @@ angular.module("app.transaction").controller("transaction-by-day-rubric", functi
   $scope.findRubricSummary = function(rubric) {
     for (var i in $scope.transactions.rubricSummary) {
       if ($scope.transactions.rubricSummary[i].rubric.id == rubric.id) {
-        return $scope.transactions.rubricSummary[i].amount;
+        return $scope.transactions.rubricSummary[i].formattedAmount;
       }
     }
   };
@@ -67,19 +76,19 @@ angular.module("app.transaction").controller("transaction-by-day-rubric", functi
     for (var i in $scope.transactions.daySummary) {
       var cell = $scope.transactions.daySummary[i];
       if (cell.date == date) {
-        return cell.amount;
+        return cell.formattedAmount;
       }
     }
   };
 
-  $scope.showRubricDateTransactions = function(rubric, date) {
-    RestApi.findRubricDayTransactions(rubric, date).then(function(response) {
+  $scope.showDayRubricTransactions = function(date, rubric) {
+    RestApi.cellDayRubricTransactions(date, rubric).then(function(response) {
       $scope.editTransactions = response.data;
     });
   };
 
-  $scope.showRubricMonthTransactions = function(rubric) {
-    RestApi.findRubricMonthTransactions(rubric, YearMonthService.getYearMonth()).then(function(response) {
+  $scope.showMonthRubricTransactions = function(rubric) {
+    RestApi.cellMonthRubricTransactions(CurrentDateService.yearMonth(), rubric).then(function(response) {
       $scope.editTransactions = response.data;
     });
   };
@@ -106,7 +115,7 @@ angular.module("app.transaction").controller("transaction-by-day-rubric", functi
 });
 
 angular.module("app.transaction").controller("saveTransaction", function($scope, AlertService,
-    RestApi, YearMonthService) {
+    RestApi) {
   var masterAccount, outerAccount;
   $scope.newTransaction = {dayRef: new Date()};
 
@@ -166,13 +175,13 @@ angular.module("app.transaction").controller("saveTransaction", function($scope,
 });
 
 angular.module("app.transaction").controller("transaction-by-month-rubric", function($scope,
-    AlertService, YearMonthService, RestApi) {
+    AlertService, CurrentDateService, RestApi) {
   $scope.transactions = {};
 
   function refreshTransactions() {
-    RestApi.findYearTransactions(YearMonthService.getYear()).then(function(response) {
+    RestApi.monthRubricTransactions(CurrentDateService.year()).then(function(response) {
       var transactions = {};
-      transactions.year = YearMonthService.getYear();
+      transactions.year = CurrentDateService.year();
       transactions.rubrics = response.data.rubrics;
       transactions.startOfMonths = response.data.startOfMonths;
       transactions.yearSummary = response.data.yearSummary;
@@ -186,12 +195,12 @@ angular.module("app.transaction").controller("transaction-by-month-rubric", func
   refreshTransactions();
 
   $scope.nextYear = function() {
-    YearMonthService.incrementYear();
+    CurrentDateService.nextYear();
     refreshTransactions();
   };
 
   $scope.previousYear = function() {
-    YearMonthService.decrementYear();
+    CurrentDateService.previousYear();
     refreshTransactions();
   };
 
@@ -199,7 +208,7 @@ angular.module("app.transaction").controller("transaction-by-month-rubric", func
     for (var i in $scope.transactions.monthRubricSummary) {
       var cell = $scope.transactions.monthRubricSummary[i];
       if (cell.startOfMonth == startOfMonth && cell.rubric.id == rubric.id) {
-        return cell.amount;
+        return cell.formattedAmount;
       }
     }
   };
@@ -207,7 +216,7 @@ angular.module("app.transaction").controller("transaction-by-month-rubric", func
   $scope.findRubricSummary = function(rubric) {
     for (var i in $scope.transactions.rubricSummary) {
       if ($scope.transactions.rubricSummary[i].rubric.id == rubric.id) {
-        return $scope.transactions.rubricSummary[i].amount;
+        return $scope.transactions.rubricSummary[i].formattedAmount;
       }
     }
   };
@@ -216,7 +225,111 @@ angular.module("app.transaction").controller("transaction-by-month-rubric", func
     for (var i in $scope.transactions.monthSummary) {
       var cell = $scope.transactions.monthSummary[i];
       if (cell.startOfMonth == startOfMonth) {
-        return cell.amount;
+        return cell.formattedAmount;
+      }
+    }
+  };
+});
+
+angular.module("app.transaction").controller("transaction-by-month-tag", function($scope,
+    AlertService, CurrentDateService, RestApi) {
+  $scope.transactions = {};
+
+  function refreshTransactions() {
+    RestApi.monthTagTransactions(CurrentDateService.year()).then(function(response) {
+      var transactions = {};
+      transactions.year = CurrentDateService.year();
+      transactions.tags = response.data.tags;
+      transactions.startOfMonths = response.data.startOfMonths;
+      transactions.yearSummary = response.data.yearSummary;
+      transactions.monthSummary = response.data.monthSummary;
+      transactions.tagSummary = response.data.tagSummary;
+      transactions.monthTagSummary = response.data.monthTagSummary;
+      $scope.transactions = transactions;
+    });
+  }
+
+  refreshTransactions();
+
+  $scope.nextYear = function() {
+    CurrentDateService.nextYear();
+    refreshTransactions();
+  };
+
+  $scope.previousYear = function() {
+    CurrentDateService.previousYear();
+    refreshTransactions();
+  };
+
+  $scope.findMonthTagSummary = function(startOfMonth, tag) {
+    for (var i in $scope.transactions.monthTagSummary) {
+      var cell = $scope.transactions.monthTagSummary[i];
+      if (cell.startOfMonth == startOfMonth && cell.tag.id == tag.id) {
+        return cell.formattedAmount;
+      }
+    }
+  };
+
+  $scope.findTagSummary = function(tag) {
+    for (var i in $scope.transactions.tagSummary) {
+      if ($scope.transactions.tagSummary[i].tag.id == tag.id) {
+        return $scope.transactions.tagSummary[i].formattedAmount;
+      }
+    }
+  };
+
+  $scope.findMonthSummary = function(startOfMonth) {
+    for (var i in $scope.transactions.monthSummary) {
+      var cell = $scope.transactions.monthSummary[i];
+      if (cell.startOfMonth == startOfMonth) {
+        return cell.formattedAmount;
+      }
+    }
+  };
+});
+
+angular.module("app.transaction").controller("transaction-by-year-rubric", function($scope,
+    AlertService, CurrentDateService, RestApi) {
+  $scope.transactions = {};
+
+  function refreshTransactions() {
+    RestApi.yearRubricTransactions(CurrentDateService.year()).then(function(response) {
+      var transactions = {};
+      transactions.year = CurrentDateService.year();
+      transactions.rubrics = response.data.rubrics;
+      transactions.startOfYears = response.data.startOfYears;
+      transactions.yearsSummary = response.data.yearsSummary;
+      transactions.yearSummary = response.data.yearSummary;
+      transactions.rubricSummary = response.data.rubricSummary;
+      transactions.yearRubricSummary = response.data.yearRubricSummary;
+      $scope.transactions = transactions;
+    });
+  }
+
+  refreshTransactions();
+
+  $scope.findYearRubricSummary = function(startOfYear, rubric) {
+    for (var i in $scope.transactions.yearRubricSummary) {
+      var cell = $scope.transactions.yearRubricSummary[i];
+      if (cell.startOfYear == startOfYear && cell.rubric.id == rubric.id) {
+        return cell.formattedAmount;
+      }
+    }
+  };
+
+  $scope.findRubricSummary = function(rubric) {
+    for (var i in $scope.transactions.rubricSummary) {
+      if ($scope.transactions.rubricSummary[i].rubric.id == rubric.id) {
+        return $scope.transactions.rubricSummary[i].formattedAmount;
+      }
+    }
+  };
+
+  $scope.findYearSummary = function(startOfYear) {
+    for (var i in $scope.transactions.yearSummary) {
+      var cell = $scope.transactions.yearSummary[i];
+      if (cell.startOfYear == startOfYear) {
+        return cell.formattedAmount;
       }
     }
   };

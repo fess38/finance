@@ -82,26 +82,29 @@ angular.module("app.restApi").service("RestApi", function($http) {
   };
 
   // Transaction
-  this.findYearTransactions = function(year) {
-    return $http.get("/transaction/find?year=" + year);
+  this.dayRubricTransactions = function(yearMonth) {
+    return $http.get("/transaction/year/" + yearMonth.year + "/month/" + yearMonth.month + "/rubric");
   };
 
-  this.findTransactions = function(yearMonth) {
-    return $http.get("/transaction/find?year=" + yearMonth.year + "&month=" + yearMonth.month);
+  this.monthRubricTransactions = function(year) {
+    return $http.get("/transaction/year/" + year + "/rubric");
   };
 
-  this.findTransfers = function(yearMonth) {
-    return $http.get("/transfer/find?year=" + yearMonth.year + "&month=" + yearMonth.month);
+  this.monthTagTransactions = function(year) {
+    return $http.get("/transaction/year/" + year + "/tag");
   };
 
-  this.findRubricDayTransactions = function(rubric, date) {
-    var query = "/transaction/find?rubric-id=" + rubric.id + "&date=" + date;
-    return $http.get(query);
+  this.yearRubricTransactions = function() {
+    return $http.get("/transaction/year/all/rubric");
   };
 
-  this.findRubricMonthTransactions = function(rubric, yearMonth) {
-    return $http.get("/transaction/find?year=" + yearMonth.year + "&month=" + yearMonth.month
-        + "&rubric-id=" + rubric.id);
+  this.cellDayRubricTransactions = function(date, rubric) {
+    return $http.get("/transaction/day/" + date + "/rubric/" + rubric.id);
+  };
+
+  this.cellMonthRubricTransactions = function(yearMonth, rubric) {
+    return $http.get("/transaction/year/" + yearMonth.year + "/month/" + yearMonth.month
+        + "/rubric/" + rubric.id);
   };
 
   this.saveTransaction = function(transaction) {
@@ -114,6 +117,10 @@ angular.module("app.restApi").service("RestApi", function($http) {
 
   this.deleteTransaction = function(transaction) {
     return $http.post("/transaction/delete", transaction);
+  };
+
+  this.transfers = function(yearMonth) {
+    return $http.get("/transfer/year/" + yearMonth.year + "/month/" + yearMonth.month);
   };
 
   // User
