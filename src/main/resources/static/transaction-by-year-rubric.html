@@ -1,12 +1,12 @@
 <div class="container-fluid" ng-controller="transaction-by-year-rubric">
   <div class="btn-group btn-block">
-    <button class="btn btn-default col-xs-3">
+    <button class="btn btn-default col-lg-3 disabled">
       <span class="glyphicon glyphicon-arrow-left"></span>
     </button>
-    <button class="btn btn-default col-xs-6">
+    <button class="btn btn-default col-lg-6 disabled">
       <strong>{{transactions.year}}</strong>
     </button>
-    <button class="btn btn-default col-xs-3">
+    <button class="btn btn-default col-lg-3 disabled">
       <span class="glyphicon glyphicon-arrow-right"></span>
     </button>
   </div>
@@ -23,20 +23,22 @@
       </thead>
       <tbody>
       <tr ng-repeat="rubric in transactions.rubrics | orderBy:['-isIncome', 'name']">
-        <td class="small">{{rubric.name}}</td>
-        <td class="small" ng-repeat="startOfYear in transactions.startOfYears">
+        <td>{{rubric.name}}</td>
+        <td ng-repeat="startOfYear in transactions.startOfYears">
           {{findYearRubricSummary(startOfYear, rubric)}}
         </td>
-        <td class="small">
-          {{findRubricSummary(rubric)}}
-        </td>
+        <td>{{findRubricSummary(rubric)}}</td>
       </tr>
       <tr>
-        <th class="small">Расходы</th>
-        <td class="small" ng-repeat="startOfYear in transactions.startOfYears">
-          {{findYearSummary(startOfYear)}}
+        <td>
+          <strong>Расходы</strong>
         </td>
-        <td class="small">{{transactions.yearsSummary}}</td>
+        <td ng-repeat="startOfYear in transactions.startOfYears">
+          <strong>{{findYearSummary(startOfYear)}}</strong>
+        </td>
+        <td>
+          <strong>{{transactions.yearsSummary}}</strong>
+        </td>
       </tr>
       </tbody>
     </table>

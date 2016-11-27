@@ -42,7 +42,7 @@ angular.module("app").service("CurrentDateService", function() {
     date.setMonth(date.getMonth() - 1);
   };
 
-  this.mextYear = function() {
+  this.nextYear = function() {
     date.setYear(date.getFullYear() + 1);
   };
 

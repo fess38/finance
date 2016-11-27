@@ -1,46 +1,84 @@
 <div class="container-fluid" ng-controller="transaction-by-day-rubric">
   <div class="btn-group btn-block">
-    <button class="btn btn-default col-xs-3" ng-click="previousMonth()">
+    <button class="btn btn-default col-lg-3" ng-click="previousMonth()">
       <span class="glyphicon glyphicon-arrow-left"></span>
     </button>
-    <button class="btn btn-default col-xs-6">
+    <button class="btn btn-default col-lg-6 disabled">
       <strong>{{yearMonth | date:"LLLL yyyy"}}</strong>
     </button>
-    <button class="btn btn-default col-xs-3" ng-click="nextMonth()">
+    <button class="btn btn-default col-lg-3" ng-click="nextMonth()">
       <span class="glyphicon glyphicon-arrow-right"></span>
     </button>
   </div>
 
-  <div class="table-responsive">
-    <table class="table table-bordered table-striped table-condense" ng-show="transactions.rubrics.length > 0">
-      <thead>
-      <tr>
-        <th></th>
-        <th ng-repeat="date in transactions.dates">{{date | date:"d"}}</th>
-        <th>Итого</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr ng-repeat="rubric in transactions.rubrics | orderBy:['-isIncome', 'name']">
-        <td class="small">{{rubric.name}}</td>
-        <td class="small" ng-repeat="date in transactions.dates"
-            ng-click="showRubricDateTransactions(rubric, date)"
-            data-toggle="modal" data-target="#desktop-transaction-editor"
-            ng-class="{info: findRubricDaySummary(rubric, date) > 2000}">
-          {{findRubricDaySummary(rubric, date)}}
-        </td>
-        <td class="small" ng-click="showRubricMonthTransactions(rubric)"
-            data-toggle="modal" data-target="#desktop-transaction-editor">
-          {{findRubricSummary(rubric)}}
-        </td>
-      </tr>
-      <tr>
-        <th class="small">Расходы</th>
-        <td class="small" ng-repeat="date in transactions.dates">{{findDaySummary(date)}}</td>
-        <td class="small">{{transactions.monthSummary}}</td>
-      </tr>
-      </tbody>
-    </table>
+  <div class="row" ng-show="transactions.rubrics.length > 0">
+    <div class="col-lg-1 no-padding">
+      <table class="table table-bordered table-striped table-condense">
+        <thead>
+        <tr>
+          <th>Рубрики</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="rubric in transactions.rubrics | orderBy:['-isIncome', 'name']">
+          <td>{{rubric.name}}</td>
+        </tr>
+        <tr>
+          <td>
+            <strong>Расходы</strong>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-responsive col-lg-10 no-padding">
+      <table class="table table-bordered table-striped table-condense">
+        <thead>
+        <tr>
+          <th ng-repeat="date in transactions.dates">{{date | date:"d"}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="rubric in transactions.rubrics | orderBy:['-isIncome', 'name']">
+          <td ng-repeat="date in transactions.dates"
+              ng-click="showDayRubricTransactions(date, rubric)"
+              data-toggle="modal" data-target="#desktop-transaction-editor"
+              ng-class="{info: findDayRubricSummaryNumber(date, rubric) > 2000}">
+            {{findDayRubricSummary(date, rubric)}}
+          </td>
+        </tr>
+        <tr>
+          <td ng-repeat="date in transactions.dates">
+            <strong>{{findDaySummary(date)}}</strong>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col-lg-1 no-padding">
+      <table class="table table-bordered table-striped table-condense">
+        <thead>
+        <tr>
+          <th>Итого</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="rubric in transactions.rubrics | orderBy:['-isIncome', 'name']">
+          <td ng-click="showMonthRubricTransactions(rubric)"
+              data-toggle="modal" data-target="#desktop-transaction-editor">
+            {{findRubricSummary(rubric)}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <strong>{{transactions.monthSummary}}</strong>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <div id="desktop-transaction-editor" class="modal fade" tabindex="-1" role="dialog">

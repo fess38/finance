@@ -26,7 +26,7 @@ public class MonthTagTransactions {
 
   private final List<Tag> tags;
   private final List<LocalDate> startOfMonths;
-  private final int yearSummary;
+  private final String yearSummary;
   private List<MonthSummary> monthSummary;
   private final List<TagSummary> tagSummary;
   private final List<MonthTagSummary> monthTagSummary;
@@ -47,11 +47,11 @@ public class MonthTagTransactions {
         .collect(Collectors.toList());
   }
 
-  private int yearSummary(List<Transaction> transactions) {
-    return transactions.stream()
+  private String yearSummary(List<Transaction> transactions) {
+    return TransactionsHelper.format(transactions.stream()
         .filter(Transaction::isExpence)
         .mapToInt(Transaction::amountFrom)
-        .sum();
+        .sum());
   }
 
   private List<MonthSummary> monthSummary(List<Transaction> transactions) {
@@ -93,7 +93,7 @@ public class MonthTagTransactions {
     return startOfMonths;
   }
 
-  public int getYearSummary() {
+  public String getYearSummary() {
     return yearSummary;
   }
 

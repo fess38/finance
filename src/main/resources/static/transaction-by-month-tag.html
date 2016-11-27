@@ -1,18 +1,18 @@
 <div class="container-fluid" ng-controller="transaction-by-month-tag">
   <div class="btn-group btn-block">
-    <button class="btn btn-default col-xs-3" ng-click="previousYear()">
+    <button class="btn btn-default col-lg-3" ng-click="previousYear()">
       <span class="glyphicon glyphicon-arrow-left"></span>
     </button>
-    <button class="btn btn-default col-xs-6">
+    <button class="btn btn-default col-lg-6 disabled">
       <strong>{{transactions.year}}</strong>
     </button>
-    <button class="btn btn-default col-xs-3" ng-click="nextYear()">
+    <button class="btn btn-default col-lg-3" ng-click="nextYear()">
       <span class="glyphicon glyphicon-arrow-right"></span>
     </button>
   </div>
 
   <div class="table-responsive">
-    <table class="table table-bordered table-striped table-condense" ng-show="transactions.tags.length > 0">
+    <table class="table table-bordered table-striped table-condense">
       <thead>
       <tr>
         <th></th>
@@ -23,20 +23,22 @@
       </thead>
       <tbody>
       <tr ng-repeat="tag in transactions.tags | orderBy:'name'">
-        <td class="small">{{tag.name}}</td>
-        <td class="small" ng-repeat="startOfMonth in transactions.startOfMonths">
+        <td>{{tag.name}}</td>
+        <td ng-repeat="startOfMonth in transactions.startOfMonths">
           {{findMonthTagSummary(startOfMonth, tag)}}
         </td>
-        <td class="small">
-          {{findTagSummary(tag)}}
-        </td>
+        <td>{{findTagSummary(tag)}}</td>
       </tr>
       <tr>
-        <th class="small">Расходы</th>
-        <td class="small" ng-repeat="startOfMonth in transactions.startOfMonths">
-          {{findMonthSummary(startOfMonth)}}
+        <th>
+          <strong>Расходы</strong>
+        </th>
+        <td ng-repeat="startOfMonth in transactions.startOfMonths">
+          <strong>{{findMonthSummary(startOfMonth)}}</strong>
         </td>
-        <td class="small">{{transactions.yearSummary}}</td>
+        <td>
+          <strong>{{transactions.yearSummary}}</strong>
+        </td>
       </tr>
       </tbody>
     </table>

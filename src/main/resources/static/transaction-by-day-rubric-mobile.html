@@ -3,7 +3,7 @@
     <button class="btn btn-default col-xs-3" ng-click="previousMonth()">
       <span class="glyphicon glyphicon-arrow-left"></span>
     </button>
-    <button class="btn btn-default col-xs-6">
+    <button class="btn btn-default col-xs-6 disabled">
       <strong>{{yearMonth | date:"LLLL yyyy"}}</strong>
     </button>
     <button class="btn btn-default col-xs-3" ng-click="nextMonth()">
@@ -20,13 +20,13 @@
       </tr>
       </thead>
       <tbody>
-      <tr ng-repeat="cell in transactions.rubricDaySummary | orderBy:['-date','rubric.name']"
-          ng-click="showRubricDateTransactions(cell.rubric, cell.date)"
+      <tr ng-repeat="cell in transactions.dayRubricSummary | orderBy:['-date','rubric.name']"
+          ng-click="showDayRubricTransactions(cell.date, cell.rubric)"
           data-toggle="modal"
           data-target="#mobile-transaction-editor">
         <td>{{cell.date | date:"dd MMM"}}</td>
         <td>{{cell.rubric.name}}</td>
-        <td>{{cell.amount}}</td>
+        <td>{{cell.formattedAmount}}</td>
       </tr>
       </tbody>
     </table>
