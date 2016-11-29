@@ -32,8 +32,11 @@
       white-space: nowrap;
     }
 
-    .no-padding {
+    .no-left-padding {
       padding-left: 0;
+    }
+
+    .no-right-padding {
       padding-right: 0;
     }
 
@@ -45,7 +48,7 @@
 </head>
 
 <body ng-app="app" ng-cloak>
-<div class="container-fluid visible-xs no-padding">
+<div class="container-fluid visible-xs no-left-padding no-right-padding">
   <div class="dropdown col-xs-12">
     <button class="btn btn-default form-control dropdown-toggle small" type="button" data-toggle="dropdown">
       Меню <span class="caret"></span>
