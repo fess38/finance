@@ -26,12 +26,12 @@ angular.module("app.transaction").controller("transaction-by-day-rubric", functi
   refreshTransactions();
   clearEditor();
 
-  RestApi.users().then(function(response) {
-    $scope.users = response.data;
-  });
-
   RestApi.tags().then(function(response) {
     $scope.tags = response.data;
+  });
+
+  RestApi.users().then(function(response) {
+    $scope.users = response.data;
   });
 
   $scope.nextMonth = function() {
@@ -84,6 +84,9 @@ angular.module("app.transaction").controller("transaction-by-day-rubric", functi
   $scope.showDayRubricTransactions = function(date, rubric) {
     RestApi.cellDayRubricTransactions(date, rubric).then(function(response) {
       $scope.editTransactions = response.data;
+      if ($scope.editTransactions.length > 0) {
+        $("#desktop-transaction-editor").modal();
+      }
     });
   };
 

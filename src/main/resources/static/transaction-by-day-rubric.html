@@ -48,7 +48,6 @@
         <tr ng-repeat="rubric in transactions.rubrics | orderBy:['-isIncome', 'name']">
           <td ng-repeat="date in transactions.dates"
               ng-click="showDayRubricTransactions(date, rubric)"
-              data-toggle="modal" data-target="#desktop-transaction-editor"
               ng-class="{info: findDayRubricSummaryNumber(date, rubric) > 2000}">
             {{findDayRubricSummary(date, rubric)}}
           </td>
