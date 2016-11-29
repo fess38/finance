@@ -25,7 +25,7 @@ public class MonthRubricTransactions {
 
   private final List<Rubric> rubrics;
   private final List<LocalDate> startOfMonths;
-  private final String yearSummary;
+  private final int yearSummary;
   private List<MonthSummary> monthSummary;
   private final List<RubricSummary> rubricSummary;
   private final List<MonthRubricSummary> monthRubricSummary;
@@ -45,11 +45,11 @@ public class MonthRubricTransactions {
         .collect(Collectors.toList());
   }
 
-  private String yearSummary(List<Transaction> transactions) {
-    return TransactionsHelper.format(transactions.stream()
+  private int yearSummary(List<Transaction> transactions) {
+    return transactions.stream()
         .filter(Transaction::isExpence)
         .mapToInt(Transaction::amountFrom)
-        .sum());
+        .sum();
   }
 
   private List<MonthSummary> monthSummary(List<Transaction> transactions) {
@@ -91,7 +91,7 @@ public class MonthRubricTransactions {
     return startOfMonths;
   }
 
-  public String getYearSummary() {
+  public int getYearSummary() {
     return yearSummary;
   }
 

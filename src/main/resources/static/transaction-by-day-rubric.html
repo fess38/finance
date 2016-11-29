@@ -12,16 +12,21 @@
   </div>
 
   <div class="row" ng-show="transactions.rubrics.length > 0">
-    <div class="col-lg-1 no-padding">
+    <div class="col-lg-1 no-right-padding">
       <table class="table table-bordered table-striped table-condense">
         <thead>
         <tr>
-          <th>Рубрики</th>
+          <th>
+            Рубрики
+          </th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="rubric in transactions.rubrics | orderBy:['-isIncome', 'name']">
-          <td>{{rubric.name}}</td>
+          <td ng-click="showMonthRubricTransactions(rubric)" data-toggle="modal"
+              data-target="#desktop-transaction-editor">
+            {{rubric.name}}
+          </td>
         </tr>
         <tr>
           <td>
@@ -32,7 +37,7 @@
       </table>
     </div>
 
-    <div class="table-responsive col-lg-10 no-padding">
+    <div class="table-responsive col-lg-10 no-left-padding no-right-padding">
       <table class="table table-bordered table-striped table-condense">
         <thead>
         <tr>
@@ -43,7 +48,6 @@
         <tr ng-repeat="rubric in transactions.rubrics | orderBy:['-isIncome', 'name']">
           <td ng-repeat="date in transactions.dates"
               ng-click="showDayRubricTransactions(date, rubric)"
-              data-toggle="modal" data-target="#desktop-transaction-editor"
               ng-class="{info: findDayRubricSummaryNumber(date, rubric) > 2000}">
             {{findDayRubricSummary(date, rubric)}}
           </td>
@@ -57,7 +61,7 @@
       </table>
     </div>
 
-    <div class="col-lg-1 no-padding">
+    <div class="col-lg-1 no-left-padding">
       <table class="table table-bordered table-striped table-condense">
         <thead>
         <tr>
@@ -66,14 +70,14 @@
         </thead>
         <tbody>
         <tr ng-repeat="rubric in transactions.rubrics | orderBy:['-isIncome', 'name']">
-          <td ng-click="showMonthRubricTransactions(rubric)"
-              data-toggle="modal" data-target="#desktop-transaction-editor">
+          <td ng-click="showMonthRubricTransactions(rubric)" data-toggle="modal"
+              data-target="#desktop-transaction-editor">
             {{findRubricSummary(rubric)}}
           </td>
         </tr>
         <tr>
           <td>
-            <strong>{{transactions.monthSummary}}</strong>
+            <strong>{{transactions.monthSummary.toLocaleString()}}</strong>
           </td>
         </tr>
         </tbody>
@@ -95,7 +99,7 @@
             <th></th>
           </tr>
           <tr ng-repeat="t in editTransactions | orderBy:['-dayRef', 'rubric.name']">
-            <td>{{t.dayRef | date:"d MMM"}}</td>
+            <td style="vertical-align: middle">{{t.dayRef | date:"d MMM"}}</td>
             <td>
               <select class="form-control" ng-model="t.user" ng-change="updateTransaction(t)"
                   ng-options="user as user.name for user in users | orderBy:'name' track by user.id">

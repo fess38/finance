@@ -26,12 +26,12 @@ angular.module("app.transaction").controller("transaction-by-day-rubric", functi
   refreshTransactions();
   clearEditor();
 
-  RestApi.users().then(function(response) {
-    $scope.users = response.data;
-  });
-
   RestApi.tags().then(function(response) {
     $scope.tags = response.data;
+  });
+
+  RestApi.users().then(function(response) {
+    $scope.users = response.data;
   });
 
   $scope.nextMonth = function() {
@@ -50,7 +50,7 @@ angular.module("app.transaction").controller("transaction-by-day-rubric", functi
     for (var i in $scope.transactions.dayRubricSummary) {
       var cell = $scope.transactions.dayRubricSummary[i];
       if (cell.rubric.id == rubric.id && cell.date == date) {
-        return cell.formattedAmount;
+        return cell.amount.toLocaleString();
       }
     }
   };
@@ -67,7 +67,7 @@ angular.module("app.transaction").controller("transaction-by-day-rubric", functi
   $scope.findRubricSummary = function(rubric) {
     for (var i in $scope.transactions.rubricSummary) {
       if ($scope.transactions.rubricSummary[i].rubric.id == rubric.id) {
-        return $scope.transactions.rubricSummary[i].formattedAmount;
+        return $scope.transactions.rubricSummary[i].amount.toLocaleString();
       }
     }
   };
@@ -76,7 +76,7 @@ angular.module("app.transaction").controller("transaction-by-day-rubric", functi
     for (var i in $scope.transactions.daySummary) {
       var cell = $scope.transactions.daySummary[i];
       if (cell.date == date) {
-        return cell.formattedAmount;
+        return cell.amount.toLocaleString();
       }
     }
   };
@@ -84,6 +84,9 @@ angular.module("app.transaction").controller("transaction-by-day-rubric", functi
   $scope.showDayRubricTransactions = function(date, rubric) {
     RestApi.cellDayRubricTransactions(date, rubric).then(function(response) {
       $scope.editTransactions = response.data;
+      if ($scope.editTransactions.length > 0) {
+        $("#desktop-transaction-editor").modal();
+      }
     });
   };
 
@@ -208,7 +211,7 @@ angular.module("app.transaction").controller("transaction-by-month-rubric", func
     for (var i in $scope.transactions.monthRubricSummary) {
       var cell = $scope.transactions.monthRubricSummary[i];
       if (cell.startOfMonth == startOfMonth && cell.rubric.id == rubric.id) {
-        return cell.formattedAmount;
+        return cell.amount.toLocaleString();
       }
     }
   };
@@ -216,7 +219,7 @@ angular.module("app.transaction").controller("transaction-by-month-rubric", func
   $scope.findRubricSummary = function(rubric) {
     for (var i in $scope.transactions.rubricSummary) {
       if ($scope.transactions.rubricSummary[i].rubric.id == rubric.id) {
-        return $scope.transactions.rubricSummary[i].formattedAmount;
+        return $scope.transactions.rubricSummary[i].amount.toLocaleString();
       }
     }
   };
@@ -225,7 +228,7 @@ angular.module("app.transaction").controller("transaction-by-month-rubric", func
     for (var i in $scope.transactions.monthSummary) {
       var cell = $scope.transactions.monthSummary[i];
       if (cell.startOfMonth == startOfMonth) {
-        return cell.formattedAmount;
+        return cell.amount.toLocaleString();
       }
     }
   };
@@ -265,7 +268,7 @@ angular.module("app.transaction").controller("transaction-by-month-tag", functio
     for (var i in $scope.transactions.monthTagSummary) {
       var cell = $scope.transactions.monthTagSummary[i];
       if (cell.startOfMonth == startOfMonth && cell.tag.id == tag.id) {
-        return cell.formattedAmount;
+        return cell.amount.toLocaleString();
       }
     }
   };
@@ -273,7 +276,7 @@ angular.module("app.transaction").controller("transaction-by-month-tag", functio
   $scope.findTagSummary = function(tag) {
     for (var i in $scope.transactions.tagSummary) {
       if ($scope.transactions.tagSummary[i].tag.id == tag.id) {
-        return $scope.transactions.tagSummary[i].formattedAmount;
+        return $scope.transactions.tagSummary[i].amount.toLocaleString();
       }
     }
   };
@@ -282,7 +285,7 @@ angular.module("app.transaction").controller("transaction-by-month-tag", functio
     for (var i in $scope.transactions.monthSummary) {
       var cell = $scope.transactions.monthSummary[i];
       if (cell.startOfMonth == startOfMonth) {
-        return cell.formattedAmount;
+        return cell.amount.toLocaleString();
       }
     }
   };
@@ -312,7 +315,7 @@ angular.module("app.transaction").controller("transaction-by-year-rubric", funct
     for (var i in $scope.transactions.yearRubricSummary) {
       var cell = $scope.transactions.yearRubricSummary[i];
       if (cell.startOfYear == startOfYear && cell.rubric.id == rubric.id) {
-        return cell.formattedAmount;
+        return cell.amount.toLocaleString();
       }
     }
   };
@@ -320,7 +323,7 @@ angular.module("app.transaction").controller("transaction-by-year-rubric", funct
   $scope.findRubricSummary = function(rubric) {
     for (var i in $scope.transactions.rubricSummary) {
       if ($scope.transactions.rubricSummary[i].rubric.id == rubric.id) {
-        return $scope.transactions.rubricSummary[i].formattedAmount;
+        return $scope.transactions.rubricSummary[i].amount.toLocaleString();
       }
     }
   };
@@ -329,7 +332,7 @@ angular.module("app.transaction").controller("transaction-by-year-rubric", funct
     for (var i in $scope.transactions.yearSummary) {
       var cell = $scope.transactions.yearSummary[i];
       if (cell.startOfYear == startOfYear) {
-        return cell.formattedAmount;
+        return cell.amount.toLocaleString();
       }
     }
   };

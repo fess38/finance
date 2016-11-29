@@ -26,7 +26,7 @@
           data-target="#mobile-transaction-editor">
         <td>{{cell.date | date:"dd MMM"}}</td>
         <td>{{cell.rubric.name}}</td>
-        <td>{{cell.formattedAmount}}</td>
+        <td>{{cell.amount.toLocaleString()}}</td>
       </tr>
       </tbody>
     </table>

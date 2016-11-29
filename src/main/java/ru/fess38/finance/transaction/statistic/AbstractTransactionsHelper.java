@@ -3,7 +3,6 @@ package ru.fess38.finance.transaction.statistic;
 import com.google.common.base.Preconditions;
 import org.immutables.gson.Gson.TypeAdapters;
 import org.immutables.value.Value.Check;
-import org.immutables.value.Value.Derived;
 import org.immutables.value.Value.Enclosing;
 import org.immutables.value.Value.Immutable;
 import org.immutables.value.Value.Parameter;
@@ -18,10 +17,6 @@ import java.time.LocalDate;
 @TypeAdapters
 @Style(typeImmutable = "*")
 abstract class AbstractTransactionsHelper {
-  static String format(int i) {
-    return String.format("%,d", i).replace(",", " ");
-  }
-
   @Immutable
   @TypeAdapters
   @Style(typeImmutable = "*")
@@ -31,11 +26,6 @@ abstract class AbstractTransactionsHelper {
 
     @Parameter
     public abstract int amount();
-
-    @Derived
-    public String formattedAmount() {
-      return format(amount());
-    }
   }
 
   @Immutable
@@ -47,11 +37,6 @@ abstract class AbstractTransactionsHelper {
 
     @Parameter
     public abstract int amount();
-
-    @Derived
-    public String formattedAmount() {
-      return format(amount());
-    }
 
     @Check
     protected void check() {
@@ -69,11 +54,6 @@ abstract class AbstractTransactionsHelper {
     @Parameter
     public abstract int amount();
 
-    @Derived
-    public String formattedAmount() {
-      return format(amount());
-    }
-
     @Check
     protected void check() {
       Preconditions.checkState(startOfYear().getDayOfYear() == 1);
@@ -89,11 +69,6 @@ abstract class AbstractTransactionsHelper {
 
     @Parameter
     public abstract int amount();
-
-    @Derived
-    public String formattedAmount() {
-      return format(amount());
-    }
   }
 
   @Immutable
@@ -105,11 +80,6 @@ abstract class AbstractTransactionsHelper {
 
     @Parameter
     public abstract int amount();
-
-    @Derived
-    public String formattedAmount() {
-      return format(amount());
-    }
   }
 
   @Immutable
@@ -124,11 +94,6 @@ abstract class AbstractTransactionsHelper {
 
     @Parameter
     public abstract int amount();
-
-    @Derived
-    public String formattedAmount() {
-      return format(amount());
-    }
   }
 
   @Immutable
@@ -143,11 +108,6 @@ abstract class AbstractTransactionsHelper {
 
     @Parameter
     public abstract int amount();
-
-    @Derived
-    public String formattedAmount() {
-      return format(amount());
-    }
 
     @Check
     protected void check() {
@@ -168,11 +128,6 @@ abstract class AbstractTransactionsHelper {
     @Parameter
     public abstract int amount();
 
-    @Derived
-    public String formattedAmount() {
-      return format(amount());
-    }
-
     @Check
     protected void check() {
       Preconditions.checkState(startOfMonth().getDayOfMonth() == 1);
@@ -191,11 +146,6 @@ abstract class AbstractTransactionsHelper {
 
     @Parameter
     public abstract int amount();
-
-    @Derived
-    public String formattedAmount() {
-      return format(amount());
-    }
 
     @Check
     protected void check() {
