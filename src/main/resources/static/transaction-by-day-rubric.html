@@ -108,8 +108,7 @@
             </td>
             <td>
               <select class="form-control" ng-model="t.tag" ng-change="updateTransaction(t)"
-                  ng-options="tag as tag.name for tag in tags | filter : {isObsolete:'false'}
-                  | orderBy:'name' track by tag.id">
+                  ng-options="tag as tag.name for tag in tags | orderBy:'name' track by tag.id">
                 <option></option>
               </select>
             </td>
