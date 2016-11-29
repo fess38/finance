@@ -28,7 +28,7 @@
             <input class="form-control" type="text" ng-model="account.name" ng-blur="updateAccount(account)">
           </td>
           <td>{{account.currency.symbol}}</td>
-          <td>{{account.balance}}</td>
+          <td>{{account.balance.toLocaleString()}}</td>
           <td>
             <span class="close" ng-click="deleteAccount(account)">
               &times;
