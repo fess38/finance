@@ -23,7 +23,7 @@ public class YearRubricTransactions {
 
   private final List<Rubric> rubrics;
   private final List<LocalDate> startOfYears;
-  private final String yearsSummary;
+  private final int yearsSummary;
   private List<YearSummary> yearSummary;
   private final List<RubricSummary> rubricSummary;
   private final List<YearRubricSummary> yearRubricSummary;
@@ -45,11 +45,11 @@ public class YearRubricTransactions {
         .collect(Collectors.toList());
   }
 
-  private String yearsSummary(List<Transaction> transactions) {
-    return TransactionsHelper.format(transactions.stream()
+  private int yearsSummary(List<Transaction> transactions) {
+    return transactions.stream()
         .filter(Transaction::isExpence)
         .mapToInt(Transaction::amountFrom)
-        .sum());
+        .sum();
   }
 
   private List<YearSummary> yearSummary(List<Transaction> transactions) {
@@ -92,7 +92,7 @@ public class YearRubricTransactions {
     return startOfYears;
   }
 
-  public String getYearsSummary() {
+  public int getYearsSummary() {
     return yearsSummary;
   }
 
