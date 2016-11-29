@@ -100,7 +100,7 @@
             <th></th>
           </tr>
           <tr ng-repeat="t in editTransactions | orderBy:['-dayRef', 'rubric.name']">
-            <td>{{t.dayRef | date:"d MMM"}}</td>
+            <td style="vertical-align: middle">{{t.dayRef | date:"d MMM"}}</td>
             <td>
               <select class="form-control" ng-model="t.user" ng-change="updateTransaction(t)"
                   ng-options="user as user.name for user in users | orderBy:'name' track by user.id">
