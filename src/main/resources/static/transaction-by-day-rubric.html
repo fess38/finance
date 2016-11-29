@@ -16,12 +16,17 @@
       <table class="table table-bordered table-striped table-condense">
         <thead>
         <tr>
-          <th>Рубрики</th>
+          <th>
+            Рубрики
+          </th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="rubric in transactions.rubrics | orderBy:['-isIncome', 'name']">
-          <td>{{rubric.name}}</td>
+          <td ng-click="showMonthRubricTransactions(rubric)" data-toggle="modal"
+              data-target="#desktop-transaction-editor">
+            {{rubric.name}}
+          </td>
         </tr>
         <tr>
           <td>
@@ -66,8 +71,8 @@
         </thead>
         <tbody>
         <tr ng-repeat="rubric in transactions.rubrics | orderBy:['-isIncome', 'name']">
-          <td ng-click="showMonthRubricTransactions(rubric)"
-              data-toggle="modal" data-target="#desktop-transaction-editor">
+          <td ng-click="showMonthRubricTransactions(rubric)" data-toggle="modal"
+              data-target="#desktop-transaction-editor">
             {{findRubricSummary(rubric)}}
           </td>
         </tr>
