@@ -44,8 +44,8 @@
       <label class="control-label col-xs-4 col-md-1">Тэг</label>
       <div class="col-xs-8 col-md-2">
         <select class="form-control" ng-model="newTransaction.tag" size="1"
-            ng-options="tag as tag.name for tag in tags | filter : {isObsolete:'false'}
-            | orderBy:'name' track by tag.id">
+            ng-options="tag as tag.name for tag in tags | filter : {isObsolete:'false',
+            rubric: {id : newTransaction.rubric.id}} | orderBy:'name' track by tag.id">
           <option></option>
         </select>
       </div>

@@ -5,6 +5,9 @@ import org.immutables.value.Value.Default;
 import org.immutables.value.Value.Immutable;
 import org.immutables.value.Value.Parameter;
 import org.immutables.value.Value.Style;
+import ru.fess38.finance.rubric.Rubric;
+
+import java.util.Optional;
 
 @Immutable
 @TypeAdapters
@@ -28,6 +31,8 @@ public abstract class AbstractTag {
     return false;
   }
 
+  public abstract Optional<Rubric> rubric();
+
   public ModifiableTag toModifiable() {
     ModifiableTag tag = new ModifiableTag();
     if (this.id() != 0) {
@@ -36,6 +41,9 @@ public abstract class AbstractTag {
     tag.setName(this.name());
     tag.setDeleted(this.isDeleted());
     tag.setObsolete(isObsolete());
+    if (rubric().isPresent()) {
+      tag.setRubric(rubric().get().toModifiable());
+    }
     return tag;
   }
 }

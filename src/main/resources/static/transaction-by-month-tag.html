@@ -15,14 +15,16 @@
     <table class="table table-bordered table-striped table-condense" ng-show="transactions.tags.length > 0">
       <thead>
       <tr>
-        <th></th>
+        <th>Рубрика</th>
+        <th>Тэг</th>
         <th ng-repeat="startOfMonth in transactions.startOfMonths">{{startOfMonth | date:"LLLL"}}
         </th>
         <th>Итого</th>
       </tr>
       </thead>
       <tbody>
-      <tr ng-repeat="tag in transactions.tags | orderBy:'name'">
+      <tr ng-repeat="tag in transactions.tags | orderBy:['rubric.name', 'name']">
+        <td>{{tag.rubric.name}}</td>
         <td>{{tag.name}}</td>
         <td ng-repeat="startOfMonth in transactions.startOfMonths">
           {{findMonthTagSummary(startOfMonth, tag)}}
@@ -30,7 +32,7 @@
         <td>{{findTagSummary(tag)}}</td>
       </tr>
       <tr>
-        <th>
+        <th colspan="2">
           <strong>Расходы</strong>
         </th>
         <td ng-repeat="startOfMonth in transactions.startOfMonths">

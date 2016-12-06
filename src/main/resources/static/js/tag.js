@@ -5,6 +5,9 @@ angular.module("app.tag").controller("tag", function($scope, AlertService, RestA
     RestApi.tags().then(function(response) {
       $scope.tags = response.data;
     });
+    RestApi.rubrics().then(function(response) {
+      $scope.rubrics = response.data;
+    });
   };
   $scope.refresh();
 
