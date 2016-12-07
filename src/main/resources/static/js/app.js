@@ -69,14 +69,12 @@ angular.module("app").service("AlertService", function($timeout) {
   };
 
   function response(type, msg) {
-    var alert = {type: "text-center alert alert-" + type, msg: msg, show: true};
-    hide(alert);
-    return alert;
-  }
-
-  function hide(alert) {
+    var modalClass = "text-center alert alert-" + type;
+    $("#modal-content").text(msg).addClass(modalClass);
+    $("#modal").modal();
     $timeout(function() {
-      alert.show = false;
-    }, 3000);
+      $("#modal").modal("hide");
+      $("#modal-content").removeClass(modalClass);
+    }, 2000);
   }
 });

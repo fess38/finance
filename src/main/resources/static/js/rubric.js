@@ -10,28 +10,28 @@ angular.module("app.rubric").controller("rubric", function($scope, AlertService,
 
   $scope.saveRubric = function() {
     RestApi.saveRubric($scope.newRubric).then(function() {
-      $scope.alert = AlertService.success("Рубрика добавлена");
+      AlertService.success("Рубрика добавлена");
       $scope.newRubric = null;
       $scope.refresh();
     }, function() {
-      $scope.alert = AlertService.danger("Ошибка добавления рубрики");
+      AlertService.danger("Ошибка добавления рубрики");
     });
   };
 
   $scope.updateRubric = function(rubric) {
     RestApi.updateRubric(rubric).then(function() {
-      $scope.alert = AlertService.success("Рубрика обновлена");
+      AlertService.success("Рубрика обновлена");
     }, function() {
-      $scope.alert = AlertService.danger("Ошибка обновления рубрики");
+      AlertService.danger("Ошибка обновления рубрики");
     });
   };
 
   $scope.deleteRubric = function(rubric) {
     RestApi.deleteRubric(rubric).then(function() {
-      $scope.alert = AlertService.success("Рубрика удалена");
+      AlertService.success("Рубрика удалена");
       $scope.refresh();
     }, function() {
-      $scope.alert = AlertService.danger("Ошибка удаления рубрики");
+      AlertService.danger("Ошибка удаления рубрики");
     });
   }
 });

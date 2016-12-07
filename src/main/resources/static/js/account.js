@@ -13,28 +13,28 @@ angular.module("app.account").controller("account", function($scope, AlertServic
 
   $scope.saveAccount = function() {
     RestApi.saveAccount($scope.newAccount).then(function() {
-      $scope.alert = AlertService.success("Счет добавлен");
+      AlertService.success("Счет добавлен");
       $scope.newAccount = null;
       $scope.refresh();
     }, function() {
-      $scope.alert = AlertService.danger("Ошибка добавления счета");
+      AlertService.danger("Ошибка добавления счета");
     });
   };
 
   $scope.updateAccount = function(account) {
     RestApi.updateAccount(account).then(function() {
-      $scope.alert = AlertService.success("Счет обновлен");
+      AlertService.success("Счет обновлен");
     }, function() {
-      $scope.alert = AlertService.danger("Ошибка обновления счета");
+      AlertService.danger("Ошибка обновления счета");
     });
   };
 
   $scope.deleteAccount = function(account) {
     RestApi.deleteAccount(account).then(function() {
-      $scope.alert = AlertService.success("Счет удален");
+      AlertService.success("Счет удален");
       $scope.refresh();
     }, function() {
-      $scope.alert = AlertService.danger("Ошибка удаления счета");
+      AlertService.danger("Ошибка удаления счета");
     });
   }
 });
