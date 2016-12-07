@@ -23,18 +23,18 @@ angular.module("app.transfer").controller("transfer", function($scope, RestApi, 
 
   $scope.updateTransfer = function(transfer) {
     RestApi.updateTransaction(transfer).then(function() {
-      $scope.alert = AlertService.success("Перевод обновлен");
+      AlertService.success("Перевод обновлен");
     }, function() {
-      $scope.alert = AlertService.danger("Ошибка обновления перевода");
+      AlertService.danger("Ошибка обновления перевода");
     });
   };
 
   $scope.deleteTransfer = function(transfer) {
     RestApi.deleteTransaction(transfer).then(function() {
-      $scope.alert = AlertService.success("Перевод удален");
+      AlertService.success("Перевод удален");
       refresh();
     }, function() {
-      $scope.alert = AlertService.danger("Ошибка удаления перевода");
+      AlertService.danger("Ошибка удаления перевода");
     });
   };
 });
@@ -54,11 +54,11 @@ angular.module("app.transfer").controller("saveTransfer", function($scope, Alert
   $scope.saveTransfer = function() {
     $scope.newTransfer.rubric = transferRubric;
     RestApi.saveTransaction($scope.newTransfer).then(function() {
-      $scope.alert = AlertService.success("Перевод добавлен");
+      AlertService.success("Перевод добавлен");
       $scope.newTransfer.amountFrom = null;
       $scope.newTransfer.amountTo = null;
     }, function() {
-      $scope.alert = AlertService.danger("Ошибка добавления перевода");
+      AlertService.danger("Ошибка добавления перевода");
     });
   };
 

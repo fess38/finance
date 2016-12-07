@@ -1,11 +1,11 @@
 <div class="container-fluid" ng-controller="tag">
   <div class="row">
     <div class="col-md-4">
-      <div class="{{alert.type}}" ng-show="alert.show">{{alert.msg}}</div>
       <table class="table table-condense">
         <tr>
           <th>Тэг</th>
           <th>Старый?</th>
+          <th>Рубрика</th>
           <th></th>
         </tr>
         <tr>
@@ -13,6 +13,12 @@
             <input class="form-control" type="text" ng-model="newTag.name">
           </td>
           <td>
+          </td>
+          <td>
+            <select ng-model="newTag.rubric" size="1" class="form-control"
+                ng-options="rubric as rubric.name for rubric in rubrics | orderBy:['-isIncome', 'name']
+              track by rubric.id">
+            </select>
           </td>
           <td>
             <span class="close" ng-click="saveTag()">&plus;</span>
@@ -25,6 +31,12 @@
           <td>
             <input class="form-control" type="checkbox" ng-model="tag.isObsolete"
                 ng-click="updateTag(tag)">
+          </td>
+          <td>
+            <select ng-model="tag.rubric" size="1" class="form-control" ng-change="updateTag(tag)"
+                ng-options="rubric as rubric.name for rubric in rubrics | orderBy:['-isIncome', 'name']
+              track by rubric.id">
+            </select>
           </td>
           <td>
             <span class="close" ng-click="deleteTag(tag)">&times;</span>

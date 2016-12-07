@@ -99,20 +99,20 @@ angular.module("app.transaction").controller("transaction-by-day-rubric", functi
   $scope.updateTransaction = function(transaction) {
     transaction.amountTo = transaction.amountFrom;
     RestApi.updateTransaction(transaction).then(function() {
-      $scope.alert = AlertService.success("Транзация обновлена");
+      AlertService.success("Транзация обновлена");
       refreshTransactions();
     }, function() {
-      $scope.alert = AlertService.danger("Ошибка обновления транзакции");
+      AlertService.danger("Ошибка обновления транзакции");
     });
   };
 
   $scope.deleteTransaction = function(transaction) {
     RestApi.deleteTransaction(transaction).then(function() {
-      $scope.alert = AlertService.success("Транзация удалена");
+      AlertService.success("Транзация удалена");
       refreshTransactions();
       $scope.editTransactions.splice($scope.editTransactions.indexOf(transaction), 1);
     }, function() {
-      $scope.alert = AlertService.danger("Ошибка удаления транзакции");
+      AlertService.danger("Ошибка удаления транзакции");
     });
   };
 });
@@ -156,13 +156,13 @@ angular.module("app.transaction").controller("saveTransaction", function($scope,
 
   $scope.saveTransaction = function() {
     RestApi.saveTransaction(readTransaction()).then(function() {
-      $scope.alert = AlertService.success("Транзакция добавлена");
+      AlertService.success("Транзакция добавлена");
       $scope.newTransaction.amountFrom = null;
       $scope.newTransaction.tag = null;
       $scope.newTransaction.user = null;
       $scope.newTransaction.comment = null;
     }, function() {
-      $scope.alert = AlertService.danger("Ошибка добавления транзакции");
+      AlertService.danger("Ошибка добавления транзакции");
     });
   };
 

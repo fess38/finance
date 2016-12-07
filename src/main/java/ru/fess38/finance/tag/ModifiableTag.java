@@ -3,12 +3,17 @@ package ru.fess38.finance.tag;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import ru.fess38.finance.rubric.ModifiableRubric;
 
+import java.util.Optional;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -25,6 +30,9 @@ public class ModifiableTag {
   private boolean isDeleted = false;
   @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
   private boolean isObsolete = false;
+  @ManyToOne(fetch = FetchType.EAGER, optional = true, targetEntity = ModifiableRubric.class)
+  @JoinColumn(name = "rubricId", nullable = true)
+  private ModifiableRubric rubric;
 
   @Override
   public boolean equals(Object object) {
@@ -47,6 +55,7 @@ public class ModifiableTag {
         .name(name)
         .isDeleted(isDeleted)
         .isObsolete(isObsolete)
+        .rubric(Optional.ofNullable(rubric == null ? null : rubric.toImmutable()))
         .build();
   }
 
@@ -80,5 +89,13 @@ public class ModifiableTag {
 
   public void setObsolete(boolean obsolete) {
     isObsolete = obsolete;
+  }
+
+  public ModifiableRubric getRubric() {
+    return rubric;
+  }
+
+  public void setRubric(ModifiableRubric rubric) {
+    this.rubric = rubric;
   }
 }

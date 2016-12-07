@@ -1,8 +1,6 @@
 <div ng-controller="saveTransaction" class="container-fluid">
+  <br>
   <form class="form-horizontal" ng-submit="saveTransaction()">
-    <div class="form-group">
-      <div class="col-xs-12 col-md-3 {{alert.type}}" ng-show="alert.show">{{alert.msg}}</div>
-    </div>
     <div class="form-group">
       <label class="control-label col-xs-4 col-md-1" for="transactionAddDate">Дата</label>
       <div class="col-xs-8 col-md-2">
@@ -44,8 +42,8 @@
       <label class="control-label col-xs-4 col-md-1">Тэг</label>
       <div class="col-xs-8 col-md-2">
         <select class="form-control" ng-model="newTransaction.tag" size="1"
-            ng-options="tag as tag.name for tag in tags | filter : {isObsolete:'false'}
-            | orderBy:'name' track by tag.id">
+            ng-options="tag as tag.name for tag in tags | filter : {isObsolete:'false',
+            rubric: {id : newTransaction.rubric.id}} | orderBy:'name' track by tag.id">
           <option></option>
         </select>
       </div>
