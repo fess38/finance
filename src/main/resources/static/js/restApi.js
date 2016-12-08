@@ -98,6 +98,10 @@ angular.module("app.restApi").service("RestApi", function($http) {
     return $http.get("/transaction/year/all/rubric");
   };
 
+  this.yearTagTransactions = function() {
+    return $http.get("/transaction/year/all/tag");
+  };
+
   this.cellDayRubricTransactions = function(date, rubric) {
     return $http.get("/transaction/day/" + date + "/rubric/" + rubric.id);
   };

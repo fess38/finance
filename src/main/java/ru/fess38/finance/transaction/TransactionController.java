@@ -13,6 +13,7 @@ import ru.fess38.finance.transaction.statistic.DayRubricTransactions;
 import ru.fess38.finance.transaction.statistic.MonthRubricTransactions;
 import ru.fess38.finance.transaction.statistic.MonthTagTransactions;
 import ru.fess38.finance.transaction.statistic.YearRubricTransactions;
+import ru.fess38.finance.transaction.statistic.YearTagTransactions;
 
 import java.time.LocalDate;
 import java.time.Year;
@@ -45,6 +46,11 @@ public class TransactionController {
   @RequestMapping(value = "/transaction/year/all/rubric")
   public @ResponseBody YearRubricTransactions yearRubricTransactions() {
     return transactionDao.yearRubricTransactions();
+  }
+
+  @RequestMapping(value = "/transaction/year/all/tag")
+  public @ResponseBody YearTagTransactions yearTagTransactions() {
+    return transactionDao.yearTagTransactions();
   }
 
   @RequestMapping(value = "/transaction/day/{day}/rubric/{rubric}", method = RequestMethod.GET)

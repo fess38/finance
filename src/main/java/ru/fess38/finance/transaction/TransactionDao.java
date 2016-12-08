@@ -8,6 +8,7 @@ import ru.fess38.finance.transaction.statistic.DayRubricTransactions;
 import ru.fess38.finance.transaction.statistic.MonthRubricTransactions;
 import ru.fess38.finance.transaction.statistic.MonthTagTransactions;
 import ru.fess38.finance.transaction.statistic.YearRubricTransactions;
+import ru.fess38.finance.transaction.statistic.YearTagTransactions;
 import ru.fess38.finance.user.User;
 
 import java.time.LocalDate;
@@ -37,6 +38,8 @@ public interface TransactionDao {
   MonthTagTransactions monthTagTransactions(Year year);
 
   YearRubricTransactions yearRubricTransactions();
+
+  YearTagTransactions yearTagTransactions();
 
   List<Transaction> cellDayRubricTransactions(LocalDate localDate, long rubricId);
 

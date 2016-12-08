@@ -1,4 +1,4 @@
-<div class="container-fluid" ng-controller="transaction-by-year-rubric">
+<div class="container-fluid" ng-controller="transaction-by-year-tag">
   <div class="btn-group btn-block">
     <button class="btn btn-default col-lg-2 disabled">
       <span class="glyphicon glyphicon-chevron-left"></span>
@@ -12,22 +12,24 @@
   </div>
 
   <div class="table-responsive">
-    <table class="table table-bordered table-striped table-condense" ng-show="transactions.rubrics.length > 0">
+    <table class="table table-bordered table-striped table-condense" ng-show="transactions.tags.length > 0">
       <thead>
       <tr>
-        <th></th>
+        <th>Рубрика</th>
+        <th>Тэг</th>
         <th ng-repeat="startOfYear in transactions.startOfYears">{{startOfYear | date:"yyyy"}}
         </th>
         <th>Итого</th>
       </tr>
       </thead>
       <tbody>
-      <tr ng-repeat="rubric in transactions.rubrics | orderBy:['-isIncome', 'name']">
-        <td>{{rubric.name}}</td>
+      <tr ng-repeat="tag in transactions.tags | orderBy:['rubric.name', 'name']">
+        <td>{{tag.rubric.name}}</td>
+        <td>{{tag.name}}</td>
         <td ng-repeat="startOfYear in transactions.startOfYears">
-          {{findYearRubricSummary(startOfYear, rubric)}}
+          {{findYearTagSummary(startOfYear, tag)}}
         </td>
-        <td>{{findRubricSummary(rubric)}}</td>
+        <td>{{findTagSummary(tag)}}</td>
       </tr>
       <tr>
         <td colspan="2"><strong>Расходы</strong></td>

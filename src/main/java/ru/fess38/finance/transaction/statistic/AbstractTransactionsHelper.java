@@ -152,4 +152,23 @@ abstract class AbstractTransactionsHelper {
       Preconditions.checkState(startOfYear().getDayOfYear() == 1);
     }
   }
+
+  @Immutable
+  @TypeAdapters
+  @Style(typeImmutable = "*")
+  abstract static class AbstractYearTagSummary {
+    @Parameter
+    public abstract LocalDate startOfYear();
+
+    @Parameter
+    public abstract Tag tag();
+
+    @Parameter
+    public abstract int amount();
+
+    @Check
+    protected void check() {
+      Preconditions.checkState(startOfYear().getDayOfYear() == 1);
+    }
+  }
 }
