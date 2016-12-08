@@ -9,16 +9,15 @@ import ru.fess38.finance.transaction.statistic.TransactionsHelper.YearTagSummary
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class YearTagTransactions {
   public YearTagTransactions(List<Transaction> transactions) {
-    tags = tags(transactions);
+    tags = TransactionsHelper.tags(transactions);
     startOfYears = startOfYears(transactions);
-    yearsSummary = yearsSummary(transactions);
-    yearSummary = yearSummary(transactions);
-    tagSummary = tagSummary(transactions);
+    yearsSummary = TransactionsHelper.expenseSum(transactions);
+    yearSummary = TransactionsHelper.yearSummary(transactions);
+    tagSummary = TransactionsHelper.tagSummary(transactions);
     yearTagSummary = yearTagSummary(transactions);
   }
 
@@ -29,14 +28,6 @@ public class YearTagTransactions {
   private final List<TagSummary> tagSummary;
   private final List<YearTagSummary> yearTagSummary;
 
-  private List<Tag> tags(List<Transaction> transactions) {
-    return transactions.stream()
-        .map(Transaction::tag)
-        .map(Optional::get)
-        .distinct()
-        .collect(Collectors.toList());
-  }
-
   private List<LocalDate> startOfYears(List<Transaction> transactions) {
     return transactions.stream()
         .map(Transaction::dayRef)
@@ -44,34 +35,6 @@ public class YearTagTransactions {
         .distinct()
         .map(x -> LocalDate.of(x, 1, 1))
         .sorted()
-        .collect(Collectors.toList());
-  }
-
-  private int yearsSummary(List<Transaction> transactions) {
-    return transactions.stream()
-        .filter(Transaction::isExpence)
-        .mapToInt(Transaction::amountFrom)
-        .sum();
-  }
-
-  private List<YearSummary> yearSummary(List<Transaction> transactions) {
-    return transactions.stream()
-        .filter(Transaction::isExpence)
-        .map(x -> Pair.of(LocalDate.of(x.dayRef().getYear(), 1, 1), x.amountFrom()))
-        .collect(Collectors.groupingBy(Pair::getKey, Collectors.summingInt(Pair::getRight)))
-        .entrySet()
-        .stream()
-        .map(x -> YearSummary.of(x.getKey(), x.getValue()))
-        .collect(Collectors.toList());
-  }
-
-  private List<TagSummary> tagSummary(List<Transaction> transactions) {
-    return transactions.stream()
-        .map(x -> Pair.of(x.tag().get(), x.amountFrom()))
-        .collect(Collectors.groupingBy(Pair::getKey, Collectors.summingInt(Pair::getRight)))
-        .entrySet()
-        .stream()
-        .map(x -> TagSummary.of(x.getKey(), x.getValue()))
         .collect(Collectors.toList());
   }
 
