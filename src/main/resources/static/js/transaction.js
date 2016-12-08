@@ -46,6 +46,18 @@ angular.module("app.transaction").controller("transaction-by-day-rubric", functi
     clearEditor();
   };
 
+  $scope.nextYear = function() {
+    CurrentDateService.nextYear();
+    refreshTransactions();
+    clearEditor();
+  };
+
+  $scope.previousYear = function() {
+    CurrentDateService.previousYear();
+    refreshTransactions();
+    clearEditor();
+  };
+
   $scope.findDayRubricSummary = function(date, rubric) {
     for (var i in $scope.transactions.dayRubricSummary) {
       var cell = $scope.transactions.dayRubricSummary[i];
