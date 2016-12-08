@@ -17,7 +17,6 @@
       <tr>
         <th></th>
         <th ng-repeat="startOfYear in transactions.startOfYears">{{startOfYear | date:"yyyy"}}
-        </th>
         <th>Итого</th>
       </tr>
       </thead>
@@ -30,7 +29,7 @@
         <td>{{findRubricSummary(rubric)}}</td>
       </tr>
       <tr>
-        <td colspan="2"><strong>Расходы</strong></td>
+        <td><strong>Расходы</strong></td>
         <td ng-repeat="startOfYear in transactions.startOfYears">
           <strong>{{findYearSummary(startOfYear)}}</strong>
         </td>
