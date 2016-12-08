@@ -1,13 +1,19 @@
 <div class="container-fluid" ng-controller="transaction-by-day-rubric">
   <div class="btn-group btn-block">
-    <button class="btn btn-default col-lg-3" ng-click="previousMonth()">
-      <span class="glyphicon glyphicon-arrow-left"></span>
+    <button class="btn btn-default col-lg-1" ng-click="previousYear()">
+      <span class="glyphicon glyphicon-backward"></span>
     </button>
-    <button class="btn btn-default col-lg-6 disabled">
+    <button class="btn btn-default col-lg-1" ng-click="previousMonth()">
+      <span class="glyphicon glyphicon-chevron-left"></span>
+    </button>
+    <button class="btn btn-default col-lg-8 disabled">
       <strong>{{yearMonth | date:"LLLL yyyy"}}</strong>
     </button>
-    <button class="btn btn-default col-lg-3" ng-click="nextMonth()">
-      <span class="glyphicon glyphicon-arrow-right"></span>
+    <button class="btn btn-default col-lg-1" ng-click="nextMonth()">
+      <span class="glyphicon glyphicon-chevron-right"></span>
+    </button>
+    <button class="btn btn-default col-lg-1" ng-click="nextYear()">
+      <span class="glyphicon glyphicon-forward"></span>
     </button>
   </div>
 

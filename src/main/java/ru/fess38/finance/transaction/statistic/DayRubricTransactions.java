@@ -16,11 +16,11 @@ import java.util.stream.IntStream;
 @SuppressWarnings("unused")
 public class DayRubricTransactions {
   public DayRubricTransactions(List<Transaction> transactions) {
-    this.rubrics = rubrics(transactions);
+    this.rubrics = TransactionsHelper.rubrics(transactions);
     this.dates = dates(transactions);
-    this.monthSummary = monthSummary(transactions);
+    this.monthSummary = TransactionsHelper.expenseSum(transactions);
     this.daySummary = daySummary(transactions);
-    this.rubricSummary = rubricSummary(transactions);
+    this.rubricSummary = TransactionsHelper.rubricSummary(transactions);
     this.dayRubricSummary = dayRubricSummary(transactions);
   }
 
@@ -31,13 +31,6 @@ public class DayRubricTransactions {
   private final List<RubricSummary> rubricSummary;
   private final List<DayRubricSummary> dayRubricSummary;
 
-  private List<Rubric> rubrics(List<Transaction> transactions) {
-    return transactions.stream()
-        .map(Transaction::rubric)
-        .distinct()
-        .collect(Collectors.toList());
-  }
-
   private List<LocalDate> dates(List<Transaction> transactions) {
     YearMonth yearMonth = transactions.isEmpty() ? YearMonth.now() : YearMonth.of(
         transactions.get(0).dayRef().getYear(), transactions.get(0).dayRef().getMonth());
@@ -45,13 +38,6 @@ public class DayRubricTransactions {
         .map(x -> LocalDate.of(yearMonth.getYear(), yearMonth.getMonth(), x))
         .sorted()
         .collect(Collectors.toList());
-  }
-
-  private int monthSummary(List<Transaction> transactions) {
-    return transactions.stream()
-        .filter(Transaction::isExpence)
-        .mapToInt(Transaction::amountFrom)
-        .sum();
   }
 
   private List<DaySummary> daySummary(List<Transaction> transactions) {
@@ -62,16 +48,6 @@ public class DayRubricTransactions {
         .entrySet()
         .stream()
         .map(x -> DaySummary.of(x.getKey(), x.getValue()))
-        .collect(Collectors.toList());
-  }
-
-  private List<RubricSummary> rubricSummary(List<Transaction> transactions) {
-    return transactions.stream()
-        .map(x -> Pair.of(x.rubric(), x.amountFrom()))
-        .collect(Collectors.groupingBy(Pair::getKey, Collectors.summingInt(Pair::getRight)))
-        .entrySet()
-        .stream()
-        .map(x -> RubricSummary.of(x.getKey(), x.getValue()))
         .collect(Collectors.toList());
   }
 

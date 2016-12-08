@@ -12,6 +12,7 @@ angular.module("app").config(function($routeProvider) {
       .when("/transaction-by-month-rubric", {templateUrl: "transaction-by-month-rubric.html"})
       .when("/transaction-by-month-tag", {templateUrl: "transaction-by-month-tag.html"})
       .when("/transaction-by-year-rubric", {templateUrl: "transaction-by-year-rubric.html"})
+      .when("/transaction-by-year-tag", {templateUrl: "transaction-by-year-tag.html"})
       .when("/transactionAdd", {templateUrl: "transactionAdd.html"})
       .when("/transfer", {templateUrl: "transfer.html"})
       .when("/transfer/m", {templateUrl: "transfer-mobile.html"})

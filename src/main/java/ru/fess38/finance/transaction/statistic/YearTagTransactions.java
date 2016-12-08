@@ -1,32 +1,32 @@
 package ru.fess38.finance.transaction.statistic;
 
 import org.apache.commons.lang3.tuple.Pair;
-import ru.fess38.finance.rubric.Rubric;
+import ru.fess38.finance.tag.Tag;
 import ru.fess38.finance.transaction.Transaction;
-import ru.fess38.finance.transaction.statistic.TransactionsHelper.RubricSummary;
-import ru.fess38.finance.transaction.statistic.TransactionsHelper.YearRubricSummary;
+import ru.fess38.finance.transaction.statistic.TransactionsHelper.TagSummary;
 import ru.fess38.finance.transaction.statistic.TransactionsHelper.YearSummary;
+import ru.fess38.finance.transaction.statistic.TransactionsHelper.YearTagSummary;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class YearRubricTransactions {
-  public YearRubricTransactions(List<Transaction> transactions) {
-    rubrics = TransactionsHelper.rubrics(transactions);
+public class YearTagTransactions {
+  public YearTagTransactions(List<Transaction> transactions) {
+    tags = TransactionsHelper.tags(transactions);
     startOfYears = startOfYears(transactions);
     yearsSummary = TransactionsHelper.expenseSum(transactions);
     yearSummary = TransactionsHelper.yearSummary(transactions);
-    rubricSummary = TransactionsHelper.rubricSummary(transactions);
-    yearRubricSummary = yearRubricSummary(transactions);
+    tagSummary = TransactionsHelper.tagSummary(transactions);
+    yearTagSummary = yearTagSummary(transactions);
   }
 
-  private final List<Rubric> rubrics;
+  private final List<Tag> tags;
   private final List<LocalDate> startOfYears;
   private final int yearsSummary;
   private List<YearSummary> yearSummary;
-  private final List<RubricSummary> rubricSummary;
-  private final List<YearRubricSummary> yearRubricSummary;
+  private final List<TagSummary> tagSummary;
+  private final List<YearTagSummary> yearTagSummary;
 
   private List<LocalDate> startOfYears(List<Transaction> transactions) {
     return transactions.stream()
@@ -38,19 +38,19 @@ public class YearRubricTransactions {
         .collect(Collectors.toList());
   }
 
-  private List<YearRubricSummary> yearRubricSummary(List<Transaction> transactions) {
+  private List<YearTagSummary> yearTagSummary(List<Transaction> transactions) {
     return transactions.stream()
         .map(x -> Pair.of(
-            Pair.of(LocalDate.of(x.dayRef().getYear(), 1, 1), x.rubric()), x.amountFrom()))
+            Pair.of(LocalDate.of(x.dayRef().getYear(), 1, 1), x.tag().get()), x.amountFrom()))
         .collect(Collectors.groupingBy(Pair::getKey, Collectors.summingInt(Pair::getRight)))
         .entrySet()
         .stream()
-        .map(x -> YearRubricSummary.of(x.getKey().getKey(), x.getKey().getValue(), x.getValue()))
+        .map(x -> YearTagSummary.of(x.getKey().getKey(), x.getKey().getValue(), x.getValue()))
         .collect(Collectors.toList());
   }
 
-  public List<Rubric> getRubrics() {
-    return rubrics;
+  public List<Tag> getTags() {
+    return tags;
   }
 
   public List<LocalDate> getStartOfYears() {
@@ -65,11 +65,11 @@ public class YearRubricTransactions {
     return yearSummary;
   }
 
-  public List<RubricSummary> getRubricSummary() {
-    return rubricSummary;
+  public List<TagSummary> getTagSummary() {
+    return tagSummary;
   }
 
-  public List<YearRubricSummary> getYearRubricSummary() {
-    return yearRubricSummary;
+  public List<YearTagSummary> getYearTagSummary() {
+    return yearTagSummary;
   }
 }

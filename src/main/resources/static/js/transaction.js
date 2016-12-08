@@ -46,6 +46,18 @@ angular.module("app.transaction").controller("transaction-by-day-rubric", functi
     clearEditor();
   };
 
+  $scope.nextYear = function() {
+    CurrentDateService.nextYear();
+    refreshTransactions();
+    clearEditor();
+  };
+
+  $scope.previousYear = function() {
+    CurrentDateService.previousYear();
+    refreshTransactions();
+    clearEditor();
+  };
+
   $scope.findDayRubricSummary = function(date, rubric) {
     for (var i in $scope.transactions.dayRubricSummary) {
       var cell = $scope.transactions.dayRubricSummary[i];
@@ -296,7 +308,7 @@ angular.module("app.transaction").controller("transaction-by-year-rubric", funct
   $scope.transactions = {};
 
   function refreshTransactions() {
-    RestApi.yearRubricTransactions(CurrentDateService.year()).then(function(response) {
+    RestApi.yearRubricTransactions().then(function(response) {
       var transactions = {};
       transactions.year = CurrentDateService.year();
       transactions.rubrics = response.data.rubrics;
@@ -324,6 +336,53 @@ angular.module("app.transaction").controller("transaction-by-year-rubric", funct
     for (var i in $scope.transactions.rubricSummary) {
       if ($scope.transactions.rubricSummary[i].rubric.id == rubric.id) {
         return $scope.transactions.rubricSummary[i].amount.toLocaleString();
+      }
+    }
+  };
+
+  $scope.findYearSummary = function(startOfYear) {
+    for (var i in $scope.transactions.yearSummary) {
+      var cell = $scope.transactions.yearSummary[i];
+      if (cell.startOfYear == startOfYear) {
+        return cell.amount.toLocaleString();
+      }
+    }
+  };
+});
+
+angular.module("app.transaction").controller("transaction-by-year-tag", function($scope,
+    AlertService, CurrentDateService, RestApi) {
+  $scope.transactions = {};
+
+  function refreshTransactions() {
+    RestApi.yearTagTransactions().then(function(response) {
+      var transactions = {};
+      transactions.year = CurrentDateService.year();
+      transactions.tags = response.data.tags;
+      transactions.startOfYears = response.data.startOfYears;
+      transactions.yearsSummary = response.data.yearsSummary;
+      transactions.yearSummary = response.data.yearSummary;
+      transactions.tagSummary = response.data.tagSummary;
+      transactions.yearTagSummary = response.data.yearTagSummary;
+      $scope.transactions = transactions;
+    });
+  }
+
+  refreshTransactions();
+
+  $scope.findYearTagSummary = function(startOfYear, tag) {
+    for (var i in $scope.transactions.yearTagSummary) {
+      var cell = $scope.transactions.yearTagSummary[i];
+      if (cell.startOfYear == startOfYear && cell.tag.id == tag.id) {
+        return cell.amount.toLocaleString();
+      }
+    }
+  };
+
+  $scope.findTagSummary = function(tag) {
+    for (var i in $scope.transactions.tagSummary) {
+      if ($scope.transactions.tagSummary[i].tag.id == tag.id) {
+        return $scope.transactions.tagSummary[i].amount.toLocaleString();
       }
     }
   };

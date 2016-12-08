@@ -1,13 +1,13 @@
 <div class="container-fluid" ng-controller="transaction-by-month-tag">
   <div class="btn-group btn-block">
-    <button class="btn btn-default col-lg-3" ng-click="previousYear()">
-      <span class="glyphicon glyphicon-arrow-left"></span>
+    <button class="btn btn-default col-lg-2" ng-click="previousYear()">
+      <span class="glyphicon glyphicon-chevron-left"></span>
     </button>
-    <button class="btn btn-default col-lg-6 disabled">
+    <button class="btn btn-default col-lg-8 disabled">
       <strong>{{transactions.year}}</strong>
     </button>
-    <button class="btn btn-default col-lg-3" ng-click="nextYear()">
-      <span class="glyphicon glyphicon-arrow-right"></span>
+    <button class="btn btn-default col-lg-2" ng-click="nextYear()">
+      <span class="glyphicon glyphicon-chevron-right"></span>
     </button>
   </div>
 
@@ -32,9 +32,7 @@
         <td>{{findTagSummary(tag)}}</td>
       </tr>
       <tr>
-        <th colspan="2">
-          <strong>Расходы</strong>
-        </th>
+        <td colspan="2"></td>
         <td ng-repeat="startOfMonth in transactions.startOfMonths">
           <strong>{{findMonthSummary(startOfMonth)}}</strong>
         </td>
