@@ -4,7 +4,7 @@
       <table class="table table-condense">
         <tr>
           <th>Тэг</th>
-          <th>Старый?</th>
+          <th ng-click="toogleObsolete()">Старый?</th>
           <th>Рубрика</th>
           <th></th>
         </tr>
@@ -24,7 +24,8 @@
             <span class="close" ng-click="saveTag()">&plus;</span>
           </td>
         </tr>
-        <tr ng-repeat="tag in tags | orderBy:['-rubric.isIncome', 'rubric.name', 'name']">
+        <tr ng-repeat="tag in tags | orderBy:['-rubric.isIncome', 'rubric.name', 'name']"
+            ng-show="!tag.isObsolete || showObsolete">
           <td>
             <input class="form-control" type="text" ng-model="tag.name" ng-blur="updateTag(tag)">
           </td>
