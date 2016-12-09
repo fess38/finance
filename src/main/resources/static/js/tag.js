@@ -11,6 +11,11 @@ angular.module("app.tag").controller("tag", function($scope, AlertService, RestA
   };
   $scope.refresh();
 
+  $scope.showObsolete = true;
+  $scope.toogleObsolete = function() {
+    $scope.showObsolete = !$scope.showObsolete;
+  };
+
   $scope.saveTag = function() {
     RestApi.saveTag($scope.newTag).then(function() {
       AlertService.success("Тэг добавлен");
