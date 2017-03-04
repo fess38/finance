@@ -3,6 +3,7 @@ package ru.fess38.finance.transaction;
 import org.immutables.gson.Gson.TypeAdapters;
 import org.immutables.value.Value.Default;
 import org.immutables.value.Value.Immutable;
+import org.immutables.value.Value.Lazy;
 import org.immutables.value.Value.Style;
 import ru.fess38.finance.account.Account;
 import ru.fess38.finance.rubric.Rubric;
@@ -10,6 +11,7 @@ import ru.fess38.finance.tag.Tag;
 import ru.fess38.finance.user.User;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.Optional;
 
 @Immutable
@@ -69,11 +71,18 @@ public abstract class AbstractTransaction {
     return transaction;
   }
 
+  @Lazy
   public boolean isIncome() {
     return rubric().isIncome();
   }
 
+  @Lazy
   public boolean isExpence() {
     return !isIncome();
+  }
+
+  @Lazy
+  public YearMonth yearMonth() {
+    return YearMonth.from(dayRef());
   }
 }

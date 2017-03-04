@@ -14,10 +14,11 @@ angular.module("app").config(function($routeProvider) {
       .when("/transaction-by-year-rubric", {templateUrl: "transaction-by-year-rubric.html"})
       .when("/transaction-by-year-tag", {templateUrl: "transaction-by-year-tag.html"})
       .when("/transactionAdd", {templateUrl: "transactionAdd.html"})
+      .when("/transaction-dashboard", {templateUrl: "transactionDashboard.html"})
       .when("/transfer", {templateUrl: "transfer.html"})
       .when("/transfer/m", {templateUrl: "transfer-mobile.html"})
       .when("/transferAdd", {templateUrl: "transferAdd.html"})
-      .when("/user", {templateUrl: "user.html"})
+      .when("/user", {templateUrl: "user.html"});
 });
 
 angular.module("app").service("CurrentDateService", function() {
@@ -76,6 +77,6 @@ angular.module("app").service("AlertService", function($timeout) {
     $timeout(function() {
       $("#modal").modal("hide");
       $("#modal-content").removeClass(modalClass);
-    }, 2000);
+    }, 1000);
   }
 });

@@ -396,3 +396,63 @@ angular.module("app.transaction").controller("transaction-by-year-tag", function
     }
   };
 });
+
+angular.module("app.transaction").controller("transaction-dashboard", function($scope,
+    CurrentDateService, RestApi) {
+  RestApi.transactionMonthSavingRates().then(function(response) {
+    var monthSavingRates = response.data;
+    var ndx = crossfilter(monthSavingRates);
+    var monthDimension = ndx.dimension(function(d) {
+      return [d3.time.format("%Y-%m-%d").parse(d.startOfMonth), d.monthPeriod];
+    });
+    var savingRateGroup = monthDimension.group().reduceSum(function(d) {
+      return (d.savingRate * 100).toFixed(0);
+    });
+
+    var minDate = new Date(monthSavingRates.reduce(function(a, b) {
+      return a.startOfMonth < b.startOfMonth ? a : b;
+    }).startOfMonth);
+
+    var maxDate = new Date(monthSavingRates.reduce(function(a, b) {
+      return a.startOfMonth > b.startOfMonth ? a : b;
+    }).startOfMonth);
+
+    var chart = dc.seriesChart("#saving-rate")
+        .height(400)
+        .chart(function(c) {
+          return dc.lineChart(c).interpolate("monotone").renderDataPoints({radius: 2});
+        })
+        .dimension(monthDimension)
+        .group(savingRateGroup)
+        .x(d3.time.scale().domain([minDate, maxDate]))
+        .xUnits(d3.time.months)
+        .xAxisLabel("Месяц")
+        .yAxisLabel("Норма сбережений (%)")
+        .seriesAccessor(function(d) {
+          return d.key[1] + " мес.";
+        })
+        .seriesSort(function sort(a, b) {
+          a = parseInt(a.split(" ")[0]);
+          b = parseInt(b.split(" ")[0]);
+          return a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN;
+        })
+        .keyAccessor(function(d) {
+          return d.key[0];
+        })
+        .valueAccessor(function(d) {
+          return d.value;
+        })
+        .title(function(d) {
+          var format = d3.time.format("%b %Y");
+          return d.value + "% (" + format(d.key[0]) + ")";
+        })
+        .legend(dc.legend().x(75).y(50).itemHeight(20).gap(5).horizontal(10).legendWidth(100).itemWidth(70))
+        .renderVerticalGridLines(true)
+        .renderHorizontalGridLines(true)
+        .clipPadding(10)
+        .mouseZoomable(true)
+        .elasticY(true)
+        .brushOn(false)
+        .render();
+  });
+});
