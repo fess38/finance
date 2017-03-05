@@ -139,6 +139,10 @@ public class TransactionDaoImpl implements TransactionDao {
     return find(criteria).stream().collect(Collectors.toList());
   }
 
+  @Override public List<Transaction> transactions() {
+    return find(notTransfers(detachedCriteria()));
+  }
+
   @Override
   public List<Transaction> transfers(YearMonth yearMonth) {
     return find(transfers(detachedCriteria().add(yearMonthCriterion(yearMonth))));

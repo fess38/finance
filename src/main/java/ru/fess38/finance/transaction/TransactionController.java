@@ -10,7 +10,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.fess38.finance.transaction.statistic.DayRubricTransactions;
+import ru.fess38.finance.transaction.statistic.ExtendedYearSummary;
+import ru.fess38.finance.transaction.statistic.ExtendedYearSummaryCalculator;
 import ru.fess38.finance.transaction.statistic.MonthRubricTransactions;
+import ru.fess38.finance.transaction.statistic.MonthSavingRate;
+import ru.fess38.finance.transaction.statistic.MonthSavingRateCalculator;
 import ru.fess38.finance.transaction.statistic.MonthTagTransactions;
 import ru.fess38.finance.transaction.statistic.YearRubricTransactions;
 import ru.fess38.finance.transaction.statistic.YearTagTransactions;
@@ -86,5 +90,15 @@ public class TransactionController {
   public @ResponseBody List<Transaction> transfers(@PathVariable("year") int year,
       @PathVariable("month") int month) {
     return transactionDao.transfers(YearMonth.of(year, month));
+  }
+
+  @RequestMapping(value = "/transaction/month/all/saving-rates", method = RequestMethod.GET)
+  public @ResponseBody List<MonthSavingRate> monthSavingRates() {
+    return new MonthSavingRateCalculator().convert(transactionDao.transactions());
+  }
+
+  @RequestMapping(value = "/transaction/year/all/summaries", method = RequestMethod.GET)
+  public @ResponseBody List<ExtendedYearSummary> yearSummaries() {
+    return new ExtendedYearSummaryCalculator().calculate(transactionDao.transactions());
   }
 }

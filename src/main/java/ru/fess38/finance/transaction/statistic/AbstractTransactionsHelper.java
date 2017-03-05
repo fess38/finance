@@ -90,6 +90,10 @@ abstract class AbstractTransactionsHelper {
         .collect(Collectors.toList());
   }
 
+  static double savingRate(int income, int expence) {
+    return income - expence > 0 || income == 0 ? (income - expence) * 1.0 / income : 0.0;
+  }
+
   @Immutable
   @TypeAdapters
   @Style(typeImmutable = "*")

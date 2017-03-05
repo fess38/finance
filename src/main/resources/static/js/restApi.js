@@ -111,6 +111,14 @@ angular.module("app.restApi").service("RestApi", function($http) {
         + "/rubric/" + rubric.id);
   };
 
+  this.transactionMonthSavingRates = function() {
+    return $http.get("/transaction/month/all/saving-rates");
+  };
+
+  this.yearSummaries = function() {
+    return $http.get("/transaction/year/all/summaries");
+  };
+
   this.saveTransaction = function(transaction) {
     return $http.post("/transaction/save", transaction);
   };

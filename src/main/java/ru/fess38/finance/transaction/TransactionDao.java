@@ -45,6 +45,8 @@ public interface TransactionDao {
 
   List<Transaction> cellMonthRubricTransactions(YearMonth yearMonth, long rubricId);
 
+  List<Transaction> transactions();
+
   List<Transaction> transfers(YearMonth yearMonth);
 
   int countByAccount(Account account);
