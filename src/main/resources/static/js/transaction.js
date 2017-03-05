@@ -397,12 +397,81 @@ angular.module("app.transaction").controller("transaction-by-year-tag", function
   };
 });
 
-angular.module("app.transaction").controller("transaction-dashboard", function($scope,
-    CurrentDateService, RestApi) {
+angular.module("app.transaction").controller("transaction-dashboard", function($scope, RestApi) {
+  // Доходы и расходы
+  RestApi.yearSummaries().then(function(response) {
+    var yearSummaries = response.data;
+    var yearDimension = crossfilter(yearSummaries).dimension(function(d) {
+      return d.year;
+    });
+    var savingRateGroup = yearDimension.group().reduce(
+        function(p, v) {
+          return v;
+        },
+        function(p, v) {
+          return v;
+        },
+        function() {
+          return {};
+        }
+    );
+
+    var maxIncome = (yearSummaries.reduce(function(a, b) {
+      return a.income > b.income ? a : b;
+    }).incomeInThousands * 1.1).toFixed(0);
+
+    var maxExpence = (yearSummaries.reduce(function(a, b) {
+      return a.expence > b.expence ? a : b;
+    }).expenceInThousands * 1.3).toFixed(0);
+
+    var maxSavings = yearSummaries.reduce(function(a, b) {
+      return a.savings > b.savings ? a : b;
+    }).savingsInThousands;
+
+    var chart = dc.bubbleChart("#year-summary")
+        .height(400)
+        .margins({top: 10, right: 50, bottom: 35, left: 50})
+        .dimension(yearDimension)
+        .group(savingRateGroup)
+        .x(d3.scale.linear().domain([0, maxIncome]))
+        .y(d3.scale.linear().domain([0, maxExpence]))
+        .r(d3.scale.linear().domain([0, maxSavings]))
+        .maxBubbleRelativeSize(0.05)
+        .colors(d3.scale.linear().domain([0, 0.3]).range(["yellow", "green"]))
+        .colorAccessor(function(p) {
+          return p.value.savingRateNotZero;
+        })
+        .keyAccessor(function(p) {
+          return p.value.incomeInThousands;
+        })
+        .valueAccessor(function(p) {
+          return p.value.expenceInThousands;
+        })
+        .radiusValueAccessor(function(p) {
+          return p.value.savingsInThousandsNotMinus;
+        })
+        .renderHorizontalGridLines(true)
+        .renderVerticalGridLines(true)
+        .sortBubbleSize(true)
+        .xAxisLabel("Доход (тыс.руб.)")
+        .yAxisLabel("Расход (тыс.руб.)")
+        .renderTitle(true)
+        .title(function(p) {
+          return [
+            p.key + " год",
+            "Доход: " + p.value.incomeInThousands + " тыс.руб.",
+            "Расход: " + p.value.expenceInThousands + " тыс.руб.",
+            "Сбережения: " + p.value.savingsInThousands + " тыс.руб.",
+            "Норма сбережний: " + (p.value.savingRateNotZero * 100).toFixed(1) + "%"
+          ].join("\n");
+        })
+        .render();
+  });
+
+  // Норма сбережений
   RestApi.transactionMonthSavingRates().then(function(response) {
     var monthSavingRates = response.data;
-    var ndx = crossfilter(monthSavingRates);
-    var monthDimension = ndx.dimension(function(d) {
+    var monthDimension = crossfilter(monthSavingRates).dimension(function(d) {
       return [d3.time.format("%Y-%m-%d").parse(d.startOfMonth), d.monthPeriod];
     });
     var savingRateGroup = monthDimension.group().reduceSum(function(d) {
@@ -419,6 +488,7 @@ angular.module("app.transaction").controller("transaction-dashboard", function($
 
     var chart = dc.seriesChart("#saving-rate")
         .height(400)
+        .margins({top: 10, right: 50, bottom: 35, left: 50})
         .chart(function(c) {
           return dc.lineChart(c).interpolate("monotone").renderDataPoints({radius: 2});
         })
@@ -426,8 +496,6 @@ angular.module("app.transaction").controller("transaction-dashboard", function($
         .group(savingRateGroup)
         .x(d3.time.scale().domain([minDate, maxDate]))
         .xUnits(d3.time.months)
-        .xAxisLabel("Месяц")
-        .yAxisLabel("Норма сбережений (%)")
         .seriesAccessor(function(d) {
           return d.key[1] + " мес.";
         })
@@ -442,17 +510,19 @@ angular.module("app.transaction").controller("transaction-dashboard", function($
         .valueAccessor(function(d) {
           return d.value;
         })
+        .renderVerticalGridLines(true)
+        .renderHorizontalGridLines(true)
+        .brushOn(false)
+        .xAxisLabel("Месяц")
+        .yAxisLabel("Норма сбережений")
         .title(function(d) {
           var format = d3.time.format("%b %Y");
           return d.value + "% (" + format(d.key[0]) + ")";
         })
-        .legend(dc.legend().x(75).y(50).itemHeight(20).gap(5).horizontal(10).legendWidth(100).itemWidth(70))
-        .renderVerticalGridLines(true)
-        .renderHorizontalGridLines(true)
-        .clipPadding(10)
-        .mouseZoomable(true)
-        .elasticY(true)
-        .brushOn(false)
-        .render();
+        .legend(dc.legend().x(75).y(50).itemHeight(20).gap(5).horizontal(10).legendWidth(100).itemWidth(70));
+    chart.yAxis().tickFormat(function(v) {
+      return v + "%";
+    });
+    chart.render();
   });
 });

@@ -34,7 +34,7 @@ public class MonthSavingRateCalculator {
   private double calculate(List<Transaction> transactions, YearMonth from, int n) {
     int income = incomeNMonths(transactions, from, n);
     int expence = expenceNMonths(transactions, from, n);
-    return income - expence > 0 || income == 0 ? (income - expence) * 1.0 / income : 0.0;
+    return TransactionsHelper.savingRate(income, expence);
   }
 
   private int incomeNMonths(List<Transaction> transactions, YearMonth from, int n) {
