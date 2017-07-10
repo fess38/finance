@@ -24,3 +24,5 @@ java -jar target/finance-0.0.1.jar
 java -Dmode=write -Dtoken=AQBBBBBLm0ibAAOJKqFH7TtUYUPtuQVpIZBkAhd -Dpassword=qwerty -jar target/finance-0.0.1.jar
 ```
 Подробнее про получение токена для Яндекс.Диска можно прочитать [здесь](https://tech.yandex.ru/disk/rest/)
+
+Протестировать приложение можно [здесь](https://fess38-test.herokuapp.com/login#/) (пароль - *password*)
