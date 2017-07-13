@@ -1,24 +1,24 @@
 <div class="container-fluid" ng-controller="transaction-by-day-rubric">
   <div class="btn-group btn-block">
-    <button class="btn btn-default col-lg-1" ng-click="previousYear()">
+    <button class="btn btn-default col-sm-1 col-md-1 col-lg-1" ng-click="previousYear()">
       <span class="glyphicon glyphicon-backward"></span>
     </button>
-    <button class="btn btn-default col-lg-1" ng-click="previousMonth()">
+    <button class="btn btn-default col-sm-1 col-md-1 col-lg-1" ng-click="previousMonth()">
       <span class="glyphicon glyphicon-chevron-left"></span>
     </button>
-    <button class="btn btn-default col-lg-8 disabled">
+    <button class="btn btn-default col-sm-8 col-md-8 col-lg-8 disabled">
       <strong>{{yearMonth | date:"LLLL yyyy"}}</strong>
     </button>
-    <button class="btn btn-default col-lg-1" ng-click="nextMonth()">
+    <button class="btn btn-default col-sm-1 col-md-1 col-lg-1" ng-click="nextMonth()">
       <span class="glyphicon glyphicon-chevron-right"></span>
     </button>
-    <button class="btn btn-default col-lg-1" ng-click="nextYear()">
+    <button class="btn btn-default col-sm-1 col-md-1 col-lg-1" ng-click="nextYear()">
       <span class="glyphicon glyphicon-forward"></span>
     </button>
   </div>
 
   <div class="row" ng-show="transactions.rubrics.length > 0">
-    <div class="col-lg-1 no-right-padding">
+    <div class="col-sm-2 col-md-2 col-lg-1 no-right-padding">
       <table class="table table-bordered table-striped table-condense">
         <thead>
         <tr>
@@ -43,7 +43,7 @@
       </table>
     </div>
 
-    <div class="table-responsive col-lg-10 no-left-padding no-right-padding">
+    <div class="table-responsive col-sm-9 col-md-9 col-lg-10 no-left-padding no-right-padding">
       <table class="table table-bordered table-striped table-condense">
         <thead>
         <tr>
@@ -67,7 +67,7 @@
       </table>
     </div>
 
-    <div class="col-lg-1 no-left-padding">
+    <div class="col-sm-1 col-md-1 col-lg-1 no-left-padding">
       <table class="table table-bordered table-striped table-condense">
         <thead>
         <tr>
