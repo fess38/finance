@@ -430,7 +430,7 @@ angular.module("app.transaction").controller("transaction-dashboard", function($
 
     var chart = dc.bubbleChart("#year-summary")
         .height(400)
-        .width(800)
+        .width(750)
         .margins({top: 10, right: 50, bottom: 35, left: 50})
         .dimension(yearDimension)
         .group(savingRateGroup)
@@ -489,7 +489,7 @@ angular.module("app.transaction").controller("transaction-dashboard", function($
 
     var chart = dc.seriesChart("#saving-rate")
         .height(400)
-        .width(800)
+        .width(750)
         .margins({top: 10, right: 50, bottom: 35, left: 50})
         .chart(function(c) {
           return dc.lineChart(c).interpolate("monotone").renderDataPoints({radius: 2});
