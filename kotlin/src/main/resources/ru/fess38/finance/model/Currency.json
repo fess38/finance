@@ -1,0 +1,100 @@
+[
+  {
+    "names": [
+      {
+        "language": "ru",
+        "value": "Российский рубль"
+      },
+      {
+        "language": "en",
+        "value": "Russian Ruble"
+      }
+    ],
+    "symbol": "₽",
+    "code": "RUB"
+  },
+  {
+    "names": [
+      {
+        "language": "ru",
+        "value": "Доллар США"
+      },
+      {
+        "language": "en",
+        "value": "US Dollar"
+      }
+    ],
+    "symbol": "$",
+    "code": "USD"
+  },
+  {
+    "names": [
+      {
+        "language": "ru",
+        "value": "Евро"
+      },
+      {
+        "language": "en",
+        "value": "Euro"
+      }
+    ],
+    "symbol": "€",
+    "code": "EUR"
+  },
+  {
+    "names": [
+      {
+        "language": "ru",
+        "value": "Фунт стерлингов"
+      },
+      {
+        "language": "en",
+        "value": "Pound Sterling"
+      }
+    ],
+    "symbol": "£",
+    "code": "GBP"
+  },
+  {
+    "names": [
+      {
+        "language": "ru",
+        "value": "Швейцарский франк"
+      },
+      {
+        "language": "en",
+        "value": "Swiss Franc"
+      }
+    ],
+    "symbol": "₣",
+    "code": "CHF"
+  },
+  {
+    "names": [
+      {
+        "language": "ru",
+        "value": "Юань"
+      },
+      {
+        "language": "en",
+        "value": "Yuan Renminbi"
+      }
+    ],
+    "symbol": "¥",
+    "code": "CNY"
+  },
+  {
+    "names": [
+      {
+        "language": "ru",
+        "value": "Иена"
+      },
+      {
+        "language": "en",
+        "value": "Yen"
+      }
+    ],
+    "symbol": "¥",
+    "code": "JPY"
+  }
+]
