@@ -1,5 +1,8 @@
 package ru.fess38.finance
 
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
+import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
@@ -7,6 +10,7 @@ import com.typesafe.config.Config
 import com.typesafe.config.ConfigFactory
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import org.hibernate.Session
 import org.hibernate.SessionFactory
 import org.hibernate.criterion.DetachedCriteria
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters
@@ -75,9 +79,13 @@ class AppConfiguration {
   }
 
   @Bean
-  fun httpMessageConverters(converter: GsonHttpMessageConverter): HttpMessageConverters {
-    return HttpMessageConverters(converter)
-  }
+  fun httpMessageConverters(converter: GsonHttpMessageConverter) = HttpMessageConverters(converter)
+
+  @Bean
+  fun googleIdTokenVerifier(config: Config) = GoogleIdTokenVerifier
+      .Builder(GoogleNetHttpTransport.newTrustedTransport(), JacksonFactory.getDefaultInstance())
+      .setAudience(listOf(config.getString("security.google.clientId")))
+      .build()!!
 }
 
 fun Config.toProperties(): Properties {
@@ -90,6 +98,7 @@ inline fun <reified T> Gson.fromJson(json: String): T {
   return this.fromJson<T>(json, object: TypeToken<T>() {}.type)
 }
 
-inline fun <reified T> SessionFactory.list(criteria: DetachedCriteria): List<T> {
-  return criteria.getExecutableCriteria(this.currentSession).list() as List<T>
+inline fun <reified T> SessionFactory.list(criteria: DetachedCriteria,
+                                           session: Session = this.currentSession): List<T> {
+  return criteria.getExecutableCriteria(session).list() as List<T>
 }
