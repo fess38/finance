@@ -2,7 +2,7 @@ group "ru.fess38.finance"
 version "0.1"
 
 buildscript {
-  ext.kotlin_version = "1.1.4-3"
+  ext.kotlin_version = "1.1.50"
   ext.spring_version = "4.3.10.RELEASE"
   ext.spring_boot_version = "1.5.4.RELEASE"
   ext.hibernate_version = "5.1.0.Final"
@@ -66,6 +66,7 @@ dependencies {
   compile "com.google.guava:guava:19.0"
   compile "com.typesafe:config:1.3.1"
   compile "com.google.api-client:google-api-client:1.22.0"
+  compile "org.apache.commons:commons-text:1.1"
 }
 
 sourceCompatibility = 1.8
