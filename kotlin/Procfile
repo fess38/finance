@@ -1,0 +1,1 @@
+web java -jar build/libs/finance-0.1.jar
