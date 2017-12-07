@@ -32,7 +32,7 @@ import javax.sql.DataSource
 @Configuration
 class AppConfiguration {
   @Bean
-  fun config() = ConfigFactory.load().getConfig(System.getProperty("env") ?: "dev")!!
+  fun config() = ConfigFactory.load().getConfig(System.getenv("env") ?: "dev")!!
 
   @Bean
   fun dataSource(config: Config): DataSource {
