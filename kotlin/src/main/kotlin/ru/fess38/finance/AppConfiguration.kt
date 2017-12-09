@@ -38,7 +38,8 @@ class AppConfiguration {
   fun dataSource(config: Config): DataSource {
     val hikariConfig = HikariConfig()
     hikariConfig.dataSourceClassName = config.getString("hikari.classname")
-    hikariConfig.addDataSourceProperty("serverName", config.getString("hikari.host"))
+    val host = config.getString("hikari.host") + ":" + config.getInt("hikari.port")
+    hikariConfig.addDataSourceProperty("serverName", host)
     hikariConfig.username = config.getString("hikari.user")
     hikariConfig.password = config.getString("hikari.password")
     hikariConfig.addDataSourceProperty("databaseName", config.getString("hikari.databasename"))
