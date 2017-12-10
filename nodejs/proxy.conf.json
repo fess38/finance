@@ -1,7 +1,7 @@
 {
   "/api/**": {
     "secure": true,
-    "target": "https://fess38-test.herokuapp.com",
+    "target": "https://fess38-finance-back-test.herokuapp.com",
     "changeOrigin": true
   }
 }
