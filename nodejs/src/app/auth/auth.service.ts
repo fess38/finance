@@ -1,6 +1,6 @@
 /// <reference path="../../../node_modules/@types/gapi/index.d.ts" />
 /// <reference path="../../../node_modules/@types/gapi.auth2/index.d.ts" />
-import {CookieService} from 'angular2-cookie/core';
+import { CookieService } from 'ngx-cookie';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -40,7 +40,7 @@ export class AuthService {
         }
       })
       .catch((error) => {
-        alert(error.message);
+        console.error(error.message);
       })
   }
 
@@ -59,7 +59,7 @@ export class AuthService {
           callback();
         })
         .catch((error) => {
-          alert(error.message);
+          console.error(error);
         })
     })
   }

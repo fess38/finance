@@ -9,7 +9,7 @@ import { AuthService } from './auth.service';
 export class LoginComponent {
   constructor(private auth: AuthService, private router: Router) { }
 
-  private signInGoogle() {
+  signInGoogle() {
     let redirect = () => { this.router.navigate([""]) };
     this.auth.isSignIn() ? redirect() : this.auth.signInGoogle(redirect);
   }

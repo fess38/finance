@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import {CookieService} from 'angular2-cookie/core';
+import { CookieModule } from 'ngx-cookie';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -20,10 +20,10 @@ import { AuthGuardService } from './auth/auth-guard.service';
     AppComponent, PageNotFoundComponent, LoginComponent, HelloComponent
   ],
   imports: [
-    BrowserModule, HttpClientModule, AppRoutingModule
+    BrowserModule, HttpClientModule, AppRoutingModule, CookieModule.forRoot()
   ],
   providers: [
-    CurrencyApiService, AuthService, AuthGuardService, CookieService
+    CurrencyApiService, AuthService, AuthGuardService
   ],
   bootstrap: [
     AppComponent
