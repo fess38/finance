@@ -2,12 +2,9 @@ var express = require('express');
 var httpProxy = require('http-proxy');
 var bodyParser = require('body-parser');
 
-var apiForwardingUrl = 'https://fess38-finance-back-test.herokuapp.com';
-
 httpProxy.prototype.onError = function (err) {
   console.log(err);
 };
-
 var apiProxy = httpProxy.createProxyServer({ changeOrigin: true });
 
 var server = express();
@@ -15,7 +12,7 @@ server.set('port', process.env.PORT || 4200);
 server.use(express.static(__dirname + '/dist'));
 
 server.all("/api/*", function(req, res) {
-    apiProxy.web(req, res, { target: apiForwardingUrl });
+    apiProxy.web(req, res, { target: process.env.backend_url });
 });
 
 server.get('*', function (req, res) {
