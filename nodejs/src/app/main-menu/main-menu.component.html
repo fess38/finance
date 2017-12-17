@@ -1,0 +1,38 @@
+<clr-header>
+  <div class="branding">
+    <span class="title">Финансы</span>
+  </div>
+  <div class="header-actions">
+    <clr-dropdown>
+      <button class="nav-icon" clrDropdownTrigger>
+        <i style="margin-top: 17px;" class="fa fa-cog fa-2x"></i>
+      </button>
+      <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+        <a href="/settings" clrDropdownItem>Настройки</a>
+        <a href="/logout" clrDropdownItem>Выйти</a>
+      </clr-dropdown-menu>
+    </clr-dropdown>
+  </div>
+</clr-header>
+<div class="content-container">
+  <main class="content-area">
+    <router-outlet></router-outlet>
+  </main>
+
+  <nav class="sidenav" [clr-nav-level]="1">
+    <section class="sidenav-content">
+      <a href="" class="nav-link">Добавить транзакцию</a>
+      <a href="" class="nav-link">Доходы и расходы</a>
+      <section class="nav-group">
+        <label>Остальное</label>
+        <ul class="nav-list">
+          <li><a href="" class="nav-link">Счета</a></li>
+          <li><a href="" class="nav-link">Переводы</a></li>
+          <li><a href="" class="nav-link">Категории</a></li>
+          <li><a href="" class="nav-link">Подкатегории</a></li>
+          <li><a href="" class="nav-link">Пользователи</a></li>
+        </ul>
+      </section>
+    </section>
+  </nav>
+</div>

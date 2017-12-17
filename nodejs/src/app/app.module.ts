@@ -1,32 +1,25 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { CookieModule } from 'ngx-cookie';
-
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ClarityModule } from 'clarity-angular';
 import { AppRoutingModule } from './app-routing.module';
-
 import { AppComponent } from './app.component';
-import { PageNotFoundComponent } from './page-not-found.component';
-import { LoginComponent } from './auth/login.component';
-import { HelloComponent } from './hello.component';
-
-import { AuthService } from './auth/auth.service';
-import { CurrencyApiService } from './api/currency-api.service';
-
-import { AuthGuardService } from './auth/auth-guard.service';
+import { AuthModule } from './auth/auth.module';
+import { MainMenuComponent } from './main-menu/main-menu.component';
+import { MainPageComponent } from './main-page/main-page.component';
 
 @NgModule({
   declarations: [
-    AppComponent, PageNotFoundComponent, LoginComponent, HelloComponent
+    AppComponent, MainMenuComponent, MainPageComponent
   ],
   imports: [
-    BrowserModule, HttpClientModule, AppRoutingModule, CookieModule.forRoot()
+    BrowserModule, BrowserAnimationsModule, ClarityModule, HttpClientModule,
+    AppRoutingModule, AuthModule
   ],
-  providers: [
-    CurrencyApiService, AuthService, AuthGuardService
-  ],
+  providers: [],
   bootstrap: [
     AppComponent
   ]
 })
-export class AppModule { }
+export class AppModule {}

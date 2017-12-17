@@ -1,22 +1,22 @@
 /// <reference path="../../../node_modules/@types/gapi/index.d.ts" />
 /// <reference path="../../../node_modules/@types/gapi.auth2/index.d.ts" />
-import { CookieService } from 'ngx-cookie';
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie';
 import 'rxjs/add/operator/toPromise';
-
 
 declare let gapi: any;
 
 @Injectable()
 export class AuthService {
   constructor(private cookie: CookieService, private http: HttpClient, private router: Router) {
+    setTimeout(() => this.validateToken(), 5000);
     setInterval(() => {
       if (this.isSignIn()) {
         this.validateToken();
       }
-    }, 60000);
+    }, 300000);
   }
 
   private readonly tokenCookieName: string = 'token';
@@ -26,22 +26,22 @@ export class AuthService {
   }
 
   private token(): string {
-    let token = this.cookie.get(this.tokenCookieName);
-    return token ? token : "";
+    const token = this.cookie.get(this.tokenCookieName);
+    return token ? token : '';
   }
 
   validateToken(): void {
     this.http.post('/api/auth/validate', new RefreshToken(this.token()))
       .toPromise()
       .then((data) => {
-        if (!data["success"]) {
+        if (!data['success']) {
           this.cookie.remove(this.tokenCookieName);
-          this.router.navigate(["login"]);
+          this.router.navigate(['login']);
         }
       })
       .catch((error) => {
         console.error(error.message);
-      })
+      });
   }
 
   signInGoogle(callback: () => void) {
@@ -51,17 +51,18 @@ export class AuthService {
           return gapi.auth2.init(clientConfig).signIn();
         })
         .then((googleUser: gapi.auth2.GoogleUser) => {
-          let id_token: string = googleUser.getAuthResponse().id_token;
-          return this.auth(new RefreshToken(id_token, AuthType.GOOGLE))
+          const id_token: string = googleUser.getAuthResponse().id_token;
+          return this.auth(new RefreshToken(id_token, AuthType.GOOGLE));
         })
         .then((session: Session) => {
-          this.cookie.put(this.tokenCookieName, session.token, { expires: new Date(session.expired) });
+          const options = { expires: new Date(session.expired) };
+          this.cookie.put(this.tokenCookieName, session.token, options);
           callback();
         })
         .catch((error) => {
           console.error(error);
-        })
-    })
+        });
+    });
   }
 
   private googleClientConfig(): Promise<gapi.auth2.ClientConfig> {
@@ -71,9 +72,10 @@ export class AuthService {
         return {
           client_id: data['value'],
           fetch_basic_profile: false,
-          scope: 'profile'
+          scope: 'profile',
+          ux_mode: 'popup'
         } as gapi.auth2.ClientConfig;
-      })
+      });
   }
 
   private auth(refreshToken: RefreshToken): Promise<Session> {

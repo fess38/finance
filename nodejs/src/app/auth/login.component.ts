@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { AuthService } from './auth.service';
 
 @Component({
-  template: '<div (click)="signInGoogle()">Google sign in</div>'
+  templateUrl: 'login.component.html'
 })
 export class LoginComponent {
   constructor(private auth: AuthService, private router: Router) { }

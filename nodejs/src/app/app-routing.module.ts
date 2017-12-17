@@ -1,15 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
-import { PageNotFoundComponent } from './page-not-found.component';
-import { LoginComponent } from './auth/login.component';
-import { HelloComponent } from './hello.component';
 import { AuthGuardService } from './auth/auth-guard.service';
+import { LoginComponent } from './auth/login.component';
+import { MainPageComponent } from './main-page/main-page.component';
 
 const appRoutes: Routes = [
   {
     path: '',
-    component: HelloComponent,
+    component: MainPageComponent,
     canActivate: [AuthGuardService]
   },
   {
@@ -18,20 +16,18 @@ const appRoutes: Routes = [
   },
   {
     path: '**',
-    component: PageNotFoundComponent
+    redirectTo: '',
+    pathMatch: 'full'
   }
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(
-      appRoutes
-    )
+    RouterModule.forRoot(appRoutes)
   ],
   exports: [
     RouterModule
   ],
-  providers: [
-  ]
+  providers: []
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

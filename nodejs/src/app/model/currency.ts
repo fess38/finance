@@ -1,4 +1,4 @@
-import {LangString} from '../langString';
+import { LangString } from '../utils/langString';
 
 export class Currency {
   id: number;
