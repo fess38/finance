@@ -12,14 +12,14 @@ declare let gapi: any;
 export class AuthService {
   constructor(private cookie: CookieService, private http: HttpClient, private router: Router) {
     setTimeout(() => this.validateToken(), 5000);
-    setInterval(() => {
-      if (this.isSignIn()) {
-        this.validateToken();
-      }
-    }, 300000);
+    setInterval(() => { if (this.isSignIn()) this.validateToken(); }, 300000);
+    this.getGoogleClientConfig()
+      .then((clientConfig) => this.googleClientConfig = clientConfig)
+      .catch((error) => console.error(error));
   }
 
   private readonly tokenCookieName: string = 'token';
+  private googleClientConfig: gapi.auth2.ClientConfig;
 
   isSignIn(): boolean {
     return this.token().length > 0;
@@ -46,10 +46,7 @@ export class AuthService {
 
   signInGoogle() {
     gapi.load('auth2', () => {
-      this.googleClientConfig()
-        .then((clientConfig) => {
-          return gapi.auth2.init(clientConfig).signIn();
-        })
+      gapi.auth2.init(this.googleClientConfig).signIn()
         .then((googleUser: gapi.auth2.GoogleUser) => {
           const id_token: string = googleUser.getAuthResponse().id_token;
           return this.auth(new RefreshToken(id_token, AuthType.GOOGLE));
@@ -57,15 +54,13 @@ export class AuthService {
         .then((session: Session) => {
           const options = { expires: new Date(session.expired) };
           this.cookie.put(this.tokenCookieName, session.token, options);
-          this.router.navigate([""]);
+          this.router.navigate(['']);
         })
-        .catch((error) => {
-          console.error(error);
-        });
+        .catch((error) => console.error(error));
     });
   }
 
-  private googleClientConfig(): Promise<gapi.auth2.ClientConfig> {
+  private getGoogleClientConfig(): Promise<gapi.auth2.ClientConfig> {
     return this.http.get('/api/auth/google-client-id')
       .toPromise()
       .then((data) => {
@@ -87,11 +82,9 @@ export class AuthService {
       .toPromise()
       .then(() => {
         this.cookie.remove(this.tokenCookieName);
-        this.router.navigate(["login"]);
+        this.router.navigate(['login']);
       })
-      .catch((error) => {
-        console.error(error.message);
-      });
+      .catch((error) => console.error(error.message));
   }
 }
 
