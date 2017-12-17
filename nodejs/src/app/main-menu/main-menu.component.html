@@ -9,7 +9,7 @@
       </button>
       <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
         <a href="/settings" clrDropdownItem>Настройки</a>
-        <a href="/logout" clrDropdownItem>Выйти</a>
+        <span (click)="signout()" clrDropdownItem>Выйти</span>
       </clr-dropdown-menu>
     </clr-dropdown>
   </div>

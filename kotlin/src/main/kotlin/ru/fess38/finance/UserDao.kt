@@ -34,6 +34,8 @@ interface UserDao {
   fun saveOrUpdate(outerId: String, authType: AuthType, session: Session)
 
   fun find(token: String): User?
+
+  fun revoke(token: String)
 }
 
 @Repository
@@ -91,5 +93,13 @@ class UserDaoImpl: UserDao {
     val user = sessionFactory.list<User>(criteria, session).firstOrNull()
     session.close()
     return user
+  }
+
+  override fun revoke(token: String) {
+    val user = find(token)
+    user?.let {
+      val updatedSessions = it.sessions.map {if (it.token == token) it.copy(expired = 0) else it}
+      update(it.copy(sessions = updatedSessions))
+    }
   }
 }

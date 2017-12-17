@@ -58,6 +58,9 @@ class AuthenticationController {
   fun validate(@RequestBody refreshToken: RefreshToken): Any {
     return mapOf(Pair("success", userDao.find(refreshToken.token) != null))
   }
+
+  @RequestMapping("/api/auth/revoke-token", method = arrayOf(RequestMethod.POST))
+  fun revokeToken(@RequestBody refreshToken: RefreshToken) = userDao.revoke(refreshToken.token)
 }
 
 data class RefreshToken(val token: String, val type: AuthType = AuthType.UNKNOWN)

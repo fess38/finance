@@ -44,7 +44,7 @@ export class AuthService {
       });
   }
 
-  signInGoogle(callback: () => void) {
+  signInGoogle() {
     gapi.load('auth2', () => {
       this.googleClientConfig()
         .then((clientConfig) => {
@@ -57,7 +57,7 @@ export class AuthService {
         .then((session: Session) => {
           const options = { expires: new Date(session.expired) };
           this.cookie.put(this.tokenCookieName, session.token, options);
-          callback();
+          this.router.navigate([""]);
         })
         .catch((error) => {
           console.error(error);
@@ -80,6 +80,18 @@ export class AuthService {
 
   private auth(refreshToken: RefreshToken): Promise<Session> {
     return this.http.post<Session>('/api/auth', refreshToken).toPromise();
+  }
+
+  signOut() {
+    this.http.post('/api/auth/revoke-token', new RefreshToken(this.token()))
+      .toPromise()
+      .then(() => {
+        this.cookie.remove(this.tokenCookieName);
+        this.router.navigate(["login"]);
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
   }
 }
 
