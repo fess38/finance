@@ -2,7 +2,7 @@ group "ru.fess38.finance"
 version "0.1"
 
 buildscript {
-  ext.kotlin_version = "1.1.50"
+  ext.kotlin_version = "1.2.10"
   ext.spring_version = "4.3.10.RELEASE"
   ext.spring_boot_version = "1.5.4.RELEASE"
   ext.hibernate_version = "5.1.0.Final"
