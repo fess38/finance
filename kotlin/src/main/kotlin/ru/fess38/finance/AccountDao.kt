@@ -33,7 +33,7 @@ class AccountDaoImpl: AccountDao {
   override fun get(id: Long) = sessionFactory.currentSession.get(Account::class.java, id)
 
   override fun update(account: Account) {
-    sessionFactory.currentSession.update(account.copy(updated = System.currentTimeMillis()))
+    sessionFactory.currentSession.update(account.copy(modified = System.currentTimeMillis()))
   }
 
   override fun find(criteria: DetachedCriteria): List<Account> {
