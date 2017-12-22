@@ -39,9 +39,7 @@ export class AuthService {
           this.router.navigate(['login']);
         }
       })
-      .catch((error) => {
-        console.error(error.message);
-      });
+      .catch((error) => console.error(error.message));
   }
 
   signInGoogle() {
@@ -56,7 +54,10 @@ export class AuthService {
           this.cookie.put(this.tokenCookieName, session.token, options);
           this.router.navigate(['']);
         })
-        .catch((error) => console.error(error));
+        .catch((error) => {
+          console.error(error);
+          this.signInGoogle();
+        });
     });
   }
 
