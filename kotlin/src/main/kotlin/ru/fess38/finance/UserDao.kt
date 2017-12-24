@@ -96,8 +96,7 @@ class UserDaoImpl: UserDao {
   }
 
   override fun revoke(token: String) {
-    val user = find(token)
-    user?.let {
+    find(token)?.let {
       val updatedSessions = it.sessions.map {if (it.token == token) it.copy(expired = 0) else it}
       update(it.copy(sessions = updatedSessions))
     }

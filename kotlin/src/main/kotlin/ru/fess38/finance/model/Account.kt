@@ -45,13 +45,35 @@ data class Account(
 data class AccountProperties(
     val name: String,
 
-    val type: AccountType = AccountType.DEFAULT,
-
     val balance: Long = 0,
 
     val currency: Currency
 )
 
-enum class AccountType {
-    DEFAULT
+data class SimpleAccount(
+    private val id: Long = 0,
+
+    private val name: String,
+
+    private val balance: Long = 0,
+
+    private val currency: Currency
+) {
+  fun toAccount() = Account(
+      id = this.id,
+      properties = AccountProperties(
+          name = this.name,
+          balance = this.balance,
+          currency = this.currency
+      )
+  )
+
+  companion object {
+    fun from(account: Account) = SimpleAccount(
+        id = account.id,
+        name = account.properties.name,
+        balance = account.properties.balance,
+        currency = account.properties.currency
+    )
+  }
 }

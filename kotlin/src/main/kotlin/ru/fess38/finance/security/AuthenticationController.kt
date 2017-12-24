@@ -30,12 +30,12 @@ class AuthenticationController {
       .withinRange(48, 122)
       .build()!!
 
-  @RequestMapping("/api/auth/google-client-id", method = arrayOf(RequestMethod.GET))
+  @RequestMapping("/api/auth/google-client-id", method = [(RequestMethod.GET)])
   fun googleclientId(): Map<String, String> {
     return mapOf(Pair("value", config.getString("security.google.clientId")))
   }
 
-  @RequestMapping("/api/auth", method = arrayOf(RequestMethod.POST))
+  @RequestMapping("/api/auth", method = [(RequestMethod.POST)])
   fun auth(@RequestBody refreshToken: RefreshToken): Session {
     val authType = refreshToken.type
     val token = refreshToken.token
@@ -54,12 +54,12 @@ class AuthenticationController {
     }
   }
 
-  @RequestMapping("/api/auth/validate", method = arrayOf(RequestMethod.POST))
+  @RequestMapping("/api/auth/validate", method = [(RequestMethod.POST)])
   fun validate(@RequestBody refreshToken: RefreshToken): Any {
     return mapOf(Pair("success", userDao.find(refreshToken.token) != null))
   }
 
-  @RequestMapping("/api/auth/revoke-token", method = arrayOf(RequestMethod.POST))
+  @RequestMapping("/api/auth/revoke-token", method = [(RequestMethod.POST)])
   fun revokeToken(@RequestBody refreshToken: RefreshToken) = userDao.revoke(refreshToken.token)
 }
 
