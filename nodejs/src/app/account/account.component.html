@@ -1,0 +1,65 @@
+<div class="row">
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
+    <table class="table table-noborder table-compact">
+      <tr>
+        <th (click)="stopEdit(); isEditing=true">
+          <span>Счет</span>
+          <i class="fa fa-plus-circle" aria-hidden="true"></i>
+        </th>
+        <th>Баланс</th>
+      </tr>
+      <tr *ngFor="let account of accounts" (click)="startEdit(account)">
+        <td>{{account.name}}</td>
+        <td>{{account.balance}} {{account.currency.symbol}}</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<clr-modal [(clrModalOpen)]="isEditing" [clrModalClosable]="false">
+  <h3 class="modal-title" [hidden]="!isAccountAdding()">Добавить счет</h3>
+  <h3 class="modal-title" [hidden]="isAccountAdding()">Редактировать счет</h3>
+  <div class="modal-body">
+    <form #accountForm="ngForm" (ngSubmit)="save(newAccount)">
+      <div class="form-group">
+        <label for="name"
+               role="tooltip"
+               class="tooltip tooltip-validation"
+               [class.invalid]="name.invalid && (name.dirty || name.touched)">
+          <input type="text"
+                 id="name"
+                 required
+                 name="name"
+                 [(ngModel)]="newAccount.name"
+                 #name="ngModel"
+                 placeholder="Название">
+        </label>
+
+        <div class="select" [hidden]="!isAccountAdding()">
+          <select name="currency" [(ngModel)]="newAccount.currency" required>
+            <option *ngFor="let currency of currencies" [ngValue]="currency">
+              Валюта: {{ currency.names[0].value }} ({{currency.symbol}})
+            </option>
+          </select>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="submit"
+            class="btn btn-primary"
+            (click)="save(newAccount)"
+            [disabled]="!accountForm.form.valid"
+            [hidden]="!isAccountAdding()">Сохранить</button>
+    <button type="submit"
+            class="btn btn-primary"
+            (click)="update(newAccount)"
+            [disabled]="!accountForm.form.valid"
+            [hidden]="isAccountAdding()">Обновить</button>
+    <button type="button"
+            class="btn btn-outline"
+            (click)="stopEdit()">Отмена
+    </button>
+  </div>
+</clr-modal>
+
