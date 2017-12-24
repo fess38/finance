@@ -11,10 +11,10 @@ export class AccountComponent implements OnInit {
   constructor(private currencyService: CurrencyService,
               private accountService: AccountService) { }
 
-  private currencies: Currency[] = [];
-  private accounts: Account[] = [];
-  private isEditing: boolean = false;
-  private newAccount = {};
+  currencies: Currency[] = [];
+  accounts: Account[] = [];
+  isEditing: boolean = false;
+  newAccount: Account = new Account();
 
   ngOnInit() {
     this.currencyService.values()
@@ -47,7 +47,7 @@ export class AccountComponent implements OnInit {
   }
 
   stopEdit() {
-    this.newAccount = {};
+    this.newAccount = new Account();
     this.isEditing = false;
   }
 
