@@ -17,12 +17,14 @@ const appRoutes: Routes = [
   },
   {
     path: 'account',
-    component: AccountComponent
+    component: AccountComponent,
+    canActivate: [AuthGuardService]
   },
   {
     path: '**',
     redirectTo: '',
-    pathMatch: 'full'
+    pathMatch: 'full',
+    canActivate: [AuthGuardService]
   }
 ];
 
