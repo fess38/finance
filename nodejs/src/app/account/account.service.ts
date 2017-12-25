@@ -7,7 +7,7 @@ import { Account } from './account';
 export class AccountService {
   constructor(private http: HttpClient) { }
 
-  readonly path = '/api/data/account/';
+  private readonly path = '/api/data/account/';
 
   get(): Promise<Account[]> {
     return new Promise((resolve) => {
