@@ -14,8 +14,7 @@ export class AccountService {
       this.http
         .get(this.path + 'get')
         .toPromise()
-        .then((data) => resolve(data as Account[]))
-        .catch((error) => console.error(error.message));
+        .then((data) => resolve(data as Account[]));
     });
   }
 

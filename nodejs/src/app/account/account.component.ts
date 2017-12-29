@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AlertService } from '../alert/alert.service';
 import { AccountService } from './account.service';
 import { CurrencyService } from './currency.service';
 import { Currency } from './currency';
@@ -9,7 +10,8 @@ import { Account } from './account';
 })
 export class AccountComponent implements OnInit {
   constructor(private currencyService: CurrencyService,
-              private accountService: AccountService) { }
+              private accountService: AccountService,
+              private alertService: AlertService) { }
 
   currencies: Currency[] = [];
   accounts: Account[] = [];
@@ -32,13 +34,19 @@ export class AccountComponent implements OnInit {
         this.accounts.push(savedAccount);
         this.stopEdit();
       })
-      .catch(error => console.error(error));
+      .catch(error => {
+        this.alertService.error('Ошибка сохранения');
+        console.error(error.message);
+      });
   }
 
   update(account: Account) {
     this.accountService.update(account)
       .then(() => this.stopEdit())
-      .catch(error => console.error(error));
+      .catch(error => {
+        this.alertService.error('Ошибка сохранения');
+        console.error(error.message);
+      });
   }
 
   startEdit(account: Account) {

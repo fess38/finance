@@ -20,30 +20,33 @@
   <h3 class="modal-title" [hidden]="!isAccountAdding()">Добавить счет</h3>
   <h3 class="modal-title" [hidden]="isAccountAdding()">Редактировать счет</h3>
   <div class="modal-body">
+    <alert></alert>
     <form #accountForm="ngForm" (ngSubmit)="save(newAccount)">
-      <div class="form-group">
-        <label for="name"
-               role="tooltip"
-               class="tooltip tooltip-validation"
-               [class.invalid]="name.invalid && (name.dirty || name.touched)">
-          <input type="text"
-                 id="name"
-                 required
-                 name="name"
-                 [(ngModel)]="newAccount.name"
-                 #name="ngModel"
-                 placeholder="Название">
-        </label>
+      <section class="form-block">
+        <div class="form-group">
+          <label for="name"
+                 role="tooltip"
+                 class="tooltip tooltip-validation"
+                 [class.invalid]="name.invalid && (name.dirty || name.touched)">
+            <input type="text"
+                   id="name"
+                   required
+                   name="name"
+                   [(ngModel)]="newAccount.name"
+                   #name="ngModel"
+                   placeholder="Название">
+          </label>
 
-        <div class="select" [hidden]="!isAccountAdding()">
-          <select name="currency" [(ngModel)]="newAccount.currency" required>
-            <option></option>
-            <option *ngFor="let currency of currencies" [ngValue]="currency">
-              {{ currency.names[0].value }} ({{currency.symbol}})
-            </option>
-          </select>
+          <div class="select" [hidden]="!isAccountAdding()">
+            <select name="currency" [(ngModel)]="newAccount.currency" required title="Валюта">
+              <option disabled selected>Валюта</option>
+              <option *ngFor="let currency of currencies" [ngValue]="currency">
+                {{ currency.names[0].value }} ({{currency.symbol}})
+              </option>
+            </select>
+          </div>
         </div>
-      </div>
+      </section>
     </form>
   </div>
   <div class="modal-footer">
