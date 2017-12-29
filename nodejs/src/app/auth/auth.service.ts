@@ -13,13 +13,10 @@ export class AuthService {
   constructor(private cookie: CookieService, private http: HttpClient, private router: Router) {
     setTimeout(() => this.validateToken(), 5000);
     setInterval(() => { if (this.isSignIn()) this.validateToken(); }, 300000);
-    this.getGoogleClientConfig()
-      .then((clientConfig) => this.googleClientConfig = clientConfig)
-      .catch((error) => console.error(error));
   }
 
   private readonly tokenCookieName: string = 'token';
-  private googleClientConfig: gapi.auth2.ClientConfig;
+  private loginTryCounter: number = 0;
 
   isSignIn(): boolean {
     return this.token().length > 0;
@@ -44,7 +41,8 @@ export class AuthService {
 
   signInGoogle() {
     gapi.load('auth2', () => {
-      gapi.auth2.init(this.googleClientConfig).signIn()
+      this.getGoogleClientConfig()
+        .then((clientConfig) => gapi.auth2.init(clientConfig).signIn())
         .then((googleUser: gapi.auth2.GoogleUser) => {
           const id_token: string = googleUser.getAuthResponse().id_token;
           return this.auth(new RefreshToken(id_token, AuthType.GOOGLE));
@@ -56,7 +54,9 @@ export class AuthService {
         })
         .catch((error) => {
           console.error(error);
-          this.signInGoogle();
+          if (this.loginTryCounter++ <= 3) {
+            this.signInGoogle();
+          }
         });
     });
   }
