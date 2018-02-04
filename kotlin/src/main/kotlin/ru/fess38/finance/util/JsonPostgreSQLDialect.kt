@@ -5,7 +5,6 @@ import org.hibernate.engine.spi.SessionImplementor
 import org.hibernate.usertype.UserType
 import org.postgresql.util.PGobject
 import ru.fess38.finance.AppConfiguration
-import ru.fess38.finance.fromJson
 import ru.fess38.finance.model.AccountProperties
 import java.io.Serializable
 import java.sql.PreparedStatement

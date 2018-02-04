@@ -1,6 +1,7 @@
 package ru.fess38.finance.model
 
 import ru.fess38.finance.security.AuthType
+import ru.fess38.finance.util.gzip
 import javax.persistence.CollectionTable
 import javax.persistence.Column
 import javax.persistence.ElementCollection
@@ -33,10 +34,13 @@ data class User(
     @Enumerated(EnumType.STRING)
     val authType: AuthType = AuthType.UNKNOWN,
 
+    @Column(name = "dump", nullable = false, columnDefinition = "bytea")
+    val byteDataDump: ByteArray = gzip("{}"),
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(schema = "model", name = "user_session",
-        joinColumns = arrayOf(JoinColumn(name = "user_id")),
-        indexes = arrayOf(Index(name = "NIX_user_session", columnList = "user_id, token, expired"))
+        joinColumns = [(JoinColumn(name = "user_id"))],
+        indexes = [(Index(name = "NIX_user_session", columnList = "user_id, token, expired"))]
     )
     val sessions: List<Session> = listOf()
 )

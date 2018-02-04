@@ -11,6 +11,7 @@ import ru.fess38.finance.model.Session
 import ru.fess38.finance.model.User
 import ru.fess38.finance.security.AuthType
 import ru.fess38.finance.security.TokenAuthentication
+import ru.fess38.finance.util.list
 import javax.annotation.PostConstruct
 
 object UserInfo {
@@ -34,6 +35,8 @@ interface UserDao {
   fun saveOrUpdate(outerId: String, authType: AuthType, session: Session)
 
   fun find(token: String): User?
+
+  fun findById(): User
 
   fun revoke(token: String)
 }
@@ -91,6 +94,15 @@ class UserDaoImpl: UserDao {
         .add(Restrictions.gt("s.expired", System.currentTimeMillis()))
     val session = sessionFactory.openSession()
     val user = sessionFactory.list<User>(criteria, session).firstOrNull()
+    session.close()
+    return user
+  }
+
+  override fun findById(): User {
+    val criteria = DetachedCriteria.forClass(User::class.java)
+        .add(Restrictions.eq("id", UserInfo.id()))
+    val session = sessionFactory.openSession()
+    val user = sessionFactory.list<User>(criteria, session).first()
     session.close()
     return user
   }

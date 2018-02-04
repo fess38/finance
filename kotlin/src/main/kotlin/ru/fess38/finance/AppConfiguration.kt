@@ -5,14 +5,11 @@ import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
 import com.typesafe.config.Config
 import com.typesafe.config.ConfigFactory
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import org.hibernate.Session
 import org.hibernate.SessionFactory
-import org.hibernate.criterion.DetachedCriteria
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -25,8 +22,8 @@ import ru.fess38.finance.model.Account
 import ru.fess38.finance.model.Currency
 import ru.fess38.finance.model.User
 import ru.fess38.finance.util.LocalDateConverter
+import ru.fess38.finance.util.toProperties
 import java.time.LocalDate
-import java.util.Properties
 import javax.sql.DataSource
 
 @Configuration
@@ -87,19 +84,4 @@ class AppConfiguration {
       .Builder(GoogleNetHttpTransport.newTrustedTransport(), JacksonFactory.getDefaultInstance())
       .setAudience(listOf(config.getString("security.google.clientId")))
       .build()!!
-}
-
-fun Config.toProperties(): Properties {
-  val properties = Properties()
-  this.entrySet().forEach {properties[it.key] = it.value.unwrapped()}
-  return properties
-}
-
-inline fun <reified T> Gson.fromJson(json: String): T {
-  return this.fromJson<T>(json, object: TypeToken<T>() {}.type)
-}
-
-inline fun <reified T> SessionFactory.list(criteria: DetachedCriteria,
-                                           session: Session = this.currentSession): List<T> {
-  return criteria.getExecutableCriteria(session).list() as List<T>
 }
