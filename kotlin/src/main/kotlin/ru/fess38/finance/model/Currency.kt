@@ -24,7 +24,7 @@ data class Currency(
     @SequenceGenerator(name = "idseq", sequenceName = "idseq")
     val id: Long = 0,
 
-    @SerializedName("is-deleted")
+    @SerializedName("is_deleted")
     @Column(name = "is_deleted", nullable = false)
     val isDeleted: Boolean = false,
 
@@ -42,5 +42,23 @@ data class Currency(
     val symbol: String,
 
     @Column(columnDefinition = "varchar(3)", nullable = false)
+    val code: String
+) {
+  fun toSimpleCurrency() = SimpleCurrency(
+      id = this.id,
+      nameRu = this.names[0].value,
+      nameEn = this.names[1].value,
+      symbol = this.symbol,
+      code = this.code
+  )
+}
+
+data class SimpleCurrency(
+    val id: Long = 0,
+    @SerializedName("name_ru")
+    val nameRu: String,
+    @SerializedName("name_en")
+    val nameEn: String,
+    val symbol: String,
     val code: String
 )

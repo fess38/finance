@@ -23,11 +23,11 @@ data class Account(
     @SequenceGenerator(name = "idseq", sequenceName = "idseq")
     val id: Long = 0,
 
-    @SerializedName("user-id")
+    @SerializedName("user_id")
     @Column(name = "user_id", updatable = false, nullable = false)
     val userId: Long = 0,
 
-    @SerializedName("is-deleted")
+    @SerializedName("is_deleted")
     @Column(name = "is_deleted", nullable = false)
     val isDeleted: Boolean = false,
 
@@ -44,19 +44,15 @@ data class Account(
 
 data class AccountProperties(
     val name: String,
-
     val balance: Long = 0,
-
-    val currency: Currency
+    @SerializedName("currency_id")
+    val currencyId: Long
 )
 
 data class SimpleAccount(
     private val id: Long = 0,
-
     private val name: String,
-
     private val balance: Long = 0,
-
     private val currency: Currency
 ) {
   fun toAccount() = Account(
@@ -64,16 +60,7 @@ data class SimpleAccount(
       properties = AccountProperties(
           name = this.name,
           balance = this.balance,
-          currency = this.currency
+          currencyId = this.currency.id
       )
   )
-
-  companion object {
-    fun from(account: Account) = SimpleAccount(
-        id = account.id,
-        name = account.properties.name,
-        balance = account.properties.balance,
-        currency = account.properties.currency
-    )
-  }
 }
