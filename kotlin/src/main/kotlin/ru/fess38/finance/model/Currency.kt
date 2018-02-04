@@ -1,10 +1,12 @@
 package ru.fess38.finance.model
 
+import com.google.gson.annotations.SerializedName
 import org.hibernate.annotations.Type
 import org.hibernate.annotations.TypeDef
 import org.hibernate.annotations.TypeDefs
 import ru.fess38.finance.util.LangString
 import ru.fess38.finance.util.ListLangStringType
+import java.time.LocalDate
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -21,6 +23,16 @@ data class Currency(
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "idseq")
     @SequenceGenerator(name = "idseq", sequenceName = "idseq")
     val id: Long = 0,
+
+    @SerializedName("is-deleted")
+    @Column(name = "is_deleted", nullable = false)
+    val isDeleted: Boolean = false,
+
+    @Column(updatable = false, nullable = false)
+    val created: LocalDate = LocalDate.now(),
+
+    @Column(nullable = false)
+    val modified: Long = System.currentTimeMillis(),
 
     @Column(columnDefinition = "jsonb", nullable = false)
     @Type(type = "listLangString")
