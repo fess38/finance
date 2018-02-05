@@ -46,6 +46,7 @@ data class Currency(
 ) {
   fun toSimpleCurrency() = SimpleCurrency(
       id = this.id,
+      modified = this.modified,
       nameRu = this.names[0].value,
       nameEn = this.names[1].value,
       symbol = this.symbol,
@@ -55,6 +56,7 @@ data class Currency(
 
 data class SimpleCurrency(
     val id: Long = 0,
+    val modified: Long = 0,
     @SerializedName("name_ru")
     val nameRu: String,
     @SerializedName("name_en")

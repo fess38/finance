@@ -36,7 +36,7 @@ interface UserDao {
 
   fun find(token: String): User?
 
-  fun findById(): User
+  fun findById(userId: Long?): User
 
   fun revoke(token: String)
 }
@@ -98,9 +98,9 @@ class UserDaoImpl: UserDao {
     return user
   }
 
-  override fun findById(): User {
+  override fun findById(userId: Long?): User {
     val criteria = DetachedCriteria.forClass(User::class.java)
-        .add(Restrictions.eq("id", UserInfo.id()))
+        .add(Restrictions.eq("id", userId ?: UserInfo.id()))
     val session = sessionFactory.openSession()
     val user = sessionFactory.list<User>(criteria, session).first()
     session.close()

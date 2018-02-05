@@ -7,9 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 import ru.fess38.finance.model.Currency
+import ru.fess38.finance.util.fromJson
+import ru.fess38.finance.util.list
+import java.time.LocalDate
 
 interface CurrencyDao {
   fun save(currency: Currency)
+
   fun find(): List<Currency>
 }
 
@@ -18,11 +22,12 @@ interface CurrencyDao {
 class CurrencyDaoImpl: CurrencyDao {
   @Autowired
   lateinit var sessionFactory: SessionFactory
+
   @Autowired
   lateinit var gson: Gson
 
   override fun save(currency: Currency) {
-    sessionFactory.currentSession.save(currency)!!
+    sessionFactory.currentSession.save(currency.copy(modified = System.currentTimeMillis()))!!
   }
 
   override fun find(): List<Currency> {
@@ -35,8 +40,7 @@ class CurrencyDaoImpl: CurrencyDao {
 
   private fun init() {
     val path = "/ru/fess38/finance/model/Currency.json"
-    val data = this::class.java.classLoader.getResource(path).readText()
-    val currencies: List<Currency> = gson.fromJson(data)
-    currencies.forEach {save(it)}
+    val currencies: List<Currency> = gson.fromJson(this.javaClass.getResource(path).readText())
+    currencies.forEach {save(it.copy(created = LocalDate.now()))}
   }
 }

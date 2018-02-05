@@ -12,11 +12,9 @@ import ru.fess38.finance.util.list
 interface AccountDao {
   fun save(account: Account): Account
 
-  fun get(id: Long): Account
-
   fun update(account: Account)
 
-  fun find(criteria: DetachedCriteria = DetachedCriteria.forClass(Account::class.java)): List<Account>
+  fun find(userId: Long?): List<Account>
 }
 
 @Repository
@@ -26,21 +24,21 @@ class AccountDaoImpl: AccountDao {
   lateinit var sessionFactory: SessionFactory
 
   override fun save(account: Account): Account {
-    val updatedAccount = account.copy(userId = UserInfo.id())
+    val updatedAccount = account.copy(userId = UserInfo.id(), modified = System.currentTimeMillis())
     sessionFactory.currentSession.save(updatedAccount)
+    UserDataUpdater.enqueue(UserInfo.id(), Entity.ACCOUNT)
     return updatedAccount
   }
 
-  override fun get(id: Long) = sessionFactory.currentSession.get(Account::class.java, id)
-
   override fun update(account: Account) {
     sessionFactory.currentSession.update(account.copy(modified = System.currentTimeMillis()))
+    UserDataUpdater.enqueue(UserInfo.id(), Entity.ACCOUNT)
   }
 
-  override fun find(criteria: DetachedCriteria): List<Account> {
-    val extendedCriteria = criteria
-        .add(Restrictions.eq("userId", UserInfo.get().id))
+  override fun find(userId: Long?): List<Account> {
+    val criteria = DetachedCriteria.forClass(Account::class.java)
+        .add(Restrictions.eq("userId", userId ?: UserInfo.id()))
         .add(Restrictions.eq("isDeleted", false))
-    return sessionFactory.list(extendedCriteria)
+    return sessionFactory.list(criteria)
   }
 }

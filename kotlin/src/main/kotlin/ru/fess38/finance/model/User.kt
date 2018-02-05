@@ -34,8 +34,8 @@ data class User(
     @Enumerated(EnumType.STRING)
     val authType: AuthType = AuthType.UNKNOWN,
 
-    @Column(name = "dump", nullable = false, columnDefinition = "bytea")
-    val byteDataDump: ByteArray = gzip("{}"),
+    @Column(name = "data", nullable = false, columnDefinition = "bytea")
+    val data: ByteArray = gzip("{}"),
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(schema = "model", name = "user_session",

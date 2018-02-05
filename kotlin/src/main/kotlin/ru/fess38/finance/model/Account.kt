@@ -40,7 +40,15 @@ data class Account(
     @Column(columnDefinition = "jsonb", nullable = false)
     @Type(type = "accountProperties")
     val properties: AccountProperties
-)
+) {
+  fun toSimpleAccount(currencies: List<Currency>) = SimpleAccount(
+      id = this.id,
+      modified = this.modified,
+      name = this.properties.name,
+      balance = this.properties.balance,
+      currency = currencies.first {it.id == this.properties.currencyId}.toSimpleCurrency()
+  )
+}
 
 data class AccountProperties(
     val name: String,
@@ -50,13 +58,15 @@ data class AccountProperties(
 )
 
 data class SimpleAccount(
-    private val id: Long = 0,
-    private val name: String,
-    private val balance: Long = 0,
-    private val currency: Currency
+    val id: Long = 0,
+    val modified: Long = 0,
+    val name: String,
+    val balance: Long = 0,
+    val currency: SimpleCurrency
 ) {
   fun toAccount() = Account(
       id = this.id,
+      modified = this.modified,
       properties = AccountProperties(
           name = this.name,
           balance = this.balance,

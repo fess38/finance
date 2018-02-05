@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
-import ru.fess38.finance.model.DataDump
 import ru.fess38.finance.model.Response
 import ru.fess38.finance.model.SimpleAccount
+import ru.fess38.finance.model.UserData
 
 @RestController
 @RequestMapping("/api/data/account")
@@ -30,13 +30,13 @@ class AccountController {
 }
 
 @RestController
-class DataDumpController {
+class UserDataController {
   @Autowired
   lateinit var gson: Gson
 
   @Autowired
   lateinit var userDao: UserDao
 
-  @RequestMapping("/api/data/dump", method = [(RequestMethod.GET)])
-  fun get(): DataDump = DataDump.fromByteArray(userDao.findById().byteDataDump, gson)
+  @RequestMapping("/api/data/user/get", method = [(RequestMethod.GET)])
+  fun get() = UserData.fromByteArray(userDao.findById(null).data, gson)
 }
