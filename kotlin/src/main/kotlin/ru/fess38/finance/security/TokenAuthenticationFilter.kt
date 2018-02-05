@@ -26,6 +26,7 @@ class TokenAuthenticationFilter(private val userDao: UserDao):
         .filter {it.size == 2}
         .map {it[1]}
         .firstOrNull()
+        ?: request.getHeader("token")
         ?: throw BadCredentialsException("Token is required")
 
     val user = userDao.find(token) ?: throw IllegalArgumentException("Invalid token: $token")
