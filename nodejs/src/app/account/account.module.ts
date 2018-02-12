@@ -4,9 +4,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ClarityModule } from 'clarity-angular';
 import { AlertComponent } from '../alert/alert.component';
 import { AlertService } from '../alert/alert.service';
+import { UserdataService } from '../utils/userdata.service';
 import { AccountComponent } from './account.component';
-import { AccountService } from './account.service';
-import { CurrencyService } from './currency.service';
 
 @NgModule({
   declarations: [
@@ -16,7 +15,7 @@ import { CurrencyService } from './currency.service';
     BrowserModule, ClarityModule, FormsModule
   ],
   providers: [
-    AccountService, AlertService, CurrencyService
+    AlertService, UserdataService
   ]
 })
 export class AccountModule {}

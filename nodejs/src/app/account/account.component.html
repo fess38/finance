@@ -10,7 +10,7 @@
       </tr>
       <tr *ngFor="let account of accounts" (click)="startEdit(account)">
         <td>{{account.name}}</td>
-        <td>{{account.balance}} {{account.currency.symbol}}</td>
+        <td>{{account.balance}} {{findCurrency(account.currency_id).symbol}}</td>
       </tr>
     </table>
   </div>
@@ -38,10 +38,10 @@
           </label>
 
           <div class="select" [hidden]="!isAccountAdding()">
-            <select name="currency" [(ngModel)]="newAccount.currency" required title="Валюта">
+            <select name="currency" [(ngModel)]="newAccount.currency_id" required title="Валюта">
               <option disabled selected>Валюта</option>
-              <option *ngFor="let currency of currencies" [ngValue]="currency">
-                {{ currency.names[0].value }} ({{currency.symbol}})
+              <option *ngFor="let currency of currencies" [ngValue]="currency.id">
+                {{currency.name_ru}} ({{currency.symbol}})
               </option>
             </select>
           </div>

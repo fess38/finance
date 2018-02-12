@@ -1,12 +1,8 @@
 export class Currency {
   id: number;
-  names: LangString[];
+  name_ru: string;
+  name_en: string;
   symbol: string;
   code: string;
-}
-
-export class LangString {
-  lang: string;
-  value: string;
 }
 

@@ -1,16 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertService } from '../alert/alert.service';
-import { AccountService } from './account.service';
-import { CurrencyService } from './currency.service';
-import { Currency } from './currency';
+import { UserdataService } from '../utils/userdata.service';
 import { Account } from './account';
+import { Currency } from './currency';
 
 @Component({
   templateUrl: 'account.component.html'
 })
 export class AccountComponent implements OnInit {
-  constructor(private currencyService: CurrencyService,
-              private accountService: AccountService,
+  constructor(private userdataService: UserdataService,
               private alertService: AlertService) { }
 
   currencies: Currency[] = [];
@@ -19,29 +17,30 @@ export class AccountComponent implements OnInit {
   newAccount: Account = new Account();
 
   ngOnInit() {
-    this.currencyService.values()
+    this.userdataService.currencies()
       .then(currencies => this.currencies = currencies)
       .catch(error => console.error(error));
 
-    this.accountService.get()
+    this.userdataService.accounts()
       .then(accounts => this.accounts = accounts)
       .catch(error => console.error(error));
   }
 
   save(account: Account) {
-    this.accountService.save(account)
+    this.userdataService.saveAccount(account)
       .then(savedAccount => {
         this.accounts.push(savedAccount);
         this.stopEdit();
       })
       .catch(error => {
         this.alertService.error('Ошибка сохранения');
+        this.stopEdit();
         console.error(error.message);
       });
   }
 
   update(account: Account) {
-    this.accountService.update(account)
+    this.userdataService.updateAccount(account)
       .then(() => this.stopEdit())
       .catch(error => {
         this.alertService.error('Ошибка сохранения');
@@ -61,6 +60,14 @@ export class AccountComponent implements OnInit {
 
   isAccountAdding(): boolean {
     return !this.newAccount['id'];
+  }
+
+  findCurrency(currencyId: number): Currency {
+    let currency: Currency = new Currency();
+    if (this.currencies.length > 0) {
+      currency = this.currencies.filter(x => x.id == currencyId)[0];
+    }
+    return currency;
   }
 }
 
