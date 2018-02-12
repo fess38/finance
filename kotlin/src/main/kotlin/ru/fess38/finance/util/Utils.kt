@@ -32,6 +32,6 @@ fun gzip(value: String): ByteArray {
   return bos.toByteArray()
 }
 
-fun ungzip(value: ByteArray): String {
+fun gunzip(value: ByteArray): String {
   return GZIPInputStream(value.inputStream()).bufferedReader().use {it.readText()}
 }

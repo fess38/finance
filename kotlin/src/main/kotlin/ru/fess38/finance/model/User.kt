@@ -23,7 +23,8 @@ import javax.persistence.Table
 data class User(
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "idseq")
-    @SequenceGenerator(name = "idseq", sequenceName = "idseq")
+    @SequenceGenerator(name = "idseq", sequenceName = "idseq", allocationSize = 25,
+        initialValue = 1000)
     val id: Long = 0,
 
     @Column(name = "outer_id", updatable = false, nullable = false,

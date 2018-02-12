@@ -18,8 +18,7 @@ import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.orm.hibernate5.HibernateTransactionManager
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean
 import org.springframework.transaction.PlatformTransactionManager
-import ru.fess38.finance.model.Account
-import ru.fess38.finance.model.Currency
+import ru.fess38.finance.model.FinanceEntity
 import ru.fess38.finance.model.User
 import ru.fess38.finance.util.LocalDateConverter
 import ru.fess38.finance.util.toProperties
@@ -49,7 +48,7 @@ class AppConfiguration {
     val factoryBean = LocalSessionFactoryBean()
     factoryBean.setDataSource(dataSource)
     factoryBean.hibernateProperties = config.getConfig("hibernate").toProperties()
-    factoryBean.setAnnotatedClasses(Currency::class.java, Account::class.java, User::class.java)
+    factoryBean.setAnnotatedClasses(FinanceEntity::class.java, User::class.java)
     factoryBean.afterPropertiesSet()
     return factoryBean.`object`
   }

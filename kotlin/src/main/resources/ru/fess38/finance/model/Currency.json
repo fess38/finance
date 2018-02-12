@@ -1,99 +1,50 @@
 [
   {
-    "names": [
-      {
-        "language": "ru",
-        "value": "Российский рубль"
-      },
-      {
-        "language": "en",
-        "value": "Russian Ruble"
-      }
-    ],
+    "id": 1,
+    "name_ru": "Российский рубль",
+    "name_en": "Russian Ruble",
     "symbol": "₽",
     "code": "RUB"
   },
   {
-    "names": [
-      {
-        "language": "ru",
-        "value": "Доллар США"
-      },
-      {
-        "language": "en",
-        "value": "US Dollar"
-      }
-    ],
+    "id": 2,
+    "name_ru": "Доллар США",
+    "name_en": "US Dollar",
     "symbol": "$",
     "code": "USD"
   },
   {
-    "names": [
-      {
-        "language": "ru",
-        "value": "Евро"
-      },
-      {
-        "language": "en",
-        "value": "Euro"
-      }
-    ],
+    "id": 3,
+    "name_ru": "Евро",
+    "name_en": "Euro",
     "symbol": "€",
     "code": "EUR"
   },
   {
-    "names": [
-      {
-        "language": "ru",
-        "value": "Фунт стерлингов"
-      },
-      {
-        "language": "en",
-        "value": "Pound Sterling"
-      }
-    ],
+    "id": 4,
+    "name_ru": "Фунт стерлингов",
+    "name_en": "Pound Sterling",
     "symbol": "£",
     "code": "GBP"
   },
   {
-    "names": [
-      {
-        "language": "ru",
-        "value": "Швейцарский франк"
-      },
-      {
-        "language": "en",
-        "value": "Swiss Franc"
-      }
-    ],
+    "id": 5,
+    "name_ru": "Швейцарский франк",
+    "name_en": "Swiss Franc",
     "symbol": "₣",
     "code": "CHF"
   },
   {
-    "names": [
-      {
-        "language": "ru",
-        "value": "Юань"
-      },
-      {
-        "language": "en",
-        "value": "Yuan Renminbi"
-      }
-    ],
+    "id": 6,
+    "name_ru": "Юань",
+    "name_en": "Yuan Renminbi",
     "symbol": "¥",
     "code": "CNY"
   },
   {
-    "names": [
-      {
-        "language": "ru",
-        "value": "Иена"
-      },
-      {
-        "language": "en",
-        "value": "Yen"
-      }
-    ],
+    "id": 7,
+    "name_ru": "Иена",
+    "name_en": "Yen",
     "symbol": "¥",
     "code": "JPY"
   }
