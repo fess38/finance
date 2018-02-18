@@ -28,6 +28,8 @@ object UserInfo {
 }
 
 interface UserDao {
+  fun getAll(): List<User>
+
   fun save(user: User): User
 
   fun update(user: User)
@@ -50,6 +52,14 @@ class UserDaoImpl: UserDao {
   @PostConstruct
   private fun init() {
     UserInfo.userDao = this
+  }
+
+  override fun getAll(): List<User> {
+    val criteria = DetachedCriteria.forClass(User::class.java, "user")
+    val session = sessionFactory.openSession()
+    val users = sessionFactory.list<User>(criteria, session)
+    session.close()
+    return users
   }
 
   override fun save(user: User): User {

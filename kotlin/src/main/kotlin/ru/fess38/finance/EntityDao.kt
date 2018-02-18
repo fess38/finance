@@ -21,6 +21,7 @@ interface EntityDao {
   fun save(account: Account): Account
 
   fun update(account: Account)
+  fun delete(account: Account)
 
   fun find(userId: Long?): List<Account>
 }
@@ -69,6 +70,10 @@ class EntityDaoImpl: EntityDao {
 
   override fun update(account: Account) {
     update(fromAccount(account))
+  }
+
+  override fun delete(account: Account) {
+    update(fromAccount(account).copy(isDeleted = true))
   }
 
   override fun find(userId: Long?): List<Account> {

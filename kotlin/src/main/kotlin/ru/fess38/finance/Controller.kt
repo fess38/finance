@@ -23,6 +23,12 @@ class AccountController {
     entityDao.update(account)
     return mapOf("success" to true)
   }
+
+  @RequestMapping("delete", method = [(RequestMethod.POST)])
+  fun delete(@RequestBody account: Account): Any {
+    entityDao.delete(account)
+    return mapOf("success" to true)
+  }
 }
 
 @RestController

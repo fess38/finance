@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import ru.fess38.finance.model.EntityType
+import ru.fess38.finance.model.User
 import ru.fess38.finance.model.UserData
 import ru.fess38.finance.util.gzip
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -26,9 +27,18 @@ class UserDataUpdater {
     fun enqueue(userId: Long, type: EntityType) {
       queue.add(QueueObject(userId, type))
     }
+
+    data class QueueObject(val userId: Long, val type: EntityType)
   }
 
-  @Scheduled(fixedRate = 3000)
+  @Scheduled(initialDelay = 10000, fixedDelay = Long.MAX_VALUE)
+  fun initialUpdate() {
+    userDao.getAll().forEach {
+      update(it, EntityType.values().asList())
+    }
+  }
+
+  @Scheduled(fixedDelay = 3000)
   fun update() {
     while (!queue.isEmpty()) {
       update(queue.poll())
@@ -37,16 +47,20 @@ class UserDataUpdater {
 
   private fun update(queueObject: QueueObject) {
     val user = userDao.findById(queueObject.userId)
+    update(user, listOf(queueObject.type))
+  }
+
+  private fun update(user: User, entitiesToUpdate: List<EntityType>) {
     var userData = UserData.fromByteArray(user.data, gson)
 
     userData = userData.copy(currencies = entityDao.currencies())
-    userData = when (queueObject.type) {
-      EntityType.ACCOUNT -> {
-        userData.copy(accounts = entityDao.find(user.id))
+    entitiesToUpdate.forEach {
+      userData = when (it) {
+        EntityType.ACCOUNT -> {
+          userData.copy(accounts = entityDao.find(user.id))
+        }
       }
     }
     userDao.update(user.copy(data = gzip(gson.toJson(userData))))
   }
 }
-
-data class QueueObject(val userId: Long, val type: EntityType)
