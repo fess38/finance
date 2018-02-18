@@ -10,13 +10,13 @@
       </tr>
       <tr *ngFor="let account of accounts" (click)="startEdit(account)">
         <td>{{account.name}}</td>
-        <td>{{account.balance}} {{findCurrency(account.currency_id).symbol}}</td>
+        <td>{{account.balance}} {{currencySymbol(account.currencyId)}}</td>
       </tr>
     </table>
   </div>
 </div>
 
-<clr-modal [(clrModalOpen)]="isEditing" [clrModalClosable]="false" [clrModalSize]="'md'">
+<clr-modal [(clrModalOpen)]="isEditing" [clrModalClosable]="true" [clrModalSize]="'md'">
   <h3 class="modal-title" [hidden]="!isAccountAdding()">Добавить счет</h3>
   <h3 class="modal-title" [hidden]="isAccountAdding()">Редактировать счет</h3>
   <div class="modal-body">
@@ -33,15 +33,15 @@
                    required
                    name="name"
                    [(ngModel)]="newAccount.name"
+                   (blur)="update(newAccount)"
                    #name="ngModel"
                    placeholder="Название">
           </label>
 
           <div class="select" [hidden]="!isAccountAdding()">
-            <select name="currency" [(ngModel)]="newAccount.currency_id" required title="Валюта">
-              <option disabled selected>Валюта</option>
+            <select name="currency" [(ngModel)]="newAccount.currencyId" required title="Валюта">
               <option *ngFor="let currency of currencies" [ngValue]="currency.id">
-                {{currency.name_ru}} ({{currency.symbol}})
+                {{currency.nameRu}} ({{currency.symbol}})
               </option>
             </select>
           </div>
@@ -57,14 +57,10 @@
             [hidden]="!isAccountAdding()">Сохранить
     </button>
     <button type="submit"
-            class="btn btn-primary btn-sm"
-            (click)="update(newAccount)"
-            [disabled]="!accountForm.form.valid"
-            [hidden]="isAccountAdding()">Обновить
-    </button>
-    <button type="button"
-            class="btn btn-outline btn-sm"
-            (click)="stopEdit()">Отмена
+            class="btn btn-danger btn-sm"
+            (click)="delete(newAccount)"
+            [disabled]="hasTransactions(newAccount)"
+            [hidden]="isAccountAdding()">Удалить
     </button>
   </div>
 </clr-modal>

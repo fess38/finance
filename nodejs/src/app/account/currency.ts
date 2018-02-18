@@ -1,7 +1,7 @@
 export class Currency {
   id: number;
-  name_ru: string;
-  name_en: string;
+  nameRu: string;
+  nameEn: string;
   symbol: string;
   code: string;
 }

@@ -9,19 +9,19 @@ import { Currency } from '../account/currency';
 @Injectable()
 export class UserdataService {
   constructor(private http: HttpClient) {
-    this.idb.openDatabase(1, (event) => {
-      let params = { keyPath: 'id', autoIncrement: false };
-      event.currentTarget.result.createObjectStore('account', params);
-      event.currentTarget.result.createObjectStore('currency', params);
-    });
-
-    setInterval(() => this.update(), 10000);
+    setInterval(() => this.update(), 30000);
   }
 
   private idb: AngularIndexedDB = new AngularIndexedDB('finance', 1);
 
   private db(): Promise<AngularIndexedDB> {
-    return this.idb.openDatabase(1).then(() => this.idb);
+    let callback = (event) => {
+      let params = { keyPath: 'id', autoIncrement: false };
+      event.currentTarget.result.createObjectStore('account', params);
+      event.currentTarget.result.createObjectStore('currency', params);
+    };
+    return this.idb.openDatabase(1, callback)
+      .then(() => this.idb);
   }
 
   private update() {
@@ -33,18 +33,10 @@ export class UserdataService {
   }
 
   private updateUserData(data) {
-    this.db()
-      .then(db => db.clear('account'))
-      .then(() => this.db())
-      .then(db => {
-        (data['accounts'] as Account[]).forEach(account => db.add('account', account));
-      });
-    this.db()
-      .then(db => db.clear('currency'))
-      .then(() => this.db())
-      .then(db => {
-        (data['currencies'] as Currency[]).forEach(currency => db.add('currency', currency));
-      });
+    this.db().then(db => {
+      (data['accounts'] as Account[]).forEach(account => db.update('account', account));
+      (data['currencies'] as Currency[]).forEach(currency => db.update('currency', currency));
+    });
   }
 
   currencies(): Promise<Currency[]> {
@@ -53,12 +45,29 @@ export class UserdataService {
       .then(data => data as Currency[]);
   }
 
-  saveAccount(account: Account): Promise<Account> {
-    return this.http.post<Account>('/api/data/account/save', account).toPromise();
+  saveAccount(account: Account): Promise<any> {
+    let savedAccount: Account;
+    return this.http.post<Account>('/api/data/account/save', account)
+      .toPromise()
+      .then((account) => {
+        savedAccount = account;
+        return this.db();
+      })
+      .then(db => db.update('account', savedAccount));
   }
 
   updateAccount(account: Account): Promise<object> {
-    return this.http.post<Account>('/api/data/account/update', account).toPromise();
+    return this.http.post<Account>('/api/data/account/update', account)
+      .toPromise()
+      .then(() => this.db())
+      .then(db => db.update('account', account));
+  }
+
+  deleteAccount(account: Account): Promise<object> {
+    return this.http.post<Account>('/api/data/account/delete', account)
+      .toPromise()
+      .then(() => this.db())
+      .then(db => db.delete('account', account.id));
   }
 
   accounts(): Promise<Account[]> {

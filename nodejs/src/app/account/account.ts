@@ -1,8 +1,8 @@
-import { Currency } from './currency';
 
 export class Account {
-  id?: number;
-  name?: string;
-  balance?: number;
-  currency_id?: number;
+  id: number = 0;
+  name: string;
+  balance: number = 0;
+  currencyId: number;
+  transactionAmount: number = 0;
 }

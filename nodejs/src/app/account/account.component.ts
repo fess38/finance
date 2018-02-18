@@ -24,26 +24,40 @@ export class AccountComponent implements OnInit {
     this.userdataService.accounts()
       .then(accounts => this.accounts = accounts)
       .catch(error => console.error(error));
+    this.stopEdit();
   }
 
   save(account: Account) {
     this.userdataService.saveAccount(account)
-      .then(savedAccount => {
-        this.accounts.push(savedAccount);
-        this.stopEdit();
+      .then(() => {
+        this.ngOnInit();
       })
       .catch(error => {
         this.alertService.error('Ошибка сохранения');
-        this.stopEdit();
         console.error(error.message);
       });
   }
 
   update(account: Account) {
-    this.userdataService.updateAccount(account)
-      .then(() => this.stopEdit())
+    if (account.id != 0) {
+      this.userdataService.updateAccount(account)
+        .then(() => {
+          this.ngOnInit();
+        })
+        .catch(error => {
+          this.alertService.error('Ошибка сохранения');
+          console.error(error.message);
+        });
+    }
+  }
+
+  delete(account: Account) {
+    this.userdataService.deleteAccount(account)
+      .then(() => {
+        this.ngOnInit();
+      })
       .catch(error => {
-        this.alertService.error('Ошибка сохранения');
+        this.alertService.error('Ошибка удаления');
         console.error(error.message);
       });
   }
@@ -62,12 +76,21 @@ export class AccountComponent implements OnInit {
     return !this.newAccount['id'];
   }
 
-  findCurrency(currencyId: number): Currency {
-    let currency: Currency = new Currency();
+  currencySymbol(currencyId: number): String {
+    let symbol: String;
     if (this.currencies.length > 0) {
-      currency = this.currencies.filter(x => x.id == currencyId)[0];
+      symbol = this.currencies
+        .filter(x => x.id == currencyId)
+        .map(x => x.symbol)[0];
     }
-    return currency;
+    if (symbol == null) {
+      symbol = '';
+    }
+    return symbol;
+  }
+
+  hasTransactions(account: Account): boolean {
+    return account.transactionAmount > 0;
   }
 }
 
