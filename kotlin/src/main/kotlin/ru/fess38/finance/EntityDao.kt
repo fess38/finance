@@ -57,7 +57,6 @@ class EntityDaoImpl: EntityDao {
   private fun update(entity: FinanceEntity) {
     val session = sessionFactory.openSession()
     session.update(entity)
-    session.flush()
     session.close()
     UserDataUpdater.enqueue(UserInfo.id(), entity.type)
   }
