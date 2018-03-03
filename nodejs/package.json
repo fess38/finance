@@ -37,6 +37,7 @@
     "gapi": "0.0.3",
     "http-proxy": "^1.16.2",
     "ngx-cookie": "^2.0.1",
+    "protobufjs": "~6.8.6",
     "rxjs": "^5.5.5",
     "typescript": "~2.6.2",
     "zone.js": "^0.8.18"
