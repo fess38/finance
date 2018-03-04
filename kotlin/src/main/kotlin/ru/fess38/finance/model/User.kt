@@ -1,7 +1,6 @@
 package ru.fess38.finance.model
 
 import ru.fess38.finance.security.AuthType
-import ru.fess38.finance.util.gzip
 import javax.persistence.CollectionTable
 import javax.persistence.Column
 import javax.persistence.ElementCollection
@@ -27,16 +26,13 @@ data class User(
         initialValue = 1000)
     val id: Long = 0,
 
-    @Column(name = "outer_id", updatable = false, nullable = false,
+    @Column(name = "outer_id", nullable = false, updatable = false,
         unique = true, length = 50)
     val outerId: String,
 
-    @Column(name = "auth_type", updatable = false, nullable = false, length = 25)
+    @Column(name = "auth_type", nullable = false, updatable = false, length = 25)
     @Enumerated(EnumType.STRING)
     val authType: AuthType = AuthType.UNKNOWN,
-
-    @Column(name = "data", nullable = false, columnDefinition = "bytea")
-    val data: ByteArray = gzip("{}"),
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(schema = "model", name = "user_session",
@@ -54,7 +50,7 @@ data class Session(
     @Column(nullable = false)
     val expired: Long = 0,
 
-    @Column(name = "role", updatable = false, nullable = false, length = 10)
+    @Column(name = "role", nullable = false, updatable = false, length = 10)
     @Enumerated(EnumType.STRING)
     val role: Role = Role.WRITE
 )

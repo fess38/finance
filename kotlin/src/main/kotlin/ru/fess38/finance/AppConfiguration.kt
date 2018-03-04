@@ -3,8 +3,6 @@ package ru.fess38.finance
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.json.jackson2.JacksonFactory
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.typesafe.config.Config
 import com.typesafe.config.ConfigFactory
 import com.zaxxer.hikari.HikariConfig
@@ -13,16 +11,14 @@ import org.hibernate.SessionFactory
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.http.converter.json.GsonHttpMessageConverter
+import org.springframework.http.converter.protobuf.ProtobufHttpMessageConverter
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.orm.hibernate5.HibernateTransactionManager
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean
 import org.springframework.transaction.PlatformTransactionManager
 import ru.fess38.finance.model.FinanceEntity
 import ru.fess38.finance.model.User
-import ru.fess38.finance.util.LocalDateConverter
 import ru.fess38.finance.util.toProperties
-import java.time.LocalDate
 import javax.sql.DataSource
 
 @Configuration
@@ -62,21 +58,14 @@ class AppConfiguration {
   }
 
   @Bean
-  fun gson(): Gson {
-    val gsonBuilder = GsonBuilder()
-    gsonBuilder.registerTypeAdapter(LocalDate::class.java, LocalDateConverter())
-    return gsonBuilder.create()
+  fun protobufHttpMessageConverter(): ProtobufHttpMessageConverter {
+    return ProtobufHttpMessageConverter()
   }
 
   @Bean
-  fun gsonHttpMessageConverter(gson: Gson): GsonHttpMessageConverter {
-    val gsonHttpMessageConverter = GsonHttpMessageConverter()
-    gsonHttpMessageConverter.gson = gson
-    return gsonHttpMessageConverter
+  fun httpMessageConverters(converter: ProtobufHttpMessageConverter): HttpMessageConverters {
+    return HttpMessageConverters(converter)
   }
-
-  @Bean
-  fun httpMessageConverters(converter: GsonHttpMessageConverter) = HttpMessageConverters(converter)
 
   @Bean
   fun googleIdTokenVerifier(config: Config) = GoogleIdTokenVerifier

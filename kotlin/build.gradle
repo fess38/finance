@@ -2,7 +2,7 @@ group "ru.fess38.finance"
 version "0.1"
 
 buildscript {
-  ext.kotlin_version = "1.2.21"
+  ext.kotlin_version = "1.2.30"
   ext.spring_version = "4.3.10.RELEASE"
   ext.spring_boot_version = "1.5.4.RELEASE"
   ext.hibernate_version = "5.1.0.Final"
@@ -71,7 +71,6 @@ dependencies {
   compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
   compile "com.zaxxer:HikariCP:2.5.1"
   compile "org.postgresql:postgresql:42.1.3"
-  compile "com.google.code.gson:gson:2.8.0"
   compile "com.google.guava:guava:19.0"
   compile "com.typesafe:config:1.3.1"
   compile "com.google.api-client:google-api-client:1.22.0"
@@ -101,4 +100,7 @@ sourceSets {
   main.kotlin.srcDirs += "src/main/kotlin"
   main.resources.srcDirs += "src/main/resources"
   main.proto.srcDirs += "src/main/proto"
+  test.kotlin.srcDirs += "src/test/kotlin"
+  test.resources.srcDirs += "src/test/resources"
+  test.proto.srcDirs += "src/test/proto"
 }

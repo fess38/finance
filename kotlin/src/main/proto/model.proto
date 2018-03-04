@@ -1,0 +1,39 @@
+syntax = "proto2";
+
+import "google/protobuf/wrappers.proto";
+
+option java_package = "ru.fess38.finance.model";
+option java_outer_classname = "Model";
+
+enum EntityType {
+    UNDEFINED = 0;
+    DUMP = 1;
+    CURRENCY = 2;
+    ACCOUNT = 3;
+}
+
+message Dump {
+    optional int64 id = 1 [default = 0];
+    repeated Account accounts = 2;
+    repeated Currency currencies = 3;
+}
+
+message Currency {
+    required int64 id = 1;
+    required string name_ru = 2;
+    required string name_en = 3;
+    required string symbol = 4;
+    required string code = 5;
+}
+
+message Currencies {
+    repeated Currency items = 1;
+}
+
+message Account {
+    optional int64 id = 1 [default = 0];
+    required string name = 2;
+    optional int64 balance = 3 [default = 0];
+    required int64 currency_id = 4;
+    optional int64 transaction_amount = 5 [default = 0];
+}

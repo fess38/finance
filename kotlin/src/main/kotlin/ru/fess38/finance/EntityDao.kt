@@ -1,29 +1,31 @@
 package ru.fess38.finance
 
-import com.google.gson.Gson
+import com.google.protobuf.Message
+import com.googlecode.protobuf.format.JsonFormat
 import org.hibernate.SessionFactory
 import org.hibernate.criterion.DetachedCriteria
 import org.hibernate.criterion.Restrictions
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
-import ru.fess38.finance.model.Account
-import ru.fess38.finance.model.Currency
 import ru.fess38.finance.model.EntityType
 import ru.fess38.finance.model.FinanceEntity
-import ru.fess38.finance.util.fromJson
-import ru.fess38.finance.util.gzip
+import ru.fess38.finance.model.Model
 import ru.fess38.finance.util.list
+import java.io.ByteArrayInputStream
 
 interface EntityDao {
-  fun currencies(): List<Currency>
+  fun save(value: Message, userId: Long? = null): Message
 
-  fun save(account: Account): Account
+  fun update(value: Message, userId: Long? = null)
 
-  fun update(account: Account)
-  fun delete(account: Account)
+  fun delete(value: Message, userId: Long? = null)
 
-  fun find(userId: Long?): List<Account>
+  fun currencies(): List<Model.Currency>
+
+  fun accounts(userId: Long?): List<Model.Account>
+
+  fun dump(userId: Long?): Model.Dump
 }
 
 @Repository
@@ -31,66 +33,67 @@ interface EntityDao {
 class EntityDaoImpl: EntityDao {
   @Autowired
   lateinit var sessionFactory: SessionFactory
+  private var currencies: List<Model.Currency> = listOf()
 
-  @Autowired
-  lateinit var gson: Gson
+  override fun save(value: Message, userId: Long?): Message {
+    val financeEntity = FinanceEntity.from(value, UserInfo.resolve(userId))
+    save(financeEntity)
+    return when (value) {
+      is Model.Dump -> value.toBuilder().setId(financeEntity.id).build()
+      is Model.Account -> value.toBuilder().setId(financeEntity.id).build()
+      else -> throw IllegalArgumentException("Unknown entity: $value")
+    }
+  }
 
-  private var currencies: List<Currency> = listOf()
+  private fun save(financeEntity: FinanceEntity): FinanceEntity {
+    val session = sessionFactory.openSession()
+    session.save(financeEntity)
+    session.flush()
+    session.close()
+    UserDataUpdater.enqueue(financeEntity.userId, financeEntity.type)
+    return financeEntity
+  }
 
-  override fun currencies(): List<Currency> {
+  override fun update(value: Message, userId: Long?) {
+    update(FinanceEntity.from(value, UserInfo.resolve(userId)))
+  }
+
+  override fun delete(value: Message, userId: Long?) {
+    update(FinanceEntity.from(value, UserInfo.resolve(userId)).copy(isDeleted = true))
+  }
+
+  private fun update(financeEntity: FinanceEntity) {
+    val session = sessionFactory.openSession()
+    session.update(financeEntity)
+    session.flush()
+    session.close()
+    UserDataUpdater.enqueue(financeEntity.userId, financeEntity.type)
+  }
+
+  override fun currencies(): List<Model.Currency> {
     if (currencies.isEmpty()) {
       val path = "/ru/fess38/finance/model/Currency.json"
-      currencies = gson.fromJson(this.javaClass.getResource(path).readText())
+      val json = this.javaClass.getResource(path).readText()
+      val currenciesBuilder = Model.Currencies.newBuilder()
+      JsonFormat().merge(ByteArrayInputStream(json.toByteArray()), currenciesBuilder)
+      currencies = currenciesBuilder.build().itemsList
     }
     return currencies.toList()
   }
 
-  private fun save(entity: FinanceEntity): FinanceEntity {
-    val session = sessionFactory.openSession()
-    session.save(entity)
-    session.flush()
-    session.close()
-    UserDataUpdater.enqueue(UserInfo.id(), entity.type)
-    return entity
+  override fun accounts(userId: Long?): List<Model.Account> {
+    return find(userId, EntityType.ACCOUNT).map {it.toAccount()}
   }
 
-  private fun update(entity: FinanceEntity) {
-    val session = sessionFactory.openSession()
-    session.update(entity)
-    session.close()
-    UserDataUpdater.enqueue(UserInfo.id(), entity.type)
+  override fun dump(userId: Long?): Model.Dump {
+    return find(userId, EntityType.DUMP).firstOrNull()?.toDump() ?: Model.Dump.newBuilder().build()
   }
 
-  override fun save(account: Account): Account {
-    val entity = fromAccount(account)
-    save(entity)
-    return account.copy(id = entity.id)
-  }
-
-  override fun update(account: Account) {
-    update(fromAccount(account))
-  }
-
-  override fun delete(account: Account) {
-    update(fromAccount(account).copy(isDeleted = true))
-  }
-
-  override fun find(userId: Long?): List<Account> {
+  private fun find(userId: Long?, entityType: EntityType): List<FinanceEntity> {
     val criteria = DetachedCriteria.forClass(FinanceEntity::class.java)
-        .add(Restrictions.eq("userId", userId ?: UserInfo.id()))
-        .add(Restrictions.eq("type", EntityType.ACCOUNT))
+        .add(Restrictions.eq("userId", UserInfo.resolve(userId)))
+        .add(Restrictions.eq("type", entityType))
         .add(Restrictions.eq("isDeleted", false))
-    val entities: List<FinanceEntity> = sessionFactory.list(criteria)
-    return entities.map {it.toAccount(gson)}
-  }
-
-  private fun fromAccount(account: Account): FinanceEntity {
-    return FinanceEntity(
-        id = account.id,
-        type = EntityType.ACCOUNT,
-        userId = UserInfo.id(),
-        modified = System.currentTimeMillis(),
-        data = gzip(gson.toJson(account))
-    )
+    return sessionFactory.list(criteria)
   }
 }

@@ -1,7 +1,6 @@
 package ru.fess38.finance.util
 
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.google.protobuf.Message
 import com.typesafe.config.Config
 import org.hibernate.Session
 import org.hibernate.SessionFactory
@@ -17,21 +16,18 @@ fun Config.toProperties(): Properties {
   return properties
 }
 
-inline fun <reified T> Gson.fromJson(json: String): T {
-  return this.fromJson<T>(json, object: TypeToken<T>() {}.type)
-}
-
 inline fun <reified T> SessionFactory.list(criteria: DetachedCriteria,
                                            session: Session = this.currentSession): List<T> {
   return criteria.getExecutableCriteria(session).list() as List<T>
 }
 
-fun gzip(value: String): ByteArray {
-  val bos = ByteArrayOutputStream()
-  GZIPOutputStream(bos).bufferedWriter().use {it.write(value)}
-  return bos.toByteArray()
+fun gzip(message: Message): ByteArray {
+  return ByteArrayOutputStream()
+      .also {GZIPOutputStream(it).apply {write(message.toByteArray())}.apply {close()}}
+      .apply {close()}
+      .toByteArray()
 }
 
-fun gunzip(value: ByteArray): String {
-  return GZIPInputStream(value.inputStream()).bufferedReader().use {it.readText()}
+fun gunzip(value: ByteArray): ByteArray {
+  return GZIPInputStream(value.inputStream()).readBytes()
 }

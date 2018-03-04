@@ -24,7 +24,7 @@ object UserInfo {
     return userDao.find(token) ?: throw IllegalArgumentException("Invalid token: $token")
   }
 
-  fun id() = get().id
+  fun resolve(userId: Long? = null) = userId ?: get().id
 }
 
 interface UserDao {
@@ -110,7 +110,7 @@ class UserDaoImpl: UserDao {
 
   override fun findById(userId: Long?): User {
     val criteria = DetachedCriteria.forClass(User::class.java)
-        .add(Restrictions.eq("id", userId ?: UserInfo.id()))
+        .add(Restrictions.eq("id", UserInfo.resolve(userId)))
     val session = sessionFactory.openSession()
     val user = sessionFactory.list<User>(criteria, session).first()
     session.close()

@@ -1,51 +1,53 @@
-[
-  {
-    "id": 1,
-    "name_ru": "Российский рубль",
-    "name_en": "Russian Ruble",
-    "symbol": "₽",
-    "code": "RUB"
-  },
-  {
-    "id": 2,
-    "name_ru": "Доллар США",
-    "name_en": "US Dollar",
-    "symbol": "$",
-    "code": "USD"
-  },
-  {
-    "id": 3,
-    "name_ru": "Евро",
-    "name_en": "Euro",
-    "symbol": "€",
-    "code": "EUR"
-  },
-  {
-    "id": 4,
-    "name_ru": "Фунт стерлингов",
-    "name_en": "Pound Sterling",
-    "symbol": "£",
-    "code": "GBP"
-  },
-  {
-    "id": 5,
-    "name_ru": "Швейцарский франк",
-    "name_en": "Swiss Franc",
-    "symbol": "₣",
-    "code": "CHF"
-  },
-  {
-    "id": 6,
-    "name_ru": "Юань",
-    "name_en": "Yuan Renminbi",
-    "symbol": "¥",
-    "code": "CNY"
-  },
-  {
-    "id": 7,
-    "name_ru": "Иена",
-    "name_en": "Yen",
-    "symbol": "¥",
-    "code": "JPY"
-  }
-]
+{
+  "items": [
+    {
+      "id": 1,
+      "name_ru": "Российский рубль",
+      "name_en": "Russian Ruble",
+      "symbol": "₽",
+      "code": "RUB"
+    },
+    {
+      "id": 2,
+      "name_ru": "Доллар США",
+      "name_en": "US Dollar",
+      "symbol": "$",
+      "code": "USD"
+    },
+    {
+      "id": 3,
+      "name_ru": "Евро",
+      "name_en": "Euro",
+      "symbol": "€",
+      "code": "EUR"
+    },
+    {
+      "id": 4,
+      "name_ru": "Фунт стерлингов",
+      "name_en": "Pound Sterling",
+      "symbol": "£",
+      "code": "GBP"
+    },
+    {
+      "id": 5,
+      "name_ru": "Швейцарский франк",
+      "name_en": "Swiss Franc",
+      "symbol": "₣",
+      "code": "CHF"
+    },
+    {
+      "id": 6,
+      "name_ru": "Юань",
+      "name_en": "Yuan Renminbi",
+      "symbol": "¥",
+      "code": "CNY"
+    },
+    {
+      "id": 7,
+      "name_ru": "Иена",
+      "name_en": "Yen",
+      "symbol": "¥",
+      "code": "JPY"
+    }
+  ]
+}
