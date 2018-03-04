@@ -46,10 +46,7 @@ class EntityDaoImpl: EntityDao {
   }
 
   private fun save(financeEntity: FinanceEntity): FinanceEntity {
-    val session = sessionFactory.openSession()
-    session.save(financeEntity)
-    session.flush()
-    session.close()
+    sessionFactory.openSession().apply {save(financeEntity)}.apply {flush()}.apply {close()}
     UserDataUpdater.enqueue(financeEntity.userId, financeEntity.type)
     return financeEntity
   }
@@ -63,10 +60,7 @@ class EntityDaoImpl: EntityDao {
   }
 
   private fun update(financeEntity: FinanceEntity) {
-    val session = sessionFactory.openSession()
-    session.update(financeEntity)
-    session.flush()
-    session.close()
+    sessionFactory.openSession().apply {update(financeEntity)}.apply {flush()}.apply {close()}
     UserDataUpdater.enqueue(financeEntity.userId, financeEntity.type)
   }
 

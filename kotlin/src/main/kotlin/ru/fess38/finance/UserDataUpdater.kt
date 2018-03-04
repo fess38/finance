@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import ru.fess38.finance.model.EntityType
-import ru.fess38.finance.model.Model
 import ru.fess38.finance.model.User
 import java.util.concurrent.ConcurrentLinkedQueue
 
@@ -48,7 +47,7 @@ class UserDataUpdater {
   }
 
   private fun update(user: User, entitiesToUpdate: List<EntityType>) {
-    val dumpBuilder: Model.Dump.Builder = entityDao.dump(user.id).toBuilder()
+    val dumpBuilder = entityDao.dump(user.id).toBuilder()
     dumpBuilder.clearCurrencies().addAllCurrencies(entityDao.currencies())
 
     entitiesToUpdate.forEach {
@@ -59,10 +58,7 @@ class UserDataUpdater {
       }
     }
     val dump = dumpBuilder.build()
-    if (dump.id == 0L) {
-      entityDao.save(dump, user.id)
-    } else {
-      entityDao.update(dump, user.id)
-    }
+    dump.takeIf {it.id == 0L}?.also {entityDao.save(it, user.id)}
+    dump.takeUnless {it.id == 0L}?.also {entityDao.update(it, user.id)}
   }
 }

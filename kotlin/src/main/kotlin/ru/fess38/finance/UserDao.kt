@@ -57,24 +57,16 @@ class UserDaoImpl: UserDao {
   override fun getAll(): List<User> {
     val criteria = DetachedCriteria.forClass(User::class.java, "user")
     val session = sessionFactory.openSession()
-    val users = sessionFactory.list<User>(criteria, session)
-    session.close()
-    return users
+    return sessionFactory.list<User>(criteria, session).also {session.close()}
   }
 
   override fun save(user: User): User {
-    val session = sessionFactory.openSession()
-    session.save(user)
-    session.flush()
-    session.close()
+    sessionFactory.openSession().apply {save(user)}.apply {flush()}.apply {close()}
     return user
   }
 
   override fun update(user: User) {
-    val session = sessionFactory.openSession()
-    session.update(user)
-    session.flush()
-    session.close()
+    sessionFactory.openSession().apply {update(user)}.apply {flush()}.apply {close()}
   }
 
   override fun saveOrUpdate(outerId: String, authType: AuthType, session: Session) {
@@ -92,9 +84,7 @@ class UserDaoImpl: UserDao {
         .add(Restrictions.eq("outerId", outerId))
         .add(Restrictions.eq("authType", authType))
     val session = sessionFactory.openSession()
-    val user = sessionFactory.list<User>(criteria, session).firstOrNull()
-    session.close()
-    return user
+    return sessionFactory.list<User>(criteria, session).firstOrNull().also {session.close()}
   }
 
   override fun find(token: String): User? {
@@ -103,18 +93,14 @@ class UserDaoImpl: UserDao {
         .add(Restrictions.eq("s.token", token))
         .add(Restrictions.gt("s.expired", System.currentTimeMillis()))
     val session = sessionFactory.openSession()
-    val user = sessionFactory.list<User>(criteria, session).firstOrNull()
-    session.close()
-    return user
+    return sessionFactory.list<User>(criteria, session).firstOrNull().also {session.close()}
   }
 
   override fun findById(userId: Long?): User {
     val criteria = DetachedCriteria.forClass(User::class.java)
         .add(Restrictions.eq("id", UserInfo.resolve(userId)))
     val session = sessionFactory.openSession()
-    val user = sessionFactory.list<User>(criteria, session).first()
-    session.close()
-    return user
+    return sessionFactory.list<User>(criteria, session).first().also {session.close()}
   }
 
   override fun revoke(token: String) {
