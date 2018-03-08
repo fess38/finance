@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertService } from '../alert/alert.service';
+import { Account, Currency } from '../model';
 import { UserdataService } from '../utils/userdata.service';
-import { Account } from './account';
-import { Currency } from './currency';
 
 @Component({
   templateUrl: 'account.component.html'

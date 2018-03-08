@@ -3,8 +3,7 @@ import { AngularIndexedDB } from 'angular2-indexeddb';
 import 'rxjs/add/operator/toPromise';
 import { HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/timeout';
-import { Account } from '../account/account';
-import { Currency } from '../account/currency';
+import { Account, Currency } from '../model';
 
 @Injectable()
 export class UserdataService {
@@ -25,7 +24,7 @@ export class UserdataService {
   }
 
   private update() {
-    this.http.get('/api/data/user/get')
+    this.http.get('/api/data/dump/get')
       .timeout(5000)
       .toPromise()
       .then(data => this.updateUserData(data))
