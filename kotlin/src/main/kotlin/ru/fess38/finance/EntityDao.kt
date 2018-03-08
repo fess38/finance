@@ -10,7 +10,10 @@ import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 import ru.fess38.finance.model.EntityType
 import ru.fess38.finance.model.FinanceEntity
-import ru.fess38.finance.model.Model
+import ru.fess38.finance.model.Model.Account
+import ru.fess38.finance.model.Model.Currencies
+import ru.fess38.finance.model.Model.Currency
+import ru.fess38.finance.model.Model.Dump
 import ru.fess38.finance.util.list
 import java.io.ByteArrayInputStream
 
@@ -21,11 +24,11 @@ interface EntityDao {
 
   fun delete(value: Message, userId: Long? = null)
 
-  fun currencies(): List<Model.Currency>
+  fun currencies(): List<Currency>
 
-  fun accounts(userId: Long?): List<Model.Account>
+  fun accounts(userId: Long?): List<Account>
 
-  fun dump(userId: Long?): Model.Dump
+  fun dump(userId: Long?): Dump
 }
 
 @Repository
@@ -33,14 +36,14 @@ interface EntityDao {
 class EntityDaoImpl: EntityDao {
   @Autowired
   lateinit var sessionFactory: SessionFactory
-  private var currencies: List<Model.Currency> = listOf()
+  private var currencies: List<Currency> = listOf()
 
   override fun save(value: Message, userId: Long?): Message {
     val financeEntity = FinanceEntity.from(value, UserInfo.resolve(userId))
     save(financeEntity)
     return when (value) {
-      is Model.Dump -> value.toBuilder().setId(financeEntity.id).build()
-      is Model.Account -> value.toBuilder().setId(financeEntity.id).build()
+      is Dump -> value.toBuilder().setId(financeEntity.id).build()
+      is Account -> value.toBuilder().setId(financeEntity.id).build()
       else -> throw IllegalArgumentException("Unknown entity: $value")
     }
   }
@@ -64,23 +67,23 @@ class EntityDaoImpl: EntityDao {
     UserDataUpdater.enqueue(financeEntity.userId, financeEntity.type)
   }
 
-  override fun currencies(): List<Model.Currency> {
+  override fun currencies(): List<Currency> {
     if (currencies.isEmpty()) {
       val path = "/ru/fess38/finance/model/Currency.json"
       val json = this.javaClass.getResource(path).readText()
-      val currenciesBuilder = Model.Currencies.newBuilder()
+      val currenciesBuilder = Currencies.newBuilder()
       JsonFormat().merge(ByteArrayInputStream(json.toByteArray()), currenciesBuilder)
       currencies = currenciesBuilder.build().itemsList
     }
     return currencies.toList()
   }
 
-  override fun accounts(userId: Long?): List<Model.Account> {
+  override fun accounts(userId: Long?): List<Account> {
     return find(userId, EntityType.ACCOUNT).map {it.toAccount()}
   }
 
-  override fun dump(userId: Long?): Model.Dump {
-    return find(userId, EntityType.DUMP).firstOrNull()?.toDump() ?: Model.Dump.newBuilder().build()
+  override fun dump(userId: Long?): Dump {
+    return find(userId, EntityType.DUMP).firstOrNull()?.toDump() ?: Dump.newBuilder().build()
   }
 
   private fun find(userId: Long?, entityType: EntityType): List<FinanceEntity> {

@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
+import ru.fess38.finance.model.Model.RefreshToken.AuthType
 import ru.fess38.finance.model.Session
 import ru.fess38.finance.model.User
-import ru.fess38.finance.security.AuthType
 import ru.fess38.finance.security.TokenAuthentication
 import ru.fess38.finance.util.list
 import javax.annotation.PostConstruct

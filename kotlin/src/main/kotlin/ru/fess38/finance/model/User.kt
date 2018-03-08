@@ -1,6 +1,6 @@
 package ru.fess38.finance.model
 
-import ru.fess38.finance.security.AuthType
+import ru.fess38.finance.model.Model.RefreshToken.AuthType
 import javax.persistence.CollectionTable
 import javax.persistence.Column
 import javax.persistence.ElementCollection
@@ -32,7 +32,7 @@ data class User(
 
     @Column(name = "auth_type", nullable = false, updatable = false, length = 25)
     @Enumerated(EnumType.STRING)
-    val authType: AuthType = AuthType.UNKNOWN,
+    val authType: AuthType,
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(schema = "model", name = "user_session",

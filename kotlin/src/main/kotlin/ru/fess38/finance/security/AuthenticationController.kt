@@ -1,20 +1,31 @@
 package ru.fess38.finance.security
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
+import com.google.protobuf.BoolValue
+import com.google.protobuf.StringValue
 import com.typesafe.config.Config
 import org.apache.commons.text.CharacterPredicates
 import org.apache.commons.text.RandomStringGenerator
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.BadCredentialsException
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
 import ru.fess38.finance.UserDao
+import ru.fess38.finance.model.Model.AccessToken
+import ru.fess38.finance.model.Model.RefreshToken.AuthType
+import ru.fess38.finance.model.Model.RefreshToken
 import ru.fess38.finance.model.Session
 import java.time.Duration
 
 @RestController
+@RequestMapping(
+    path = ["/api"],
+    produces = ["application/x-protobuf"],
+    consumes = ["application/x-protobuf"]
+)
 class AuthenticationController {
   @Autowired
   lateinit var config: Config
@@ -30,15 +41,15 @@ class AuthenticationController {
       .withinRange(48, 122)
       .build()!!
 
-  @RequestMapping("/api/auth/google-client-id", method = [(RequestMethod.GET)])
-  fun googleclientId(): Map<String, String> {
-    return mapOf(Pair("value", config.getString("security.google.clientId")))
+  @GetMapping("/auth/google-client-id")
+  fun googleclientId(): StringValue {
+    return StringValue.of(config.getString("security.google.clientId"))
   }
 
-  @RequestMapping("/api/auth", method = [(RequestMethod.POST)])
-  fun auth(@RequestBody refreshToken: RefreshToken): Session {
+  @PostMapping("/auth")
+  fun auth(@RequestBody refreshToken: RefreshToken): AccessToken {
     val authType = refreshToken.type
-    val token = refreshToken.token
+    val token = refreshToken.value
     when (authType) {
       AuthType.GOOGLE -> {
         val googleIdToken = googleIdTokenVerifier.verify(token) ?:
@@ -46,21 +57,19 @@ class AuthenticationController {
         val googleId = googleIdToken.payload.subject
         val accessToken = tokenGenerator.generate(50)
         val expired = System.currentTimeMillis() + Duration.ofDays(90).toMillis()
-        val session = Session(accessToken, expired = expired)
+        val session = Session(token = accessToken, expired = expired)
         userDao.saveOrUpdate(googleId, authType, session)
-        return session
+        return AccessToken.newBuilder().setValue(accessToken).setExpired(expired).build()
       }
       else -> throw BadCredentialsException("Not supported auth type: $authType")
     }
   }
 
-  @RequestMapping("/api/auth/validate", method = [(RequestMethod.POST)])
-  fun validate(@RequestBody refreshToken: RefreshToken): Any {
-    return mapOf(Pair("success", userDao.find(refreshToken.token) != null))
+  @PostMapping("/auth/validate")
+  fun validate(@RequestBody accessToken: AccessToken): BoolValue {
+    return BoolValue.of(userDao.find(accessToken.value) != null)
   }
 
-  @RequestMapping("/api/auth/revoke-token", method = [(RequestMethod.POST)])
-  fun revokeToken(@RequestBody refreshToken: RefreshToken) = userDao.revoke(refreshToken.token)
+  @PostMapping("/auth/revoke-token")
+  fun revokeToken(@RequestBody accessToken: AccessToken) = userDao.revoke(accessToken.value)
 }
-
-data class RefreshToken(val token: String, val type: AuthType = AuthType.UNKNOWN)

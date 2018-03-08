@@ -1,6 +1,8 @@
 package ru.fess38.finance.model
 
 import com.google.protobuf.Message
+import ru.fess38.finance.model.Model.Account
+import ru.fess38.finance.model.Model.Dump
 import ru.fess38.finance.util.gunzip
 import ru.fess38.finance.util.gzip
 import java.time.LocalDate
@@ -48,11 +50,11 @@ data class FinanceEntity(
       val entityType: EntityType
 
       when (message) {
-        is Model.Account -> {
+        is Account -> {
           id = message.id
           entityType = EntityType.ACCOUNT
         }
-        is Model.Dump -> {
+        is Dump -> {
           id = message.id
           entityType = EntityType.DUMP
         }
@@ -68,12 +70,12 @@ data class FinanceEntity(
     }
   }
 
-  fun toDump(): Model.Dump {
-    return Model.Dump.parseFrom(gunzip(data)).toBuilder().setId(id).build()
+  fun toDump(): Dump {
+    return Dump.parseFrom(gunzip(data)).toBuilder().setId(id).build()
   }
 
-  fun toAccount(): Model.Account {
-    return Model.Account.parseFrom(gunzip(data)).toBuilder().setId(id).build()
+  fun toAccount(): Account {
+    return Account.parseFrom(gunzip(data)).toBuilder().setId(id).build()
   }
 }
 
