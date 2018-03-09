@@ -3,6 +3,7 @@ package ru.fess38.finance
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.json.jackson2.JacksonFactory
+import com.googlecode.protobuf.format.JsonFormat
 import com.typesafe.config.Config
 import com.typesafe.config.ConfigFactory
 import com.zaxxer.hikari.HikariConfig
@@ -17,12 +18,29 @@ import org.springframework.orm.hibernate5.HibernateTransactionManager
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean
 import org.springframework.transaction.PlatformTransactionManager
 import ru.fess38.finance.model.FinanceEntity
+import ru.fess38.finance.model.Model.Currencies
+import ru.fess38.finance.model.Model.Currency
 import ru.fess38.finance.model.User
 import ru.fess38.finance.util.toProperties
+import java.io.ByteArrayInputStream
 import javax.sql.DataSource
 
 @Configuration
 class AppConfiguration {
+  companion object {
+    val CURRENCIES: List<Currency> = currencies()
+
+    private fun currencies(): List<Currency> {
+      val currencies: List<Currency>
+      val path = "/ru/fess38/finance/model/Currency.json"
+      val json = this.javaClass.getResource(path).readText()
+      val currenciesBuilder = Currencies.newBuilder()
+      JsonFormat().merge(ByteArrayInputStream(json.toByteArray()), currenciesBuilder)
+      currencies = currenciesBuilder.build().itemsList
+      return currencies.toList()
+    }
+  }
+
   @Bean
   fun config() = ConfigFactory.load().getConfig(System.getenv("env") ?: "dev")!!
 

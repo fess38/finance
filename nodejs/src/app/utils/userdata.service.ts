@@ -63,29 +63,15 @@ export class UserdataService {
       .then(db => db.update('account', savedAccount));
   }
 
-  updateAccount(account: Account): Promise<BoolValue> {
+  updateAccount(account: Account): Promise<any> {
     return this.http.post('/api/data/account/update', Account.encode(account))
-      .then(data => {
-        const success = BoolValue.decode(data).value;
-        if (success) {
-          return this.db();
-        } else {
-          throw new Error('Can not update account');
-        }
-      })
+      .then(() => this.db())
       .then(db => db.update('account', account));
   }
 
-  deleteAccount(account: Account): Promise<BoolValue> {
+  deleteAccount(account: Account): Promise<any> {
     return this.http.post('/api/data/account/delete', Account.encode(account))
-      .then(data => {
-        const success = BoolValue.decode(data).value;
-        if (success) {
-          return this.db();
-        } else {
-          throw new Error('Can not delete account');
-        }
-      })
+      .then(() => this.db())
       .then(db => db.delete('account', account.id));
   }
 }

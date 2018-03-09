@@ -16,6 +16,10 @@ export class AccountComponent implements OnInit {
   newAccount: Account = new Account();
 
   ngOnInit() {
+    this.updateView();
+  }
+
+  private updateView() {
     this.userdataService.currencies()
       .then(currencies => this.currencies = currencies)
       .catch(error => console.error(error));
@@ -23,12 +27,11 @@ export class AccountComponent implements OnInit {
     this.userdataService.accounts()
       .then(accounts => this.accounts = accounts)
       .catch(error => console.error(error));
-    this.stopEdit();
   }
 
   save(account: Account) {
     this.userdataService.saveAccount(account)
-      .then(() => this.ngOnInit())
+      .then(() => this.updateView())
       .catch(error => {
         this.alertService.error('Ошибка сохранения');
         console.error(error.message);
@@ -39,11 +42,13 @@ export class AccountComponent implements OnInit {
     if (account.id != 0) {
       this.userdataService.updateAccount(account)
         .then(() => {
-          this.ngOnInit();
+          this.updateView();
+          this.stopEdit();
         })
         .catch(error => {
-          this.alertService.error('Ошибка сохранения');
+          this.alertService.error('Ошибка обновления');
           console.error(error.message);
+          this.updateView();
         });
     }
   }
@@ -51,11 +56,13 @@ export class AccountComponent implements OnInit {
   delete(account: Account) {
     this.userdataService.deleteAccount(account)
       .then(() => {
-        this.ngOnInit();
+        this.updateView();
+        this.stopEdit();
       })
       .catch(error => {
         this.alertService.error('Ошибка удаления');
         console.error(error.message);
+        this.updateView();
       });
   }
 

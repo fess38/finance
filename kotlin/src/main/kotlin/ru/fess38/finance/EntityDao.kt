@@ -1,7 +1,6 @@
 package ru.fess38.finance
 
 import com.google.protobuf.Message
-import com.googlecode.protobuf.format.JsonFormat
 import org.hibernate.SessionFactory
 import org.hibernate.criterion.DetachedCriteria
 import org.hibernate.criterion.Restrictions
@@ -11,11 +10,9 @@ import org.springframework.transaction.annotation.Transactional
 import ru.fess38.finance.model.EntityType
 import ru.fess38.finance.model.FinanceEntity
 import ru.fess38.finance.model.Model.Account
-import ru.fess38.finance.model.Model.Currencies
 import ru.fess38.finance.model.Model.Currency
 import ru.fess38.finance.model.Model.Dump
 import ru.fess38.finance.util.list
-import java.io.ByteArrayInputStream
 
 interface EntityDao {
   fun save(value: Message, userId: Long? = null): Message
@@ -25,6 +22,8 @@ interface EntityDao {
   fun delete(value: Message, userId: Long? = null)
 
   fun currencies(): List<Currency>
+
+  fun account(userId: Long? = null, id: Long): Account?
 
   fun accounts(userId: Long? = null): List<Account>
 
@@ -67,15 +66,10 @@ class EntityDaoImpl: EntityDao {
     UserDataUpdater.enqueue(financeEntity.userId, financeEntity.type)
   }
 
-  override fun currencies(): List<Currency> {
-    if (currencies.isEmpty()) {
-      val path = "/ru/fess38/finance/model/Currency.json"
-      val json = this.javaClass.getResource(path).readText()
-      val currenciesBuilder = Currencies.newBuilder()
-      JsonFormat().merge(ByteArrayInputStream(json.toByteArray()), currenciesBuilder)
-      currencies = currenciesBuilder.build().itemsList
-    }
-    return currencies.toList()
+  override fun currencies(): List<Currency> = AppConfiguration.CURRENCIES
+
+  override fun account(userId: Long?, id: Long): Account? {
+    return find(userId, EntityType.ACCOUNT, listOf(id)).map {it.toAccount()}.firstOrNull()
   }
 
   override fun accounts(userId: Long?): List<Account> {
@@ -86,11 +80,15 @@ class EntityDaoImpl: EntityDao {
     return find(userId, EntityType.DUMP).firstOrNull()?.toDump() ?: Dump.newBuilder().build()
   }
 
-  private fun find(userId: Long?, entityType: EntityType): List<FinanceEntity> {
+  private fun find(userId: Long?, entityType: EntityType, ids: List<Long> = listOf()):
+      List<FinanceEntity> {
     val criteria = DetachedCriteria.forClass(FinanceEntity::class.java)
         .add(Restrictions.eq("userId", UserInfo.resolve(userId)))
         .add(Restrictions.eq("type", entityType))
         .add(Restrictions.eq("isDeleted", false))
+    if (!ids.isEmpty()) {
+      criteria.add(Restrictions.`in`("id", ids))
+    }
     return sessionFactory.list(criteria)
   }
 }

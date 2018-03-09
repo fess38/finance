@@ -10,7 +10,7 @@
       </tr>
       <tr *ngFor="let account of accounts" (click)="startEdit(account)">
         <td>{{account.name}}</td>
-        <td>{{account.balance}} {{currencySymbol(account.currencyId)}}</td>
+        <td>{{account.balance || 0}} {{currencySymbol(account.currencyId)}}</td>
       </tr>
     </table>
   </div>
@@ -40,7 +40,6 @@
 
           <div class="select" [hidden]="!isAccountAdding()">
             <select name="currency" [(ngModel)]="newAccount.currencyId" required title="Валюта">
-              <option disabled selected>Валюта</option>
               <option *ngFor="let currency of currencies" [ngValue]="currency.id">
                 {{currency.nameRu}} ({{currency.symbol}})
               </option>
