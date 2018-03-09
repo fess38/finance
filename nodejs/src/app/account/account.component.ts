@@ -28,9 +28,7 @@ export class AccountComponent implements OnInit {
 
   save(account: Account) {
     this.userdataService.saveAccount(account)
-      .then(() => {
-        this.ngOnInit();
-      })
+      .then(() => this.ngOnInit())
       .catch(error => {
         this.alertService.error('Ошибка сохранения');
         console.error(error.message);

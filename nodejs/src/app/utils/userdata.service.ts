@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
 import { AngularIndexedDB } from 'angular2-indexeddb';
-import 'rxjs/add/operator/toPromise';
-import { HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/timeout';
-import { Account, Currency } from '../model';
+import 'rxjs/add/operator/toPromise';
+import { Account, Currency, Dump } from '../model';
+import { google } from '../wrappers';
+import { HttpService } from './http.service';
+import BoolValue = google.protobuf.BoolValue;
 
 @Injectable()
 export class UserdataService {
-  constructor(private http: HttpClient) {
-    setInterval(() => this.update(), 30000);
+  constructor(private http: HttpService) {
+    setTimeout(() => this.update(), 10000);
   }
 
   private idb: AngularIndexedDB = new AngularIndexedDB('finance', 1);
@@ -25,53 +27,58 @@ export class UserdataService {
 
   private update() {
     this.http.get('/api/data/dump/get')
-      .timeout(5000)
-      .toPromise()
-      .then(data => this.updateUserData(data))
+      .then(data => this.updateUserData(Dump.decode(data)))
       .catch(error => console.error(error.message));
   }
 
-  private updateUserData(data) {
+  private updateUserData(dump: Dump) {
     this.db().then(db => {
-      (data['accounts'] as Account[]).forEach(account => db.update('account', account));
-      (data['currencies'] as Currency[]).forEach(currency => db.update('currency', currency));
+      dump.accounts.forEach(account => db.update('account', account));
+      dump.currencies.forEach(currency => db.update('currency', currency));
     });
   }
 
   currencies(): Promise<Currency[]> {
-    return this.db()
-      .then(db => db.getAll('currency'))
-      .then(data => data as Currency[]);
+    return this.db().then(db => db.getAll('currency') as Promise<Currency[]>);
   }
 
-  saveAccount(account: Account): Promise<any> {
+  accounts(): Promise<Account[]> {
+    return this.db().then(db => db.getAll('account') as Promise<Account[]>);
+  }
+
+  saveAccount(account: Account) {
     let savedAccount: Account;
-    return this.http.post<Account>('/api/data/account/save', account)
-      .toPromise()
-      .then((account) => {
-        savedAccount = account;
+    return this.http.post('/api/data/account/save', Account.encode(account))
+      .then((data) => {
+        savedAccount = Account.decode(data);
         return this.db();
       })
       .then(db => db.update('account', savedAccount));
   }
 
-  updateAccount(account: Account): Promise<object> {
-    return this.http.post<Account>('/api/data/account/update', account)
-      .toPromise()
-      .then(() => this.db())
+  updateAccount(account: Account): Promise<BoolValue> {
+    return this.http.post('/api/data/account/update', Account.encode(account))
+      .then(data => {
+        const success = BoolValue.decode(data).value;
+        if (success) {
+          return this.db();
+        } else {
+          throw new Error('Can not update account');
+        }
+      })
       .then(db => db.update('account', account));
   }
 
-  deleteAccount(account: Account): Promise<object> {
-    return this.http.post<Account>('/api/data/account/delete', account)
-      .toPromise()
-      .then(() => this.db())
+  deleteAccount(account: Account): Promise<BoolValue> {
+    return this.http.post('/api/data/account/delete', Account.encode(account))
+      .then(data => {
+        const success = BoolValue.decode(data).value;
+        if (success) {
+          return this.db();
+        } else {
+          throw new Error('Can not delete account');
+        }
+      })
       .then(db => db.delete('account', account.id));
-  }
-
-  accounts(): Promise<Account[]> {
-    return this.db()
-      .then(db => db.getAll('account'))
-      .then(data => data as Account[]);
   }
 }

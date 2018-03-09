@@ -1,5 +1,6 @@
 package ru.fess38.finance
 
+import com.google.protobuf.BoolValue
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -7,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import ru.fess38.finance.model.Model.Account
-import ru.fess38.finance.model.Model.Dump
 
 @RestController
 @RequestMapping(
@@ -23,15 +23,15 @@ class AccountController {
   fun save(@RequestBody account: Account) = entityDao.save(account)
 
   @PostMapping("update")
-  fun update(@RequestBody account: Account): Any {
+  fun update(@RequestBody account: Account): BoolValue {
     entityDao.update(account)
-    return mapOf("success" to true)
+    return BoolValue.of(true)
   }
 
   @PostMapping("delete")
-  fun delete(@RequestBody account: Account): Any {
+  fun delete(@RequestBody account: Account): BoolValue {
     entityDao.delete(account)
-    return mapOf("success" to true)
+    return BoolValue.of(true)
   }
 }
 
@@ -45,7 +45,5 @@ class UserDataController {
   lateinit var entityDao: EntityDao
 
   @GetMapping("/api/data/dump/get")
-  fun get(): Dump {
-    return entityDao.dump(null)
-  }
+  fun get() = entityDao.dump()
 }

@@ -26,9 +26,9 @@ interface EntityDao {
 
   fun currencies(): List<Currency>
 
-  fun accounts(userId: Long?): List<Account>
+  fun accounts(userId: Long? = null): List<Account>
 
-  fun dump(userId: Long?): Dump
+  fun dump(userId: Long? = null): Dump
 }
 
 @Repository

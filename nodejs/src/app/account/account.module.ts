@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ClarityModule } from 'clarity-angular';
 import { AlertComponent } from '../alert/alert.component';
 import { AlertService } from '../alert/alert.service';
+import { HttpService } from '../utils/http.service';
 import { UserdataService } from '../utils/userdata.service';
 import { AccountComponent } from './account.component';
 
@@ -15,7 +16,7 @@ import { AccountComponent } from './account.component';
     BrowserModule, ClarityModule, FormsModule
   ],
   providers: [
-    AlertService, UserdataService
+    AlertService, HttpService, UserdataService
   ]
 })
 export class AccountModule {}

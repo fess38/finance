@@ -35,6 +35,7 @@ const appRoutes: Routes = [
   exports: [
     RouterModule
   ],
-  providers: []
+  providers: [
+  ]
 })
 export class AppRoutingModule {}

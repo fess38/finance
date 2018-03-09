@@ -1,31 +1,27 @@
 /// <reference path="../../../node_modules/@types/gapi/index.d.ts" />
 /// <reference path="../../../node_modules/@types/gapi.auth2/index.d.ts" />
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie';
-import { Writer } from 'protobufjs';
 import 'rxjs/add/operator/toPromise';
-import { AccessToken, RefreshToken } from '../model';
+import { AccessToken, Account, IAccount, RefreshToken } from '../model';
+import { HttpService } from '../utils/http.service';
 import { google } from '../wrappers';
 import BoolValue = google.protobuf.BoolValue;
 import StringValue = google.protobuf.StringValue;
 import AuthType = RefreshToken.AuthType;
+import protobuf = google.protobuf;
 
 declare let gapi: any;
 
 @Injectable()
 export class AuthService {
-  constructor(private cookie: CookieService, private http: HttpClient, private router: Router) {
+  constructor(private cookie: CookieService, private http: HttpService, private router: Router) {
     setTimeout(() => this.validateToken(), 5000);
   }
 
   private readonly tokenCookieName = 'token';
   private loginTryCounter = 0;
-  private readonly options: any = {
-    responseType: 'arraybuffer',
-    headers: new HttpHeaders({ 'Content-Type': 'application/x-protobuf' })
-  };
 
   isSignIn(): boolean {
     return this.token().length > 0;
@@ -38,11 +34,9 @@ export class AuthService {
 
   validateToken(): void {
     const accessToken = new AccessToken({ value: this.token() });
-    const body = this.encode(AccessToken.encode(accessToken));
-    this.http.post('/api/auth/validate', body, this.options)
-      .toPromise()
-      .then((data: ArrayBuffer) => {
-        const success: boolean = BoolValue.decode(new Uint8Array(data)).value;
+    this.http.post('/api/auth/validate', AccessToken.encode(accessToken))
+      .then(data => {
+        const success: boolean = BoolValue.decode(data).value;
         if (!success) {
           this.cookie.remove(this.tokenCookieName);
           this.router.navigate(['login']);
@@ -74,11 +68,10 @@ export class AuthService {
   }
 
   private getGoogleClientConfig(): Promise<gapi.auth2.ClientConfig> {
-    return this.http.get('/api/auth/google-client-id', this.options)
-      .toPromise()
-      .then((data: ArrayBuffer) => {
+    return this.http.get('/api/auth/google-client-id')
+      .then(data => {
         return {
-          client_id: StringValue.decode(new Uint8Array(data)).value,
+          client_id: StringValue.decode(data).value,
           fetch_basic_profile: false,
           scope: 'profile',
           ux_mode: 'popup'
@@ -87,30 +80,19 @@ export class AuthService {
   }
 
   private auth(refreshToken: RefreshToken): Promise<AccessToken> {
-    const body = this.encode(RefreshToken.encode(refreshToken));
-    return this.http.post('/api/auth', body, this.options)
-      .toPromise()
-      .then((data: ArrayBuffer) => {
-        return AccessToken.decode(new Uint8Array(data));
+    return this.http.post('/api/auth', RefreshToken.encode(refreshToken))
+      .then((data) => {
+        return AccessToken.decode(data);
       });
   }
 
   signOut() {
     const accessToken = new AccessToken({ value: this.token() });
-    const body = this.encode(AccessToken.encode(accessToken));
-    this.http.post('/api/auth/revoke-token', body, this.options)
-      .toPromise()
+    this.http.post('/api/auth/revoke-token', AccessToken.encode(accessToken))
       .then(() => {
         this.cookie.remove(this.tokenCookieName);
         this.router.navigate(['login']);
       })
       .catch((error) => console.error(error.message));
-  }
-
-  private encode(value: Writer) {
-    const array = value.finish();
-    const length = array.byteLength;
-    const offcet = array.byteOffset;
-    return array.buffer.slice(offcet, offcet + length);
   }
 }
