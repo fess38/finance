@@ -13,11 +13,13 @@ import javax.persistence.Enumerated
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
+import javax.persistence.Index
 import javax.persistence.SequenceGenerator
 import javax.persistence.Table
 
 @Entity
-@Table(schema = "model", name = "entity")
+@Table(schema = "model", name = "entity",
+    indexes = [(Index(name = "NIX_id_type_userid", columnList = "id, user_id, type"))])
 data class FinanceEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "idseq")
