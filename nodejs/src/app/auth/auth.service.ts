@@ -6,17 +6,20 @@ import { CookieService } from 'ngx-cookie';
 import 'rxjs/add/operator/toPromise';
 import { AccessToken, Account, IAccount, RefreshToken } from '../model';
 import { HttpService } from '../utils/http.service';
+import { UserdataService } from '../utils/userdata.service';
 import { google } from '../wrappers';
 import BoolValue = google.protobuf.BoolValue;
 import StringValue = google.protobuf.StringValue;
 import AuthType = RefreshToken.AuthType;
-import protobuf = google.protobuf;
 
 declare let gapi: any;
 
 @Injectable()
 export class AuthService {
-  constructor(private cookie: CookieService, private http: HttpService, private router: Router) {
+  constructor(private cookie: CookieService,
+              private http: HttpService,
+              private router: Router,
+              private userdataService: UserdataService) {
     setTimeout(() => this.validateToken(), 5000);
   }
 
@@ -38,8 +41,7 @@ export class AuthService {
       .then(data => {
         const success: boolean = BoolValue.decode(data).value;
         if (!success) {
-          this.cookie.remove(this.tokenCookieName);
-          this.router.navigate(['login']);
+          this.signOut();
         }
       })
       .catch((error) => console.error(error.message));
@@ -87,12 +89,15 @@ export class AuthService {
   }
 
   signOut() {
-    const accessToken = new AccessToken({ value: this.token() });
-    this.http.post('/api/auth/revoke-token', AccessToken.encode(accessToken))
-      .then(() => {
-        this.cookie.remove(this.tokenCookieName);
-        this.router.navigate(['login']);
-      })
-      .catch((error) => console.error(error.message));
+    if (this.isSignIn()) {
+      const accessToken = new AccessToken({ value: this.token() });
+      this.http.post('/api/auth/revoke-token', AccessToken.encode(accessToken))
+        .then(() => {
+          this.cookie.remove(this.tokenCookieName);
+          this.router.navigate(['login']);
+        })
+        .then(() => this.userdataService.deleteUserData())
+        .catch((error) => console.error(error.message));
+    }
   }
 }

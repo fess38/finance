@@ -38,6 +38,13 @@ export class UserdataService {
     });
   }
 
+  deleteUserData() {
+    this.db().then(db => {
+      db.clear('account');
+      db.clear('currency');
+    });
+  }
+
   currencies(): Promise<Currency[]> {
     return this.db().then(db => db.getAll('currency') as Promise<Currency[]>);
   }
