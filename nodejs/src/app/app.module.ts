@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ClarityModule } from 'clarity-angular';
+import { CookieModule } from 'ngx-cookie';
 import { AccountModule } from './account/account.module';
 import { AlertModule } from './alert/alert.module';
 import { AppRoutingModule } from './app-routing.module';
@@ -19,7 +20,7 @@ import { MainPageComponent } from './main-page/main-page.component';
   imports: [
     BrowserModule, BrowserAnimationsModule, ClarityModule, FormsModule, HttpClientModule,
     AppRoutingModule,
-    AccountModule, AlertModule, AuthModule
+    AccountModule, AlertModule, AuthModule, CookieModule.forRoot()
   ],
   providers: [
   ],

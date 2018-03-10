@@ -1,6 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { CookieModule } from 'ngx-cookie';
 import { AlertModule } from '../alert/alert.module';
 import { HttpService } from '../utils/http.service';
 import { UserdataService } from '../utils/userdata.service';
@@ -13,7 +12,7 @@ import { LoginComponent } from './login.component';
     LoginComponent
   ],
   imports: [
-    AlertModule, HttpClientModule, CookieModule.forRoot()
+    AlertModule, HttpClientModule
   ],
   providers: [
     AuthService, AuthGuardService, HttpService, UserdataService
