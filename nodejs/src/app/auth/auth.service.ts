@@ -4,7 +4,8 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie';
 import 'rxjs/add/operator/toPromise';
-import { AccessToken, Account, IAccount, RefreshToken } from '../model';
+import { AlertService } from '../alert/alert.service';
+import { AccessToken, RefreshToken } from '../model';
 import { HttpService } from '../utils/http.service';
 import { UserdataService } from '../utils/userdata.service';
 import { google } from '../wrappers';
@@ -19,7 +20,8 @@ export class AuthService {
   constructor(private cookie: CookieService,
               private http: HttpService,
               private router: Router,
-              private userdataService: UserdataService) {
+              private userdataService: UserdataService,
+              private alertService: AlertService) {
     setTimeout(() => this.validateToken(), 5000);
   }
 
@@ -50,7 +52,7 @@ export class AuthService {
   signInGoogle() {
     gapi.load('auth2', () => {
       this.getGoogleClientConfig()
-        .then((clientConfig) => gapi.auth2.init(clientConfig).signIn())
+        .then(clientConfig => gapi.auth2.init(clientConfig).signIn())
         .then((googleUser: gapi.auth2.GoogleUser) => {
           const token: string = googleUser.getAuthResponse().id_token;
           return this.auth(new RefreshToken({ value: token, type: AuthType.GOOGLE }));
@@ -60,9 +62,11 @@ export class AuthService {
           this.cookie.put(this.tokenCookieName, accessToken.value, options);
           this.router.navigate(['']);
         })
-        .catch((error) => {
-          console.error(error);
-          if (this.loginTryCounter++ < 1) {
+        .catch(error => {
+          const message: string = error.error;
+          if (message == 'popup_blocked_by_browser') {
+            this.alertService.error('Не удается открыть всплывающее окно');
+          } else if (this.loginTryCounter++ < 1) {
             this.signInGoogle();
           }
         });
