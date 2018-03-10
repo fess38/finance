@@ -31,7 +31,10 @@ export class AccountComponent implements OnInit {
 
   save(account: Account) {
     this.userdataService.saveAccount(account)
-      .then(() => this.updateView())
+      .then(() => {
+        this.updateView();
+        this.stopEdit();
+      })
       .catch(error => {
         this.alertService.error('Ошибка сохранения');
         console.error(error.message);
