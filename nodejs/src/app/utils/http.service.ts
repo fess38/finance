@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Writer } from 'protobufjs';
+import 'rxjs/add/operator/timeout';
 import 'rxjs/add/operator/toPromise';
 
 @Injectable()

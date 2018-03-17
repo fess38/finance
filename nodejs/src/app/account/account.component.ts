@@ -1,40 +1,30 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AlertService } from '../alert/alert.service';
-import { Account, Currency } from '../model';
+import { Account } from '../model';
 import { UserdataService } from '../utils/userdata.service';
 
 @Component({
   templateUrl: 'account.component.html'
 })
-export class AccountComponent implements OnInit {
-  constructor(private userdataService: UserdataService,
-              private alertService: AlertService) { }
+export class AccountComponent {
+  constructor(private userdata: UserdataService,
+              private alertService: AlertService) {
+  }
 
-  currencies: Currency[] = [];
-  accounts: Account[] = [];
   isEditing: boolean = false;
   newAccount: Account = new Account();
 
-  ngOnInit() {
-    this.updateView();
+  accounts() {
+    return this.userdata.accounts;
   }
 
-  private updateView() {
-    this.userdataService.currencies()
-      .then(currencies => this.currencies = currencies)
-      .catch(error => console.error(error));
-
-    this.userdataService.accounts()
-      .then(accounts => this.accounts = accounts)
-      .catch(error => console.error(error));
-  }
+  currencies() {
+    return this.userdata.currencies;
+  };
 
   save(account: Account) {
-    this.userdataService.saveAccount(account)
-      .then(() => {
-        this.updateView();
-        this.stopEdit();
-      })
+    this.userdata.saveAccount(account)
+      .then(() => this.stopEdit())
       .catch(error => {
         this.alertService.error('Ошибка сохранения');
         console.error(error.message);
@@ -43,29 +33,21 @@ export class AccountComponent implements OnInit {
 
   update(account: Account) {
     if (account.id != 0) {
-      this.userdataService.updateAccount(account)
-        .then(() => {
-          this.updateView();
-          this.stopEdit();
-        })
+      this.userdata.updateAccount(account)
+        .then(() => this.stopEdit())
         .catch(error => {
           this.alertService.error('Ошибка обновления');
           console.error(error.message);
-          this.updateView();
         });
     }
   }
 
   delete(account: Account) {
-    this.userdataService.deleteAccount(account)
-      .then(() => {
-        this.updateView();
-        this.stopEdit();
-      })
+    this.userdata.deleteAccount(account)
+      .then(() => this.stopEdit())
       .catch(error => {
         this.alertService.error('Ошибка удаления');
         console.error(error.message);
-        this.updateView();
       });
   }
 
@@ -85,8 +67,8 @@ export class AccountComponent implements OnInit {
 
   currencySymbol(currencyId: number): String {
     let symbol: String;
-    if (this.currencies.length > 0) {
-      symbol = this.currencies
+    if (this.currencies().length > 0) {
+      symbol = this.currencies()
         .filter(x => x.id == currencyId)
         .map(x => x.symbol)[0];
     }

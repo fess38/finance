@@ -35,7 +35,6 @@ interface EntityDao {
 class EntityDaoImpl: EntityDao {
   @Autowired
   lateinit var sessionFactory: SessionFactory
-  private var currencies: List<Currency> = listOf()
 
   override fun save(value: Message, userId: Long?): Message {
     val financeEntity = FinanceEntity.from(value, UserInfo.resolve(userId))

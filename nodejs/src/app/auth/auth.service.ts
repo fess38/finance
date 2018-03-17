@@ -7,7 +7,6 @@ import 'rxjs/add/operator/toPromise';
 import { AlertService } from '../alert/alert.service';
 import { AccessToken, RefreshToken } from '../model';
 import { HttpService } from '../utils/http.service';
-import { UserdataService } from '../utils/userdata.service';
 import { google } from '../wrappers';
 import BoolValue = google.protobuf.BoolValue;
 import StringValue = google.protobuf.StringValue;
@@ -20,12 +19,10 @@ export class AuthService {
   constructor(private cookie: CookieService,
               private http: HttpService,
               private router: Router,
-              private userdataService: UserdataService,
               private alertService: AlertService) {
     setTimeout(() => this.validateToken(), 5000);
   }
 
-  private readonly tokenCookieName = 'token';
   private loginTryCounter = 0;
 
   isSignIn(): boolean {
@@ -33,7 +30,7 @@ export class AuthService {
   }
 
   private token(): string {
-    const token = this.cookie.get(this.tokenCookieName);
+    const token = this.cookie.get('token');
     return token ? token : '';
   }
 
@@ -59,7 +56,7 @@ export class AuthService {
         })
         .then((accessToken: AccessToken) => {
           const options = { expires: new Date(accessToken.expired as number) };
-          this.cookie.put(this.tokenCookieName, accessToken.value, options);
+          this.cookie.put('token', accessToken.value, options);
           this.router.navigate(['']);
         })
         .catch(error => {
@@ -87,9 +84,7 @@ export class AuthService {
 
   private auth(refreshToken: RefreshToken): Promise<AccessToken> {
     return this.http.post('/api/auth', RefreshToken.encode(refreshToken))
-      .then((data) => {
-        return AccessToken.decode(data);
-      });
+      .then(data => AccessToken.decode(data));
   }
 
   signOut() {
@@ -97,11 +92,10 @@ export class AuthService {
       const accessToken = new AccessToken({ value: this.token() });
       this.http.post('/api/auth/revoke-token', AccessToken.encode(accessToken))
         .then(() => {
-          this.cookie.remove(this.tokenCookieName);
+          this.cookie.remove('token');
           this.router.navigate(['login']);
         })
-        .then(() => this.userdataService.deleteUserData())
-        .catch((error) => console.error(error.message));
+        .catch(error => console.error(error.message));
     }
   }
 }

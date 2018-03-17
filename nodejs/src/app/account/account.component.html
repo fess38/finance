@@ -8,7 +8,7 @@
         </th>
         <th>Баланс</th>
       </tr>
-      <tr *ngFor="let account of accounts" (click)="startEdit(account)">
+      <tr *ngFor="let account of accounts()" (click)="startEdit(account)">
         <td>{{account.name}}</td>
         <td>{{account.balance || 0}} {{currencySymbol(account.currencyId)}}</td>
       </tr>
@@ -40,7 +40,8 @@
 
           <div class="select" [hidden]="!isAccountAdding()">
             <select name="currency" [(ngModel)]="newAccount.currencyId" required title="Валюта">
-              <option *ngFor="let currency of currencies" [ngValue]="currency.id">
+              <option disabled value="0">Валюта</option>
+              <option selected *ngFor="let currency of currencies()" [ngValue]="currency.id">
                 {{currency.nameRu}} ({{currency.symbol}})
               </option>
             </select>
@@ -53,7 +54,7 @@
     <button type="submit"
             class="btn btn-primary btn-sm"
             (click)="save(newAccount)"
-            [disabled]="!accountForm.form.valid"
+            [disabled]="!accountForm.form.valid || newAccount.currencyId == 0"
             [hidden]="!isAccountAdding()">Сохранить
     </button>
     <button type="submit"
