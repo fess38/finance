@@ -1,6 +1,5 @@
 package ru.fess38.finance
 
-import com.google.protobuf.Int64Value
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -83,9 +82,6 @@ class AccountController {
 class UserDataController {
   @Autowired
   lateinit var entityDao: EntityDao
-
-  @GetMapping("/api/data/dump/version")
-  fun version() = Int64Value.of(UserDataUpdater.dataVersion.getOrDefault(UserInfo.resolve(), 0))
 
   @GetMapping("/api/data/dump/get")
   fun get() = entityDao.dump()
