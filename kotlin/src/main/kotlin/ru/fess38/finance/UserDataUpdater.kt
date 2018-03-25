@@ -3,7 +3,7 @@ package ru.fess38.finance
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
-import ru.fess38.finance.model.EntityType
+import ru.fess38.finance.model.Model.EntityType
 import ru.fess38.finance.model.User
 import java.util.concurrent.ConcurrentLinkedQueue
 
@@ -54,6 +54,18 @@ class UserDataUpdater {
       when (it) {
         EntityType.ACCOUNT -> {
           dumpBuilder.clearAccounts().addAllAccounts(entityDao.accounts(user.id))
+        }
+        EntityType.CATEGORY -> {
+          dumpBuilder.clearCategories().addAllCategories(entityDao.categories(user.id))
+        }
+        EntityType.SUB_CATEGORY -> {
+          dumpBuilder.clearSubCategories().addAllSubCategories(entityDao.subCategories(user.id))
+        }
+        EntityType.FAMILY_MEMBER -> {
+          dumpBuilder.clearFamilyMembers().addAllFamilyMembers(entityDao.familyMembers(user.id))
+        }
+        EntityType.TRANSACTION -> {
+          dumpBuilder.clearTransactions().addAllTransactions(entityDao.transactions(user.id))
         }
       }
     }

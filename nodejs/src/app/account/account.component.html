@@ -17,8 +17,8 @@
 </div>
 
 <clr-modal [(clrModalOpen)]="isEditing" [clrModalClosable]="true" [clrModalSize]="'md'">
-  <h3 class="modal-title" [hidden]="!isAccountAdding()">Добавить счет</h3>
-  <h3 class="modal-title" [hidden]="isAccountAdding()">Редактировать счет</h3>
+  <h3 class="modal-title" [hidden]="!isAccountAdding()">Добавить</h3>
+  <h3 class="modal-title" [hidden]="isAccountAdding()">Редактировать</h3>
   <div class="modal-body">
     <alert></alert>
     <form #accountForm="ngForm" (ngSubmit)="save(newAccount)">

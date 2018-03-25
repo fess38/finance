@@ -12,6 +12,7 @@ import { AlertModule } from './alert/alert.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthModule } from './auth/auth.module';
+import { FamilyMemberModule } from './family-member/family-member.module';
 import { MainMenuComponent } from './main-menu/main-menu.component';
 import { MainPageComponent } from './main-page/main-page.component';
 
@@ -20,9 +21,10 @@ import { MainPageComponent } from './main-page/main-page.component';
     AppComponent, MainMenuComponent, MainPageComponent
   ],
   imports: [
-    BrowserModule, BrowserAnimationsModule, ClarityModule, FormsModule, HttpClientModule,
+    BrowserModule, BrowserAnimationsModule, ClarityModule, CookieModule.forRoot(),
+    FormsModule, HttpClientModule,
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
-    AccountModule, AlertModule, AppRoutingModule, AuthModule, CookieModule.forRoot()
+    AccountModule, AlertModule, AppRoutingModule, AuthModule, FamilyMemberModule
   ],
   providers: [
   ],

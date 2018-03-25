@@ -2,7 +2,12 @@ package ru.fess38.finance.model
 
 import com.google.protobuf.Message
 import ru.fess38.finance.model.Model.Account
+import ru.fess38.finance.model.Model.Category
 import ru.fess38.finance.model.Model.Dump
+import ru.fess38.finance.model.Model.EntityType
+import ru.fess38.finance.model.Model.FamilyMember
+import ru.fess38.finance.model.Model.SubCategory
+import ru.fess38.finance.model.Model.Transaction
 import ru.fess38.finance.util.gunzip
 import ru.fess38.finance.util.gzip
 import java.time.LocalDate
@@ -52,13 +57,29 @@ data class FinanceEntity(
       val entityType: EntityType
 
       when (message) {
+        is Dump -> {
+          id = message.id
+          entityType = EntityType.DUMP
+        }
         is Account -> {
           id = message.id
           entityType = EntityType.ACCOUNT
         }
-        is Dump -> {
+        is Category -> {
           id = message.id
-          entityType = EntityType.DUMP
+          entityType = EntityType.CATEGORY
+        }
+        is SubCategory -> {
+          id = message.id
+          entityType = EntityType.SUB_CATEGORY
+        }
+        is FamilyMember -> {
+          id = message.id
+          entityType = EntityType.FAMILY_MEMBER
+        }
+        is Transaction -> {
+          id = message.id
+          entityType = EntityType.TRANSACTION
         }
         else -> throw IllegalArgumentException("Unknown entity: $message")
       }
@@ -72,16 +93,27 @@ data class FinanceEntity(
     }
   }
 
-  fun toDump(): Dump {
-    return Dump.parseFrom(gunzip(data)).toBuilder().setId(id).build()
+  fun toMessage(): Message {
+    when (type) {
+      EntityType.DUMP -> {
+        return Dump.parseFrom(gunzip(data)).toBuilder().setId(id).build()
+      }
+      EntityType.ACCOUNT -> {
+        return Account.parseFrom(gunzip(data)).toBuilder().setId(id).build()
+      }
+      EntityType.CATEGORY -> {
+        return Category.parseFrom(gunzip(data)).toBuilder().setId(id).build()
+      }
+      EntityType.SUB_CATEGORY -> {
+        return SubCategory.parseFrom(gunzip(data)).toBuilder().setId(id).build()
+      }
+      EntityType.FAMILY_MEMBER -> {
+        return FamilyMember.parseFrom(gunzip(data)).toBuilder().setId(id).build()
+      }
+      EntityType.TRANSACTION -> {
+        return Transaction.parseFrom(gunzip(data)).toBuilder().setId(id).build()
+      }
+      else -> throw IllegalArgumentException("Unknown type: $type")
+    }
   }
-
-  fun toAccount(): Account {
-    return Account.parseFrom(gunzip(data)).toBuilder().setId(id).build()
-  }
-}
-
-enum class EntityType {
-  DUMP,
-  ACCOUNT
 }

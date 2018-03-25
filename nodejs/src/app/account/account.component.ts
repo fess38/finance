@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { AlertService } from '../alert/alert.service';
 import { Account } from '../model';
-import { UserdataService } from '../utils/userdata.service';
+import { UserDataService } from '../utils/user-data.service';
 
 @Component({
   templateUrl: 'account.component.html'
 })
 export class AccountComponent {
-  constructor(private userdata: UserdataService,
+  constructor(private userdata: UserDataService,
               private alertService: AlertService) {
   }
 

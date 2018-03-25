@@ -5,11 +5,11 @@ import { ClarityModule } from 'clarity-angular';
 import { AlertModule } from '../alert/alert.module';
 import { HttpService } from '../utils/http.service';
 import { UserDataService } from '../utils/user-data.service';
-import { AccountComponent } from './account.component';
+import { FamilyMemberComponent } from './family-member.component';
 
 @NgModule({
   declarations: [
-    AccountComponent
+    FamilyMemberComponent
   ],
   imports: [
     AlertModule, BrowserModule, ClarityModule, FormsModule
@@ -18,4 +18,4 @@ import { AccountComponent } from './account.component';
     HttpService, UserDataService
   ]
 })
-export class AccountModule {}
+export class FamilyMemberModule {}
