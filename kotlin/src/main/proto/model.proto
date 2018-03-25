@@ -1,5 +1,7 @@
 syntax = "proto2";
 
+import "google/protobuf/timestamp.proto";
+
 option java_package = "ru.fess38.finance.model";
 option java_outer_classname = "Model";
 
@@ -8,12 +10,20 @@ enum EntityType {
     DUMP = 1;
     CURRENCY = 2;
     ACCOUNT = 3;
+    CATEGORY = 4;
+    SUB_CATEGORY = 5;
+    FAMILY_MEMBER = 6;
+    TRANSACTION = 7;
 }
 
 message Dump {
     optional int64 id = 1 [default = 0];
-    repeated Account accounts = 2;
-    repeated Currency currencies = 3;
+    repeated Currency currencies = 2;
+    repeated Account accounts = 3;
+    repeated Category categories = 4;
+    repeated SubCategory sub_categories = 5;
+    repeated FamilyMember family_members = 6;
+    repeated Transaction transactions = 7;
 }
 
 message Currency {
@@ -34,6 +44,37 @@ message Account {
     optional int64 balance = 3 [default = 0];
     required int64 currency_id = 4;
     optional int64 transaction_amount = 5 [default = 0];
+}
+
+message Category {
+    optional int64 id = 1 [default = 0];
+    required string name = 2;
+    optional bool is_income = 3 [default = false];
+    optional bool is_expence = 4 [default = false];
+}
+
+message SubCategory {
+    optional int64 id = 1 [default = 0];
+    required string name = 2;
+    required int64 category_id = 3;
+}
+
+message FamilyMember {
+    optional int64 id = 1 [default = 0];
+    required string name = 2;
+}
+
+message Transaction {
+    optional int64 id = 1 [default = 0];
+    required google.protobuf.Timestamp created = 2;
+    required int64 account_id_from = 3;
+    required int64 account_id_to = 4;
+    required int64 amount_from = 5;
+    required int64 amount_to = 6;
+    required int64 category_id = 7;
+    optional int64 sub_category_id = 8;
+    optional int64 family_member_id = 9;
+    optional string comment = 10;
 }
 
 message AccessToken {
