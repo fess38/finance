@@ -1,0 +1,100 @@
+syntax = "proto2";
+
+import "google/protobuf/timestamp.proto";
+
+option java_package = "ru.fess38.finance.model";
+option java_outer_classname = "Model";
+
+enum EntityType {
+    UNDEFINED = 0;
+    DUMP = 1;
+    CURRENCY = 2;
+    ACCOUNT = 3;
+    CATEGORY = 4;
+    SUB_CATEGORY = 5;
+    FAMILY_MEMBER = 6;
+    TRANSACTION = 7;
+}
+
+message Dump {
+    optional int64 id = 1 [default = 0];
+    repeated Currency currencies = 2;
+    repeated Account accounts = 3;
+    repeated Category categories = 4;
+    repeated SubCategory sub_categories = 5;
+    repeated FamilyMember family_members = 6;
+    repeated Transaction transactions = 7;
+}
+
+message Currency {
+    required int64 id = 1;
+    required string name_ru = 2;
+    required string name_en = 3;
+    required string symbol = 4;
+    required string code = 5;
+}
+
+message Currencies {
+    repeated Currency items = 1;
+}
+
+message Account {
+    optional int64 id = 1 [default = 0];
+    optional bool is_deleted = 2 [default = false];
+    required string name = 3;
+    optional int64 balance = 4 [default = 0];
+    required int64 currency_id = 5;
+    optional int64 transaction_amount = 6 [default = 0];
+}
+
+message Category {
+    optional int64 id = 1 [default = 0];
+    optional bool is_deleted = 2 [default = false];
+    required string name = 3;
+    optional bool is_income = 4 [default = false];
+    optional bool is_expence = 5 [default = false];
+}
+
+message SubCategory {
+    optional int64 id = 1 [default = 0];
+    optional bool is_deleted = 2 [default = false];
+    required string name = 3;
+    required int64 category_id = 4;
+}
+
+message FamilyMember {
+    optional int64 id = 1 [default = 0];
+    optional bool is_deleted = 2 [default = false];
+    required string name = 3;
+}
+
+message Transaction {
+    optional int64 id = 1 [default = 0];
+    optional bool is_deleted = 2 [default = false];
+    required google.protobuf.Timestamp created = 3;
+    required int64 account_id_from = 4;
+    required int64 account_id_to = 5;
+    required int64 amount_from = 6;
+    required int64 amount_to = 7;
+    required int64 category_id = 8;
+    optional int64 sub_category_id = 9;
+    optional int64 family_member_id = 10;
+    optional string comment = 11;
+}
+
+message AccessToken {
+    optional string value = 1;
+    optional int64 expired = 2 [default = 0];
+}
+
+message RefreshToken {
+    required string value = 1;
+    required AuthType type = 2;
+
+    enum AuthType {
+        UNDEFINED = 0;
+        GOOGLE = 1;
+        FACEBOOK = 2;
+        VK = 3;
+    }
+}

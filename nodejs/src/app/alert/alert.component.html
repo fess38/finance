@@ -1,0 +1,7 @@
+<clr-alert [clrAlertClosed]="!alert"
+           [clrAlertType]="cssClass(alert)"
+           [clrAlertSizeSmall]="true">
+  <div clr-alert-item class="alert-item">
+    <span class="alert-text">{{ alert?.message }}</span>
+  </div>
+</clr-alert>
