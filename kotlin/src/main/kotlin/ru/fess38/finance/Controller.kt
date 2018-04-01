@@ -101,34 +101,4 @@ class Controller {
 
   @PostMapping("transaction/update")
   fun update(@RequestBody value: Transaction) = updateMessage(value, value.id)
-
-  fun deleteMessage(value: Message, id: Long): ResponseEntity<Any> {
-    var httpStatus: HttpStatus
-    if (validator.isValid(value, entityDao.findById(id = id))) {
-      httpStatus = HttpStatus.OK
-      try {
-        entityDao.delete(value)
-      } catch (e: Exception) {
-        httpStatus = HttpStatus.INTERNAL_SERVER_ERROR
-      }
-    } else {
-      httpStatus = HttpStatus.BAD_REQUEST
-    }
-    return ResponseEntity(value, httpStatus)
-  }
-
-  @PostMapping("account/delete")
-  fun delete(@RequestBody value: Account) = deleteMessage(value, value.id)
-
-  @PostMapping("category/delete")
-  fun delete(@RequestBody value: Category) = deleteMessage(value, value.id)
-
-  @PostMapping("sub_category/delete")
-  fun delete(@RequestBody value: SubCategory) = deleteMessage(value, value.id)
-
-  @PostMapping("family_member/delete")
-  fun delete(@RequestBody value: FamilyMember) = deleteMessage(value, value.id)
-
-  @PostMapping("transaction/delete")
-  fun delete(@RequestBody value: Transaction) = deleteMessage(value, value.id)
 }

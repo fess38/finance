@@ -39,9 +39,6 @@ data class FinanceEntity(
     @Column(name = "user_id", nullable = false, updatable = false)
     val userId: Long = 0,
 
-    @Column(name = "is_deleted", nullable = false)
-    val isDeleted: Boolean = false,
-
     @Column(nullable = false, updatable = false)
     val created: LocalDate = LocalDate.now(),
 

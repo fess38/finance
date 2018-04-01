@@ -14,11 +14,13 @@ export class FamilyMemberComponent {
   newFamilyMember = new FamilyMember();
 
   familyMembers() {
-    return this.userdata.familyMembers.sort((a: FamilyMember, b: FamilyMember) => {
-      if (a.name < b.name) return -1;
-      else if (a.name > b.name) return 1;
-      else return 0;
-    });
+    return this.userdata.familyMembers
+      .filter(x => !x.isDeleted)
+      .sort((a: FamilyMember, b: FamilyMember) => {
+        if (a.name < b.name) return -1;
+        else if (a.name > b.name) return 1;
+        else return 0;
+      });
   }
 
   save(familyMember: FamilyMember) {
@@ -42,7 +44,8 @@ export class FamilyMemberComponent {
   }
 
   delete(familyMember: FamilyMember) {
-    this.userdata.deleteFamilyMember(familyMember)
+    familyMember.isDeleted = true;
+    this.userdata.updateFamilyMember(familyMember)
       .then(() => this.stopEdit())
       .catch(error => {
         this.alertService.error('Ошибка удаления');

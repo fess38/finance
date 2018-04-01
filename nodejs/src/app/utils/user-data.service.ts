@@ -43,14 +43,4 @@ export class UserDataService {
   updateFamilyMember(familyMember: FamilyMember): Promise<any> {
     return this.http.post('/api/data/family_member/update', FamilyMember.encode(familyMember));
   }
-
-  deleteAccount(account: Account): Promise<any> {
-    return this.http.post('/api/data/account/delete', Account.encode(account))
-      .then(() => this.accounts = this.accounts.filter(x => x.id != account.id));
-  }
-
-  deleteFamilyMember(familyMember: FamilyMember): Promise<any> {
-    return this.http.post('/api/data/family_member/delete', FamilyMember.encode(familyMember))
-      .then(() => this.familyMembers = this.familyMembers.filter(x => x.id != familyMember.id));
-  }
 }

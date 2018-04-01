@@ -34,16 +34,12 @@ class UserDataUpdater {
     }
   }
 
-  @Scheduled(fixedDelay = 3000)
+  @Scheduled(fixedRate = 3000)
   fun update() {
     while (!queue.isEmpty()) {
-      update(queue.poll())
+      val queueObject = queue.poll()
+      update(userDao.findById(queueObject.userId), listOf(queueObject.type))
     }
-  }
-
-  private fun update(queueObject: QueueObject) {
-    val user = userDao.findById(queueObject.userId)
-    update(user, listOf(queueObject.type))
   }
 
   private fun update(user: User, entitiesToUpdate: List<EntityType>) {

@@ -23,8 +23,6 @@ interface EntityDao {
 
   fun update(value: Message, userId: Long? = null)
 
-  fun delete(value: Message, userId: Long? = null)
-
   fun findById(userId: Long? = null, id: Long): Message?
 
   fun dump(userId: Long? = null): Dump
@@ -72,10 +70,6 @@ class EntityDaoImpl: EntityDao {
     update(FinanceEntity.from(value, UserInfo.resolve(userId)))
   }
 
-  override fun delete(value: Message, userId: Long?) {
-    update(FinanceEntity.from(value, UserInfo.resolve(userId)).copy(isDeleted = true))
-  }
-
   private fun update(financeEntity: FinanceEntity) {
     sessionFactory.openSession().apply {update(financeEntity)}.apply {flush()}.apply {close()}
     UserDataUpdater.enqueue(financeEntity.userId, financeEntity.type)
@@ -116,7 +110,6 @@ class EntityDaoImpl: EntityDao {
       List<FinanceEntity> {
     val criteria = DetachedCriteria.forClass(FinanceEntity::class.java)
         .add(Restrictions.eq("userId", UserInfo.resolve(userId)))
-        .add(Restrictions.eq("isDeleted", false))
     if (!ids.isEmpty()) {
       criteria.add(Restrictions.`in`("id", ids))
     }

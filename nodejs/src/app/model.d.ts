@@ -348,6 +348,9 @@ export interface IAccount {
     /** Account id */
     id?: (number|Long|null);
 
+    /** Account isDeleted */
+    isDeleted?: (boolean|null);
+
     /** Account name */
     name: string;
 
@@ -372,6 +375,9 @@ export class Account implements IAccount {
 
     /** Account id. */
     public id: (number|Long);
+
+    /** Account isDeleted. */
+    public isDeleted: boolean;
 
     /** Account name. */
     public name: string;
@@ -462,6 +468,9 @@ export interface ICategory {
     /** Category id */
     id?: (number|Long|null);
 
+    /** Category isDeleted */
+    isDeleted?: (boolean|null);
+
     /** Category name */
     name: string;
 
@@ -483,6 +492,9 @@ export class Category implements ICategory {
 
     /** Category id. */
     public id: (number|Long);
+
+    /** Category isDeleted. */
+    public isDeleted: boolean;
 
     /** Category name. */
     public name: string;
@@ -570,6 +582,9 @@ export interface ISubCategory {
     /** SubCategory id */
     id?: (number|Long|null);
 
+    /** SubCategory isDeleted */
+    isDeleted?: (boolean|null);
+
     /** SubCategory name */
     name: string;
 
@@ -588,6 +603,9 @@ export class SubCategory implements ISubCategory {
 
     /** SubCategory id. */
     public id: (number|Long);
+
+    /** SubCategory isDeleted. */
+    public isDeleted: boolean;
 
     /** SubCategory name. */
     public name: string;
@@ -672,6 +690,9 @@ export interface IFamilyMember {
     /** FamilyMember id */
     id?: (number|Long|null);
 
+    /** FamilyMember isDeleted */
+    isDeleted?: (boolean|null);
+
     /** FamilyMember name */
     name: string;
 }
@@ -687,6 +708,9 @@ export class FamilyMember implements IFamilyMember {
 
     /** FamilyMember id. */
     public id: (number|Long);
+
+    /** FamilyMember isDeleted. */
+    public isDeleted: boolean;
 
     /** FamilyMember name. */
     public name: string;
@@ -768,6 +792,9 @@ export interface ITransaction {
     /** Transaction id */
     id?: (number|Long|null);
 
+    /** Transaction isDeleted */
+    isDeleted?: (boolean|null);
+
     /** Transaction created */
     created: google.protobuf.ITimestamp;
 
@@ -807,6 +834,9 @@ export class Transaction implements ITransaction {
 
     /** Transaction id. */
     public id: (number|Long);
+
+    /** Transaction isDeleted. */
+    public isDeleted: boolean;
 
     /** Transaction created. */
     public created: google.protobuf.ITimestamp;

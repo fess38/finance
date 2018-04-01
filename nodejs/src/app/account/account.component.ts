@@ -15,11 +15,13 @@ export class AccountComponent {
   newAccount: Account = new Account();
 
   accounts() {
-    return this.userdata.accounts.sort((a: Account, b: Account) => {
-      if (a.name < b.name) return -1;
-      else if (a.name > b.name) return 1;
-      else return 0;
-    });
+    return this.userdata.accounts
+      .filter(x => !x.isDeleted)
+      .sort((a: Account, b: Account) => {
+        if (a.name < b.name) return -1;
+        else if (a.name > b.name) return 1;
+        else return 0;
+      });
   }
 
   currencies() {
@@ -47,7 +49,8 @@ export class AccountComponent {
   }
 
   delete(account: Account) {
-    this.userdata.deleteAccount(account)
+    account.isDeleted = true;
+    this.userdata.updateAccount(account)
       .then(() => this.stopEdit())
       .catch(error => {
         this.alertService.error('Ошибка удаления');

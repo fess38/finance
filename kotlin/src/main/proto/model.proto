@@ -40,41 +40,46 @@ message Currencies {
 
 message Account {
     optional int64 id = 1 [default = 0];
-    required string name = 2;
-    optional int64 balance = 3 [default = 0];
-    required int64 currency_id = 4;
-    optional int64 transaction_amount = 5 [default = 0];
+    optional bool is_deleted = 2 [default = false];
+    required string name = 3;
+    optional int64 balance = 4 [default = 0];
+    required int64 currency_id = 5;
+    optional int64 transaction_amount = 6 [default = 0];
 }
 
 message Category {
     optional int64 id = 1 [default = 0];
-    required string name = 2;
-    optional bool is_income = 3 [default = false];
-    optional bool is_expence = 4 [default = false];
+    optional bool is_deleted = 2 [default = false];
+    required string name = 3;
+    optional bool is_income = 4 [default = false];
+    optional bool is_expence = 5 [default = false];
 }
 
 message SubCategory {
     optional int64 id = 1 [default = 0];
-    required string name = 2;
-    required int64 category_id = 3;
+    optional bool is_deleted = 2 [default = false];
+    required string name = 3;
+    required int64 category_id = 4;
 }
 
 message FamilyMember {
     optional int64 id = 1 [default = 0];
-    required string name = 2;
+    optional bool is_deleted = 2 [default = false];
+    required string name = 3;
 }
 
 message Transaction {
     optional int64 id = 1 [default = 0];
-    required google.protobuf.Timestamp created = 2;
-    required int64 account_id_from = 3;
-    required int64 account_id_to = 4;
-    required int64 amount_from = 5;
-    required int64 amount_to = 6;
-    required int64 category_id = 7;
-    optional int64 sub_category_id = 8;
-    optional int64 family_member_id = 9;
-    optional string comment = 10;
+    optional bool is_deleted = 2 [default = false];
+    required google.protobuf.Timestamp created = 3;
+    required int64 account_id_from = 4;
+    required int64 account_id_to = 5;
+    required int64 amount_from = 6;
+    required int64 amount_to = 7;
+    required int64 category_id = 8;
+    optional int64 sub_category_id = 9;
+    optional int64 family_member_id = 10;
+    optional string comment = 11;
 }
 
 message AccessToken {

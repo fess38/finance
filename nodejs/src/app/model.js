@@ -1001,6 +1001,7 @@ $root.Account = (function() {
      * @exports IAccount
      * @interface IAccount
      * @property {number|Long|null} [id] Account id
+     * @property {boolean|null} [isDeleted] Account isDeleted
      * @property {string} name Account name
      * @property {number|Long|null} [balance] Account balance
      * @property {number|Long} currencyId Account currencyId
@@ -1029,6 +1030,14 @@ $root.Account = (function() {
      * @instance
      */
     Account.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
+     * Account isDeleted.
+     * @member {boolean} isDeleted
+     * @memberof Account
+     * @instance
+     */
+    Account.prototype.isDeleted = false;
 
     /**
      * Account name.
@@ -1088,12 +1097,14 @@ $root.Account = (function() {
             writer = $Writer.create();
         if (message.id != null && message.hasOwnProperty("id"))
             writer.uint32(/* id 1, wireType 0 =*/8).int64(message.id);
-        writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
+        if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
+            writer.uint32(/* id 2, wireType 0 =*/16).bool(message.isDeleted);
+        writer.uint32(/* id 3, wireType 2 =*/26).string(message.name);
         if (message.balance != null && message.hasOwnProperty("balance"))
-            writer.uint32(/* id 3, wireType 0 =*/24).int64(message.balance);
-        writer.uint32(/* id 4, wireType 0 =*/32).int64(message.currencyId);
+            writer.uint32(/* id 4, wireType 0 =*/32).int64(message.balance);
+        writer.uint32(/* id 5, wireType 0 =*/40).int64(message.currencyId);
         if (message.transactionAmount != null && message.hasOwnProperty("transactionAmount"))
-            writer.uint32(/* id 5, wireType 0 =*/40).int64(message.transactionAmount);
+            writer.uint32(/* id 6, wireType 0 =*/48).int64(message.transactionAmount);
         return writer;
     };
 
@@ -1132,15 +1143,18 @@ $root.Account = (function() {
                 message.id = reader.int64();
                 break;
             case 2:
-                message.name = reader.string();
+                message.isDeleted = reader.bool();
                 break;
             case 3:
-                message.balance = reader.int64();
+                message.name = reader.string();
                 break;
             case 4:
-                message.currencyId = reader.int64();
+                message.balance = reader.int64();
                 break;
             case 5:
+                message.currencyId = reader.int64();
+                break;
+            case 6:
                 message.transactionAmount = reader.int64();
                 break;
             default:
@@ -1185,6 +1199,9 @@ $root.Account = (function() {
         if (message.id != null && message.hasOwnProperty("id"))
             if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
                 return "id: integer|Long expected";
+        if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
+            if (typeof message.isDeleted !== "boolean")
+                return "isDeleted: boolean expected";
         if (!$util.isString(message.name))
             return "name: string expected";
         if (message.balance != null && message.hasOwnProperty("balance"))
@@ -1219,6 +1236,8 @@ $root.Account = (function() {
                 message.id = object.id;
             else if (typeof object.id === "object")
                 message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber();
+        if (object.isDeleted != null)
+            message.isDeleted = Boolean(object.isDeleted);
         if (object.name != null)
             message.name = String(object.name);
         if (object.balance != null)
@@ -1270,6 +1289,7 @@ $root.Account = (function() {
                 object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.id = options.longs === String ? "0" : 0;
+            object.isDeleted = false;
             object.name = "";
             if ($util.Long) {
                 var long = new $util.Long(0, 0, false);
@@ -1292,6 +1312,8 @@ $root.Account = (function() {
                 object.id = options.longs === String ? String(message.id) : message.id;
             else
                 object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber() : message.id;
+        if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
+            object.isDeleted = message.isDeleted;
         if (message.name != null && message.hasOwnProperty("name"))
             object.name = message.name;
         if (message.balance != null && message.hasOwnProperty("balance"))
@@ -1333,6 +1355,7 @@ $root.Category = (function() {
      * @exports ICategory
      * @interface ICategory
      * @property {number|Long|null} [id] Category id
+     * @property {boolean|null} [isDeleted] Category isDeleted
      * @property {string} name Category name
      * @property {boolean|null} [isIncome] Category isIncome
      * @property {boolean|null} [isExpence] Category isExpence
@@ -1360,6 +1383,14 @@ $root.Category = (function() {
      * @instance
      */
     Category.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
+     * Category isDeleted.
+     * @member {boolean} isDeleted
+     * @memberof Category
+     * @instance
+     */
+    Category.prototype.isDeleted = false;
 
     /**
      * Category name.
@@ -1411,11 +1442,13 @@ $root.Category = (function() {
             writer = $Writer.create();
         if (message.id != null && message.hasOwnProperty("id"))
             writer.uint32(/* id 1, wireType 0 =*/8).int64(message.id);
-        writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
+        if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
+            writer.uint32(/* id 2, wireType 0 =*/16).bool(message.isDeleted);
+        writer.uint32(/* id 3, wireType 2 =*/26).string(message.name);
         if (message.isIncome != null && message.hasOwnProperty("isIncome"))
-            writer.uint32(/* id 3, wireType 0 =*/24).bool(message.isIncome);
+            writer.uint32(/* id 4, wireType 0 =*/32).bool(message.isIncome);
         if (message.isExpence != null && message.hasOwnProperty("isExpence"))
-            writer.uint32(/* id 4, wireType 0 =*/32).bool(message.isExpence);
+            writer.uint32(/* id 5, wireType 0 =*/40).bool(message.isExpence);
         return writer;
     };
 
@@ -1454,12 +1487,15 @@ $root.Category = (function() {
                 message.id = reader.int64();
                 break;
             case 2:
-                message.name = reader.string();
+                message.isDeleted = reader.bool();
                 break;
             case 3:
-                message.isIncome = reader.bool();
+                message.name = reader.string();
                 break;
             case 4:
+                message.isIncome = reader.bool();
+                break;
+            case 5:
                 message.isExpence = reader.bool();
                 break;
             default:
@@ -1502,6 +1538,9 @@ $root.Category = (function() {
         if (message.id != null && message.hasOwnProperty("id"))
             if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
                 return "id: integer|Long expected";
+        if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
+            if (typeof message.isDeleted !== "boolean")
+                return "isDeleted: boolean expected";
         if (!$util.isString(message.name))
             return "name: string expected";
         if (message.isIncome != null && message.hasOwnProperty("isIncome"))
@@ -1534,6 +1573,8 @@ $root.Category = (function() {
                 message.id = object.id;
             else if (typeof object.id === "object")
                 message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber();
+        if (object.isDeleted != null)
+            message.isDeleted = Boolean(object.isDeleted);
         if (object.name != null)
             message.name = String(object.name);
         if (object.isIncome != null)
@@ -1562,6 +1603,7 @@ $root.Category = (function() {
                 object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.id = options.longs === String ? "0" : 0;
+            object.isDeleted = false;
             object.name = "";
             object.isIncome = false;
             object.isExpence = false;
@@ -1571,6 +1613,8 @@ $root.Category = (function() {
                 object.id = options.longs === String ? String(message.id) : message.id;
             else
                 object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber() : message.id;
+        if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
+            object.isDeleted = message.isDeleted;
         if (message.name != null && message.hasOwnProperty("name"))
             object.name = message.name;
         if (message.isIncome != null && message.hasOwnProperty("isIncome"))
@@ -1601,6 +1645,7 @@ $root.SubCategory = (function() {
      * @exports ISubCategory
      * @interface ISubCategory
      * @property {number|Long|null} [id] SubCategory id
+     * @property {boolean|null} [isDeleted] SubCategory isDeleted
      * @property {string} name SubCategory name
      * @property {number|Long} categoryId SubCategory categoryId
      */
@@ -1627,6 +1672,14 @@ $root.SubCategory = (function() {
      * @instance
      */
     SubCategory.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
+     * SubCategory isDeleted.
+     * @member {boolean} isDeleted
+     * @memberof SubCategory
+     * @instance
+     */
+    SubCategory.prototype.isDeleted = false;
 
     /**
      * SubCategory name.
@@ -1670,8 +1723,10 @@ $root.SubCategory = (function() {
             writer = $Writer.create();
         if (message.id != null && message.hasOwnProperty("id"))
             writer.uint32(/* id 1, wireType 0 =*/8).int64(message.id);
-        writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
-        writer.uint32(/* id 3, wireType 0 =*/24).int64(message.categoryId);
+        if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
+            writer.uint32(/* id 2, wireType 0 =*/16).bool(message.isDeleted);
+        writer.uint32(/* id 3, wireType 2 =*/26).string(message.name);
+        writer.uint32(/* id 4, wireType 0 =*/32).int64(message.categoryId);
         return writer;
     };
 
@@ -1710,9 +1765,12 @@ $root.SubCategory = (function() {
                 message.id = reader.int64();
                 break;
             case 2:
-                message.name = reader.string();
+                message.isDeleted = reader.bool();
                 break;
             case 3:
+                message.name = reader.string();
+                break;
+            case 4:
                 message.categoryId = reader.int64();
                 break;
             default:
@@ -1757,6 +1815,9 @@ $root.SubCategory = (function() {
         if (message.id != null && message.hasOwnProperty("id"))
             if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
                 return "id: integer|Long expected";
+        if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
+            if (typeof message.isDeleted !== "boolean")
+                return "isDeleted: boolean expected";
         if (!$util.isString(message.name))
             return "name: string expected";
         if (!$util.isInteger(message.categoryId) && !(message.categoryId && $util.isInteger(message.categoryId.low) && $util.isInteger(message.categoryId.high)))
@@ -1785,6 +1846,8 @@ $root.SubCategory = (function() {
                 message.id = object.id;
             else if (typeof object.id === "object")
                 message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber();
+        if (object.isDeleted != null)
+            message.isDeleted = Boolean(object.isDeleted);
         if (object.name != null)
             message.name = String(object.name);
         if (object.categoryId != null)
@@ -1818,6 +1881,7 @@ $root.SubCategory = (function() {
                 object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.id = options.longs === String ? "0" : 0;
+            object.isDeleted = false;
             object.name = "";
             if ($util.Long) {
                 var long = new $util.Long(0, 0, false);
@@ -1830,6 +1894,8 @@ $root.SubCategory = (function() {
                 object.id = options.longs === String ? String(message.id) : message.id;
             else
                 object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber() : message.id;
+        if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
+            object.isDeleted = message.isDeleted;
         if (message.name != null && message.hasOwnProperty("name"))
             object.name = message.name;
         if (message.categoryId != null && message.hasOwnProperty("categoryId"))
@@ -1861,6 +1927,7 @@ $root.FamilyMember = (function() {
      * @exports IFamilyMember
      * @interface IFamilyMember
      * @property {number|Long|null} [id] FamilyMember id
+     * @property {boolean|null} [isDeleted] FamilyMember isDeleted
      * @property {string} name FamilyMember name
      */
 
@@ -1886,6 +1953,14 @@ $root.FamilyMember = (function() {
      * @instance
      */
     FamilyMember.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
+     * FamilyMember isDeleted.
+     * @member {boolean} isDeleted
+     * @memberof FamilyMember
+     * @instance
+     */
+    FamilyMember.prototype.isDeleted = false;
 
     /**
      * FamilyMember name.
@@ -1921,7 +1996,9 @@ $root.FamilyMember = (function() {
             writer = $Writer.create();
         if (message.id != null && message.hasOwnProperty("id"))
             writer.uint32(/* id 1, wireType 0 =*/8).int64(message.id);
-        writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
+        if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
+            writer.uint32(/* id 2, wireType 0 =*/16).bool(message.isDeleted);
+        writer.uint32(/* id 3, wireType 2 =*/26).string(message.name);
         return writer;
     };
 
@@ -1960,6 +2037,9 @@ $root.FamilyMember = (function() {
                 message.id = reader.int64();
                 break;
             case 2:
+                message.isDeleted = reader.bool();
+                break;
+            case 3:
                 message.name = reader.string();
                 break;
             default:
@@ -2002,6 +2082,9 @@ $root.FamilyMember = (function() {
         if (message.id != null && message.hasOwnProperty("id"))
             if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
                 return "id: integer|Long expected";
+        if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
+            if (typeof message.isDeleted !== "boolean")
+                return "isDeleted: boolean expected";
         if (!$util.isString(message.name))
             return "name: string expected";
         return null;
@@ -2028,6 +2111,8 @@ $root.FamilyMember = (function() {
                 message.id = object.id;
             else if (typeof object.id === "object")
                 message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber();
+        if (object.isDeleted != null)
+            message.isDeleted = Boolean(object.isDeleted);
         if (object.name != null)
             message.name = String(object.name);
         return message;
@@ -2052,6 +2137,7 @@ $root.FamilyMember = (function() {
                 object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.id = options.longs === String ? "0" : 0;
+            object.isDeleted = false;
             object.name = "";
         }
         if (message.id != null && message.hasOwnProperty("id"))
@@ -2059,6 +2145,8 @@ $root.FamilyMember = (function() {
                 object.id = options.longs === String ? String(message.id) : message.id;
             else
                 object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber() : message.id;
+        if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
+            object.isDeleted = message.isDeleted;
         if (message.name != null && message.hasOwnProperty("name"))
             object.name = message.name;
         return object;
@@ -2085,6 +2173,7 @@ $root.Transaction = (function() {
      * @exports ITransaction
      * @interface ITransaction
      * @property {number|Long|null} [id] Transaction id
+     * @property {boolean|null} [isDeleted] Transaction isDeleted
      * @property {google.protobuf.ITimestamp} created Transaction created
      * @property {number|Long} accountIdFrom Transaction accountIdFrom
      * @property {number|Long} accountIdTo Transaction accountIdTo
@@ -2118,6 +2207,14 @@ $root.Transaction = (function() {
      * @instance
      */
     Transaction.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
+     * Transaction isDeleted.
+     * @member {boolean} isDeleted
+     * @memberof Transaction
+     * @instance
+     */
+    Transaction.prototype.isDeleted = false;
 
     /**
      * Transaction created.
@@ -2217,18 +2314,20 @@ $root.Transaction = (function() {
             writer = $Writer.create();
         if (message.id != null && message.hasOwnProperty("id"))
             writer.uint32(/* id 1, wireType 0 =*/8).int64(message.id);
-        $root.google.protobuf.Timestamp.encode(message.created, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-        writer.uint32(/* id 3, wireType 0 =*/24).int64(message.accountIdFrom);
-        writer.uint32(/* id 4, wireType 0 =*/32).int64(message.accountIdTo);
-        writer.uint32(/* id 5, wireType 0 =*/40).int64(message.amountFrom);
-        writer.uint32(/* id 6, wireType 0 =*/48).int64(message.amountTo);
-        writer.uint32(/* id 7, wireType 0 =*/56).int64(message.categoryId);
+        if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
+            writer.uint32(/* id 2, wireType 0 =*/16).bool(message.isDeleted);
+        $root.google.protobuf.Timestamp.encode(message.created, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+        writer.uint32(/* id 4, wireType 0 =*/32).int64(message.accountIdFrom);
+        writer.uint32(/* id 5, wireType 0 =*/40).int64(message.accountIdTo);
+        writer.uint32(/* id 6, wireType 0 =*/48).int64(message.amountFrom);
+        writer.uint32(/* id 7, wireType 0 =*/56).int64(message.amountTo);
+        writer.uint32(/* id 8, wireType 0 =*/64).int64(message.categoryId);
         if (message.subCategoryId != null && message.hasOwnProperty("subCategoryId"))
-            writer.uint32(/* id 8, wireType 0 =*/64).int64(message.subCategoryId);
+            writer.uint32(/* id 9, wireType 0 =*/72).int64(message.subCategoryId);
         if (message.familyMemberId != null && message.hasOwnProperty("familyMemberId"))
-            writer.uint32(/* id 9, wireType 0 =*/72).int64(message.familyMemberId);
+            writer.uint32(/* id 10, wireType 0 =*/80).int64(message.familyMemberId);
         if (message.comment != null && message.hasOwnProperty("comment"))
-            writer.uint32(/* id 10, wireType 2 =*/82).string(message.comment);
+            writer.uint32(/* id 11, wireType 2 =*/90).string(message.comment);
         return writer;
     };
 
@@ -2267,30 +2366,33 @@ $root.Transaction = (function() {
                 message.id = reader.int64();
                 break;
             case 2:
-                message.created = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
+                message.isDeleted = reader.bool();
                 break;
             case 3:
-                message.accountIdFrom = reader.int64();
+                message.created = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
                 break;
             case 4:
-                message.accountIdTo = reader.int64();
+                message.accountIdFrom = reader.int64();
                 break;
             case 5:
-                message.amountFrom = reader.int64();
+                message.accountIdTo = reader.int64();
                 break;
             case 6:
-                message.amountTo = reader.int64();
+                message.amountFrom = reader.int64();
                 break;
             case 7:
-                message.categoryId = reader.int64();
+                message.amountTo = reader.int64();
                 break;
             case 8:
-                message.subCategoryId = reader.int64();
+                message.categoryId = reader.int64();
                 break;
             case 9:
-                message.familyMemberId = reader.int64();
+                message.subCategoryId = reader.int64();
                 break;
             case 10:
+                message.familyMemberId = reader.int64();
+                break;
+            case 11:
                 message.comment = reader.string();
                 break;
             default:
@@ -2343,6 +2445,9 @@ $root.Transaction = (function() {
         if (message.id != null && message.hasOwnProperty("id"))
             if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
                 return "id: integer|Long expected";
+        if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
+            if (typeof message.isDeleted !== "boolean")
+                return "isDeleted: boolean expected";
         {
             var error = $root.google.protobuf.Timestamp.verify(message.created);
             if (error)
@@ -2391,6 +2496,8 @@ $root.Transaction = (function() {
                 message.id = object.id;
             else if (typeof object.id === "object")
                 message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber();
+        if (object.isDeleted != null)
+            message.isDeleted = Boolean(object.isDeleted);
         if (object.created != null) {
             if (typeof object.created !== "object")
                 throw TypeError(".Transaction.created: object expected");
@@ -2483,6 +2590,7 @@ $root.Transaction = (function() {
                 object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.id = options.longs === String ? "0" : 0;
+            object.isDeleted = false;
             object.created = null;
             if ($util.Long) {
                 var long = new $util.Long(0, 0, false);
@@ -2526,6 +2634,8 @@ $root.Transaction = (function() {
                 object.id = options.longs === String ? String(message.id) : message.id;
             else
                 object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber() : message.id;
+        if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
+            object.isDeleted = message.isDeleted;
         if (message.created != null && message.hasOwnProperty("created"))
             object.created = $root.google.protobuf.Timestamp.toObject(message.created, options);
         if (message.accountIdFrom != null && message.hasOwnProperty("accountIdFrom"))
