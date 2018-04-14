@@ -57,7 +57,7 @@ class UserDaoImpl: UserDao {
   override fun getAll(): List<User> {
     val criteria = DetachedCriteria.forClass(User::class.java, "user")
     val session = sessionFactory.openSession()
-    return sessionFactory.list<User>(criteria, session).also {session.close()}
+    return sessionFactory.list<User>(criteria, session).distinct().also {session.close()}
   }
 
   override fun save(user: User): User {

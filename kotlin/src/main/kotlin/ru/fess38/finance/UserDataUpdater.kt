@@ -1,5 +1,6 @@
 package ru.fess38.finance
 
+import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
@@ -9,6 +10,8 @@ import java.util.concurrent.ConcurrentLinkedQueue
 
 @Component
 class UserDataUpdater {
+  private val log = KotlinLogging.logger {}
+
   @Autowired
   lateinit var entityDao: EntityDao
 
@@ -30,6 +33,7 @@ class UserDataUpdater {
   @Scheduled(initialDelay = 10000, fixedDelay = Long.MAX_VALUE)
   fun initialUpdate() {
     userDao.getAll().forEach {
+      log.info {"Initial update of user ${it.id}"}
       update(it, EntityType.values().asList())
     }
   }
@@ -43,9 +47,9 @@ class UserDataUpdater {
   }
 
   private fun update(user: User, entitiesToUpdate: List<EntityType>) {
+    log.info {"Update user ${user.id}, entities: $entitiesToUpdate"}
     val dumpBuilder = entityDao.dump(user.id).toBuilder()
     dumpBuilder.clearCurrencies().addAllCurrencies(entityDao.currencies())
-
     entitiesToUpdate.forEach {
       when (it) {
         EntityType.ACCOUNT -> {
