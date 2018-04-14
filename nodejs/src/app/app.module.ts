@@ -8,7 +8,6 @@ import { ClarityModule } from 'clarity-angular';
 import { CookieModule } from 'ngx-cookie';
 import { environment } from '../environments/environment';
 import { AccountModule } from './account/account.module';
-import { AlertModule } from './alert/alert.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthModule } from './auth/auth.module';
@@ -24,7 +23,7 @@ import { MainPageComponent } from './main-page/main-page.component';
     BrowserModule, BrowserAnimationsModule, ClarityModule, CookieModule.forRoot(),
     FormsModule, HttpClientModule,
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
-    AccountModule, AlertModule, AppRoutingModule, AuthModule, FamilyMemberModule
+    AccountModule, AppRoutingModule, AuthModule, FamilyMemberModule
   ],
   providers: [
   ],
