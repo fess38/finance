@@ -22,10 +22,10 @@ import ru.fess38.finance.model.Model.Transaction
 )
 class UserDataController {
   @Autowired
-  lateinit var entityDao: EntityDao
+  lateinit var financeEntityService: FinanceEntityService
 
   @GetMapping("/api/data/dump/get")
-  fun get() = entityDao.dump()
+  fun get() = financeEntityService.dump()
 }
 
 @RestController
@@ -36,7 +36,7 @@ class UserDataController {
 )
 class Controller {
   @Autowired
-  lateinit var entityDao: EntityDao
+  lateinit var entityService: FinanceEntityService
 
   val validator = InputValuesValidator()
 
@@ -47,7 +47,7 @@ class Controller {
     if (validator.isValid(value)) {
       httpStatus = HttpStatus.OK
       try {
-        savedValue = entityDao.save(value)
+        savedValue = entityService.save(value)
       } catch (e: Exception) {
         httpStatus = HttpStatus.INTERNAL_SERVER_ERROR
       }
@@ -74,10 +74,10 @@ class Controller {
 
   private fun updateMessage(value: Message, id: Long): ResponseEntity<Any> {
     var httpStatus: HttpStatus
-    if (validator.isValid(value, entityDao.findById(id = id))) {
+    if (validator.isValid(value) && entityService.isExist(id)) {
       httpStatus = HttpStatus.OK
       try {
-        entityDao.update(value)
+        entityService.update(value)
       } catch (e: Exception) {
         httpStatus = HttpStatus.INTERNAL_SERVER_ERROR
       }

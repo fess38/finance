@@ -13,10 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import ru.fess38.finance.UserDao
 import ru.fess38.finance.model.Model.AccessToken
-import ru.fess38.finance.model.Model.RefreshToken.AuthType
 import ru.fess38.finance.model.Model.RefreshToken
+import ru.fess38.finance.model.Model.RefreshToken.AuthType
 import ru.fess38.finance.model.Session
 import java.time.Duration
 
@@ -34,7 +33,7 @@ class AuthenticationController {
   lateinit var googleIdTokenVerifier: GoogleIdTokenVerifier
 
   @Autowired
-  lateinit var userDao: UserDao
+  lateinit var userService: UserService
 
   val tokenGenerator = RandomStringGenerator.Builder()
       .filteredBy(CharacterPredicates.LETTERS, CharacterPredicates.DIGITS)
@@ -58,7 +57,7 @@ class AuthenticationController {
         val accessToken = tokenGenerator.generate(50)
         val expired = System.currentTimeMillis() + Duration.ofDays(90).toMillis()
         val session = Session(token = accessToken, expired = expired)
-        userDao.saveOrUpdate(googleId, authType, session)
+        userService.save(googleId, authType, session)
         return AccessToken.newBuilder().setValue(accessToken).setExpired(expired).build()
       }
       else -> throw BadCredentialsException("Not supported auth type: $authType")
@@ -67,9 +66,9 @@ class AuthenticationController {
 
   @PostMapping("/auth/validate")
   fun validate(@RequestBody accessToken: AccessToken): BoolValue {
-    return BoolValue.of(userDao.find(accessToken.value) != null)
+    return BoolValue.of(userService.find(accessToken.value) != null)
   }
 
   @PostMapping("/auth/revoke-token")
-  fun revokeToken(@RequestBody accessToken: AccessToken) = userDao.revoke(accessToken.value)
+  fun revokeToken(@RequestBody accessToken: AccessToken) = userService.revoke(accessToken)
 }
