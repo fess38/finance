@@ -8,9 +8,10 @@ import ru.fess38.finance.model.Model.EntityType
 import ru.fess38.finance.model.Model.FamilyMember
 import ru.fess38.finance.model.Model.SubCategory
 import ru.fess38.finance.model.Model.Transaction
-import ru.fess38.finance.util.gunzip
-import ru.fess38.finance.util.gzip
+import java.io.ByteArrayOutputStream
 import java.time.LocalDate
+import java.util.zip.GZIPInputStream
+import java.util.zip.GZIPOutputStream
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.EnumType
@@ -88,6 +89,14 @@ data class FinanceEntity(
           data = gzip(message)
       )
     }
+
+    private fun gzip(message: Message): ByteArray {
+      return ByteArrayOutputStream()
+          .also {GZIPOutputStream(it).apply {write(message.toByteArray())}.apply {close()}}
+          .apply {close()}
+          .toByteArray()
+    }
+
   }
 
   fun toMessage(): Message {
@@ -112,5 +121,9 @@ data class FinanceEntity(
       }
       else -> throw IllegalArgumentException("Unknown type: $type")
     }
+  }
+
+  private fun gunzip(value: ByteArray): ByteArray {
+    return GZIPInputStream(value.inputStream()).readBytes()
   }
 }

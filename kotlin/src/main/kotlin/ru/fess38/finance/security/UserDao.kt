@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 import ru.fess38.finance.model.Model.RefreshToken.AuthType
 import ru.fess38.finance.model.User
-import ru.fess38.finance.util.list
 
 interface UserDao {
   fun getAll(): List<User>
@@ -31,7 +30,10 @@ class UserDaoImpl: UserDao {
   override fun getAll(): List<User> {
     val criteria = DetachedCriteria.forClass(User::class.java, "user")
     val session = sessionFactory.openSession()
-    return sessionFactory.list<User>(criteria, session).distinct().apply {session.close()}
+    return criteria.getExecutableCriteria(session).list()
+        .map {it as User}
+        .distinct()
+        .apply{session.close()}
   }
 
   override fun save(user: User): User {
@@ -49,7 +51,10 @@ class UserDaoImpl: UserDao {
         .add(Restrictions.eq("s.token", token))
         .add(Restrictions.gt("s.expired", System.currentTimeMillis()))
     val session = sessionFactory.openSession()
-    return sessionFactory.list<User>(criteria, session).firstOrNull().apply {session.close()}
+    return criteria.getExecutableCriteria(session).list()
+        .map {it as User}
+        .firstOrNull()
+        .apply {session.close()}
   }
 
   override fun find(outerId: String, authType: AuthType): User? {
@@ -57,6 +62,9 @@ class UserDaoImpl: UserDao {
         .add(Restrictions.eq("outerId", outerId))
         .add(Restrictions.eq("authType", authType))
     val session = sessionFactory.openSession()
-    return sessionFactory.list<User>(criteria, session).firstOrNull().apply {session.close()}
+    return criteria.getExecutableCriteria(session).list()
+        .map {it as User}
+        .firstOrNull()
+        .apply {session.close()}
   }
 }

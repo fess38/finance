@@ -21,8 +21,8 @@ import ru.fess38.finance.model.FinanceEntity
 import ru.fess38.finance.model.Model.Currencies
 import ru.fess38.finance.model.Model.Currency
 import ru.fess38.finance.model.User
-import ru.fess38.finance.util.toProperties
 import java.io.ByteArrayInputStream
+import java.util.Properties
 import javax.sql.DataSource
 
 @Configuration
@@ -90,4 +90,10 @@ class AppConfiguration {
       .Builder(GoogleNetHttpTransport.newTrustedTransport(), JacksonFactory.getDefaultInstance())
       .setAudience(listOf(config.getString("security.google.clientId")))
       .build()!!
+}
+
+fun Config.toProperties(): Properties {
+  val properties = Properties()
+  this.entrySet().forEach {properties[it.key] = it.value.unwrapped()}
+  return properties
 }

@@ -19,7 +19,7 @@ class InputValuesValidator {
     }
   }
 
-  private fun isValid(value: Account, oldValue: Message? = null): Boolean {
+  private fun isValid(value: Account): Boolean {
     var isValid = true
 
     if (isEmptyName(value.name)) {
@@ -31,7 +31,7 @@ class InputValuesValidator {
     return isValid
   }
 
-  private fun isValid(value: Category, oldValue: Message? = null): Boolean {
+  private fun isValid(value: Category): Boolean {
     var isValid = true
 
     if (isEmptyName(value.name)) {
@@ -40,7 +40,7 @@ class InputValuesValidator {
     return isValid
   }
 
-  private fun isValid(value: SubCategory, oldValue: Message? = null): Boolean {
+  private fun isValid(value: SubCategory): Boolean {
     var isValid = true
 
     if (isEmptyName(value.name)) {
@@ -52,7 +52,7 @@ class InputValuesValidator {
     return isValid
   }
 
-  private fun isValid(value: FamilyMember, oldValue: Message? = null): Boolean {
+  private fun isValid(value: FamilyMember): Boolean {
     var isValid = true
 
     if (isEmptyName(value.name)) {
@@ -61,7 +61,7 @@ class InputValuesValidator {
     return isValid
   }
 
-  private fun isValid(value: Transaction, oldValue: Message? = null): Boolean {
+  private fun isValid(value: Transaction): Boolean {
     var isValid = true
 
     if (value.accountIdFrom <= 0L || value.accountIdTo <= 0L) {

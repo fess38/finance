@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional
 import ru.fess38.finance.model.FinanceEntity
 import ru.fess38.finance.model.Model.EntityType
 import ru.fess38.finance.model.User
-import ru.fess38.finance.util.list
 
 interface FinanceEntityDao {
   fun save(financeEntity: FinanceEntity, user: User): FinanceEntity
@@ -39,6 +38,9 @@ class FinanceEntityDaoImpl: FinanceEntityDao {
         .add(Restrictions.eq("userId", user.id))
     ids.takeIf {ids.isNotEmpty()}?.let {criteria.add(Restrictions.`in`("id", ids))}
     entityType?.let {criteria.add(Restrictions.eq("type", entityType))}
-    return sessionFactory.list(criteria)
+    val session = sessionFactory.openSession()
+    return criteria.getExecutableCriteria(session).list()
+        .map {it as FinanceEntity}
+        .apply {session.close()}
   }
-  }
+}
