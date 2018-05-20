@@ -1,4 +1,4 @@
-package ru.fess38.finance
+package ru.fess38.finance.core
 
 import com.google.protobuf.Timestamp
 import org.junit.Assert
@@ -52,7 +52,7 @@ internal class InputValuesValidatorTest {
         .setName("name")
         .setCurrencyId(0)
         .build()
-    Assert.assertFalse(validator.isValid(account, null))
+    Assert.assertFalse(validator.isValid(account))
   }
 
   @Test
@@ -62,7 +62,7 @@ internal class InputValuesValidatorTest {
         .setName("name")
         .setCategoryId(0L)
         .build()
-    Assert.assertFalse(validator.isValid(subCategory, null))
+    Assert.assertFalse(validator.isValid(subCategory))
   }
 
   @Test
@@ -76,7 +76,7 @@ internal class InputValuesValidatorTest {
         .setAmountTo(3L)
         .setCategoryId(1L)
         .build();
-    Assert.assertFalse(validator.isValid(transaction, null))
+    Assert.assertFalse(validator.isValid(transaction))
   }
 
   @Test
@@ -90,7 +90,7 @@ internal class InputValuesValidatorTest {
         .setAmountTo(-3L)
         .setCategoryId(1L)
         .build();
-    Assert.assertFalse(validator.isValid(transaction, null))
+    Assert.assertFalse(validator.isValid(transaction))
   }
 
   @Test
@@ -104,7 +104,7 @@ internal class InputValuesValidatorTest {
         .setAmountTo(3L)
         .setCategoryId(0L)
         .build();
-    Assert.assertFalse(validator.isValid(transaction, null))
+    Assert.assertFalse(validator.isValid(transaction))
   }
 
   @Test
@@ -119,7 +119,7 @@ internal class InputValuesValidatorTest {
         .setCategoryId(1L)
         .setCategoryId(0L)
         .build();
-    Assert.assertFalse(validator.isValid(transaction, null))
+    Assert.assertFalse(validator.isValid(transaction))
   }
 
   @Test
@@ -134,6 +134,6 @@ internal class InputValuesValidatorTest {
         .setCategoryId(1L)
         .setFamilyMemberId(0L)
         .build();
-    Assert.assertFalse(validator.isValid(transaction, null))
+    Assert.assertFalse(validator.isValid(transaction))
   }
 }

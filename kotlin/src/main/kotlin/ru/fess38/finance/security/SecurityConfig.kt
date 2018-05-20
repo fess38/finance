@@ -7,19 +7,19 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
-import ru.fess38.finance.UserDao
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
 @Configuration
 class SecurityConfig: WebSecurityConfigurerAdapter() {
   @Autowired
-  lateinit var userDao: UserDao
+  lateinit var userService: UserService
+
   @Override
   override fun configure(http: HttpSecurity) {
     http
         .csrf().disable()
-        .addFilterBefore(TokenAuthenticationFilter(userDao),
+        .addFilterBefore(TokenAuthenticationFilter(userService),
             UsernamePasswordAuthenticationFilter::class.java)
         .authorizeRequests()
         .antMatchers("/api/data/**").hasAuthority("USER")

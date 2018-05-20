@@ -1,4 +1,4 @@
-package ru.fess38.finance
+package ru.fess38.finance.core
 
 import com.google.protobuf.Message
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,28 +17,18 @@ import ru.fess38.finance.model.Model.Transaction
 
 @RestController
 @RequestMapping(
-    produces = ["application/x-protobuf"],
-    consumes = ["application/x-protobuf"]
-)
-class UserDataController {
-  @Autowired
-  lateinit var entityDao: EntityDao
-
-  @GetMapping("/api/data/dump/get")
-  fun get() = entityDao.dump()
-}
-
-@RestController
-@RequestMapping(
     path = ["/api/data"],
     produces = ["application/x-protobuf"],
     consumes = ["application/x-protobuf"]
 )
 class Controller {
   @Autowired
-  lateinit var entityDao: EntityDao
+  lateinit var entityService: FinanceEntityService
 
   val validator = InputValuesValidator()
+
+  @GetMapping("/api/data/dump/get")
+  fun get() = entityService.dump()
 
   private fun saveMessage(value: Message): ResponseEntity<Any> {
     var httpStatus: HttpStatus
@@ -47,7 +37,7 @@ class Controller {
     if (validator.isValid(value)) {
       httpStatus = HttpStatus.OK
       try {
-        savedValue = entityDao.save(value)
+        savedValue = entityService.save(value)
       } catch (e: Exception) {
         httpStatus = HttpStatus.INTERNAL_SERVER_ERROR
       }
@@ -74,10 +64,10 @@ class Controller {
 
   private fun updateMessage(value: Message, id: Long): ResponseEntity<Any> {
     var httpStatus: HttpStatus
-    if (validator.isValid(value, entityDao.findById(id = id))) {
+    if (validator.isValid(value) && entityService.isExist(id)) {
       httpStatus = HttpStatus.OK
       try {
-        entityDao.update(value)
+        entityService.update(value)
       } catch (e: Exception) {
         httpStatus = HttpStatus.INTERNAL_SERVER_ERROR
       }

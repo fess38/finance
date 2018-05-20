@@ -4,7 +4,7 @@ import { AlertModule } from '../alert/alert.module';
 import { HttpService } from '../utils/http.service';
 import { AuthGuardService } from './auth-guard.service';
 import { AuthService } from './auth.service';
-import { LoginComponent } from './login.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [

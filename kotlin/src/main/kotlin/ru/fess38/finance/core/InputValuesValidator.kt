@@ -1,6 +1,7 @@
-package ru.fess38.finance
+package ru.fess38.finance.core
 
 import com.google.protobuf.Message
+import ru.fess38.finance.AppConfiguration
 import ru.fess38.finance.model.Model.Account
 import ru.fess38.finance.model.Model.Category
 import ru.fess38.finance.model.Model.FamilyMember
@@ -8,24 +9,21 @@ import ru.fess38.finance.model.Model.SubCategory
 import ru.fess38.finance.model.Model.Transaction
 
 class InputValuesValidator {
-  fun isValid(value: Message, oldValue: Message? = null): Boolean {
+  fun isValid(value: Message): Boolean {
     return when (value) {
-      is Account -> isValid(value, oldValue)
-      is Category -> isValid(value, oldValue)
-      is SubCategory -> isValid(value, oldValue)
-      is FamilyMember -> isValid(value, oldValue)
-      is Transaction -> isValid(value, oldValue)
+      is Account -> isValid(value)
+      is Category -> isValid(value)
+      is SubCategory -> isValid(value)
+      is FamilyMember -> isValid(value)
+      is Transaction -> isValid(value)
       else -> throw IllegalArgumentException("Unknown entity $value")
     }
   }
 
-  private fun isValid(value: Account, oldValue: Message? = null): Boolean {
+  private fun isValid(value: Account): Boolean {
     var isValid = true
 
     if (isEmptyName(value.name)) {
-      isValid = false
-    }
-    if (isInvalidUpdate(value.id, oldValue)) {
       isValid = false
     }
     if (!AppConfiguration.CURRENCIES.map {it.id}.contains(value.currencyId)) {
@@ -34,25 +32,19 @@ class InputValuesValidator {
     return isValid
   }
 
-  private fun isValid(value: Category, oldValue: Message? = null): Boolean {
+  private fun isValid(value: Category): Boolean {
     var isValid = true
 
     if (isEmptyName(value.name)) {
-      isValid = false
-    }
-    if (isInvalidUpdate(value.id, oldValue)) {
       isValid = false
     }
     return isValid
   }
 
-  private fun isValid(value: SubCategory, oldValue: Message? = null): Boolean {
+  private fun isValid(value: SubCategory): Boolean {
     var isValid = true
 
     if (isEmptyName(value.name)) {
-      isValid = false
-    }
-    if (isInvalidUpdate(value.id, oldValue)) {
       isValid = false
     }
     if (value.categoryId <= 0L) {
@@ -61,24 +53,18 @@ class InputValuesValidator {
     return isValid
   }
 
-  private fun isValid(value: FamilyMember, oldValue: Message? = null): Boolean {
+  private fun isValid(value: FamilyMember): Boolean {
     var isValid = true
 
     if (isEmptyName(value.name)) {
       isValid = false
     }
-    if (isInvalidUpdate(value.id, oldValue)) {
-      isValid = false
-    }
     return isValid
   }
 
-  private fun isValid(value: Transaction, oldValue: Message? = null): Boolean {
+  private fun isValid(value: Transaction): Boolean {
     var isValid = true
 
-    if (isInvalidUpdate(value.id, oldValue)) {
-      isValid = false
-    }
     if (value.accountIdFrom <= 0L || value.accountIdTo <= 0L) {
       isValid = false
     }
@@ -93,9 +79,5 @@ class InputValuesValidator {
 
   private fun isEmptyName(name: String): Boolean {
     return name.trim().isEmpty()
-  }
-
-  private fun isInvalidUpdate(id: Long, oldValue: Message?): Boolean {
-    return (id == 0L && oldValue != null) || (id != 0L && oldValue == null)
   }
 }

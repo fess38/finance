@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularIndexedDB } from 'angular2-indexeddb';
-import { Account, Currency, Dump, FamilyMember } from '../model';
+import { Account, Category, Currency, Dump, FamilyMember, SubCategory, Transaction } from '../model';
 import { HttpService } from './http.service';
 
 @Injectable()
@@ -11,7 +11,10 @@ export class UserDataService {
 
   currencies: Currency[] = [];
   accounts: Account[] = [];
+  categories: Category[] = [];
+  subCategories: SubCategory[] = [];
   familyMembers: FamilyMember[] = [];
+  transactions: Transaction[] = [];
 
   private refresh(timeout = 5000) {
     setTimeout(() => {
@@ -20,7 +23,10 @@ export class UserDataService {
         .then(dump => {
           this.currencies = dump.currencies as Currency[];
           this.accounts = dump.accounts as Account[];
+          this.categories = dump.categories as Category[];
+          this.subCategories = dump.subCategories as SubCategory[];
           this.familyMembers = dump.familyMembers as FamilyMember[];
+          this.transactions = dump.transactions as Transaction[];
         })
         .catch(error => console.error(error));
     }, timeout);
