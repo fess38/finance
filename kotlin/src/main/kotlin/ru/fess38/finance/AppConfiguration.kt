@@ -6,8 +6,7 @@ import com.google.api.client.json.jackson2.JacksonFactory
 import com.googlecode.protobuf.format.JsonFormat
 import com.typesafe.config.Config
 import com.typesafe.config.ConfigFactory
-import com.zaxxer.hikari.HikariConfig
-import com.zaxxer.hikari.HikariDataSource
+import org.apache.commons.dbcp2.BasicDataSource
 import org.hibernate.SessionFactory
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters
 import org.springframework.context.annotation.Bean
@@ -33,7 +32,7 @@ class AppConfiguration {
     private fun currencies(): List<Currency> {
       val currencies: List<Currency>
       val path = "/ru/fess38/finance/model/Currency.json"
-      val json = this.javaClass.getResource(path).readText()
+      val json = this::class.java.getResource(path).readText()
       val currenciesBuilder = Currencies.newBuilder()
       JsonFormat().merge(ByteArrayInputStream(json.toByteArray()), currenciesBuilder)
       currencies = currenciesBuilder.build().itemsList
@@ -46,15 +45,16 @@ class AppConfiguration {
 
   @Bean
   fun dataSource(config: Config): DataSource {
-    val hikariConfig = HikariConfig()
-    hikariConfig.dataSourceClassName = config.getString("hikari.classname")
-    val host = config.getString("hikari.host") + ":" + config.getInt("hikari.port")
-    hikariConfig.addDataSourceProperty("serverName", host)
-    hikariConfig.username = config.getString("hikari.user")
-    hikariConfig.password = config.getString("hikari.password")
-    hikariConfig.addDataSourceProperty("databaseName", config.getString("hikari.databasename"))
-    hikariConfig.addHealthCheckProperty("stringtype", "unspecified")
-    return HikariDataSource(hikariConfig)
+    val dataSource = BasicDataSource()
+    dataSource.driverClassName = config.getString("postgres.classname")
+    val host = config.getString("postgres.host")
+    val port = config.getString("postgres.port")
+    val database = config.getString("postgres.databasename")
+    dataSource.url = "jdbc:postgresql://$host:$port/$database"
+    dataSource.username = config.getString("postgres.user")
+    dataSource.password = config.getString("postgres.password")
+    dataSource.validationQuery = "SELECT version();"
+    return dataSource
   }
 
   @Bean
