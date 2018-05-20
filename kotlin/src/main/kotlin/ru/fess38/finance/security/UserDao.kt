@@ -33,7 +33,7 @@ class UserDaoImpl: UserDao {
     return criteria.getExecutableCriteria(session).list()
         .map {it as User}
         .distinct()
-        .apply{session.close()}
+        .apply {session.close()}
   }
 
   override fun save(user: User): User {

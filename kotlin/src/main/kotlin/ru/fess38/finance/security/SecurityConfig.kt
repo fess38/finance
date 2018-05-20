@@ -14,6 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 class SecurityConfig: WebSecurityConfigurerAdapter() {
   @Autowired
   lateinit var userService: UserService
+
   @Override
   override fun configure(http: HttpSecurity) {
     http
