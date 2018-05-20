@@ -1,4 +1,4 @@
-package ru.fess38.finance
+package ru.fess38.finance.core
 
 import com.google.protobuf.Timestamp
 import org.junit.Assert

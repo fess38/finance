@@ -1,4 +1,4 @@
-package ru.fess38.finance
+package ru.fess38.finance.core
 
 import com.google.protobuf.Message
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,19 +17,6 @@ import ru.fess38.finance.model.Model.Transaction
 
 @RestController
 @RequestMapping(
-    produces = ["application/x-protobuf"],
-    consumes = ["application/x-protobuf"]
-)
-class UserDataController {
-  @Autowired
-  lateinit var financeEntityService: FinanceEntityService
-
-  @GetMapping("/api/data/dump/get")
-  fun get() = financeEntityService.dump()
-}
-
-@RestController
-@RequestMapping(
     path = ["/api/data"],
     produces = ["application/x-protobuf"],
     consumes = ["application/x-protobuf"]
@@ -39,6 +26,9 @@ class Controller {
   lateinit var entityService: FinanceEntityService
 
   val validator = InputValuesValidator()
+
+  @GetMapping("/api/data/dump/get")
+  fun get() = entityService.dump()
 
   private fun saveMessage(value: Message): ResponseEntity<Any> {
     var httpStatus: HttpStatus

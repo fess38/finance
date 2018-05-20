@@ -1,6 +1,7 @@
-package ru.fess38.finance
+package ru.fess38.finance.core
 
 import com.google.protobuf.Message
+import ru.fess38.finance.AppConfiguration
 import ru.fess38.finance.model.Model.Account
 import ru.fess38.finance.model.Model.Category
 import ru.fess38.finance.model.Model.FamilyMember

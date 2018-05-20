@@ -1,10 +1,11 @@
-package ru.fess38.finance
+package ru.fess38.finance.core
 
 import com.google.protobuf.Message
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
+import ru.fess38.finance.AppConfiguration
 import ru.fess38.finance.model.FinanceEntity
 import ru.fess38.finance.model.Model.Account
 import ru.fess38.finance.model.Model.Category
