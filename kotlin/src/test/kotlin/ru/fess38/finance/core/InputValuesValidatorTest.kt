@@ -3,9 +3,9 @@ package ru.fess38.finance.core
 import com.google.protobuf.Timestamp
 import org.junit.Assert
 import org.junit.Test
-import ru.fess38.finance.model.Model.Account
-import ru.fess38.finance.model.Model.SubCategory
-import ru.fess38.finance.model.Model.Transaction
+import ru.fess38.finance.core.Model.Account
+import ru.fess38.finance.core.Model.SubCategory
+import ru.fess38.finance.core.Model.Transaction
 
 internal class InputValuesValidatorTest {
   private val validator = InputValuesValidator()

@@ -16,10 +16,10 @@ import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.orm.hibernate5.HibernateTransactionManager
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean
 import org.springframework.transaction.PlatformTransactionManager
-import ru.fess38.finance.model.FinanceEntity
-import ru.fess38.finance.model.Model.Currencies
-import ru.fess38.finance.model.Model.Currency
-import ru.fess38.finance.model.User
+import ru.fess38.finance.core.Model.Currencies
+import ru.fess38.finance.core.Model.Currency
+import ru.fess38.finance.dao.HibernateEntity
+import ru.fess38.finance.security.User
 import java.io.ByteArrayInputStream
 import java.util.Properties
 import javax.sql.DataSource
@@ -31,7 +31,7 @@ class AppConfiguration {
 
     private fun currencies(): List<Currency> {
       val currencies: List<Currency>
-      val path = "/ru/fess38/finance/model/Currency.json"
+      val path = "/ru/fess38/finance/core/Currency.json"
       val json = this::class.java.getResource(path).readText()
       val currenciesBuilder = Currencies.newBuilder()
       JsonFormat().merge(ByteArrayInputStream(json.toByteArray()), currenciesBuilder)
@@ -62,7 +62,7 @@ class AppConfiguration {
     val factoryBean = LocalSessionFactoryBean()
     factoryBean.setDataSource(dataSource)
     factoryBean.hibernateProperties = config.getConfig("hibernate").toProperties()
-    factoryBean.setAnnotatedClasses(FinanceEntity::class.java, User::class.java)
+    factoryBean.setAnnotatedClasses(HibernateEntity::class.java, User::class.java)
     factoryBean.afterPropertiesSet()
     return factoryBean.`object`
   }

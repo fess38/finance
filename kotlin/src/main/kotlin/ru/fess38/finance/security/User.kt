@@ -1,6 +1,7 @@
-package ru.fess38.finance.model
+package ru.fess38.finance.security
 
-import ru.fess38.finance.model.Model.RefreshToken.AuthType
+import ru.fess38.finance.core.Model.RefreshToken.AuthType
+import ru.fess38.finance.security.Role.WRITE
 import javax.persistence.CollectionTable
 import javax.persistence.Column
 import javax.persistence.ElementCollection
@@ -52,7 +53,7 @@ data class Session(
 
     @Column(name = "role", nullable = false, updatable = false, length = 10)
     @Enumerated(EnumType.STRING)
-    val role: Role = Role.WRITE
+    val role: Role = WRITE
 )
 
 enum class Role {

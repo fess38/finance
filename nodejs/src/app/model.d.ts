@@ -3,20 +3,16 @@ import { Long } from "protobufjs";import * as $protobuf from "protobufjs";
 /** EntityType enum. */
 export enum EntityType {
     UNDEFINED = 0,
-    DUMP = 1,
-    CURRENCY = 2,
-    ACCOUNT = 3,
-    CATEGORY = 4,
-    SUB_CATEGORY = 5,
-    FAMILY_MEMBER = 6,
-    TRANSACTION = 7
+    CURRENCY = 1,
+    ACCOUNT = 2,
+    CATEGORY = 3,
+    SUB_CATEGORY = 4,
+    FAMILY_MEMBER = 5,
+    TRANSACTION = 6
 }
 
 /** Properties of a Dump. */
 export interface IDump {
-
-    /** Dump id */
-    id?: (number|Long|null);
 
     /** Dump currencies */
     currencies?: (ICurrency[]|null);
@@ -45,9 +41,6 @@ export class Dump implements IDump {
      * @param [properties] Properties to set
      */
     constructor(properties?: IDump);
-
-    /** Dump id. */
-    public id: (number|Long);
 
     /** Dump currencies. */
     public currencies: ICurrency[];

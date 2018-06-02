@@ -2,11 +2,11 @@ package ru.fess38.finance.core
 
 import com.google.protobuf.Message
 import ru.fess38.finance.AppConfiguration
-import ru.fess38.finance.model.Model.Account
-import ru.fess38.finance.model.Model.Category
-import ru.fess38.finance.model.Model.FamilyMember
-import ru.fess38.finance.model.Model.SubCategory
-import ru.fess38.finance.model.Model.Transaction
+import ru.fess38.finance.core.Model.Account
+import ru.fess38.finance.core.Model.Category
+import ru.fess38.finance.core.Model.FamilyMember
+import ru.fess38.finance.core.Model.SubCategory
+import ru.fess38.finance.core.Model.Transaction
 
 class InputValuesValidator {
   fun isValid(value: Message): Boolean {

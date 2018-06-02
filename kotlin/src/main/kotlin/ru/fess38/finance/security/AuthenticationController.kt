@@ -13,10 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import ru.fess38.finance.model.Model.AccessToken
-import ru.fess38.finance.model.Model.RefreshToken
-import ru.fess38.finance.model.Model.RefreshToken.AuthType
-import ru.fess38.finance.model.Session
+import ru.fess38.finance.core.Model.AccessToken
+import ru.fess38.finance.core.Model.RefreshToken
+import ru.fess38.finance.core.Model.RefreshToken.AuthType
 import java.time.Duration
 
 @RestController

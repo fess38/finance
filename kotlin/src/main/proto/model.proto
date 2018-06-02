@@ -2,28 +2,26 @@ syntax = "proto2";
 
 import "google/protobuf/timestamp.proto";
 
-option java_package = "ru.fess38.finance.model";
+option java_package = "ru.fess38.finance.core";
 option java_outer_classname = "Model";
 
 enum EntityType {
     UNDEFINED = 0;
-    DUMP = 1;
-    CURRENCY = 2;
-    ACCOUNT = 3;
-    CATEGORY = 4;
-    SUB_CATEGORY = 5;
-    FAMILY_MEMBER = 6;
-    TRANSACTION = 7;
+    CURRENCY = 1;
+    ACCOUNT = 2;
+    CATEGORY = 3;
+    SUB_CATEGORY = 4;
+    FAMILY_MEMBER = 5;
+    TRANSACTION = 6;
 }
 
 message Dump {
-    optional int64 id = 1 [default = 0];
-    repeated Currency currencies = 2;
-    repeated Account accounts = 3;
-    repeated Category categories = 4;
-    repeated SubCategory sub_categories = 5;
-    repeated FamilyMember family_members = 6;
-    repeated Transaction transactions = 7;
+    repeated Currency currencies = 1;
+    repeated Account accounts = 2;
+    repeated Category categories = 3;
+    repeated SubCategory sub_categories = 4;
+    repeated FamilyMember family_members = 5;
+    repeated Transaction transactions = 6;
 }
 
 message Currency {

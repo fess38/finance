@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import ru.fess38.finance.model.Model.Account
-import ru.fess38.finance.model.Model.Category
-import ru.fess38.finance.model.Model.FamilyMember
-import ru.fess38.finance.model.Model.SubCategory
-import ru.fess38.finance.model.Model.Transaction
+import ru.fess38.finance.core.Model.Account
+import ru.fess38.finance.core.Model.Category
+import ru.fess38.finance.core.Model.FamilyMember
+import ru.fess38.finance.core.Model.SubCategory
+import ru.fess38.finance.core.Model.Transaction
 
 @RestController
 @RequestMapping(
@@ -23,12 +23,12 @@ import ru.fess38.finance.model.Model.Transaction
 )
 class Controller {
   @Autowired
-  lateinit var entityService: FinanceEntityService
+  lateinit var messageService: MessageService
 
   val validator = InputValuesValidator()
 
   @GetMapping("dump/get")
-  fun get() = entityService.dump()
+  fun get() = messageService.dump()
 
   private fun saveMessage(value: Message): ResponseEntity<Any> {
     var httpStatus: HttpStatus
@@ -37,7 +37,7 @@ class Controller {
     if (validator.isValid(value)) {
       httpStatus = HttpStatus.OK
       try {
-        savedValue = entityService.save(value)
+        savedValue = messageService.save(value)
       } catch (e: Exception) {
         httpStatus = HttpStatus.INTERNAL_SERVER_ERROR
       }
@@ -64,10 +64,10 @@ class Controller {
 
   private fun updateMessage(value: Message, id: Long): ResponseEntity<Any> {
     var httpStatus: HttpStatus
-    if (validator.isValid(value) && entityService.isExist(id)) {
+    if (validator.isValid(value) && messageService.isExist(id)) {
       httpStatus = HttpStatus.OK
       try {
-        entityService.update(value)
+        messageService.update(value)
       } catch (e: Exception) {
         httpStatus = HttpStatus.INTERNAL_SERVER_ERROR
       }

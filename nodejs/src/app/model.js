@@ -14,24 +14,22 @@ var $root = $protobuf.roots["default"] || ($protobuf.roots["default"] = {});
  * @exports EntityType
  * @enum {string}
  * @property {number} UNDEFINED=0 UNDEFINED value
- * @property {number} DUMP=1 DUMP value
- * @property {number} CURRENCY=2 CURRENCY value
- * @property {number} ACCOUNT=3 ACCOUNT value
- * @property {number} CATEGORY=4 CATEGORY value
- * @property {number} SUB_CATEGORY=5 SUB_CATEGORY value
- * @property {number} FAMILY_MEMBER=6 FAMILY_MEMBER value
- * @property {number} TRANSACTION=7 TRANSACTION value
+ * @property {number} CURRENCY=1 CURRENCY value
+ * @property {number} ACCOUNT=2 ACCOUNT value
+ * @property {number} CATEGORY=3 CATEGORY value
+ * @property {number} SUB_CATEGORY=4 SUB_CATEGORY value
+ * @property {number} FAMILY_MEMBER=5 FAMILY_MEMBER value
+ * @property {number} TRANSACTION=6 TRANSACTION value
  */
 $root.EntityType = (function() {
     var valuesById = {}, values = Object.create(valuesById);
     values[valuesById[0] = "UNDEFINED"] = 0;
-    values[valuesById[1] = "DUMP"] = 1;
-    values[valuesById[2] = "CURRENCY"] = 2;
-    values[valuesById[3] = "ACCOUNT"] = 3;
-    values[valuesById[4] = "CATEGORY"] = 4;
-    values[valuesById[5] = "SUB_CATEGORY"] = 5;
-    values[valuesById[6] = "FAMILY_MEMBER"] = 6;
-    values[valuesById[7] = "TRANSACTION"] = 7;
+    values[valuesById[1] = "CURRENCY"] = 1;
+    values[valuesById[2] = "ACCOUNT"] = 2;
+    values[valuesById[3] = "CATEGORY"] = 3;
+    values[valuesById[4] = "SUB_CATEGORY"] = 4;
+    values[valuesById[5] = "FAMILY_MEMBER"] = 5;
+    values[valuesById[6] = "TRANSACTION"] = 6;
     return values;
 })();
 
@@ -41,7 +39,6 @@ $root.Dump = (function() {
      * Properties of a Dump.
      * @exports IDump
      * @interface IDump
-     * @property {number|Long|null} [id] Dump id
      * @property {Array.<ICurrency>|null} [currencies] Dump currencies
      * @property {Array.<IAccount>|null} [accounts] Dump accounts
      * @property {Array.<ICategory>|null} [categories] Dump categories
@@ -70,14 +67,6 @@ $root.Dump = (function() {
                 if (properties[keys[i]] != null)
                     this[keys[i]] = properties[keys[i]];
     }
-
-    /**
-     * Dump id.
-     * @member {number|Long} id
-     * @memberof Dump
-     * @instance
-     */
-    Dump.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
     /**
      * Dump currencies.
@@ -151,26 +140,24 @@ $root.Dump = (function() {
     Dump.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.id != null && message.hasOwnProperty("id"))
-            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.id);
         if (message.currencies != null && message.currencies.length)
             for (var i = 0; i < message.currencies.length; ++i)
-                $root.Currency.encode(message.currencies[i], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                $root.Currency.encode(message.currencies[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
         if (message.accounts != null && message.accounts.length)
             for (var i = 0; i < message.accounts.length; ++i)
-                $root.Account.encode(message.accounts[i], writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                $root.Account.encode(message.accounts[i], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
         if (message.categories != null && message.categories.length)
             for (var i = 0; i < message.categories.length; ++i)
-                $root.Category.encode(message.categories[i], writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+                $root.Category.encode(message.categories[i], writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
         if (message.subCategories != null && message.subCategories.length)
             for (var i = 0; i < message.subCategories.length; ++i)
-                $root.SubCategory.encode(message.subCategories[i], writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
+                $root.SubCategory.encode(message.subCategories[i], writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
         if (message.familyMembers != null && message.familyMembers.length)
             for (var i = 0; i < message.familyMembers.length; ++i)
-                $root.FamilyMember.encode(message.familyMembers[i], writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
+                $root.FamilyMember.encode(message.familyMembers[i], writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
         if (message.transactions != null && message.transactions.length)
             for (var i = 0; i < message.transactions.length; ++i)
-                $root.Transaction.encode(message.transactions[i], writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
+                $root.Transaction.encode(message.transactions[i], writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
         return writer;
     };
 
@@ -206,34 +193,31 @@ $root.Dump = (function() {
             var tag = reader.uint32();
             switch (tag >>> 3) {
             case 1:
-                message.id = reader.int64();
-                break;
-            case 2:
                 if (!(message.currencies && message.currencies.length))
                     message.currencies = [];
                 message.currencies.push($root.Currency.decode(reader, reader.uint32()));
                 break;
-            case 3:
+            case 2:
                 if (!(message.accounts && message.accounts.length))
                     message.accounts = [];
                 message.accounts.push($root.Account.decode(reader, reader.uint32()));
                 break;
-            case 4:
+            case 3:
                 if (!(message.categories && message.categories.length))
                     message.categories = [];
                 message.categories.push($root.Category.decode(reader, reader.uint32()));
                 break;
-            case 5:
+            case 4:
                 if (!(message.subCategories && message.subCategories.length))
                     message.subCategories = [];
                 message.subCategories.push($root.SubCategory.decode(reader, reader.uint32()));
                 break;
-            case 6:
+            case 5:
                 if (!(message.familyMembers && message.familyMembers.length))
                     message.familyMembers = [];
                 message.familyMembers.push($root.FamilyMember.decode(reader, reader.uint32()));
                 break;
-            case 7:
+            case 6:
                 if (!(message.transactions && message.transactions.length))
                     message.transactions = [];
                 message.transactions.push($root.Transaction.decode(reader, reader.uint32()));
@@ -273,9 +257,6 @@ $root.Dump = (function() {
     Dump.verify = function verify(message) {
         if (typeof message !== "object" || message === null)
             return "object expected";
-        if (message.id != null && message.hasOwnProperty("id"))
-            if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
-                return "id: integer|Long expected";
         if (message.currencies != null && message.hasOwnProperty("currencies")) {
             if (!Array.isArray(message.currencies))
                 return "currencies: array expected";
@@ -345,15 +326,6 @@ $root.Dump = (function() {
         if (object instanceof $root.Dump)
             return object;
         var message = new $root.Dump();
-        if (object.id != null)
-            if ($util.Long)
-                (message.id = $util.Long.fromValue(object.id)).unsigned = false;
-            else if (typeof object.id === "string")
-                message.id = parseInt(object.id, 10);
-            else if (typeof object.id === "number")
-                message.id = object.id;
-            else if (typeof object.id === "object")
-                message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber();
         if (object.currencies) {
             if (!Array.isArray(object.currencies))
                 throw TypeError(".Dump.currencies: array expected");
@@ -438,17 +410,6 @@ $root.Dump = (function() {
             object.familyMembers = [];
             object.transactions = [];
         }
-        if (options.defaults)
-            if ($util.Long) {
-                var long = new $util.Long(0, 0, false);
-                object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-            } else
-                object.id = options.longs === String ? "0" : 0;
-        if (message.id != null && message.hasOwnProperty("id"))
-            if (typeof message.id === "number")
-                object.id = options.longs === String ? String(message.id) : message.id;
-            else
-                object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber() : message.id;
         if (message.currencies && message.currencies.length) {
             object.currencies = [];
             for (var j = 0; j < message.currencies.length; ++j)
