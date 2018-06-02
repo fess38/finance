@@ -27,7 +27,7 @@ class Controller {
 
   val validator = InputValuesValidator()
 
-  @GetMapping("/api/data/dump/get")
+  @GetMapping("dump/get")
   fun get() = entityService.dump()
 
   private fun saveMessage(value: Message): ResponseEntity<Any> {
