@@ -45,7 +45,6 @@ class MessageServiceImpl: MessageService {
   }
 
   override fun dump(): Dump {
-    val start = System.currentTimeMillis()
     val user = userService.findByContext()
     val dumpBuilder = Dump.newBuilder()
     dumpBuilder.addAllCurrencies(AppConfiguration.CURRENCIES)
@@ -68,7 +67,7 @@ class MessageServiceImpl: MessageService {
 
   override fun isExist(id: Long): Boolean {
     val user = userService.findByContext()
-    val isExist = entityDao.find(id, user) != null
+    val isExist = entityDao.isExist(id, user)
     log.info {"id [$id] is exist [$isExist] for user [${user.id}]"}
     return isExist
   }

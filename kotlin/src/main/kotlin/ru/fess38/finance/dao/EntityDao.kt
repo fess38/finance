@@ -8,7 +8,7 @@ interface EntityDao {
 
   fun update(message: Message, user: User)
 
-  fun find(id: Long, user: User): Message?
+  fun isExist(id: Long, user: User): Boolean
 
   fun get(user: User): List<Message>
 }
