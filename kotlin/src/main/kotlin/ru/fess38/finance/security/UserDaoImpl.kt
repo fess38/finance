@@ -14,18 +14,8 @@ class UserDaoImpl: UserDao {
   @Autowired
   lateinit var sessionFactory: SessionFactory
 
-  override fun getAll(): List<User> {
-    val criteria = DetachedCriteria.forClass(User::class.java, "user")
-    val session = sessionFactory.openSession()
-    return criteria.getExecutableCriteria(session).list()
-        .map {it as User}
-        .distinct()
-        .apply {session.close()}
-  }
-
-  override fun save(user: User): User {
+  override fun save(user: User) {
     sessionFactory.openSession().apply {save(user)}.apply {flush()}.apply {close()}
-    return user
   }
 
   override fun update(user: User) {

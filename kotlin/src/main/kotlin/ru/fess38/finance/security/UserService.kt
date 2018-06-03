@@ -4,8 +4,6 @@ import ru.fess38.finance.core.Model.AccessToken
 import ru.fess38.finance.core.Model.RefreshToken.AuthType
 
 interface UserService {
-  fun getAll(): List<User>
-
   fun save(outerId: String, authType: AuthType, session: Session)
 
   fun find(token: String): User?

@@ -11,15 +11,10 @@ class UserServiceImpl: UserService {
   @Autowired
   lateinit var userDao: UserDao
 
-  override fun getAll(): List<User> {
-    return userDao.getAll()
-  }
-
   override fun save(outerId: String, authType: AuthType, session: Session) {
     val user = userDao.find(outerId, authType)
     if (user == null) {
-      userDao.save(User(outerId = outerId, authType = authType,
-          sessions = listOf(session)))
+      userDao.save(User(outerId = outerId, authType = authType, sessions = listOf(session)))
     } else {
       val updatedUser = user.copy(sessions = user.sessions.plus(session))
       userDao.update(updatedUser)

@@ -61,7 +61,7 @@ class MessageServiceImpl: MessageService {
     dumpBuilder.addAllFamilyMembers(familyMembers)
     dumpBuilder.addAllTransactions(transactions)
 
-    log.info {"Create dump for user [${user.id}] in "}
+    log.info {"Create dump for user [${user.id}]"}
     return dumpBuilder.build()
   }
 
