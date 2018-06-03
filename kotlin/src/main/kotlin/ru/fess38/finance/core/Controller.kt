@@ -1,6 +1,7 @@
 package ru.fess38.finance.core
 
 import com.google.protobuf.Message
+import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -15,6 +16,8 @@ import ru.fess38.finance.core.Model.FamilyMember
 import ru.fess38.finance.core.Model.SubCategory
 import ru.fess38.finance.core.Model.Transaction
 import ru.fess38.finance.utils.id
+import ru.fess38.finance.utils.type
+import ru.fess38.finance.validation.MessageValidator
 
 @RestController
 @RequestMapping(
@@ -23,19 +26,24 @@ import ru.fess38.finance.utils.id
     consumes = ["application/x-protobuf"]
 )
 class Controller {
+  private val log = KotlinLogging.logger {}
+
   @Autowired
   lateinit var messageService: MessageService
 
-  private val validator = InputValuesValidator()
+  @Autowired
+  lateinit var validator: MessageValidator<Message>
 
   @GetMapping("dump/get")
   fun get() = messageService.dump()
 
   private fun saveMessage(message: Message): ResponseEntity<Any> {
     var httpStatus: HttpStatus
-    var savedValue = message
+    var savedValue: Message? = null
 
-    if (validator.isValid(message)) {
+    val validatorResponse = validator.validate(message)
+    val errors = validatorResponse.errors.joinToString("; ")
+    if (validatorResponse.isValid) {
       httpStatus = HttpStatus.OK
       try {
         savedValue = messageService.save(message)
@@ -43,9 +51,10 @@ class Controller {
         httpStatus = HttpStatus.INTERNAL_SERVER_ERROR
       }
     } else {
+      log.info{"Unable to save [${message.type}]: $errors"}
       httpStatus = HttpStatus.BAD_REQUEST
     }
-    return ResponseEntity(savedValue, httpStatus)
+    return ResponseEntity(savedValue ?: errors, httpStatus)
   }
 
   @PostMapping("account/save")
@@ -65,7 +74,9 @@ class Controller {
 
   private fun updateMessage(message: Message): ResponseEntity<Any> {
     var httpStatus: HttpStatus
-    if (validator.isValid(message) && messageService.isExist(message.id)) {
+    val validatorResponse = validator.validate(message)
+    val errors = validatorResponse.errors.joinToString("; ")
+    if (validatorResponse.isValid) {
       httpStatus = HttpStatus.OK
       try {
         messageService.update(message)
@@ -73,9 +84,10 @@ class Controller {
         httpStatus = HttpStatus.INTERNAL_SERVER_ERROR
       }
     } else {
+      log.info{"Unable to update [${message.type}] [${message.id}]: $errors"}
       httpStatus = HttpStatus.BAD_REQUEST
     }
-    return ResponseEntity(message, httpStatus)
+    return ResponseEntity(errors, httpStatus)
   }
 
   @PostMapping("account/update")

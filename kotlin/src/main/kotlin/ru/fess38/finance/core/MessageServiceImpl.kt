@@ -8,6 +8,7 @@ import ru.fess38.finance.AppConfiguration
 import ru.fess38.finance.core.Model.Account
 import ru.fess38.finance.core.Model.Category
 import ru.fess38.finance.core.Model.Dump
+import ru.fess38.finance.core.Model.EntityType
 import ru.fess38.finance.core.Model.EntityType.ACCOUNT
 import ru.fess38.finance.core.Model.EntityType.CATEGORY
 import ru.fess38.finance.core.Model.EntityType.FAMILY_MEMBER
@@ -65,10 +66,7 @@ class MessageServiceImpl: MessageService {
     return dumpBuilder.build()
   }
 
-  override fun isExist(id: Long): Boolean {
-    val user = userService.findByContext()
-    val isExist = entityDao.isExist(id, user)
-    log.info {"id [$id] is exist [$isExist] for user [${user.id}]"}
-    return isExist
+  override fun isExist(id: Long, type: EntityType): Boolean {
+    return entityDao.isExist(id, type, userService.findByContext())
   }
 }

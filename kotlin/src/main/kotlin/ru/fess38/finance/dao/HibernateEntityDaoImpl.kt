@@ -35,9 +35,10 @@ class HibernateEntityDaoImpl: EntityDao {
     sessionFactory.openSession().apply {update(hibernateEntity)}.apply {flush()}.apply {close()}
   }
 
-  override fun isExist(id: Long, user: User): Boolean {
+  override fun isExist(id: Long, type: EntityType, user: User): Boolean {
     val criteria = DetachedCriteria.forClass(HibernateEntity::class.java)
         .add(Restrictions.eq("userId", user.id))
+        .add(Restrictions.eq("type", type))
         .add(Restrictions.eq("id", id))
         .setProjection(Projections.rowCount())
     val session = sessionFactory.openSession()

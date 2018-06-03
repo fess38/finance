@@ -3,6 +3,7 @@ package ru.fess38.finance
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.json.jackson2.JacksonFactory
+import com.google.protobuf.Message
 import com.googlecode.protobuf.format.JsonFormat
 import com.typesafe.config.Config
 import com.typesafe.config.ConfigFactory
@@ -16,10 +17,13 @@ import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.orm.hibernate5.HibernateTransactionManager
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean
 import org.springframework.transaction.PlatformTransactionManager
+import ru.fess38.finance.core.MessageService
 import ru.fess38.finance.core.Model.Currencies
 import ru.fess38.finance.core.Model.Currency
 import ru.fess38.finance.dao.HibernateEntity
 import ru.fess38.finance.security.User
+import ru.fess38.finance.validation.CompositeValidator
+import ru.fess38.finance.validation.MessageValidator
 import java.io.ByteArrayInputStream
 import java.util.Properties
 import javax.sql.DataSource
@@ -90,6 +94,11 @@ class AppConfiguration {
       .Builder(GoogleNetHttpTransport.newTrustedTransport(), JacksonFactory.getDefaultInstance())
       .setAudience(listOf(config.getString("security.google.clientId")))
       .build()!!
+
+  @Bean
+  fun messageValidator(messageService: MessageService): MessageValidator<Message> {
+    return CompositeValidator(messageService)
+  }
 }
 
 fun Config.toProperties(): Properties {
