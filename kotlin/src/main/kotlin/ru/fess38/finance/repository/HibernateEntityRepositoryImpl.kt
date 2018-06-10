@@ -1,4 +1,4 @@
-package ru.fess38.finance.dao
+package ru.fess38.finance.repository
 
 import com.google.protobuf.Message
 import org.hibernate.SessionFactory
@@ -14,19 +14,19 @@ import ru.fess38.finance.core.Model.FamilyMember
 import ru.fess38.finance.core.Model.SubCategory
 import ru.fess38.finance.core.Model.Transaction
 import ru.fess38.finance.security.User
-import ru.fess38.finance.utils.setId
+import ru.fess38.finance.utils.withId
 import java.util.zip.GZIPInputStream
 
 @Repository
 @Transactional
-class HibernateEntityDaoImpl: EntityDao {
+class HibernateEntityRepositoryImpl: EntityRepository {
   @Autowired
   lateinit var sessionFactory: SessionFactory
 
   override fun save(message: Message, user: User): Message {
     val hibernateEntity = HibernateEntity.from(message, user)
     sessionFactory.openSession().apply {save(hibernateEntity)}.apply {flush()}.apply {close()}
-    return message.setId(hibernateEntity.id)
+    return message.withId(hibernateEntity.id)
   }
 
   override fun update(message: Message, user: User) {
@@ -63,6 +63,6 @@ class HibernateEntityDaoImpl: EntityDao {
       EntityType.FAMILY_MEMBER -> FamilyMember.parseFrom(data)
       EntityType.TRANSACTION -> Transaction.parseFrom(data)
       else -> throw IllegalArgumentException("Unknown type: $hibernateEntity.type")
-    }.setId(hibernateEntity.id)
+    }.withId(hibernateEntity.id)
   }
 }

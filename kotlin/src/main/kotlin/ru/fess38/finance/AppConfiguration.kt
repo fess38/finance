@@ -18,7 +18,7 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean
 import org.springframework.transaction.PlatformTransactionManager
 import ru.fess38.finance.core.Model.Currencies
 import ru.fess38.finance.core.Model.Currency
-import ru.fess38.finance.dao.HibernateEntity
+import ru.fess38.finance.repository.HibernateEntity
 import ru.fess38.finance.security.User
 import java.io.ByteArrayInputStream
 import java.util.Properties

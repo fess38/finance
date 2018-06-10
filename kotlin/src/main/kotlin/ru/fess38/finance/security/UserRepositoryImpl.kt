@@ -10,7 +10,7 @@ import ru.fess38.finance.core.Model.RefreshToken.AuthType
 
 @Repository
 @Transactional
-class UserDaoImpl: UserDao {
+class UserRepositoryImpl: UserRepository {
   @Autowired
   lateinit var sessionFactory: SessionFactory
 

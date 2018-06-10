@@ -17,7 +17,7 @@ import ru.fess38.finance.core.Model.Transaction
 private val Message.idField: FieldDescriptor
   get() = this.descriptorForType.findFieldByName("id")!!
 
-fun Message.setId(id: Long) = this.toBuilder().setField(this.idField, id).build()!!
+fun Message.withId(id: Long) = this.toBuilder().setField(this.idField, id).build()!!
 
 val Message.id: Long
   get() = this.getField(this.idField) as Long

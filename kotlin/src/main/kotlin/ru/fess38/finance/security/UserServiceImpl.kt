@@ -9,44 +9,44 @@ import ru.fess38.finance.core.Model.RefreshToken.AuthType
 @Service
 class UserServiceImpl: UserService {
   @Autowired
-  lateinit var userDao: UserDao
+  lateinit var repository: UserRepository
 
   override fun getAll(): List<User> {
-    return userDao.getAll()
+    return repository.getAll()
   }
 
   override fun save(outerId: String, authType: AuthType, session: Session) {
-    val user = userDao.find(outerId, authType)
+    val user = repository.find(outerId, authType)
     if (user == null) {
-      userDao.save(User(outerId = outerId, authType = authType,
+      repository.save(User(outerId = outerId, authType = authType,
           sessions = listOf(session)))
     } else {
       val updatedUser = user.copy(sessions = user.sessions.plus(session))
-      userDao.update(updatedUser)
+      repository.update(updatedUser)
     }
   }
 
   override fun find(token: String): User? {
-    return userDao.find(token)
+    return repository.find(token)
   }
 
   override fun find(outerId: String, authType: AuthType): User? {
-    return userDao.find(outerId, authType)
+    return repository.find(outerId, authType)
   }
 
   override fun findByContext(): User {
     val securityContext = SecurityContextHolder.getContext()
     val tokenAuthentication = (securityContext.authentication) as TokenAuthentication
     val token = tokenAuthentication.credentials
-    return userDao.find(token) ?: throw IllegalArgumentException("Invalid token: $token")
+    return repository.find(token) ?: throw IllegalArgumentException("Invalid token: $token")
   }
 
   override fun revoke(accessToken: AccessToken) {
-    userDao.find(accessToken.value)?.let {
+    repository.find(accessToken.value)?.let {
       val updatedSessions = it.sessions.map {
         if (it.token == accessToken.value) it.copy(expired = 0) else it
       }
-      userDao.update(it.copy(sessions = updatedSessions))
+      repository.update(it.copy(sessions = updatedSessions))
     }
   }
 }

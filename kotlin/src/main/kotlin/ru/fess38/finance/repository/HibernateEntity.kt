@@ -1,4 +1,4 @@
-package ru.fess38.finance.dao
+package ru.fess38.finance.repository
 
 import com.google.protobuf.Message
 import ru.fess38.finance.core.Model.EntityType
