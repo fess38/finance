@@ -4,7 +4,6 @@ import com.google.protobuf.Message
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import ru.fess38.finance.AppConfiguration
 import ru.fess38.finance.core.Model.Account
 import ru.fess38.finance.core.Model.Category
 import ru.fess38.finance.core.Model.Dump
@@ -48,7 +47,7 @@ class MessageServiceImpl: MessageService {
   override fun dump(): Dump {
     val user = userService.findByContext()
     val dumpBuilder = Dump.newBuilder()
-    dumpBuilder.addAllCurrencies(AppConfiguration.CURRENCIES)
+    dumpBuilder.addAllCurrencies(repository.currencies())
     val messages = repository.get(user)
     val accounts = messages.filter {it.type == ACCOUNT }.map {it as Account}
     val categories = messages.filter {it.type == CATEGORY }.map {it as Category}

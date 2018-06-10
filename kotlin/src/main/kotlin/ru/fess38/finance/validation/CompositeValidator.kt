@@ -11,7 +11,7 @@ import ru.fess38.finance.utils.id
 import ru.fess38.finance.utils.type
 
 class CompositeValidator(private val messageService: MessageService): MessageValidator<Message> {
-  private val accountValidator = AccountValidator()
+  private val accountValidator = AccountValidator(messageService)
   private val categoryValidator = CategoryValidator()
   private val subCategoryValidator = SubCategoryValidator(messageService)
   private val familyMemberValidator = FamilyMemberValidator()

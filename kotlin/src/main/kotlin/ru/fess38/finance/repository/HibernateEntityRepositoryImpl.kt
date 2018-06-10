@@ -1,6 +1,7 @@
 package ru.fess38.finance.repository
 
 import com.google.protobuf.Message
+import com.googlecode.protobuf.format.JsonFormat
 import org.hibernate.SessionFactory
 import org.hibernate.criterion.DetachedCriteria
 import org.hibernate.criterion.Projections
@@ -10,12 +11,16 @@ import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 import ru.fess38.finance.core.Model.Account
 import ru.fess38.finance.core.Model.Category
+import ru.fess38.finance.core.Model.Currencies
+import ru.fess38.finance.core.Model.Currency
 import ru.fess38.finance.core.Model.EntityType
+import ru.fess38.finance.core.Model.EntityType.CURRENCY
 import ru.fess38.finance.core.Model.FamilyMember
 import ru.fess38.finance.core.Model.SubCategory
 import ru.fess38.finance.core.Model.Transaction
 import ru.fess38.finance.security.User
 import ru.fess38.finance.utils.withId
+import java.io.ByteArrayInputStream
 import java.util.zip.GZIPInputStream
 
 @Repository
@@ -23,6 +28,8 @@ import java.util.zip.GZIPInputStream
 class HibernateEntityRepositoryImpl: EntityRepository {
   @Autowired
   lateinit var sessionFactory: SessionFactory
+
+  private val currencies = currencies()
 
   override fun save(message: Message, user: User): Message {
     val hibernateEntity = HibernateEntity.from(message, user)
@@ -36,15 +43,19 @@ class HibernateEntityRepositoryImpl: EntityRepository {
   }
 
   override fun isExist(id: Long, type: EntityType, user: User): Boolean {
-    val criteria = DetachedCriteria.forClass(HibernateEntity::class.java)
-        .add(Restrictions.eq("userId", user.id))
-        .add(Restrictions.eq("type", type))
-        .add(Restrictions.eq("id", id))
-        .setProjection(Projections.rowCount())
-    val session = sessionFactory.openSession()
-    val rowCount = criteria.getExecutableCriteria(session).uniqueResult() as Long
-    session.close()
-    return rowCount > 0
+    return if (type == CURRENCY) {
+      currencies.any {it.id == id}
+    } else {
+      val criteria = DetachedCriteria.forClass(HibernateEntity::class.java)
+          .add(Restrictions.eq("userId", user.id))
+          .add(Restrictions.eq("type", type))
+          .add(Restrictions.eq("id", id))
+          .setProjection(Projections.rowCount())
+      val session = sessionFactory.openSession()
+      val rowCount = criteria.getExecutableCriteria(session).uniqueResult() as Long
+      session.close()
+      rowCount > 0
+    }
   }
 
   override fun get(user: User): List<Message> {
@@ -66,5 +77,15 @@ class HibernateEntityRepositoryImpl: EntityRepository {
       EntityType.TRANSACTION -> Transaction.parseFrom(data)
       else -> throw IllegalArgumentException("Unknown type: $hibernateEntity.type")
     }.withId(hibernateEntity.id)
+  }
+
+  final override fun currencies(): List<Currency> {
+    val currencies: List<Currency>
+    val path = "/ru/fess38/finance/core/Currency.json"
+    val json = this::class.java.getResource(path).readText()
+    val currenciesBuilder = Currencies.newBuilder()
+    JsonFormat().merge(ByteArrayInputStream(json.toByteArray()), currenciesBuilder)
+    currencies = currenciesBuilder.build().itemsList
+    return currencies.toList()
   }
 }

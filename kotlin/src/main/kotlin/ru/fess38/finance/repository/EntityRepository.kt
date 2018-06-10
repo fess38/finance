@@ -1,6 +1,7 @@
 package ru.fess38.finance.repository
 
 import com.google.protobuf.Message
+import ru.fess38.finance.core.Model.Currency
 import ru.fess38.finance.core.Model.EntityType
 import ru.fess38.finance.security.User
 
@@ -12,4 +13,6 @@ interface EntityRepository {
   fun isExist(id: Long, type: EntityType, user: User): Boolean
 
   fun get(user: User): List<Message>
+
+  fun currencies(): List<Currency>
 }

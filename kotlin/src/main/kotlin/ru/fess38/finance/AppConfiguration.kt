@@ -4,7 +4,6 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.protobuf.Message
-import com.googlecode.protobuf.format.JsonFormat
 import com.typesafe.config.Config
 import com.typesafe.config.ConfigFactory
 import org.apache.commons.dbcp2.BasicDataSource
@@ -18,32 +17,15 @@ import org.springframework.orm.hibernate5.HibernateTransactionManager
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean
 import org.springframework.transaction.PlatformTransactionManager
 import ru.fess38.finance.core.MessageService
-import ru.fess38.finance.core.Model.Currencies
-import ru.fess38.finance.core.Model.Currency
 import ru.fess38.finance.repository.HibernateEntity
 import ru.fess38.finance.security.User
 import ru.fess38.finance.validation.CompositeValidator
 import ru.fess38.finance.validation.MessageValidator
-import java.io.ByteArrayInputStream
 import java.util.Properties
 import javax.sql.DataSource
 
 @Configuration
 class AppConfiguration {
-  companion object {
-    val CURRENCIES: List<Currency> = currencies()
-
-    private fun currencies(): List<Currency> {
-      val currencies: List<Currency>
-      val path = "/ru/fess38/finance/core/Currency.json"
-      val json = this::class.java.getResource(path).readText()
-      val currenciesBuilder = Currencies.newBuilder()
-      JsonFormat().merge(ByteArrayInputStream(json.toByteArray()), currenciesBuilder)
-      currencies = currenciesBuilder.build().itemsList
-      return currencies.toList()
-    }
-  }
-
   @Bean
   fun config() = ConfigFactory.load().getConfig(System.getenv("env") ?: "dev")!!
 

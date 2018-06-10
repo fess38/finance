@@ -6,6 +6,7 @@ import org.mockito.Mockito
 import ru.fess38.finance.core.MessageService
 import ru.fess38.finance.core.Model.Account
 import ru.fess38.finance.core.Model.EntityType.ACCOUNT
+import ru.fess38.finance.core.Model.EntityType.CURRENCY
 import ru.fess38.finance.core.Model.EntityType.FAMILY_MEMBER
 import ru.fess38.finance.core.Model.FamilyMember
 
@@ -39,6 +40,7 @@ internal class CompositeValidatorTest {
   private fun mockMessageService(): MessageService {
     val messageService = Mockito.mock(MessageService::class.java)
     Mockito.`when`(messageService.isExist(10, ACCOUNT)).thenReturn(true)
+    Mockito.`when`(messageService.isExist(1, CURRENCY)).thenReturn(true)
     Mockito.`when`(messageService.isExist(20, FAMILY_MEMBER)).thenReturn(false)
     return messageService
   }
