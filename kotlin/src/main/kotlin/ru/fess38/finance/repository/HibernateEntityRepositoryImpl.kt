@@ -3,6 +3,7 @@ package ru.fess38.finance.repository
 import com.google.protobuf.Message
 import org.hibernate.SessionFactory
 import org.hibernate.criterion.DetachedCriteria
+import org.hibernate.criterion.Projections
 import org.hibernate.criterion.Restrictions
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Repository
@@ -34,15 +35,16 @@ class HibernateEntityRepositoryImpl: EntityRepository {
     sessionFactory.openSession().apply {update(hibernateEntity)}.apply {flush()}.apply {close()}
   }
 
-  override fun find(id: Long, user: User): Message? {
+  override fun isExist(id: Long, type: EntityType, user: User): Boolean {
     val criteria = DetachedCriteria.forClass(HibernateEntity::class.java)
         .add(Restrictions.eq("userId", user.id))
+        .add(Restrictions.eq("type", type))
         .add(Restrictions.eq("id", id))
+        .setProjection(Projections.rowCount())
     val session = sessionFactory.openSession()
-    return criteria.getExecutableCriteria(session).list()
-        .map {parse((it as HibernateEntity))}
-        .apply {session.close()}
-        .firstOrNull()
+    val rowCount = criteria.getExecutableCriteria(session).uniqueResult() as Long
+    session.close()
+    return rowCount > 0
   }
 
   override fun get(user: User): List<Message> {

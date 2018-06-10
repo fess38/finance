@@ -11,15 +11,10 @@ class UserServiceImpl: UserService {
   @Autowired
   lateinit var repository: UserRepository
 
-  override fun getAll(): List<User> {
-    return repository.getAll()
-  }
-
   override fun save(outerId: String, authType: AuthType, session: Session) {
     val user = repository.find(outerId, authType)
     if (user == null) {
-      repository.save(User(outerId = outerId, authType = authType,
-          sessions = listOf(session)))
+      repository.save(User(outerId = outerId, authType = authType, sessions = listOf(session)))
     } else {
       val updatedUser = user.copy(sessions = user.sessions.plus(session))
       repository.update(updatedUser)

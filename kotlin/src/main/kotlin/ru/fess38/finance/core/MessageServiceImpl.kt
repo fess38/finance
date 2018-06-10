@@ -8,6 +8,7 @@ import ru.fess38.finance.AppConfiguration
 import ru.fess38.finance.core.Model.Account
 import ru.fess38.finance.core.Model.Category
 import ru.fess38.finance.core.Model.Dump
+import ru.fess38.finance.core.Model.EntityType
 import ru.fess38.finance.core.Model.EntityType.ACCOUNT
 import ru.fess38.finance.core.Model.EntityType.CATEGORY
 import ru.fess38.finance.core.Model.EntityType.FAMILY_MEMBER
@@ -45,7 +46,6 @@ class MessageServiceImpl: MessageService {
   }
 
   override fun dump(): Dump {
-    val start = System.currentTimeMillis()
     val user = userService.findByContext()
     val dumpBuilder = Dump.newBuilder()
     dumpBuilder.addAllCurrencies(AppConfiguration.CURRENCIES)
@@ -62,14 +62,11 @@ class MessageServiceImpl: MessageService {
     dumpBuilder.addAllFamilyMembers(familyMembers)
     dumpBuilder.addAllTransactions(transactions)
 
-    log.info {"Create dump for user [${user.id}] in "}
+    log.info {"Create dump for user [${user.id}]"}
     return dumpBuilder.build()
   }
 
-  override fun isExist(id: Long): Boolean {
-    val user = userService.findByContext()
-    val isExist = repository.find(id, user) != null
-    log.info {"id [$id] is exist [$isExist] for user [${user.id}]"}
-    return isExist
+  override fun isExist(id: Long, type: EntityType): Boolean {
+    return repository.isExist(id, type, userService.findByContext())
   }
 }
