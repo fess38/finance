@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AccountComponent } from './account/account.component';
+import { AccountDetailComponent } from './account/account-detail/account-detail.component';
+import { AccountListComponent } from './account/account-list/account-list.component';
 import { AuthGuardService } from './auth/auth-guard.service';
 import { LoginComponent } from './auth/login/login.component';
 import { FamilyMemberComponent } from './family-member/family-member.component';
@@ -18,7 +19,12 @@ const appRoutes: Routes = [
   },
   {
     path: 'account',
-    component: AccountComponent,
+    component: AccountListComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'account/:id',
+    component: AccountDetailComponent,
     canActivate: [AuthGuardService]
   },
   {

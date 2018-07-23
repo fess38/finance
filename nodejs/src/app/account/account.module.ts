@@ -3,15 +3,18 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { ClarityModule } from 'clarity-angular';
 import { AlertModule } from '../alert/alert.module';
+import { AppRoutingModule } from '../app-routing.module';
 import { UserDataService } from '../utils/user-data.service';
-import { AccountComponent } from './account.component';
+import { AccountDetailComponent } from './account-detail/account-detail.component';
+import { AccountListComponent } from './account-list/account-list.component';
 
 @NgModule({
   declarations: [
-    AccountComponent
+    AccountListComponent,
+    AccountDetailComponent
   ],
   imports: [
-    AlertModule, BrowserModule, ClarityModule, FormsModule
+    AlertModule, AppRoutingModule, BrowserModule, ClarityModule, FormsModule
   ],
   providers: [
     UserDataService

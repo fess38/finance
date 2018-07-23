@@ -1,0 +1,39 @@
+<div>
+  <alert></alert>
+  <form #accountForm="ngForm">
+    <section class="form-block">
+      <div class="form-group">
+        <label for="name"
+               role="tooltip"
+               class="tooltip tooltip-validation"
+               [class.invalid]="name.invalid && (name.dirty || name.touched)">
+          <input type="text"
+                 id="name"
+                 required
+                 name="name"
+                 [(ngModel)]="account.name"
+                 #name="ngModel"
+                 placeholder="Название">
+        </label>
+        <div class="select">
+          <select name="currency" [(ngModel)]="account.currencyId" required title="Валюта">
+            <option selected *ngFor="let currency of currencies()" [ngValue]="currency.id">
+              {{currency.nameRu}} ({{currency.symbol}})
+            </option>
+          </select>
+        </div>
+      </div>
+    </section>
+  </form>
+  <button type="submit"
+          class="btn btn-primary btn-sm"
+          (click)="update(account)"
+          [disabled]="!accountForm.form.valid || account.currencyId == 0">Сохранить
+  </button>
+  <button type="submit"
+          class="btn btn-danger btn-sm"
+          (click)="delete(account)"
+          [hidden]="!isEditing()"
+          [disabled]="account.transactionAmount > 0">Удалить
+  </button>
+</div>
