@@ -27,11 +27,11 @@ export class AccountDetailComponent implements OnInit {
     }
   }
 
-  private currencies() {
+  currencies() {
     return this.userdata.currencies;
   }
 
-  private update(account: Account) {
+  update(account: Account) {
     if (account.id == 0) {
       this.userdata.saveAccount(account)
         .then(() => this.router.navigate(['/account']))
@@ -49,13 +49,13 @@ export class AccountDetailComponent implements OnInit {
     }
   }
 
-  private delete(account: Account) {
+  delete(account: Account) {
     account.isDeleted = true;
     this.update(account);
     this.router.navigate(['/account']);
   }
 
-  private isEditing() {
+  isEditing() {
     return this.account.id != 0;
   }
 }

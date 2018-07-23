@@ -8,7 +8,7 @@ import { UserDataService } from '../../utils/user-data.service';
 export class AccountListComponent {
   constructor(private userdata: UserDataService) {}
 
-  private accounts() {
+  accounts() {
     return this.userdata.accounts
       .filter(x => !x.isDeleted)
       .sort(AccountListComponent.sortByName());
@@ -22,7 +22,7 @@ export class AccountListComponent {
     };
   }
 
-  private currencySymbol(currencyId: number): String {
+  currencySymbol(currencyId: number): String {
     let symbol: String;
     if (this.currencies().length > 0) {
       symbol = this.currencies()
