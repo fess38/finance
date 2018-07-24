@@ -55,7 +55,15 @@ export class AccountDetailComponent implements OnInit {
     this.router.navigate(['/account']);
   }
 
-  isEditing() {
-    return this.account.id != 0;
+  isNewAccount() {
+    return this.account.id == 0;
+  }
+
+  hasCurrency() {
+    return this.account.currencyId != 0;
+  }
+
+  hasTransations() {
+    return this.account.transactionAmount > 0;
   }
 }

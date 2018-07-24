@@ -20,7 +20,7 @@
                   [(ngModel)]="account.currencyId"
                   required
                   title="Валюта"
-                  [disabled]="account.id != 0">
+                  [disabled]="!isNewAccount()">
             <option disabled>Валюта</option>
             <option selected *ngFor="let currency of currencies()" [ngValue]="currency.id">
               {{currency.nameRu}} ({{currency.symbol}})
@@ -33,12 +33,12 @@
   <button type="submit"
           class="btn btn-primary btn-sm"
           (click)="update(account)"
-          [disabled]="!accountForm.form.valid || account.currencyId == 0">Сохранить
+          [disabled]="!accountForm.form.valid || !hasCurrency()">Сохранить
   </button>
   <button type="submit"
           class="btn btn-danger btn-sm"
           (click)="delete(account)"
-          [hidden]="!isEditing()"
-          [disabled]="account.transactionAmount > 0">Удалить
+          [hidden]="isNewAccount()"
+          [disabled]="hasTransations()">Удалить
   </button>
 </div>
