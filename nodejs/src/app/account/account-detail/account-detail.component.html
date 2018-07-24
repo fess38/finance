@@ -16,7 +16,12 @@
                  placeholder="Название">
         </label>
         <div class="select">
-          <select name="currency" [(ngModel)]="account.currencyId" required title="Валюта">
+          <select name="currency"
+                  [(ngModel)]="account.currencyId"
+                  required
+                  title="Валюта"
+                  [disabled]="account.id != 0">
+            <option disabled>Валюта</option>
             <option selected *ngFor="let currency of currencies()" [ngValue]="currency.id">
               {{currency.nameRu}} ({{currency.symbol}})
             </option>
