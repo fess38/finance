@@ -1,4 +1,5 @@
-import { Long } from "protobufjs";import * as $protobuf from "protobufjs";
+import * as $protobuf from 'protobufjs';
+import { Long } from 'protobufjs';
 
 /** EntityType enum. */
 export enum EntityType {
@@ -472,6 +473,9 @@ export interface ICategory {
 
     /** Category isExpence */
     isExpence?: (boolean|null);
+
+    /** Category transactionAmount */
+    transactionAmount?: (number|Long|null);
 }
 
 /** Represents a Category. */
@@ -497,6 +501,9 @@ export class Category implements ICategory {
 
     /** Category isExpence. */
     public isExpence: boolean;
+
+    /** Category transactionAmount. */
+    public transactionAmount: (number|Long);
 
     /**
      * Creates a new Category instance using the specified properties.
@@ -583,6 +590,9 @@ export interface ISubCategory {
 
     /** SubCategory categoryId */
     categoryId: (number|Long);
+
+    /** SubCategory transactionAmount */
+    transactionAmount?: (number|Long|null);
 }
 
 /** Represents a SubCategory. */
@@ -605,6 +615,9 @@ export class SubCategory implements ISubCategory {
 
     /** SubCategory categoryId. */
     public categoryId: (number|Long);
+
+    /** SubCategory transactionAmount. */
+    public transactionAmount: (number|Long);
 
     /**
      * Creates a new SubCategory instance using the specified properties.
@@ -688,6 +701,9 @@ export interface IFamilyMember {
 
     /** FamilyMember name */
     name: string;
+
+    /** FamilyMember transactionAmount */
+    transactionAmount?: (number|Long|null);
 }
 
 /** Represents a FamilyMember. */
@@ -707,6 +723,9 @@ export class FamilyMember implements IFamilyMember {
 
     /** FamilyMember name. */
     public name: string;
+
+    /** FamilyMember transactionAmount. */
+    public transactionAmount: (number|Long);
 
     /**
      * Creates a new FamilyMember instance using the specified properties.

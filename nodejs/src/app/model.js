@@ -1320,6 +1320,7 @@ $root.Category = (function() {
      * @property {string} name Category name
      * @property {boolean|null} [isIncome] Category isIncome
      * @property {boolean|null} [isExpence] Category isExpence
+     * @property {number|Long|null} [transactionAmount] Category transactionAmount
      */
 
     /**
@@ -1378,6 +1379,14 @@ $root.Category = (function() {
     Category.prototype.isExpence = false;
 
     /**
+     * Category transactionAmount.
+     * @member {number|Long} transactionAmount
+     * @memberof Category
+     * @instance
+     */
+    Category.prototype.transactionAmount = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
      * Creates a new Category instance using the specified properties.
      * @function create
      * @memberof Category
@@ -1410,6 +1419,8 @@ $root.Category = (function() {
             writer.uint32(/* id 4, wireType 0 =*/32).bool(message.isIncome);
         if (message.isExpence != null && message.hasOwnProperty("isExpence"))
             writer.uint32(/* id 5, wireType 0 =*/40).bool(message.isExpence);
+        if (message.transactionAmount != null && message.hasOwnProperty("transactionAmount"))
+            writer.uint32(/* id 6, wireType 0 =*/48).int64(message.transactionAmount);
         return writer;
     };
 
@@ -1458,6 +1469,9 @@ $root.Category = (function() {
                 break;
             case 5:
                 message.isExpence = reader.bool();
+                break;
+            case 6:
+                message.transactionAmount = reader.int64();
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -1510,6 +1524,9 @@ $root.Category = (function() {
         if (message.isExpence != null && message.hasOwnProperty("isExpence"))
             if (typeof message.isExpence !== "boolean")
                 return "isExpence: boolean expected";
+        if (message.transactionAmount != null && message.hasOwnProperty("transactionAmount"))
+            if (!$util.isInteger(message.transactionAmount) && !(message.transactionAmount && $util.isInteger(message.transactionAmount.low) && $util.isInteger(message.transactionAmount.high)))
+                return "transactionAmount: integer|Long expected";
         return null;
     };
 
@@ -1542,6 +1559,15 @@ $root.Category = (function() {
             message.isIncome = Boolean(object.isIncome);
         if (object.isExpence != null)
             message.isExpence = Boolean(object.isExpence);
+        if (object.transactionAmount != null)
+            if ($util.Long)
+                (message.transactionAmount = $util.Long.fromValue(object.transactionAmount)).unsigned = false;
+            else if (typeof object.transactionAmount === "string")
+                message.transactionAmount = parseInt(object.transactionAmount, 10);
+            else if (typeof object.transactionAmount === "number")
+                message.transactionAmount = object.transactionAmount;
+            else if (typeof object.transactionAmount === "object")
+                message.transactionAmount = new $util.LongBits(object.transactionAmount.low >>> 0, object.transactionAmount.high >>> 0).toNumber();
         return message;
     };
 
@@ -1568,6 +1594,11 @@ $root.Category = (function() {
             object.name = "";
             object.isIncome = false;
             object.isExpence = false;
+            if ($util.Long) {
+                var long = new $util.Long(0, 0, false);
+                object.transactionAmount = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.transactionAmount = options.longs === String ? "0" : 0;
         }
         if (message.id != null && message.hasOwnProperty("id"))
             if (typeof message.id === "number")
@@ -1582,6 +1613,11 @@ $root.Category = (function() {
             object.isIncome = message.isIncome;
         if (message.isExpence != null && message.hasOwnProperty("isExpence"))
             object.isExpence = message.isExpence;
+        if (message.transactionAmount != null && message.hasOwnProperty("transactionAmount"))
+            if (typeof message.transactionAmount === "number")
+                object.transactionAmount = options.longs === String ? String(message.transactionAmount) : message.transactionAmount;
+            else
+                object.transactionAmount = options.longs === String ? $util.Long.prototype.toString.call(message.transactionAmount) : options.longs === Number ? new $util.LongBits(message.transactionAmount.low >>> 0, message.transactionAmount.high >>> 0).toNumber() : message.transactionAmount;
         return object;
     };
 
@@ -1609,6 +1645,7 @@ $root.SubCategory = (function() {
      * @property {boolean|null} [isDeleted] SubCategory isDeleted
      * @property {string} name SubCategory name
      * @property {number|Long} categoryId SubCategory categoryId
+     * @property {number|Long|null} [transactionAmount] SubCategory transactionAmount
      */
 
     /**
@@ -1659,6 +1696,14 @@ $root.SubCategory = (function() {
     SubCategory.prototype.categoryId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
     /**
+     * SubCategory transactionAmount.
+     * @member {number|Long} transactionAmount
+     * @memberof SubCategory
+     * @instance
+     */
+    SubCategory.prototype.transactionAmount = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
      * Creates a new SubCategory instance using the specified properties.
      * @function create
      * @memberof SubCategory
@@ -1688,6 +1733,8 @@ $root.SubCategory = (function() {
             writer.uint32(/* id 2, wireType 0 =*/16).bool(message.isDeleted);
         writer.uint32(/* id 3, wireType 2 =*/26).string(message.name);
         writer.uint32(/* id 4, wireType 0 =*/32).int64(message.categoryId);
+        if (message.transactionAmount != null && message.hasOwnProperty("transactionAmount"))
+            writer.uint32(/* id 5, wireType 0 =*/40).int64(message.transactionAmount);
         return writer;
     };
 
@@ -1733,6 +1780,9 @@ $root.SubCategory = (function() {
                 break;
             case 4:
                 message.categoryId = reader.int64();
+                break;
+            case 5:
+                message.transactionAmount = reader.int64();
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -1783,6 +1833,9 @@ $root.SubCategory = (function() {
             return "name: string expected";
         if (!$util.isInteger(message.categoryId) && !(message.categoryId && $util.isInteger(message.categoryId.low) && $util.isInteger(message.categoryId.high)))
             return "categoryId: integer|Long expected";
+        if (message.transactionAmount != null && message.hasOwnProperty("transactionAmount"))
+            if (!$util.isInteger(message.transactionAmount) && !(message.transactionAmount && $util.isInteger(message.transactionAmount.low) && $util.isInteger(message.transactionAmount.high)))
+                return "transactionAmount: integer|Long expected";
         return null;
     };
 
@@ -1820,6 +1873,15 @@ $root.SubCategory = (function() {
                 message.categoryId = object.categoryId;
             else if (typeof object.categoryId === "object")
                 message.categoryId = new $util.LongBits(object.categoryId.low >>> 0, object.categoryId.high >>> 0).toNumber();
+        if (object.transactionAmount != null)
+            if ($util.Long)
+                (message.transactionAmount = $util.Long.fromValue(object.transactionAmount)).unsigned = false;
+            else if (typeof object.transactionAmount === "string")
+                message.transactionAmount = parseInt(object.transactionAmount, 10);
+            else if (typeof object.transactionAmount === "number")
+                message.transactionAmount = object.transactionAmount;
+            else if (typeof object.transactionAmount === "object")
+                message.transactionAmount = new $util.LongBits(object.transactionAmount.low >>> 0, object.transactionAmount.high >>> 0).toNumber();
         return message;
     };
 
@@ -1849,6 +1911,11 @@ $root.SubCategory = (function() {
                 object.categoryId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.categoryId = options.longs === String ? "0" : 0;
+            if ($util.Long) {
+                var long = new $util.Long(0, 0, false);
+                object.transactionAmount = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.transactionAmount = options.longs === String ? "0" : 0;
         }
         if (message.id != null && message.hasOwnProperty("id"))
             if (typeof message.id === "number")
@@ -1864,6 +1931,11 @@ $root.SubCategory = (function() {
                 object.categoryId = options.longs === String ? String(message.categoryId) : message.categoryId;
             else
                 object.categoryId = options.longs === String ? $util.Long.prototype.toString.call(message.categoryId) : options.longs === Number ? new $util.LongBits(message.categoryId.low >>> 0, message.categoryId.high >>> 0).toNumber() : message.categoryId;
+        if (message.transactionAmount != null && message.hasOwnProperty("transactionAmount"))
+            if (typeof message.transactionAmount === "number")
+                object.transactionAmount = options.longs === String ? String(message.transactionAmount) : message.transactionAmount;
+            else
+                object.transactionAmount = options.longs === String ? $util.Long.prototype.toString.call(message.transactionAmount) : options.longs === Number ? new $util.LongBits(message.transactionAmount.low >>> 0, message.transactionAmount.high >>> 0).toNumber() : message.transactionAmount;
         return object;
     };
 
@@ -1890,6 +1962,7 @@ $root.FamilyMember = (function() {
      * @property {number|Long|null} [id] FamilyMember id
      * @property {boolean|null} [isDeleted] FamilyMember isDeleted
      * @property {string} name FamilyMember name
+     * @property {number|Long|null} [transactionAmount] FamilyMember transactionAmount
      */
 
     /**
@@ -1932,6 +2005,14 @@ $root.FamilyMember = (function() {
     FamilyMember.prototype.name = "";
 
     /**
+     * FamilyMember transactionAmount.
+     * @member {number|Long} transactionAmount
+     * @memberof FamilyMember
+     * @instance
+     */
+    FamilyMember.prototype.transactionAmount = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
      * Creates a new FamilyMember instance using the specified properties.
      * @function create
      * @memberof FamilyMember
@@ -1960,6 +2041,8 @@ $root.FamilyMember = (function() {
         if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
             writer.uint32(/* id 2, wireType 0 =*/16).bool(message.isDeleted);
         writer.uint32(/* id 3, wireType 2 =*/26).string(message.name);
+        if (message.transactionAmount != null && message.hasOwnProperty("transactionAmount"))
+            writer.uint32(/* id 4, wireType 0 =*/32).int64(message.transactionAmount);
         return writer;
     };
 
@@ -2002,6 +2085,9 @@ $root.FamilyMember = (function() {
                 break;
             case 3:
                 message.name = reader.string();
+                break;
+            case 4:
+                message.transactionAmount = reader.int64();
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -2048,6 +2134,9 @@ $root.FamilyMember = (function() {
                 return "isDeleted: boolean expected";
         if (!$util.isString(message.name))
             return "name: string expected";
+        if (message.transactionAmount != null && message.hasOwnProperty("transactionAmount"))
+            if (!$util.isInteger(message.transactionAmount) && !(message.transactionAmount && $util.isInteger(message.transactionAmount.low) && $util.isInteger(message.transactionAmount.high)))
+                return "transactionAmount: integer|Long expected";
         return null;
     };
 
@@ -2076,6 +2165,15 @@ $root.FamilyMember = (function() {
             message.isDeleted = Boolean(object.isDeleted);
         if (object.name != null)
             message.name = String(object.name);
+        if (object.transactionAmount != null)
+            if ($util.Long)
+                (message.transactionAmount = $util.Long.fromValue(object.transactionAmount)).unsigned = false;
+            else if (typeof object.transactionAmount === "string")
+                message.transactionAmount = parseInt(object.transactionAmount, 10);
+            else if (typeof object.transactionAmount === "number")
+                message.transactionAmount = object.transactionAmount;
+            else if (typeof object.transactionAmount === "object")
+                message.transactionAmount = new $util.LongBits(object.transactionAmount.low >>> 0, object.transactionAmount.high >>> 0).toNumber();
         return message;
     };
 
@@ -2100,6 +2198,11 @@ $root.FamilyMember = (function() {
                 object.id = options.longs === String ? "0" : 0;
             object.isDeleted = false;
             object.name = "";
+            if ($util.Long) {
+                var long = new $util.Long(0, 0, false);
+                object.transactionAmount = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.transactionAmount = options.longs === String ? "0" : 0;
         }
         if (message.id != null && message.hasOwnProperty("id"))
             if (typeof message.id === "number")
@@ -2110,6 +2213,11 @@ $root.FamilyMember = (function() {
             object.isDeleted = message.isDeleted;
         if (message.name != null && message.hasOwnProperty("name"))
             object.name = message.name;
+        if (message.transactionAmount != null && message.hasOwnProperty("transactionAmount"))
+            if (typeof message.transactionAmount === "number")
+                object.transactionAmount = options.longs === String ? String(message.transactionAmount) : message.transactionAmount;
+            else
+                object.transactionAmount = options.longs === String ? $util.Long.prototype.toString.call(message.transactionAmount) : options.longs === Number ? new $util.LongBits(message.transactionAmount.low >>> 0, message.transactionAmount.high >>> 0).toNumber() : message.transactionAmount;
         return object;
     };
 

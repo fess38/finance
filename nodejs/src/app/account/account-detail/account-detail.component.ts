@@ -32,21 +32,18 @@ export class AccountDetailComponent implements OnInit {
   }
 
   update(account: Account) {
+    let promise: Promise<any>;
     if (account.id == 0) {
-      this.userdata.saveAccount(account)
-        .then(() => this.router.navigate(['/account']))
-        .catch(error => {
-          this.alertService.error('Ошибка сохранения');
-          console.error(error.message);
-        });
+      promise = this.userdata.saveAccount(account);
     } else {
-      this.userdata.updateAccount(account)
-        .then(() => this.router.navigate(['/account']))
-        .catch(error => {
-          this.alertService.error('Ошибка обновления');
-          console.error(error.message);
-        });
+      promise = this.userdata.updateAccount(account);
     }
+    promise
+      .then(() => this.router.navigate(['/account']))
+      .catch(error => {
+        this.alertService.error('Ошибка обновления');
+        console.error(error.message);
+      });
   }
 
   delete(account: Account) {
