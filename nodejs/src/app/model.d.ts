@@ -471,8 +471,8 @@ export interface ICategory {
     /** Category isIncome */
     isIncome?: (boolean|null);
 
-    /** Category isExpence */
-    isExpence?: (boolean|null);
+    /** Category isExpense */
+    isExpense?: (boolean|null);
 
     /** Category transactionAmount */
     transactionAmount?: (number|Long|null);
@@ -499,8 +499,8 @@ export class Category implements ICategory {
     /** Category isIncome. */
     public isIncome: boolean;
 
-    /** Category isExpence. */
-    public isExpence: boolean;
+    /** Category isExpense. */
+    public isExpense: boolean;
 
     /** Category transactionAmount. */
     public transactionAmount: (number|Long);

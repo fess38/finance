@@ -37,6 +37,11 @@ export class UserDataService {
       .then((data) => this.accounts.push(Account.decode(data)));
   }
 
+  saveCategory(category: Category) {
+    return this.http.post('/api/data/category/save', Category.encode(category))
+      .then((data) => this.categories.push(Category.decode(data)));
+  }
+
   saveFamilyMember(familyMember: FamilyMember) {
     return this.http.post('/api/data/family_member/save', FamilyMember.encode(familyMember))
       .then((data) => this.familyMembers.push(FamilyMember.decode(data)));
@@ -44,6 +49,10 @@ export class UserDataService {
 
   updateAccount(account: Account): Promise<any> {
     return this.http.post('/api/data/account/update', Account.encode(account));
+  }
+
+  updateCategory(category: Category): Promise<any> {
+    return this.http.post('/api/data/category/update', Category.encode(category));
   }
 
   updateFamilyMember(familyMember: FamilyMember): Promise<any> {

@@ -1,0 +1,38 @@
+<div>
+  <alert></alert>
+  <form #categoryForm="ngForm">
+    <section class="form-block">
+      <div class="form-group">
+        <label for="name"
+               role="tooltip"
+               class="tooltip tooltip-validation"
+               [class.invalid]="name.invalid && (name.dirty || name.touched)">
+          <input type="text"
+                 id="name"
+                 required
+                 name="name"
+                 [(ngModel)]="category.name"
+                 #name="ngModel"
+                 placeholder="Название">
+        </label>
+        <clr-checkbox name="incomeCheckbox" [(ngModel)]="category.isIncome">
+          Доход
+        </clr-checkbox>
+        <clr-checkbox name="expenseCheckbox" id="expense" [(ngModel)]="category.isExpense">
+          Расход
+        </clr-checkbox>
+      </div>
+    </section>
+  </form>
+  <button type="submit"
+          class="btn btn-primary btn-sm"
+          (click)="update(category)"
+          [disabled]="!categoryForm.form.valid || !isValidCheckBox()">Сохранить
+  </button>
+  <button type="submit"
+          class="btn btn-danger btn-sm"
+          (click)="delete(category)"
+          [hidden]="isNewCategory()"
+          [disabled]="hasTransations()">Удалить
+  </button>
+</div>

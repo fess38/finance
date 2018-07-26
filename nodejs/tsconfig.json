@@ -14,7 +14,8 @@
     "types": [
       "gapi",
       "gapi.auth2",
-      "jasmine"
+      "jasmine",
+      "underscore"
     ],
     "lib": [
       "es2017",

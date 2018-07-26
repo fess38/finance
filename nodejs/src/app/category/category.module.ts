@@ -5,12 +5,12 @@ import { ClarityModule } from 'clarity-angular';
 import { AlertModule } from '../alert/alert.module';
 import { AppRoutingModule } from '../app-routing.module';
 import { UserDataService } from '../utils/user-data.service';
-import { FamilyMemberDetailComponent } from './family-member-detail/family-member-detail.component';
-import { FamilyMemberListComponent } from './family-member-list/family-member-list.component';
+import { CategoryDetailComponent } from './category-detail/category-detail.component';
+import { CategoryListComponent } from './category-list/category-list.component';
 
 @NgModule({
   declarations: [
-    FamilyMemberListComponent, FamilyMemberDetailComponent
+    CategoryListComponent, CategoryDetailComponent
   ],
   imports: [
     AlertModule, AppRoutingModule, BrowserModule, ClarityModule, FormsModule
@@ -19,4 +19,4 @@ import { FamilyMemberListComponent } from './family-member-list/family-member-li
     UserDataService
   ]
 })
-export class FamilyMemberModule {}
+export class CategoryModule {}

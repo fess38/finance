@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Account } from '../../model';
+import * as _ from 'underscore';
 import { UserDataService } from '../../utils/user-data.service';
 
 @Component({
@@ -9,17 +9,10 @@ export class AccountListComponent {
   constructor(private userdata: UserDataService) {}
 
   accounts() {
-    return this.userdata.accounts
+    return _.chain(this.userdata.accounts)
       .filter(x => !x.isDeleted)
-      .sort(AccountListComponent.sortByName());
-  }
-
-  private static sortByName() {
-    return (a: Account, b: Account) => {
-      if (a.name < b.name) return -1;
-      else if (a.name > b.name) return 1;
-      else return 0;
-    };
+      .sortBy(x => x.name)
+      .value();
   }
 
   currencySymbol(currencyId: number): String {

@@ -1319,7 +1319,7 @@ $root.Category = (function() {
      * @property {boolean|null} [isDeleted] Category isDeleted
      * @property {string} name Category name
      * @property {boolean|null} [isIncome] Category isIncome
-     * @property {boolean|null} [isExpence] Category isExpence
+     * @property {boolean|null} [isExpense] Category isExpense
      * @property {number|Long|null} [transactionAmount] Category transactionAmount
      */
 
@@ -1371,12 +1371,12 @@ $root.Category = (function() {
     Category.prototype.isIncome = false;
 
     /**
-     * Category isExpence.
-     * @member {boolean} isExpence
+     * Category isExpense.
+     * @member {boolean} isExpense
      * @memberof Category
      * @instance
      */
-    Category.prototype.isExpence = false;
+    Category.prototype.isExpense = false;
 
     /**
      * Category transactionAmount.
@@ -1417,8 +1417,8 @@ $root.Category = (function() {
         writer.uint32(/* id 3, wireType 2 =*/26).string(message.name);
         if (message.isIncome != null && message.hasOwnProperty("isIncome"))
             writer.uint32(/* id 4, wireType 0 =*/32).bool(message.isIncome);
-        if (message.isExpence != null && message.hasOwnProperty("isExpence"))
-            writer.uint32(/* id 5, wireType 0 =*/40).bool(message.isExpence);
+        if (message.isExpense != null && message.hasOwnProperty("isExpense"))
+            writer.uint32(/* id 5, wireType 0 =*/40).bool(message.isExpense);
         if (message.transactionAmount != null && message.hasOwnProperty("transactionAmount"))
             writer.uint32(/* id 6, wireType 0 =*/48).int64(message.transactionAmount);
         return writer;
@@ -1468,7 +1468,7 @@ $root.Category = (function() {
                 message.isIncome = reader.bool();
                 break;
             case 5:
-                message.isExpence = reader.bool();
+                message.isExpense = reader.bool();
                 break;
             case 6:
                 message.transactionAmount = reader.int64();
@@ -1521,9 +1521,9 @@ $root.Category = (function() {
         if (message.isIncome != null && message.hasOwnProperty("isIncome"))
             if (typeof message.isIncome !== "boolean")
                 return "isIncome: boolean expected";
-        if (message.isExpence != null && message.hasOwnProperty("isExpence"))
-            if (typeof message.isExpence !== "boolean")
-                return "isExpence: boolean expected";
+        if (message.isExpense != null && message.hasOwnProperty("isExpense"))
+            if (typeof message.isExpense !== "boolean")
+                return "isExpense: boolean expected";
         if (message.transactionAmount != null && message.hasOwnProperty("transactionAmount"))
             if (!$util.isInteger(message.transactionAmount) && !(message.transactionAmount && $util.isInteger(message.transactionAmount.low) && $util.isInteger(message.transactionAmount.high)))
                 return "transactionAmount: integer|Long expected";
@@ -1557,8 +1557,8 @@ $root.Category = (function() {
             message.name = String(object.name);
         if (object.isIncome != null)
             message.isIncome = Boolean(object.isIncome);
-        if (object.isExpence != null)
-            message.isExpence = Boolean(object.isExpence);
+        if (object.isExpense != null)
+            message.isExpense = Boolean(object.isExpense);
         if (object.transactionAmount != null)
             if ($util.Long)
                 (message.transactionAmount = $util.Long.fromValue(object.transactionAmount)).unsigned = false;
@@ -1593,7 +1593,7 @@ $root.Category = (function() {
             object.isDeleted = false;
             object.name = "";
             object.isIncome = false;
-            object.isExpence = false;
+            object.isExpense = false;
             if ($util.Long) {
                 var long = new $util.Long(0, 0, false);
                 object.transactionAmount = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
@@ -1611,8 +1611,8 @@ $root.Category = (function() {
             object.name = message.name;
         if (message.isIncome != null && message.hasOwnProperty("isIncome"))
             object.isIncome = message.isIncome;
-        if (message.isExpence != null && message.hasOwnProperty("isExpence"))
-            object.isExpence = message.isExpence;
+        if (message.isExpense != null && message.hasOwnProperty("isExpense"))
+            object.isExpense = message.isExpense;
         if (message.transactionAmount != null && message.hasOwnProperty("transactionAmount"))
             if (typeof message.transactionAmount === "number")
                 object.transactionAmount = options.longs === String ? String(message.transactionAmount) : message.transactionAmount;

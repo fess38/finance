@@ -23,9 +23,9 @@ internal class CategoryValidatorTest {
     val category = Category.newBuilder()
         .setName(" ")
         .setIsIncome(true)
-        .setIsExpence(true)
+        .setIsExpense(true)
         .build()
-    val message = "unknown category state: is_income=true, is_expence=true"
+    val message = "unknown category state: is_income=true, is_expense=true"
     val expected = ValidatorResponse(false, message)
     val actual = validator.validate(category)
     Assert.assertEquals(expected, actual)
@@ -36,7 +36,7 @@ internal class CategoryValidatorTest {
     val category = Category.newBuilder()
         .setName(" ")
         .build()
-    val message = "unknown category state: is_income=false, is_expence=false"
+    val message = "unknown category state: is_income=false, is_expense=false"
     val expected = ValidatorResponse(false, message)
     val actual = validator.validate(category)
     Assert.assertEquals(expected, actual)

@@ -7,11 +7,11 @@ class CategoryValidator: MessageValidator<Category> {
     var isValid = true
     val errors = mutableListOf<String>()
 
-    if (value.isIncome == value.isExpence) {
+    if (value.isIncome == value.isExpense) {
       isValid = false
       val isIncome = value.isIncome
-      val isExpence = value.isExpence
-      errors.add("unknown category state: is_income=$isIncome, is_expence=$isExpence")
+      val isExpense = value.isExpense
+      errors.add("unknown category state: is_income=$isIncome, is_expense=$isExpense")
     }
     if (isValid) {
       errors.add("ok")

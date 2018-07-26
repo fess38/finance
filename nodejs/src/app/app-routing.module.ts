@@ -4,6 +4,8 @@ import { AccountDetailComponent } from './account/account-detail/account-detail.
 import { AccountListComponent } from './account/account-list/account-list.component';
 import { AuthGuardService } from './auth/auth-guard.service';
 import { LoginComponent } from './auth/login/login.component';
+import { CategoryDetailComponent } from './category/category-detail/category-detail.component';
+import { CategoryListComponent } from './category/category-list/category-list.component';
 import { FamilyMemberDetailComponent } from './family-member/family-member-detail/family-member-detail.component';
 import { FamilyMemberListComponent } from './family-member/family-member-list/family-member-list.component';
 import { MainPageComponent } from './main-page/main-page.component';
@@ -26,6 +28,16 @@ const appRoutes: Routes = [
   {
     path: 'account/:id',
     component: AccountDetailComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'category',
+    component: CategoryListComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'category/:id',
+    component: CategoryDetailComponent,
     canActivate: [AuthGuardService]
   },
   {
@@ -53,7 +65,6 @@ const appRoutes: Routes = [
   exports: [
     RouterModule
   ],
-  providers: [
-  ]
+  providers: []
 })
 export class AppRoutingModule {}

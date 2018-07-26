@@ -10,8 +10,7 @@ import { AccountListComponent } from './account-list/account-list.component';
 
 @NgModule({
   declarations: [
-    AccountListComponent,
-    AccountDetailComponent
+    AccountListComponent, AccountDetailComponent
   ],
   imports: [
     AlertModule, AppRoutingModule, BrowserModule, ClarityModule, FormsModule
