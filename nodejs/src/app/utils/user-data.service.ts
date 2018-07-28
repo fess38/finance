@@ -42,6 +42,11 @@ export class UserDataService {
       .then((data) => this.categories.push(Category.decode(data)));
   }
 
+  saveSubCategory(subCategory: SubCategory) {
+    return this.http.post('/api/data/sub_category/save', SubCategory.encode(subCategory))
+      .then((data) => this.subCategories.push(SubCategory.decode(data)));
+  }
+
   saveFamilyMember(familyMember: FamilyMember) {
     return this.http.post('/api/data/family_member/save', FamilyMember.encode(familyMember))
       .then((data) => this.familyMembers.push(FamilyMember.decode(data)));
@@ -53,6 +58,10 @@ export class UserDataService {
 
   updateCategory(category: Category): Promise<any> {
     return this.http.post('/api/data/category/update', Category.encode(category));
+  }
+
+  updateSubCategory(subCategory: SubCategory): Promise<any> {
+    return this.http.post('/api/data/sub_category/update', SubCategory.encode(subCategory));
   }
 
   updateFamilyMember(familyMember: FamilyMember): Promise<any> {

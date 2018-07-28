@@ -1,0 +1,44 @@
+<div>
+  <alert></alert>
+  <form #subCategoryForm="ngForm">
+    <section class="form-block">
+      <div class="form-group">
+        <label for="name"
+               role="tooltip"
+               class="tooltip tooltip-validation"
+               [class.invalid]="name.invalid && (name.dirty || name.touched)">
+          <input type="text"
+                 id="name"
+                 required
+                 name="name"
+                 [(ngModel)]="subCategory.name"
+                 #name="ngModel"
+                 placeholder="Название">
+        </label>
+        <div class="select">
+          <select name="category"
+                  [(ngModel)]="subCategory.categoryId"
+                  required
+                  title="Категория"
+                  [disabled]="!isNewSubCategory()">
+            <option disabled>Категория</option>
+            <option selected *ngFor="let category of categories()" [ngValue]="category.id">
+              {{category.name}}
+            </option>
+          </select>
+        </div>
+      </div>
+    </section>
+  </form>
+  <button type="submit"
+          class="btn btn-primary btn-sm"
+          (click)="update(subCategory)"
+          [disabled]="!subCategoryForm.form.valid || !hasCategory()">Сохранить
+  </button>
+  <button type="submit"
+          class="btn btn-danger btn-sm"
+          (click)="delete(subCategory)"
+          [hidden]="isNewSubCategory()"
+          [disabled]="hasTransations()">Удалить
+  </button>
+</div>

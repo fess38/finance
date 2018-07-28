@@ -11,7 +11,7 @@ export class AccountListComponent {
   accounts() {
     return _.chain(this.userdata.accounts)
       .filter(x => !x.isDeleted)
-      .sortBy(x => x.name)
+      .sortBy(x => x.name.toLowerCase())
       .value();
   }
 

@@ -15,6 +15,7 @@ import { CategoryModule } from './category/category.module';
 import { FamilyMemberModule } from './family-member/family-member.module';
 import { MainMenuComponent } from './main-menu/main-menu.component';
 import { MainPageComponent } from './main-page/main-page.component';
+import { SubCategoryModule } from './sub-category/sub-category.module';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { MainPageComponent } from './main-page/main-page.component';
     BrowserModule, BrowserAnimationsModule, ClarityModule, CookieModule.forRoot(),
     FormsModule, HttpClientModule,
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
-    AccountModule, AppRoutingModule, AuthModule, CategoryModule, FamilyMemberModule
+    AccountModule, AppRoutingModule, AuthModule, CategoryModule, SubCategoryModule,
+    FamilyMemberModule
   ],
   providers: [
   ],

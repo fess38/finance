@@ -9,6 +9,8 @@ import { CategoryListComponent } from './category/category-list/category-list.co
 import { FamilyMemberDetailComponent } from './family-member/family-member-detail/family-member-detail.component';
 import { FamilyMemberListComponent } from './family-member/family-member-list/family-member-list.component';
 import { MainPageComponent } from './main-page/main-page.component';
+import { SubCategoryDetailComponent } from './sub-category/sub-category-detail/sub-category-detail.component';
+import { SubCategoryListComponent } from './sub-category/sub-category-list/sub-category-list.component';
 
 const appRoutes: Routes = [
   {
@@ -38,6 +40,16 @@ const appRoutes: Routes = [
   {
     path: 'category/:id',
     component: CategoryDetailComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'sub_category',
+    component: SubCategoryListComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'sub_category/:id',
+    component: SubCategoryDetailComponent,
     canActivate: [AuthGuardService]
   },
   {

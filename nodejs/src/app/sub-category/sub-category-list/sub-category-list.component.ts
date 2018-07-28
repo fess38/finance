@@ -3,13 +3,14 @@ import * as _ from 'underscore';
 import { UserDataService } from '../../utils/user-data.service';
 
 @Component({
-  templateUrl: 'family-member-list.component.html'
+  templateUrl: 'sub-category-list.component.html'
 })
-export class FamilyMemberListComponent {
+export class SubCategoryListComponent {
   constructor(private userdata: UserDataService) {}
 
-  familyMembers() {
-    return _.chain(this.userdata.familyMembers)
+  subCategories() {
+    return _
+      .chain(this.userdata.subCategories)
       .filter(x => !x.isDeleted)
       .sortBy(x => x.name.toLowerCase())
       .value();
