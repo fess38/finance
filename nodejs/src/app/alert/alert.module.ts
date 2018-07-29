@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
+import { ClarityModule } from '@clr/angular';
 import { AlertComponent } from './alert.component';
 import { AlertService } from './alert.service';
-import { ClarityModule } from 'clarity-angular';
 
 @NgModule({
   declarations: [

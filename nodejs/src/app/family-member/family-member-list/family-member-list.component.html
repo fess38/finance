@@ -3,8 +3,8 @@
     <table class="table table-noborder table-compact">
       <tr>
         <th routerLink="/family_member/new">
-          <span>Член семьи</span>
-          <i class="fa fa-plus-circle" aria-hidden="true"></i>
+          <span>Член семьи </span>
+          <clr-icon shape="plus-circle"></clr-icon>
         </th>
       </tr>
       <tr *ngFor="let familyMember of familyMembers()" routerLink="/family_member/{{familyMember.id}}">

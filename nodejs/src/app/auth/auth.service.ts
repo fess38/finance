@@ -3,7 +3,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie';
-import 'rxjs/add/operator/toPromise';
 import { AlertService } from '../alert/alert.service';
 import { AccessToken, RefreshToken } from '../model';
 import { HttpService } from '../utils/http.service';

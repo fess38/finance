@@ -1,8 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Writer } from 'protobufjs';
-import 'rxjs/add/operator/timeout';
-import 'rxjs/add/operator/toPromise';
+import { map, timeout } from 'rxjs/operators';
 
 @Injectable()
 export class HttpService {
@@ -16,21 +15,21 @@ export class HttpService {
     })
   };
 
-  get(url: string, timeout = 5000): Promise<Uint8Array> {
+  get(url: string, timeout_ = 5000): Promise<Uint8Array> {
     return this.http.get(url, this.options)
-      .timeout(timeout)
-      .map(data => new Uint8Array(data))
+      .pipe(timeout(timeout_))
+      .pipe(map(data => new Uint8Array(data)))
       .toPromise();
   }
 
-  post(url: string, value: Writer, timeout = 5000): Promise<Uint8Array> {
+  post(url: string, value: Writer, timeout_ = 5000): Promise<Uint8Array> {
     const array = value.finish();
     const length = array.byteLength;
     const offcet = array.byteOffset;
     const body = array.buffer.slice(offcet, offcet + length);
     return this.http.post(url, body, this.options)
-      .timeout(timeout)
-      .map(data => new Uint8Array(data))
+      .pipe(timeout(timeout_))
+      .pipe(map(data => new Uint8Array(data)))
       .toPromise();
   }
 }

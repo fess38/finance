@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { ClarityModule } from 'clarity-angular';
+import { ClarityModule } from '@clr/angular';
 import { AlertModule } from '../alert/alert.module';
 import { AppRoutingModule } from '../app-routing.module';
 import { UserDataService } from '../utils/user-data.service';

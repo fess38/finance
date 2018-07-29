@@ -8,13 +8,10 @@
         "files": [
           "/favicon.ico",
           "/index.html",
-          "/ngsw-worker.js"
-        ],
-        "versionedFiles": [
+          "/ngsw-worker.js",
           "/*.bundle.css",
           "/*.bundle.js",
-          "/*.chunk.js",
-          "/fontawesome-webfont*"
+          "/*.chunk.js"
         ]
       }
     },
