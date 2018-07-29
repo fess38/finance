@@ -4,7 +4,7 @@ import org.junit.Assert
 import org.junit.Test
 import org.mockito.Mockito
 import ru.fess38.finance.core.MessageService
-import ru.fess38.finance.core.Model.EntityType.SUB_CATEGORY
+import ru.fess38.finance.core.Model.EntityType.CATEGORY
 import ru.fess38.finance.core.Model.SubCategory
 
 internal class SubCategoryValidatorTest {
@@ -34,8 +34,8 @@ internal class SubCategoryValidatorTest {
 
   private fun mockMessageService(): MessageService {
     val messageService = Mockito.mock(MessageService::class.java)
-    Mockito.`when`(messageService.isExist(1, SUB_CATEGORY)).thenReturn(true)
-    Mockito.`when`(messageService.isExist(2, SUB_CATEGORY)).thenReturn(false)
+    Mockito.`when`(messageService.isExist(1, CATEGORY)).thenReturn(true)
+    Mockito.`when`(messageService.isExist(2, CATEGORY)).thenReturn(false)
     return messageService
   }
 }
