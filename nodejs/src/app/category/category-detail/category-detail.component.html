@@ -1,5 +1,7 @@
 <div>
   <alert></alert>
+  <h4 [hidden]="!isNewCategory()">Добавление категории</h4>
+  <h4 [hidden]="isNewCategory()">Редактирование категории</h4>
   <form #categoryForm="ngForm">
     <section class="form-block">
       <div class="form-group">
@@ -21,6 +23,12 @@
         <clr-checkbox name="expenseCheckbox" id="expense" [(ngModel)]="category.isExpense">
           Расход
         </clr-checkbox>
+        <clr-checkbox name="isVisible" [(ngModel)]="category.isVisible" [hidden]="isNewCategory()">
+          Использовать в новых транзакциях
+        </clr-checkbox>
+      </div>
+      <div [hidden]="isNewCategory()">
+        <span>Транзакций: {{category.transactionAmount}}</span>
       </div>
     </section>
   </form>

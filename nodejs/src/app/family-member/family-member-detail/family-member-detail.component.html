@@ -1,5 +1,7 @@
 <div>
   <alert></alert>
+  <h4 [hidden]="!isNewFamilyMember()">Добавление члена семьи</h4>
+  <h4 [hidden]="isNewFamilyMember()">Редактирование члена семьи</h4>
   <form #familyMemberForm="ngForm">
     <section class="form-block">
       <div class="form-group">
@@ -15,6 +17,14 @@
                  #name="ngModel"
                  placeholder="Имя">
         </label>
+        <clr-checkbox name="isVisible"
+                      [(ngModel)]="familyMember.isVisible"
+                      [hidden]="isNewFamilyMember()">
+          Использовать в новых транзакциях
+        </clr-checkbox>
+      </div>
+      <div [hidden]="isNewFamilyMember()">
+        <span>Транзакций: {{familyMember.transactionAmount}}</span>
       </div>
     </section>
   </form>

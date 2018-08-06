@@ -1,5 +1,7 @@
 <div>
   <alert></alert>
+  <h4 [hidden]="!isNewSubCategory()">Добавление подкатегории</h4>
+  <h4 [hidden]="isNewSubCategory()">Редактирование подкатегории</h4>
   <form #subCategoryForm="ngForm">
     <section class="form-block">
       <div class="form-group">
@@ -26,7 +28,15 @@
               {{category.name}}
             </option>
           </select>
+          <clr-checkbox name="isVisible"
+                        [(ngModel)]="subCategory.isVisible"
+                        [hidden]="isNewSubCategory()">
+            Использовать в новых транзакциях
+          </clr-checkbox>
         </div>
+      </div>
+      <div [hidden]="isNewSubCategory()">
+        <span>Транзакций: {{subCategory.transactionAmount}}</span>
       </div>
     </section>
   </form>

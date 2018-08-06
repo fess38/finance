@@ -345,6 +345,12 @@ export interface IAccount {
     /** Account isDeleted */
     isDeleted?: (boolean|null);
 
+    /** Account isVisible */
+    isVisible?: (boolean|null);
+
+    /** Account transactionAmount */
+    transactionAmount?: (number|Long|null);
+
     /** Account name */
     name: string;
 
@@ -353,9 +359,6 @@ export interface IAccount {
 
     /** Account currencyId */
     currencyId: (number|Long);
-
-    /** Account transactionAmount */
-    transactionAmount?: (number|Long|null);
 }
 
 /** Represents an Account. */
@@ -373,6 +376,12 @@ export class Account implements IAccount {
     /** Account isDeleted. */
     public isDeleted: boolean;
 
+    /** Account isVisible. */
+    public isVisible: boolean;
+
+    /** Account transactionAmount. */
+    public transactionAmount: (number|Long);
+
     /** Account name. */
     public name: string;
 
@@ -381,9 +390,6 @@ export class Account implements IAccount {
 
     /** Account currencyId. */
     public currencyId: (number|Long);
-
-    /** Account transactionAmount. */
-    public transactionAmount: (number|Long);
 
     /**
      * Creates a new Account instance using the specified properties.
@@ -465,6 +471,12 @@ export interface ICategory {
     /** Category isDeleted */
     isDeleted?: (boolean|null);
 
+    /** Category isVisible */
+    isVisible?: (boolean|null);
+
+    /** Category transactionAmount */
+    transactionAmount?: (number|Long|null);
+
     /** Category name */
     name: string;
 
@@ -473,9 +485,6 @@ export interface ICategory {
 
     /** Category isExpense */
     isExpense?: (boolean|null);
-
-    /** Category transactionAmount */
-    transactionAmount?: (number|Long|null);
 }
 
 /** Represents a Category. */
@@ -493,6 +502,12 @@ export class Category implements ICategory {
     /** Category isDeleted. */
     public isDeleted: boolean;
 
+    /** Category isVisible. */
+    public isVisible: boolean;
+
+    /** Category transactionAmount. */
+    public transactionAmount: (number|Long);
+
     /** Category name. */
     public name: string;
 
@@ -501,9 +516,6 @@ export class Category implements ICategory {
 
     /** Category isExpense. */
     public isExpense: boolean;
-
-    /** Category transactionAmount. */
-    public transactionAmount: (number|Long);
 
     /**
      * Creates a new Category instance using the specified properties.
@@ -585,14 +597,17 @@ export interface ISubCategory {
     /** SubCategory isDeleted */
     isDeleted?: (boolean|null);
 
+    /** SubCategory isVisible */
+    isVisible?: (boolean|null);
+
+    /** SubCategory transactionAmount */
+    transactionAmount?: (number|Long|null);
+
     /** SubCategory name */
     name: string;
 
     /** SubCategory categoryId */
     categoryId: (number|Long);
-
-    /** SubCategory transactionAmount */
-    transactionAmount?: (number|Long|null);
 }
 
 /** Represents a SubCategory. */
@@ -610,14 +625,17 @@ export class SubCategory implements ISubCategory {
     /** SubCategory isDeleted. */
     public isDeleted: boolean;
 
+    /** SubCategory isVisible. */
+    public isVisible: boolean;
+
+    /** SubCategory transactionAmount. */
+    public transactionAmount: (number|Long);
+
     /** SubCategory name. */
     public name: string;
 
     /** SubCategory categoryId. */
     public categoryId: (number|Long);
-
-    /** SubCategory transactionAmount. */
-    public transactionAmount: (number|Long);
 
     /**
      * Creates a new SubCategory instance using the specified properties.
@@ -699,11 +717,14 @@ export interface IFamilyMember {
     /** FamilyMember isDeleted */
     isDeleted?: (boolean|null);
 
-    /** FamilyMember name */
-    name: string;
+    /** FamilyMember isVisible */
+    isVisible?: (boolean|null);
 
     /** FamilyMember transactionAmount */
     transactionAmount?: (number|Long|null);
+
+    /** FamilyMember name */
+    name: string;
 }
 
 /** Represents a FamilyMember. */
@@ -721,11 +742,14 @@ export class FamilyMember implements IFamilyMember {
     /** FamilyMember isDeleted. */
     public isDeleted: boolean;
 
-    /** FamilyMember name. */
-    public name: string;
+    /** FamilyMember isVisible. */
+    public isVisible: boolean;
 
     /** FamilyMember transactionAmount. */
     public transactionAmount: (number|Long);
+
+    /** FamilyMember name. */
+    public name: string;
 
     /**
      * Creates a new FamilyMember instance using the specified properties.

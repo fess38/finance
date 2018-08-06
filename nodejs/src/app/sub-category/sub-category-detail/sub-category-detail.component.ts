@@ -31,6 +31,7 @@ export class SubCategoryDetailComponent {
   categories() {
     return _.chain(this.userdata.categories)
       .filter(x => !x.isDeleted)
+      .filter(x => x.isVisible)
       .sortBy(x => x.name.toLowerCase())
       .sortBy(x => !x.isIncome)
       .value();

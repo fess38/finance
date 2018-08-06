@@ -1,5 +1,7 @@
 <div>
   <alert></alert>
+  <h4 [hidden]="!isNewAccount()">Добавление счета</h4>
+  <h4 [hidden]="isNewAccount()">Редактирование счета</h4>
   <form #accountForm="ngForm">
     <section class="form-block">
       <div class="form-group">
@@ -27,6 +29,12 @@
             </option>
           </select>
         </div>
+        <clr-checkbox name="isVisible" [(ngModel)]="account.isVisible" [hidden]="isNewAccount()">
+          Использовать в новых транзакциях
+        </clr-checkbox>
+      </div>
+      <div [hidden]="isNewAccount()">
+        <span>Транзакций: {{account.transactionAmount}}</span>
       </div>
     </section>
   </form>
