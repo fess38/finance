@@ -1,54 +1,48 @@
-<div>
-  <alert></alert>
-  <h4 [hidden]="!isNewSubCategory()">Добавление подкатегории</h4>
-  <h4 [hidden]="isNewSubCategory()">Редактирование подкатегории</h4>
-  <form #subCategoryForm="ngForm">
-    <section class="form-block">
-      <div class="form-group">
-        <label for="name"
-               role="tooltip"
-               class="tooltip tooltip-validation"
-               [class.invalid]="name.invalid && (name.dirty || name.touched)">
-          <input type="text"
-                 id="name"
-                 required
-                 name="name"
-                 [(ngModel)]="subCategory.name"
-                 #name="ngModel"
-                 placeholder="Название">
-        </label>
-        <div class="select">
-          <select name="category"
-                  [(ngModel)]="subCategory.categoryId"
-                  required
-                  title="Категория"
-                  [disabled]="!isNewSubCategory()">
-            <option disabled>Категория</option>
-            <option selected *ngFor="let category of categories()" [ngValue]="category.id">
-              {{category.name}}
-            </option>
-          </select>
-          <clr-checkbox name="isVisible"
-                        [(ngModel)]="subCategory.isVisible"
-                        [hidden]="isNewSubCategory()">
-            Использовать в новых транзакциях
+<div class="clr-row">
+  <div class="clr-col-12 clr-col-lg-6">
+    <form>
+      <section class="form-block">
+        <label [hidden]="!isNewSubCategory()">Добавление подкатегории</label>
+        <label [hidden]="isNewSubCategory()">Редактирование подкатегории</label>
+        <div class="form-group">
+          <label>Название</label>
+          <input class="form-control" type="text" name="name" [(ngModel)]="subCategory.name"/>
+        </div>
+        <div class="form-group">
+          <label>Категория</label>
+          <div class="select">
+            <select name="category"
+                    [(ngModel)]="subCategory.categoryId"
+                    [disabled]="!isNewSubCategory()">
+              <option disabled>Категория</option>
+              <option selected *ngFor="let category of categories()" [ngValue]="category.id">
+                {{category.name}}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group-single" [hidden]="isNewSubCategory()">
+          <clr-checkbox name="isVisible" [(ngModel)]="subCategory.isVisible">
+            Использовать в транзакциях
           </clr-checkbox>
         </div>
-      </div>
-      <div [hidden]="isNewSubCategory()">
-        <span>Транзакций: {{subCategory.transactionAmount}}</span>
-      </div>
-    </section>
-  </form>
-  <button type="submit"
-          class="btn btn-primary btn-sm"
-          (click)="update(subCategory)"
-          [disabled]="!subCategoryForm.form.valid || !hasCategory()">Сохранить
-  </button>
-  <button type="submit"
-          class="btn btn-danger btn-sm"
-          (click)="delete(subCategory)"
-          [hidden]="isNewSubCategory()"
-          [disabled]="hasTransations()">Удалить
-  </button>
+        <div class="form-group-single" [hidden]="isNewSubCategory()">
+          <span>Транзакций: {{subCategory.transactionAmount}}</span>
+        </div>
+      </section>
+    </form>
+    <div class="btn-group btn-primary">
+      <button type="submit"
+              class="btn btn-primary btn-sm"
+              (click)="update(subCategory)"
+              [disabled]="!isValidForm()">Сохранить
+      </button>
+      <button type="submit"
+              class="btn btn-danger btn-sm"
+              (click)="delete(subCategory)"
+              [hidden]="isNewSubCategory()"
+              [disabled]="hasTransations()">Удалить
+      </button>
+    </div>
+  </div>
 </div>

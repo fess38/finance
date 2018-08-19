@@ -55,4 +55,8 @@ export class FamilyMemberDetailComponent implements OnInit {
   hasTransations() {
     return this.familyMember.transactionAmount > 0;
   }
+
+  isValidForm() {
+    return this.familyMember.name.length > 0;
+  }
 }

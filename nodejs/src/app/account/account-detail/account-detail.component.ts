@@ -56,11 +56,11 @@ export class AccountDetailComponent implements OnInit {
     return this.account.id == 0;
   }
 
-  hasCurrency() {
-    return this.account.currencyId != 0;
-  }
-
   hasTransations() {
     return this.account.transactionAmount > 0;
+  }
+
+  isValidForm() {
+    return this.account.name.length > 0 && this.account.currencyId != 0;
   }
 }

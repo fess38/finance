@@ -1,42 +1,33 @@
-<div>
-  <alert></alert>
-  <h4 [hidden]="!isNewFamilyMember()">Добавление члена семьи</h4>
-  <h4 [hidden]="isNewFamilyMember()">Редактирование члена семьи</h4>
-  <form #familyMemberForm="ngForm">
-    <section class="form-block">
-      <div class="form-group">
-        <label for="name"
-               role="tooltip"
-               class="tooltip tooltip-validation"
-               [class.invalid]="name.invalid && (name.dirty || name.touched)">
-          <input type="text"
-                 id="name"
-                 required
-                 name="name"
-                 [(ngModel)]="familyMember.name"
-                 #name="ngModel"
-                 placeholder="Имя">
-        </label>
-        <clr-checkbox name="isVisible"
-                      [(ngModel)]="familyMember.isVisible"
-                      [hidden]="isNewFamilyMember()">
-          Использовать в новых транзакциях
-        </clr-checkbox>
-      </div>
-      <div [hidden]="isNewFamilyMember()">
-        <span>Транзакций: {{familyMember.transactionAmount}}</span>
-      </div>
-    </section>
-  </form>
-  <button type="submit"
-          class="btn btn-primary btn-sm"
-          (click)="update(familyMember)"
-          [disabled]="!familyMemberForm.form.valid">Сохранить
-  </button>
-  <button type="submit"
-          class="btn btn-danger btn-sm"
-          (click)="delete(familyMember)"
-          [hidden]="isNewFamilyMember()"
-          [disabled]="hasTransations()">Удалить
-  </button>
+<div class="clr-row">
+  <div class="clr-col-12 clr-col-lg-6">
+    <form>
+      <section class="form-block">
+        <label [hidden]="!isNewFamilyMember()">Добавление члена семьи</label>
+        <label [hidden]="isNewFamilyMember()">Редактирование члена семьи</label>
+        <div class="form-group">
+          <label>Название</label>
+          <input class="form-control" type="text" name="name" [(ngModel)]="familyMember.name"/>
+        </div>
+        <div class="form-group-single" [hidden]="isNewFamilyMember()">
+          <clr-checkbox name="isVisible" [(ngModel)]="familyMember.isVisible">
+            Использовать в транзакциях
+          </clr-checkbox>
+        </div>
+        <div class="form-group-single" [hidden]="isNewFamilyMember()">
+          <span>Транзакций: {{familyMember.transactionAmount}}</span>
+        </div>
+      </section>
+    </form>
+    <div class="btn-group btn-primary">
+      <button class="btn btn-primary btn-sm"
+              (click)="update(familyMember)"
+              [disabled]="!isValidForm()">Сохранить
+      </button>
+      <button class="btn btn-danger btn-sm"
+              (click)="delete(familyMember)"
+              [hidden]="isNewFamilyMember()"
+              [disabled]="hasTransations()">Удалить
+      </button>
+    </div>
+  </div>
 </div>

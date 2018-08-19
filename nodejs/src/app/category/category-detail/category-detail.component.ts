@@ -52,12 +52,13 @@ export class CategoryDetailComponent {
     return this.category.id == 0;
   }
 
-  isValidCheckBox() {
-    return !(this.category.isIncome == this.category.isExpense);
-  }
-
   hasTransations() {
     return this.category.transactionAmount > 0;
+  }
+
+  isValidForm() {
+    return !(this.category.isIncome == this.category.isExpense)
+      && this.category.name.length > 0;
   }
 
 }

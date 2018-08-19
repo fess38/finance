@@ -62,11 +62,11 @@ export class SubCategoryDetailComponent {
     return this.subCategory.id == 0;
   }
 
-  hasCategory() {
-    return this.subCategory.categoryId != 0;
-  }
-
   hasTransations() {
     return this.subCategory.transactionAmount > 0;
+  }
+
+  isValidForm() {
+    return this.subCategory.name.length > 0 && this.subCategory.categoryId != 0;
   }
 }
