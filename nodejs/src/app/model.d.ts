@@ -1,9 +1,8 @@
-import * as $protobuf from 'protobufjs';
-import { Long } from 'protobufjs';
-
+import { Long } from "protobufjs";import * as $protobuf from "protobufjs";
 /** EntityType enum. */
 export enum EntityType {
     UNDEFINED = 0,
+    SETTINGS = 7,
     CURRENCY = 1,
     ACCOUNT = 2,
     CATEGORY = 3,
@@ -14,6 +13,9 @@ export enum EntityType {
 
 /** Properties of a Dump. */
 export interface IDump {
+
+    /** Dump settings */
+    settings: ISettings;
 
     /** Dump currencies */
     currencies?: (ICurrency[]|null);
@@ -42,6 +44,9 @@ export class Dump implements IDump {
      * @param [properties] Properties to set
      */
     constructor(properties?: IDump);
+
+    /** Dump settings. */
+    public settings: ISettings;
 
     /** Dump currencies. */
     public currencies: ICurrency[];
@@ -970,6 +975,111 @@ export class Transaction implements ITransaction {
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a Settings. */
+export interface ISettings {
+
+    /** Settings language */
+    language?: (Settings.Language|null);
+
+    /** Settings currencyId */
+    currencyId?: (number|Long|null);
+}
+
+/** Represents a Settings. */
+export class Settings implements ISettings {
+
+    /**
+     * Constructs a new Settings.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: ISettings);
+
+    /** Settings language. */
+    public language: Settings.Language;
+
+    /** Settings currencyId. */
+    public currencyId: (number|Long);
+
+    /**
+     * Creates a new Settings instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns Settings instance
+     */
+    public static create(properties?: ISettings): Settings;
+
+    /**
+     * Encodes the specified Settings message. Does not implicitly {@link Settings.verify|verify} messages.
+     * @param message Settings message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: ISettings, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified Settings message, length delimited. Does not implicitly {@link Settings.verify|verify} messages.
+     * @param message Settings message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: ISettings, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a Settings message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns Settings
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Settings;
+
+    /**
+     * Decodes a Settings message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns Settings
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Settings;
+
+    /**
+     * Verifies a Settings message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a Settings message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns Settings
+     */
+    public static fromObject(object: { [k: string]: any }): Settings;
+
+    /**
+     * Creates a plain object from a Settings message. Also converts values to other types if specified.
+     * @param message Settings
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: Settings, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this Settings to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+export namespace Settings {
+
+    /** Language enum. */
+    enum Language {
+        RU = 0,
+        EN = 1
+    }
 }
 
 /** Properties of an AccessToken. */

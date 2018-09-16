@@ -7,6 +7,7 @@ option java_outer_classname = "Model";
 
 enum EntityType {
     UNDEFINED = 0;
+    SETTINGS = 7;
     CURRENCY = 1;
     ACCOUNT = 2;
     CATEGORY = 3;
@@ -16,6 +17,7 @@ enum EntityType {
 }
 
 message Dump {
+    required Settings settings = 7;
     repeated Currency currencies = 1;
     repeated Account accounts = 2;
     repeated Category categories = 3;
@@ -85,6 +87,16 @@ message Transaction {
     optional int64 sub_category_id = 9;
     optional int64 family_member_id = 10;
     optional string comment = 11;
+}
+
+message Settings {
+    optional Language language = 1 [default = RU];
+    optional int64 currency_id = 2 [default = 1];
+
+    enum Language {
+        RU = 0;
+        EN = 1;
+    }
 }
 
 message AccessToken {

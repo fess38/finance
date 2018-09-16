@@ -5,12 +5,14 @@ import ru.fess38.finance.core.MessageService
 import ru.fess38.finance.core.Model.Account
 import ru.fess38.finance.core.Model.Category
 import ru.fess38.finance.core.Model.FamilyMember
+import ru.fess38.finance.core.Model.Settings
 import ru.fess38.finance.core.Model.SubCategory
 import ru.fess38.finance.core.Model.Transaction
 import ru.fess38.finance.utils.id
 import ru.fess38.finance.utils.type
 
 class CompositeValidator(private val messageService: MessageService): MessageValidator<Message> {
+  private val settingsValidator = SettingsValidator(messageService)
   private val accountValidator = AccountValidator(messageService)
   private val categoryValidator = CategoryValidator()
   private val subCategoryValidator = SubCategoryValidator(messageService)
@@ -26,6 +28,7 @@ class CompositeValidator(private val messageService: MessageService): MessageVal
     }
     else {
       validatorResponse = when (value) {
+        is Settings -> settingsValidator.validate(value)
         is Account -> accountValidator.validate(value)
         is Category -> categoryValidator.validate(value)
         is SubCategory -> subCategoryValidator.validate(value)

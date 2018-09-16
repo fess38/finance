@@ -11,9 +11,11 @@ import ru.fess38.finance.core.Model.EntityType
 import ru.fess38.finance.core.Model.EntityType.ACCOUNT
 import ru.fess38.finance.core.Model.EntityType.CATEGORY
 import ru.fess38.finance.core.Model.EntityType.FAMILY_MEMBER
+import ru.fess38.finance.core.Model.EntityType.SETTINGS
 import ru.fess38.finance.core.Model.EntityType.SUB_CATEGORY
 import ru.fess38.finance.core.Model.EntityType.TRANSACTION
 import ru.fess38.finance.core.Model.FamilyMember
+import ru.fess38.finance.core.Model.Settings
 import ru.fess38.finance.core.Model.SubCategory
 import ru.fess38.finance.core.Model.Transaction
 import ru.fess38.finance.repository.EntityRepository
@@ -47,14 +49,17 @@ class MessageServiceImpl: MessageService {
   override fun dump(): Dump {
     val user = userService.findByContext()
     val dumpBuilder = Dump.newBuilder()
-    dumpBuilder.addAllCurrencies(repository.currencies())
     val messages = repository.get(user)
-    val accounts = messages.filter {it.type == ACCOUNT }.map {it as Account}
-    val categories = messages.filter {it.type == CATEGORY }.map {it as Category}
-    val subCategories = messages.filter {it.type == SUB_CATEGORY }.map {it as SubCategory}
-    val familyMembers = messages.filter {it.type == FAMILY_MEMBER }.map {it as FamilyMember}
-    val transactions = messages.filter {it.type == TRANSACTION }.map {it as Transaction}
+    val settings = messages.filter {it.type == SETTINGS}.map {it as Settings}
+        .getOrElse(0) {Settings.getDefaultInstance()}
+    val accounts = messages.filter {it.type == ACCOUNT}.map {it as Account}
+    val categories = messages.filter {it.type == CATEGORY}.map {it as Category}
+    val subCategories = messages.filter {it.type == SUB_CATEGORY}.map {it as SubCategory}
+    val familyMembers = messages.filter {it.type == FAMILY_MEMBER}.map {it as FamilyMember}
+    val transactions = messages.filter {it.type == TRANSACTION}.map {it as Transaction}
 
+    dumpBuilder.addAllCurrencies(repository.currencies())
+    dumpBuilder.settings = settings
     dumpBuilder.addAllAccounts(accounts)
     dumpBuilder.addAllCategories(categories)
     dumpBuilder.addAllSubCategories(subCategories)

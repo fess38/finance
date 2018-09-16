@@ -16,6 +16,7 @@ import ru.fess38.finance.core.Model.Currency
 import ru.fess38.finance.core.Model.EntityType
 import ru.fess38.finance.core.Model.EntityType.CURRENCY
 import ru.fess38.finance.core.Model.FamilyMember
+import ru.fess38.finance.core.Model.Settings
 import ru.fess38.finance.core.Model.SubCategory
 import ru.fess38.finance.core.Model.Transaction
 import ru.fess38.finance.security.User
@@ -70,6 +71,7 @@ class HibernateEntityRepositoryImpl: EntityRepository {
   private fun parse(hibernateEntity: HibernateEntity): Message {
     val data = GZIPInputStream(hibernateEntity.data.inputStream()).readBytes()
     return when (hibernateEntity.type) {
+      EntityType.SETTINGS -> Settings.parseFrom(data)
       EntityType.ACCOUNT -> Account.parseFrom(data)
       EntityType.CATEGORY -> Category.parseFrom(data)
       EntityType.SUB_CATEGORY -> SubCategory.parseFrom(data)

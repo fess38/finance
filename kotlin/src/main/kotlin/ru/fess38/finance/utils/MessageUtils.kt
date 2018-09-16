@@ -8,9 +8,11 @@ import ru.fess38.finance.core.Model.EntityType
 import ru.fess38.finance.core.Model.EntityType.ACCOUNT
 import ru.fess38.finance.core.Model.EntityType.CATEGORY
 import ru.fess38.finance.core.Model.EntityType.FAMILY_MEMBER
+import ru.fess38.finance.core.Model.EntityType.SETTINGS
 import ru.fess38.finance.core.Model.EntityType.SUB_CATEGORY
 import ru.fess38.finance.core.Model.EntityType.TRANSACTION
 import ru.fess38.finance.core.Model.FamilyMember
+import ru.fess38.finance.core.Model.Settings
 import ru.fess38.finance.core.Model.SubCategory
 import ru.fess38.finance.core.Model.Transaction
 
@@ -24,6 +26,7 @@ val Message.id: Long
 
 val Message.type: EntityType
   get() = when (this) {
+    is Settings -> SETTINGS
     is Account -> ACCOUNT
     is Category -> CATEGORY
     is SubCategory -> SUB_CATEGORY

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController
 import ru.fess38.finance.core.Model.Account
 import ru.fess38.finance.core.Model.Category
 import ru.fess38.finance.core.Model.FamilyMember
+import ru.fess38.finance.core.Model.Settings
 import ru.fess38.finance.core.Model.SubCategory
 import ru.fess38.finance.core.Model.Transaction
 import ru.fess38.finance.utils.id
@@ -57,6 +58,9 @@ class Controller {
     return ResponseEntity(savedValue ?: errors, httpStatus)
   }
 
+  @PostMapping("settings/save")
+  fun save(@RequestBody value: Settings) = saveMessage(value)
+
   @PostMapping("account/save")
   fun save(@RequestBody value: Account) = saveMessage(value)
 
@@ -89,6 +93,9 @@ class Controller {
     }
     return ResponseEntity(errors, httpStatus)
   }
+
+  @PostMapping("settings/update")
+  fun update(@RequestBody value: Settings) = updateMessage(value)
 
   @PostMapping("account/update")
   fun update(@RequestBody value: Account) = updateMessage(value)

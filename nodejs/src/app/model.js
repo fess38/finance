@@ -14,6 +14,7 @@ var $root = $protobuf.roots["default"] || ($protobuf.roots["default"] = {});
  * @exports EntityType
  * @enum {string}
  * @property {number} UNDEFINED=0 UNDEFINED value
+ * @property {number} SETTINGS=7 SETTINGS value
  * @property {number} CURRENCY=1 CURRENCY value
  * @property {number} ACCOUNT=2 ACCOUNT value
  * @property {number} CATEGORY=3 CATEGORY value
@@ -24,6 +25,7 @@ var $root = $protobuf.roots["default"] || ($protobuf.roots["default"] = {});
 $root.EntityType = (function() {
     var valuesById = {}, values = Object.create(valuesById);
     values[valuesById[0] = "UNDEFINED"] = 0;
+    values[valuesById[7] = "SETTINGS"] = 7;
     values[valuesById[1] = "CURRENCY"] = 1;
     values[valuesById[2] = "ACCOUNT"] = 2;
     values[valuesById[3] = "CATEGORY"] = 3;
@@ -39,6 +41,7 @@ $root.Dump = (function() {
      * Properties of a Dump.
      * @exports IDump
      * @interface IDump
+     * @property {ISettings} settings Dump settings
      * @property {Array.<ICurrency>|null} [currencies] Dump currencies
      * @property {Array.<IAccount>|null} [accounts] Dump accounts
      * @property {Array.<ICategory>|null} [categories] Dump categories
@@ -67,6 +70,14 @@ $root.Dump = (function() {
                 if (properties[keys[i]] != null)
                     this[keys[i]] = properties[keys[i]];
     }
+
+    /**
+     * Dump settings.
+     * @member {ISettings} settings
+     * @memberof Dump
+     * @instance
+     */
+    Dump.prototype.settings = null;
 
     /**
      * Dump currencies.
@@ -158,6 +169,7 @@ $root.Dump = (function() {
         if (message.transactions != null && message.transactions.length)
             for (var i = 0; i < message.transactions.length; ++i)
                 $root.Transaction.encode(message.transactions[i], writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
+        $root.Settings.encode(message.settings, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
         return writer;
     };
 
@@ -192,6 +204,9 @@ $root.Dump = (function() {
         while (reader.pos < end) {
             var tag = reader.uint32();
             switch (tag >>> 3) {
+            case 7:
+                message.settings = $root.Settings.decode(reader, reader.uint32());
+                break;
             case 1:
                 if (!(message.currencies && message.currencies.length))
                     message.currencies = [];
@@ -227,6 +242,8 @@ $root.Dump = (function() {
                 break;
             }
         }
+        if (!message.hasOwnProperty("settings"))
+            throw $util.ProtocolError("missing required 'settings'", { instance: message });
         return message;
     };
 
@@ -257,6 +274,11 @@ $root.Dump = (function() {
     Dump.verify = function verify(message) {
         if (typeof message !== "object" || message === null)
             return "object expected";
+        {
+            var error = $root.Settings.verify(message.settings);
+            if (error)
+                return "settings." + error;
+        }
         if (message.currencies != null && message.hasOwnProperty("currencies")) {
             if (!Array.isArray(message.currencies))
                 return "currencies: array expected";
@@ -326,6 +348,11 @@ $root.Dump = (function() {
         if (object instanceof $root.Dump)
             return object;
         var message = new $root.Dump();
+        if (object.settings != null) {
+            if (typeof object.settings !== "object")
+                throw TypeError(".Dump.settings: object expected");
+            message.settings = $root.Settings.fromObject(object.settings);
+        }
         if (object.currencies) {
             if (!Array.isArray(object.currencies))
                 throw TypeError(".Dump.currencies: array expected");
@@ -410,6 +437,8 @@ $root.Dump = (function() {
             object.familyMembers = [];
             object.transactions = [];
         }
+        if (options.defaults)
+            object.settings = null;
         if (message.currencies && message.currencies.length) {
             object.currencies = [];
             for (var j = 0; j < message.currencies.length; ++j)
@@ -440,6 +469,8 @@ $root.Dump = (function() {
             for (var j = 0; j < message.transactions.length; ++j)
                 object.transactions[j] = $root.Transaction.toObject(message.transactions[j], options);
         }
+        if (message.settings != null && message.hasOwnProperty("settings"))
+            object.settings = $root.Settings.toObject(message.settings, options);
         return object;
     };
 
@@ -2847,6 +2878,257 @@ $root.Transaction = (function() {
     };
 
     return Transaction;
+})();
+
+$root.Settings = (function() {
+
+    /**
+     * Properties of a Settings.
+     * @exports ISettings
+     * @interface ISettings
+     * @property {Settings.Language|null} [language] Settings language
+     * @property {number|Long|null} [currencyId] Settings currencyId
+     */
+
+    /**
+     * Constructs a new Settings.
+     * @exports Settings
+     * @classdesc Represents a Settings.
+     * @implements ISettings
+     * @constructor
+     * @param {ISettings=} [properties] Properties to set
+     */
+    function Settings(properties) {
+        if (properties)
+            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * Settings language.
+     * @member {Settings.Language} language
+     * @memberof Settings
+     * @instance
+     */
+    Settings.prototype.language = 0;
+
+    /**
+     * Settings currencyId.
+     * @member {number|Long} currencyId
+     * @memberof Settings
+     * @instance
+     */
+    Settings.prototype.currencyId = $util.Long ? $util.Long.fromBits(1,0,false) : 1;
+
+    /**
+     * Creates a new Settings instance using the specified properties.
+     * @function create
+     * @memberof Settings
+     * @static
+     * @param {ISettings=} [properties] Properties to set
+     * @returns {Settings} Settings instance
+     */
+    Settings.create = function create(properties) {
+        return new Settings(properties);
+    };
+
+    /**
+     * Encodes the specified Settings message. Does not implicitly {@link Settings.verify|verify} messages.
+     * @function encode
+     * @memberof Settings
+     * @static
+     * @param {ISettings} message Settings message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    Settings.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.language != null && message.hasOwnProperty("language"))
+            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.language);
+        if (message.currencyId != null && message.hasOwnProperty("currencyId"))
+            writer.uint32(/* id 2, wireType 0 =*/16).int64(message.currencyId);
+        return writer;
+    };
+
+    /**
+     * Encodes the specified Settings message, length delimited. Does not implicitly {@link Settings.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof Settings
+     * @static
+     * @param {ISettings} message Settings message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    Settings.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a Settings message from the specified reader or buffer.
+     * @function decode
+     * @memberof Settings
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {Settings} Settings
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    Settings.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Settings();
+        while (reader.pos < end) {
+            var tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                message.language = reader.int32();
+                break;
+            case 2:
+                message.currencyId = reader.int64();
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes a Settings message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof Settings
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {Settings} Settings
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    Settings.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a Settings message.
+     * @function verify
+     * @memberof Settings
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    Settings.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (message.language != null && message.hasOwnProperty("language"))
+            switch (message.language) {
+            default:
+                return "language: enum value expected";
+            case 0:
+            case 1:
+                break;
+            }
+        if (message.currencyId != null && message.hasOwnProperty("currencyId"))
+            if (!$util.isInteger(message.currencyId) && !(message.currencyId && $util.isInteger(message.currencyId.low) && $util.isInteger(message.currencyId.high)))
+                return "currencyId: integer|Long expected";
+        return null;
+    };
+
+    /**
+     * Creates a Settings message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof Settings
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {Settings} Settings
+     */
+    Settings.fromObject = function fromObject(object) {
+        if (object instanceof $root.Settings)
+            return object;
+        var message = new $root.Settings();
+        switch (object.language) {
+        case "RU":
+        case 0:
+            message.language = 0;
+            break;
+        case "EN":
+        case 1:
+            message.language = 1;
+            break;
+        }
+        if (object.currencyId != null)
+            if ($util.Long)
+                (message.currencyId = $util.Long.fromValue(object.currencyId)).unsigned = false;
+            else if (typeof object.currencyId === "string")
+                message.currencyId = parseInt(object.currencyId, 10);
+            else if (typeof object.currencyId === "number")
+                message.currencyId = object.currencyId;
+            else if (typeof object.currencyId === "object")
+                message.currencyId = new $util.LongBits(object.currencyId.low >>> 0, object.currencyId.high >>> 0).toNumber();
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a Settings message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof Settings
+     * @static
+     * @param {Settings} message Settings
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    Settings.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        var object = {};
+        if (options.defaults) {
+            object.language = options.enums === String ? "RU" : 0;
+            if ($util.Long) {
+                var long = new $util.Long(1, 0, false);
+                object.currencyId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.currencyId = options.longs === String ? "1" : 1;
+        }
+        if (message.language != null && message.hasOwnProperty("language"))
+            object.language = options.enums === String ? $root.Settings.Language[message.language] : message.language;
+        if (message.currencyId != null && message.hasOwnProperty("currencyId"))
+            if (typeof message.currencyId === "number")
+                object.currencyId = options.longs === String ? String(message.currencyId) : message.currencyId;
+            else
+                object.currencyId = options.longs === String ? $util.Long.prototype.toString.call(message.currencyId) : options.longs === Number ? new $util.LongBits(message.currencyId.low >>> 0, message.currencyId.high >>> 0).toNumber() : message.currencyId;
+        return object;
+    };
+
+    /**
+     * Converts this Settings to JSON.
+     * @function toJSON
+     * @memberof Settings
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    Settings.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * Language enum.
+     * @name Settings.Language
+     * @enum {string}
+     * @property {number} RU=0 RU value
+     * @property {number} EN=1 EN value
+     */
+    Settings.Language = (function() {
+        var valuesById = {}, values = Object.create(valuesById);
+        values[valuesById[0] = "RU"] = 0;
+        values[valuesById[1] = "EN"] = 1;
+        return values;
+    })();
+
+    return Settings;
 })();
 
 $root.AccessToken = (function() {
