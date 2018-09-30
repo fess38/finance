@@ -48,26 +48,32 @@ class MessageServiceImpl: MessageService {
 
   override fun dump(): Dump {
     val user = userService.findByContext()
-    val dumpBuilder = Dump.newBuilder()
+    val builder = Dump.newBuilder()
     val messages = repository.get(user)
-    val settings = messages.filter {it.type == SETTINGS}.map {it as Settings}
-        .getOrElse(0) {Settings.getDefaultInstance()}
     val accounts = messages.filter {it.type == ACCOUNT}.map {it as Account}
     val categories = messages.filter {it.type == CATEGORY}.map {it as Category}
     val subCategories = messages.filter {it.type == SUB_CATEGORY}.map {it as SubCategory}
     val familyMembers = messages.filter {it.type == FAMILY_MEMBER}.map {it as FamilyMember}
     val transactions = messages.filter {it.type == TRANSACTION}.map {it as Transaction}
 
-    dumpBuilder.addAllCurrencies(repository.currencies())
-    dumpBuilder.settings = settings
-    dumpBuilder.addAllAccounts(accounts)
-    dumpBuilder.addAllCategories(categories)
-    dumpBuilder.addAllSubCategories(subCategories)
-    dumpBuilder.addAllFamilyMembers(familyMembers)
-    dumpBuilder.addAllTransactions(transactions)
-
     log.info {"Create dump for user [${user.id}]"}
-    return dumpBuilder.build()
+    return builder
+        .setSettings(settings(messages))
+        .addAllCurrencies(repository.currencies())
+        .addAllAccounts(accounts)
+        .addAllCategories(categories)
+        .addAllSubCategories(subCategories)
+        .addAllFamilyMembers(familyMembers)
+        .addAllTransactions(transactions)
+        .build()
+  }
+
+  private fun settings(messages: List<Message>): Settings {
+    return messages.asSequence()
+        .filter {it.type == SETTINGS}
+        .map {it as Settings}
+        .toList()
+        .getOrElse(0) { save(Settings.getDefaultInstance()) as Settings }
   }
 
   override fun isExist(id: Long, type: EntityType): Boolean {

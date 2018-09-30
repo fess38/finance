@@ -42,6 +42,21 @@ internal class TransactionValidatorTest {
   }
 
   @Test
+  fun accountFromMinus1() {
+    val transaction = Transaction.newBuilder()
+        .setCreated(millisToTimestamp(1000))
+        .setAccountIdFrom(-1)
+        .setAccountIdTo(2)
+        .setAmountFrom(1)
+        .setAmountTo(1)
+        .setCategoryId(3)
+        .build()
+    val expected = ValidatorResponse(true, "ok")
+    val actual = validator.validate(transaction)
+    Assert.assertEquals(expected, actual)
+  }
+
+  @Test
   fun unknownAccountTo() {
     val transaction = Transaction.newBuilder()
         .setCreated(millisToTimestamp(1000))
@@ -52,6 +67,21 @@ internal class TransactionValidatorTest {
         .setCategoryId(3)
         .build()
     val expected = ValidatorResponse(false, "unknown account_to [4]")
+    val actual = validator.validate(transaction)
+    Assert.assertEquals(expected, actual)
+  }
+
+  @Test
+  fun accountToMinus1() {
+    val transaction = Transaction.newBuilder()
+        .setCreated(millisToTimestamp(1000))
+        .setAccountIdFrom(1)
+        .setAccountIdTo(-1)
+        .setAmountFrom(1)
+        .setAmountTo(1)
+        .setCategoryId(3)
+        .build()
+    val expected = ValidatorResponse(true, "ok")
     val actual = validator.validate(transaction)
     Assert.assertEquals(expected, actual)
   }
@@ -127,6 +157,21 @@ internal class TransactionValidatorTest {
         .setCategoryId(5)
         .build()
     val expected = ValidatorResponse(false, "unknown category [5]")
+    val actual = validator.validate(transaction)
+    Assert.assertEquals(expected, actual)
+  }
+
+  @Test
+  fun categoryMinus1() {
+    val transaction = Transaction.newBuilder()
+        .setCreated(millisToTimestamp(1000))
+        .setAccountIdFrom(1)
+        .setAccountIdTo(2)
+        .setAmountFrom(1)
+        .setAmountTo(0)
+        .setCategoryId(-1)
+        .build()
+    val expected = ValidatorResponse(true, "ok")
     val actual = validator.validate(transaction)
     Assert.assertEquals(expected, actual)
   }

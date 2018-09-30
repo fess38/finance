@@ -6,9 +6,10 @@ import { AuthGuardService } from './auth/auth-guard.service';
 import { LoginComponent } from './auth/login/login.component';
 import { CategoryDetailComponent } from './category/category-detail/category-detail.component';
 import { CategoryListComponent } from './category/category-list/category-list.component';
+import { MainPageComponent } from './core/main-page/main-page.component';
+import { SettingsComponent } from './core/settings/settings.component';
 import { FamilyMemberDetailComponent } from './family-member/family-member-detail/family-member-detail.component';
 import { FamilyMemberListComponent } from './family-member/family-member-list/family-member-list.component';
-import { MainPageComponent } from './main-page/main-page.component';
 import { SubCategoryDetailComponent } from './sub-category/sub-category-detail/sub-category-detail.component';
 import { SubCategoryListComponent } from './sub-category/sub-category-list/sub-category-list.component';
 
@@ -21,6 +22,10 @@ const appRoutes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'settings',
+    component: SettingsComponent
   },
   {
     path: 'account',

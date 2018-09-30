@@ -58,9 +58,6 @@ class Controller {
     return ResponseEntity(savedValue ?: errors, httpStatus)
   }
 
-  @PostMapping("settings/save")
-  fun save(@RequestBody value: Settings) = saveMessage(value)
-
   @PostMapping("account/save")
   fun save(@RequestBody value: Account) = saveMessage(value)
 

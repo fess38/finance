@@ -2886,6 +2886,7 @@ $root.Settings = (function() {
      * Properties of a Settings.
      * @exports ISettings
      * @interface ISettings
+     * @property {number|Long|null} [id] Settings id
      * @property {Settings.Language|null} [language] Settings language
      * @property {number|Long|null} [currencyId] Settings currencyId
      */
@@ -2904,6 +2905,14 @@ $root.Settings = (function() {
                 if (properties[keys[i]] != null)
                     this[keys[i]] = properties[keys[i]];
     }
+
+    /**
+     * Settings id.
+     * @member {number|Long} id
+     * @memberof Settings
+     * @instance
+     */
+    Settings.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
     /**
      * Settings language.
@@ -2945,10 +2954,12 @@ $root.Settings = (function() {
     Settings.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
+        if (message.id != null && message.hasOwnProperty("id"))
+            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.id);
         if (message.language != null && message.hasOwnProperty("language"))
-            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.language);
+            writer.uint32(/* id 2, wireType 0 =*/16).int32(message.language);
         if (message.currencyId != null && message.hasOwnProperty("currencyId"))
-            writer.uint32(/* id 2, wireType 0 =*/16).int64(message.currencyId);
+            writer.uint32(/* id 3, wireType 0 =*/24).int64(message.currencyId);
         return writer;
     };
 
@@ -2984,9 +2995,12 @@ $root.Settings = (function() {
             var tag = reader.uint32();
             switch (tag >>> 3) {
             case 1:
-                message.language = reader.int32();
+                message.id = reader.int64();
                 break;
             case 2:
+                message.language = reader.int32();
+                break;
+            case 3:
                 message.currencyId = reader.int64();
                 break;
             default:
@@ -3024,6 +3038,9 @@ $root.Settings = (function() {
     Settings.verify = function verify(message) {
         if (typeof message !== "object" || message === null)
             return "object expected";
+        if (message.id != null && message.hasOwnProperty("id"))
+            if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
+                return "id: integer|Long expected";
         if (message.language != null && message.hasOwnProperty("language"))
             switch (message.language) {
             default:
@@ -3050,6 +3067,15 @@ $root.Settings = (function() {
         if (object instanceof $root.Settings)
             return object;
         var message = new $root.Settings();
+        if (object.id != null)
+            if ($util.Long)
+                (message.id = $util.Long.fromValue(object.id)).unsigned = false;
+            else if (typeof object.id === "string")
+                message.id = parseInt(object.id, 10);
+            else if (typeof object.id === "number")
+                message.id = object.id;
+            else if (typeof object.id === "object")
+                message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber();
         switch (object.language) {
         case "RU":
         case 0:
@@ -3086,6 +3112,11 @@ $root.Settings = (function() {
             options = {};
         var object = {};
         if (options.defaults) {
+            if ($util.Long) {
+                var long = new $util.Long(0, 0, false);
+                object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.id = options.longs === String ? "0" : 0;
             object.language = options.enums === String ? "RU" : 0;
             if ($util.Long) {
                 var long = new $util.Long(1, 0, false);
@@ -3093,6 +3124,11 @@ $root.Settings = (function() {
             } else
                 object.currencyId = options.longs === String ? "1" : 1;
         }
+        if (message.id != null && message.hasOwnProperty("id"))
+            if (typeof message.id === "number")
+                object.id = options.longs === String ? String(message.id) : message.id;
+            else
+                object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber() : message.id;
         if (message.language != null && message.hasOwnProperty("language"))
             object.language = options.enums === String ? $root.Settings.Language[message.language] : message.language;
         if (message.currencyId != null && message.hasOwnProperty("currencyId"))

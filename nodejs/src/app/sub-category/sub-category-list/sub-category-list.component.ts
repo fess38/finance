@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import * as _ from 'underscore';
-import { Category } from '../../model';
+import { Category } from '../../core/model/model';
 import { UserDataService } from '../../utils/user-data.service';
 
 @Component({

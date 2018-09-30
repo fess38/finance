@@ -90,8 +90,9 @@ message Transaction {
 }
 
 message Settings {
-    optional Language language = 1 [default = RU];
-    optional int64 currency_id = 2 [default = 1];
+    optional int64 id = 1 [default = 0];
+    optional Language language = 2 [default = RU];
+    optional int64 currency_id = 3 [default = 1];
 
     enum Language {
         RU = 0;

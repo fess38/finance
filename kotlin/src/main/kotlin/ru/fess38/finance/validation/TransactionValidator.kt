@@ -9,11 +9,11 @@ class TransactionValidator(private val messageService: MessageService): MessageV
     var isValid = true
     val errors = mutableListOf<String>()
 
-    if (!messageService.isExist(value.accountIdFrom, TRANSACTION)) {
+    if (value.accountIdFrom != -1L && !messageService.isExist(value.accountIdFrom, TRANSACTION)) {
       isValid = false
       errors.add("unknown account_from [${value.accountIdFrom}]")
     }
-    if (!messageService.isExist(value.accountIdTo, TRANSACTION)) {
+    if (value.accountIdTo != -1L && !messageService.isExist(value.accountIdTo, TRANSACTION)) {
       isValid = false
       errors.add("unknown account_to [${value.accountIdTo}]")
     }
@@ -33,7 +33,7 @@ class TransactionValidator(private val messageService: MessageService): MessageV
       isValid = false
       errors.add("empty transaction")
     }
-    if (!messageService.isExist(value.categoryId, TRANSACTION)) {
+    if (value.categoryId != -1L && !messageService.isExist(value.categoryId, TRANSACTION)) {
       isValid = false
       errors.add("unknown category [${value.categoryId}]")
     }

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlertService } from '../../alert/alert.service';
-import { FamilyMember } from '../../model';
+import { FamilyMember } from '../../core/model/model';
 import { UserDataService } from '../../utils/user-data.service';
 
 @Component({
@@ -11,7 +10,6 @@ export class FamilyMemberDetailComponent implements OnInit {
   familyMember: FamilyMember = new FamilyMember();
 
   constructor(private userdata: UserDataService,
-              private alertService: AlertService,
               private route: ActivatedRoute,
               private router: Router) {}
 
@@ -37,7 +35,6 @@ export class FamilyMemberDetailComponent implements OnInit {
     promise
       .then(() => this.router.navigate(['/family_member']))
       .catch(error => {
-        this.alertService.error('Ошибка обновления');
         console.error(error.message);
       });
   }

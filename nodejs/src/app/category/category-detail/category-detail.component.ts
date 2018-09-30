@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlertService } from '../../alert/alert.service';
-import { Category } from '../../model';
+import { Category } from '../../core/model/model';
 import { UserDataService } from '../../utils/user-data.service';
 
 @Component({
@@ -11,7 +10,6 @@ export class CategoryDetailComponent {
   category: Category = new Category();
 
   constructor(private userdata: UserDataService,
-              private alertService: AlertService,
               private route: ActivatedRoute,
               private router: Router) {}
 
@@ -37,7 +35,6 @@ export class CategoryDetailComponent {
     promise
       .then(() => this.router.navigate(['/category']))
       .catch(error => {
-        this.alertService.error('Ошибка обновления');
         console.error(error.message);
       });
   }

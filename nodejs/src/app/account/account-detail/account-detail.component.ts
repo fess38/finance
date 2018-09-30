@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlertService } from '../../alert/alert.service';
-import { Account } from '../../model';
+import { Account } from '../../core/model/model';
 import { UserDataService } from '../../utils/user-data.service';
 
 @Component({
@@ -11,7 +10,6 @@ export class AccountDetailComponent implements OnInit {
   account: Account = new Account();
 
   constructor(private userdata: UserDataService,
-              private alertService: AlertService,
               private route: ActivatedRoute,
               private router: Router) {}
 
@@ -41,7 +39,6 @@ export class AccountDetailComponent implements OnInit {
     promise
       .then(() => this.router.navigate(['/account']))
       .catch(error => {
-        this.alertService.error('Ошибка обновления');
         console.error(error.message);
       });
   }

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularIndexedDB } from 'angular2-indexeddb';
-import { Account, Category, Currency, Dump, FamilyMember, SubCategory, Transaction } from '../model';
+import { Account, Category, Currency, Dump, FamilyMember, Settings, SubCategory, Transaction } from '../core/model/model';
 import { HttpService } from './http.service';
 
 @Injectable()
@@ -9,6 +8,7 @@ export class UserDataService {
     this.refresh(0);
   }
 
+  settings: Settings = new Settings();
   currencies: Currency[] = [];
   accounts: Account[] = [];
   categories: Category[] = [];
@@ -21,6 +21,7 @@ export class UserDataService {
       this.http.get('/api/data/dump/get')
         .then(data => Dump.decode(data))
         .then(dump => {
+          this.settings = dump.settings as Settings;
           this.currencies = dump.currencies as Currency[];
           this.accounts = dump.accounts as Account[];
           this.categories = dump.categories as Category[];
@@ -34,22 +35,26 @@ export class UserDataService {
 
   saveAccount(account: Account) {
     return this.http.post('/api/data/account/save', Account.encode(account))
-      .then((data) => this.accounts.push(Account.decode(data)));
+      .then(data => this.accounts.push(Account.decode(data)));
   }
 
   saveCategory(category: Category) {
     return this.http.post('/api/data/category/save', Category.encode(category))
-      .then((data) => this.categories.push(Category.decode(data)));
+      .then(data => this.categories.push(Category.decode(data)));
   }
 
   saveSubCategory(subCategory: SubCategory) {
     return this.http.post('/api/data/sub_category/save', SubCategory.encode(subCategory))
-      .then((data) => this.subCategories.push(SubCategory.decode(data)));
+      .then(data => this.subCategories.push(SubCategory.decode(data)));
   }
 
   saveFamilyMember(familyMember: FamilyMember) {
     return this.http.post('/api/data/family_member/save', FamilyMember.encode(familyMember))
-      .then((data) => this.familyMembers.push(FamilyMember.decode(data)));
+      .then(data => this.familyMembers.push(FamilyMember.decode(data)));
+  }
+
+  updateSettings(settings: Settings): Promise<any> {
+    return this.http.post('/api/data/settings/update', Settings.encode(settings));
   }
 
   updateAccount(account: Account): Promise<any> {

@@ -1,4 +1,6 @@
-import { Long } from "protobufjs";import * as $protobuf from "protobufjs";
+import * as $protobuf from 'protobufjs';
+import { Long } from 'protobufjs';
+
 /** EntityType enum. */
 export enum EntityType {
     UNDEFINED = 0,
@@ -980,6 +982,9 @@ export class Transaction implements ITransaction {
 /** Properties of a Settings. */
 export interface ISettings {
 
+    /** Settings id */
+    id?: (number|Long|null);
+
     /** Settings language */
     language?: (Settings.Language|null);
 
@@ -995,6 +1000,9 @@ export class Settings implements ISettings {
      * @param [properties] Properties to set
      */
     constructor(properties?: ISettings);
+
+    /** Settings id. */
+    public id: (number|Long);
 
     /** Settings language. */
     public language: Settings.Language;

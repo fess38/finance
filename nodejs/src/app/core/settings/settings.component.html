@@ -1,0 +1,26 @@
+<div class="clr-row">
+  <div class="clr-col-12 clr-col-lg-6">
+    <form>
+      <section class="form-block">
+        <label>Настройки</label>
+        <div class="form-group">
+          <label>Язык</label>
+          <div class="select form-control">
+            <select name="language"
+                    required
+                    [(ngModel)]="userdata.settings.language">
+              <option selected *ngFor="let language of languages()" [ngValue]="language.code">
+                {{language.value}}
+              </option>
+            </select>
+          </div>
+        </div>
+      </section>
+    </form>
+    <div class="btn-group btn-primary">
+      <button class="btn btn-primary btn-sm" (click)="updateSettings()">
+        Сохранить
+      </button>
+    </div>
+  </div>
+</div>
