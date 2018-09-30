@@ -1,13 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { Category } from '../../core/model/model';
-import { UserDataService } from '../../utils/user-data.service';
+import { UserDataService } from '../../core/user-data.service';
 
 @Component({
   templateUrl: 'category-detail.component.html'
 })
-export class CategoryDetailComponent {
+export class CategoryDetailComponent implements OnInit, OnDestroy {
   category: Category = new Category();
+  private subscription: Subscription;
 
   constructor(private userdata: UserDataService,
               private route: ActivatedRoute,
@@ -16,27 +18,37 @@ export class CategoryDetailComponent {
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
     if (id != 'new') {
-      const navigatedCategory = this.userdata.categories.filter(x => x.id == +id)[0];
-      if (navigatedCategory == null) {
-        this.router.navigate(['/category /new']);
-      } else {
-        this.category = navigatedCategory;
-      }
+      const callback = () => {
+        const navigatedCategory = this.userdata.categories.filter(x => x.id == +id)[0];
+        if (navigatedCategory == null) {
+          this.router.navigate(['/category']);
+        } else {
+          this.category = navigatedCategory;
+        }
+      };
+      this.subscription = this.userdata.subscribeOnInit(callback);
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   }
 
   update(category: Category) {
-    let promise: Promise<any>;
     if (category.id == 0) {
-      promise = this.userdata.saveCategory(category);
+      this.userdata.saveCategory(category)
+        .then(newCategory => {
+          this.router.navigate(['/category/' + newCategory.id]);
+          this.category = newCategory;
+        })
+        .catch(error => console.error(error.message));
     } else {
-      promise = this.userdata.updateCategory(category);
+      this.userdata.updateCategory(category)
+        .then(() => this.router.navigate(['/category']))
+        .catch(error => console.error(error.message));
     }
-    promise
-      .then(() => this.router.navigate(['/category']))
-      .catch(error => {
-        console.error(error.message);
-      });
   }
 
   delete(category: Category) {
@@ -57,5 +69,4 @@ export class CategoryDetailComponent {
     return !(this.category.isIncome == this.category.isExpense)
       && this.category.name.length > 0;
   }
-
 }

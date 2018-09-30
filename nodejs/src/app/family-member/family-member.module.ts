@@ -1,9 +1,6 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
-import { ClarityModule } from '@clr/angular';
-import { AppRoutingModule } from '../app-routing.module';
-import { UserDataService } from '../utils/user-data.service';
+import { SharedModule } from '../core/shared/shared.module';
+import { UserDataService } from '../core/user-data.service';
 import { FamilyMemberDetailComponent } from './family-member-detail/family-member-detail.component';
 import { FamilyMemberListComponent } from './family-member-list/family-member-list.component';
 
@@ -12,7 +9,7 @@ import { FamilyMemberListComponent } from './family-member-list/family-member-li
     FamilyMemberListComponent, FamilyMemberDetailComponent
   ],
   imports: [
-    AppRoutingModule, BrowserModule, ClarityModule, FormsModule
+    SharedModule
   ],
   providers: [
     UserDataService

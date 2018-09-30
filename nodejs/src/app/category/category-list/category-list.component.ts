@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import * as _ from 'underscore';
-import { UserDataService } from '../../utils/user-data.service';
+import { UserDataService } from '../../core/user-data.service';
 
 @Component({
   templateUrl: 'category-list.component.html'

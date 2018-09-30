@@ -1,20 +1,29 @@
 import { Injectable } from '@angular/core';
-import { Account, Category, Currency, Dump, FamilyMember, Settings, SubCategory, Transaction } from '../core/model/model';
+import { TranslateService } from '@ngx-translate/core';
+import { AsyncSubject, Subscription } from 'rxjs';
 import { HttpService } from './http.service';
+import { Account, Category, Currency, Dump, FamilyMember, Settings, SubCategory, Transaction } from './model/model';
+import Language = Settings.Language;
 
 @Injectable()
 export class UserDataService {
-  constructor(private http: HttpService) {
-    this.refresh(0);
-  }
-
-  settings: Settings = new Settings();
+  private isInit: AsyncSubject<boolean> = new AsyncSubject();
+  settings: Settings = new Settings({ language: Language.RU });
   currencies: Currency[] = [];
   accounts: Account[] = [];
   categories: Category[] = [];
   subCategories: SubCategory[] = [];
   familyMembers: FamilyMember[] = [];
   transactions: Transaction[] = [];
+
+  constructor(private http: HttpService, private translate: TranslateService) {
+    this.setDefaultLang();
+    this.refresh(0);
+  }
+
+  subscribeOnInit(callback): Subscription {
+    return this.isInit.subscribe(() => callback());
+  }
 
   private refresh(timeout = 5000) {
     setTimeout(() => {
@@ -28,32 +37,57 @@ export class UserDataService {
           this.subCategories = dump.subCategories as SubCategory[];
           this.familyMembers = dump.familyMembers as FamilyMember[];
           this.transactions = dump.transactions as Transaction[];
+          this.isInit.next(true);
+          this.isInit.complete();
+          this.setDefaultLang();
         })
         .catch(error => console.error(error));
     }, timeout);
   }
 
-  saveAccount(account: Account) {
+  private setDefaultLang() {
+    this.translate.setDefaultLang('ru');
+    this.translate.use(Language[this.settings.language].toLowerCase());
+  }
+
+  saveAccount(account: Account): Promise<Account> {
     return this.http.post('/api/data/account/save', Account.encode(account))
-      .then(data => this.accounts.push(Account.decode(data)));
+      .then(data => Account.decode(data))
+      .then(newAccount => {
+        this.accounts.push(newAccount);
+        return newAccount;
+      });
   }
 
-  saveCategory(category: Category) {
+  saveCategory(category: Category): Promise<Category> {
     return this.http.post('/api/data/category/save', Category.encode(category))
-      .then(data => this.categories.push(Category.decode(data)));
+      .then(data => Category.decode(data))
+      .then(newCategory => {
+        this.categories.push(newCategory);
+        return newCategory;
+      });
   }
 
-  saveSubCategory(subCategory: SubCategory) {
+  saveSubCategory(subCategory: SubCategory): Promise<SubCategory> {
     return this.http.post('/api/data/sub_category/save', SubCategory.encode(subCategory))
-      .then(data => this.subCategories.push(SubCategory.decode(data)));
+      .then(data => SubCategory.decode(data))
+      .then(newSubCategory => {
+        this.subCategories.push(newSubCategory);
+        return newSubCategory;
+      });
   }
 
-  saveFamilyMember(familyMember: FamilyMember) {
+  saveFamilyMember(familyMember: FamilyMember): Promise<FamilyMember> {
     return this.http.post('/api/data/family_member/save', FamilyMember.encode(familyMember))
-      .then(data => this.familyMembers.push(FamilyMember.decode(data)));
+      .then(data => FamilyMember.decode(data))
+      .then(newFamilyMember => {
+        this.familyMembers.push(newFamilyMember);
+        return newFamilyMember;
+      });
   }
 
   updateSettings(settings: Settings): Promise<any> {
+    this.setDefaultLang();
     return this.http.post('/api/data/settings/update', Settings.encode(settings));
   }
 

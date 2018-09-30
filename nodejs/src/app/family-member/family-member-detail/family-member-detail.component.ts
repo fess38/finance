@@ -1,13 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { FamilyMember } from '../../core/model/model';
-import { UserDataService } from '../../utils/user-data.service';
+import { UserDataService } from '../../core/user-data.service';
 
 @Component({
   templateUrl: 'family-member-detail.component.html'
 })
-export class FamilyMemberDetailComponent implements OnInit {
+export class FamilyMemberDetailComponent implements OnInit, OnDestroy {
   familyMember: FamilyMember = new FamilyMember();
+  private subscription: Subscription;
 
   constructor(private userdata: UserDataService,
               private route: ActivatedRoute,
@@ -16,27 +18,37 @@ export class FamilyMemberDetailComponent implements OnInit {
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
     if (id != 'new') {
-      const navigatedFamilyMember = this.userdata.familyMembers.filter(x => x.id == +id)[0];
-      if (navigatedFamilyMember == null) {
-        this.router.navigate(['/family_member/new']);
-      } else {
-        this.familyMember = navigatedFamilyMember;
-      }
+      const callback = () => {
+        const navigatedFamilyMember = this.userdata.familyMembers.filter(x => x.id == +id)[0];
+        if (navigatedFamilyMember == null) {
+          this.router.navigate(['/family_member']);
+        } else {
+          this.familyMember = navigatedFamilyMember;
+        }
+      };
+      this.subscription = this.userdata.subscribeOnInit(callback);
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   }
 
   update(familyMember: FamilyMember) {
-    let promise: Promise<any>;
     if (familyMember.id == 0) {
-      promise = this.userdata.saveFamilyMember(familyMember);
+      this.userdata.saveFamilyMember(familyMember)
+        .then(newFamilyMember => {
+          this.router.navigate(['/family_member/' + newFamilyMember.id]);
+          this.familyMember = newFamilyMember;
+        })
+        .catch(error => console.error(error.message));
     } else {
-      promise = this.userdata.updateFamilyMember(familyMember);
+      this.userdata.updateFamilyMember(familyMember)
+        .then(() => this.router.navigate(['/family_member']))
+        .catch(error => console.error(error.message));
     }
-    promise
-      .then(() => this.router.navigate(['/family_member']))
-      .catch(error => {
-        console.error(error.message);
-      });
   }
 
   delete(familyMember: FamilyMember) {

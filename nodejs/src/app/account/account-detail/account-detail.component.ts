@@ -1,13 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { Account } from '../../core/model/model';
-import { UserDataService } from '../../utils/user-data.service';
+import { UserDataService } from '../../core/user-data.service';
 
 @Component({
   templateUrl: 'account-detail.component.html'
 })
-export class AccountDetailComponent implements OnInit {
+export class AccountDetailComponent implements OnInit, OnDestroy {
   account: Account = new Account();
+  private subscription: Subscription;
 
   constructor(private userdata: UserDataService,
               private route: ActivatedRoute,
@@ -16,12 +18,21 @@ export class AccountDetailComponent implements OnInit {
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
     if (id != 'new') {
-      const navigatedAccount = this.userdata.accounts.filter(x => x.id == +id)[0];
-      if (navigatedAccount == null) {
-        this.router.navigate(['/account/new']);
-      } else {
-        this.account = navigatedAccount;
-      }
+      const callback = () => {
+        const navigatedAccount = this.userdata.accounts.filter(x => x.id == +id)[0];
+        if (navigatedAccount == null) {
+          this.router.navigate(['/account']);
+        } else {
+          this.account = navigatedAccount;
+        }
+      };
+      this.subscription = this.userdata.subscribeOnInit(callback);
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   }
 
@@ -30,17 +41,18 @@ export class AccountDetailComponent implements OnInit {
   }
 
   update(account: Account) {
-    let promise: Promise<any>;
     if (account.id == 0) {
-      promise = this.userdata.saveAccount(account);
+      this.userdata.saveAccount(account)
+        .then(newAccount => {
+          this.router.navigate(['/account/' + newAccount.id]);
+          this.account = newAccount;
+        })
+        .catch(error => console.error(error.message));
     } else {
-      promise = this.userdata.updateAccount(account);
+      this.userdata.updateAccount(account)
+        .then(() => this.router.navigate(['/account']))
+        .catch(error => console.error(error.message));
     }
-    promise
-      .then(() => this.router.navigate(['/account']))
-      .catch(error => {
-        console.error(error.message);
-      });
   }
 
   delete(account: Account) {

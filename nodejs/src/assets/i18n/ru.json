@@ -1,0 +1,15 @@
+{
+  "main_menu": {
+    "title": "Финансы",
+    "settings": "Настройки",
+    "exit": "Выйти",
+    "add_transaction": "Добавить транзакцию",
+    "transaction": "Доходы и расходы",
+    "other": "Остальное",
+    "account": "Счета",
+    "transfer": "Переводы",
+    "category": "Категории",
+    "sub_category": "Подкатегории",
+    "family_member": "Члены семьи"
+  }
+}

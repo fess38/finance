@@ -1,6 +1,6 @@
 <clr-header>
   <div class="branding">
-    <span class="title">Финансы</span>
+    <span class="title">{{'main_menu.title' | translate}}</span>
   </div>
   <div class="header-actions">
     <clr-dropdown>
@@ -8,8 +8,8 @@
         <clr-icon shape="cog"></clr-icon>
       </button>
       <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-        <a routerLink="/settings" clrDropdownItem>Настройки</a>
-        <span (click)="signout()" clrDropdownItem>Выйти</span>
+        <a routerLink="/settings" clrDropdownItem>{{'main_menu.settings' | translate}}</a>
+        <span (click)="signout()" clrDropdownItem>{{'main_menu.exit' | translate}}</span>
       </clr-dropdown-menu>
     </clr-dropdown>
   </div>
@@ -21,16 +21,39 @@
 
   <nav class="sidenav" [clr-nav-level]="1">
     <section class="sidenav-content">
-      <a routerLink="" class="nav-link">Добавить транзакцию</a>
-      <a routerLink="" class="nav-link">Доходы и расходы</a>
+      <a routerLink="" class="nav-link">
+        {{'main_menu.add_transaction' | translate}}
+      </a>
+      <a routerLink="" class="nav-link">
+        {{'main_menu.transaction' | translate}}
+      </a>
       <section class="nav-group">
-        <label>Остальное</label>
+        <label>{{'main_menu.other' | translate}}</label>
         <ul class="nav-list">
-          <li><a routerLink="/account" class="nav-link">Счета</a></li>
-          <li><a routerLink="" class="nav-link">Переводы</a></li>
-          <li><a routerLink="/category" class="nav-link">Категории</a></li>
-          <li><a routerLink="/sub_category" class="nav-link">Подкатегории</a></li>
-          <li><a routerLink="/family_member" class="nav-link">Члены семьи</a></li>
+          <li>
+            <a routerLink="/account" class="nav-link">
+              {{'main_menu.account' | translate}}
+            </a>
+          </li>
+          <li>
+            <a routerLink="" class="nav-link">{{'main_menu.transfer' | translate}}
+            </a>
+          </li>
+          <li>
+            <a routerLink="/category" class="nav-link">
+              {{'main_menu.category' | translate}}
+            </a>
+          </li>
+          <li>
+            <a routerLink="/sub_category" class="nav-link">
+              {{'main_menu.sub_category' | translate}}
+            </a>
+          </li>
+          <li>
+            <a routerLink="/family_member" class="nav-link">
+              {{'main_menu.family_member' | translate}}
+            </a>
+          </li>
         </ul>
       </section>
     </section>
