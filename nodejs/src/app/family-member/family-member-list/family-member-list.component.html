@@ -1,0 +1,15 @@
+<div class="clr-row">
+  <div class="clr-col-12 clr-col-sm-9 clr-col-md-6">
+    <table class="table table-noborder table-compact">
+      <tr>
+        <th routerLink="/family_member/new">
+          <span>Член семьи </span>
+          <clr-icon shape="plus-circle"></clr-icon>
+        </th>
+      </tr>
+      <tr *ngFor="let familyMember of familyMembers()" routerLink="/family_member/{{familyMember.id}}">
+        <td>{{familyMember.name}}</td>
+      </tr>
+    </table>
+  </div>
+</div>

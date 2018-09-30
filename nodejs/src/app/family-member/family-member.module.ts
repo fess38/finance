@@ -1,17 +1,18 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { ClarityModule } from 'clarity-angular';
-import { AlertModule } from '../alert/alert.module';
+import { ClarityModule } from '@clr/angular';
+import { AppRoutingModule } from '../app-routing.module';
 import { UserDataService } from '../utils/user-data.service';
-import { FamilyMemberComponent } from './family-member.component';
+import { FamilyMemberDetailComponent } from './family-member-detail/family-member-detail.component';
+import { FamilyMemberListComponent } from './family-member-list/family-member-list.component';
 
 @NgModule({
   declarations: [
-    FamilyMemberComponent
+    FamilyMemberListComponent, FamilyMemberDetailComponent
   ],
   imports: [
-    AlertModule, BrowserModule, ClarityModule, FormsModule
+    AppRoutingModule, BrowserModule, ClarityModule, FormsModule
   ],
   providers: [
     UserDataService

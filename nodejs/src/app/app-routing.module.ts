@@ -1,10 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AccountComponent } from './account/account.component';
+import { AccountDetailComponent } from './account/account-detail/account-detail.component';
+import { AccountListComponent } from './account/account-list/account-list.component';
 import { AuthGuardService } from './auth/auth-guard.service';
 import { LoginComponent } from './auth/login/login.component';
-import { FamilyMemberComponent } from './family-member/family-member.component';
-import { MainPageComponent } from './main-page/main-page.component';
+import { CategoryDetailComponent } from './category/category-detail/category-detail.component';
+import { CategoryListComponent } from './category/category-list/category-list.component';
+import { MainPageComponent } from './core/main-page/main-page.component';
+import { SettingsComponent } from './core/settings/settings.component';
+import { FamilyMemberDetailComponent } from './family-member/family-member-detail/family-member-detail.component';
+import { FamilyMemberListComponent } from './family-member/family-member-list/family-member-list.component';
+import { SubCategoryDetailComponent } from './sub-category/sub-category-detail/sub-category-detail.component';
+import { SubCategoryListComponent } from './sub-category/sub-category-list/sub-category-list.component';
 
 const appRoutes: Routes = [
   {
@@ -17,13 +24,47 @@ const appRoutes: Routes = [
     component: LoginComponent
   },
   {
+    path: 'settings',
+    component: SettingsComponent
+  },
+  {
     path: 'account',
-    component: AccountComponent,
+    component: AccountListComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'account/:id',
+    component: AccountDetailComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'category',
+    component: CategoryListComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'category/:id',
+    component: CategoryDetailComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'sub_category',
+    component: SubCategoryListComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'sub_category/:id',
+    component: SubCategoryDetailComponent,
     canActivate: [AuthGuardService]
   },
   {
     path: 'family_member',
-    component: FamilyMemberComponent,
+    component: FamilyMemberListComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'family_member/:id',
+    component: FamilyMemberDetailComponent,
     canActivate: [AuthGuardService]
   },
   {
@@ -41,7 +82,6 @@ const appRoutes: Routes = [
   exports: [
     RouterModule
   ],
-  providers: [
-  ]
+  providers: []
 })
 export class AppRoutingModule {}

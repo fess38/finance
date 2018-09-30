@@ -1,0 +1,46 @@
+<div class="clr-row">
+  <div class="clr-col-12 clr-col-lg-6">
+    <form>
+      <section class="form-block">
+        <label [hidden]="!isNewCategory()">Добавление категории</label>
+        <label [hidden]="isNewCategory()">Редактирование категории</label>
+        <div class="form-group">
+          <label>Название</label>
+          <input class="form-control" type="text" name="name" [(ngModel)]="category.name"/>
+        </div>
+        <div class="form-group">
+          <label>Тип категории</label>
+          <clr-checkbox name="incomeCheckbox"
+                        [(ngModel)]="category.isIncome"
+                        [clrDisabled]="!isNewCategory()">
+            Доход
+          </clr-checkbox>
+          <clr-checkbox name="expenseCheckbox"
+                        [(ngModel)]="category.isExpense"
+                        [clrDisabled]="!isNewCategory()">
+            Расход
+          </clr-checkbox>
+        </div>
+        <div class="form-group-single" [hidden]="isNewCategory()">
+          <clr-checkbox name="isVisible" [(ngModel)]="category.isVisible">
+            Использовать в транзакциях
+          </clr-checkbox>
+        </div>
+        <div class="form-group-single" [hidden]="isNewCategory()">
+          <span>Транзакций: {{category.transactionAmount}}</span>
+        </div>
+      </section>
+    </form>
+    <div class="btn-group btn-primary">
+      <button class="btn btn-primary btn-sm"
+              (click)="update(category)"
+              [disabled]="!isValidForm()">Сохранить
+      </button>
+      <button class="btn btn-danger btn-sm"
+              (click)="delete(category)"
+              [hidden]="isNewCategory()"
+              [disabled]="hasTransations()">Удалить
+      </button>
+    </div>
+  </div>
+</div>

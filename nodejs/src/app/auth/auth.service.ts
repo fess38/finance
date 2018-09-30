@@ -3,11 +3,10 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie';
-import 'rxjs/add/operator/toPromise';
-import { AlertService } from '../alert/alert.service';
-import { AccessToken, RefreshToken } from '../model';
+import { AccessToken, RefreshToken } from '../core/model/model';
+import { google } from '../core/model/wrappers';
+import { AlertService } from '../utils/alert/alert.service';
 import { HttpService } from '../utils/http.service';
-import { google } from '../wrappers';
 import BoolValue = google.protobuf.BoolValue;
 import StringValue = google.protobuf.StringValue;
 import AuthType = RefreshToken.AuthType;

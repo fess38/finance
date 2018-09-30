@@ -1,0 +1,17 @@
+<div class="clr-row">
+  <div class="clr-col-12 clr-col-sm-9 clr-col-md-6">
+    <table class="table table-noborder table-compact">
+      <tr>
+        <th routerLink="/account/new">
+          <span>Счет </span>
+          <clr-icon shape="plus-circle"></clr-icon>
+        </th>
+        <th>Баланс</th>
+      </tr>
+      <tr *ngFor="let account of accounts()" routerLink="/account/{{account.id}}">
+        <td>{{account.name}}</td>
+        <td>{{account.balance || 0}} {{currencySymbol(account.currencyId)}}</td>
+      </tr>
+    </table>
+  </div>
+</div>

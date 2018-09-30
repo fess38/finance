@@ -1,6 +1,7 @@
 package ru.fess38.finance.core
 
 import com.google.protobuf.Message
+import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -9,11 +10,15 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import ru.fess38.finance.model.Model.Account
-import ru.fess38.finance.model.Model.Category
-import ru.fess38.finance.model.Model.FamilyMember
-import ru.fess38.finance.model.Model.SubCategory
-import ru.fess38.finance.model.Model.Transaction
+import ru.fess38.finance.core.Model.Account
+import ru.fess38.finance.core.Model.Category
+import ru.fess38.finance.core.Model.FamilyMember
+import ru.fess38.finance.core.Model.Settings
+import ru.fess38.finance.core.Model.SubCategory
+import ru.fess38.finance.core.Model.Transaction
+import ru.fess38.finance.utils.id
+import ru.fess38.finance.utils.type
+import ru.fess38.finance.validation.MessageValidator
 
 @RestController
 @RequestMapping(
@@ -22,29 +27,35 @@ import ru.fess38.finance.model.Model.Transaction
     consumes = ["application/x-protobuf"]
 )
 class Controller {
-  @Autowired
-  lateinit var entityService: FinanceEntityService
+  private val log = KotlinLogging.logger {}
 
-  val validator = InputValuesValidator()
+  @Autowired
+  lateinit var messageService: MessageService
+
+  @Autowired
+  lateinit var validator: MessageValidator<Message>
 
   @GetMapping("dump/get")
-  fun get() = entityService.dump()
+  fun get() = messageService.dump()
 
-  private fun saveMessage(value: Message): ResponseEntity<Any> {
+  private fun saveMessage(message: Message): ResponseEntity<Any> {
     var httpStatus: HttpStatus
-    var savedValue = value
+    var savedValue: Message? = null
 
-    if (validator.isValid(value)) {
+    val validatorResponse = validator.validate(message)
+    val errors = validatorResponse.errors.joinToString("; ")
+    if (validatorResponse.isValid) {
       httpStatus = HttpStatus.OK
       try {
-        savedValue = entityService.save(value)
+        savedValue = messageService.save(message)
       } catch (e: Exception) {
         httpStatus = HttpStatus.INTERNAL_SERVER_ERROR
       }
     } else {
+      log.info{"Unable to save [${message.type}]: $errors"}
       httpStatus = HttpStatus.BAD_REQUEST
     }
-    return ResponseEntity(savedValue, httpStatus)
+    return ResponseEntity(savedValue ?: errors, httpStatus)
   }
 
   @PostMapping("account/save")
@@ -62,33 +73,39 @@ class Controller {
   @PostMapping("transaction/save")
   fun save(@RequestBody value: Transaction) = saveMessage(value)
 
-  private fun updateMessage(value: Message, id: Long): ResponseEntity<Any> {
+  private fun updateMessage(message: Message): ResponseEntity<Any> {
     var httpStatus: HttpStatus
-    if (validator.isValid(value) && entityService.isExist(id)) {
+    val validatorResponse = validator.validate(message)
+    val errors = validatorResponse.errors.joinToString("; ")
+    if (validatorResponse.isValid) {
       httpStatus = HttpStatus.OK
       try {
-        entityService.update(value)
+        messageService.update(message)
       } catch (e: Exception) {
         httpStatus = HttpStatus.INTERNAL_SERVER_ERROR
       }
     } else {
+      log.info{"Unable to update [${message.type}] [${message.id}]: $errors"}
       httpStatus = HttpStatus.BAD_REQUEST
     }
-    return ResponseEntity(value, httpStatus)
+    return ResponseEntity(errors, httpStatus)
   }
 
+  @PostMapping("settings/update")
+  fun update(@RequestBody value: Settings) = updateMessage(value)
+
   @PostMapping("account/update")
-  fun update(@RequestBody value: Account) = updateMessage(value, value.id)
+  fun update(@RequestBody value: Account) = updateMessage(value)
 
   @PostMapping("category/update")
-  fun update(@RequestBody value: Category) = updateMessage(value, value.id)
+  fun update(@RequestBody value: Category) = updateMessage(value)
 
   @PostMapping("sub_category/update")
-  fun update(@RequestBody value: SubCategory) = updateMessage(value, value.id)
+  fun update(@RequestBody value: SubCategory) = updateMessage(value)
 
   @PostMapping("family_member/update")
-  fun update(@RequestBody value: FamilyMember) = updateMessage(value, value.id)
+  fun update(@RequestBody value: FamilyMember) = updateMessage(value)
 
   @PostMapping("transaction/update")
-  fun update(@RequestBody value: Transaction) = updateMessage(value, value.id)
+  fun update(@RequestBody value: Transaction) = updateMessage(value)
 }

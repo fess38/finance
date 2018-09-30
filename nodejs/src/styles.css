@@ -1,2 +1,5 @@
-@import "../node_modules/font-awesome/css/font-awesome.min.css";
-@import "../node_modules/clarity-ui/clarity-ui.min.css";
+.form-group-single {
+  margin-bottom: 1rem;
+  font-size: 13px;
+  color: black;
+}

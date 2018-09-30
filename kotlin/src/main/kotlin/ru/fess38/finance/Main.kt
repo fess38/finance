@@ -4,7 +4,6 @@ import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.web.HttpMessageConvertersAutoConfiguration
 import org.springframework.context.annotation.ComponentScan
-import org.springframework.scheduling.annotation.EnableScheduling
 
 fun main(args: Array<String>) {
   val properties = AppConfiguration().config().getConfig("spring").toProperties()
@@ -13,7 +12,6 @@ fun main(args: Array<String>) {
   springApplication.run(*args)
 }
 
-@EnableScheduling
 @EnableAutoConfiguration(exclude = [(HttpMessageConvertersAutoConfiguration::class)])
 @ComponentScan(basePackages = ["ru.fess38.finance"])
 class Application
