@@ -7,7 +7,7 @@ import Language = Settings.Language;
   templateUrl: 'settings.component.html'
 })
 export class SettingsComponent {
-  constructor(private userdata: UserDataService) {}
+  constructor(public userdata: UserDataService) {}
 
   languages(): any[] {
     return [{ code: Language.RU, value: 'RU' }, { code: Language.EN, value: 'EN' }];
