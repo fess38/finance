@@ -41,24 +41,40 @@ export class UserDataService {
     return this.isInit.subscribe(() => callback());
   }
 
-  saveAccount(account: Account) {
+  saveAccount(account: Account): Promise<Account> {
     return this.http.post('/api/data/account/save', Account.encode(account))
-      .then(data => this.accounts.push(Account.decode(data)));
+      .then(data => Account.decode(data))
+      .then(newAccount => {
+        this.accounts.push(newAccount);
+        return newAccount;
+      });
   }
 
-  saveCategory(category: Category) {
+  saveCategory(category: Category): Promise<Category> {
     return this.http.post('/api/data/category/save', Category.encode(category))
-      .then(data => this.categories.push(Category.decode(data)));
+      .then(data => Category.decode(data))
+      .then(newCategory => {
+        this.categories.push(newCategory);
+        return newCategory;
+      });
   }
 
-  saveSubCategory(subCategory: SubCategory) {
+  saveSubCategory(subCategory: SubCategory): Promise<SubCategory> {
     return this.http.post('/api/data/sub_category/save', SubCategory.encode(subCategory))
-      .then(data => this.subCategories.push(SubCategory.decode(data)));
+      .then(data => SubCategory.decode(data))
+      .then(newSubCategory => {
+        this.subCategories.push(newSubCategory);
+        return newSubCategory;
+      });
   }
 
-  saveFamilyMember(familyMember: FamilyMember) {
+  saveFamilyMember(familyMember: FamilyMember): Promise<FamilyMember> {
     return this.http.post('/api/data/family_member/save', FamilyMember.encode(familyMember))
-      .then(data => this.familyMembers.push(FamilyMember.decode(data)));
+      .then(data => FamilyMember.decode(data))
+      .then(newFamilyMember => {
+        this.familyMembers.push(newFamilyMember);
+        return newFamilyMember;
+      });
   }
 
   updateSettings(settings: Settings): Promise<any> {

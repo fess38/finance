@@ -47,17 +47,18 @@ export class SubCategoryDetailComponent implements OnInit, OnDestroy {
   }
 
   update(subCategory: SubCategory) {
-    let promise: Promise<any>;
     if (subCategory.id == 0) {
-      promise = this.userdata.saveSubCategory(subCategory);
+      this.userdata.saveSubCategory(subCategory)
+        .then(newSubCategory => {
+          this.router.navigate(['/sub_category/' + newSubCategory.id]);
+          this.subCategory = newSubCategory;
+        })
+        .catch(error => console.error(error.message));
     } else {
-      promise = this.userdata.updateSubCategory(subCategory);
+      this.userdata.updateSubCategory(subCategory)
+        .then(() => this.router.navigate(['/sub_category']))
+        .catch(error => console.error(error.message));
     }
-    promise
-      .then(() => this.router.navigate(['/sub_category']))
-      .catch(error => {
-        console.error(error.message);
-      });
   }
 
   delete(subCategory: SubCategory) {

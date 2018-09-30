@@ -41,17 +41,18 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   }
 
   update(account: Account) {
-    let promise: Promise<any>;
     if (account.id == 0) {
-      promise = this.userdata.saveAccount(account);
+      this.userdata.saveAccount(account)
+        .then(newAccount => {
+          this.router.navigate(['/account/' + newAccount.id]);
+          this.account = newAccount;
+        })
+        .catch(error => console.error(error.message));
     } else {
-      promise = this.userdata.updateAccount(account);
+      this.userdata.updateAccount(account)
+        .then(() => this.router.navigate(['/account']))
+        .catch(error => console.error(error.message));
     }
-    promise
-      .then(() => this.router.navigate(['/account']))
-      .catch(error => {
-        console.error(error.message);
-      });
   }
 
   delete(account: Account) {

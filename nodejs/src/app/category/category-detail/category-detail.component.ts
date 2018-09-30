@@ -37,17 +37,18 @@ export class CategoryDetailComponent implements OnInit, OnDestroy {
   }
 
   update(category: Category) {
-    let promise: Promise<any>;
     if (category.id == 0) {
-      promise = this.userdata.saveCategory(category);
+      this.userdata.saveCategory(category)
+        .then(newCategory => {
+          this.router.navigate(['/category/' + newCategory.id]);
+          this.category = newCategory;
+        })
+        .catch(error => console.error(error.message));
     } else {
-      promise = this.userdata.updateCategory(category);
+      this.userdata.updateCategory(category)
+        .then(() => this.router.navigate(['/category']))
+        .catch(error => console.error(error.message));
     }
-    promise
-      .then(() => this.router.navigate(['/category']))
-      .catch(error => {
-        console.error(error.message);
-      });
   }
 
   delete(category: Category) {

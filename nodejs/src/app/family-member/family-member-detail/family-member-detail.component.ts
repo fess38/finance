@@ -37,17 +37,18 @@ export class FamilyMemberDetailComponent implements OnInit, OnDestroy {
   }
 
   update(familyMember: FamilyMember) {
-    let promise: Promise<any>;
     if (familyMember.id == 0) {
-      promise = this.userdata.saveFamilyMember(familyMember);
+      this.userdata.saveFamilyMember(familyMember)
+        .then(newFamilyMember => {
+          this.router.navigate(['/family_member/' + newFamilyMember.id]);
+          this.familyMember = newFamilyMember;
+        })
+        .catch(error => console.error(error.message));
     } else {
-      promise = this.userdata.updateFamilyMember(familyMember);
+      this.userdata.updateFamilyMember(familyMember)
+        .then(() => this.router.navigate(['/family_member']))
+        .catch(error => console.error(error.message));
     }
-    promise
-      .then(() => this.router.navigate(['/family_member']))
-      .catch(error => {
-        console.error(error.message);
-      });
   }
 
   delete(familyMember: FamilyMember) {
