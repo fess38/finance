@@ -1,0 +1,15 @@
+{
+  "main_menu": {
+    "title": "Finance",
+    "settings": "Settings",
+    "exit": "Sign out",
+    "add_transaction": "Add transaction",
+    "transaction": "Incomes and expences",
+    "other": "Other",
+    "account": "Accounts",
+    "transfer": "Transfers",
+    "category": "Categories",
+    "sub_category": "Subcategories",
+    "family_member": "Family members"
+  }
+}

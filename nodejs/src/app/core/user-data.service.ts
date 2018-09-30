@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { AsyncSubject, Subscription } from 'rxjs';
 import { HttpService } from './http.service';
 import { Account, Category, Currency, Dump, FamilyMember, Settings, SubCategory, Transaction } from './model/model';
+import Language = Settings.Language;
 
 @Injectable()
 export class UserDataService {
   private isInit: AsyncSubject<boolean> = new AsyncSubject();
-  settings: Settings = new Settings();
+  settings: Settings = new Settings({ language: Language.RU });
   currencies: Currency[] = [];
   accounts: Account[] = [];
   categories: Category[] = [];
@@ -14,8 +16,13 @@ export class UserDataService {
   familyMembers: FamilyMember[] = [];
   transactions: Transaction[] = [];
 
-  constructor(private http: HttpService) {
+  constructor(private http: HttpService, private translate: TranslateService) {
+    this.setDefaultLang();
     this.refresh(0);
+  }
+
+  subscribeOnInit(callback): Subscription {
+    return this.isInit.subscribe(() => callback());
   }
 
   private refresh(timeout = 5000) {
@@ -32,13 +39,15 @@ export class UserDataService {
           this.transactions = dump.transactions as Transaction[];
           this.isInit.next(true);
           this.isInit.complete();
+          this.setDefaultLang();
         })
         .catch(error => console.error(error));
     }, timeout);
   }
 
-  subscribeOnInit(callback): Subscription {
-    return this.isInit.subscribe(() => callback());
+  private setDefaultLang() {
+    this.translate.setDefaultLang('ru');
+    this.translate.use(Language[this.settings.language].toLowerCase());
   }
 
   saveAccount(account: Account): Promise<Account> {
@@ -78,6 +87,7 @@ export class UserDataService {
   }
 
   updateSettings(settings: Settings): Promise<any> {
+    this.setDefaultLang();
     return this.http.post('/api/data/settings/update', Settings.encode(settings));
   }
 

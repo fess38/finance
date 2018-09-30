@@ -1,8 +1,5 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
-import { ClarityModule } from '@clr/angular';
-import { AppRoutingModule } from '../app-routing.module';
+import { SharedModule } from '../core/shared/shared.module';
 import { UserDataService } from '../core/user-data.service';
 import { SubCategoryDetailComponent } from './sub-category-detail/sub-category-detail.component';
 import { SubCategoryListComponent } from './sub-category-list/sub-category-list.component';
@@ -12,7 +9,7 @@ import { SubCategoryListComponent } from './sub-category-list/sub-category-list.
     SubCategoryListComponent, SubCategoryDetailComponent
   ],
   imports: [
-    AppRoutingModule, BrowserModule, ClarityModule, FormsModule
+    SharedModule
   ],
   providers: [
     UserDataService
