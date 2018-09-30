@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { UserDataService } from '../../utils/user-data.service';
 import { Settings } from '../model/model';
+import { UserDataService } from '../user-data.service';
 import Language = Settings.Language;
 
 @Component({

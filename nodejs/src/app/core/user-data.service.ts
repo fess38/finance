@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Account, Category, Currency, Dump, FamilyMember, Settings, SubCategory, Transaction } from '../core/model/model';
+import { AsyncSubject, Subscription } from 'rxjs';
 import { HttpService } from './http.service';
+import { Account, Category, Currency, Dump, FamilyMember, Settings, SubCategory, Transaction } from './model/model';
 
 @Injectable()
 export class UserDataService {
-  constructor(private http: HttpService) {
-    this.refresh(0);
-  }
-
+  private isInit: AsyncSubject<boolean> = new AsyncSubject();
   settings: Settings = new Settings();
   currencies: Currency[] = [];
   accounts: Account[] = [];
@@ -15,6 +13,10 @@ export class UserDataService {
   subCategories: SubCategory[] = [];
   familyMembers: FamilyMember[] = [];
   transactions: Transaction[] = [];
+
+  constructor(private http: HttpService) {
+    this.refresh(0);
+  }
 
   private refresh(timeout = 5000) {
     setTimeout(() => {
@@ -28,9 +30,15 @@ export class UserDataService {
           this.subCategories = dump.subCategories as SubCategory[];
           this.familyMembers = dump.familyMembers as FamilyMember[];
           this.transactions = dump.transactions as Transaction[];
+          this.isInit.next(true);
+          this.isInit.complete();
         })
         .catch(error => console.error(error));
     }, timeout);
+  }
+
+  subscribeOnInit(callback): Subscription {
+    return this.isInit.subscribe(() => callback());
   }
 
   saveAccount(account: Account) {

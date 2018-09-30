@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import * as _ from 'underscore';
 import { Category } from '../../core/model/model';
-import { UserDataService } from '../../utils/user-data.service';
+import { UserDataService } from '../../core/user-data.service';
 
 @Component({
   templateUrl: 'sub-category-list.component.html'
