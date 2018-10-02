@@ -1,7 +1,26 @@
 {
+  "common": {
+    "settings": "Settings",
+    "save": "Save",
+    "delete": "Delete"
+  },
+  "account_detail": {
+    "add": "Add account",
+    "edit": "Edit account",
+    "name": "Name",
+    "currency": "Currency",
+    "use_in_transactions": "Use in transactions",
+    "amount": "Transaction amount"
+  },
+  "account_list": {
+    "account_title": "Account",
+    "balance_title": "Balance"
+  },
+  "login": {
+    "google": "Log in by Google"
+  },
   "main_menu": {
     "title": "Finance",
-    "settings": "Settings",
     "exit": "Sign out",
     "add_transaction": "Add transaction",
     "transaction": "Incomes and expences",
@@ -11,5 +30,8 @@
     "category": "Categories",
     "sub_category": "Subcategories",
     "family_member": "Family members"
+  },
+  "settings": {
+    "language": "Language"
   }
 }

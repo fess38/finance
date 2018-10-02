@@ -1,7 +1,26 @@
 {
+  "common": {
+    "settings": "Настройки",
+    "save": "Сохранить",
+    "delete": "Удалить"
+  },
+  "account_detail": {
+    "add": "Добавление счета",
+    "edit": "Редактирование счета",
+    "name": "Название",
+    "currency": "Валюта",
+    "use_in_transactions": "Использовать в транзакциях",
+    "amount": "Транзакций"
+  },
+  "account_list": {
+    "account_title": "Счет",
+    "balance_title": "Баланс"
+  },
+  "login": {
+    "google": "Войти через Google"
+  },
   "main_menu": {
     "title": "Финансы",
-    "settings": "Настройки",
     "exit": "Выйти",
     "add_transaction": "Добавить транзакцию",
     "transaction": "Доходы и расходы",
@@ -11,5 +30,8 @@
     "category": "Категории",
     "sub_category": "Подкатегории",
     "family_member": "Члены семьи"
+  },
+  "settings": {
+    "language": "Язык"
   }
 }
