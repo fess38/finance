@@ -2,20 +2,20 @@
   <div class="clr-col-12 clr-col-lg-6">
     <form>
       <section class="form-block">
-        <label [hidden]="!isNewAccount()">Добавление счета</label>
-        <label [hidden]="isNewAccount()">Редактирование счета</label>
+        <label [hidden]="!isNewAccount()">{{'account_detail.add' | translate}}</label>
+        <label [hidden]="isNewAccount()">{{'account_detail.edit' | translate}}</label>
         <div class="form-group">
-          <label>Название</label>
+          <label>{{'account_detail.name' | translate}}</label>
           <input class="form-control" type="text" name="name" [(ngModel)]="account.name"/>
         </div>
         <div class="form-group">
-          <label>Валюта</label>
+          <label>{{'account_detail.currency' | translate}}</label>
           <div class="select form-control">
             <select name="currencyId"
                     required
                     [(ngModel)]="account.currencyId"
                     [disabled]="!isNewAccount()">
-              <option disabled>Валюта</option>
+              <option disabled>{{'account_detail.currency' | translate}}</option>
               <option selected *ngFor="let currency of currencies()" [ngValue]="currency.id">
                 {{currency.nameRu}} ({{currency.symbol}})
               </option>
@@ -24,23 +24,23 @@
         </div>
         <div class="form-group-single" [hidden]="isNewAccount()">
           <clr-checkbox name="isVisible" [(ngModel)]="account.isVisible">
-            Использовать в транзакциях
+            {{'account_detail.use_in_transactions' | translate}}
           </clr-checkbox>
         </div>
         <div class="form-group-single" [hidden]="isNewAccount()">
-          <span>Транзакций: {{account.transactionAmount}}</span>
+          <span>{{'account_detail.amount' | translate}}: {{account.transactionAmount}}</span>
         </div>
       </section>
     </form>
     <div class="btn-group btn-primary">
       <button class="btn btn-primary btn-sm"
               (click)="update(account)"
-              [disabled]="!isValidForm()">Сохранить
+              [disabled]="!isValidForm()">{{'common.save' | translate}}
       </button>
       <button class="btn btn-danger btn-sm"
               (click)="delete(account)"
               [hidden]="isNewAccount()"
-              [disabled]="hasTransations()">Удалить
+              [disabled]="hasTransations()">{{'common.delete' | translate}}
       </button>
     </div>
   </div>

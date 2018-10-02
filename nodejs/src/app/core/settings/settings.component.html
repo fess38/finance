@@ -2,9 +2,9 @@
   <div class="clr-col-12 clr-col-lg-6">
     <form>
       <section class="form-block">
-        <label>Настройки</label>
+        <label>{{'common.settings' | translate}}</label>
         <div class="form-group">
-          <label>Язык</label>
+          <label>{{'settings.language' | translate}}</label>
           <div class="select form-control">
             <select name="language"
                     required
@@ -19,7 +19,7 @@
     </form>
     <div class="btn-group btn-primary">
       <button class="btn btn-primary btn-sm" (click)="updateSettings()">
-        Сохранить
+        {{'common.save' | translate}}
       </button>
     </div>
   </div>
