@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Account } from '../../core/model/model';
+import { Account, Currency, Settings } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data.service';
+import Language = Settings.Language;
 
 @Component({
   templateUrl: 'account-detail.component.html'
@@ -36,8 +37,12 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  currencies() {
+  currencies(): Currency[] {
     return this.userdata.currencies;
+  }
+
+  private language(): string {
+    return Language[this.userdata.settings.language];
   }
 
   update(account: Account) {

@@ -17,7 +17,9 @@
                     [disabled]="!isNewAccount()">
               <option disabled>{{'account_detail.currency' | translate}}</option>
               <option selected *ngFor="let currency of currencies()" [ngValue]="currency.id">
-                {{currency.nameRu}} ({{currency.symbol}})
+                <span *ngIf="language() == 'RU'">{{currency.nameRu}}</span>
+                <span *ngIf="language() == 'EN'">{{currency.nameEn}}</span>
+                <span> ({{currency.symbol}})</span>
               </option>
             </select>
           </div>
