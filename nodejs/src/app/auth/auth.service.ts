@@ -3,6 +3,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie';
+import { AsyncSubject, Subscription } from 'rxjs';
 import { HttpService } from '../core/http.service';
 import { AccessToken, RefreshToken } from '../core/model/model';
 import { google } from '../core/model/wrappers';
@@ -23,17 +24,9 @@ export class AuthService {
   }
 
   private loginTryCounter = 0;
+  private isSignInSubject: AsyncSubject<boolean> = new AsyncSubject();
 
-  isSignIn(): boolean {
-    return this.token().length > 0;
-  }
-
-  private token(): string {
-    const token = this.cookie.get('token');
-    return token ? token : '';
-  }
-
-  validateToken(): void {
+  private validateToken(): void {
     const accessToken = new AccessToken({ value: this.token() });
     this.http.post('/api/auth/validate', AccessToken.encode(accessToken))
       .then(data => {
@@ -43,6 +36,23 @@ export class AuthService {
         }
       })
       .catch((error) => console.error(error.message));
+  }
+
+  isSignIn(): boolean {
+    return this.token().length > 0;
+  }
+
+  subscribeOnSignIn(callback): Subscription {
+    const subscription = this.isSignInSubject.subscribe(() => callback());
+    if (this.isSignIn()) {
+      this.completeSignIn();
+    }
+    return subscription;
+  }
+
+  private completeSignIn() {
+    this.isSignInSubject.next(true);
+    this.isSignInSubject.complete();
   }
 
   signInGoogle() {
@@ -56,6 +66,7 @@ export class AuthService {
         .then((accessToken: AccessToken) => {
           const options = { expires: new Date(accessToken.expired as number) };
           this.cookie.put('token', accessToken.value, options);
+          this.completeSignIn();
           this.router.navigate(['']);
         })
         .catch(error => {
@@ -96,5 +107,10 @@ export class AuthService {
         })
         .catch(error => console.error(error.message));
     }
+  }
+
+  private token(): string {
+    const token = this.cookie.get('token');
+    return token ? token : '';
   }
 }

@@ -1,20 +1,37 @@
 {
   "common": {
     "settings": "Настройки",
+    "name": "Название",
+    "use_in_transactions": "Использовать в транзакциях",
+    "amount": "Транзакций",
     "save": "Сохранить",
-    "delete": "Удалить"
+    "delete": "Удалить",
+    "income": "Доход",
+    "expense": "Расход"
   },
   "account_detail": {
     "add": "Добавление счета",
     "edit": "Редактирование счета",
-    "name": "Название",
-    "currency": "Валюта",
-    "use_in_transactions": "Использовать в транзакциях",
-    "amount": "Транзакций"
+    "currency": "Валюта"
   },
   "account_list": {
     "account_title": "Счет",
     "balance_title": "Баланс"
+  },
+  "category_detail": {
+    "add": "Добавление категории",
+    "edit": "Редактирование категории",
+    "type": "Тип категории"
+  },
+  "category_list": {
+    "category": "Категория"
+  },
+  "family_member_detail": {
+    "add": "Добавление члена семьи",
+    "edit": "Редактирование члена семьи"
+  },
+  "family_member_list": {
+    "family_member": "Член семьи"
   },
   "login": {
     "google": "Войти через Google"
@@ -33,5 +50,14 @@
   },
   "settings": {
     "language": "Язык"
+  },
+  "sub_category_detail": {
+    "add": "Добавление подкатегории",
+    "edit": "Редактирование подкатегории",
+    "category": "Категория"
+  },
+  "sub_category_list": {
+    "sub_category": "Подкатегория",
+    "category": "Категория"
   }
 }

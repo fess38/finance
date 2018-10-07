@@ -18,31 +18,31 @@ export class UserDataService {
 
   constructor(private http: HttpService, private translate: TranslateService) {
     this.setDefaultLang();
-    this.refresh(0);
   }
 
   subscribeOnInit(callback): Subscription {
     return this.isInit.subscribe(() => callback());
   }
 
-  private refresh(timeout = 5000) {
-    setTimeout(() => {
-      this.http.get('/api/data/dump/get')
-        .then(data => Dump.decode(data))
-        .then(dump => {
-          this.settings = dump.settings as Settings;
-          this.currencies = dump.currencies as Currency[];
-          this.accounts = dump.accounts as Account[];
-          this.categories = dump.categories as Category[];
-          this.subCategories = dump.subCategories as SubCategory[];
-          this.familyMembers = dump.familyMembers as FamilyMember[];
-          this.transactions = dump.transactions as Transaction[];
-          this.isInit.next(true);
-          this.isInit.complete();
-          this.setDefaultLang();
-        })
-        .catch(error => console.error(error));
-    }, timeout);
+  refresh(timeout = 1000) {
+    this.http.get('/api/data/dump/get')
+      .then(data => Dump.decode(data))
+      .then(dump => {
+        this.settings = dump.settings as Settings;
+        this.currencies = dump.currencies as Currency[];
+        this.accounts = dump.accounts as Account[];
+        this.categories = dump.categories as Category[];
+        this.subCategories = dump.subCategories as SubCategory[];
+        this.familyMembers = dump.familyMembers as FamilyMember[];
+        this.transactions = dump.transactions as Transaction[];
+        this.isInit.next(true);
+        this.isInit.complete();
+        this.setDefaultLang();
+      })
+      .catch((error) => {
+        console.error(error.message);
+        setTimeout(() => this.refresh(timeout + 1000));
+      });
   }
 
   private setDefaultLang() {
