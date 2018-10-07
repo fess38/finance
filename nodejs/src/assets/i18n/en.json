@@ -1,20 +1,30 @@
 {
   "common": {
     "settings": "Settings",
+    "name": "Name",
+    "use_in_transactions": "Use in transactions",
+    "amount": "Transaction amount",
     "save": "Save",
-    "delete": "Delete"
+    "delete": "Delete",
+    "income": "Income",
+    "expense": "Expense"
   },
   "account_detail": {
     "add": "Add account",
     "edit": "Edit account",
-    "name": "Name",
-    "currency": "Currency",
-    "use_in_transactions": "Use in transactions",
-    "amount": "Transaction amount"
+    "currency": "Currency"
   },
   "account_list": {
     "account_title": "Account",
     "balance_title": "Balance"
+  },
+  "category_detail": {
+    "add": "Add category",
+    "edit": "Edit category",
+    "type": "Category type"
+  },
+  "category_list": {
+    "category": "Category"
   },
   "login": {
     "google": "Log in by Google"

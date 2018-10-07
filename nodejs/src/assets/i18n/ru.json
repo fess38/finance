@@ -1,20 +1,30 @@
 {
   "common": {
     "settings": "Настройки",
+    "name": "Название",
+    "use_in_transactions": "Использовать в транзакциях",
+    "amount": "Транзакций",
     "save": "Сохранить",
-    "delete": "Удалить"
+    "delete": "Удалить",
+    "income": "Доход",
+    "expense": "Расход"
   },
   "account_detail": {
     "add": "Добавление счета",
     "edit": "Редактирование счета",
-    "name": "Название",
-    "currency": "Валюта",
-    "use_in_transactions": "Использовать в транзакциях",
-    "amount": "Транзакций"
+    "currency": "Валюта"
   },
   "account_list": {
     "account_title": "Счет",
     "balance_title": "Баланс"
+  },
+  "category_detail": {
+    "add": "Добавление категории",
+    "edit": "Редактирование категории",
+    "type": "Тип категории"
+  },
+  "category_list": {
+    "category": "Категория"
   },
   "login": {
     "google": "Войти через Google"
