@@ -25,7 +25,8 @@ const appRoutes: Routes = [
   },
   {
     path: 'settings',
-    component: SettingsComponent
+    component: SettingsComponent,
+    canActivate: [AuthGuardService]
   },
   {
     path: 'account',
