@@ -39,12 +39,10 @@ export class AuthService {
   }
 
   isSignIn(): boolean {
-    console.log(2);
     return this.token().length > 0;
   }
 
   subscribeOnSignIn(callback): Subscription {
-    console.log(1);
     const subscription = this.isSignInSubject.subscribe(() => callback());
     if (this.isSignIn()) {
       this.completeSignIn();
@@ -53,7 +51,6 @@ export class AuthService {
   }
 
   private completeSignIn() {
-    console.log(3);
     this.isSignInSubject.next(true);
     this.isSignInSubject.complete();
   }

@@ -26,6 +26,13 @@
   "category_list": {
     "category": "Категория"
   },
+  "family_member_detail": {
+    "add": "Добавление члена семьи",
+    "edit": "Редактирование члена семьи"
+  },
+  "family_member_list": {
+    "family_member": "Член семьи"
+  },
   "login": {
     "google": "Войти через Google"
   },
@@ -43,5 +50,14 @@
   },
   "settings": {
     "language": "Язык"
+  },
+  "sub_category_detail": {
+    "add": "Добавление подкатегории",
+    "edit": "Редактирование подкатегории",
+    "category": "Категория"
+  },
+  "sub_category_list": {
+    "sub_category": "Подкатегория",
+    "category": "Категория"
   }
 }

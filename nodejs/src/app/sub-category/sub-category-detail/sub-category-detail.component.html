@@ -2,19 +2,19 @@
   <div class="clr-col-12 clr-col-lg-6">
     <form>
       <section class="form-block">
-        <label [hidden]="!isNewSubCategory()">Добавление подкатегории</label>
-        <label [hidden]="isNewSubCategory()">Редактирование подкатегории</label>
+        <label [hidden]="!isNewSubCategory()">{{'sub_category_detail.add' | translate}}</label>
+        <label [hidden]="isNewSubCategory()">{{'sub_category_detail.add' | translate}}</label>
         <div class="form-group">
-          <label>Название</label>
+          <label>{{'common.name' | translate}}</label>
           <input class="form-control" type="text" name="name" [(ngModel)]="subCategory.name"/>
         </div>
         <div class="form-group">
-          <label>Категория</label>
+          <label>{{'sub_category_detail.category' | translate}}</label>
           <div class="select">
             <select name="category"
                     [(ngModel)]="subCategory.categoryId"
                     [disabled]="!isNewSubCategory()">
-              <option disabled>Категория</option>
+              <option disabled>{{'sub_category_detail.category' | translate}}</option>
               <option selected *ngFor="let category of categories()" [ngValue]="category.id">
                 {{category.name}}
               </option>
@@ -23,11 +23,11 @@
         </div>
         <div class="form-group-single" [hidden]="isNewSubCategory()">
           <clr-checkbox name="isVisible" [(ngModel)]="subCategory.isVisible">
-            Использовать в транзакциях
+            {{'common.use_in_transactions' | translate}}
           </clr-checkbox>
         </div>
         <div class="form-group-single" [hidden]="isNewSubCategory()">
-          <span>Транзакций: {{subCategory.transactionAmount}}</span>
+          <span>{{'common.amount' | translate}}: {{subCategory.transactionAmount}}</span>
         </div>
       </section>
     </form>
@@ -35,13 +35,13 @@
       <button type="submit"
               class="btn btn-primary btn-sm"
               (click)="update(subCategory)"
-              [disabled]="!isValidForm()">Сохранить
+              [disabled]="!isValidForm()">{{'common.save' | translate}}
       </button>
       <button type="submit"
               class="btn btn-danger btn-sm"
               (click)="delete(subCategory)"
               [hidden]="isNewSubCategory()"
-              [disabled]="hasTransations()">Удалить
+              [disabled]="hasTransations()">{{'common.delete' | translate}}
       </button>
     </div>
   </div>
