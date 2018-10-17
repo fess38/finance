@@ -3,12 +3,19 @@ package ru.fess38.finance.validation
 import ru.fess38.finance.core.MessageService
 import ru.fess38.finance.core.Model.EntityType.TRANSACTION
 import ru.fess38.finance.core.Model.Transaction
+import java.time.LocalDate
 
 class TransactionValidator(private val messageService: MessageService): MessageValidator<Transaction> {
   override fun validate(value: Transaction): ValidatorResponse {
     var isValid = true
     val errors = mutableListOf<String>()
 
+    try {
+      LocalDate.parse(value.created)
+    } catch (e: Exception) {
+      isValid = false
+      errors.add("invalid creation date [${value.created}]")
+    }
     if (value.accountIdFrom != -1L && !messageService.isExist(value.accountIdFrom, TRANSACTION)) {
       isValid = false
       errors.add("unknown account_from [${value.accountIdFrom}]")

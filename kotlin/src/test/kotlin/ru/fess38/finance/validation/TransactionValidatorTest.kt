@@ -6,7 +6,6 @@ import org.mockito.Mockito
 import ru.fess38.finance.core.MessageService
 import ru.fess38.finance.core.Model.EntityType.TRANSACTION
 import ru.fess38.finance.core.Model.Transaction
-import ru.fess38.finance.utils.millisToTimestamp
 
 internal class TransactionValidatorTest {
   private val validator = TransactionValidator(mockMessageService())
@@ -14,7 +13,7 @@ internal class TransactionValidatorTest {
   @Test
   fun valid() {
     val transaction = Transaction.newBuilder()
-        .setCreated(millisToTimestamp(1000))
+        .setCreated("2018-01-01")
         .setAccountIdFrom(1)
         .setAccountIdTo(2)
         .setAmountFrom(1)
@@ -29,7 +28,7 @@ internal class TransactionValidatorTest {
   @Test
   fun unknownAccountFrom() {
     val transaction = Transaction.newBuilder()
-        .setCreated(millisToTimestamp(1000))
+        .setCreated("2018-01-01")
         .setAccountIdFrom(4)
         .setAccountIdTo(2)
         .setAmountFrom(1)
@@ -44,7 +43,7 @@ internal class TransactionValidatorTest {
   @Test
   fun accountFromMinus1() {
     val transaction = Transaction.newBuilder()
-        .setCreated(millisToTimestamp(1000))
+        .setCreated("2018-01-01")
         .setAccountIdFrom(-1)
         .setAccountIdTo(2)
         .setAmountFrom(1)
@@ -59,7 +58,7 @@ internal class TransactionValidatorTest {
   @Test
   fun unknownAccountTo() {
     val transaction = Transaction.newBuilder()
-        .setCreated(millisToTimestamp(1000))
+        .setCreated("2018-01-01")
         .setAccountIdFrom(1)
         .setAccountIdTo(4)
         .setAmountFrom(1)
@@ -74,7 +73,7 @@ internal class TransactionValidatorTest {
   @Test
   fun accountToMinus1() {
     val transaction = Transaction.newBuilder()
-        .setCreated(millisToTimestamp(1000))
+        .setCreated("2018-01-01")
         .setAccountIdFrom(1)
         .setAccountIdTo(-1)
         .setAmountFrom(1)
@@ -89,7 +88,7 @@ internal class TransactionValidatorTest {
   @Test
   fun equalAccounts() {
     val transaction = Transaction.newBuilder()
-        .setCreated(millisToTimestamp(1000))
+        .setCreated("2018-01-01")
         .setAccountIdFrom(1)
         .setAccountIdTo(1)
         .setAmountFrom(1)
@@ -104,7 +103,7 @@ internal class TransactionValidatorTest {
   @Test
   fun invalidAmountFrom() {
     val transaction = Transaction.newBuilder()
-        .setCreated(millisToTimestamp(1000))
+        .setCreated("2018-01-01")
         .setAccountIdFrom(1)
         .setAccountIdTo(2)
         .setAmountFrom(-1)
@@ -119,7 +118,7 @@ internal class TransactionValidatorTest {
   @Test
   fun invalidAmountTo() {
     val transaction = Transaction.newBuilder()
-        .setCreated(millisToTimestamp(1000))
+        .setCreated("2018-01-01")
         .setAccountIdFrom(1)
         .setAccountIdTo(2)
         .setAmountFrom(2)
@@ -134,7 +133,7 @@ internal class TransactionValidatorTest {
   @Test
   fun emptyTransaction() {
     val transaction = Transaction.newBuilder()
-        .setCreated(millisToTimestamp(1000))
+        .setCreated("2018-01-01")
         .setAccountIdFrom(1)
         .setAccountIdTo(2)
         .setAmountFrom(0)
@@ -149,7 +148,7 @@ internal class TransactionValidatorTest {
   @Test
   fun unknownCategory() {
     val transaction = Transaction.newBuilder()
-        .setCreated(millisToTimestamp(1000))
+        .setCreated("2018-01-01")
         .setAccountIdFrom(1)
         .setAccountIdTo(2)
         .setAmountFrom(1)
@@ -164,7 +163,7 @@ internal class TransactionValidatorTest {
   @Test
   fun categoryMinus1() {
     val transaction = Transaction.newBuilder()
-        .setCreated(millisToTimestamp(1000))
+        .setCreated("2018-01-01")
         .setAccountIdFrom(1)
         .setAccountIdTo(2)
         .setAmountFrom(1)
@@ -179,7 +178,7 @@ internal class TransactionValidatorTest {
   @Test
   fun unknownSubCategory() {
     val transaction = Transaction.newBuilder()
-        .setCreated(millisToTimestamp(1000))
+        .setCreated("2018-01-01")
         .setAccountIdFrom(1)
         .setAccountIdTo(2)
         .setAmountFrom(1)
@@ -195,7 +194,7 @@ internal class TransactionValidatorTest {
   @Test
   fun unknownFamilyMember() {
     val transaction = Transaction.newBuilder()
-        .setCreated(millisToTimestamp(1000))
+        .setCreated("2018-01-01")
         .setAccountIdFrom(1)
         .setAccountIdTo(2)
         .setAmountFrom(1)
@@ -204,6 +203,21 @@ internal class TransactionValidatorTest {
         .setFamilyMemberId(5)
         .build()
     val expected = ValidatorResponse(false, "unknown family member [5]")
+    val actual = validator.validate(transaction)
+    Assert.assertEquals(expected, actual)
+  }
+
+  @Test
+  fun invalidDate() {
+    val transaction = Transaction.newBuilder()
+        .setCreated("2018-91-01")
+        .setAccountIdFrom(1)
+        .setAccountIdTo(2)
+        .setAmountFrom(1)
+        .setAmountTo(0)
+        .setCategoryId(3)
+        .build()
+    val expected = ValidatorResponse(false, "invalid creation date [2018-91-01]")
     val actual = validator.validate(transaction)
     Assert.assertEquals(expected, actual)
   }
