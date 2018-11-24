@@ -6,6 +6,8 @@ import ru.fess38.finance.core.Model.Transaction
 import java.time.LocalDate
 
 class TransactionValidator(private val messageService: MessageService): MessageValidator<Transaction> {
+  private val EMPTY_VALUE: Long = -1
+
   override fun validate(value: Transaction): ValidatorResponse {
     var isValid = true
     val errors = mutableListOf<String>()
@@ -16,11 +18,13 @@ class TransactionValidator(private val messageService: MessageService): MessageV
       isValid = false
       errors.add("invalid creation date [${value.created}]")
     }
-    if (value.accountIdFrom != -1L && !messageService.isExist(value.accountIdFrom, TRANSACTION)) {
+    if (value.accountIdFrom != EMPTY_VALUE
+        && !messageService.isExist(value.accountIdFrom, TRANSACTION)) {
       isValid = false
       errors.add("unknown account_from [${value.accountIdFrom}]")
     }
-    if (value.accountIdTo != -1L && !messageService.isExist(value.accountIdTo, TRANSACTION)) {
+    if (value.accountIdTo != EMPTY_VALUE
+        && !messageService.isExist(value.accountIdTo, TRANSACTION)) {
       isValid = false
       errors.add("unknown account_to [${value.accountIdTo}]")
     }
@@ -40,9 +44,15 @@ class TransactionValidator(private val messageService: MessageService): MessageV
       isValid = false
       errors.add("empty transaction")
     }
-    if (value.categoryId != -1L && !messageService.isExist(value.categoryId, TRANSACTION)) {
+    if (value.categoryId != EMPTY_VALUE
+        && !messageService.isExist(value.categoryId, TRANSACTION)) {
       isValid = false
       errors.add("unknown category [${value.categoryId}]")
+    }
+    if (value.categoryId == EMPTY_VALUE
+        && !(value.accountIdFrom == EMPTY_VALUE || value.accountIdTo == EMPTY_VALUE)) {
+      isValid = false
+      errors.add("transaction without category")
     }
     if (value.subCategoryId != 0L && !messageService.isExist(value.subCategoryId, TRANSACTION)) {
       isValid = false

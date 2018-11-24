@@ -161,10 +161,25 @@ internal class TransactionValidatorTest {
   }
 
   @Test
-  fun categoryMinus1() {
+  fun emptyCategory() {
     val transaction = Transaction.newBuilder()
         .setCreated("2018-01-01")
         .setAccountIdFrom(1)
+        .setAccountIdTo(2)
+        .setAmountFrom(1)
+        .setAmountTo(0)
+        .setCategoryId(-1)
+        .build()
+    val expected = ValidatorResponse(false, "transaction without category")
+    val actual = validator.validate(transaction)
+    Assert.assertEquals(expected, actual)
+  }
+
+  @Test
+  fun categoryMinus1() {
+    val transaction = Transaction.newBuilder()
+        .setCreated("2018-01-01")
+        .setAccountIdFrom(-1)
         .setAccountIdTo(2)
         .setAmountFrom(1)
         .setAmountTo(0)
