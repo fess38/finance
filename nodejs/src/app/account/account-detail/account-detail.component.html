@@ -25,9 +25,10 @@
           </div>
         </div>
         <div class="form-group-single" [hidden]="isNewAccount()">
-          <clr-checkbox name="isVisible" [(ngModel)]="account.isVisible">
-            {{'common.use_in_transactions' | translate}}
-          </clr-checkbox>
+          <clr-checkbox-wrapper>
+            <input type="checkbox" clrCheckbox name="isVisible" [(ngModel)]="account.isVisible"/>
+            <label>{{'common.use_in_transactions' | translate}}</label>
+          </clr-checkbox-wrapper>
         </div>
         <div class="form-group-single" [hidden]="isNewAccount()">
           <span>{{'common.amount' | translate}}: {{account.transactionAmount}}</span>

@@ -22,9 +22,13 @@
           </div>
         </div>
         <div class="form-group-single" [hidden]="isNewSubCategory()">
-          <clr-checkbox name="isVisible" [(ngModel)]="subCategory.isVisible">
-            {{'common.use_in_transactions' | translate}}
-          </clr-checkbox>
+          <clr-checkbox-wrapper>
+            <input type="checkbox"
+                   clrCheckbox
+                   name="isVisible"
+                   [(ngModel)]="subCategory.isVisible"/>
+            <label>{{'common.use_in_transactions' | translate}}</label>
+          </clr-checkbox-wrapper>
         </div>
         <div class="form-group-single" [hidden]="isNewSubCategory()">
           <span>{{'common.amount' | translate}}: {{subCategory.transactionAmount}}</span>
