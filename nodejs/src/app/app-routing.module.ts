@@ -12,6 +12,7 @@ import { FamilyMemberDetailComponent } from './family-member/family-member-detai
 import { FamilyMemberListComponent } from './family-member/family-member-list/family-member-list.component';
 import { SubCategoryDetailComponent } from './sub-category/sub-category-detail/sub-category-detail.component';
 import { SubCategoryListComponent } from './sub-category/sub-category-list/sub-category-list.component';
+import { TransactionDetailComponent } from './transaction/transaction-detail/transaction-detail.component';
 
 const appRoutes: Routes = [
   {
@@ -66,6 +67,11 @@ const appRoutes: Routes = [
   {
     path: 'family_member/:id',
     component: FamilyMemberDetailComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'transaction/:id',
+    component: TransactionDetailComponent,
     canActivate: [AuthGuardService]
   },
   {

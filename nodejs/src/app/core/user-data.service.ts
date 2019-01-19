@@ -86,6 +86,15 @@ export class UserDataService {
       });
   }
 
+  saveTransaction(transaction: Transaction): Promise<Transaction> {
+    return this.http.post('/api/data/transaction/save', Transaction.encode(transaction))
+      .then(data => Transaction.decode(data))
+      .then(newTransaction => {
+        this.transactions.push(newTransaction);
+        return newTransaction;
+      });
+  }
+
   updateSettings(settings: Settings): Promise<any> {
     this.setDefaultLang();
     return this.http.post('/api/data/settings/update', Settings.encode(settings));
@@ -105,5 +114,9 @@ export class UserDataService {
 
   updateFamilyMember(familyMember: FamilyMember): Promise<any> {
     return this.http.post('/api/data/family_member/update', FamilyMember.encode(familyMember));
+  }
+
+  updateTransaction(transaction: Transaction): Promise<any> {
+    return this.http.post('/api/data/transaction/update', Transaction.encode(transaction));
   }
 }

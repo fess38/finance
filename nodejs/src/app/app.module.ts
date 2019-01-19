@@ -11,6 +11,7 @@ import { CoreModule } from './core/core.module';
 import { SharedModule } from './core/shared/shared.module';
 import { FamilyMemberModule } from './family-member/family-member.module';
 import { SubCategoryModule } from './sub-category/sub-category.module';
+import { TransactionModule } from './transaction/transaction.module';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -29,10 +30,9 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient]
       }
     }),
-    AccountModule, CategoryModule, CoreModule,
-    FamilyMemberModule, SharedModule, SubCategoryModule
+    AccountModule, CategoryModule, CoreModule, FamilyMemberModule,
+    SharedModule, SubCategoryModule, TransactionModule
   ],
-  providers: [],
   bootstrap: [
     AppComponent
   ]
