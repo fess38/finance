@@ -4,7 +4,7 @@ import org.junit.Assert
 import org.junit.Test
 import org.mockito.Mockito
 import ru.fess38.finance.core.MessageService
-import ru.fess38.finance.core.Model.EntityType.TRANSACTION
+import ru.fess38.finance.core.Model.EntityType
 import ru.fess38.finance.core.Model.Transaction
 
 internal class TransactionValidatorTest {
@@ -239,11 +239,12 @@ internal class TransactionValidatorTest {
 
   private fun mockMessageService(): MessageService {
     val messageService = Mockito.mock(MessageService::class.java)
-    Mockito.`when`(messageService.isExist(1, TRANSACTION)).thenReturn(true)
-    Mockito.`when`(messageService.isExist(2, TRANSACTION)).thenReturn(true)
-    Mockito.`when`(messageService.isExist(3, TRANSACTION)).thenReturn(true)
-    Mockito.`when`(messageService.isExist(4, TRANSACTION)).thenReturn(false)
-    Mockito.`when`(messageService.isExist(5, TRANSACTION)).thenReturn(false)
+    Mockito.`when`(messageService.isExist(1, EntityType.ACCOUNT)).thenReturn(true)
+    Mockito.`when`(messageService.isExist(2, EntityType.ACCOUNT)).thenReturn(true)
+    Mockito.`when`(messageService.isExist(3, EntityType.CATEGORY)).thenReturn(true)
+    Mockito.`when`(messageService.isExist(4, EntityType.ACCOUNT)).thenReturn(false)
+    Mockito.`when`(messageService.isExist(5, EntityType.SUB_CATEGORY)).thenReturn(false)
+    Mockito.`when`(messageService.isExist(5, EntityType.FAMILY_MEMBER)).thenReturn(false)
     return messageService
   }
 }
