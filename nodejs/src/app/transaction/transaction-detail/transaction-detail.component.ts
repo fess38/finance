@@ -48,6 +48,9 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   }
 
   update(transaction: Transaction): void {
+    transaction.amountFrom = transaction.amountFrom || 0;
+    transaction.amountTo = transaction.amountTo || 0;
+
     if (transaction.id == 0) {
       this.userdata.saveTransaction(transaction)
         .then(newTransaction => {
@@ -71,8 +74,8 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   onChangeTransactionType(): void {
     this.transaction.accountIdFrom = 0;
     this.transaction.accountIdTo = 0;
-    this.transaction.amountFrom = 0;
-    this.transaction.amountTo = 0;
+    this.transaction.amountFrom = null;
+    this.transaction.amountTo = null;
     this.transaction.categoryId = 0;
 
     if (this.isIncome()) {
@@ -144,19 +147,19 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
       if (t.accountIdFrom != -1) {
         result = false;
       }
-      if (t.accountIdTo <= 0 || t.amountTo <= 0) {
+      if (t.accountIdTo <= 0 || (t.amountTo || 0) <= 0) {
         result = false;
       }
     } else if (this.isExpense()) {
-      if (t.accountIdFrom <= 0 || t.amountFrom <= 0) {
+      if (t.accountIdFrom <= 0 || (t.amountFrom || 0) <= 0) {
         result = false;
       }
       if (t.accountIdTo != -1) {
         result = false;
       }
     } else if (this.isTransfer()) {
-      if (t.accountIdFrom <= 0 || t.amountFrom <= 0 || t.accountIdTo < 0 || t.amountTo < 0
-        || t.categoryId != -1) {
+      if (t.accountIdFrom <= 0 || (t.amountFrom || 0) <= 0 || t.accountIdTo < 0
+        || (t.amountTo || 0) < 0 || t.categoryId != -1) {
         result = false;
       }
     }
