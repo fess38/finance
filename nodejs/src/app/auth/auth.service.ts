@@ -20,17 +20,20 @@ export class AuthService {
               private http: HttpService,
               private router: Router,
               private alertService: AlertService) {
-    setTimeout(() => this.validateToken(), 5000);
+    setTimeout(() => this.validateToken(this.token()), 5000);
   }
 
   private loginTryCounter = 0;
   private isSignInSubject: AsyncSubject<boolean> = new AsyncSubject();
 
-  private validateToken(): void {
-    const accessToken = new AccessToken({ value: this.token() });
+  validateToken(token): void {
+    const accessToken = new AccessToken({ value: token });
     this.http.post('/api/auth/validate', AccessToken.encode(accessToken))
       .then(data => {
         const success: boolean = BoolValue.decode(data).value;
+        if (success && !this.isSignIn()) {
+          this.cookie.put('token', token);
+        }
         if (!success) {
           this.signOut();
         }
@@ -101,10 +104,7 @@ export class AuthService {
     if (this.isSignIn()) {
       const accessToken = new AccessToken({ value: this.token() });
       this.http.post('/api/auth/revoke-token', AccessToken.encode(accessToken))
-        .then(() => {
-          this.cookie.remove('token');
-          this.router.navigate(['login']);
-        })
+        .then(() => this.router.navigate(['login']))
         .catch(error => console.error(error.message));
     }
   }
