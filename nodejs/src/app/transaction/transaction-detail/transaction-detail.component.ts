@@ -14,7 +14,10 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
 
   constructor(private userdata: UserDataService,
               private route: ActivatedRoute,
-              private router: Router) {}
+              private router: Router) {
+    // to reload component on params change
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+  }
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
