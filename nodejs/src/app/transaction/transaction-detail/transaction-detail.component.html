@@ -1,6 +1,5 @@
 <div class="clr-row">
   <div class="clr-col-12 clr-col-lg-6">
-    {{transaction | json}}
     <form>
       <section class="form-block">
         <label [hidden]="!isNewTransaction()">
@@ -11,12 +10,7 @@
         </label>
         <div class="form-group">
           <label>{{'common.date' | translate}}</label>
-          <input name="date"
-                 disabled
-                 value="{{date | date:'d MM yyyy'}}"
-                 [(ngModel)]="date"
-                 (ngModelChange)="onChangeDate()"
-                 clrDate>
+          <input name="date" type="date" [(ngModel)]="this.transaction.created">
         </div>
         <div class="form-group">
           <label>{{'transaction_detail.action' | translate}}</label>

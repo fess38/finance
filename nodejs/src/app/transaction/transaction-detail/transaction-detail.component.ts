@@ -10,7 +10,6 @@ import { UserDataService } from '../../core/user-data.service';
 export class TransactionDetailComponent implements OnInit, OnDestroy {
   transaction: Transaction = new Transaction();
   action: String = 'expense';
-  date: string;
   private subscription: Subscription;
 
   constructor(private userdata: UserDataService,
@@ -83,13 +82,6 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
     } else if (this.isTransfer()) {
       this.transaction.categoryId = -1;
     }
-  }
-
-  onChangeDate(): void {
-    const year = this.date.split('/')[2];
-    const month = this.date.split('/')[0];
-    const day = this.date.split('/')[1];
-    this.transaction.created = `${year}-${month}-${day}`;
   }
 
   accounts(): Array<Account> {
