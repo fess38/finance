@@ -3,7 +3,8 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie';
-import { AsyncSubject, Subscription } from 'rxjs';
+import { interval } from 'rxjs';
+import { filter, takeWhile } from 'rxjs/operators';
 import { HttpService } from '../core/http.service';
 import { AccessToken, RefreshToken } from '../core/model/model';
 import { google } from '../core/model/wrappers';
@@ -20,45 +21,45 @@ export class AuthService {
               private http: HttpService,
               private router: Router,
               private alertService: AlertService) {
-    setTimeout(() => this.validateToken(this.token()), 5000);
+    interval(1000)
+      .pipe(filter(x => this.hasToken()))
+      .pipe(takeWhile(x => !this.isSignIn() && x < 90))
+      .subscribe(() => this.validateToken(this.token()));
   }
 
   private loginTryCounter = 0;
-  private isSignInSubject: AsyncSubject<boolean> = new AsyncSubject();
+  private isValidToken = false;
 
-  validateToken(token): void {
+  subscribeOnSignIn(callback, takeWhileCondition): void {
+    interval(1000)
+      .pipe(filter(x => this.isSignIn()))
+      .pipe(takeWhile(x => !takeWhileCondition() && x < 90))
+      .subscribe(() => callback());
+  }
+
+  hasToken(): boolean {
+    return this.token().length > 0;
+  }
+
+  private validateToken(token): void {
     const accessToken = new AccessToken({ value: token });
     this.http.post('/api/auth/validate', AccessToken.encode(accessToken))
       .then(data => {
-        const success: boolean = BoolValue.decode(data).value;
-        if (success && !this.isSignIn()) {
+        this.isValidToken = BoolValue.decode(data).value;
+        if (this.isValidToken) {
           this.cookie.put('token', token);
-        }
-        if (!success) {
+        } else {
           this.signOut();
         }
       })
       .catch((error) => console.error(error.message));
   }
 
-  isSignIn(): boolean {
-    return this.token().length > 0;
+  private isSignIn(): boolean {
+    return this.hasToken() && this.isValidToken;
   }
 
-  subscribeOnSignIn(callback): Subscription {
-    const subscription = this.isSignInSubject.subscribe(() => callback());
-    if (this.isSignIn()) {
-      this.completeSignIn();
-    }
-    return subscription;
-  }
-
-  private completeSignIn() {
-    this.isSignInSubject.next(true);
-    this.isSignInSubject.complete();
-  }
-
-  signInGoogle() {
+  signInGoogle(): void {
     gapi.load('auth2', () => {
       this.getGoogleClientConfig()
         .then(clientConfig => gapi.auth2.init(clientConfig).signIn())
@@ -69,7 +70,6 @@ export class AuthService {
         .then((accessToken: AccessToken) => {
           const options = { expires: new Date(accessToken.expired as number) };
           this.cookie.put('token', accessToken.value, options);
-          this.completeSignIn();
           this.router.navigate(['']);
         })
         .catch(error => {
@@ -101,16 +101,18 @@ export class AuthService {
   }
 
   signOut() {
-    if (this.isSignIn()) {
+    if (this.hasToken()) {
       const accessToken = new AccessToken({ value: this.token() });
       this.http.post('/api/auth/revoke-token', AccessToken.encode(accessToken))
-        .then(() => this.router.navigate(['login']))
+        .then(() => {
+          this.cookie.remove('token');
+          this.router.navigate(['login']);
+        })
         .catch(error => console.error(error.message));
     }
   }
 
   private token(): string {
-    const token = this.cookie.get('token');
-    return token ? token : '';
+    return this.cookie.get('token') || '';
   }
 }

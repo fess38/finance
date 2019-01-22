@@ -24,7 +24,7 @@ export class UserDataService {
     return this.isInit.subscribe(() => callback());
   }
 
-  refresh(timeout = 1000) {
+  refresh() {
     this.http.get('/api/data/dump/get')
       .then(data => Dump.decode(data))
       .then(dump => {
@@ -41,7 +41,6 @@ export class UserDataService {
       })
       .catch((error) => {
         console.error(error.message);
-        setTimeout(() => this.refresh(timeout + 1000));
       });
   }
 

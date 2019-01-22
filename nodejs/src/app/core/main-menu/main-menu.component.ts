@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { AuthService } from '../../auth/auth.service';
 import { UserDataService } from '../user-data.service';
 
@@ -6,13 +7,23 @@ import { UserDataService } from '../user-data.service';
   selector: 'main-menu',
   templateUrl: 'main-menu.component.html'
 })
-export class MainMenuComponent {
+export class MainMenuComponent implements OnDestroy {
   constructor(private auth: AuthService, private userdata: UserDataService) {
-    auth.subscribeOnSignIn(() => userdata.refresh(0));
+    let isInit = false;
+    this.subscription = this.userdata.subscribeOnInit(() => isInit = true);
+    auth.subscribeOnSignIn(() => userdata.refresh(), () => isInit);
   }
+
+  private readonly subscription: Subscription;
 
   signout() {
     this.auth.signOut();
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }
 
