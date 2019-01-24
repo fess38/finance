@@ -14,12 +14,12 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
 
   constructor(private userdata: UserDataService,
               private route: ActivatedRoute,
-              private router: Router) {
-    // to reload component on params change
-    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-  }
+              private router: Router) { }
 
   ngOnInit(): void {
+    // to reload component on params change
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+
     const id = this.route.snapshot.paramMap.get('id');
     if (id != 'new') {
       const callback = () => {
@@ -37,11 +37,10 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  private currentDate(): string {
-    const now: Date = new Date();
-    let month = String(now.getUTCMonth() + 1);
+  currentDate(date: Date = new Date()): string {
+    let month = String(date.getMonth() + 1);
     month = (month.length == 1 ? '0' : '') + month;
-    return `${now.getUTCFullYear()}-${month}-${now.getUTCDate()}`;
+    return `${date.getFullYear()}-${month}-${date.getDate()}`;
   }
 
   ngOnDestroy(): void {
@@ -115,8 +114,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   }
 
   currency(account: Account): string {
-    return this.userdata.currencies
-      .filter(x => x.id == account.currencyId)[0].symbol;
+    return this.userdata.currencies.filter(x => x.id == account.currencyId)[0].symbol;
   }
 
   isNewTransaction(): boolean {
@@ -135,37 +133,60 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
     return !this.isIncome() && !this.isExpense();
   }
 
-  isValidForm(): boolean {
-    let result = true;
+  isValidFormWithErrors(): string[] {
+    const errors = [];
     const t = this.transaction;
     if (t.created.length == 0) {
-      result = false;
-    }
-
-    if (!this.isTransfer() && t.categoryId <= 0) {
-      result = false;
+      errors.push('CREATED');
     }
 
     if (this.isIncome()) {
       if (t.accountIdFrom != -1) {
-        result = false;
+        errors.push('INCOME_ACCOUNT_ID_FROM');
       }
-      if (t.accountIdTo <= 0 || (t.amountTo || 0) <= 0) {
-        result = false;
+      if (t.accountIdTo <= 0) {
+        errors.push('INCOME_ACCOUNT_ID_TO');
+      }
+      if ((t.amountTo || 0) <= 0) {
+        errors.push('INCOME_AMOUNT_TO');
+      }
+      if (t.categoryId <= 0) {
+        errors.push('INCOME_CATEGORY_ID');
       }
     } else if (this.isExpense()) {
-      if (t.accountIdFrom <= 0 || (t.amountFrom || 0) <= 0) {
-        result = false;
+      if (t.accountIdFrom <= 0) {
+        errors.push('EXPENSE_ACCOUNT_ID_FROM');
       }
       if (t.accountIdTo != -1) {
-        result = false;
+        errors.push('EXPENSE_ACCOUNT_ID_TO');
+      }
+      if ((t.amountFrom || 0) <= 0) {
+        errors.push('EXPENSE_AMOUNT_FROM');
+      }
+      if (t.categoryId <= 0) {
+        errors.push('EXPENSE_CATEGORY_ID');
       }
     } else if (this.isTransfer()) {
-      if (t.accountIdFrom <= 0 || (t.amountFrom || 0) <= 0 || t.accountIdTo < 0
-        || (t.amountTo || 0) < 0 || t.categoryId != -1) {
-        result = false;
+      if (t.accountIdFrom <= 0) {
+        errors.push('TRANSFER_ACCOUNT_ID_FROM');
+      }
+      if (t.accountIdTo < 0) {
+        errors.push('TRANSFER_ACCOUNT_ID_TO');
+      }
+      if ((t.amountFrom || 0) <= 0) {
+        errors.push('TRANSFER_AMOUNT_FROM');
+      }
+      if ((t.amountTo || 0) <= 0) {
+        errors.push('TRANSFER_AMOUNT_TO');
+      }
+      if (t.categoryId != -1) {
+        errors.push('CATEGORY_ID');
       }
     }
-    return result;
+    return errors;
+  }
+
+  isValidForm(): any {
+    return this.isValidFormWithErrors().length == 0;
   }
 }
