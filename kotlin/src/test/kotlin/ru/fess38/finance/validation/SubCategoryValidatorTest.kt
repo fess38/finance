@@ -16,7 +16,7 @@ internal class SubCategoryValidatorTest {
         .setName("name")
         .setCategoryId(1)
         .build()
-    val expected = ValidatorResponse(true, "ok")
+    val expected = ValidatorResponse()
     val actual = validator.validate(subCategory)
     Assert.assertEquals(expected, actual)
   }
@@ -27,7 +27,7 @@ internal class SubCategoryValidatorTest {
         .setName("name")
         .setCategoryId(2)
         .build()
-    val expected = ValidatorResponse(false, "unknown category [2]")
+    val expected = ValidatorResponse("unknown category [2]")
     val actual = validator.validate(subCategory)
     Assert.assertEquals(expected, actual)
   }

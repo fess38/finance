@@ -18,206 +18,106 @@ internal class TransactionValidatorTest {
         .setAccountIdTo(2)
         .setAmountFrom(1)
         .setAmountTo(1)
-        .setCategoryId(3)
+        .setCategoryId(-1)
         .build()
-    val expected = ValidatorResponse(true, "ok")
+    val expected = ValidatorResponse()
     val actual = validator.validate(transaction)
     Assert.assertEquals(expected, actual)
   }
 
   @Test
-  fun unknownAccountFrom() {
-    val transaction = Transaction.newBuilder()
-        .setCreated("2018-01-01")
-        .setAccountIdFrom(4)
-        .setAccountIdTo(2)
-        .setAmountFrom(1)
-        .setAmountTo(1)
-        .setCategoryId(3)
-        .build()
-    val expected = ValidatorResponse(false, "unknown account_from [4]")
-    val actual = validator.validate(transaction)
-    Assert.assertEquals(expected, actual)
-  }
-
-  @Test
-  fun accountFromMinus1() {
+  fun invalidIncome() {
     val transaction = Transaction.newBuilder()
         .setCreated("2018-01-01")
         .setAccountIdFrom(-1)
-        .setAccountIdTo(2)
-        .setAmountFrom(1)
-        .setAmountTo(1)
-        .setCategoryId(3)
-        .build()
-    val expected = ValidatorResponse(true, "ok")
-    val actual = validator.validate(transaction)
-    Assert.assertEquals(expected, actual)
-  }
-
-  @Test
-  fun unknownAccountTo() {
-    val transaction = Transaction.newBuilder()
-        .setCreated("2018-01-01")
-        .setAccountIdFrom(1)
-        .setAccountIdTo(4)
-        .setAmountFrom(1)
-        .setAmountTo(1)
-        .setCategoryId(3)
-        .build()
-    val expected = ValidatorResponse(false, "unknown account_to [4]")
-    val actual = validator.validate(transaction)
-    Assert.assertEquals(expected, actual)
-  }
-
-  @Test
-  fun accountToMinus1() {
-    val transaction = Transaction.newBuilder()
-        .setCreated("2018-01-01")
-        .setAccountIdFrom(1)
-        .setAccountIdTo(-1)
-        .setAmountFrom(1)
-        .setAmountTo(1)
-        .setCategoryId(3)
-        .build()
-    val expected = ValidatorResponse(true, "ok")
-    val actual = validator.validate(transaction)
-    Assert.assertEquals(expected, actual)
-  }
-
-  @Test
-  fun equalAccounts() {
-    val transaction = Transaction.newBuilder()
-        .setCreated("2018-01-01")
-        .setAccountIdFrom(1)
-        .setAccountIdTo(1)
-        .setAmountFrom(1)
-        .setAmountTo(1)
-        .setCategoryId(3)
-        .build()
-    val expected = ValidatorResponse(false, "accounts equal each other [1]")
-    val actual = validator.validate(transaction)
-    Assert.assertEquals(expected, actual)
-  }
-
-  @Test
-  fun invalidAmountFrom() {
-    val transaction = Transaction.newBuilder()
-        .setCreated("2018-01-01")
-        .setAccountIdFrom(1)
-        .setAccountIdTo(2)
-        .setAmountFrom(-1)
-        .setAmountTo(1)
-        .setCategoryId(3)
-        .build()
-    val expected = ValidatorResponse(false, "amount_from is negative: -1")
-    val actual = validator.validate(transaction)
-    Assert.assertEquals(expected, actual)
-  }
-
-  @Test
-  fun invalidAmountTo() {
-    val transaction = Transaction.newBuilder()
-        .setCreated("2018-01-01")
-        .setAccountIdFrom(1)
-        .setAccountIdTo(2)
-        .setAmountFrom(2)
-        .setAmountTo(-1)
-        .setCategoryId(3)
-        .build()
-    val expected = ValidatorResponse(false, "amount_to is negative: -1")
-    val actual = validator.validate(transaction)
-    Assert.assertEquals(expected, actual)
-  }
-
-  @Test
-  fun emptyTransaction() {
-    val transaction = Transaction.newBuilder()
-        .setCreated("2018-01-01")
-        .setAccountIdFrom(1)
-        .setAccountIdTo(2)
-        .setAmountFrom(0)
-        .setAmountTo(0)
-        .setCategoryId(3)
-        .build()
-    val expected = ValidatorResponse(false, "empty transaction")
-    val actual = validator.validate(transaction)
-    Assert.assertEquals(expected, actual)
-  }
-
-  @Test
-  fun unknownCategory() {
-    val transaction = Transaction.newBuilder()
-        .setCreated("2018-01-01")
-        .setAccountIdFrom(1)
-        .setAccountIdTo(2)
-        .setAmountFrom(1)
+        .setAccountIdTo(3)
+        .setAmountFrom(10)
         .setAmountTo(0)
         .setCategoryId(5)
         .build()
-    val expected = ValidatorResponse(false, "unknown category [5]")
+    val expected = ValidatorResponse(listOf("unknown account_to [3]",
+        "invalid amount_from for income", "amount_to is not positive: 0", "unknown category [5]"))
     val actual = validator.validate(transaction)
     Assert.assertEquals(expected, actual)
   }
 
   @Test
-  fun emptyCategory() {
+  fun invalidExpense() {
     val transaction = Transaction.newBuilder()
         .setCreated("2018-01-01")
-        .setAccountIdFrom(1)
-        .setAccountIdTo(2)
-        .setAmountFrom(1)
-        .setAmountTo(0)
-        .setCategoryId(-1)
+        .setAccountIdFrom(3)
+        .setAccountIdTo(-1)
+        .setAmountFrom(0)
+        .setAmountTo(10)
+        .setCategoryId(5)
         .build()
-    val expected = ValidatorResponse(false, "transaction without category")
+    val expected = ValidatorResponse(listOf("unknown account_from [3]",
+        "amount_from is not positive: 0", "invalid amount_to for expense", "unknown category [5]"))
     val actual = validator.validate(transaction)
     Assert.assertEquals(expected, actual)
   }
 
   @Test
-  fun categoryMinus1() {
+  fun invalidTransfer() {
+    val transaction = Transaction.newBuilder()
+        .setCreated("2018-01-01")
+        .setAccountIdFrom(3)
+        .setAccountIdTo(3)
+        .setAmountFrom(0)
+        .setAmountTo(0)
+        .setCategoryId(5)
+        .build()
+    val expected = ValidatorResponse(listOf("accounts equal each other [3]",
+        "unknown account_from [3]", "unknown account_to [3]",
+        "amount_from is not positive: 0", "amount_to is not positive: 0",
+        "unknown category for transfer [5]"))
+    val actual = validator.validate(transaction)
+    Assert.assertEquals(expected, actual)
+  }
+
+  @Test
+  fun invalidSubCategory() {
     val transaction = Transaction.newBuilder()
         .setCreated("2018-01-01")
         .setAccountIdFrom(-1)
         .setAccountIdTo(2)
-        .setAmountFrom(1)
-        .setAmountTo(0)
-        .setCategoryId(-1)
+        .setAmountFrom(0)
+        .setAmountTo(10)
+        .setCategoryId(4)
+        .setSubCategoryId(6)
         .build()
-    val expected = ValidatorResponse(true, "ok")
+    val expected = ValidatorResponse("unknown sub_category [6]")
     val actual = validator.validate(transaction)
     Assert.assertEquals(expected, actual)
   }
 
   @Test
-  fun unknownSubCategory() {
+  fun unknownAccounts() {
     val transaction = Transaction.newBuilder()
         .setCreated("2018-01-01")
-        .setAccountIdFrom(1)
-        .setAccountIdTo(2)
-        .setAmountFrom(1)
-        .setAmountTo(0)
-        .setCategoryId(3)
-        .setSubCategoryId(5)
+        .setAccountIdFrom(0)
+        .setAccountIdTo(0)
+        .setAmountFrom(0)
+        .setAmountTo(10)
+        .setCategoryId(4)
         .build()
-    val expected = ValidatorResponse(false, "unknown sub_category [5]")
+    val expected = ValidatorResponse("unknown accounts")
     val actual = validator.validate(transaction)
     Assert.assertEquals(expected, actual)
   }
 
   @Test
-  fun unknownFamilyMember() {
+  fun invalidFamilyMember() {
     val transaction = Transaction.newBuilder()
         .setCreated("2018-01-01")
-        .setAccountIdFrom(1)
+        .setAccountIdFrom(-1)
         .setAccountIdTo(2)
-        .setAmountFrom(1)
-        .setAmountTo(0)
-        .setCategoryId(3)
-        .setFamilyMemberId(5)
+        .setAmountFrom(0)
+        .setAmountTo(10)
+        .setCategoryId(4)
+        .setFamilyMemberId(7)
         .build()
-    val expected = ValidatorResponse(false, "unknown family member [5]")
+    val expected = ValidatorResponse("unknown family member [7]")
     val actual = validator.validate(transaction)
     Assert.assertEquals(expected, actual)
   }
@@ -229,10 +129,10 @@ internal class TransactionValidatorTest {
         .setAccountIdFrom(1)
         .setAccountIdTo(2)
         .setAmountFrom(1)
-        .setAmountTo(0)
-        .setCategoryId(3)
+        .setAmountTo(1)
+        .setCategoryId(-1)
         .build()
-    val expected = ValidatorResponse(false, "invalid creation date [2018-91-01]")
+    val expected = ValidatorResponse("invalid creation date [2018-91-01]")
     val actual = validator.validate(transaction)
     Assert.assertEquals(expected, actual)
   }
@@ -241,10 +141,11 @@ internal class TransactionValidatorTest {
     val messageService = Mockito.mock(MessageService::class.java)
     Mockito.`when`(messageService.isExist(1, EntityType.ACCOUNT)).thenReturn(true)
     Mockito.`when`(messageService.isExist(2, EntityType.ACCOUNT)).thenReturn(true)
-    Mockito.`when`(messageService.isExist(3, EntityType.CATEGORY)).thenReturn(true)
-    Mockito.`when`(messageService.isExist(4, EntityType.ACCOUNT)).thenReturn(false)
-    Mockito.`when`(messageService.isExist(5, EntityType.SUB_CATEGORY)).thenReturn(false)
-    Mockito.`when`(messageService.isExist(5, EntityType.FAMILY_MEMBER)).thenReturn(false)
+    Mockito.`when`(messageService.isExist(3, EntityType.ACCOUNT)).thenReturn(false)
+    Mockito.`when`(messageService.isExist(4, EntityType.CATEGORY)).thenReturn(true)
+    Mockito.`when`(messageService.isExist(5, EntityType.CATEGORY)).thenReturn(false)
+    Mockito.`when`(messageService.isExist(6, EntityType.SUB_CATEGORY)).thenReturn(false)
+    Mockito.`when`(messageService.isExist(7, EntityType.FAMILY_MEMBER)).thenReturn(false)
     return messageService
   }
 }

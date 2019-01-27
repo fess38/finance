@@ -12,7 +12,7 @@ internal class FamilyMemberValidatorTest {
     val familyMember = FamilyMember.newBuilder()
         .setName("name")
         .build()
-    val expected = ValidatorResponse(true, "ok")
+    val expected = ValidatorResponse()
     val actual = validator.validate(familyMember)
     Assert.assertEquals(expected, actual)
   }

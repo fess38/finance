@@ -20,7 +20,7 @@ internal class CompositeValidatorTest {
         .setName("name")
         .setCurrencyId(1)
         .build()
-    val expected = ValidatorResponse(true, "ok")
+    val expected = ValidatorResponse()
     val actual = validator.validate(account)
     Assert.assertEquals(expected, actual)
   }
@@ -32,7 +32,7 @@ internal class CompositeValidatorTest {
         .setName("name")
         .build()
     val error = "try to update uknown [FAMILY_MEMBER] with id [20]"
-    val expected = ValidatorResponse(false, error)
+    val expected = ValidatorResponse(error)
     val actual = validator.validate(familyMember)
     Assert.assertEquals(expected, actual)
   }

@@ -44,7 +44,7 @@ class Controller {
 
     val validatorResponse = validator.validate(message)
     val errors = validatorResponse.errors.joinToString("; ")
-    if (validatorResponse.isValid) {
+    if (validatorResponse.isValid()) {
       httpStatus = HttpStatus.OK
       try {
         savedValue = messageService.save(message)
@@ -77,7 +77,7 @@ class Controller {
     var httpStatus: HttpStatus
     val validatorResponse = validator.validate(message)
     val errors = validatorResponse.errors.joinToString("; ")
-    if (validatorResponse.isValid) {
+    if (validatorResponse.isValid()) {
       httpStatus = HttpStatus.OK
       try {
         messageService.update(message)
