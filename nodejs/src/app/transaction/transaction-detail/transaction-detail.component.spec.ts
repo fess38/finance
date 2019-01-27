@@ -3,9 +3,18 @@ import { TransactionDetailComponent } from './transaction-detail.component';
 
 describe('TransactionDetailComponent', () => {
   let component: TransactionDetailComponent;
+  let transactionTemplate;
 
   beforeEach(() => {
     component = new TransactionDetailComponent(null, null, null);
+    transactionTemplate = new Transaction({
+      created: '2019-01-01',
+      accountIdFrom: 10,
+      accountIdTo: 11,
+      amountFrom: 100,
+      amountTo: 101,
+      categoryId: 200
+    });
   });
 
   it('#currentDate should return YYYY-MM-DD date', () => {
@@ -214,11 +223,3 @@ describe('TransactionDetailComponent', () => {
   });
 });
 
-const transactionTemplate = {
-  created: '2019-01-01',
-  accountIdFrom: 10,
-  accountIdTo: 11,
-  amountFrom: 100,
-  amountTo: 101,
-  categoryId: 200
-};

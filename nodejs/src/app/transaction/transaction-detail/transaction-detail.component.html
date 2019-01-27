@@ -36,7 +36,9 @@
           <div class="select form-control">
             <select name="accountIdFrom" [(ngModel)]="transaction.accountIdFrom">
               <option disabled>{{'transaction_detail.account' | translate}}</option>
-              <option selected *ngFor="let account of accounts()" [ngValue]="account.id">
+              <option selected *ngFor="let account of accounts()"
+                      [ngValue]="account.id"
+                      [hidden]="account.id == transaction.accountIdTo">
                 <span>{{account.name}}</span>
                 <span> ({{currency(account)}})</span>
               </option>
@@ -48,7 +50,9 @@
           <div class="select form-control">
             <select name="accountIdTo" [(ngModel)]="transaction.accountIdTo">
               <option disabled>{{'transaction_detail.account' | translate}}</option>
-              <option selected *ngFor="let account of accounts()" [ngValue]="account.id">
+              <option selected *ngFor="let account of accounts()"
+                      [ngValue]="account.id"
+                      [hidden]="account.id == transaction.accountIdFrom">
                 <span>{{account.name}}</span>
                 <span> ({{currency(account)}})</span>
               </option>
