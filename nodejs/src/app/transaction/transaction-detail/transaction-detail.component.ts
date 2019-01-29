@@ -28,6 +28,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
           this.router.navigate(['/transaction']);
         } else {
           this.transaction = navigatedTransaction;
+          this.action = this.defineAction(navigatedTransaction);
         }
       };
       this.subscription = this.userdata.subscribeOnInit(callback);
@@ -43,6 +44,16 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
     return `${date.getFullYear()}-${month}-${date.getDate()}`;
   }
 
+  private defineAction(transaction: Transaction): string {
+    let result = 'transfer';
+    if (transaction.accountIdFrom == -1) {
+      result = 'income';
+    } else if (transaction.accountIdTo == -1) {
+      result = 'expense';
+    }
+    return result;
+  }
+
   ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();
@@ -55,10 +66,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
 
     if (transaction.id == 0) {
       this.userdata.saveTransaction(transaction)
-        .then(newTransaction => {
-          this.router.navigate(['/transaction/' + newTransaction.id]);
-          this.transaction = newTransaction;
-        })
+        .then(newTransaction => this.router.navigate(['/transaction/' + newTransaction.id]))
         .catch(error => console.error(error.message));
     } else {
       this.userdata.updateTransaction(transaction)

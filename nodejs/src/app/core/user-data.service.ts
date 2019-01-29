@@ -3,11 +3,14 @@ import { TranslateService } from '@ngx-translate/core';
 import { AsyncSubject, Subscription } from 'rxjs';
 import { HttpService } from './http.service';
 import { Account, Category, Currency, Dump, FamilyMember, Settings, SubCategory, Transaction } from './model/model';
+import { UserDataEnricherService } from './user-data-enricher.service';
 import Language = Settings.Language;
 
 @Injectable()
 export class UserDataService {
+  private enricher = new UserDataEnricherService();
   private isInit: AsyncSubject<boolean> = new AsyncSubject();
+  private dump: Dump;
   settings: Settings = new Settings({ language: Language.RU });
   currencies: Currency[] = [];
   accounts: Account[] = [];
@@ -28,13 +31,15 @@ export class UserDataService {
     this.http.get('/api/data/dump/get')
       .then(data => Dump.decode(data))
       .then(dump => {
-        this.settings = dump.settings as Settings;
-        this.currencies = dump.currencies as Currency[];
-        this.accounts = dump.accounts as Account[];
-        this.categories = dump.categories as Category[];
-        this.subCategories = dump.subCategories as SubCategory[];
-        this.familyMembers = dump.familyMembers as FamilyMember[];
-        this.transactions = dump.transactions as Transaction[];
+        this.dump = dump;
+        this.enricher.enrich(this.dump);
+        this.settings = this.dump.settings as Settings;
+        this.currencies = this.dump.currencies as Currency[];
+        this.accounts = this.dump.accounts as Account[];
+        this.categories = this.dump.categories as Category[];
+        this.subCategories = this.dump.subCategories as SubCategory[];
+        this.familyMembers = this.dump.familyMembers as FamilyMember[];
+        this.transactions = this.dump.transactions as Transaction[];
         this.isInit.next(true);
         this.isInit.complete();
         this.setDefaultLang();
@@ -90,6 +95,7 @@ export class UserDataService {
       .then(data => Transaction.decode(data))
       .then(newTransaction => {
         this.transactions.push(newTransaction);
+        this.enricher.enrich(this.dump);
         return newTransaction;
       });
   }
@@ -116,6 +122,7 @@ export class UserDataService {
   }
 
   updateTransaction(transaction: Transaction): Promise<any> {
-    return this.http.post('/api/data/transaction/update', Transaction.encode(transaction));
+    return this.http.post('/api/data/transaction/update', Transaction.encode(transaction))
+      .then(() => this.enricher.enrich(this.dump));
   }
 }
