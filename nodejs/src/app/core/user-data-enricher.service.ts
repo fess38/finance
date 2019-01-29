@@ -3,6 +3,14 @@ import { Account, Category, Dump, FamilyMember, SubCategory, Transaction } from 
 
 export class UserDataEnricherService {
   enrich(dump: Dump): void {
+    dump.accounts.forEach(x => {
+      x.transactionAmount = 0;
+      x.balance = 0;
+    });
+    dump.categories.forEach(x => x.transactionAmount = 0);
+    dump.subCategories.forEach(x => x.transactionAmount = 0);
+    dump.familyMembers.forEach(x => x.transactionAmount = 0);
+
     this.enrichEnity(dump, dump.accounts as Account[], 'accountIdFrom');
     this.enrichEnity(dump, dump.accounts as Account[], 'accountIdTo');
     this.enrichEnity(dump, dump.categories as Category[], 'categoryId');
@@ -10,18 +18,10 @@ export class UserDataEnricherService {
     this.enrichEnity(dump, dump.familyMembers as FamilyMember[], 'familyMemberId');
   }
 
-  enrichEnity(dump: Dump, values: Account[] | Category[] | SubCategory[] | FamilyMember[],
-              attributeName: string): void {
+  private enrichEnity(dump: Dump, values: Account[] | Category[] | SubCategory[] | FamilyMember[],
+                      attributeName: string): void {
     const map = new Map<number, Account | Category | SubCategory | FamilyMember>();
-    values
-      .filter(x => !x.isDeleted)
-      .forEach(x => {
-        x.transactionAmount = 0;
-        if ('balance' in x && attributeName == 'accountIdFrom') {
-          (x as Account).balance = 0;
-        }
-        map.set(x.id as number, x);
-      });
+    values.forEach(x => map.set(x.id as number, x));
 
     _.chain(dump.transactions)
       .filter(x => !x.isDeleted && x[attributeName] > 0)

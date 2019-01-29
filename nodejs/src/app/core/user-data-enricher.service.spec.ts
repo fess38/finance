@@ -14,7 +14,7 @@ describe('UserDataEnricherService', () => {
     categoryId: 200
   });
 
-  it('#enrichFamilyMember', () => {
+  it('#enrich familyMember', () => {
     const dump = new Dump();
     dump.transactions = Array.from(Array(5).keys())
       .map(x => new Transaction(transaction));
@@ -39,6 +39,8 @@ describe('UserDataEnricherService', () => {
     enricher.enrich(dump);
 
     expect(-500).toEqual(<number>dump.accounts[0].balance);
+    expect(5).toEqual(<number>dump.accounts[0].transactionAmount);
     expect(505).toEqual(<number>dump.accounts[1].balance);
+    expect(5).toEqual(<number>dump.accounts[1].transactionAmount);
   });
 });
