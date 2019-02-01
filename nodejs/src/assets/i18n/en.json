@@ -74,5 +74,10 @@
     "sub_category": "Subcategory",
     "family_member": "Family member",
     "comment": "comment"
+  },
+  "transaction_list": {
+    "date": "Date",
+    "category": "Category",
+    "amount": "Amount"
   }
 }

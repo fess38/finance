@@ -977,6 +977,17 @@ export class Transaction implements ITransaction {
     public toJSON(): { [k: string]: any };
 }
 
+export namespace Transaction {
+
+    /** Type enum. */
+    enum Type {
+        UNDEFINED = 0,
+        INCOME = 1,
+        EXPENSE = 2,
+        TRANSFER = 3
+    }
+}
+
 /** Properties of a Settings. */
 export interface ISettings {
 

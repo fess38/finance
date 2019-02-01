@@ -3,14 +3,20 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Account, Category, FamilyMember, SubCategory, Transaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data.service';
+import { TransactionUtilsService as utils } from '../transaction-utils.service';
 
 @Component({
   templateUrl: 'transaction-detail.component.html'
 })
 export class TransactionDetailComponent implements OnInit, OnDestroy {
   transaction: Transaction = new Transaction();
-  action: String = 'expense';
+  type: Transaction.Type = Transaction.Type.EXPENSE;
   private subscription: Subscription;
+  typesWithLabels = [
+    { type: Transaction.Type.INCOME, label: 'common.income' },
+    { type: Transaction.Type.EXPENSE, label: 'common.expense' },
+    { type: Transaction.Type.TRANSFER, label: 'transaction_detail.transfer' }
+  ];
 
   constructor(private userdata: UserDataService,
               private route: ActivatedRoute,
@@ -28,30 +34,14 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
           this.router.navigate(['/transaction']);
         } else {
           this.transaction = navigatedTransaction;
-          this.action = this.defineAction(navigatedTransaction);
+          this.type = utils.type(navigatedTransaction);
         }
       };
       this.subscription = this.userdata.subscribeOnInit(callback);
     } else {
-      this.transaction.created = this.currentDate();
+      this.transaction.created = utils.currentDate();
       this.onChangeTransactionType();
     }
-  }
-
-  currentDate(date: Date = new Date()): string {
-    let month = String(date.getMonth() + 1);
-    month = (month.length == 1 ? '0' : '') + month;
-    return `${date.getFullYear()}-${month}-${date.getDate()}`;
-  }
-
-  private defineAction(transaction: Transaction): string {
-    let result = 'transfer';
-    if (transaction.accountIdFrom == -1) {
-      result = 'income';
-    } else if (transaction.accountIdTo == -1) {
-      result = 'expense';
-    }
-    return result;
   }
 
   ngOnDestroy(): void {
@@ -130,15 +120,15 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   }
 
   isIncome(): boolean {
-    return this.action == 'income';
+    return this.type == Transaction.Type.INCOME;
   }
 
   isExpense(): boolean {
-    return this.action == 'expense';
+    return this.type == Transaction.Type.EXPENSE;
   }
 
   isTransfer(): boolean {
-    return !this.isIncome() && !this.isExpense();
+    return this.type == Transaction.Type.TRANSFER;
   }
 
   isValidFormWithErrors(): string[] {

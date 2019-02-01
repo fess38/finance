@@ -74,5 +74,10 @@
     "sub_category": "Подкатегория",
     "family_member": "Член семьи",
     "comment": "Комментарий"
+  },
+  "transaction_list": {
+    "date": "Дата",
+    "category": "Категория",
+    "amount": "Сумма"
   }
 }

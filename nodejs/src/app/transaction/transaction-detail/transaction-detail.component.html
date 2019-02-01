@@ -15,18 +15,12 @@
         <div class="form-group">
           <label>{{'transaction_detail.action' | translate}}</label>
           <div class="select form-control">
-            <select name="action"
-                    [(ngModel)]="action"
+            <select name="type"
+                    [(ngModel)]="type"
                     (ngModelChange)="onChangeTransactionType()"
                     [disabled]="!isNewTransaction()">
-              <option value="income">
-                {{'common.income' | translate}}
-              </option>
-              <option value="expense">
-                {{'common.expense' | translate}}
-              </option>
-              <option value="transfer">
-                {{'transaction_detail.transfer' | translate}}
+              <option *ngFor="let typeWithLabel of typesWithLabels" [value]="typeWithLabel.type">
+                {{typeWithLabel.label | translate}}
               </option>
             </select>
           </div>

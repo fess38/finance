@@ -2871,6 +2871,24 @@ $root.Transaction = (function() {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Type enum.
+     * @name Transaction.Type
+     * @enum {string}
+     * @property {number} UNDEFINED=0 UNDEFINED value
+     * @property {number} INCOME=1 INCOME value
+     * @property {number} EXPENSE=2 EXPENSE value
+     * @property {number} TRANSFER=3 TRANSFER value
+     */
+    Transaction.Type = (function() {
+        var valuesById = {}, values = Object.create(valuesById);
+        values[valuesById[0] = "UNDEFINED"] = 0;
+        values[valuesById[1] = "INCOME"] = 1;
+        values[valuesById[2] = "EXPENSE"] = 2;
+        values[valuesById[3] = "TRANSFER"] = 3;
+        return values;
+    })();
+
     return Transaction;
 })();
 

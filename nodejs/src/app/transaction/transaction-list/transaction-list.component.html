@@ -1,0 +1,22 @@
+<div class="clr-row">
+  <div class="clr-col-12 clr-col-sm-9 clr-col-md-6">
+
+    <table class="table table-noborder table-compact">
+      <tr>
+        <th routerLink="/transaction/new">
+          <span>{{'transaction_list.date' | translate}} </span>
+          <clr-icon shape="plus-circle"></clr-icon>
+        </th>
+        <th>{{'transaction_list.category' | translate}}</th>
+        <th>{{'transaction_list.amount' | translate}}</th>
+      </tr>
+      <tr *ngFor="let transaction of transactions()" routerLink="/transaction/{{transaction.id}}">
+        <td>
+          {{date(transaction.created) | date:'dd.MM.yyyy'}}
+        </td>
+        <td>{{transaction.categoryId}}</td>
+        <td>{{transaction.amountTo}}</td>
+      </tr>
+    </table>
+  </div>
+</div>
