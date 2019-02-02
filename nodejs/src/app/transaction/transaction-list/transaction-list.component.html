@@ -1,21 +1,35 @@
 <div class="clr-row">
   <div class="clr-col-12 clr-col-sm-9 clr-col-md-6">
-
     <table class="table table-noborder table-compact">
       <tr>
+        <td (click)="previousMonth()">
+          <button class="btn btn-link btn-sm btn-icon">
+            <clr-icon shape="rewind"></clr-icon>
+          </button>
+        </td>
+        <td>
+          <button class="btn btn-link btn-sm" disabled>
+            {{formatFilterDate() | date:'MMM yyyy':'':locale()}}
+          </button>
+        </td>
+        <td (click)="nextMonth()">
+          <button class="btn btn-link btn-sm btn-icon">
+            <clr-icon shape="fast-forward"></clr-icon>
+          </button>
+        </td>
+      </tr>
+      <tr>
         <th routerLink="/transaction/new">
-          <span>{{'transaction_list.date' | translate}} </span>
+          <span>{{'transaction_list.date' | translate}}</span>
           <clr-icon shape="plus-circle"></clr-icon>
         </th>
         <th>{{'transaction_list.category' | translate}}</th>
         <th>{{'transaction_list.amount' | translate}}</th>
       </tr>
       <tr *ngFor="let transaction of transactions()" routerLink="/transaction/{{transaction.id}}">
-        <td>
-          {{date(transaction.created) | date:'dd.MM.yyyy'}}
-        </td>
-        <td>{{transaction.categoryId}}</td>
-        <td>{{transaction.amountTo}}</td>
+        <td>{{date(transaction) | date:'dd'}}</td>
+        <td>{{category(transaction) | translate}}</td>
+        <td>{{amount(transaction)}}</td>
       </tr>
     </table>
   </div>

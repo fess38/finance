@@ -1,4 +1,7 @@
+import { registerLocaleData } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import localeEn from '@angular/common/locales/en';
+import localeRu from '@angular/common/locales/ru';
 import { NgModule } from '@angular/core';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -16,6 +19,9 @@ import { TransactionModule } from './transaction/transaction.module';
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
+
+registerLocaleData(localeRu, 'ru');
+registerLocaleData(localeEn, 'en');
 
 @NgModule({
   declarations: [

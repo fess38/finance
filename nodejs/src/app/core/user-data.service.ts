@@ -54,6 +54,10 @@ export class UserDataService {
     this.translate.use(Language[this.settings.language].toLowerCase());
   }
 
+  locale(): string {
+    return Language[this.settings.language].toLowerCase();
+  }
+
   saveAccount(account: Account): Promise<Account> {
     return this.http.post('/api/data/account/save', Account.encode(account))
       .then(data => Account.decode(data))

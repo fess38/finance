@@ -21,9 +21,17 @@ export class TransactionUtilsService {
     return `${date.getFullYear()}-${month}-${day}`;
   }
 
+  static currentYear(): number {
+    return this.parseDate(this.currentDate()).year;
+  }
+
+  static currentMonth(): number {
+    return this.parseDate(this.currentDate()).month;
+  }
+
   static parseDate(dateString: string): any {
     const tokens = dateString.split('-');
-    const date = new Date(+tokens[0], +tokens[1]-1, +tokens[2]);
+    const date = new Date(+tokens[0], +tokens[1] - 1, +tokens[2]);
     return {
       year: date.getFullYear(),
       month: date.getMonth() + 1,
@@ -32,19 +40,15 @@ export class TransactionUtilsService {
     };
   }
 
-  static filter(transaction: Transaction, year: number = 0, month: number = 0): boolean {
+  static filter(transaction: Transaction, year: number, month: number = 0): boolean {
     let result = false;
     const parsedDate = this.parseDate(transaction.created);
-    const currentDate = this.parseDate(this.currentDate());
-    if (year == 0) {
-      year = currentDate.year;
-      month = currentDate.month;
-    }
-
-    if (month > 0) {
-      result = (parsedDate.year == +year) && (parsedDate.month == +month);
-    } else {
-      result = true;
+    if (parsedDate.year == +year) {
+      if (month > 0) {
+        result = parsedDate.month == +month;
+      } else {
+        result = true;
+      }
     }
     return result;
   }
