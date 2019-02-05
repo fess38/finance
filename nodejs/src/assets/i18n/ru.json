@@ -1,5 +1,6 @@
 {
   "common": {
+    "access_link": "Ссылка для входа",
     "settings": "Настройки",
     "name": "Название",
     "use_in_transactions": "Использовать в транзакциях",

@@ -8,21 +8,25 @@ import { UserDataService } from '../user-data.service';
   templateUrl: 'main-menu.component.html'
 })
 export class MainMenuComponent implements OnDestroy {
+  private readonly subscription1: Subscription;
+  private readonly subscription2: Subscription;
+
   constructor(private auth: AuthService, private userdata: UserDataService) {
     let isInit = false;
-    this.subscription = this.userdata.subscribeOnInit(() => isInit = true);
-    auth.subscribeOnSignIn(() => userdata.refresh(), () => isInit);
+    this.subscription1 = this.userdata.subscribeOnInit(() => isInit = true);
+    this.subscription2 = auth.subscribeOnSignIn(() => userdata.refresh(), () => isInit);
   }
-
-  private readonly subscription: Subscription;
 
   signout() {
     this.auth.signOut();
   }
 
   ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
+    if (this.subscription1) {
+      this.subscription1.unsubscribe();
+    }
+    if (this.subscription2) {
+      this.subscription2.unsubscribe();
     }
   }
 }

@@ -3,7 +3,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie';
-import { interval } from 'rxjs';
+import { interval, Subscription } from 'rxjs';
 import { filter, takeWhile } from 'rxjs/operators';
 import { HttpService } from '../core/http.service';
 import { AccessToken, RefreshToken } from '../core/model/model';
@@ -30,8 +30,8 @@ export class AuthService {
   private loginTryCounter = 0;
   private isValidToken = false;
 
-  subscribeOnSignIn(callback, takeWhileCondition): void {
-    interval(1000)
+  subscribeOnSignIn(callback, takeWhileCondition): Subscription {
+    return interval(1000)
       .pipe(filter(x => this.isSignIn()))
       .pipe(takeWhile(x => !takeWhileCondition() && x < 90))
       .subscribe(() => callback());
@@ -41,7 +41,7 @@ export class AuthService {
     return this.token().length > 0;
   }
 
-  private validateToken(token): void {
+  validateToken(token): void {
     const accessToken = new AccessToken({ value: token });
     this.http.post('/api/auth/validate', AccessToken.encode(accessToken))
       .then(data => {
@@ -112,7 +112,7 @@ export class AuthService {
     }
   }
 
-  private token(): string {
+  token(): string {
     return this.cookie.get('token') || '';
   }
 }

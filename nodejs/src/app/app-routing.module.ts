@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AccountDetailComponent } from './account/account-detail/account-detail.component';
 import { AccountListComponent } from './account/account-list/account-list.component';
+import { AccessLinkComponent } from './auth/access-link/access-link.component';
 import { AuthGuardService } from './auth/auth-guard.service';
 import { LoginComponent } from './auth/login/login.component';
 import { CategoryDetailComponent } from './category/category-detail/category-detail.component';
@@ -24,6 +25,10 @@ const appRoutes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'access_link/:token',
+    component: AccessLinkComponent
   },
   {
     path: 'settings',
