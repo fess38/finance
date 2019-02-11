@@ -168,13 +168,13 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
       if (t.accountIdFrom <= 0) {
         errors.push('TRANSFER_ACCOUNT_ID_FROM');
       }
-      if (t.accountIdTo < 0) {
+      if (t.accountIdTo <= 0) {
         errors.push('TRANSFER_ACCOUNT_ID_TO');
       }
-      if ((t.amountFrom || 0) <= 0) {
+      if ((t.amountFrom || 0) < 0) {
         errors.push('TRANSFER_AMOUNT_FROM');
       }
-      if ((t.amountTo || 0) <= 0) {
+      if ((t.amountTo || 0) < 0) {
         errors.push('TRANSFER_AMOUNT_TO');
       }
       if (t.categoryId != -1) {

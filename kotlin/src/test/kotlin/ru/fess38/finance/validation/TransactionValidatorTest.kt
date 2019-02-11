@@ -67,9 +67,7 @@ internal class TransactionValidatorTest {
         .setAmountTo(0)
         .setCategoryId(5)
         .build()
-    val expected = ValidatorResponse(listOf("accounts equal each other [3]",
-        "unknown account_from [3]", "unknown account_to [3]",
-        "amount_from is not positive: 0", "amount_to is not positive: 0",
+    val expected = ValidatorResponse(listOf("unknown account_from [3]", "unknown account_to [3]",
         "unknown category for transfer [5]"))
     val actual = validator.validate(transaction)
     Assert.assertEquals(expected, actual)

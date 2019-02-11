@@ -88,7 +88,7 @@ export class TransactionListComponent implements OnInit {
         result = String(transaction.amountFrom);
         break;
       case  Transaction.Type.TRANSFER:
-        result = `${String(transaction.amountFrom)} => ${String(transaction.amountFrom)}`;
+        result = `${String(transaction.amountFrom)} => ${String(transaction.amountTo)}`;
         break;
       default:
         throw new Error(`Undefined transaction type for transaction ${transaction.id}`);

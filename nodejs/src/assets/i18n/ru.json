@@ -14,6 +14,7 @@
   "account_detail": {
     "add": "Добавление счета",
     "edit": "Редактирование счета",
+    "updated_balance": "Обновленный баланс",
     "currency": "Валюта"
   },
   "account_list": {

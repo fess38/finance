@@ -3,6 +3,7 @@ package ru.fess38.finance.validation
 import ru.fess38.finance.core.MessageService
 import ru.fess38.finance.core.Model.EntityType
 import ru.fess38.finance.core.Model.Transaction
+import ru.fess38.finance.core.Model.Transaction.Type
 import java.time.LocalDate
 
 class TransactionValidator(private val messageService: MessageService): MessageValidator<Transaction> {
@@ -17,7 +18,8 @@ class TransactionValidator(private val messageService: MessageService): MessageV
       errors.add("invalid creation date [${value.created}]")
     }
 
-    if (value.accountIdFrom == EMPTY_VALUE) {
+    val type: Type = transactionType(value)
+    if (type == Type.INCOME) {
       if (!messageService.isExist(value.accountIdTo, EntityType.ACCOUNT)) {
         errors.add("unknown account_to [${value.accountIdTo}]")
       }
@@ -30,7 +32,7 @@ class TransactionValidator(private val messageService: MessageService): MessageV
       if (!messageService.isExist(value.categoryId, EntityType.CATEGORY)) {
         errors.add("unknown category [${value.categoryId}]")
       }
-    } else if (value.accountIdTo == EMPTY_VALUE) {
+    } else if (type == Type.EXPENSE) {
       if (!messageService.isExist(value.accountIdFrom, EntityType.ACCOUNT)) {
         errors.add("unknown account_from [${value.accountIdFrom}]")
       }
@@ -43,20 +45,17 @@ class TransactionValidator(private val messageService: MessageService): MessageV
       if (!messageService.isExist(value.categoryId, EntityType.CATEGORY)) {
         errors.add("unknown category [${value.categoryId}]")
       }
-    } else if (value.accountIdFrom > 0 && value.accountIdTo > 0) {
-      if (value.accountIdFrom == value.accountIdTo) {
-        errors.add("accounts equal each other [${value.accountIdFrom}]")
-      }
+    } else if (type == Type.TRANSFER) {
       if (!messageService.isExist(value.accountIdFrom, EntityType.ACCOUNT)) {
         errors.add("unknown account_from [${value.accountIdFrom}]")
       }
       if (!messageService.isExist(value.accountIdTo, EntityType.ACCOUNT)) {
         errors.add("unknown account_to [${value.accountIdTo}]")
       }
-      if (value.amountFrom <= 0) {
+      if (value.amountFrom < 0) {
         errors.add("amount_from is not positive: ${value.amountFrom}")
       }
-      if (value.amountTo <= 0) {
+      if (value.amountTo < 0) {
         errors.add("amount_to is not positive: ${value.amountTo}")
       }
       if (value.categoryId != EMPTY_VALUE) {
@@ -73,5 +72,17 @@ class TransactionValidator(private val messageService: MessageService): MessageV
       errors.add("unknown family member [${value.familyMemberId}]")
     }
     return ValidatorResponse(errors)
+  }
+
+  fun transactionType(transaction: Transaction): Type {
+    var type: Type = Type.UNDEFINED
+    if (transaction.accountIdFrom == EMPTY_VALUE) {
+      type = Type.INCOME
+    } else if (transaction.accountIdTo == EMPTY_VALUE) {
+      type = Type.EXPENSE
+    } else if (transaction.accountIdFrom > 0 && transaction.accountIdTo > 0) {
+      type = Type.TRANSFER
+    }
+    return type
   }
 }
