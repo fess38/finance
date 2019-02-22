@@ -47,6 +47,8 @@ public interface TransactionDao {
 
   List<Transaction> transactions();
 
+  List<Transaction> transfers();
+
   List<Transaction> transfers(YearMonth yearMonth);
 
   int countByAccount(Account account);

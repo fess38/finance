@@ -71,6 +71,11 @@ public class TransactionController {
     return transactionDao.cellMonthRubricTransactions(YearMonth.of(year, month), rubricId);
   }
 
+  @RequestMapping(value = "/transaction/all", method = RequestMethod.GET)
+  public @ResponseBody List<Transaction> transactions() {
+    return transactionDao.transactions();
+  }
+
   @RequestMapping(value = "/transaction/save", method = RequestMethod.POST)
   public void save(@RequestBody Transaction transaction) {
     transactionDao.save(transaction);
@@ -84,6 +89,11 @@ public class TransactionController {
   @RequestMapping(value = "/transaction/delete", method = RequestMethod.POST)
   public void delete(@RequestBody Transaction transaction) {
     transactionDao.delete(transaction);
+  }
+
+  @RequestMapping(value = "/transfer/all", method = RequestMethod.GET)
+  public @ResponseBody List<Transaction> transfers() {
+    return transactionDao.transfers();
   }
 
   @RequestMapping(value = "/transfer/year/{year}/month/{month}", method = RequestMethod.GET)
