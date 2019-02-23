@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import * as _ from 'underscore';
 import { Account, Category, FamilyMember, SubCategory, Transaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data.service';
 import { TransactionUtilsService as utils } from '../transaction-utils.service';
@@ -92,9 +93,11 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   }
 
   categories(): Array<Category> {
-    return this.userdata.categories
+    return _.chain(this.userdata.categories)
       .filter(x => !x.isDeleted && x.isVisible)
-      .filter(x => (this.isIncome() && x.isIncome) || (this.isExpense() && x.isExpense));
+      .filter(x => (this.isIncome() && x.isIncome) || (this.isExpense() && x.isExpense))
+      .sortBy(x => x.name)
+      .value();
   }
 
   onChangeCategory(): void {
@@ -102,13 +105,18 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   }
 
   subCategories(): Array<SubCategory> {
-    return this.userdata.subCategories
+    return _.chain(this.userdata.subCategories)
       .filter(x => !x.isDeleted && x.isVisible)
-      .filter(x => x.categoryId == this.transaction.categoryId);
+      .filter(x => x.categoryId == this.transaction.categoryId)
+      .sortBy(x => x.name)
+      .value();
   }
 
   familyMembers(): Array<FamilyMember> {
-    return this.userdata.familyMembers.filter(x => !x.isDeleted && x.isVisible);
+    return _.chain(this.userdata.familyMembers)
+      .filter(x => !x.isDeleted && x.isVisible)
+      .sortBy(x => x.name)
+      .value();
   }
 
   currency(account: Account): string {
