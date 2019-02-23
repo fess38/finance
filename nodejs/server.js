@@ -1,4 +1,5 @@
 var express = require('express');
+var compression = require('compression');
 var httpProxy = require('http-proxy');
 var bodyParser = require('body-parser');
 
@@ -8,6 +9,7 @@ httpProxy.prototype.onError = function(err) {
 var apiProxy = httpProxy.createProxyServer({ changeOrigin: true });
 
 var server = express();
+server.use(compression());
 server.set('port', process.env.PORT || 4200);
 server.use(express.static(__dirname + '/dist'));
 
