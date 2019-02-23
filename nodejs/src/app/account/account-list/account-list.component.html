@@ -10,7 +10,7 @@
       </tr>
       <tr *ngFor="let account of accounts()" routerLink="/account/{{account.id}}">
         <td>{{account.name}}</td>
-        <td>{{account.balance || 0}} {{currencySymbol(account.currencyId)}}</td>
+        <td>{{formatBalance(account)}}</td>
       </tr>
     </table>
   </div>

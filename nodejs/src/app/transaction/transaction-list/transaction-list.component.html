@@ -29,7 +29,7 @@
       <tr *ngFor="let transaction of transactions()" routerLink="/transaction/{{transaction.id}}">
         <td>{{date(transaction) | date:'dd'}}</td>
         <td>{{category(transaction) | translate}}</td>
-        <td>{{amount(transaction)}}</td>
+        <td>{{formatAmount(transaction)}}</td>
       </tr>
     </table>
   </div>
