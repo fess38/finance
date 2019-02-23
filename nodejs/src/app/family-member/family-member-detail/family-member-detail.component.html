@@ -2,6 +2,9 @@
   <div class="clr-col-12 clr-col-lg-6">
     <form>
       <section class="form-block">
+        <button type="button" class="btn btn-icon btn-link" routerLink="/family_member">
+          <clr-icon shape="undo"></clr-icon>
+        </button>
         <label [hidden]="!isNewFamilyMember()">{{'family_member_detail.add' | translate}}</label>
         <label [hidden]="isNewFamilyMember()">{{'family_member_detail.edit' | translate}}</label>
         <div class="form-group">
