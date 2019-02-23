@@ -20,6 +20,7 @@
           <label>{{'account_detail.updated_balance' | translate}}</label>
           <input class="form-control"
                  type="number"
+                 pattern="[0-9]+"
                  name="updatedBalance"
                  [(ngModel)]="updatedBalance"/>
         </div>
