@@ -6,7 +6,7 @@
           <clr-icon shape="undo"></clr-icon>
         </button>
         <label [hidden]="!isNewSubCategory()">{{'sub_category_detail.add' | translate}}</label>
-        <label [hidden]="isNewSubCategory()">{{'sub_category_detail.edit' | translate}}</label>
+        <label [hidden]="isNewSubCategory()">{{'sub_category_detail.add' | translate}}</label>
         <div class="form-group">
           <label>{{'common.name' | translate}}</label>
           <input class="form-control" type="text" name="name" [(ngModel)]="subCategory.name"/>
