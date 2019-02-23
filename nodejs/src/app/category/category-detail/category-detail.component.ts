@@ -61,8 +61,11 @@ export class CategoryDetailComponent implements OnInit, OnDestroy {
     return this.category.id == 0;
   }
 
-  hasTransations() {
-    return this.category.transactionAmount > 0;
+  hasLinkedEntities() {
+    const subCategoryAmount = this.userdata.subCategories
+      .filter(x => !x.isDeleted && x.categoryId == this.category.id)
+      .length;
+    return this.category.transactionAmount > 0 || subCategoryAmount > 0;
   }
 
   isValidForm() {

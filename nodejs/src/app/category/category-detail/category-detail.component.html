@@ -47,7 +47,7 @@
       <button class="btn btn-danger btn-sm"
               (click)="delete(category)"
               [hidden]="isNewCategory()"
-              [disabled]="hasTransations()">{{'common.delete' | translate}}
+              [disabled]="hasLinkedEntities()">{{'common.delete' | translate}}
       </button>
     </div>
   </div>
