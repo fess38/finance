@@ -22,7 +22,7 @@ export class AuthService {
               private router: Router,
               private alertService: AlertService) {
     interval(1000)
-      .pipe(filter(x => this.hasToken()))
+      .pipe(filter(() => this.hasToken()))
       .pipe(takeWhile(x => !this.isSignIn() && x < 90))
       .subscribe(() => this.validateToken(this.token()));
   }
@@ -30,10 +30,11 @@ export class AuthService {
   private loginTryCounter = 0;
   private isValidToken = false;
 
-  subscribeOnSignIn(callback, takeWhileCondition): Subscription {
+  subscribeOnSignIn(callback, hasActiveAttemptCallback = () => false): Subscription {
     return interval(1000)
-      .pipe(filter(x => this.isSignIn()))
-      .pipe(takeWhile(x => !takeWhileCondition() && x < 90))
+      .pipe(filter(() => this.isSignIn()))
+      .pipe(filter(() => !hasActiveAttemptCallback()))
+      .pipe(takeWhile(x => x < 90))
       .subscribe(() => callback());
   }
 

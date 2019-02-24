@@ -8,13 +8,17 @@ import { UserDataService } from '../user-data.service';
   templateUrl: 'main-menu.component.html'
 })
 export class MainMenuComponent implements OnDestroy {
-  private readonly subscription1: Subscription;
-  private readonly subscription2: Subscription;
+  private readonly subscription: Subscription;
 
   constructor(private auth: AuthService, private userdata: UserDataService) {
-    let isInit = false;
-    this.subscription1 = this.userdata.subscribeOnInit(() => isInit = true);
-    this.subscription2 = auth.subscribeOnSignIn(() => userdata.refresh(), () => isInit);
+    let hasActiveAttempt = false;
+    this.subscription = auth.subscribeOnSignIn(
+      () => {
+        hasActiveAttempt = true;
+        userdata.refresh(() => hasActiveAttempt = false);
+      },
+      () => hasActiveAttempt
+    );
   }
 
   signout() {
@@ -22,11 +26,8 @@ export class MainMenuComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.subscription1) {
-      this.subscription1.unsubscribe();
-    }
-    if (this.subscription2) {
-      this.subscription2.unsubscribe();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   }
 }

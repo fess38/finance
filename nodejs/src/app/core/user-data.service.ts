@@ -27,7 +27,7 @@ export class UserDataService {
     return this.isInit.subscribe(() => callback());
   }
 
-  refresh() {
+  refresh(catchCallback = () => {}) {
     this.http.get('/api/data/dump/get')
       .then(data => Dump.decode(data))
       .then(dump => {
@@ -46,6 +46,7 @@ export class UserDataService {
       })
       .catch((error) => {
         console.error(error.message);
+        catchCallback();
       });
   }
 

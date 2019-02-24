@@ -24,10 +24,7 @@ export class AccessLinkComponent implements OnInit, OnDestroy {
       }
     } else {
       this.auth.validateToken(token);
-      this.subscription = this.auth.subscribeOnSignIn(
-        () => this.router.navigate(['/']),
-        () => false
-      );
+      this.subscription = this.auth.subscribeOnSignIn(() => this.router.navigate(['/']));
     }
   }
 
