@@ -61,7 +61,7 @@
           <input class="form-control"
                  type="number"
                  min="0"
-                 pattern="[0-9]+"
+                 pattern="\d*"
                  name="amount_from"
                  [(ngModel)]="transaction.amountFrom"/>
         </div>
@@ -70,7 +70,7 @@
           <input class="form-control"
                  type="number"
                  min="0"
-                 pattern="[0-9]+"
+                 pattern="\d*"
                  name="amount_to"
                  [(ngModel)]="transaction.amountTo"/>
         </div>

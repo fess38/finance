@@ -58,8 +58,8 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
     if (transaction.id == 0) {
       this.userdata.saveTransaction(transaction)
         .then(newTransaction => {
-          this.transaction.amountFrom = 0;
-          this.transaction.amountTo = 0;
+          this.transaction.amountFrom = null;
+          this.transaction.amountTo = null;
           this.transaction.comment = '';
           this.transaction.subCategoryId = 0;
           this.transaction.familyMemberId = 0;
