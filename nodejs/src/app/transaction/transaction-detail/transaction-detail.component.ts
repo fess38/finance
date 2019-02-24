@@ -10,9 +10,11 @@ import { TransactionUtilsService as utils } from '../transaction-utils.service';
   templateUrl: 'transaction-detail.component.html'
 })
 export class TransactionDetailComponent implements OnInit, OnDestroy {
+  private subscription: Subscription;
+  private maxTransactionsAccountId: number = 0;
+
   transaction: Transaction = new Transaction();
   type: Transaction.Type = Transaction.Type.EXPENSE;
-  private subscription: Subscription;
   typesWithLabels = [
     { type: Transaction.Type.INCOME, label: 'common.income' },
     { type: Transaction.Type.EXPENSE, label: 'common.expense' },
@@ -29,18 +31,33 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
 
     const id = this.route.snapshot.paramMap.get('id');
     if (id != 'new') {
-      const callback = () => {
-        const navigatedTransaction = this.userdata.transactions.filter(x => x.id == +id && !x.isDeleted)[0];
-        if (navigatedTransaction == null) {
-          this.router.navigate(['/transaction']);
-        } else {
-          this.transaction = navigatedTransaction;
-          this.type = utils.type(navigatedTransaction);
-        }
-      };
-      this.subscription = this.userdata.subscribeOnInit(callback);
+      this.subscription = this.userdata.subscribeOnInit(this.updateTransactionCallback(+id));
     } else {
       this.transaction.created = utils.currentDate();
+      this.subscription = this.userdata.subscribeOnInit(this.newTransactionCallback());
+      this.onChangeTransactionType();
+    }
+  }
+
+  private updateTransactionCallback(id: number) {
+    return () => {
+      const navigatedTransaction = this.userdata.transactions.filter(x => x.id == id && !x.isDeleted)[0];
+      if (navigatedTransaction == null) {
+        this.router.navigate(['/transaction']);
+      } else {
+        this.transaction = navigatedTransaction;
+        this.type = utils.type(navigatedTransaction);
+      }
+    };
+  }
+
+  private newTransactionCallback() {
+    return () => {
+      this.maxTransactionsAccountId = _.chain(this.accounts())
+        .sortBy(x => x.transactionAmount)
+        .reverse()
+        .map(x => Number(x.id))
+        .value()[0] || 0;
       this.onChangeTransactionType();
     }
   }
@@ -57,7 +74,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
 
     if (transaction.id == 0) {
       this.userdata.saveTransaction(transaction)
-        .then(newTransaction => {
+        .then(() => {
           this.transaction.amountFrom = null;
           this.transaction.amountTo = null;
           this.transaction.comment = '';
@@ -87,18 +104,20 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
 
     if (this.isIncome()) {
       this.transaction.accountIdFrom = -1;
+      this.transaction.accountIdTo = this.maxTransactionsAccountId;
     } else if (this.isExpense()) {
+      this.transaction.accountIdFrom = this.maxTransactionsAccountId;
       this.transaction.accountIdTo = -1;
     } else if (this.isTransfer()) {
       this.transaction.categoryId = -1;
     }
   }
 
-  accounts(): Array<Account> {
+  accounts(): Account[] {
     return this.userdata.accounts.filter(x => !x.isDeleted && x.isVisible);
   }
 
-  categories(): Array<Category> {
+  categories(): Category[] {
     return _.chain(this.userdata.categories)
       .filter(x => !x.isDeleted && x.isVisible)
       .filter(x => (this.isIncome() && x.isIncome) || (this.isExpense() && x.isExpense))
@@ -110,7 +129,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
     this.transaction.subCategoryId = 0;
   }
 
-  subCategories(): Array<SubCategory> {
+  subCategories(): SubCategory[] {
     return _.chain(this.userdata.subCategories)
       .filter(x => !x.isDeleted && x.isVisible)
       .filter(x => x.categoryId == this.transaction.categoryId)
@@ -118,7 +137,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
       .value();
   }
 
-  familyMembers(): Array<FamilyMember> {
+  familyMembers(): FamilyMember[] {
     return _.chain(this.userdata.familyMembers)
       .filter(x => !x.isDeleted && x.isVisible)
       .sortBy(x => x.name)
