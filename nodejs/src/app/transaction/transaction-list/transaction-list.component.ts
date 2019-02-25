@@ -11,17 +11,15 @@ import { TransactionUtilsService as utils } from '../transaction-utils.service';
   templateUrl: './transaction-list.component.html'
 })
 export class TransactionListComponent implements OnInit {
-  private year: number;
-  private month: number;
-
   constructor(private userdata: UserDataService,
+              private utils: utils,
               private route: ActivatedRoute,
               private router: Router) {}
 
   ngOnInit() {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-    this.year = +this.route.snapshot.queryParams.year || utils.currentYear();
-    this.month = +this.route.snapshot.queryParams.month || utils.currentMonth();
+    this.utils.setYear(+this.route.snapshot.queryParams.year);
+    this.utils.setMonth(+this.route.snapshot.queryParams.month);
   }
 
   locale(): string {
@@ -29,12 +27,12 @@ export class TransactionListComponent implements OnInit {
   }
 
   formatFilterDate(): string {
-    return `${this.year}-${this.month}-01`;
+    return `${this.utils.year}-${this.utils.month}-01`;
   }
 
   previousMonth() {
-    let year = this.year;
-    let month = this.month;
+    let year = this.utils.year;
+    let month = this.utils.month;
 
     if (month == 1) {
       month = 12;
@@ -46,8 +44,8 @@ export class TransactionListComponent implements OnInit {
   }
 
   nextMonth() {
-    let year = this.year;
-    let month = this.month;
+    let year = this.utils.year;
+    let month = this.utils.month;
 
     if (month == 12) {
       month = 1;
@@ -61,7 +59,7 @@ export class TransactionListComponent implements OnInit {
   transactions() {
     return _.chain(this.userdata.transactions)
       .filter(x => !x.isDeleted)
-      .filter(x => utils.filter(x, this.year, this.month))
+      .filter(x => utils.filter(x, this.utils.year, this.utils.month))
       .sortBy(x => x.created)
       .reverse()
       .value();

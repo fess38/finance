@@ -1,6 +1,30 @@
+import { Injectable } from '@angular/core';
 import { Transaction } from '../core/model/model';
 
+@Injectable()
 export class TransactionUtilsService {
+  year: number = TransactionUtilsService.currentYear();
+  month: number = TransactionUtilsService.currentMonth();
+
+  private static currentYear(): number {
+    return this.parseDate(this.currentDate()).year;
+  }
+
+  private static currentMonth(): number {
+    return this.parseDate(this.currentDate()).month;
+  }
+  setYear(year: number): void {
+    if (year) {
+      this.year = year;
+    }
+  }
+
+  setMonth(month: number): void {
+    if (month) {
+      this.month = month;
+    }
+  }
+
   static type(transaction: Transaction): Transaction.Type {
     let type: Transaction.Type = Transaction.Type.UNDEFINED;
     if (transaction.accountIdFrom == -1 && transaction.accountIdTo > 0) {
@@ -19,14 +43,6 @@ export class TransactionUtilsService {
     let day = String(date.getDate());
     day = (day.length == 1 ? '0' : '') + day;
     return `${date.getFullYear()}-${month}-${day}`;
-  }
-
-  static currentYear(): number {
-    return this.parseDate(this.currentDate()).year;
-  }
-
-  static currentMonth(): number {
-    return this.parseDate(this.currentDate()).month;
   }
 
   static parseDate(dateString: string): any {

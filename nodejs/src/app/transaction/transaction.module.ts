@@ -3,6 +3,7 @@ import { SharedModule } from '../core/shared/shared.module';
 import { UserDataService } from '../core/user-data.service';
 import { TransactionDetailComponent } from './transaction-detail/transaction-detail.component';
 import { TransactionListComponent } from './transaction-list/transaction-list.component';
+import { TransactionUtilsService } from './transaction-utils.service';
 
 @NgModule({
   declarations: [
@@ -12,7 +13,7 @@ import { TransactionListComponent } from './transaction-list/transaction-list.co
     SharedModule
   ],
   providers: [
-    UserDataService
+    TransactionUtilsService, UserDataService
   ]
 })
 export class TransactionModule {}
