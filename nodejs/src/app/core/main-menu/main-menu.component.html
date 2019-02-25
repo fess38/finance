@@ -8,9 +8,6 @@
         <clr-icon shape="cog"></clr-icon>
       </button>
       <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-        <a routerLink="/access_link/create_link"
-           clrDropdownItem>{{'common.access_link' | translate}}
-        </a>
         <a routerLink="/settings" clrDropdownItem>{{'common.settings' | translate}}</a>
         <span (click)="signout()" clrDropdownItem>{{'main_menu.exit' | translate}}</span>
       </clr-dropdown-menu>
