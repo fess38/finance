@@ -75,7 +75,11 @@
     "category": "Category",
     "sub_category": "Subcategory",
     "family_member": "Family member",
-    "comment": "comment"
+    "comment": "comment",
+    "save_success": "Transaction saved",
+    "save_error": "Transaction save error",
+    "update_success": "Transaction updated",
+    "update_error": "Transaction update error"
   },
   "transaction_list": {
     "date": "Date",

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { Observable, Subject } from 'rxjs';
 import { Alert, AlertType } from './alert';
 
@@ -6,6 +7,8 @@ import { Alert, AlertType } from './alert';
 export class AlertService {
   private subject = new Subject<Alert>();
   private defaultTimeout: number = 5000;
+
+  constructor(private translate: TranslateService) {}
 
   getAlert(): Observable<any> {
     return this.subject.asObservable();
@@ -28,7 +31,9 @@ export class AlertService {
   }
 
   alert(type: AlertType, message: string, timeout: number) {
-    this.subject.next(<Alert>{ type: type, message: message, timeout: timeout });
+    this.translate.get(message).subscribe(x => {
+      this.subject.next(<Alert>{ type: type, message: x, timeout: timeout });
+    });
   }
 
   clear() {

@@ -75,7 +75,11 @@
     "category": "Категория",
     "sub_category": "Подкатегория",
     "family_member": "Член семьи",
-    "comment": "Комментарий"
+    "comment": "Комментарий",
+    "save_success": "Транзакция сохранена",
+    "save_error": "Ошибка сохранения транзакции",
+    "update_success": "Транзакция обновлена",
+    "update_error": "Ошибка обновления транзакции"
   },
   "transaction_list": {
     "date": "Дата",
