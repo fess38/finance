@@ -25,16 +25,14 @@
         </div>
       </section>
     </form>
-    <div class="btn-group btn-primary">
-      <button class="btn btn-primary btn-sm"
-              (click)="update(familyMember)"
-              [disabled]="!isValidForm()">{{'common.save' | translate}}
-      </button>
-      <button class="btn btn-danger btn-sm"
-              (click)="delete(familyMember)"
-              [hidden]="isNewFamilyMember()"
-              [disabled]="hasTransations()">{{'common.delete' | translate}}
-      </button>
-    </div>
+    <button class="btn btn-primary btn-block"
+            (click)="update(familyMember)"
+            [disabled]="!isValidForm()">{{'common.save' | translate}}
+    </button>
+    <button class="btn btn-danger btn-block"
+            (click)="delete(familyMember)"
+            [hidden]="isNewFamilyMember()"
+            [disabled]="hasTransations()">{{'common.delete' | translate}}
+    </button>
   </div>
 </div>

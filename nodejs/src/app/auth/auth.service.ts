@@ -53,7 +53,10 @@ export class AuthService {
           this.signOut();
         }
       })
-      .catch((error) => console.error(error.message));
+      .catch((error) => {
+        console.error(error.message);
+        this.router.navigate(['/error']);
+      });
   }
 
   private isSignIn(): boolean {
@@ -76,16 +79,19 @@ export class AuthService {
         .catch(error => {
           const message: string = error.error;
           if (message == 'popup_blocked_by_browser') {
-            this.alertService.error('Не удается открыть всплывающее окно');
+            this.alertService.error('error.popup_blocked');
           } else if (this.loginTryCounter++ < 1) {
             this.signInGoogle();
+          } else {
+            console.error(error);
+            this.router.navigate(['/error']);
           }
         });
     });
   }
 
   private getGoogleClientConfig(): Promise<gapi.auth2.ClientConfig> {
-    return this.http.get('/api/auth/google-client-id')
+    return this.http.get('/api/auth/google-client-id2')
       .then(data => {
         return {
           client_id: StringValue.decode(data).value,
@@ -109,7 +115,10 @@ export class AuthService {
           this.cookie.remove('token');
           this.router.navigate(['login']);
         })
-        .catch(error => console.error(error.message));
+        .catch(error => {
+          console.error(error.message);
+          this.router.navigate(['/error']);
+        });
     }
   }
 

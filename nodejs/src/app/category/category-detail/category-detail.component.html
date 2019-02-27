@@ -42,16 +42,14 @@
         </div>
       </section>
     </form>
-    <div class="btn-group btn-primary">
-      <button class="btn btn-primary btn-sm"
-              (click)="update(category)"
-              [disabled]="!isValidForm()">{{'common.save' | translate}}
-      </button>
-      <button class="btn btn-danger btn-sm"
-              (click)="delete(category)"
-              [hidden]="isNewCategory()"
-              [disabled]="hasLinkedEntities()">{{'common.delete' | translate}}
-      </button>
-    </div>
+    <button class="btn btn-primary btn-block"
+            (click)="update(category)"
+            [disabled]="!isValidForm()">{{'common.save' | translate}}
+    </button>
+    <button class="btn btn-danger btn-block"
+            (click)="delete(category)"
+            [hidden]="isNewCategory()"
+            [disabled]="hasLinkedEntities()">{{'common.delete' | translate}}
+    </button>
   </div>
 </div>

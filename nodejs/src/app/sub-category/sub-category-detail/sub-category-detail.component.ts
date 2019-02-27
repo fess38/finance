@@ -53,18 +53,24 @@ export class SubCategoryDetailComponent implements OnInit, OnDestroy {
           this.router.navigate(['/sub_category/' + newSubCategory.id]);
           this.subCategory = newSubCategory;
         })
-        .catch(error => console.error(error.message));
+        .catch(error => {
+          console.error(error.message);
+          this.router.navigate(['/error']);
+        });
     } else {
       this.userdata.updateSubCategory(subCategory)
         .then(() => this.router.navigate(['/sub_category']))
-        .catch(error => console.error(error.message));
+        .catch(error => {
+          subCategory.isDeleted = false;
+          console.error(error.message);
+          this.router.navigate(['/error']);
+        });
     }
   }
 
   delete(subCategory: SubCategory) {
     subCategory.isDeleted = true;
     this.update(subCategory);
-    this.router.navigate(['/subcategory']);
   }
 
   isNewSubCategory() {

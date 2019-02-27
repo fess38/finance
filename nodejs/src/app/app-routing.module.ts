@@ -7,6 +7,7 @@ import { AuthGuardService } from './auth/auth-guard.service';
 import { LoginComponent } from './auth/login/login.component';
 import { CategoryDetailComponent } from './category/category-detail/category-detail.component';
 import { CategoryListComponent } from './category/category-list/category-list.component';
+import { ErrorPageComponent } from './core/error-page/error-page.component';
 import { MainPageComponent } from './core/main-page/main-page.component';
 import { SettingsComponent } from './core/settings/settings.component';
 import { FamilyMemberDetailComponent } from './family-member/family-member-detail/family-member-detail.component';
@@ -25,6 +26,10 @@ const appRoutes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'error',
+    component: ErrorPageComponent,
   },
   {
     path: 'access_link/:token',

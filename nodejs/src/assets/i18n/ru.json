@@ -75,15 +75,15 @@
     "category": "Категория",
     "sub_category": "Подкатегория",
     "family_member": "Член семьи",
-    "comment": "Комментарий",
-    "save_success": "Транзакция сохранена",
-    "save_error": "Ошибка сохранения транзакции",
-    "update_success": "Транзакция обновлена",
-    "update_error": "Ошибка обновления транзакции"
+    "comment": "Комментарий"
   },
   "transaction_list": {
     "date": "Дата",
     "category": "Категория",
     "amount": "Сумма"
+  },
+  "error": {
+    "message": "Что-то пошло не так",
+    "popup_blocked": "Не удается открыть всплывающее окно"
   }
 }

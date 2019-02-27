@@ -75,15 +75,15 @@
     "category": "Category",
     "sub_category": "Subcategory",
     "family_member": "Family member",
-    "comment": "comment",
-    "save_success": "Transaction saved",
-    "save_error": "Transaction save error",
-    "update_success": "Transaction updated",
-    "update_error": "Transaction update error"
+    "comment": "Comment"
   },
   "transaction_list": {
     "date": "Date",
     "category": "Category",
     "amount": "Amount"
+  },
+  "error": {
+    "message": "Something goes wrong",
+    "popup_blocked": "Pop up blocked by browser"
   }
 }

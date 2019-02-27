@@ -4,7 +4,6 @@ import { Subscription } from 'rxjs';
 import * as _ from 'underscore';
 import { Account, Category, FamilyMember, SubCategory, Transaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data.service';
-import { AlertService } from '../../utils/alert/alert.service';
 import { TransactionUtilsService as utils } from '../transaction-utils.service';
 
 @Component({
@@ -24,8 +23,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
 
   constructor(private userdata: UserDataService,
               private route: ActivatedRoute,
-              private router: Router,
-              private alertService: AlertService) { }
+              private router: Router) { }
 
   ngOnInit(): void {
     // to reload component on params change
@@ -77,7 +75,6 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
     if (transaction.id == 0) {
       this.userdata.saveTransaction(transaction)
         .then(() => {
-          this.alertService.success('transaction_detail.save_success');
           this.transaction.amountFrom = null;
           this.transaction.amountTo = null;
           this.transaction.comment = '';
@@ -85,21 +82,16 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
           this.transaction.familyMemberId = 0;
         })
         .catch(error => {
-          this.alertService.error('transaction_detail.save_error');
           console.error(error.message);
+          this.router.navigate(['/error']);
         });
     } else {
       this.userdata.updateTransaction(transaction)
-        .then(() => {
-          this.alertService.success('transaction_detail.update_success');
-          if (transaction.isDeleted) {
-            this.router.navigate(['/transaction']);
-          }
-        })
+        .then(() => this.router.navigate(['/transaction']))
         .catch(error => {
-          this.alertService.error('transaction_detail.update_error');
           transaction.isDeleted = false;
           console.error(error.message);
+          this.router.navigate(['/error']);
         });
     }
   }

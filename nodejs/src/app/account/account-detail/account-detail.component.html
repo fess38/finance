@@ -2,6 +2,7 @@
   <div class="clr-col-12 clr-col-lg-6">
     <form>
       <section class="form-block">
+        <alert></alert>
         <button type="button" class="btn btn-icon btn-link" routerLink="/account">
           <clr-icon shape="undo"></clr-icon>
         </button>
@@ -54,16 +55,14 @@
         </div>
       </section>
     </form>
-    <div class="btn-group btn-primary">
-      <button class="btn btn-primary btn-sm"
-              (click)="update(account)"
-              [disabled]="!isValidForm()">{{'common.save' | translate}}
-      </button>
-      <button class="btn btn-danger btn-sm"
-              (click)="delete(account)"
-              [hidden]="isNewAccount()"
-              [disabled]="hasTransations()">{{'common.delete' | translate}}
-      </button>
-    </div>
+    <button class="btn btn-primary btn-block"
+            (click)="update(account)"
+            [disabled]="!isValidForm()">{{'common.save' | translate}}
+    </button>
+    <button class="btn btn-danger btn-block"
+            (click)="delete(account)"
+            [hidden]="isNewAccount()"
+            [disabled]="hasTransations()">{{'common.delete' | translate}}
+    </button>
   </div>
 </div>

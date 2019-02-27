@@ -54,15 +54,25 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
           this.router.navigate(['/account/' + newAccount.id]);
           this.account = newAccount;
         })
-        .catch(error => console.error(error.message));
+        .catch(error => {
+          console.error(error.message);
+          this.router.navigate(['/error']);
+        });
     } else {
       if (this.updatedBalance != undefined && account.balance != this.updatedBalance) {
         const transaction = this.createAccountBalanceCorrection(account, this.updatedBalance);
-        this.userdata.saveTransaction(transaction).catch(error => console.error(error.message));
+        this.userdata.saveTransaction(transaction).catch(error => {
+          console.error(error.message);
+          this.router.navigate(['/error']);
+        });
       }
       this.userdata.updateAccount(account)
         .then(() => this.router.navigate(['/account']))
-        .catch(error => console.error(error.message));
+        .catch(error => {
+          account.isDeleted = false;
+          console.error(error.message);
+          this.router.navigate(['/error']);
+        });
     }
   }
 
@@ -86,7 +96,6 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   delete(account: Account) {
     account.isDeleted = true;
     this.update(account);
-    this.router.navigate(['/account']);
   }
 
   isNewAccount() {

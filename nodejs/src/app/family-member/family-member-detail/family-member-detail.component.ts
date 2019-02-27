@@ -43,18 +43,24 @@ export class FamilyMemberDetailComponent implements OnInit, OnDestroy {
           this.router.navigate(['/family_member/' + newFamilyMember.id]);
           this.familyMember = newFamilyMember;
         })
-        .catch(error => console.error(error.message));
+        .catch(error => {
+          console.error(error.message);
+          this.router.navigate(['/error']);
+        });
     } else {
       this.userdata.updateFamilyMember(familyMember)
         .then(() => this.router.navigate(['/family_member']))
-        .catch(error => console.error(error.message));
+        .catch(error => {
+          familyMember.isDeleted = false;
+          console.error(error.message);
+          this.router.navigate(['/error']);
+        });
     }
   }
 
   delete(familyMember: FamilyMember) {
     familyMember.isDeleted = true;
     this.update(familyMember);
-    this.router.navigate(['/family_member']);
   }
 
   isNewFamilyMember() {

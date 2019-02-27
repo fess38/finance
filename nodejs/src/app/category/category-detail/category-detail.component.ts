@@ -43,18 +43,24 @@ export class CategoryDetailComponent implements OnInit, OnDestroy {
           this.router.navigate(['/category/' + newCategory.id]);
           this.category = newCategory;
         })
-        .catch(error => console.error(error.message));
+        .catch(error => {
+          console.error(error.message);
+          this.router.navigate(['/error']);
+        });
     } else {
       this.userdata.updateCategory(category)
         .then(() => this.router.navigate(['/category']))
-        .catch(error => console.error(error.message));
+        .catch(error => {
+          category.isDeleted = false;
+          console.error(error.message);
+          this.router.navigate(['/error']);
+        });
     }
   }
 
   delete(category: Category) {
     category.isDeleted = true;
     this.update(category);
-    this.router.navigate(['/category']);
   }
 
   isNewCategory() {

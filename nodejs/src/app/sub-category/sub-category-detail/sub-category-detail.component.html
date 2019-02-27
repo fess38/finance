@@ -6,7 +6,7 @@
           <clr-icon shape="undo"></clr-icon>
         </button>
         <label [hidden]="!isNewSubCategory()">{{'sub_category_detail.add' | translate}}</label>
-        <label [hidden]="isNewSubCategory()">{{'sub_category_detail.add' | translate}}</label>
+        <label [hidden]="isNewSubCategory()">{{'sub_category_detail.edit' | translate}}</label>
         <div class="form-group">
           <label>{{'common.name' | translate}}</label>
           <input class="form-control" type="text" name="name" [(ngModel)]="subCategory.name"/>
@@ -38,18 +38,16 @@
         </div>
       </section>
     </form>
-    <div class="btn-group btn-primary">
-      <button type="submit"
-              class="btn btn-primary btn-sm"
-              (click)="update(subCategory)"
-              [disabled]="!isValidForm()">{{'common.save' | translate}}
-      </button>
-      <button type="submit"
-              class="btn btn-danger btn-sm"
-              (click)="delete(subCategory)"
-              [hidden]="isNewSubCategory()"
-              [disabled]="hasTransations()">{{'common.delete' | translate}}
-      </button>
-    </div>
+    <button type="submit"
+            class="btn btn-primary btn-block"
+            (click)="update(subCategory)"
+            [disabled]="!isValidForm()">{{'common.save' | translate}}
+    </button>
+    <button type="submit"
+            class="btn btn-danger btn-block"
+            (click)="delete(subCategory)"
+            [hidden]="isNewSubCategory()"
+            [disabled]="hasTransations()">{{'common.delete' | translate}}
+    </button>
   </div>
 </div>
