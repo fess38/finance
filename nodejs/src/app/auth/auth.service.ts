@@ -91,7 +91,7 @@ export class AuthService {
   }
 
   private getGoogleClientConfig(): Promise<gapi.auth2.ClientConfig> {
-    return this.http.get('/api/auth/google-client-id2')
+    return this.http.get('/api/auth/google-client-id')
       .then(data => {
         return {
           client_id: StringValue.decode(data).value,

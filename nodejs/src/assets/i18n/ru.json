@@ -9,7 +9,8 @@
     "delete": "Удалить",
     "income": "Доход",
     "expense": "Расход",
-    "date": "Дата"
+    "date": "Дата",
+    "title": "Финансы"
   },
   "account_detail": {
     "add": "Добавление счета",

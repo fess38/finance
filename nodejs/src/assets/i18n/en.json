@@ -9,7 +9,8 @@
     "delete": "Delete",
     "income": "Income",
     "expense": "Expense",
-    "date": "Date"
+    "date": "Date",
+    "title": "Finance"
   },
   "account_detail": {
     "add": "Add account",

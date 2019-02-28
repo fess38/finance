@@ -12,7 +12,7 @@
             <select name="language"
                     required
                     [(ngModel)]="userdata.settings.language">
-              <option selected *ngFor="let language of languages()" [ngValue]="language.code">
+              <option selected *ngFor="let language of languages" [ngValue]="language.code">
                 {{language.value}}
               </option>
             </select>

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import { AsyncSubject, Subscription } from 'rxjs';
 import { HttpService } from './http.service';
@@ -19,7 +20,9 @@ export class UserDataService {
   familyMembers: FamilyMember[] = [];
   transactions: Transaction[] = [];
 
-  constructor(private http: HttpService, private translate: TranslateService) {
+  constructor(private http: HttpService,
+              private translate: TranslateService,
+              private titleService: Title) {
     this.setDefaultLang();
   }
 
@@ -53,6 +56,9 @@ export class UserDataService {
   private setDefaultLang() {
     this.translate.setDefaultLang('ru');
     this.translate.use(Language[this.settings.language].toLowerCase());
+    this.translate.get('common.title').subscribe(x => {
+      this.titleService.setTitle(x);
+    });
   }
 
   locale(): string {

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import localeEn from '@angular/common/locales/en';
 import localeRu from '@angular/common/locales/ru';
 import { NgModule } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -38,6 +39,9 @@ registerLocaleData(localeEn, 'en');
     }),
     AccountModule, CategoryModule, CoreModule, FamilyMemberModule,
     SharedModule, SubCategoryModule, TransactionModule
+  ],
+  providers: [
+    Title
   ],
   bootstrap: [
     AppComponent
