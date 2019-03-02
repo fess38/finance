@@ -2,7 +2,7 @@
   <div class="clr-col-12 clr-col-lg-6">
     <form>
       <section class="form-block">
-        <button type="button" class="btn btn-icon btn-link" routerLink="/transaction">
+        <button type="button" class="btn btn-icon btn-link" (click)="viewTransactions()">
           <clr-icon shape="undo"></clr-icon>
         </button>
         <label [hidden]="!isNewTransaction()">

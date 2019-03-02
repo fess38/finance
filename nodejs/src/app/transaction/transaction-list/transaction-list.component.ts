@@ -5,21 +5,21 @@ import * as _ from 'underscore';
 import { Transaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data.service';
 import { NumberFormatter } from '../../utils/number_formatter';
-import { TransactionUtilsService as utils } from '../transaction-utils.service';
+import { TransactionCriteriaService as Criteria } from '../transaction-criteria.service';
+import { TransactionUtilsService } from '../transaction-utils.service';
 
 @Component({
   templateUrl: './transaction-list.component.html'
 })
 export class TransactionListComponent implements OnInit {
   constructor(private userdata: UserDataService,
-              private utils: utils,
+              private criteria: Criteria,
               private route: ActivatedRoute,
               private router: Router) {}
 
   ngOnInit() {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-    this.utils.setYear(+this.route.snapshot.queryParams.year);
-    this.utils.setMonth(+this.route.snapshot.queryParams.month);
+    this.criteria.update(this.route.snapshot.queryParams);
   }
 
   locale(): string {
@@ -27,46 +27,40 @@ export class TransactionListComponent implements OnInit {
   }
 
   formatFilterDate(): string {
-    return `${this.utils.year}-${this.utils.month}-01`;
+    return `${this.criteria.year}-${this.criteria.month}-01`;
   }
 
   previousMonth() {
-    let year = this.utils.year;
-    let month = this.utils.month;
-
-    if (month == 1) {
-      month = 12;
-      year--;
+    if (this.criteria.month == 1) {
+      this.criteria.month = 12;
+      this.criteria.year--;
     } else {
-      month--;
+      this.criteria.month--;
     }
-    this.router.navigate(['/transaction'], { queryParams: { year: year, month: month } });
+    this.router.navigate(['/transaction'], { queryParams: this.criteria.toQueryParams() });
   }
 
   nextMonth() {
-    let year = this.utils.year;
-    let month = this.utils.month;
-
-    if (month == 12) {
-      month = 1;
-      year++;
+    if (this.criteria.month == 12) {
+      this.criteria.month = 1;
+      this.criteria.year++;
     } else {
-      month++;
+      this.criteria.month++;
     }
-    this.router.navigate(['/transaction'], { queryParams: { year: year, month: month } });
+    this.router.navigate(['/transaction'], { queryParams: this.criteria.toQueryParams() });
   }
 
   transactions() {
     return _.chain(this.userdata.transactions)
       .filter(x => !x.isDeleted)
-      .filter(x => utils.filter(x, this.utils.year, this.utils.month))
+      .filter(x => this.criteria.isFit(x))
       .sortBy(x => x.created)
       .reverse()
       .value();
   }
 
   date(transaction: Transaction): Date {
-    return utils.parseDate(transaction.created).date;
+    return TransactionUtilsService.parseDate(transaction.created).date;
   }
 
   category(transaction: Transaction): string {
@@ -78,7 +72,7 @@ export class TransactionListComponent implements OnInit {
 
   formatAmount(transaction: Transaction): string {
     let result = '';
-    switch (utils.type(transaction)) {
+    switch (TransactionUtilsService.type(transaction)) {
       case Transaction.Type.INCOME:
         result = NumberFormatter.format(transaction.amountTo);
         result += this.currencySymbol(transaction.accountIdTo);

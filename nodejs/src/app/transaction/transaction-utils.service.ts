@@ -1,30 +1,6 @@
-import { Injectable } from '@angular/core';
 import { Transaction } from '../core/model/model';
 
-@Injectable()
 export class TransactionUtilsService {
-  year: number = TransactionUtilsService.currentYear();
-  month: number = TransactionUtilsService.currentMonth();
-
-  private static currentYear(): number {
-    return this.parseDate(this.currentDate()).year;
-  }
-
-  private static currentMonth(): number {
-    return this.parseDate(this.currentDate()).month;
-  }
-  setYear(year: number): void {
-    if (year) {
-      this.year = year;
-    }
-  }
-
-  setMonth(month: number): void {
-    if (month) {
-      this.month = month;
-    }
-  }
-
   static type(transaction: Transaction): Transaction.Type {
     let type: Transaction.Type = Transaction.Type.UNDEFINED;
     if (transaction.accountIdFrom == -1 && transaction.accountIdTo > 0) {
@@ -45,27 +21,36 @@ export class TransactionUtilsService {
     return `${date.getFullYear()}-${month}-${day}`;
   }
 
-  static parseDate(dateString: string): any {
+  static currentYear(): number {
+    return this.parseDate(this.currentDate()).year;
+  }
+
+  static currentMonth(): number {
+    return this.parseDate(this.currentDate()).month;
+  }
+
+  static parseDate(dateString: string): SimpleDate {
     const tokens = dateString.split('-');
     const date = new Date(+tokens[0], +tokens[1] - 1, +tokens[2]);
-    return {
+    return new SimpleDate({
       year: date.getFullYear(),
       month: date.getMonth() + 1,
       day: date.getDate(),
       date: date
-    };
+    });
   }
+}
 
-  static filter(transaction: Transaction, year: number, month: number = 0): boolean {
-    let result = false;
-    const parsedDate = this.parseDate(transaction.created);
-    if (parsedDate.year == +year) {
-      if (month > 0) {
-        result = parsedDate.month == +month;
-      } else {
-        result = true;
-      }
-    }
-    return result;
+export class SimpleDate {
+  readonly year: number;
+  readonly month: number;
+  readonly day: number;
+  readonly date: Date;
+
+  constructor(any) {
+    this.year = any.year;
+    this.month = any.month;
+    this.day = any.day;
+    this.date = any.date;
   }
 }

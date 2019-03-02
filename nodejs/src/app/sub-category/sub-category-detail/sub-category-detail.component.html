@@ -33,7 +33,9 @@
             <label>{{'common.use_in_transactions' | translate}}</label>
           </clr-checkbox-wrapper>
         </div>
-        <div class="form-group-single" [hidden]="isNewSubCategory()">
+        <div class="form-group-single"
+             [hidden]="isNewSubCategory()"
+             (click)="viewTransactions(subCategory)">
           <span>{{'common.amount' | translate}}: {{subCategory.transactionAmount}}</span>
         </div>
       </section>

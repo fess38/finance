@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import * as _ from 'underscore';
 import { Account, Category, FamilyMember, SubCategory, Transaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data.service';
+import { TransactionCriteriaService as Criteria } from '../transaction-criteria.service';
 import { TransactionUtilsService as utils } from '../transaction-utils.service';
 
 @Component({
@@ -22,6 +23,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   ];
 
   constructor(private userdata: UserDataService,
+              private criteria: Criteria,
               private route: ActivatedRoute,
               private router: Router) { }
 
@@ -225,5 +227,9 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
 
   isValidForm(): any {
     return this.isValidFormWithErrors().length == 0;
+  }
+
+  viewTransactions(): void {
+    this.router.navigate(['/transaction'], { queryParams: this.criteria.toQueryParams() })
   }
 }

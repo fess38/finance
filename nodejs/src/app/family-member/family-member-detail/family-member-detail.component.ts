@@ -74,4 +74,8 @@ export class FamilyMemberDetailComponent implements OnInit, OnDestroy {
   isValidForm() {
     return this.familyMember.name.length > 0;
   }
+
+  viewTransactions(familyMember: FamilyMember) {
+    this.router.navigate(['/transaction'], { queryParams: { family_member_id: familyMember.id } });
+  }
 }

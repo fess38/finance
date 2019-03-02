@@ -109,4 +109,8 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   isValidForm() {
     return this.account.name.length > 0 && this.account.currencyId != 0;
   }
+
+  viewTransactions(account: Account) {
+    this.router.navigate(['/transaction'], { queryParams: { account_id: account.id } });
+  }
 }

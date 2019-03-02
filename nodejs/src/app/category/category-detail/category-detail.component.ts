@@ -78,4 +78,8 @@ export class CategoryDetailComponent implements OnInit, OnDestroy {
     return !(this.category.isIncome == this.category.isExpense)
       && this.category.name.length > 0;
   }
+
+  viewTransactions(category: Category) {
+    this.router.navigate(['/transaction'], { queryParams: { category_id: category.id } });
+  }
 }

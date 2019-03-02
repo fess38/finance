@@ -84,4 +84,8 @@ export class SubCategoryDetailComponent implements OnInit, OnDestroy {
   isValidForm() {
     return this.subCategory.name.length > 0 && this.subCategory.categoryId != 0;
   }
+
+  viewTransactions(subCategory: SubCategory) {
+    this.router.navigate(['/transaction'], { queryParams: { sub_category_id: subCategory.id } });
+  }
 }

@@ -20,7 +20,9 @@
             <label>{{'common.use_in_transactions' | translate}}</label>
           </clr-checkbox-wrapper>
         </div>
-        <div class="form-group-single" [hidden]="isNewFamilyMember()">
+        <div class="form-group-single"
+             [hidden]="isNewFamilyMember()"
+             (click)="viewTransactions(familyMember)">
           <span>{{'common.amount' | translate}}: {{familyMember.transactionAmount}}</span>
         </div>
       </section>
