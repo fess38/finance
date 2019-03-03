@@ -17,7 +17,7 @@ export class TransactionListComponent implements OnInit {
               private route: ActivatedRoute,
               private router: Router) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.criteria.update(this.route.snapshot.queryParams);
   }
@@ -30,7 +30,7 @@ export class TransactionListComponent implements OnInit {
     return `${this.criteria.year}-${this.criteria.month}-01`;
   }
 
-  previousMonth() {
+  previousMonth(): void {
     if (this.criteria.month == 1) {
       this.criteria.month = 12;
       this.criteria.year--;
@@ -40,7 +40,7 @@ export class TransactionListComponent implements OnInit {
     this.router.navigate(['/transaction'], { queryParams: this.criteria.toQueryParams() });
   }
 
-  nextMonth() {
+  nextMonth(): void {
     if (this.criteria.month == 12) {
       this.criteria.month = 1;
       this.criteria.year++;
@@ -50,7 +50,7 @@ export class TransactionListComponent implements OnInit {
     this.router.navigate(['/transaction'], { queryParams: this.criteria.toQueryParams() });
   }
 
-  transactions() {
+  transactions(): Transaction[] {
     return _.chain(this.userdata.transactions)
       .filter(x => !x.isDeleted)
       .filter(x => this.criteria.isFit(x))

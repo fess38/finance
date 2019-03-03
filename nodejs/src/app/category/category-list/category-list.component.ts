@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import * as _ from 'underscore';
+import { Category } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data.service';
 
 @Component({
@@ -8,7 +9,7 @@ import { UserDataService } from '../../core/user-data.service';
 export class CategoryListComponent {
   constructor(private userdata: UserDataService) {}
 
-  categories() {
+  categories(): Category[] {
     return _
       .chain(this.userdata.categories)
       .filter(x => !x.isDeleted)

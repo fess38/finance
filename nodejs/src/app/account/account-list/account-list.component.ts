@@ -11,7 +11,7 @@ import { NumberFormatter } from '../../utils/number_formatter';
 export class AccountListComponent {
   constructor(private userdata: UserDataService) {}
 
-  accounts() {
+  accounts(): Account[] {
     return _.chain(this.userdata.accounts)
       .filter(x => !x.isDeleted)
       .sortBy(x => x.name.toLowerCase())

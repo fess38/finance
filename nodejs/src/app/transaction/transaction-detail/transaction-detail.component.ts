@@ -41,7 +41,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  private updateTransactionCallback(id: number) {
+  private updateTransactionCallback(id: number): any {
     return () => {
       const navigatedTransaction = this.userdata.transactions.filter(x => x.id == id && !x.isDeleted)[0];
       if (navigatedTransaction == null) {
@@ -53,7 +53,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
     };
   }
 
-  private newTransactionCallback() {
+  private newTransactionCallback(): any {
     return () => {
       this.maxTransactionsAccountId = _.chain(this.accounts())
         .sortBy(x => x.transactionAmount)
@@ -225,7 +225,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
     return errors;
   }
 
-  isValidForm(): any {
+  isValidForm(): boolean {
     return this.isValidFormWithErrors().length == 0;
   }
 

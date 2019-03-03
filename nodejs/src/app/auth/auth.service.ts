@@ -107,7 +107,7 @@ export class AuthService {
       .then(data => AccessToken.decode(data));
   }
 
-  signOut() {
+  signOut(): void {
     if (this.hasToken()) {
       const accessToken = new AccessToken({ value: this.token() });
       this.http.post('/api/auth/revoke-token', AccessToken.encode(accessToken))

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import * as _ from 'underscore';
-import { Category } from '../../core/model/model';
+import { Category, SubCategory } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { UserDataService } from '../../core/user-data.service';
 export class SubCategoryListComponent {
   constructor(private userdata: UserDataService) {}
 
-  subCategories() {
+  subCategories(): SubCategory[] {
     return _
       .chain(this.userdata.subCategories)
       .filter(x => !x.isDeleted)

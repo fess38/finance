@@ -18,7 +18,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
               private route: ActivatedRoute,
               private router: Router) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id != 'new') {
       const callback = () => {
@@ -33,7 +33,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
@@ -47,7 +47,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     return Language[this.userdata.settings.language];
   }
 
-  update(account: Account) {
+  update(account: Account): void {
     if (account.id == 0) {
       this.userdata.saveAccount(account)
         .then(newAccount => {
@@ -93,24 +93,24 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     return transaction;
   }
 
-  delete(account: Account) {
+  delete(account: Account): void {
     account.isDeleted = true;
     this.update(account);
   }
 
-  isNewAccount() {
+  isNewAccount(): boolean {
     return this.account.id == 0;
   }
 
-  hasTransations() {
+  hasTransations(): boolean {
     return this.account.transactionAmount > 0;
   }
 
-  isValidForm() {
+  isValidForm(): boolean {
     return this.account.name.length > 0 && this.account.currencyId != 0;
   }
 
-  viewTransactions(account: Account) {
+  viewTransactions(account: Account): void {
     this.router.navigate(['/transaction'], { queryParams: { account_id: account.id } });
   }
 }

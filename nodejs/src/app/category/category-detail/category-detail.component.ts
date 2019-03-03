@@ -15,7 +15,7 @@ export class CategoryDetailComponent implements OnInit, OnDestroy {
               private route: ActivatedRoute,
               private router: Router) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id != 'new') {
       const callback = () => {
@@ -36,7 +36,7 @@ export class CategoryDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  update(category: Category) {
+  update(category: Category): void {
     if (category.id == 0) {
       this.userdata.saveCategory(category)
         .then(newCategory => {
@@ -58,28 +58,28 @@ export class CategoryDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  delete(category: Category) {
+  delete(category: Category): void {
     category.isDeleted = true;
     this.update(category);
   }
 
-  isNewCategory() {
+  isNewCategory(): boolean {
     return this.category.id == 0;
   }
 
-  hasLinkedEntities() {
+  hasLinkedEntities(): boolean {
     const subCategoryAmount = this.userdata.subCategories
       .filter(x => !x.isDeleted && x.categoryId == this.category.id)
       .length;
     return this.category.transactionAmount > 0 || subCategoryAmount > 0;
   }
 
-  isValidForm() {
+  isValidForm(): boolean {
     return !(this.category.isIncome == this.category.isExpense)
       && this.category.name.length > 0;
   }
 
-  viewTransactions(category: Category) {
+  viewTransactions(category: Category): void {
     this.router.navigate(['/transaction'], { queryParams: { category_id: category.id } });
   }
 }

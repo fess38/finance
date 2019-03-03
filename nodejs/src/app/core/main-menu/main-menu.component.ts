@@ -21,7 +21,7 @@ export class MainMenuComponent implements OnDestroy {
     );
   }
 
-  signout() {
+  signout(): void {
     this.auth.signOut();
   }
 

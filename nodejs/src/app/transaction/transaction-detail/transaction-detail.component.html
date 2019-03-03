@@ -92,7 +92,7 @@
           <div class="select form-control">
             <select name="subCategoryId" [(ngModel)]="transaction.subCategoryId">
               <option disabled>{{'transaction_detail.sub_category' | translate}}</option>
-              <option [ngValue]="0"></option>
+              <option [ngValue]="null"></option>
               <option selected
                       *ngFor="let subCategory of subCategories()"
                       [ngValue]="subCategory.id">
@@ -106,7 +106,7 @@
           <div class="select form-control">
             <select name="familyMemberId" [(ngModel)]="transaction.familyMemberId">
               <option disabled>{{'transaction_detail.family_member' | translate}}</option>
-              <option [ngValue]="0"></option>
+              <option [ngValue]="null"></option>
               <option selected
                       *ngFor="let familyMember of familyMembers()"
                       [ngValue]="familyMember.id">
