@@ -19,7 +19,7 @@ export class CategoryDetailComponent implements OnInit, OnDestroy {
     const id = this.route.snapshot.paramMap.get('id');
     if (id != 'new') {
       const callback = () => {
-        const navigatedCategory = this.userdata.categories.filter(x => x.id == +id)[0];
+        const navigatedCategory = this.userdata.categories().filter(x => x.id == +id)[0];
         if (navigatedCategory == null) {
           this.router.navigate(['/category']);
         } else {
@@ -68,7 +68,7 @@ export class CategoryDetailComponent implements OnInit, OnDestroy {
   }
 
   hasLinkedEntities(): boolean {
-    const subCategoryAmount = this.userdata.subCategories
+    const subCategoryAmount = this.userdata.subCategories()
       .filter(x => !x.isDeleted && x.categoryId == this.category.id)
       .length;
     return this.category.transactionAmount > 0 || subCategoryAmount > 0;

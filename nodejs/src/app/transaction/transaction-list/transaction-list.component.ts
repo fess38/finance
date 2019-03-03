@@ -51,7 +51,7 @@ export class TransactionListComponent implements OnInit {
   }
 
   transactions(): Transaction[] {
-    return _.chain(this.userdata.transactions)
+    return _.chain(this.userdata.transactions())
       .filter(x => !x.isDeleted)
       .filter(x => this.criteria.isFit(x))
       .sortBy(x => x.created)
@@ -64,7 +64,7 @@ export class TransactionListComponent implements OnInit {
   }
 
   category(transaction: Transaction): string {
-    return _.chain(this.userdata.categories)
+    return _.chain(this.userdata.categories())
       .filter(x => x.id == transaction.categoryId)
       .map(x => x.name)
       .value().pop() || 'transaction_detail.transfer';
@@ -95,10 +95,10 @@ export class TransactionListComponent implements OnInit {
   }
 
   private currencySymbol(accountId: number | Long): string {
-    const account = this.userdata.accounts.filter(x => x.id == accountId)[0];
+    const account = this.userdata.accounts().filter(x => x.id == accountId)[0];
     let symbol: string;
     if (this.userdata.currencies.length > 0) {
-      symbol = this.userdata.currencies
+      symbol = this.userdata.currencies()
         .filter(x => x.id == account.currencyId)
         .map(x => x.symbol)[0];
     }

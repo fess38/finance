@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Long } from 'protobufjs';
 import * as _ from 'underscore';
-import { Account } from '../../core/model/model';
+import { Account, Currency } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data.service';
 import { NumberFormatter } from '../../utils/number_formatter';
 
@@ -12,13 +12,13 @@ export class AccountListComponent {
   constructor(private userdata: UserDataService) {}
 
   accounts(): Account[] {
-    return _.chain(this.userdata.accounts)
+    return _.chain(this.userdata.accounts())
       .filter(x => !x.isDeleted)
       .sortBy(x => x.name.toLowerCase())
       .value();
   }
 
-  formatBalance(account: Account): string {
+  formatBalance(account: Account): String {
     return NumberFormatter.format(account.balance || 0) + this.currencySymbol(account.currencyId);
   }
 
@@ -35,7 +35,7 @@ export class AccountListComponent {
     return symbol;
   }
 
-  private currencies() {
-    return this.userdata.currencies;
+  private currencies(): Currency[] {
+    return this.userdata.currencies();
   }
 }

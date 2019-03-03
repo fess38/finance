@@ -43,7 +43,8 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
 
   private updateTransactionCallback(id: number): any {
     return () => {
-      const navigatedTransaction = this.userdata.transactions.filter(x => x.id == id && !x.isDeleted)[0];
+      const navigatedTransaction = this.userdata.transactions()
+        .filter(x => x.id == id && !x.isDeleted)[0];
       if (navigatedTransaction == null) {
         this.router.navigate(['/transaction']);
       } else {
@@ -122,11 +123,11 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   }
 
   accounts(): Account[] {
-    return this.userdata.accounts.filter(x => !x.isDeleted && x.isVisible);
+    return this.userdata.accounts().filter(x => !x.isDeleted && x.isVisible);
   }
 
   categories(): Category[] {
-    return _.chain(this.userdata.categories)
+    return _.chain(this.userdata.categories())
       .filter(x => !x.isDeleted && x.isVisible)
       .filter(x => (this.isIncome() && x.isIncome) || (this.isExpense() && x.isExpense))
       .sortBy(x => x.name)
@@ -138,7 +139,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   }
 
   subCategories(): SubCategory[] {
-    return _.chain(this.userdata.subCategories)
+    return _.chain(this.userdata.subCategories())
       .filter(x => !x.isDeleted && x.isVisible)
       .filter(x => x.categoryId == this.transaction.categoryId)
       .sortBy(x => x.name)
@@ -146,14 +147,14 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   }
 
   familyMembers(): FamilyMember[] {
-    return _.chain(this.userdata.familyMembers)
+    return _.chain(this.userdata.familyMembers())
       .filter(x => !x.isDeleted && x.isVisible)
       .sortBy(x => x.name)
       .value();
   }
 
   currency(account: Account): string {
-    return this.userdata.currencies.filter(x => x.id == account.currencyId)[0].symbol;
+    return this.userdata.currencies().filter(x => x.id == account.currencyId)[0].symbol;
   }
 
   isNewTransaction(): boolean {

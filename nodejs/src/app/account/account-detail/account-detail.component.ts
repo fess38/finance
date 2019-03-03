@@ -22,7 +22,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     const id = this.route.snapshot.paramMap.get('id');
     if (id != 'new') {
       const callback = () => {
-        const navigatedAccount = this.userdata.accounts.filter(x => x.id == +id)[0];
+        const navigatedAccount = this.userdata.accounts().filter(x => x.id == +id)[0];
         if (navigatedAccount == null) {
           this.router.navigate(['/account']);
         } else {
@@ -40,11 +40,11 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   }
 
   currencies(): Currency[] {
-    return this.userdata.currencies;
+    return this.userdata.currencies();
   }
 
   private language(): string {
-    return Language[this.userdata.settings.language];
+    return Language[this.userdata.settings().language];
   }
 
   update(account: Account): void {

@@ -10,8 +10,7 @@ export class SubCategoryListComponent {
   constructor(private userdata: UserDataService) {}
 
   subCategories(): SubCategory[] {
-    return _
-      .chain(this.userdata.subCategories)
+    return _.chain(this.userdata.subCategories())
       .filter(x => !x.isDeleted)
       .sortBy(x => x.name.toLowerCase())
       .sortBy(x => this.findCategory(<number>x.categoryId).name)
@@ -20,6 +19,6 @@ export class SubCategoryListComponent {
   }
 
   findCategory(categoryId: number): Category {
-    return this.userdata.categories.filter(x => x.id == categoryId)[0];
+    return this.userdata.categories().filter(x => x.id == categoryId)[0];
   }
 }

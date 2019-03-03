@@ -10,8 +10,7 @@ export class CategoryListComponent {
   constructor(private userdata: UserDataService) {}
 
   categories(): Category[] {
-    return _
-      .chain(this.userdata.categories)
+    return _.chain(this.userdata.categories())
       .filter(x => !x.isDeleted)
       .filter(x => x.isIncome || x.isExpense)
       .sortBy(x => x.name.toLowerCase())

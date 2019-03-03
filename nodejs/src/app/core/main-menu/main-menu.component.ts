@@ -12,6 +12,7 @@ export class MainMenuComponent implements OnDestroy {
 
   constructor(private auth: AuthService, private userdata: UserDataService) {
     let hasActiveAttempt = false;
+    this.userdata.readCache();
     this.subscription = auth.subscribeOnSignIn(
       () => {
         hasActiveAttempt = true;

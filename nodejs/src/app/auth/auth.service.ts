@@ -23,7 +23,7 @@ export class AuthService {
               private alertService: AlertService) {
     interval(1000)
       .pipe(filter(() => this.hasToken()))
-      .pipe(takeWhile(x => !this.isSignIn() && x < 90))
+      .pipe(takeWhile(x => !this.isSignIn() && x < 5))
       .subscribe(() => this.validateToken(this.token()));
   }
 
@@ -34,7 +34,7 @@ export class AuthService {
     return interval(1000)
       .pipe(filter(() => this.isSignIn()))
       .pipe(filter(() => !hasActiveAttemptCallback()))
-      .pipe(takeWhile(x => x < 90))
+      .pipe(takeWhile(x => x < 5))
       .subscribe(() => callback());
   }
 
@@ -43,19 +43,19 @@ export class AuthService {
   }
 
   validateToken(token): void {
+    if (!this.hasToken()) {
+      this.cookie.put('token', token);
+    }
     const accessToken = new AccessToken({ value: token });
     this.http.post('/api/auth/validate', AccessToken.encode(accessToken))
       .then(data => {
         this.isValidToken = BoolValue.decode(data).value;
-        if (this.isValidToken) {
-          this.cookie.put('token', token);
-        } else {
+        if (!this.isValidToken) {
           this.signOut();
         }
       })
-      .catch((error) => {
+      .catch(error => {
         console.error(error.message);
-        this.router.navigate(['/error']);
       });
   }
 

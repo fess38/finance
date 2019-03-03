@@ -20,7 +20,7 @@ export class SubCategoryDetailComponent implements OnInit, OnDestroy {
     const id = this.route.snapshot.paramMap.get('id');
     if (id != 'new') {
       const callback = () => {
-        const navigatedSubCategory = this.userdata.subCategories.filter(x => x.id == +id)[0];
+        const navigatedSubCategory = this.userdata.subCategories().filter(x => x.id == +id)[0];
         if (navigatedSubCategory == null) {
           this.router.navigate(['/sub_category']);
         } else {
@@ -38,7 +38,7 @@ export class SubCategoryDetailComponent implements OnInit, OnDestroy {
   }
 
   categories() {
-    return _.chain(this.userdata.categories)
+    return _.chain(this.userdata.categories())
       .filter(x => !x.isDeleted)
       .filter(x => x.isVisible)
       .sortBy(x => x.name.toLowerCase())

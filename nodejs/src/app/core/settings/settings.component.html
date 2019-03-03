@@ -11,7 +11,7 @@
           <div class="select form-control">
             <select name="language"
                     required
-                    [(ngModel)]="userdata.settings.language">
+                    [(ngModel)]="userdata.settings().language">
               <option selected *ngFor="let language of languages" [ngValue]="language.code">
                 {{language.value}}
               </option>

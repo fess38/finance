@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import * as _ from 'underscore';
+import { FamilyMember } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data.service';
 
 @Component({
@@ -8,8 +9,8 @@ import { UserDataService } from '../../core/user-data.service';
 export class FamilyMemberListComponent {
   constructor(private userdata: UserDataService) {}
 
-  familyMembers() {
-    return _.chain(this.userdata.familyMembers)
+  familyMembers(): FamilyMember[] {
+    return _.chain(this.userdata.familyMembers())
       .filter(x => !x.isDeleted)
       .sortBy(x => x.name.toLowerCase())
       .value();

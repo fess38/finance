@@ -13,7 +13,7 @@ export class SettingsComponent {
   constructor(public userdata: UserDataService, private router: Router) {}
 
   updateSettings() {
-    this.userdata.updateSettings(this.userdata.settings)
+    this.userdata.updateSettings(this.userdata.settings())
       .catch(error => {
         console.error(error.message);
         this.router.navigate(['/error']);
