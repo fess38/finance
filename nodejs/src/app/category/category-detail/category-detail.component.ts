@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Category } from '../../core/model/model';
-import { UserDataService } from '../../core/user-data.service';
+import { UserDataService } from '../../core/user-data/user-data.service';
 
 @Component({
   templateUrl: 'category-detail.component.html'

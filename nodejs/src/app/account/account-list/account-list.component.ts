@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Long } from 'protobufjs';
 import * as _ from 'underscore';
 import { Account, Currency } from '../../core/model/model';
-import { UserDataService } from '../../core/user-data.service';
+import { UserDataService } from '../../core/user-data/user-data.service';
 import { NumberFormatter } from '../../utils/number_formatter';
 
 @Component({

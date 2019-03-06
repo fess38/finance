@@ -1,5 +1,6 @@
+import { Long } from 'protobufjs';
 import * as _ from 'underscore';
-import { Account, Category, Dump, FamilyMember, SubCategory, Transaction } from './model/model';
+import { Account, Category, Dump, FamilyMember, SubCategory, Transaction } from '../model/model';
 
 export class UserDataEnricherService {
   enrich(dump: Dump): void {
@@ -46,5 +47,40 @@ export class UserDataEnricherService {
     return Number(_.chain(transactions)
       .map(mapper)
       .reduce((x1, x2) => Number(x1) + Number(x2), 0)) || 0;
+  }
+
+  merge(source: Dump, update: Dump): Dump {
+    const result: Dump = Dump.fromObject(update);
+
+    const idsToUpdate: (number | Long)[] = [];
+    update.accounts.forEach(x => idsToUpdate.push(x.id));
+    update.categories.forEach(x => idsToUpdate.push(x.id));
+    update.subCategories.forEach(x => idsToUpdate.push(x.id));
+    update.familyMembers.forEach(x => idsToUpdate.push(x.id));
+    update.transactions.forEach(x => idsToUpdate.push(x.id));
+
+    result.settings = source.settings || result.settings;
+
+    source.accounts
+      .filter(x => !idsToUpdate.includes(x.id))
+      .forEach(x => result.accounts.push(x as Account));
+
+    source.categories
+      .filter(x => !idsToUpdate.includes(x.id))
+      .forEach(x => result.categories.push(x as Category));
+
+    source.subCategories
+      .filter(x => !idsToUpdate.includes(x.id))
+      .forEach(x => result.subCategories.push(x as SubCategory));
+
+    source.familyMembers
+      .filter(x => !idsToUpdate.includes(x.id))
+      .forEach(x => result.familyMembers.push(x as FamilyMember));
+
+    source.transactions
+      .filter(x => !idsToUpdate.includes(x.id))
+      .forEach(x => result.transactions.push(x as Transaction));
+
+    return result;
   }
 }

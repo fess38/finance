@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../auth/auth.service';
-import { UserDataService } from '../user-data.service';
+import { UserDataService } from '../user-data/user-data.service';
 
 @Component({
   selector: 'main-menu',

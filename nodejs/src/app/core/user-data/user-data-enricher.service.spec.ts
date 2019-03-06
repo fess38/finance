@@ -1,4 +1,4 @@
-import { Account, Dump, FamilyMember, Transaction } from './model/model';
+import { Account, Dump, FamilyMember, Transaction } from '../model/model';
 import { UserDataEnricherService } from './user-data-enricher.service';
 
 describe('UserDataEnricherService', () => {

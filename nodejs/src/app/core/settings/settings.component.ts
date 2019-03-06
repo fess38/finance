@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Settings } from '../model/model';
-import { UserDataService } from '../user-data.service';
+import { UserDataService } from '../user-data/user-data.service';
 import Language = Settings.Language;
 
 @Component({

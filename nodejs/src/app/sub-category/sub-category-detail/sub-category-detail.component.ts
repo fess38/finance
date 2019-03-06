@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import * as _ from 'underscore';
 import { SubCategory } from '../../core/model/model';
-import { UserDataService } from '../../core/user-data.service';
+import { UserDataService } from '../../core/user-data/user-data.service';
 
 @Component({
   templateUrl: 'sub-category-detail.component.html'

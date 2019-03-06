@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Long } from 'protobufjs';
 import * as _ from 'underscore';
 import { Transaction } from '../../core/model/model';
-import { UserDataService } from '../../core/user-data.service';
+import { UserDataService } from '../../core/user-data/user-data.service';
 import { NumberFormatter } from '../../utils/number_formatter';
 import { TransactionCriteriaService as Criteria } from '../transaction-criteria.service';
 import { TransactionUtilsService } from '../transaction-utils.service';

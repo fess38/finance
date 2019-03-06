@@ -3,8 +3,8 @@ import { Title } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import { get, set } from 'idb-keyval';
 import { AsyncSubject, Subscription } from 'rxjs';
-import { HttpService } from './http.service';
-import { Account, Category, Currency, Dump, FamilyMember, Settings, SubCategory, Transaction } from './model/model';
+import { HttpService } from '../http.service';
+import { Account, Category, Currency, Dump, FamilyMember, Settings, SubCategory, Transaction } from '../model/model';
 import { UserDataEnricherService } from './user-data-enricher.service';
 import Language = Settings.Language;
 
@@ -13,7 +13,6 @@ export class UserDataService {
   private enricher = new UserDataEnricherService();
   private isInit: AsyncSubject<boolean> = new AsyncSubject();
   private dump: Dump = new Dump();
-  private ts: number = 0;
 
   constructor(private http: HttpService,
               private translate: TranslateService,
@@ -26,20 +25,27 @@ export class UserDataService {
   }
 
   readCache(): void {
-    get('ts').then(ts => this.ts = ts as number || 0);
     get('dump').then(dump => {
       if (dump) {
-        this.dump = Dump.fromObject(dump);
+        this.dump = this.enricher.merge(this.dump, Dump.fromObject(dump));
         this.init();
       }
     });
   }
 
   refresh(catchCallback = () => {}): void {
-    this.http.get('/api/data/dump/get')
+    get('ts')
+      .then(ts => {
+        const modifiedAfter = (ts as number - 7 * 86400 * 1000) || 0;
+        return this.http.get('/api/data/dump/get?ts=' + modifiedAfter);
+      })
       .then(data => Dump.decode(data))
+      .then(data => {
+        console.log(data.transactions.length);
+        return data;
+      })
       .then(dump => {
-        this.dump = dump;
+        this.dump = this.enricher.merge(this.dump, dump);
         this.init();
         this.updateCache();
         set('ts', new Date().getTime());

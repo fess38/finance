@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import * as _ from 'underscore';
 import { Account, Category, FamilyMember, SubCategory, Transaction } from '../../core/model/model';
-import { UserDataService } from '../../core/user-data.service';
+import { UserDataService } from '../../core/user-data/user-data.service';
 import { TransactionCriteriaService as Criteria } from '../transaction-criteria.service';
 import { TransactionUtilsService as utils } from '../transaction-utils.service';
 
