@@ -60,9 +60,12 @@ class HibernateEntityRepositoryImpl: EntityRepository {
     }
   }
 
-  override fun get(user: User): List<Message> {
+  override fun get(user: User, modifiedAfter: Long): List<Message> {
     val criteria = DetachedCriteria.forClass(HibernateEntity::class.java)
         .add(Restrictions.eq("userId", user.id))
+    if (modifiedAfter > 0) {
+      criteria.add(Restrictions.gt("modified", modifiedAfter))
+    }
     val session = sessionFactory.openSession()
     return criteria.getExecutableCriteria(session).list()
         .map {parse((it as HibernateEntity))}

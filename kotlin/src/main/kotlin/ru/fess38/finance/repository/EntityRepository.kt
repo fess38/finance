@@ -12,7 +12,7 @@ interface EntityRepository {
 
   fun isExist(id: Long, type: EntityType, user: User): Boolean
 
-  fun get(user: User): List<Message>
+  fun get(user: User, modifiedAfter: Long): List<Message>
 
   fun currencies(): List<Currency>
 }

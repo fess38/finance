@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import ru.fess38.finance.core.Model.Account
 import ru.fess38.finance.core.Model.Category
+import ru.fess38.finance.core.Model.Dump
 import ru.fess38.finance.core.Model.FamilyMember
 import ru.fess38.finance.core.Model.Settings
 import ru.fess38.finance.core.Model.SubCategory
@@ -36,7 +38,9 @@ class Controller {
   lateinit var validator: MessageValidator<Message>
 
   @GetMapping("dump/get")
-  fun get() = messageService.dump()
+  fun get(@RequestParam("ts", required = false) modifiedAfter: Long?): Dump {
+    return messageService.dump(modifiedAfter ?: 0)
+  }
 
   private fun saveMessage(message: Message): ResponseEntity<Any> {
     var httpStatus: HttpStatus
