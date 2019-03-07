@@ -41,7 +41,6 @@ export class UserDataService {
       })
       .then(data => Dump.decode(data))
       .then(data => {
-        console.log(data.transactions.length);
         return data;
       })
       .then(dump => {
