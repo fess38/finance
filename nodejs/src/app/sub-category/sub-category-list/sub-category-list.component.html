@@ -6,7 +6,16 @@
           <span>{{'sub_category_list.sub_category' | translate}} </span>
           <clr-icon shape="plus-circle"></clr-icon>
         </th>
-        <th>{{'sub_category_list.category' | translate}}</th>
+        <th>
+          <select name="category" [(ngModel)]="filterCategoryId">
+            <option [ngValue]="undefined" selected>
+              {{'sub_category_list.category' | translate}}
+            </option>
+            <option *ngFor="let category of categories()" [ngValue]="category.id">
+              <span>{{category.name}}</span>
+            </option>
+          </select>
+        </th>
       </tr>
       <tr *ngFor="let subCategory of subCategories()" routerLink="/sub_category/{{subCategory.id}}">
         <td>{{subCategory.name}}</td>
