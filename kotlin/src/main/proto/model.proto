@@ -121,3 +121,145 @@ message RefreshToken {
         VK = 3;
     }
 }
+
+message CategorySummary {
+    required Category category = 1;
+    repeated int64 amount = 2;
+}
+
+message SubCategorySummary {
+    required SubCategory subCategory = 1;
+    repeated int64 amount = 2;
+}
+
+message Date_ {
+    required int32 year = 1;
+    required int32 month = 2;
+    required int32 day = 3;
+}
+
+message Month {
+    required int32 year = 1;
+    required int32 month = 2;
+}
+
+message Year {
+    required int32 value = 1;
+}
+
+message DateSummary {
+    required Date_ date = 1;
+    repeated int64 amount = 2;
+}
+
+message DateCategorySummary {
+    required Date_ date = 1;
+    required Category category = 2;
+    repeated int64 amount = 3;
+}
+
+message DateCategorySummaries {
+    required Currency currency = 1;
+    repeated Category categories = 2;
+    repeated Date_ dates = 3;
+    repeated DateSummary dateSummaries = 4;
+    repeated CategorySummary categorySummaries = 5;
+    repeated DateCategorySummary dateCategorySummaries = 6;
+    required int64 income = 7;
+    required int64 expense = 8;
+}
+
+message DateSubCategorySummary {
+    required Date_ date = 1;
+    required SubCategory subCategory = 2;
+    repeated int64 amount = 3;
+}
+
+message DateSubCategorySummaries {
+    required Currency currency = 1;
+    repeated SubCategory subCategories = 2;
+    repeated Date_ dates = 3;
+    repeated DateSummary dateSummaries = 4;
+    repeated SubCategorySummary subCategorySummaries = 5;
+    repeated DateSubCategorySummary dateSubCategorySummaries = 6;
+    required int64 income = 7;
+    required int64 expense = 8;
+}
+
+message MonthSummary {
+    required Month month = 1;
+    repeated int64 amount = 2;
+}
+
+message MonthCategorySummary {
+    required Month month = 1;
+    required Category category = 2;
+    repeated int64 amount = 3;
+}
+
+message MonthCategorySummaries {
+    required Currency currency = 1;
+    repeated Category categories = 2;
+    repeated Month months = 3;
+    repeated MonthSummary monthSummaries = 4;
+    repeated CategorySummary categorySummaries = 5;
+    repeated MonthCategorySummary monthCategorySummaries = 6;
+    required int64 income = 7;
+    required int64 expense = 8;
+}
+
+message MonthSubCategorySummary {
+    required Month month = 1;
+    required SubCategory subCategory = 2;
+    repeated int64 amount = 3;
+}
+
+message MonthSubCategorySummaries {
+    required Currency currency = 1;
+    repeated SubCategory subCategories = 2;
+    repeated Month month = 3;
+    repeated MonthSummary monthSummaries = 4;
+    repeated SubCategorySummary subCategorySummaries = 5;
+    repeated MonthSubCategorySummary monthSubCategorySummaries = 6;
+    required int64 income = 7;
+    required int64 expense = 8;
+}
+
+message YearSummary {
+    required Year year = 1;
+    repeated int64 amount = 2;
+}
+
+message YearCategorySummary {
+    required Year year = 1;
+    required Category category = 2;
+    repeated int64 amount = 3;
+}
+
+message YearCategorySummaries {
+    required Currency currency = 1;
+    repeated Category categories = 2;
+    repeated Year years = 3;
+    repeated YearSummary yearSummaries = 4;
+    repeated CategorySummary categorySummaries = 5;
+    repeated YearCategorySummary yearCategorySummaries = 6;
+    required int64 income = 7;
+    required int64 expense = 8;
+}
+
+message YearSubCategorySummary {
+    required Year year = 1;
+    required SubCategory subCategory = 2;
+    repeated int64 amount = 3;
+}
+
+message YearSubCategorySummaries {
+    required Currency currency = 1;
+    repeated SubCategory subcategories = 2;
+    repeated Year years = 3;
+    repeated YearSummary yearSummaries = 4;
+    repeated SubCategorySummary subCategorySummaries = 5;
+    repeated YearSubCategorySummary yearSubCategorySummaries = 6;
+    required int64 income = 7;
+    required int64 expense = 8;
+}
