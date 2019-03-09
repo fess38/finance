@@ -86,6 +86,12 @@ export class SubCategoryDetailComponent implements OnInit, OnDestroy {
   }
 
   viewTransactions(subCategory: SubCategory) {
-    this.router.navigate(['/transaction'], { queryParams: { sub_category_id: subCategory.id } });
+    this.router.navigate(['/transaction'], {
+      queryParams: {
+        sub_category_id: subCategory.id,
+        transaction_amount: subCategory.transactionAmount,
+        source: 'sub_category'
+      }
+    });
   }
 }

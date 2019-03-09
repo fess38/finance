@@ -76,6 +76,12 @@ export class FamilyMemberDetailComponent implements OnInit, OnDestroy {
   }
 
   viewTransactions(familyMember: FamilyMember) {
-    this.router.navigate(['/transaction'], { queryParams: { family_member_id: familyMember.id } });
+    this.router.navigate(['/transaction'], {
+      queryParams: {
+        family_member_id: familyMember.id,
+        transaction_amount: familyMember.transactionAmount,
+        source: 'family_member'
+      }
+    });
   }
 }

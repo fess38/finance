@@ -111,6 +111,12 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   }
 
   viewTransactions(account: Account): void {
-    this.router.navigate(['/transaction'], { queryParams: { account_id: account.id } });
+    this.router.navigate(['/transaction'], {
+      queryParams: {
+        account_id: account.id,
+        transaction_amount: account.transactionAmount,
+        source: 'account'
+      }
+    });
   }
 }
