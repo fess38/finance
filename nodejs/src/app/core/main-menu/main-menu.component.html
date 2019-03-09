@@ -24,9 +24,31 @@
       <a routerLink="/transaction/new" class="nav-link">
         {{'main_menu.add_transaction' | translate}}
       </a>
-      <a routerLink="/transaction" class="nav-link">
-        {{'main_menu.transaction' | translate}}
-      </a>
+      <section class="nav-group">
+        <label>{{'main_menu.transaction' | translate}}</label>
+        <ul class="nav-list">
+          <li>
+            <a (click)="allTransactions()" class="nav-link">
+              {{'main_menu.all_transactions' | translate}}
+            </a>
+          </li>
+          <li>
+            <a (click)="incomes()" class="nav-link">
+              {{'main_menu.incomes' | translate}}
+            </a>
+          </li>
+          <li>
+            <a (click)="expences()" class="nav-link">
+              {{'main_menu.expences' | translate}}
+            </a>
+          </li>
+          <li>
+            <a (click)="transfers()" class="nav-link">
+              {{'main_menu.transfers' | translate}}
+            </a>
+          </li>
+        </ul>
+      </section>
       <section class="nav-group">
         <label>{{'main_menu.other' | translate}}</label>
         <ul class="nav-list">
