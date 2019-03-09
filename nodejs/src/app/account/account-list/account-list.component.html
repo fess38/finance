@@ -2,15 +2,15 @@
   <div class="clr-col-12 clr-col-sm-9 clr-col-md-6">
     <table class="table table-noborder table-compact">
       <tr>
-        <th routerLink="/account/new">
+        <th class="left" routerLink="/account/new">
           <span>{{'account_list.account_title' | translate}} </span>
           <clr-icon shape="plus-circle"></clr-icon>
         </th>
-        <th>{{'account_list.balance_title' | translate}}</th>
+        <th class="left">{{'account_list.balance_title' | translate}}</th>
       </tr>
       <tr *ngFor="let account of accounts()" routerLink="/account/{{account.id}}">
-        <td>{{account.name}}</td>
-        <td>{{formatBalance(account)}}</td>
+        <td class="left">{{account.name}}</td>
+        <td class="left">{{formatBalance(account)}}</td>
       </tr>
     </table>
   </div>

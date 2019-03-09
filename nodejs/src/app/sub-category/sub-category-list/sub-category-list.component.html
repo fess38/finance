@@ -2,12 +2,12 @@
   <div class="clr-col-12 clr-col-sm-9 clr-col-md-6">
     <table class="table table-noborder table-compact">
       <tr>
-        <th routerLink="/sub_category/new">
+        <th class="left" routerLink="/sub_category/new">
           <span>{{'sub_category_list.sub_category' | translate}} </span>
           <clr-icon shape="plus-circle"></clr-icon>
         </th>
         <th>
-          <select name="category" [(ngModel)]="filterCategoryId">
+          <select clrSelect name="category" [(ngModel)]="filterCategoryId">
             <option [ngValue]="undefined" selected>
               {{'sub_category_list.category' | translate}}
             </option>
@@ -18,8 +18,8 @@
         </th>
       </tr>
       <tr *ngFor="let subCategory of subCategories()" routerLink="/sub_category/{{subCategory.id}}">
-        <td>{{subCategory.name}}</td>
-        <td>{{findCategory(subCategory.categoryId).name}}</td>
+        <td class="left">{{subCategory.name}}</td>
+        <td class="left">{{findCategory(subCategory.categoryId).name}}</td>
       </tr>
     </table>
   </div>

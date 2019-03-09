@@ -2,16 +2,16 @@
   <div class="clr-col-12 clr-col-sm-8 clr-col-md-6">
     <table class="table table-noborder table-compact">
       <tr>
-        <th routerLink="/category/new">
+        <th class="left" routerLink="/category/new">
           <span>{{'category_list.category' | translate}} </span>
           <clr-icon shape="plus-circle"></clr-icon>
         </th>
         <th></th>
       </tr>
       <tr *ngFor="let category of categories()" routerLink="/category/{{category.id}}">
-        <td>{{category.name}}</td>
-        <td [hidden]="!category.isIncome">{{'common.income' | translate}}</td>
-        <td [hidden]="category.isIncome">{{'common.expense' | translate}}</td>
+        <td class="left">{{category.name}}</td>
+        <td class="left" [hidden]="!category.isIncome">{{'common.income' | translate}}</td>
+        <td class="left" [hidden]="category.isIncome">{{'common.expense' | translate}}</td>
       </tr>
     </table>
   </div>
