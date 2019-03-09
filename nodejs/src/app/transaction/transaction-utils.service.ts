@@ -1,4 +1,4 @@
-import { Transaction } from '../core/model/model';
+import { Date_, Month, Transaction, Year } from '../core/model/model';
 
 export class TransactionUtilsService {
   static type(transaction: Transaction): Transaction.Type {
@@ -22,35 +22,33 @@ export class TransactionUtilsService {
   }
 
   static currentYear(): number {
-    return this.parseDate(this.currentDate()).year;
+    const tokens = this.currentDate().split('-');
+    return +tokens[0];
   }
 
   static currentMonth(): number {
-    return this.parseDate(this.currentDate()).month;
+    const tokens = this.currentDate().split('-');
+    return +tokens[1];
   }
 
-  static parseDate(dateString: string): SimpleDate {
-    const tokens = dateString.split('-');
-    const date = new Date(+tokens[0], +tokens[1] - 1, +tokens[2]);
-    return new SimpleDate({
-      year: date.getFullYear(),
-      month: date.getMonth() + 1,
-      day: date.getDate(),
-      date: date
+  static parseDate(yyyymmdd: string): Date_ {
+    const tokens = yyyymmdd.split('-');
+    return new Date_({
+      year: +tokens[0],
+      month: +tokens[1],
+      day: +tokens[2]
     });
   }
-}
 
-export class SimpleDate {
-  readonly year: number;
-  readonly month: number;
-  readonly day: number;
-  readonly date: Date;
+  static parseMonth(yyyymmdd: string): Month {
+    const tokens = yyyymmdd.split('-');
+    return new Month({
+      year: +tokens[0],
+      month: +tokens[1]
+    });
+  }
 
-  constructor(any) {
-    this.year = any.year;
-    this.month = any.month;
-    this.day = any.day;
-    this.date = any.date;
+  static parseYear(yyyymmdd: string): Year {
+    return new Year({ value: +yyyymmdd.split('-')[0] });
   }
 }

@@ -1,36 +1,41 @@
 <div class="clr-row">
   <div class="clr-col-12 clr-col-sm-9 clr-col-md-6">
-    <table class="table table-noborder table-compact">
-      <tr>
-        <td (click)="previousMonth()">
-          <button class="btn btn-link btn-sm btn-icon">
-            <clr-icon shape="rewind"></clr-icon>
-          </button>
-        </td>
-        <td>
-          <button class="btn btn-link btn-sm" disabled>
-            {{formatFilterDate() | date:'MMM yyyy':'':locale()}}
-          </button>
-        </td>
-        <td (click)="nextMonth()">
-          <button class="btn btn-link btn-sm btn-icon">
-            <clr-icon shape="fast-forward"></clr-icon>
-          </button>
-        </td>
-      </tr>
-      <tr>
-        <th routerLink="/transaction/new">
-          <span>{{'transaction_list.date' | translate}}</span>
-          <clr-icon shape="plus-circle"></clr-icon>
-        </th>
-        <th>{{'transaction_list.category' | translate}}</th>
-        <th>{{'transaction_list.amount' | translate}}</th>
-      </tr>
-      <tr *ngFor="let transaction of transactions()" routerLink="/transaction/{{transaction.id}}">
-        <td>{{date(transaction) | date:'dd'}}</td>
-        <td>{{category(transaction) | translate}}</td>
-        <td>{{formatAmount(transaction)}}</td>
-      </tr>
-    </table>
+    <div *ngFor="let month of months; let i = index">
+      <table class="table table-noborder table-compact">
+        <tr>
+          <td class="left" (click)="previousMonth()">
+            <button [hidden]="manyMonths()" class="btn btn-link btn-sm btn-icon">
+              <clr-icon shape="rewind"></clr-icon>
+            </button>
+            <button [hidden]="!manyMonths() || i > 0"
+                    (click)="return()"
+                    type="button"
+                    class="btn btn-icon btn-link">
+              <clr-icon shape="undo"></clr-icon>
+            </button>
+          </td>
+          <td class="left">
+            <button class="btn btn-link btn-sm" disabled>
+              {{formatMonth(month) | date:'MMM yyyy':'':locale()}}
+            </button>
+          </td>
+          <td class="left" (click)="nextMonth()">
+            <button [hidden]="manyMonths()" class="btn btn-link btn-sm btn-icon">
+              <clr-icon shape="fast-forward"></clr-icon>
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <th class="left">{{'transaction_list.date' | translate}}</th>
+          <th class="left">{{'transaction_list.category' | translate}}</th>
+          <th class="left">{{'transaction_list.amount' | translate}}</th>
+        </tr>
+        <tr *ngFor="let transaction of filterTransactions(month)" routerLink="/transaction/{{transaction.id}}">
+          <td class="left">{{formatDate(transaction) | date:'dd'}}</td>
+          <td class="left">{{formatCategory(transaction) | translate}}</td>
+          <td class="left">{{formatAmount(transaction)}}</td>
+        </tr>
+      </table>
+    </div>
   </div>
 </div>

@@ -2,16 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Long } from 'protobufjs';
 import * as _ from 'underscore';
-import { Transaction } from '../../core/model/model';
+import { Month, Transaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 import { NumberFormatter } from '../../utils/number_formatter';
 import { TransactionCriteriaService as Criteria } from '../transaction-criteria.service';
-import { TransactionUtilsService } from '../transaction-utils.service';
+import { TransactionUtilsService as Utils } from '../transaction-utils.service';
 
 @Component({
   templateUrl: './transaction-list.component.html'
 })
 export class TransactionListComponent implements OnInit {
+  months: Month[] = [];
+  transactions: Transaction[];
+
   constructor(private userdata: UserDataService,
               private criteria: Criteria,
               private route: ActivatedRoute,
@@ -20,14 +23,39 @@ export class TransactionListComponent implements OnInit {
   ngOnInit(): void {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.criteria.update(this.route.snapshot.queryParams);
+    this.userdata.subscribeOnInit(() => this.onInitCallback());
+  }
+
+  private onInitCallback(): void {
+    this.transactions = _.chain(this.userdata.transactions())
+      .filter(x => !x.isDeleted)
+      .filter(x => this.criteria.isFit(x))
+      .sortBy(x => x.created)
+      .reverse()
+      .value();
+    _.chain(this.transactions)
+      .sortBy(x => x.created)
+      .reverse()
+      .map(x => Utils.parseMonth(x.created))
+      .unique(true, (x) => String(x.year) + String(x.month))
+      .value()
+      .forEach(x => {
+        if (!this.months.includes(x)) {
+          this.months.push(x);
+        }
+      });
+    if (this.months.length == 0) {
+      this.months.push(new Month({ year: this.criteria.year, month: this.criteria.month }));
+    }
+  }
+
+  manyMonths(): boolean {
+    return this.criteria.transactionAmount != null
+      && this.criteria.transactionAmount < this.criteria.amountThreshold;
   }
 
   locale(): string {
     return this.userdata.locale();
-  }
-
-  formatFilterDate(): string {
-    return `${this.criteria.year}-${this.criteria.month}-01`;
   }
 
   previousMonth(): void {
@@ -50,20 +78,31 @@ export class TransactionListComponent implements OnInit {
     this.router.navigate(['/transaction'], { queryParams: this.criteria.toQueryParams() });
   }
 
-  transactions(): Transaction[] {
-    return _.chain(this.userdata.transactions())
-      .filter(x => !x.isDeleted)
-      .filter(x => this.criteria.isFit(x))
+  return(): void {
+    this.router.navigate(['/' + this.criteria.source || '']);
+  }
+
+  formatMonth(month: Month): string {
+    return `${month.year}-${month.month}-01`;
+  }
+
+  private filterTransactions(month: Month): Transaction[] {
+    return _.chain(this.transactions)
+      .filter(x => {
+        const currentMonth = Utils.parseMonth(x.created);
+        return currentMonth.year == month.year && currentMonth.month == month.month;
+      })
       .sortBy(x => x.created)
       .reverse()
       .value();
   }
 
-  date(transaction: Transaction): Date {
-    return TransactionUtilsService.parseDate(transaction.created).date;
+  formatDate(transaction: Transaction): Date {
+    const tokens = transaction.created.split('-');
+    return new Date(+tokens[0], +tokens[1] - 1, +tokens[2]);
   }
 
-  category(transaction: Transaction): string {
+  formatCategory(transaction: Transaction): string {
     return _.chain(this.userdata.categories())
       .filter(x => x.id == transaction.categoryId)
       .map(x => x.name)
@@ -72,7 +111,7 @@ export class TransactionListComponent implements OnInit {
 
   formatAmount(transaction: Transaction): string {
     let result = '';
-    switch (TransactionUtilsService.type(transaction)) {
+    switch (Utils.type(transaction)) {
       case Transaction.Type.INCOME:
         result = NumberFormatter.format(transaction.amountTo);
         result += this.currencySymbol(transaction.accountIdTo);
@@ -96,15 +135,8 @@ export class TransactionListComponent implements OnInit {
 
   private currencySymbol(accountId: number | Long): string {
     const account = this.userdata.accounts().filter(x => x.id == accountId)[0];
-    let symbol: string;
-    if (this.userdata.currencies.length > 0) {
-      symbol = this.userdata.currencies()
-        .filter(x => x.id == account.currencyId)
-        .map(x => x.symbol)[0];
-    }
-    if (symbol == null) {
-      symbol = '';
-    }
-    return symbol;
+    return this.userdata.currencies()
+      .filter(x => x.id == account.currencyId)
+      .map(x => x.symbol)[0] || '';
   }
 }

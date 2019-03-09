@@ -1,6 +1,6 @@
-import { Transaction } from '../core/model/model';
+import { Date_, Transaction } from '../core/model/model';
 
-import { SimpleDate, TransactionUtilsService as Utils } from './transaction-utils.service';
+import { TransactionUtilsService as Utils } from './transaction-utils.service';
 
 describe('TransactionUtilsService', () => {
   let transactionTemplate;
@@ -47,14 +47,7 @@ describe('TransactionUtilsService', () => {
   });
 
   it('should return 2019-01-05', () => {
-    const expected = new SimpleDate(
-      {
-        year: 2019,
-        month: 1,
-        day: 5,
-        date: new Date(2019, 0, 5, 0, 0, 0)
-      }
-    );
+    const expected = new Date_({ year: 2019, month: 1, day: 5 });
     expect(expected).toEqual(Utils.parseDate('2019-01-05'));
   });
 });

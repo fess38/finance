@@ -1,15 +1,19 @@
 import { Params } from '@angular/router';
-import { Transaction } from '../core/model/model';
-import { SimpleDate, TransactionUtilsService } from './transaction-utils.service';
+import { Date_, Transaction } from '../core/model/model';
+import { TransactionUtilsService as Utils } from './transaction-utils.service';
 
 export class TransactionCriteriaService {
-  year: number = TransactionUtilsService.currentYear();
-  month: number = TransactionUtilsService.currentMonth();
+  readonly amountThreshold = 250;
+  year: number = Utils.currentYear();
+  month: number = Utils.currentMonth();
   day: number;
   accountId: number;
   categoryId: number;
   subCategoryId: number;
   familyMemberId: number;
+  transactionAmount: number;
+  transactionType: number;
+  source: string;
 
   update(params: Params): void {
     if (params.year) {
@@ -23,18 +27,21 @@ export class TransactionCriteriaService {
     this.categoryId = params.category_id;
     this.subCategoryId = params.sub_category_id;
     this.familyMemberId = params.family_member_id;
+    this.transactionAmount = params.transaction_amount;
+    this.transactionType = params.transaction_type;
+    this.source = params.source;
   }
 
   isFit(t: Transaction): boolean {
     let result = true;
-    const simpleDate: SimpleDate = TransactionUtilsService.parseDate(t.created);
-    if (this.year && this.year != simpleDate.year) {
+    const date: Date_ = Utils.parseDate(t.created);
+    if (this.filterByDate() && this.year && this.year != date.year) {
       result = false;
     }
-    if (this.month && this.month != simpleDate.month) {
+    if (this.filterByDate() && this.month && this.month != date.month) {
       result = false;
     }
-    if (this.day && this.day != simpleDate.day) {
+    if (this.filterByDate() && this.day && this.day != date.day) {
       result = false;
     }
     if (this.accountId && this.accountId != t.accountIdFrom && this.accountId != t.accountIdTo) {
@@ -49,7 +56,15 @@ export class TransactionCriteriaService {
     if (this.familyMemberId && this.familyMemberId != t.familyMemberId) {
       result = false;
     }
+    if (this.transactionType && this.transactionType != Utils.type(t)) {
+      result = false;
+    }
     return result;
+  }
+
+  private filterByDate(): boolean {
+    return (this.accountId == null && this.categoryId == null && this.subCategoryId == null
+      && this.familyMemberId == null) || (this.transactionAmount || 0) > this.amountThreshold;
   }
 
   toQueryParams(): any {
@@ -60,7 +75,9 @@ export class TransactionCriteriaService {
       account_id: this.accountId,
       category_id: this.categoryId,
       sub_category_id: this.subCategoryId,
-      family_member_id: this.familyMemberId
+      family_member_id: this.familyMemberId,
+      transaction_amount: this.transactionAmount,
+      transaction_type: this.transactionType
     }
   }
 }
