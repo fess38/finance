@@ -3,7 +3,7 @@ import { Title } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import { get, set } from 'idb-keyval';
 import { AsyncSubject, Subscription } from 'rxjs';
-import { HttpService } from '../http.service';
+import { HttpService } from '../../utils/http.service';
 import { Account, Category, Currency, Dump, FamilyMember, Settings, SubCategory, Transaction } from '../model/model';
 import { UserDataEnricherService } from './user-data-enricher.service';
 import Language = Settings.Language;
