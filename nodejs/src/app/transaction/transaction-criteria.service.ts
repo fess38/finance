@@ -32,6 +32,24 @@ export class TransactionCriteriaService {
     this.source = params.source;
   }
 
+  previousMonth(): void {
+    if (this.month == 1) {
+      this.month = 12;
+      this.year--;
+    } else {
+      this.month--;
+    }
+  }
+
+  nextMonth(): void {
+    if (this.month == 12) {
+      this.month = 1;
+      this.year++;
+    } else {
+      this.month++;
+    }
+  }
+
   isFit(t: Transaction): boolean {
     let result = true;
     const date: Date_ = Utils.parseDate(t.created);

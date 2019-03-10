@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Long } from 'protobufjs';
 import * as _ from 'underscore';
 import { Month, Transaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
@@ -58,31 +57,17 @@ export class TransactionListComponent implements OnInit {
   }
 
   previousMonth(): void {
-    if (this.criteria.month == 1) {
-      this.criteria.month = 12;
-      this.criteria.year--;
-    } else {
-      this.criteria.month--;
-    }
+    this.criteria.previousMonth();
     this.router.navigate(['/transaction'], { queryParams: this.criteria.toQueryParams() });
   }
 
   nextMonth(): void {
-    if (this.criteria.month == 12) {
-      this.criteria.month = 1;
-      this.criteria.year++;
-    } else {
-      this.criteria.month++;
-    }
+    this.criteria.nextMonth();
     this.router.navigate(['/transaction'], { queryParams: this.criteria.toQueryParams() });
   }
 
   return(): void {
     this.router.navigate(['/' + this.criteria.source || '']);
-  }
-
-  formatMonth(month: Month): string {
-    return `${month.year}-${month.month}-01`;
   }
 
   private filterTransactions(month: Month): Transaction[] {
@@ -94,11 +79,6 @@ export class TransactionListComponent implements OnInit {
       .sortBy(x => x.created)
       .reverse()
       .value();
-  }
-
-  formatDate(transaction: Transaction): Date {
-    const tokens = transaction.created.split('-');
-    return new Date(+tokens[0], +tokens[1] - 1, +tokens[2]);
   }
 
   formatCategory(transaction: Transaction): string {
@@ -120,7 +100,7 @@ export class TransactionListComponent implements OnInit {
     return Utils.type(transaction) == Transaction.Type.TRANSFER;
   }
 
-  currencySymbol(accountId: number | Long): string {
+  currencySymbol(accountId: number): string {
     const account = this.userdata.accounts().filter(x => x.id == accountId)[0];
     return this.userdata.currencies()
       .filter(x => x.id == account.currencyId)

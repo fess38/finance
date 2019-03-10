@@ -16,7 +16,7 @@
           </td>
           <td class="left">
             <button class="btn btn-link btn-sm" disabled>
-              {{formatMonth(month) | date:'MMM yyyy':'':locale()}}
+              {{month | monthFormat | date:'MMM yyyy':'':locale()}}
             </button>
           </td>
           <td class="left" (click)="nextMonth()">
@@ -31,7 +31,7 @@
           <th class="left">{{'transaction_list.amount' | translate}}</th>
         </tr>
         <tr *ngFor="let transaction of filterTransactions(month)" routerLink="/transaction/{{transaction.id}}">
-          <td class="left">{{formatDate(transaction) | date:'dd'}}</td>
+          <td class="left">{{transaction.created | createdFormat | date:'dd'}}</td>
           <td class="left">{{formatCategory(transaction) | translate}}</td>
           <td class="left">
             <span *ngIf="isIncome(transaction)">
