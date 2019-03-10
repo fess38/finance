@@ -33,7 +33,19 @@
         <tr *ngFor="let transaction of filterTransactions(month)" routerLink="/transaction/{{transaction.id}}">
           <td class="left">{{formatDate(transaction) | date:'dd'}}</td>
           <td class="left">{{formatCategory(transaction) | translate}}</td>
-          <td class="left">{{formatAmount(transaction)}}</td>
+          <td class="left">
+            <span *ngIf="isIncome(transaction)">
+              {{transaction.amountTo | number:'':locale()}}{{currencySymbol(transaction.accountIdTo)}}
+            </span>
+            <span *ngIf="isExpence(transaction)">
+              {{transaction.amountFrom | number:'':locale()}}{{currencySymbol(transaction.accountIdFrom)}}
+            </span>
+            <span *ngIf="isTransfer(transaction)">
+              {{transaction.amountFrom | number:'':locale()}}{{currencySymbol(transaction.accountIdFrom)}}
+              =>
+              {{transaction.amountTo | number:'':locale()}}{{currencySymbol(transaction.accountIdTo)}}
+            </span>
+          </td>
         </tr>
       </table>
     </div>

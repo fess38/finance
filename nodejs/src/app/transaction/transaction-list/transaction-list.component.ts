@@ -4,7 +4,6 @@ import { Long } from 'protobufjs';
 import * as _ from 'underscore';
 import { Month, Transaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
-import { NumberFormatter } from '../../utils/number_formatter';
 import { TransactionCriteriaService as Criteria } from '../transaction-criteria.service';
 import { TransactionUtilsService as Utils } from '../transaction-utils.service';
 
@@ -109,31 +108,19 @@ export class TransactionListComponent implements OnInit {
       .value().pop() || 'transaction_detail.transfer';
   }
 
-  formatAmount(transaction: Transaction): string {
-    let result = '';
-    switch (Utils.type(transaction)) {
-      case Transaction.Type.INCOME:
-        result = NumberFormatter.format(transaction.amountTo);
-        result += this.currencySymbol(transaction.accountIdTo);
-        break;
-      case Transaction.Type.EXPENSE:
-        result = NumberFormatter.format(transaction.amountFrom);
-        result += this.currencySymbol(transaction.accountIdFrom);
-        break;
-      case Transaction.Type.TRANSFER:
-        result = NumberFormatter.format(transaction.amountFrom);
-        result += this.currencySymbol(transaction.accountIdFrom);
-        result += ' => ';
-        result += NumberFormatter.format(transaction.amountTo);
-        result += this.currencySymbol(transaction.accountIdTo);
-        break;
-      default:
-        throw new Error(`Undefined transaction type for transaction ${transaction.id}`);
-    }
-    return result;
+  isIncome(transaction: Transaction): boolean {
+    return Utils.type(transaction) == Transaction.Type.INCOME;
   }
 
-  private currencySymbol(accountId: number | Long): string {
+  isExpence(transaction: Transaction): boolean {
+    return Utils.type(transaction) == Transaction.Type.EXPENSE;
+  }
+
+  isTransfer(transaction: Transaction): boolean {
+    return Utils.type(transaction) == Transaction.Type.TRANSFER;
+  }
+
+  currencySymbol(accountId: number | Long): string {
     const account = this.userdata.accounts().filter(x => x.id == accountId)[0];
     return this.userdata.currencies()
       .filter(x => x.id == account.currencyId)
