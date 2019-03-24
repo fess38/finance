@@ -1,0 +1,67 @@
+<div class="clr-row">
+  <div class="clr-col-12">
+    <table class="table table-compact">
+      <tr>
+        <th nowrap>
+          <clr-icon (click)="previousMonth()" shape="rewind"></clr-icon>
+          <span>&nbsp;</span>
+          <span>{{month() | monthFormat | date:'MMM yyyy':'':locale()}}</span>
+          <span>&nbsp;</span>
+          <span [hidden]="currencies.length <= 1">
+            <select name="currency" required
+                    [(ngModel)]="currency"
+                    (ngModelChange)="onChangeCurrency()">
+              <option [selected]="" *ngFor="let currency of currencies" [ngValue]="currency">
+                <span>
+                  {{currency.symbol}}
+                </span>
+              </option>
+            </select>
+            <span>&nbsp;</span>
+          </span>
+          <clr-icon (click)="nextMonth()" shape="fast-forward"></clr-icon>
+        </th>
+        <th *ngFor="let date of dates">
+          {{date.day}}
+        </th>
+        <th>{{'report.summary' | translate}}</th>
+      </tr>
+      <tr *ngFor="let category of incomeCategories()">
+        <td>{{category.name}}</td>
+        <td *ngFor="let date of dates">
+          {{findDateCategorySummary(date, category) | number:'':locale()}}
+        </td>
+        <td>
+          {{findCategorySummary(category) | number:'':locale()}}
+        </td>
+      </tr>
+      <tr *ngIf="incomeCategories().length > 0">
+        <th>{{'report.summary' | translate}}</th>
+        <th *ngFor="let date of dates">
+          {{findIncomeDateSummary(date) | number:'':locale()}}
+        </th>
+        <th>
+          {{income | number:'':locale()}}
+        </th>
+      </tr>
+      <tr *ngFor="let category of expenseCategories()">
+        <td>{{category.name}}</td>
+        <td *ngFor="let date of dates">
+          {{findDateCategorySummary(date, category) | number:'':locale()}}
+        </td>
+        <td>
+          {{findCategorySummary(category) | number:'':locale()}}
+        </td>
+      </tr>
+      <tr *ngIf="expenseCategories().length > 0">
+        <th>{{'report.summary' | translate}}</th>
+        <th *ngFor="let date of dates">
+          {{findExpenseDateSummary(date) | number:'':locale()}}
+        </th>
+        <th>
+          {{expense | number:'':locale()}}
+        </th>
+      </tr>
+    </table>
+  </div>
+</div>

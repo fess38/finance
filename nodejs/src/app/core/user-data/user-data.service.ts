@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import { get, set } from 'idb-keyval';
+import { Long } from 'protobufjs';
 import { AsyncSubject, Subscription } from 'rxjs';
 import { HttpService } from '../../utils/http.service';
 import { Account, Category, Currency, Dump, FamilyMember, Settings, SubCategory, Transaction } from '../model/model';
@@ -71,7 +72,11 @@ export class UserDataService {
   }
 
   locale(): string {
-    return Language[this.settings().language].toLowerCase();
+    return this.language().toLowerCase();
+  }
+
+  language(): string {
+    return Language[this.settings().language];
   }
 
   settings(): Settings {
@@ -99,7 +104,31 @@ export class UserDataService {
   }
 
   transactions(): Transaction[] {
-    return this.dump.transactions as Transaction[];
+    return this.dump.transactions.filter(x => !x.isDeleted) as Transaction[];
+  }
+
+  findCurrency(id: number | Long): Currency {
+    return this.currencies().filter(x => x.id == id)[0];
+  }
+
+  findAccount(id: number | Long): Account {
+    return this.accounts().filter(x => x.id == id)[0];
+  }
+
+  findCategory(id: number | Long): Category {
+    return this.categories().filter(x => x.id == id)[0];
+  }
+
+  findSubCategory(id: number | Long): SubCategory {
+    return this.subCategories().filter(x => x.id == id)[0];
+  }
+
+  findFamilyMember(id: number | Long): FamilyMember {
+    return this.familyMembers().filter(x => x.id == id)[0];
+  }
+
+  findTransaction(id: number | Long): Transaction {
+    return this.transactions().filter(x => x.id == id)[0];
   }
 
   saveAccount(account: Account): Promise<Account> {

@@ -11,9 +11,20 @@
           <div class="select form-control">
             <select name="language"
                     required
-                    [(ngModel)]="userdata.settings().language">
+                    [(ngModel)]="settings.language">
               <option selected *ngFor="let language of languages" [ngValue]="language.code">
                 {{language.value}}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>{{'settings.currency' | translate}}</label>
+          <div class="select form-control">
+            <select name="currency" required [(ngModel)]="settings.currencyId">
+              <option selected *ngFor="let currency of currencies()" [ngValue]="currency.id">
+                <span *ngIf="language() == 'RU'">{{currency.nameRu}} ({{currency.symbol}})</span>
+                <span *ngIf="language() == 'EN'">{{currency.nameEn}} ({{currency.symbol}})</span>
               </option>
             </select>
           </div>

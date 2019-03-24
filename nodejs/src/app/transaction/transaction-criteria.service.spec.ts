@@ -1,8 +1,8 @@
 import { Params } from '@angular/router';
 import { Transaction } from '../core/model/model';
+import { DateUtils } from '../utils/date-utils';
 
 import { TransactionCriteriaService as Criteria } from './transaction-criteria.service';
-import { TransactionUtilsService } from './transaction-utils.service';
 
 describe('TransactionCriteriaService', () => {
   let criteria;
@@ -16,7 +16,7 @@ describe('TransactionCriteriaService', () => {
     criteria.update(params);
     const transaction: Transaction = new Transaction({
       id: 0,
-      created: TransactionUtilsService.currentDate(),
+      created: DateUtils.formatDate(),
       categoryId: 4,
       accountIdFrom: 123,
       accountIdTo: -1,
@@ -32,7 +32,7 @@ describe('TransactionCriteriaService', () => {
     criteria.update(params);
     const transaction: Transaction = new Transaction({
       id: 0,
-      created: TransactionUtilsService.currentDate(),
+      created: DateUtils.formatDate(),
       categoryId: 1239,
       accountIdFrom: -1,
       accountIdTo: 123,
@@ -48,7 +48,7 @@ describe('TransactionCriteriaService', () => {
     criteria.update(params);
     const transaction: Transaction = new Transaction({
       id: 0,
-      created: TransactionUtilsService.currentDate(),
+      created: DateUtils.formatDate(),
       categoryId: 1239,
       accountIdFrom: -1,
       accountIdTo: 1234,

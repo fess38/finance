@@ -3,3 +3,7 @@
   font-size: 13px;
   color: black;
 }
+
+td, th {
+  white-space: nowrap;
+}

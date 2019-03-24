@@ -14,6 +14,7 @@ import { FamilyMemberDetailComponent } from './family-member/family-member-detai
 import { FamilyMemberListComponent } from './family-member/family-member-list/family-member-list.component';
 import { SubCategoryDetailComponent } from './sub-category/sub-category-detail/sub-category-detail.component';
 import { SubCategoryListComponent } from './sub-category/sub-category-list/sub-category-list.component';
+import { TransactionDateComponent } from './transaction/transaction-date/transaction-date.component';
 import { TransactionDetailComponent } from './transaction/transaction-detail/transaction-detail.component';
 import { TransactionListComponent } from './transaction/transaction-list/transaction-list.component';
 
@@ -88,6 +89,21 @@ const appRoutes: Routes = [
   {
     path: 'transaction/:id',
     component: TransactionDetailComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'report/date',
+    component: TransactionDateComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'report/month',
+    component: TransactionDateComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'report/year',
+    component: TransactionDateComponent,
     canActivate: [AuthGuardService]
   },
   {

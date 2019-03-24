@@ -1,15 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import * as _ from 'underscore';
-import { Month, Transaction } from '../../core/model/model';
+import { Category, Month, Transaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
+import { DateUtils } from '../../utils/date-utils';
 import { TransactionCriteriaService as Criteria } from '../transaction-criteria.service';
-import { TransactionUtilsService as Utils } from '../transaction-utils.service';
+import { TransactionUtils } from '../transaction-utils';
 
 @Component({
   templateUrl: './transaction-list.component.html'
 })
-export class TransactionListComponent implements OnInit {
+export class TransactionListComponent implements OnInit, OnDestroy {
+  private subscription: Subscription;
   months: Month[] = [];
   transactions: Transaction[];
 
@@ -21,12 +24,11 @@ export class TransactionListComponent implements OnInit {
   ngOnInit(): void {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.criteria.update(this.route.snapshot.queryParams);
-    this.userdata.subscribeOnInit(() => this.onInitCallback());
+    this.subscription = this.userdata.subscribeOnInit(() => this.onInitCallback());
   }
 
   private onInitCallback(): void {
     this.transactions = _.chain(this.userdata.transactions())
-      .filter(x => !x.isDeleted)
       .filter(x => this.criteria.isFit(x))
       .sortBy(x => x.created)
       .reverse()
@@ -34,7 +36,7 @@ export class TransactionListComponent implements OnInit {
     _.chain(this.transactions)
       .sortBy(x => x.created)
       .reverse()
-      .map(x => Utils.parseMonth(x.created))
+      .map(x => DateUtils.parseMonth(x.created))
       .unique(true, (x) => String(x.year) + String(x.month))
       .value()
       .forEach(x => {
@@ -44,6 +46,12 @@ export class TransactionListComponent implements OnInit {
       });
     if (this.months.length == 0) {
       this.months.push(new Month({ year: this.criteria.year, month: this.criteria.month }));
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   }
 
@@ -73,7 +81,7 @@ export class TransactionListComponent implements OnInit {
   private filterTransactions(month: Month): Transaction[] {
     return _.chain(this.transactions)
       .filter(x => {
-        const currentMonth = Utils.parseMonth(x.created);
+        const currentMonth = DateUtils.parseMonth(x.created);
         return currentMonth.year == month.year && currentMonth.month == month.month;
       })
       .sortBy(x => x.created)
@@ -82,28 +90,23 @@ export class TransactionListComponent implements OnInit {
   }
 
   formatCategory(transaction: Transaction): string {
-    return _.chain(this.userdata.categories())
-      .filter(x => x.id == transaction.categoryId)
-      .map(x => x.name)
-      .value().pop() || 'transaction_detail.transfer';
+    const category: Category = this.userdata.findCategory(transaction.categoryId) || new Category();
+    return category.name || 'transaction_detail.transfer';
   }
 
   isIncome(transaction: Transaction): boolean {
-    return Utils.type(transaction) == Transaction.Type.INCOME;
+    return TransactionUtils.type(transaction) == Transaction.Type.INCOME;
   }
 
   isExpence(transaction: Transaction): boolean {
-    return Utils.type(transaction) == Transaction.Type.EXPENSE;
+    return TransactionUtils.type(transaction) == Transaction.Type.EXPENSE;
   }
 
   isTransfer(transaction: Transaction): boolean {
-    return Utils.type(transaction) == Transaction.Type.TRANSFER;
+    return TransactionUtils.type(transaction) == Transaction.Type.TRANSFER;
   }
 
   currencySymbol(accountId: number): string {
-    const account = this.userdata.accounts().filter(x => x.id == accountId)[0];
-    return this.userdata.currencies()
-      .filter(x => x.id == account.currencyId)
-      .map(x => x.symbol)[0] || '';
+    return this.userdata.findCurrency(this.userdata.findAccount(accountId).currencyId).symbol;
   }
 }

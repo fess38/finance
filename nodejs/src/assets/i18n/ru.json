@@ -49,6 +49,10 @@
     "incomes": "Доходы",
     "expences": "Расходы",
     "transfers": "Переводы",
+    "reports": "Отчеты",
+    "date_report": "По дням ",
+    "month_report": "По месяцам",
+    "year_report": "По годам",
     "other": "Остальное",
     "account": "Счета",
     "category": "Категории",
@@ -56,7 +60,8 @@
     "family_member": "Члены семьи"
   },
   "settings": {
-    "language": "Язык"
+    "language": "Язык",
+    "currency": "Валюта"
   },
   "sub_category_detail": {
     "add": "Добавление подкатегории",
@@ -86,6 +91,9 @@
     "date": "Дата",
     "category": "Категория",
     "amount": "Сумма"
+  },
+  "report": {
+    "summary": "Итого"
   },
   "error": {
     "message": "Что-то пошло не так",

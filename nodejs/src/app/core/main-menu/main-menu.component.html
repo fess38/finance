@@ -1,79 +1,101 @@
-<clr-header>
-  <div class="branding">
-    <span class="title">{{'main_menu.title' | translate}}</span>
-  </div>
-  <div class="header-actions">
-    <clr-dropdown>
-      <button class="nav-icon" clrDropdownTrigger>
-        <clr-icon shape="cog"></clr-icon>
-      </button>
-      <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-        <a routerLink="/settings" clrDropdownItem>{{'common.settings' | translate}}</a>
-        <span (click)="signout()" clrDropdownItem>{{'main_menu.exit' | translate}}</span>
-      </clr-dropdown-menu>
-    </clr-dropdown>
-  </div>
-</clr-header>
-<div class="content-container">
-  <div class="content-area">
-    <router-outlet></router-outlet>
-  </div>
+<clr-main-container class="main-container">
+  <clr-header>
+    <div class="branding">
+      <span class="title">{{'main_menu.title' | translate}}</span>
+    </div>
+    <div class="header-actions">
+      <clr-dropdown>
+        <button class="nav-icon" clrDropdownTrigger>
+          <clr-icon shape="cog"></clr-icon>
+        </button>
+        <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+          <a routerLink="/settings" clrDropdownItem>{{'common.settings' | translate}}</a>
+          <span (click)="signout()" clrDropdownItem>{{'main_menu.exit' | translate}}</span>
+        </clr-dropdown-menu>
+      </clr-dropdown>
+    </div>
+  </clr-header>
+  <div class="content-container">
+    <div class="content-area">
+      <router-outlet></router-outlet>
+    </div>
 
-  <nav class="sidenav" [clr-nav-level]="1">
-    <section class="sidenav-content">
-      <a routerLink="/transaction/new" class="nav-link">
-        {{'main_menu.add_transaction' | translate}}
-      </a>
-      <section class="nav-group">
-        <label>{{'main_menu.transaction' | translate}}</label>
-        <ul class="nav-list">
-          <li>
-            <a (click)="allTransactions()" class="nav-link">
-              {{'main_menu.all_transactions' | translate}}
-            </a>
-          </li>
-          <li>
-            <a (click)="incomes()" class="nav-link">
-              {{'main_menu.incomes' | translate}}
-            </a>
-          </li>
-          <li>
-            <a (click)="expences()" class="nav-link">
-              {{'main_menu.expences' | translate}}
-            </a>
-          </li>
-          <li>
-            <a (click)="transfers()" class="nav-link">
-              {{'main_menu.transfers' | translate}}
-            </a>
-          </li>
-        </ul>
+    <nav class="sidenav" [clr-nav-level]="1">
+      <section class="sidenav-content">
+        <a routerLink="/transaction/new" class="nav-link">
+          {{'main_menu.add_transaction' | translate}}
+        </a>
+        <section class="nav-group">
+          <label>{{'main_menu.transaction' | translate}}</label>
+          <ul class="nav-list">
+            <li>
+              <a (click)="allTransactions()" class="nav-link">
+                {{'main_menu.all_transactions' | translate}}
+              </a>
+            </li>
+            <li>
+              <a (click)="incomes()" class="nav-link">
+                {{'main_menu.incomes' | translate}}
+              </a>
+            </li>
+            <li>
+              <a (click)="expences()" class="nav-link">
+                {{'main_menu.expences' | translate}}
+              </a>
+            </li>
+            <li>
+              <a (click)="transfers()" class="nav-link">
+                {{'main_menu.transfers' | translate}}
+              </a>
+            </li>
+          </ul>
+        </section>
+        <section class="nav-group">
+          <label>{{'main_menu.reports' | translate}}</label>
+          <ul class="nav-list">
+            <li>
+              <a routerLink="/report/date" class="nav-link">
+                {{'main_menu.date_report' | translate}}
+              </a>
+            </li>
+            <li>
+              <a routerLink="/report/month" class="nav-link">
+                {{'main_menu.month_report' | translate}}
+              </a>
+            </li>
+            <li>
+              <a routerLink="/report/year" class="nav-link">
+                {{'main_menu.year_report' | translate}}
+              </a>
+            </li>
+          </ul>
+        </section>
+        <section class="nav-group">
+          <label>{{'main_menu.other' | translate}}</label>
+          <ul class="nav-list">
+            <li>
+              <a routerLink="/account" class="nav-link">
+                {{'main_menu.account' | translate}}
+              </a>
+            </li>
+            <li>
+              <a routerLink="/category" class="nav-link">
+                {{'main_menu.category' | translate}}
+              </a>
+            </li>
+            <li>
+              <a routerLink="/sub_category" class="nav-link">
+                {{'main_menu.sub_category' | translate}}
+              </a>
+            </li>
+            <li>
+              <a routerLink="/family_member" class="nav-link">
+                {{'main_menu.family_member' | translate}}
+              </a>
+            </li>
+          </ul>
+        </section>
       </section>
-      <section class="nav-group">
-        <label>{{'main_menu.other' | translate}}</label>
-        <ul class="nav-list">
-          <li>
-            <a routerLink="/account" class="nav-link">
-              {{'main_menu.account' | translate}}
-            </a>
-          </li>
-          <li>
-            <a routerLink="/category" class="nav-link">
-              {{'main_menu.category' | translate}}
-            </a>
-          </li>
-          <li>
-            <a routerLink="/sub_category" class="nav-link">
-              {{'main_menu.sub_category' | translate}}
-            </a>
-          </li>
-          <li>
-            <a routerLink="/family_member" class="nav-link">
-              {{'main_menu.family_member' | translate}}
-            </a>
-          </li>
-        </ul>
-      </section>
-    </section>
-  </nav>
-</div>
+    </nav>
+  </div>
+</clr-main-container>

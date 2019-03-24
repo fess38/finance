@@ -23,8 +23,8 @@ export class SubCategoryListComponent {
     let result = _.chain(this.userdata.subCategories())
       .filter(x => !x.isDeleted)
       .sortBy(x => x.name.toLowerCase())
-      .sortBy(x => this.findCategory(<number>x.categoryId).name)
-      .sortBy(x => !this.findCategory(<number>x.categoryId).isIncome)
+      .sortBy(x => this.userdata.findCategory(x.categoryId).name)
+      .sortBy(x => !this.userdata.findCategory(x.categoryId).isIncome)
       .value();
     if (this.filterCategoryId != null) {
       result = result.filter(x => x.categoryId == this.filterCategoryId);
@@ -33,6 +33,6 @@ export class SubCategoryListComponent {
   }
 
   findCategory(categoryId: number): Category {
-    return this.userdata.categories().filter(x => x.id == categoryId)[0];
+    return this.userdata.findCategory(categoryId);
   }
 }

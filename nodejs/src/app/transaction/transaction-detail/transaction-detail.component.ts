@@ -4,8 +4,9 @@ import { Subscription } from 'rxjs';
 import * as _ from 'underscore';
 import { Account, Category, FamilyMember, SubCategory, Transaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
+import { DateUtils } from '../../utils/date-utils';
 import { TransactionCriteriaService as Criteria } from '../transaction-criteria.service';
-import { TransactionUtilsService as utils } from '../transaction-utils.service';
+import { TransactionUtils } from '../transaction-utils';
 
 @Component({
   templateUrl: 'transaction-detail.component.html'
@@ -35,7 +36,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
     if (id != 'new') {
       this.subscription = this.userdata.subscribeOnInit(this.updateTransactionCallback(+id));
     } else {
-      this.transaction.created = utils.currentDate();
+      this.transaction.created = DateUtils.formatDate();
       this.subscription = this.userdata.subscribeOnInit(this.newTransactionCallback());
       this.onChangeTransactionType();
     }
@@ -43,13 +44,12 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
 
   private updateTransactionCallback(id: number): any {
     return () => {
-      const navigatedTransaction = this.userdata.transactions()
-        .filter(x => x.id == id && !x.isDeleted)[0];
+      const navigatedTransaction = this.userdata.findTransaction(id);
       if (navigatedTransaction == null) {
         this.router.navigate(['/transaction']);
       } else {
         this.transaction = navigatedTransaction;
-        this.type = utils.type(navigatedTransaction);
+        this.type = TransactionUtils.type(navigatedTransaction);
       }
     };
   }
@@ -139,11 +139,17 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   }
 
   subCategories(): SubCategory[] {
-    return _.chain(this.userdata.subCategories())
+    const subCategories: SubCategory[] = _.chain(this.userdata.subCategories())
       .filter(x => !x.isDeleted && x.isVisible)
       .filter(x => x.categoryId == this.transaction.categoryId)
-      .sortBy(x => x.name)
       .value();
+    if (this.transaction.subCategoryId) {
+      const subCategory: SubCategory = this.userdata.findSubCategory(this.transaction.subCategoryId);
+      if (!subCategory.isVisible) {
+        subCategories.push(subCategory);
+      }
+    }
+    return _.chain(subCategories).sortBy(x => x.name).value();
   }
 
   familyMembers(): FamilyMember[] {
@@ -231,6 +237,6 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   }
 
   viewTransactions(): void {
-    this.router.navigate(['/transaction'], { queryParams: this.criteria.toQueryParams() })
+    this.router.navigate(['/transaction'], { queryParams: this.criteria.toQueryParams() });
   }
 }

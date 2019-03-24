@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Account, Currency, Settings, Transaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
-import { TransactionUtilsService } from '../../transaction/transaction-utils.service';
+import { DateUtils } from '../../utils/date-utils';
 import Language = Settings.Language;
 
 @Component({
@@ -78,7 +78,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
 
   createAccountBalanceCorrection(account: Account, updatedBalance: number): Transaction {
     const transaction: Transaction = new Transaction({
-      created: TransactionUtilsService.currentDate(),
+      created: DateUtils.formatDate(),
       accountIdFrom: account.id,
       amountFrom: 0,
       accountIdTo: account.id,

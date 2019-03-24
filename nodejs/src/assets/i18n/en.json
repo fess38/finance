@@ -49,6 +49,10 @@
     "incomes": "Incomes",
     "expences": "Expences",
     "transfers": "Transfers",
+    "reports": "Reports",
+    "date_report": "By days",
+    "month_report": "By months",
+    "year_report": "By years",
     "other": "Other",
     "account": "Accounts",
     "category": "Categories",
@@ -56,7 +60,8 @@
     "family_member": "Family members"
   },
   "settings": {
-    "language": "Language"
+    "language": "Language",
+    "currency": "Currency"
   },
   "sub_category_detail": {
     "add": "Add subcategory",
@@ -86,6 +91,9 @@
     "date": "Date",
     "category": "Category",
     "amount": "Amount"
+  },
+  "report": {
+    "summary": "Summary"
   },
   "error": {
     "message": "Something goes wrong",

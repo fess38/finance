@@ -1,11 +1,12 @@
 import { Params } from '@angular/router';
 import { Date_, Transaction } from '../core/model/model';
-import { TransactionUtilsService as Utils } from './transaction-utils.service';
+import { DateUtils } from '../utils/date-utils';
+import { TransactionUtils } from './transaction-utils';
 
 export class TransactionCriteriaService {
   readonly amountThreshold = 250;
-  year: number = Utils.currentYear();
-  month: number = Utils.currentMonth();
+  year: number = DateUtils.currentYear();
+  month: number = DateUtils.currentMonth();
   day: number;
   accountId: number;
   categoryId: number;
@@ -52,7 +53,7 @@ export class TransactionCriteriaService {
 
   isFit(t: Transaction): boolean {
     let result = true;
-    const date: Date_ = Utils.parseDate(t.created);
+    const date: Date_ = DateUtils.parseDate_(t.created);
     if (this.filterByDate() && this.year && this.year != date.year) {
       result = false;
     }
@@ -74,7 +75,7 @@ export class TransactionCriteriaService {
     if (this.familyMemberId && this.familyMemberId != t.familyMemberId) {
       result = false;
     }
-    if (this.transactionType && this.transactionType != Utils.type(t)) {
+    if (this.transactionType && this.transactionType != TransactionUtils.type(t)) {
       result = false;
     }
     return result;

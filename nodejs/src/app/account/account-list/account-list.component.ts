@@ -21,7 +21,7 @@ export class AccountListComponent {
   }
 
   currencySymbol(account: Account): String {
-    return this.currencies().filter(x => x.id == account.currencyId).map(x => x.symbol)[0];
+    return this.userdata.findCurrency(account.currencyId).symbol;
   }
 
   private currencies(): Currency[] {

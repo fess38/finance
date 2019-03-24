@@ -1,5 +1,5 @@
 import { Account, Transaction } from '../../core/model/model';
-import { TransactionUtilsService } from '../../transaction/transaction-utils.service';
+import { DateUtils } from '../../utils/date-utils';
 import { AccountDetailComponent } from './account-detail.component';
 
 describe('AccountDetailComponent', () => {
@@ -18,7 +18,7 @@ describe('AccountDetailComponent', () => {
 
   it('should created transfer to increase balance', () => {
     const expected = new Transaction({
-      created: TransactionUtilsService.currentDate(),
+      created: DateUtils.formatDate(),
       accountIdFrom: 101,
       amountFrom: 0,
       accountIdTo: 101,
@@ -30,7 +30,7 @@ describe('AccountDetailComponent', () => {
 
   it('should created transfer to decrease balance', () => {
     const expected = new Transaction({
-      created: TransactionUtilsService.currentDate(),
+      created: DateUtils.formatDate(),
       accountIdFrom: 101,
       amountFrom: 10,
       accountIdTo: 101,
