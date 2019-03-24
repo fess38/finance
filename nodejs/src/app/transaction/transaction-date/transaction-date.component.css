@@ -1,0 +1,42 @@
+#left-column {
+  float: left;
+  padding-right: 0;
+}
+
+#left-column table {
+  margin-top: 0;
+}
+
+#left-column th {
+  font-size: 0.54rem;
+}
+
+#center-column {
+  width: auto;
+  overflow-x: scroll;
+  padding-left: 0;
+  padding-right: 0;
+  margin-top: 0;
+}
+
+#center-column table {
+  margin-top: 0;
+}
+
+#center-column th {
+  font-size: 0.54rem;
+}
+
+#right-column {
+  float: right;
+  padding-left: 0;
+  margin-top: 0;
+}
+
+#right-column table {
+  margin-top: 0;
+}
+
+#right-column th {
+  font-size: 0.54rem;
+}

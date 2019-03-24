@@ -54,7 +54,7 @@ export class DateUtils {
 
   static dates(year: number, month: number): Date_[] {
     const dates: Date_[] = [];
-    const daysInMonth: number = new Date(year, month - 1, 0).getDate();
+    const daysInMonth: number = new Date(year, month, 0).getDate();
     for (let i = 1; i <= daysInMonth; i++) {
       dates.push(new Date_({ year: year, month: month, day: i }));
     }

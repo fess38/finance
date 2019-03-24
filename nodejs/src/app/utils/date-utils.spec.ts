@@ -16,4 +16,19 @@ describe('DateUtils', () => {
     const expected = new Date_({ year: 2019, month: 1, day: 5 });
     expect(expected).toEqual(DateUtils.parseDate_('2019-01-05'));
   });
+
+  it('should return 28', () => {
+    const expected = 28;
+    expect(expected).toEqual(DateUtils.dates(2019, 2).length);
+  });
+
+  it('should return 29', () => {
+    const expected = 29;
+    expect(expected).toEqual(DateUtils.dates(2020, 2).length);
+  });
+
+  it('should return 31', () => {
+    const expected = 31;
+    expect(expected).toEqual(DateUtils.dates(2020, 3).length);
+  });
 });

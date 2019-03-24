@@ -9,7 +9,8 @@ import { TransactionCriteriaService as Criteria } from '../transaction-criteria.
 import { TransactionUtils as Utils } from '../transaction-utils';
 
 @Component({
-  templateUrl: './transaction-date.component.html'
+  templateUrl: './transaction-date.component.html',
+  styleUrls: ['./transaction-date.component.css']
 })
 export class TransactionDateComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
