@@ -136,3 +136,9 @@ message Month {
 message Year {
     required int32 value = 1;
 }
+
+message Summary {
+    required int64 amount = 1;
+    required double share = 2;
+    optional bool use_in_share = 3 [default = true];
+}

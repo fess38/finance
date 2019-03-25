@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import * as _ from 'underscore';
-import { Category, Currency, Date_, Month, Transaction } from '../../core/model/model';
+import { Category, Currency, Date_, Month, Summary, Transaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 import { DateUtils } from '../../utils/date-utils';
 import { TransactionCriteriaService as Criteria } from '../transaction-criteria.service';
@@ -19,13 +19,15 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
   private incomeTransactions: Transaction[] = [];
   private expenseTransactions: Transaction[] = [];
   private categories: Category[] = [];
+  incomeCategories: Category[] = [];
+  expenseCategories: Category[] = [];
   dates: Date_[] = [];
   currency: Currency;
   currencies: Currency[] = [];
-  dateCategorySummaries = new Map<string, number>();
-  incomeDateSummaries = new Map<string, number>();
-  expenseDateSummaries = new Map<string, number>();
-  categorySummaries = new Map<number, number>();
+  dateCategorySummaries = new Map<string, Summary>();
+  incomeDateSummaries = new Map<string, Summary>();
+  expenseDateSummaries = new Map<string, Summary>();
+  categorySummaries = new Map<number, Summary>();
   income: number;
   expense: number;
 
@@ -52,11 +54,13 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
     this.incomeTransactions = Utils.incomeTransactions(this.transactions);
     this.expenseTransactions = Utils.expenseTransactions(this.transactions);
     this.categories = Utils.categories(this.transactions, this.userdata);
+    this.incomeCategories = this.categories.filter(x => x.isIncome);
+    this.expenseCategories = this.categories.filter(x => x.isExpense);
     this.income = Utils.income(this.transactions);
     this.expense = Utils.expense(this.transactions);
-    this.incomeDateSummaries = Utils.dateSummaries(this.incomeTransactions);
-    this.expenseDateSummaries = Utils.dateSummaries(this.expenseTransactions);
-    this.categorySummaries = Utils.categorySummaries(this.transactions);
+    this.incomeDateSummaries = Utils.dateSummaries(this.incomeTransactions, this.income);
+    this.expenseDateSummaries = Utils.dateSummaries(this.expenseTransactions, this.expense);
+    this.categorySummaries = Utils.categorySummaries(this.transactions, this.income, this.expense);
     this.updateDateCategorySummaries();
   }
 
@@ -75,16 +79,17 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
 
   private updateDateCategorySummaries(): void {
     this.dateCategorySummaries.clear();
-
     const value: Transaction[][] = _.chain(this.transactions)
       .groupBy(x => [x.created, x.categoryId])
       .value();
     for (let key in value) {
+      const category = this.userdata.findCategory(+key.split(',')[1]);
       const amount: number = _.chain(value[key])
         .map(x => Math.max(Number(x.amountFrom), Number(x.amountTo)))
         .reduce((x1, x2) => x1 + x2, 0)
         .value();
-      this.dateCategorySummaries.set(key, amount);
+      const sum: number = category.isIncome ? this.income : this.expense;
+      this.dateCategorySummaries.set(key, new Summary({ amount: amount, share: amount / sum }));
     }
   }
 
@@ -106,27 +111,27 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
     return this.userdata.locale();
   }
 
-  incomeCategories(): Category[] {
-    return this.categories.filter(x => x.isIncome);
-  }
-
-  expenseCategories(): Category[] {
-    return this.categories.filter(x => x.isExpense);
-  }
-
-  findDateCategorySummary(date: Date_, category: Category): number {
-    return this.dateCategorySummaries.get(`${DateUtils.formatDate_(date)},${category.id}`);
+  findDateCategorySummary(date: Date_, category: Category): Summary[] {
+    const result: Summary[] = [];
+    const key: string = `${DateUtils.formatDate_(date)},${category.id}`;
+    const summary: Summary =  this.dateCategorySummaries.get(key);
+    if (summary) {
+      result.push(summary);
+    }
+    return result;
   }
 
   findIncomeDateSummary(date: Date_): number {
-    return this.incomeDateSummaries.get(DateUtils.formatDate_(date));
+    const summary: Summary =  this.incomeDateSummaries.get(DateUtils.formatDate_(date));
+    return summary ? <number>summary.amount : undefined;
   }
 
   findExpenseDateSummary(date: Date_): number {
-    return this.expenseDateSummaries.get(DateUtils.formatDate_(date));
+    const summary: Summary =  this.expenseDateSummaries.get(DateUtils.formatDate_(date));
+    return summary ? <number>summary.amount : undefined;
   }
 
-  findCategorySummary(category: Category): number {
+  findCategorySummary(category: Category): Summary {
     return this.categorySummaries.get(Number(category.id));
   }
 

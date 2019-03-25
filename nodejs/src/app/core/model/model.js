@@ -4283,4 +4283,250 @@ $root.Year = (function() {
     return Year;
 })();
 
+$root.Summary = (function() {
+
+    /**
+     * Properties of a Summary.
+     * @exports ISummary
+     * @interface ISummary
+     * @property {number|Long} amount Summary amount
+     * @property {number} share Summary share
+     * @property {boolean|null} [useInShare] Summary useInShare
+     */
+
+    /**
+     * Constructs a new Summary.
+     * @exports Summary
+     * @classdesc Represents a Summary.
+     * @implements ISummary
+     * @constructor
+     * @param {ISummary=} [properties] Properties to set
+     */
+    function Summary(properties) {
+        if (properties)
+            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * Summary amount.
+     * @member {number|Long} amount
+     * @memberof Summary
+     * @instance
+     */
+    Summary.prototype.amount = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
+     * Summary share.
+     * @member {number} share
+     * @memberof Summary
+     * @instance
+     */
+    Summary.prototype.share = 0;
+
+    /**
+     * Summary useInShare.
+     * @member {boolean} useInShare
+     * @memberof Summary
+     * @instance
+     */
+    Summary.prototype.useInShare = true;
+
+    /**
+     * Creates a new Summary instance using the specified properties.
+     * @function create
+     * @memberof Summary
+     * @static
+     * @param {ISummary=} [properties] Properties to set
+     * @returns {Summary} Summary instance
+     */
+    Summary.create = function create(properties) {
+        return new Summary(properties);
+    };
+
+    /**
+     * Encodes the specified Summary message. Does not implicitly {@link Summary.verify|verify} messages.
+     * @function encode
+     * @memberof Summary
+     * @static
+     * @param {ISummary} message Summary message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    Summary.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        writer.uint32(/* id 1, wireType 0 =*/8).int64(message.amount);
+        writer.uint32(/* id 2, wireType 1 =*/17).double(message.share);
+        if (message.useInShare != null && message.hasOwnProperty("useInShare"))
+            writer.uint32(/* id 3, wireType 0 =*/24).bool(message.useInShare);
+        return writer;
+    };
+
+    /**
+     * Encodes the specified Summary message, length delimited. Does not implicitly {@link Summary.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof Summary
+     * @static
+     * @param {ISummary} message Summary message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    Summary.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a Summary message from the specified reader or buffer.
+     * @function decode
+     * @memberof Summary
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {Summary} Summary
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    Summary.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Summary();
+        while (reader.pos < end) {
+            var tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                message.amount = reader.int64();
+                break;
+            case 2:
+                message.share = reader.double();
+                break;
+            case 3:
+                message.useInShare = reader.bool();
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        if (!message.hasOwnProperty("amount"))
+            throw $util.ProtocolError("missing required 'amount'", { instance: message });
+        if (!message.hasOwnProperty("share"))
+            throw $util.ProtocolError("missing required 'share'", { instance: message });
+        return message;
+    };
+
+    /**
+     * Decodes a Summary message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof Summary
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {Summary} Summary
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    Summary.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a Summary message.
+     * @function verify
+     * @memberof Summary
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    Summary.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (!$util.isInteger(message.amount) && !(message.amount && $util.isInteger(message.amount.low) && $util.isInteger(message.amount.high)))
+            return "amount: integer|Long expected";
+        if (typeof message.share !== "number")
+            return "share: number expected";
+        if (message.useInShare != null && message.hasOwnProperty("useInShare"))
+            if (typeof message.useInShare !== "boolean")
+                return "useInShare: boolean expected";
+        return null;
+    };
+
+    /**
+     * Creates a Summary message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof Summary
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {Summary} Summary
+     */
+    Summary.fromObject = function fromObject(object) {
+        if (object instanceof $root.Summary)
+            return object;
+        var message = new $root.Summary();
+        if (object.amount != null)
+            if ($util.Long)
+                (message.amount = $util.Long.fromValue(object.amount)).unsigned = false;
+            else if (typeof object.amount === "string")
+                message.amount = parseInt(object.amount, 10);
+            else if (typeof object.amount === "number")
+                message.amount = object.amount;
+            else if (typeof object.amount === "object")
+                message.amount = new $util.LongBits(object.amount.low >>> 0, object.amount.high >>> 0).toNumber();
+        if (object.share != null)
+            message.share = Number(object.share);
+        if (object.useInShare != null)
+            message.useInShare = Boolean(object.useInShare);
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a Summary message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof Summary
+     * @static
+     * @param {Summary} message Summary
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    Summary.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        var object = {};
+        if (options.defaults) {
+            if ($util.Long) {
+                var long = new $util.Long(0, 0, false);
+                object.amount = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.amount = options.longs === String ? "0" : 0;
+            object.share = 0;
+            object.useInShare = true;
+        }
+        if (message.amount != null && message.hasOwnProperty("amount"))
+            if (typeof message.amount === "number")
+                object.amount = options.longs === String ? String(message.amount) : message.amount;
+            else
+                object.amount = options.longs === String ? $util.Long.prototype.toString.call(message.amount) : options.longs === Number ? new $util.LongBits(message.amount.low >>> 0, message.amount.high >>> 0).toNumber() : message.amount;
+        if (message.share != null && message.hasOwnProperty("share"))
+            object.share = options.json && !isFinite(message.share) ? String(message.share) : message.share;
+        if (message.useInShare != null && message.hasOwnProperty("useInShare"))
+            object.useInShare = message.useInShare;
+        return object;
+    };
+
+    /**
+     * Converts this Summary to JSON.
+     * @function toJSON
+     * @memberof Summary
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    Summary.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    return Summary;
+})();
+
 module.exports = $root;

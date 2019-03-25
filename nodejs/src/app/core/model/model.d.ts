@@ -1591,3 +1591,105 @@ export class Year implements IYear {
      */
     public toJSON(): { [k: string]: any };
 }
+
+/** Properties of a Summary. */
+export interface ISummary {
+
+    /** Summary amount */
+    amount: (number|Long);
+
+    /** Summary share */
+    share: number;
+
+    /** Summary useInShare */
+    useInShare?: (boolean|null);
+}
+
+/** Represents a Summary. */
+export class Summary implements ISummary {
+
+    /**
+     * Constructs a new Summary.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: ISummary);
+
+    /** Summary amount. */
+    public amount: (number|Long);
+
+    /** Summary share. */
+    public share: number;
+
+    /** Summary useInShare. */
+    public useInShare: boolean;
+
+    /**
+     * Creates a new Summary instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns Summary instance
+     */
+    public static create(properties?: ISummary): Summary;
+
+    /**
+     * Encodes the specified Summary message. Does not implicitly {@link Summary.verify|verify} messages.
+     * @param message Summary message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: ISummary, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified Summary message, length delimited. Does not implicitly {@link Summary.verify|verify} messages.
+     * @param message Summary message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: ISummary, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a Summary message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns Summary
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Summary;
+
+    /**
+     * Decodes a Summary message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns Summary
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Summary;
+
+    /**
+     * Verifies a Summary message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a Summary message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns Summary
+     */
+    public static fromObject(object: { [k: string]: any }): Summary;
+
+    /**
+     * Creates a plain object from a Summary message. Also converts values to other types if specified.
+     * @param message Summary
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: Summary, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this Summary to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
