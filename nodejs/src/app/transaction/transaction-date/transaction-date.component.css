@@ -44,3 +44,11 @@
 .high-share {
   color: #FF5500
 }
+
+.category-row {
+  background-color: #DEFFF9;
+}
+
+.sub-category-padding {
+  margin-left: 1.0em;
+}

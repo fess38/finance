@@ -175,7 +175,7 @@ export class UserDataService {
     return this.http.post('/api/data/transaction/save', Transaction.encode(transaction))
       .then(data => Transaction.decode(data))
       .then(newTransaction => {
-        this.transactions().push(newTransaction);
+        this.dump.transactions.push(newTransaction);
         this.enricher.enrich(this.dump);
         this.updateCache();
         return newTransaction;
