@@ -7,7 +7,7 @@
             <button [hidden]="manyMonths()" class="btn btn-link btn-sm btn-icon">
               <clr-icon shape="rewind"></clr-icon>
             </button>
-            <button [hidden]="!manyMonths() || i > 0"
+            <button [hidden]="i > 0 || !hasSource()"
                     (click)="return()"
                     type="button"
                     class="btn btn-icon btn-link">

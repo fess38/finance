@@ -138,7 +138,7 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
   findDateCategorySummary(date: Date_, category: Category): Summary[] {
     const result: Summary[] = [];
     const key: string = `${DateUtils.formatDate_(date)},${category.id}`;
-    const summary: Summary =  this.dateCategorySummaries.get(key);
+    const summary: Summary = this.dateCategorySummaries.get(key);
     if (summary) {
       result.push(summary);
     }
@@ -148,7 +148,7 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
   findDateSubCategorySummary(date: Date_, subCategory: SubCategory): Summary[] {
     const result: Summary[] = [];
     const key: string = `${DateUtils.formatDate_(date)},${subCategory.id}`;
-    const summary: Summary =  this.dateSubCategorySummaries.get(key);
+    const summary: Summary = this.dateSubCategorySummaries.get(key);
     if (summary) {
       result.push(summary);
     }
@@ -156,12 +156,12 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
   }
 
   findIncomeDateSummary(date: Date_): number {
-    const summary: Summary =  this.incomeDateSummaries.get(DateUtils.formatDate_(date));
+    const summary: Summary = this.incomeDateSummaries.get(DateUtils.formatDate_(date));
     return summary ? <number>summary.amount : undefined;
   }
 
   findExpenseDateSummary(date: Date_): number {
-    const summary: Summary =  this.expenseDateSummaries.get(DateUtils.formatDate_(date));
+    const summary: Summary = this.expenseDateSummaries.get(DateUtils.formatDate_(date));
     return summary ? <number>summary.amount : undefined;
   }
 
@@ -175,6 +175,66 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
 
   findSubCategories(category: Category): SubCategory[] {
     return this.subCategories.filter(x => x.categoryId == category.id);
+  }
+
+  routeCategory(category: Category): void {
+    this.router.navigate(['/transaction'], {
+      queryParams: {
+        category_id: category.id,
+        transaction_amount: 1000,
+        source: 'report/date',
+        year: this.criteria.year,
+        month: this.criteria.month
+      }
+    });
+  }
+
+  routeSubCategory(subCategory: SubCategory): void {
+    this.router.navigate(['/transaction'], {
+      queryParams: {
+        sub_category_id: subCategory.id,
+        transaction_amount: 1000,
+        source: 'report/date',
+        year: this.criteria.year,
+        month: this.criteria.month
+      }
+    });
+  }
+
+  routeIncome(): void {
+    this.router.navigate(['/transaction'], {
+      queryParams: {
+        transaction_type: 1,
+        transaction_amount: 1000,
+        source: 'report/date',
+        year: this.criteria.year,
+        month: this.criteria.month
+      }
+    });
+  }
+
+  routeExpense(): void {
+    this.router.navigate(['/transaction'], {
+      queryParams: {
+        transaction_type: 2,
+        transaction_amount: 1000,
+        source: 'report/date',
+        year: this.criteria.year,
+        month: this.criteria.month
+      }
+    });
+  }
+
+  routeDate(date: Date_): void {
+    this.router.navigate(['/transaction'], {
+      queryParams: {
+        transaction_amount: 1000,
+        source: 'report/date',
+        year: this.criteria.year,
+        month: this.criteria.month,
+        day: date.day
+      }
+    });
   }
 
   ngOnDestroy(): void {

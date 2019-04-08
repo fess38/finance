@@ -74,6 +74,10 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     this.router.navigate(['/transaction'], { queryParams: this.criteria.toQueryParams() });
   }
 
+  hasSource(): boolean {
+    return (this.criteria.source || '').length > 0;
+  }
+
   return(): void {
     this.router.navigate(['/' + this.criteria.source || '']);
   }

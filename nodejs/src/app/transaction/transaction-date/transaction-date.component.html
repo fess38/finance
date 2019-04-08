@@ -37,10 +37,10 @@
       <tbody>
       <ng-container *ngFor="let category of incomeCategories">
         <tr class="category-row">
-          <td class="left">{{category.name}}</td>
+          <td (click)="routeCategory(category)" class="left">{{category.name}}</td>
         </tr>
         <tr *ngFor="let subCategory of findSubCategories(category)">
-          <td class="left">
+          <td (click)="routeSubCategory(subCategory)" class="left">
             <span class="sub-category-padding">
               {{subCategory.name}}
             </span>
@@ -48,14 +48,14 @@
         </tr>
       </ng-container>
       <tr *ngIf="incomeCategories.length > 0">
-        <th class="left">{{'report.summary' | translate}}</th>
+        <th (click)="routeIncome()" class="left">{{'report.summary' | translate}}</th>
       </tr>
       <ng-container *ngFor="let category of expenseCategories">
         <tr class="category-row">
-          <td class="left">{{category.name}}</td>
+          <td (click)="routeCategory(category)" class="left">{{category.name}}</td>
         </tr>
         <tr *ngFor="let subCategory of findSubCategories(category)">
-          <td class="left">
+          <td (click)="routeSubCategory(subCategory)" class="left">
             <span class="sub-category-padding">
               {{subCategory.name}}
             </span>
@@ -63,7 +63,7 @@
         </tr>
       </ng-container>
       <tr *ngIf="expenseCategories.length > 0">
-        <th class="left">{{'report.summary' | translate}}</th>
+        <th (click)="routeExpense()" class="left">{{'report.summary' | translate}}</th>
       </tr>
       </tbody>
     </table>
@@ -97,7 +97,9 @@
       </ng-container>
       <tr *ngIf="incomeCategories.length > 0">
         <th *ngFor="let date of dates">
-          {{findIncomeDateSummary(date) | number:'':locale()}}
+          <span (click)="routeDate(date)">
+            {{findIncomeDateSummary(date) | number:'':locale()}}
+          </span>
         </th>
       </tr>
       <ng-container *ngFor="let category of expenseCategories">
@@ -120,7 +122,9 @@
       </ng-container>
       <tr *ngIf="expenseCategories.length > 0">
         <th *ngFor="let date of dates">
-          {{findExpenseDateSummary(date) | number:'':locale()}}
+          <span (click)="routeDate(date)">
+            {{findExpenseDateSummary(date) | number:'':locale()}}
+          </span>
         </th>
       </tr>
       </tbody>
