@@ -51,6 +51,14 @@ export class TransactionCriteriaService {
     }
   }
 
+  previousYear(): void {
+    this.year--;
+  }
+
+  nextYear(): void {
+    this.year++;
+  }
+
   isFit(t: Transaction): boolean {
     let result = true;
     const date: Date_ = DateUtils.parseDate_(t.created);
@@ -97,6 +105,6 @@ export class TransactionCriteriaService {
       family_member_id: this.familyMemberId,
       transaction_amount: this.transactionAmount,
       transaction_type: this.transactionType
-    }
+    };
   }
 }

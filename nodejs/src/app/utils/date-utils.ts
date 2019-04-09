@@ -44,6 +44,10 @@ export class DateUtils {
     return `${year.value}-01-01`;
   }
 
+  static parseAndFormatMonth(yyyymmdd: string): string {
+    return this.formatMonth(this.parseMonth(yyyymmdd));
+  }
+
   static currentYear(): number {
     return +this.formatDate().split('-')[0];
   }
@@ -59,5 +63,13 @@ export class DateUtils {
       dates.push(new Date_({ year: year, month: month, day: i }));
     }
     return dates;
+  }
+
+  static months(year: number): Month[] {
+    const months: Month[] = [];
+    for (let i = 1; i <= 12; i++) {
+      months.push(new Month({ year: year, month: i }));
+    }
+    return months;
   }
 }

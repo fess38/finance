@@ -17,6 +17,7 @@ import { SubCategoryListComponent } from './sub-category/sub-category-list/sub-c
 import { TransactionDateComponent } from './transaction/transaction-date/transaction-date.component';
 import { TransactionDetailComponent } from './transaction/transaction-detail/transaction-detail.component';
 import { TransactionListComponent } from './transaction/transaction-list/transaction-list.component';
+import { TransactionMonthComponent } from './transaction/transaction-month/transaction-month.component';
 
 const appRoutes: Routes = [
   {
@@ -98,7 +99,7 @@ const appRoutes: Routes = [
   },
   {
     path: 'report/month',
-    component: TransactionDateComponent,
+    component: TransactionMonthComponent,
     canActivate: [AuthGuardService]
   },
   {

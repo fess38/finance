@@ -2,17 +2,17 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import * as _ from 'underscore';
-import { Category, Currency, Date_, Month, SubCategory, Summary, Transaction } from '../../core/model/model';
+import { Category, Currency, Month, SubCategory, Summary, Transaction, Year } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 import { DateUtils } from '../../utils/date-utils';
 import { TransactionCriteriaService as Criteria } from '../transaction-criteria.service';
 import { TransactionUtils as Utils } from '../transaction-utils';
 
 @Component({
-  templateUrl: './transaction-date.component.html',
-  styleUrls: ['./transaction-date.component.css']
+  templateUrl: 'transaction-month.component.html',
+  styleUrls: ['../transaction-date/transaction-date.component.css']
 })
-export class TransactionDateComponent implements OnInit, OnDestroy {
+export class TransactionMonthComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
   private allTransactions: Transaction[] = [];
   private transactions: Transaction[] = [];
@@ -22,13 +22,13 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
   private subCategories: SubCategory[] = [];
   incomeCategories: Category[] = [];
   expenseCategories: Category[] = [];
-  dates: Date_[] = [];
+  months: Month[] = [];
   currency: Currency;
   currencies: Currency[] = [];
-  dateCategorySummaries = new Map<string, Summary>();
-  dateSubCategorySummaries = new Map<string, Summary>();
-  incomeDateSummaries = new Map<string, Summary>();
-  expenseDateSummaries = new Map<string, Summary>();
+  monthCategorySummaries = new Map<string, Summary>();
+  monthSubCategorySummaries = new Map<string, Summary>();
+  incomeMonthSummaries = new Map<string, Summary>();
+  expenseMonthSummaries = new Map<string, Summary>();
   categorySummaries = new Map<number, Summary>();
   subCategorySummaries = new Map<number, Summary>();
   income: number;
@@ -46,7 +46,7 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
   }
 
   private onInitCallback(): void {
-    this.dates = DateUtils.dates(this.criteria.year, this.criteria.month);
+    this.months = DateUtils.months(this.criteria.year);
     this.currency = this.userdata.findCurrency(this.userdata.settings().currencyId);
     this.onChangeCurrency();
   }
@@ -62,19 +62,19 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
     this.expenseCategories = this.categories.filter(x => x.isExpense);
     this.income = Utils.income(this.transactions);
     this.expense = Utils.expense(this.transactions);
-    this.incomeDateSummaries = this.dateSummaries(this.incomeTransactions, this.income);
-    this.expenseDateSummaries = this.dateSummaries(this.expenseTransactions, this.expense);
+    this.incomeMonthSummaries = this.monthSummaries(this.incomeTransactions, this.income);
+    this.expenseMonthSummaries = this.monthSummaries(this.expenseTransactions, this.expense);
     this.categorySummaries = Utils.categorySummaries(this.transactions, this.income, this.expense);
     this.subCategorySummaries = Utils.subCategorySummaries(this.transactions, this.income, this.expense);
-    this.updateDateCategorySummaries();
-    this.updateDateSubCategorySummaries();
+    this.updateMonthCategorySummaries();
+    this.updateMonthSubCategorySummaries();
   }
 
   private updateTransactions(): void {
     const types: Transaction.Type[] = [Transaction.Type.INCOME, Transaction.Type.EXPENSE];
     this.allTransactions = _.chain(this.userdata.transactions())
       .filter(x => types.includes(Utils.type(x)))
-      .filter(x => this.criteria.isFit(x))
+      .filter(x => DateUtils.parseDate_(x.created).year == this.criteria.year)
       .value();
     this.transactions = this.allTransactions
       .filter(x => {
@@ -83,10 +83,10 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
       });
   }
 
-  private updateDateCategorySummaries(): void {
-    this.dateCategorySummaries.clear();
+  private updateMonthCategorySummaries(): void {
+    this.monthCategorySummaries.clear();
     const value: Transaction[][] = _.chain(this.transactions)
-      .groupBy(x => [x.created, x.categoryId])
+      .groupBy(x => [DateUtils.parseAndFormatMonth(x.created), x.categoryId])
       .value();
     for (let key in value) {
       const category = this.userdata.findCategory(+key.split(',')[1]);
@@ -95,15 +95,15 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
         .reduce((x1, x2) => x1 + x2, 0)
         .value();
       const sum: number = category.isIncome ? this.income : this.expense;
-      this.dateCategorySummaries.set(key, new Summary({ amount: amount, share: amount / sum }));
+      this.monthCategorySummaries.set(key, new Summary({ amount: amount, share: amount / sum }));
     }
   }
 
-  private updateDateSubCategorySummaries(): void {
-    this.dateSubCategorySummaries.clear();
+  private updateMonthSubCategorySummaries(): void {
+    this.monthSubCategorySummaries.clear();
     const value: Transaction[][] = _.chain(this.transactions)
       .filter(x => x.subCategoryId > 0)
-      .groupBy(x => [x.created, x.subCategoryId])
+      .groupBy(x => [DateUtils.parseAndFormatMonth(x.created), x.subCategoryId])
       .value();
     for (let key in value) {
       const subCategory = this.userdata.findSubCategory(+key.split(',')[1]);
@@ -113,13 +113,13 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
         .reduce((x1, x2) => x1 + x2, 0)
         .value();
       const sum: number = category.isIncome ? this.income : this.expense;
-      this.dateSubCategorySummaries.set(key, new Summary({ amount: amount, share: amount / sum }));
+      this.monthSubCategorySummaries.set(key, new Summary({ amount: amount, share: amount / sum }));
     }
   }
 
-  private dateSummaries(transactions: Transaction[], sum: number): Map<string, Summary> {
+  private monthSummaries(transactions: Transaction[], sum: number): Map<string, Summary> {
     const result = new Map<string, Summary>();
-    const value = _.chain(transactions).groupBy(x => x.created).value();
+    const value = _.chain(transactions).groupBy(x => DateUtils.parseAndFormatMonth(x.created)).value();
     for (let key in value) {
       const amount: number = _.chain(value[key])
         .map(x => Math.abs(Number(x.amountFrom)) + Math.abs(Number(x.amountTo)))
@@ -130,51 +130,51 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
     return result;
   }
 
-  previousMonth(): void {
-    this.criteria.previousMonth();
-    this.router.navigate(['/report/date'], { queryParams: this.criteria.toQueryParams() });
+  previousYear(): void {
+    this.criteria.previousYear();
+    this.router.navigate(['/report/month'], { queryParams: this.criteria.toQueryParams() });
   }
 
-  nextMonth(): void {
-    this.criteria.nextMonth();
-    this.router.navigate(['/report/date'], { queryParams: this.criteria.toQueryParams() });
+  nextYear(): void {
+    this.criteria.nextYear();
+    this.router.navigate(['/report/month'], { queryParams: this.criteria.toQueryParams() });
   }
 
-  month(): Month {
-    return new Month({ year: this.criteria.year, month: this.criteria.month });
+  year(): Year {
+    return new Year({ value: this.criteria.year });
   }
 
   locale(): string {
     return this.userdata.locale();
   }
 
-  findDateCategorySummary(date: Date_, category: Category): Summary[] {
+  findMonthCategorySummary(month: Month, category: Category): Summary[] {
     const result: Summary[] = [];
-    const key: string = `${DateUtils.formatDate_(date)},${category.id}`;
-    const summary: Summary = this.dateCategorySummaries.get(key);
+    const key: string = `${DateUtils.formatMonth(month)},${category.id}`;
+    const summary: Summary = this.monthCategorySummaries.get(key);
     if (summary) {
       result.push(summary);
     }
     return result;
   }
 
-  findDateSubCategorySummary(date: Date_, subCategory: SubCategory): Summary[] {
+  findMonthSubCategorySummary(month: Month, subCategory: SubCategory): Summary[] {
     const result: Summary[] = [];
-    const key: string = `${DateUtils.formatDate_(date)},${subCategory.id}`;
-    const summary: Summary = this.dateSubCategorySummaries.get(key);
+    const key: string = `${DateUtils.formatMonth(month)},${subCategory.id}`;
+    const summary: Summary = this.monthSubCategorySummaries.get(key);
     if (summary) {
       result.push(summary);
     }
     return result;
   }
 
-  findIncomeDateSummary(date: Date_): number {
-    const summary: Summary = this.incomeDateSummaries.get(DateUtils.formatDate_(date));
+  findIncomeMonthSummary(month: Month): number {
+    const summary: Summary = this.incomeMonthSummaries.get(DateUtils.formatMonth(month));
     return summary ? <number>summary.amount : undefined;
   }
 
-  findExpenseDateSummary(date: Date_): number {
-    const summary: Summary = this.expenseDateSummaries.get(DateUtils.formatDate_(date));
+  findExpenseMonthSummary(month: Month): number {
+    const summary: Summary = this.expenseMonthSummaries.get(DateUtils.formatMonth(month));
     return summary ? <number>summary.amount : undefined;
   }
 
@@ -190,62 +190,35 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
     return this.subCategories.filter(x => x.categoryId == category.id);
   }
 
-  routeCategory(category: Category): void {
+  routeMonthCategory(month: Month, category: Category): void {
     this.router.navigate(['/transaction'], {
       queryParams: {
         category_id: category.id,
         transaction_amount: 1000,
-        source: 'report/date',
-        year: this.criteria.year,
-        month: this.criteria.month
+        source: 'report/month',
+        year: month.year,
+        month: month.month,
       }
     });
   }
 
-  routeSubCategory(subCategory: SubCategory): void {
+  routeMonthSubCategory(month: Month, subCategory: SubCategory): void {
     this.router.navigate(['/transaction'], {
       queryParams: {
         sub_category_id: subCategory.id,
         transaction_amount: 1000,
-        source: 'report/date',
-        year: this.criteria.year,
-        month: this.criteria.month
+        source: 'report/month',
+        year: month.year,
+        month: month.month,
       }
     });
   }
 
-  routeIncome(): void {
-    this.router.navigate(['/transaction'], {
+  routeMonth(month: Month): void {
+    this.router.navigate(['/report/date'], {
       queryParams: {
-        transaction_type: 1,
-        transaction_amount: 1000,
-        source: 'report/date',
-        year: this.criteria.year,
-        month: this.criteria.month
-      }
-    });
-  }
-
-  routeExpense(): void {
-    this.router.navigate(['/transaction'], {
-      queryParams: {
-        transaction_type: 2,
-        transaction_amount: 1000,
-        source: 'report/date',
-        year: this.criteria.year,
-        month: this.criteria.month
-      }
-    });
-  }
-
-  routeDate(date: Date_): void {
-    this.router.navigate(['/transaction'], {
-      queryParams: {
-        transaction_amount: 1000,
-        source: 'report/date',
-        year: this.criteria.year,
-        month: this.criteria.month,
-        day: date.day
+        year: month.year,
+        month: month.month
       }
     });
   }

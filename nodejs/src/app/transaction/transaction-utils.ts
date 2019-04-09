@@ -66,19 +66,6 @@ export class TransactionUtils {
     return transactions.filter(x => TransactionUtils.type(x) == Transaction.Type.EXPENSE);
   }
 
-  static dateSummaries(transactions: Transaction[], sum: number): Map<string, Summary> {
-    const result = new Map<string, Summary>();
-    const value = _.chain(transactions).groupBy(x => x.created).value();
-    for (let key in value) {
-      const amount: number = _.chain(value[key])
-        .map(x => Math.abs(Number(x.amountFrom)) + Math.abs(Number(x.amountTo)))
-        .reduce((x1, x2) => x1 + x2, 0)
-        .value();
-      result.set(key, new Summary({ amount: amount, share: amount / sum }));
-    }
-    return result;
-  }
-
   static categorySummaries(transactions: Transaction[], income: number,
                            expense: number): Map<number, Summary> {
     const result = new Map<number, Summary>();

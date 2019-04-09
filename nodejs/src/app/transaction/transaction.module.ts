@@ -7,11 +7,13 @@ import { TransactionCriteriaService } from './transaction-criteria.service';
 import { TransactionDateComponent } from './transaction-date/transaction-date.component';
 import { TransactionDetailComponent } from './transaction-detail/transaction-detail.component';
 import { TransactionListComponent } from './transaction-list/transaction-list.component';
+import { TransactionMonthComponent } from './transaction-month/transaction-month.component';
 
 @NgModule({
   declarations: [
     CreatedFormatPipe, MonthFormatPipe,
-    TransactionDateComponent, TransactionDetailComponent, TransactionListComponent
+    TransactionDateComponent, TransactionMonthComponent, TransactionDetailComponent,
+    TransactionListComponent
   ],
   imports: [
     SharedModule
