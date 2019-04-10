@@ -18,6 +18,7 @@ import { TransactionDateComponent } from './transaction/transaction-date/transac
 import { TransactionDetailComponent } from './transaction/transaction-detail/transaction-detail.component';
 import { TransactionListComponent } from './transaction/transaction-list/transaction-list.component';
 import { TransactionMonthComponent } from './transaction/transaction-month/transaction-month.component';
+import { TransactionYearComponent } from './transaction/transaction-year/transaction-year.component';
 
 const appRoutes: Routes = [
   {
@@ -104,7 +105,7 @@ const appRoutes: Routes = [
   },
   {
     path: 'report/year',
-    component: TransactionDateComponent,
+    component: TransactionYearComponent,
     canActivate: [AuthGuardService]
   },
   {
