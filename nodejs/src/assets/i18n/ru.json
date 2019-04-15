@@ -10,7 +10,9 @@
     "income": "Доход",
     "expense": "Расход",
     "date": "Дата",
-    "title": "Финансы"
+    "title": "Финансы",
+    "category": "Категория",
+    "sub_category": "Подкатегория"
   },
   "account_detail": {
     "add": "Добавление счета",
@@ -26,9 +28,6 @@
     "add": "Добавление категории",
     "edit": "Редактирование категории",
     "type": "Тип категории"
-  },
-  "category_list": {
-    "category": "Категория"
   },
   "family_member_detail": {
     "add": "Добавление члена семьи",
@@ -65,12 +64,7 @@
   },
   "sub_category_detail": {
     "add": "Добавление подкатегории",
-    "edit": "Редактирование подкатегории",
-    "category": "Категория"
-  },
-  "sub_category_list": {
-    "sub_category": "Подкатегория",
-    "category": "Категория"
+    "edit": "Редактирование подкатегории"
   },
   "transaction_detail": {
     "add": "Добавление транзакции",
@@ -82,14 +76,10 @@
     "account_to": "Счет получения",
     "amount_from": "Сумма списания",
     "amount_to": "Сумма получения",
-    "category": "Категория",
-    "sub_category": "Подкатегория",
     "family_member": "Член семьи",
     "comment": "Комментарий"
   },
   "transaction_list": {
-    "date": "Дата",
-    "category": "Категория",
     "amount": "Сумма"
   },
   "report": {

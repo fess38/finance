@@ -10,7 +10,9 @@
     "income": "Income",
     "expense": "Expense",
     "date": "Date",
-    "title": "Finance"
+    "title": "Finance",
+    "category": "Category",
+    "sub_category": "Subcategory"
   },
   "account_detail": {
     "add": "Add account",
@@ -26,9 +28,6 @@
     "add": "Add category",
     "edit": "Edit category",
     "type": "Category type"
-  },
-  "category_list": {
-    "category": "Category"
   },
   "family_member_detail": {
     "add": "Add family member",
@@ -65,12 +64,7 @@
   },
   "sub_category_detail": {
     "add": "Add subcategory",
-    "edit": "Edit subcategory",
-    "category": "Category"
-  },
-  "sub_category_list": {
-    "sub_category": "Subcategory",
-    "category": "Category"
+    "edit": "Edit subcategory"
   },
   "transaction_detail": {
     "add": "Add transaction",
@@ -82,14 +76,10 @@
     "account_to": "Receipt account",
     "amount_from": "Charge amount",
     "amount_to": "Amount of receipt",
-    "category": "Category",
-    "sub_category": "Subcategory",
     "family_member": "Family member",
     "comment": "Comment"
   },
   "transaction_list": {
-    "date": "Date",
-    "category": "Category",
     "amount": "Amount"
   },
   "report": {

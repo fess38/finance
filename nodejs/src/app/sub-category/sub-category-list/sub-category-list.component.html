@@ -3,13 +3,13 @@
     <table class="table table-noborder table-compact">
       <tr>
         <th class="left" routerLink="/sub_category/new">
-          <span>{{'sub_category_list.sub_category' | translate}} </span>
+          <span>{{'common.sub_category' | translate}} </span>
           <clr-icon shape="plus-circle"></clr-icon>
         </th>
         <th>
           <select clrSelect name="category" [(ngModel)]="filterCategoryId">
             <option [ngValue]="undefined" selected>
-              {{'sub_category_list.category' | translate}}
+              {{'common.category' | translate}}
             </option>
             <option *ngFor="let category of categories()" [ngValue]="category.id">
               <span>{{category.name}}</span>

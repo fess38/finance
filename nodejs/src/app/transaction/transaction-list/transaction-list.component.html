@@ -26,8 +26,8 @@
           </td>
         </tr>
         <tr>
-          <th class="left">{{'transaction_list.date' | translate}}</th>
-          <th class="left">{{'transaction_list.category' | translate}}</th>
+          <th class="left">{{'common.date' | translate}}</th>
+          <th class="left">{{'common.category' | translate}}</th>
           <th class="left">{{'transaction_list.amount' | translate}}</th>
         </tr>
         <tr *ngFor="let transaction of filterTransactions(month)" routerLink="/transaction/{{transaction.id}}">
