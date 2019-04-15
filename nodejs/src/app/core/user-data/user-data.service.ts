@@ -123,14 +123,6 @@ export class UserDataService {
     return this.subCategories().filter(x => x.id == id)[0];
   }
 
-  findFamilyMember(id: number | Long): FamilyMember {
-    return this.familyMembers().filter(x => x.id == id)[0];
-  }
-
-  findTransaction(id: number | Long): Transaction {
-    return this.transactions().filter(x => x.id == id)[0];
-  }
-
   saveAccount(account: Account): Promise<Account> {
     return this.http.post('/api/data/account/save', Account.encode(account))
       .then(data => Account.decode(data))

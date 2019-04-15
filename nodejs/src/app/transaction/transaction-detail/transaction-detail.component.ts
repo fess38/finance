@@ -44,7 +44,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
 
   private updateTransactionCallback(id: number): any {
     return () => {
-      const navigatedTransaction = this.userdata.findTransaction(id);
+      const navigatedTransaction = this.userdata.transactions().filter(x => x.id == id)[0];
       if (navigatedTransaction == null) {
         this.router.navigate(['/transaction']);
       } else {

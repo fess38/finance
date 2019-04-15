@@ -61,7 +61,6 @@ export class TransactionYearComponent implements OnInit, OnDestroy {
     this.subCategorySummaries = Utils.subCategorySummaries(this.transactions, this.income, this.expense);
     this.updateYearCategorySummaries();
     this.updateYearSubCategorySummaries();
-    console.log(1);
   }
 
   private updateTransactions(): void {
@@ -80,7 +79,6 @@ export class TransactionYearComponent implements OnInit, OnDestroy {
       .map(x => new Year({value: x}))
       .sortBy(x => x.value)
       .value();
-    console.log(this.years);
   }
 
   private updateYearCategorySummaries(): void {
