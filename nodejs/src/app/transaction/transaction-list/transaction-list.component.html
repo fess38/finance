@@ -30,9 +30,19 @@
           <th class="left">{{'common.category' | translate}}</th>
           <th class="left">{{'transaction_list.amount' | translate}}</th>
         </tr>
-        <tr *ngFor="let transaction of filterTransactions(month)" routerLink="/transaction/{{transaction.id}}">
+        <tr *ngFor="let transaction of filterTransactions(month)">
           <td class="left">{{transaction.created | createdFormat | date:'dd'}}</td>
-          <td class="left">{{formatCategory(transaction) | translate}}</td>
+          <td class="left">
+            <span routerLink="/transaction/{{transaction.id}}">
+              {{formatCategory(transaction) | translate}}
+            </span>
+            <clr-tooltip *ngIf="transaction.comment">
+              <clr-icon clrTooltipTrigger shape="info-circle" size="16"></clr-icon>
+              <clr-tooltip-content clrPosition="top-right" clrSize="xs" *clrIfOpen>
+                <span>{{transaction.comment}}</span>
+              </clr-tooltip-content>
+            </clr-tooltip>
+          </td>
           <td class="left">
             <span *ngIf="isIncome(transaction)">
               {{transaction.amountTo | number:'':locale()}}{{currencySymbol(transaction.accountIdTo)}}

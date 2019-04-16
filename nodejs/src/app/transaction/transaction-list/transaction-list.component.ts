@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import * as _ from 'underscore';
-import { Category, Month, Transaction } from '../../core/model/model';
+import { Category, Month, SubCategory, Transaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 import { DateUtils } from '../../utils/date-utils';
 import { TransactionCriteriaService as Criteria } from '../transaction-criteria.service';
@@ -94,8 +94,15 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   }
 
   formatCategory(transaction: Transaction): string {
-    const category: Category = this.userdata.findCategory(transaction.categoryId) || new Category();
-    return category.name || 'transaction_detail.transfer';
+    let result = 'transaction_detail.transfer';
+    const category: Category = this.userdata.findCategory(transaction.categoryId);
+    const subCategory: SubCategory = this.userdata.findSubCategory(transaction.subCategoryId);
+    if (subCategory) {
+      result = subCategory.name
+    } else if (category) {
+      result = category.name;
+    }
+    return result;
   }
 
   isIncome(transaction: Transaction): boolean {
