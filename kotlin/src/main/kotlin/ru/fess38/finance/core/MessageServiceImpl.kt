@@ -46,10 +46,10 @@ class MessageServiceImpl: MessageService {
     log.info {"Update [${message.type}] with id [${message.id}] of user [${user.id}]"}
   }
 
-  override fun dump(): Dump {
+  override fun dump(modifiedAfter: Long): Dump {
     val user = userService.findByContext()
     val builder = Dump.newBuilder()
-    val messages = repository.get(user)
+    val messages = repository.get(user, modifiedAfter)
     val accounts = messages.filter {it.type == ACCOUNT}.map {it as Account}
     val categories = messages.filter {it.type == CATEGORY}.map {it as Category}
     val subCategories = messages.filter {it.type == SUB_CATEGORY}.map {it as SubCategory}

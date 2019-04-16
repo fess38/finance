@@ -85,6 +85,13 @@ message Transaction {
     optional int64 sub_category_id = 9;
     optional int64 family_member_id = 10;
     optional string comment = 11;
+
+    enum Type {
+        UNDEFINED = 0;
+        INCOME = 1;
+        EXPENSE = 2;
+        TRANSFER = 3;
+    }
 }
 
 message Settings {
@@ -113,4 +120,25 @@ message RefreshToken {
         FACEBOOK = 2;
         VK = 3;
     }
+}
+
+message Date_ {
+    required int32 year = 1;
+    required int32 month = 2;
+    required int32 day = 3;
+}
+
+message Month {
+    required int32 year = 1;
+    required int32 month = 2;
+}
+
+message Year {
+    required int32 value = 1;
+}
+
+message Summary {
+    required int64 amount = 1;
+    required double share = 2;
+    optional bool use_in_share = 3 [default = true];
 }

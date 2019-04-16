@@ -22,6 +22,7 @@ import ru.fess38.finance.core.Model.Transaction
 import ru.fess38.finance.security.User
 import ru.fess38.finance.utils.withId
 import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
 import java.util.zip.GZIPInputStream
 
 @Repository
@@ -59,9 +60,12 @@ class HibernateEntityRepositoryImpl: EntityRepository {
     }
   }
 
-  override fun get(user: User): List<Message> {
+  override fun get(user: User, modifiedAfter: Long): List<Message> {
     val criteria = DetachedCriteria.forClass(HibernateEntity::class.java)
         .add(Restrictions.eq("userId", user.id))
+    if (modifiedAfter > 0) {
+      criteria.add(Restrictions.gt("modified", modifiedAfter))
+    }
     val session = sessionFactory.openSession()
     return criteria.getExecutableCriteria(session).list()
         .map {parse((it as HibernateEntity))}
@@ -69,25 +73,33 @@ class HibernateEntityRepositoryImpl: EntityRepository {
   }
 
   private fun parse(hibernateEntity: HibernateEntity): Message {
-    val data = GZIPInputStream(hibernateEntity.data.inputStream()).readBytes()
-    return when (hibernateEntity.type) {
-      EntityType.SETTINGS -> Settings.parseFrom(data)
-      EntityType.ACCOUNT -> Account.parseFrom(data)
-      EntityType.CATEGORY -> Category.parseFrom(data)
-      EntityType.SUB_CATEGORY -> SubCategory.parseFrom(data)
-      EntityType.FAMILY_MEMBER -> FamilyMember.parseFrom(data)
-      EntityType.TRANSACTION -> Transaction.parseFrom(data)
-      else -> throw IllegalArgumentException("Unknown type: $hibernateEntity.type")
-    }.withId(hibernateEntity.id)
+    hibernateEntity.data.inputStream().use {inputStream ->
+      GZIPInputStream(inputStream).use {data ->
+        val buffer = ByteArrayOutputStream(Math.max(DEFAULT_BUFFER_SIZE, data.available()))
+        data.copyTo(buffer)
+        buffer.use {
+          val bytes = buffer.toByteArray()
+          return when (hibernateEntity.type) {
+            EntityType.SETTINGS -> Settings.parseFrom(bytes)
+            EntityType.ACCOUNT -> Account.parseFrom(bytes)
+            EntityType.CATEGORY -> Category.parseFrom(bytes)
+            EntityType.SUB_CATEGORY -> SubCategory.parseFrom(bytes)
+            EntityType.FAMILY_MEMBER -> FamilyMember.parseFrom(bytes)
+            EntityType.TRANSACTION -> Transaction.parseFrom(bytes)
+            else -> throw IllegalArgumentException("Unknown type: $hibernateEntity.type")
+          }.withId(hibernateEntity.id)
+        }
+      }
+    }
   }
 
   final override fun currencies(): List<Currency> {
-    val currencies: List<Currency>
     val path = "/ru/fess38/finance/core/Currency.json"
     val json = this::class.java.getResource(path).readText()
     val currenciesBuilder = Currencies.newBuilder()
-    JsonFormat().merge(ByteArrayInputStream(json.toByteArray()), currenciesBuilder)
-    currencies = currenciesBuilder.build().itemsList
-    return currencies.toList()
+    ByteArrayInputStream(json.toByteArray()).use {
+      JsonFormat().merge(it, currenciesBuilder)
+      return currenciesBuilder.build().itemsList
+    }
   }
 }

@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import * as _ from 'underscore';
 import { SubCategory } from '../../core/model/model';
-import { UserDataService } from '../../core/user-data.service';
+import { UserDataService } from '../../core/user-data/user-data.service';
 
 @Component({
   templateUrl: 'sub-category-detail.component.html'
@@ -16,11 +16,11 @@ export class SubCategoryDetailComponent implements OnInit, OnDestroy {
               private route: ActivatedRoute,
               private router: Router) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id != 'new') {
       const callback = () => {
-        const navigatedSubCategory = this.userdata.subCategories.filter(x => x.id == +id)[0];
+        const navigatedSubCategory = this.userdata.subCategories().filter(x => x.id == +id)[0];
         if (navigatedSubCategory == null) {
           this.router.navigate(['/sub_category']);
         } else {
@@ -38,7 +38,7 @@ export class SubCategoryDetailComponent implements OnInit, OnDestroy {
   }
 
   categories() {
-    return _.chain(this.userdata.categories)
+    return _.chain(this.userdata.categories())
       .filter(x => !x.isDeleted)
       .filter(x => x.isVisible)
       .sortBy(x => x.name.toLowerCase())
@@ -53,18 +53,24 @@ export class SubCategoryDetailComponent implements OnInit, OnDestroy {
           this.router.navigate(['/sub_category/' + newSubCategory.id]);
           this.subCategory = newSubCategory;
         })
-        .catch(error => console.error(error.message));
+        .catch(error => {
+          console.error(error.message);
+          this.router.navigate(['/error']);
+        });
     } else {
       this.userdata.updateSubCategory(subCategory)
         .then(() => this.router.navigate(['/sub_category']))
-        .catch(error => console.error(error.message));
+        .catch(error => {
+          subCategory.isDeleted = false;
+          console.error(error.message);
+          this.router.navigate(['/error']);
+        });
     }
   }
 
   delete(subCategory: SubCategory) {
     subCategory.isDeleted = true;
     this.update(subCategory);
-    this.router.navigate(['/subcategory']);
   }
 
   isNewSubCategory() {
@@ -77,5 +83,15 @@ export class SubCategoryDetailComponent implements OnInit, OnDestroy {
 
   isValidForm() {
     return this.subCategory.name.length > 0 && this.subCategory.categoryId != 0;
+  }
+
+  viewTransactions(subCategory: SubCategory) {
+    this.router.navigate(['/transaction'], {
+      queryParams: {
+        sub_category_id: subCategory.id,
+        transaction_amount: subCategory.transactionAmount,
+        source: 'sub_category'
+      }
+    });
   }
 }

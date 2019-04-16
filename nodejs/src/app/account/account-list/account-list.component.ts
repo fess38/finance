@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import * as _ from 'underscore';
-import { UserDataService } from '../../core/user-data.service';
+import { Account, Currency } from '../../core/model/model';
+import { UserDataService } from '../../core/user-data/user-data.service';
 
 @Component({
   templateUrl: 'account-list.component.html'
@@ -8,27 +9,22 @@ import { UserDataService } from '../../core/user-data.service';
 export class AccountListComponent {
   constructor(private userdata: UserDataService) {}
 
-  accounts() {
-    return _.chain(this.userdata.accounts)
+  accounts(): Account[] {
+    return _.chain(this.userdata.accounts())
       .filter(x => !x.isDeleted)
       .sortBy(x => x.name.toLowerCase())
       .value();
   }
 
-  currencySymbol(currencyId: number): String {
-    let symbol: String;
-    if (this.currencies().length > 0) {
-      symbol = this.currencies()
-        .filter(x => x.id == currencyId)
-        .map(x => x.symbol)[0];
-    }
-    if (symbol == null) {
-      symbol = '';
-    }
-    return symbol;
+  locale(): string {
+    return this.userdata.locale();
   }
 
-  private currencies() {
-    return this.userdata.currencies;
+  currencySymbol(account: Account): String {
+    return this.userdata.findCurrency(account.currencyId).symbol;
+  }
+
+  private currencies(): Currency[] {
+    return this.userdata.currencies();
   }
 }

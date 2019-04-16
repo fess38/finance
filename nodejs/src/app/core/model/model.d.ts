@@ -1,4 +1,6 @@
-import { Long } from "protobufjs";import * as $protobuf from "protobufjs";
+import * as $protobuf from 'protobufjs';
+import { Long } from 'protobufjs';
+
 /** EntityType enum. */
 export enum EntityType {
     UNDEFINED = 0,
@@ -977,6 +979,17 @@ export class Transaction implements ITransaction {
     public toJSON(): { [k: string]: any };
 }
 
+export namespace Transaction {
+
+    /** Type enum. */
+    enum Type {
+        UNDEFINED = 0,
+        INCOME = 1,
+        EXPENSE = 2,
+        TRANSFER = 3
+    }
+}
+
 /** Properties of a Settings. */
 export interface ISettings {
 
@@ -1289,4 +1302,394 @@ export namespace RefreshToken {
         FACEBOOK = 2,
         VK = 3
     }
+}
+
+/** Properties of a Date_. */
+export interface IDate_ {
+
+    /** Date_ year */
+    year: number;
+
+    /** Date_ month */
+    month: number;
+
+    /** Date_ day */
+    day: number;
+}
+
+/** Represents a Date_. */
+export class Date_ implements IDate_ {
+
+    /**
+     * Constructs a new Date_.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IDate_);
+
+    /** Date_ year. */
+    public year: number;
+
+    /** Date_ month. */
+    public month: number;
+
+    /** Date_ day. */
+    public day: number;
+
+    /**
+     * Creates a new Date_ instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns Date_ instance
+     */
+    public static create(properties?: IDate_): Date_;
+
+    /**
+     * Encodes the specified Date_ message. Does not implicitly {@link Date_.verify|verify} messages.
+     * @param message Date_ message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IDate_, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified Date_ message, length delimited. Does not implicitly {@link Date_.verify|verify} messages.
+     * @param message Date_ message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IDate_, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a Date_ message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns Date_
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Date_;
+
+    /**
+     * Decodes a Date_ message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns Date_
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Date_;
+
+    /**
+     * Verifies a Date_ message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a Date_ message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns Date_
+     */
+    public static fromObject(object: { [k: string]: any }): Date_;
+
+    /**
+     * Creates a plain object from a Date_ message. Also converts values to other types if specified.
+     * @param message Date_
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: Date_, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this Date_ to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a Month. */
+export interface IMonth {
+
+    /** Month year */
+    year: number;
+
+    /** Month month */
+    month: number;
+}
+
+/** Represents a Month. */
+export class Month implements IMonth {
+
+    /**
+     * Constructs a new Month.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IMonth);
+
+    /** Month year. */
+    public year: number;
+
+    /** Month month. */
+    public month: number;
+
+    /**
+     * Creates a new Month instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns Month instance
+     */
+    public static create(properties?: IMonth): Month;
+
+    /**
+     * Encodes the specified Month message. Does not implicitly {@link Month.verify|verify} messages.
+     * @param message Month message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IMonth, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified Month message, length delimited. Does not implicitly {@link Month.verify|verify} messages.
+     * @param message Month message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IMonth, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a Month message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns Month
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Month;
+
+    /**
+     * Decodes a Month message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns Month
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Month;
+
+    /**
+     * Verifies a Month message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a Month message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns Month
+     */
+    public static fromObject(object: { [k: string]: any }): Month;
+
+    /**
+     * Creates a plain object from a Month message. Also converts values to other types if specified.
+     * @param message Month
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: Month, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this Month to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a Year. */
+export interface IYear {
+
+    /** Year value */
+    value: number;
+}
+
+/** Represents a Year. */
+export class Year implements IYear {
+
+    /**
+     * Constructs a new Year.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IYear);
+
+    /** Year value. */
+    public value: number;
+
+    /**
+     * Creates a new Year instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns Year instance
+     */
+    public static create(properties?: IYear): Year;
+
+    /**
+     * Encodes the specified Year message. Does not implicitly {@link Year.verify|verify} messages.
+     * @param message Year message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IYear, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified Year message, length delimited. Does not implicitly {@link Year.verify|verify} messages.
+     * @param message Year message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IYear, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a Year message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns Year
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Year;
+
+    /**
+     * Decodes a Year message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns Year
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Year;
+
+    /**
+     * Verifies a Year message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a Year message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns Year
+     */
+    public static fromObject(object: { [k: string]: any }): Year;
+
+    /**
+     * Creates a plain object from a Year message. Also converts values to other types if specified.
+     * @param message Year
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: Year, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this Year to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a Summary. */
+export interface ISummary {
+
+    /** Summary amount */
+    amount: (number|Long);
+
+    /** Summary share */
+    share: number;
+
+    /** Summary useInShare */
+    useInShare?: (boolean|null);
+}
+
+/** Represents a Summary. */
+export class Summary implements ISummary {
+
+    /**
+     * Constructs a new Summary.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: ISummary);
+
+    /** Summary amount. */
+    public amount: (number|Long);
+
+    /** Summary share. */
+    public share: number;
+
+    /** Summary useInShare. */
+    public useInShare: boolean;
+
+    /**
+     * Creates a new Summary instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns Summary instance
+     */
+    public static create(properties?: ISummary): Summary;
+
+    /**
+     * Encodes the specified Summary message. Does not implicitly {@link Summary.verify|verify} messages.
+     * @param message Summary message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: ISummary, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified Summary message, length delimited. Does not implicitly {@link Summary.verify|verify} messages.
+     * @param message Summary message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: ISummary, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a Summary message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns Summary
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Summary;
+
+    /**
+     * Decodes a Summary message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns Summary
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Summary;
+
+    /**
+     * Verifies a Summary message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a Summary message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns Summary
+     */
+    public static fromObject(object: { [k: string]: any }): Summary;
+
+    /**
+     * Creates a plain object from a Summary message. Also converts values to other types if specified.
+     * @param message Summary
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: Summary, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this Summary to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
 }

@@ -1,0 +1,187 @@
+<div class="clr-row">
+  <div class="clr-col-12">
+    <button (click)="previousMonth()" class="btn btn-link btn-sm btn-icon">
+      <clr-icon shape="rewind"></clr-icon>
+    </button>
+    <span>&nbsp;</span>
+    <button class="btn btn-link btn-sm" disabled>
+      {{month() | monthFormat | date:'MMM yyyy':'':locale()}}
+    </button>
+    <span>&nbsp;</span>
+    <span [hidden]="currencies.length <= 1">
+      <select name="currency" required
+              [(ngModel)]="currency"
+              (ngModelChange)="onChangeCurrency()">
+        <option [selected]="" *ngFor="let currency of currencies" [ngValue]="currency">
+          <span>
+            {{currency.symbol}}
+          </span>
+        </option>
+      </select>
+      <span>&nbsp;</span>
+    </span>
+    <button (click)="nextMonth()" class="btn btn-link btn-sm btn-icon">
+      <clr-icon shape="fast-forward"></clr-icon>
+    </button>
+  </div>
+</div>
+
+<div class="clr-row">
+  <div id="left-column" class="clr-col-3 clr-col-md-2">
+    <table class="table table-compact">
+      <thead>
+      <tr>
+        <th>{{'common.category' | translate}}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngFor="let category of incomeCategories">
+        <tr class="category-row">
+          <td (click)="routeCategory(category)" class="left">{{category.name}}</td>
+        </tr>
+        <tr *ngFor="let subCategory of findSubCategories(category)">
+          <td (click)="routeSubCategory(subCategory)" class="left">
+            <span class="sub-category-padding">
+              {{subCategory.name}}
+            </span>
+          </td>
+        </tr>
+      </ng-container>
+      <tr *ngIf="incomeCategories.length > 0">
+        <th (click)="routeIncome()" class="left">{{'report.summary' | translate}}</th>
+      </tr>
+      <ng-container *ngFor="let category of expenseCategories">
+        <tr class="category-row">
+          <td (click)="routeCategory(category)" class="left">{{category.name}}</td>
+        </tr>
+        <tr *ngFor="let subCategory of findSubCategories(category)">
+          <td (click)="routeSubCategory(subCategory)" class="left">
+            <span class="sub-category-padding">
+              {{subCategory.name}}
+            </span>
+          </td>
+        </tr>
+      </ng-container>
+      <tr *ngIf="expenseCategories.length > 0">
+        <th (click)="routeExpense()" class="left">{{'report.summary' | translate}}</th>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="center-column" class="clr-col-7 clr-col-md-8">
+    <table class="table table-compact">
+      <thead>
+      <tr>
+        <th *ngFor="let date of dates">
+          {{date.day}}
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngFor="let category of incomeCategories">
+        <tr class="category-row">
+          <td *ngFor="let date of dates">
+            <span *ngFor="let summary of findDateCategorySummary(date, category)">
+              {{summary.amount | number:'':locale()}}
+            </span>
+          </td>
+        </tr>
+        <tr *ngFor="let subCategory of findSubCategories(category)">
+          <td *ngFor="let date of dates">
+            <span *ngFor="let summary of findDateSubCategorySummary(date, subCategory)">
+              {{summary.amount | number:'':locale()}}
+            </span>
+          </td>
+        </tr>
+      </ng-container>
+      <tr *ngIf="incomeCategories.length > 0">
+        <th *ngFor="let date of dates">
+          <span (click)="routeDate(date)">
+            {{findIncomeDateSummary(date) | number:'':locale()}}
+          </span>
+        </th>
+      </tr>
+      <ng-container *ngFor="let category of expenseCategories">
+        <tr class="category-row">
+          <td *ngFor="let date of dates">
+            <span *ngFor="let summary of findDateCategorySummary(date, category)">
+              <span [class.high-share]="summary.share > 0.01">
+                {{summary.amount | number:'':locale()}}
+              </span>
+            </span>
+          </td>
+        </tr>
+        <tr *ngFor="let subCategory of findSubCategories(category)">
+          <td *ngFor="let date of dates">
+            <span *ngFor="let summary of findDateSubCategorySummary(date, subCategory)">
+              {{summary.amount | number:'':locale()}}
+            </span>
+          </td>
+        </tr>
+      </ng-container>
+      <tr *ngIf="expenseCategories.length > 0">
+        <th *ngFor="let date of dates">
+          <span (click)="routeDate(date)">
+            {{findExpenseDateSummary(date) | number:'':locale()}}
+          </span>
+        </th>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="right-column" class="clr-col-2 clr-col-md-2">
+    <table class="table table-compact">
+      <thead>
+      <tr>
+        <th colspan="2">{{'report.summary' | translate}}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngFor="let category of incomeCategories">
+        <tr class="category-row">
+          <td>
+            {{findCategorySummary(category).amount | number:'':locale()}}
+          </td>
+          <td>
+            {{findCategorySummary(category).share | percent:'':locale()}}
+          </td>
+        </tr>
+        <tr *ngFor="let subCategory of findSubCategories(category)">
+          <td>
+            {{findSubCategorySummary(subCategory).amount | number:'':locale()}}
+          </td>
+          <td></td>
+        </tr>
+      </ng-container>
+      <tr *ngIf="incomeCategories.length > 0">
+        <th colspan="2">
+          {{income | number:'':locale()}}
+        </th>
+      </tr>
+      <ng-container *ngFor="let category of expenseCategories">
+        <tr class="category-row">
+          <td>
+            {{findCategorySummary(category).amount | number:'':locale()}}
+          </td>
+          <td>
+            {{findCategorySummary(category).share | percent:'':locale()}}
+          </td>
+        </tr>
+        <tr *ngFor="let subCategory of findSubCategories(category)">
+          <td>
+            {{findSubCategorySummary(subCategory).amount | number:'':locale()}}
+          </td>
+          <td></td>
+        </tr>
+      </ng-container>
+      <tr *ngIf="expenseCategories.length > 0">
+        <th colspan="2">
+          {{expense | number:'':locale()}}
+        </th>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

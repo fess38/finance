@@ -9,7 +9,7 @@ interface MessageService {
 
   fun update(message: Message)
 
-  fun dump(): Dump
+  fun dump(modifiedAfter: Long): Dump
 
   fun isExist(id: Long, type: EntityType): Boolean
 }

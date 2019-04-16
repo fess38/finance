@@ -1,5 +1,6 @@
 {
   "common": {
+    "access_link": "Ссылка для входа",
     "settings": "Настройки",
     "name": "Название",
     "use_in_transactions": "Использовать в транзакциях",
@@ -7,11 +8,16 @@
     "save": "Сохранить",
     "delete": "Удалить",
     "income": "Доход",
-    "expense": "Расход"
+    "expense": "Расход",
+    "date": "Дата",
+    "title": "Финансы",
+    "category": "Категория",
+    "sub_category": "Подкатегория"
   },
   "account_detail": {
     "add": "Добавление счета",
     "edit": "Редактирование счета",
+    "updated_balance": "Обновленный баланс",
     "currency": "Валюта"
   },
   "account_list": {
@@ -22,9 +28,6 @@
     "add": "Добавление категории",
     "edit": "Редактирование категории",
     "type": "Тип категории"
-  },
-  "category_list": {
-    "category": "Категория"
   },
   "family_member_detail": {
     "add": "Добавление члена семьи",
@@ -40,24 +43,50 @@
     "title": "Финансы",
     "exit": "Выйти",
     "add_transaction": "Добавить транзакцию",
-    "transaction": "Доходы и расходы",
+    "transaction": "Транзакции",
+    "all_transactions": "Все транзакции",
+    "incomes": "Доходы",
+    "expences": "Расходы",
+    "transfers": "Переводы",
+    "reports": "Отчеты",
+    "date_report": "По дням ",
+    "month_report": "По месяцам",
+    "year_report": "По годам",
     "other": "Остальное",
     "account": "Счета",
-    "transfer": "Переводы",
     "category": "Категории",
     "sub_category": "Подкатегории",
     "family_member": "Члены семьи"
   },
   "settings": {
-    "language": "Язык"
+    "language": "Язык",
+    "currency": "Валюта"
   },
   "sub_category_detail": {
     "add": "Добавление подкатегории",
-    "edit": "Редактирование подкатегории",
-    "category": "Категория"
+    "edit": "Редактирование подкатегории"
   },
-  "sub_category_list": {
-    "sub_category": "Подкатегория",
-    "category": "Категория"
+  "transaction_detail": {
+    "add": "Добавление транзакции",
+    "edit": "Редактирование транзакции",
+    "action": "Операция",
+    "transfer": "Перевод",
+    "account": "Счет",
+    "account_from": "Счет списания",
+    "account_to": "Счет получения",
+    "amount_from": "Сумма списания",
+    "amount_to": "Сумма получения",
+    "family_member": "Член семьи",
+    "comment": "Комментарий"
+  },
+  "transaction_list": {
+    "amount": "Сумма"
+  },
+  "report": {
+    "summary": "Итого"
+  },
+  "error": {
+    "message": "Что-то пошло не так",
+    "popup_blocked": "Не удается открыть всплывающее окно"
   }
 }

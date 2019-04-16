@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Account, Currency, Settings } from '../../core/model/model';
-import { UserDataService } from '../../core/user-data.service';
+import { Account, Currency, Settings, Transaction } from '../../core/model/model';
+import { UserDataService } from '../../core/user-data/user-data.service';
+import { DateUtils } from '../../utils/date-utils';
 import Language = Settings.Language;
 
 @Component({
@@ -10,17 +11,18 @@ import Language = Settings.Language;
 })
 export class AccountDetailComponent implements OnInit, OnDestroy {
   account: Account = new Account();
+  updatedBalance: number = undefined;
   private subscription: Subscription;
 
   constructor(private userdata: UserDataService,
               private route: ActivatedRoute,
               private router: Router) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id != 'new') {
       const callback = () => {
-        const navigatedAccount = this.userdata.accounts.filter(x => x.id == +id)[0];
+        const navigatedAccount = this.userdata.accounts().filter(x => x.id == +id)[0];
         if (navigatedAccount == null) {
           this.router.navigate(['/account']);
         } else {
@@ -31,50 +33,90 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
   }
 
   currencies(): Currency[] {
-    return this.userdata.currencies;
+    return this.userdata.currencies();
   }
 
   private language(): string {
-    return Language[this.userdata.settings.language];
+    return Language[this.userdata.settings().language];
   }
 
-  update(account: Account) {
+  update(account: Account): void {
     if (account.id == 0) {
       this.userdata.saveAccount(account)
         .then(newAccount => {
           this.router.navigate(['/account/' + newAccount.id]);
           this.account = newAccount;
         })
-        .catch(error => console.error(error.message));
+        .catch(error => {
+          console.error(error.message);
+          this.router.navigate(['/error']);
+        });
     } else {
+      if (this.updatedBalance != undefined && account.balance != this.updatedBalance) {
+        const transaction = this.createAccountBalanceCorrection(account, this.updatedBalance);
+        this.userdata.saveTransaction(transaction).catch(error => {
+          console.error(error.message);
+          this.router.navigate(['/error']);
+        });
+      }
       this.userdata.updateAccount(account)
         .then(() => this.router.navigate(['/account']))
-        .catch(error => console.error(error.message));
+        .catch(error => {
+          account.isDeleted = false;
+          console.error(error.message);
+          this.router.navigate(['/error']);
+        });
     }
   }
 
-  delete(account: Account) {
-    account.isDeleted = true;
-    this.update(account);
-    this.router.navigate(['/account']);
+  createAccountBalanceCorrection(account: Account, updatedBalance: number): Transaction {
+    const transaction: Transaction = new Transaction({
+      created: DateUtils.formatDate(),
+      accountIdFrom: account.id,
+      amountFrom: 0,
+      accountIdTo: account.id,
+      amountTo: 0,
+      categoryId: -1
+    });
+    if (account.balance > updatedBalance) {
+      transaction.amountFrom = Number(account.balance) - updatedBalance;
+    } else {
+      transaction.amountTo = updatedBalance - Number(account.balance);
+    }
+    return transaction;
   }
 
-  isNewAccount() {
+  delete(account: Account): void {
+    account.isDeleted = true;
+    this.update(account);
+  }
+
+  isNewAccount(): boolean {
     return this.account.id == 0;
   }
 
-  hasTransations() {
+  hasTransations(): boolean {
     return this.account.transactionAmount > 0;
   }
 
-  isValidForm() {
+  isValidForm(): boolean {
     return this.account.name.length > 0 && this.account.currencyId != 0;
+  }
+
+  viewTransactions(account: Account): void {
+    this.router.navigate(['/transaction'], {
+      queryParams: {
+        account_id: account.id,
+        transaction_amount: account.transactionAmount,
+        source: 'account'
+      }
+    });
   }
 }

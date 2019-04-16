@@ -2,6 +2,9 @@
   <div class="clr-col-12 clr-col-lg-6">
     <form>
       <section class="form-block">
+        <button type="button" class="btn btn-icon btn-link" routerLink="/family_member">
+          <clr-icon shape="undo"></clr-icon>
+        </button>
         <label [hidden]="!isNewFamilyMember()">{{'family_member_detail.add' | translate}}</label>
         <label [hidden]="isNewFamilyMember()">{{'family_member_detail.edit' | translate}}</label>
         <div class="form-group">
@@ -9,25 +12,29 @@
           <input class="form-control" type="text" name="name" [(ngModel)]="familyMember.name"/>
         </div>
         <div class="form-group-single" [hidden]="isNewFamilyMember()">
-          <clr-checkbox name="isVisible" [(ngModel)]="familyMember.isVisible">
-            {{'common.use_in_transactions' | translate}}
-          </clr-checkbox>
+          <clr-checkbox-wrapper>
+            <input type="checkbox"
+                   clrCheckbox
+                   name="isVisible"
+                   [(ngModel)]="familyMember.isVisible"/>
+            <label>{{'common.use_in_transactions' | translate}}</label>
+          </clr-checkbox-wrapper>
         </div>
-        <div class="form-group-single" [hidden]="isNewFamilyMember()">
+        <div class="form-group-single"
+             [hidden]="isNewFamilyMember()"
+             (click)="viewTransactions(familyMember)">
           <span>{{'common.amount' | translate}}: {{familyMember.transactionAmount}}</span>
         </div>
       </section>
     </form>
-    <div class="btn-group btn-primary">
-      <button class="btn btn-primary btn-sm"
-              (click)="update(familyMember)"
-              [disabled]="!isValidForm()">{{'common.save' | translate}}
-      </button>
-      <button class="btn btn-danger btn-sm"
-              (click)="delete(familyMember)"
-              [hidden]="isNewFamilyMember()"
-              [disabled]="hasTransations()">{{'common.delete' | translate}}
-      </button>
-    </div>
+    <button class="btn btn-primary btn-block"
+            (click)="update(familyMember)"
+            [disabled]="!isValidForm()">{{'common.save' | translate}}
+    </button>
+    <button class="btn btn-danger btn-block"
+            (click)="delete(familyMember)"
+            [hidden]="isNewFamilyMember()"
+            [disabled]="hasTransations()">{{'common.delete' | translate}}
+    </button>
   </div>
 </div>

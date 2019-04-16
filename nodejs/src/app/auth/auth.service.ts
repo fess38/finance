@@ -3,11 +3,12 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie';
-import { AsyncSubject, Subscription } from 'rxjs';
-import { HttpService } from '../core/http.service';
+import { interval, Subscription } from 'rxjs';
+import { filter, takeWhile } from 'rxjs/operators';
 import { AccessToken, RefreshToken } from '../core/model/model';
 import { google } from '../core/model/wrappers';
 import { AlertService } from '../utils/alert/alert.service';
+import { HttpService } from '../utils/http.service';
 import BoolValue = google.protobuf.BoolValue;
 import StringValue = google.protobuf.StringValue;
 import AuthType = RefreshToken.AuthType;
@@ -20,42 +21,49 @@ export class AuthService {
               private http: HttpService,
               private router: Router,
               private alertService: AlertService) {
-    setTimeout(() => this.validateToken(), 5000);
+    interval(1000)
+      .pipe(filter(() => this.hasToken()))
+      .pipe(takeWhile(x => !this.isSignIn() && x < 5))
+      .subscribe(() => this.validateToken(this.token()));
   }
 
   private loginTryCounter = 0;
-  private isSignInSubject: AsyncSubject<boolean> = new AsyncSubject();
+  private isValidToken = false;
 
-  private validateToken(): void {
-    const accessToken = new AccessToken({ value: this.token() });
-    this.http.post('/api/auth/validate', AccessToken.encode(accessToken))
-      .then(data => {
-        const success: boolean = BoolValue.decode(data).value;
-        if (!success) {
-          this.signOut();
-        }
-      })
-      .catch((error) => console.error(error.message));
+  subscribeOnSignIn(callback, hasActiveAttemptCallback = () => false): Subscription {
+    return interval(1000)
+      .pipe(filter(() => this.isSignIn()))
+      .pipe(filter(() => !hasActiveAttemptCallback()))
+      .pipe(takeWhile(x => x < 5))
+      .subscribe(() => callback());
   }
 
-  isSignIn(): boolean {
+  hasToken(): boolean {
     return this.token().length > 0;
   }
 
-  subscribeOnSignIn(callback): Subscription {
-    const subscription = this.isSignInSubject.subscribe(() => callback());
-    if (this.isSignIn()) {
-      this.completeSignIn();
+  validateToken(token): void {
+    if (!this.hasToken()) {
+      this.cookie.put('token', token);
     }
-    return subscription;
+    const accessToken = new AccessToken({ value: token });
+    this.http.post('/api/auth/validate', AccessToken.encode(accessToken))
+      .then(data => {
+        this.isValidToken = BoolValue.decode(data).value;
+        if (!this.isValidToken) {
+          this.signOut();
+        }
+      })
+      .catch(error => {
+        console.error(error.message);
+      });
   }
 
-  private completeSignIn() {
-    this.isSignInSubject.next(true);
-    this.isSignInSubject.complete();
+  private isSignIn(): boolean {
+    return this.hasToken() && this.isValidToken;
   }
 
-  signInGoogle() {
+  signInGoogle(): void {
     gapi.load('auth2', () => {
       this.getGoogleClientConfig()
         .then(clientConfig => gapi.auth2.init(clientConfig).signIn())
@@ -66,15 +74,17 @@ export class AuthService {
         .then((accessToken: AccessToken) => {
           const options = { expires: new Date(accessToken.expired as number) };
           this.cookie.put('token', accessToken.value, options);
-          this.completeSignIn();
           this.router.navigate(['']);
         })
         .catch(error => {
           const message: string = error.error;
           if (message == 'popup_blocked_by_browser') {
-            this.alertService.error('Не удается открыть всплывающее окно');
+            this.alertService.error('error.popup_blocked');
           } else if (this.loginTryCounter++ < 1) {
             this.signInGoogle();
+          } else {
+            console.error(error);
+            this.router.navigate(['/error']);
           }
         });
     });
@@ -97,20 +107,22 @@ export class AuthService {
       .then(data => AccessToken.decode(data));
   }
 
-  signOut() {
-    if (this.isSignIn()) {
+  signOut(): void {
+    if (this.hasToken()) {
       const accessToken = new AccessToken({ value: this.token() });
       this.http.post('/api/auth/revoke-token', AccessToken.encode(accessToken))
         .then(() => {
           this.cookie.remove('token');
           this.router.navigate(['login']);
         })
-        .catch(error => console.error(error.message));
+        .catch(error => {
+          console.error(error.message);
+          this.router.navigate(['/error']);
+        });
     }
   }
 
-  private token(): string {
-    const token = this.cookie.get('token');
-    return token ? token : '';
+  token(): string {
+    return this.cookie.get('token') || '';
   }
 }

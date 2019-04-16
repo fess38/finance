@@ -2871,6 +2871,24 @@ $root.Transaction = (function() {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Type enum.
+     * @name Transaction.Type
+     * @enum {string}
+     * @property {number} UNDEFINED=0 UNDEFINED value
+     * @property {number} INCOME=1 INCOME value
+     * @property {number} EXPENSE=2 EXPENSE value
+     * @property {number} TRANSFER=3 TRANSFER value
+     */
+    Transaction.Type = (function() {
+        var valuesById = {}, values = Object.create(valuesById);
+        values[valuesById[0] = "UNDEFINED"] = 0;
+        values[valuesById[1] = "INCOME"] = 1;
+        values[valuesById[2] = "EXPENSE"] = 2;
+        values[valuesById[3] = "TRANSFER"] = 3;
+        return values;
+    })();
+
     return Transaction;
 })();
 
@@ -3634,6 +3652,881 @@ $root.RefreshToken = (function() {
     })();
 
     return RefreshToken;
+})();
+
+$root.Date_ = (function() {
+
+    /**
+     * Properties of a Date_.
+     * @exports IDate_
+     * @interface IDate_
+     * @property {number} year Date_ year
+     * @property {number} month Date_ month
+     * @property {number} day Date_ day
+     */
+
+    /**
+     * Constructs a new Date_.
+     * @exports Date_
+     * @classdesc Represents a Date_.
+     * @implements IDate_
+     * @constructor
+     * @param {IDate_=} [properties] Properties to set
+     */
+    function Date_(properties) {
+        if (properties)
+            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * Date_ year.
+     * @member {number} year
+     * @memberof Date_
+     * @instance
+     */
+    Date_.prototype.year = 0;
+
+    /**
+     * Date_ month.
+     * @member {number} month
+     * @memberof Date_
+     * @instance
+     */
+    Date_.prototype.month = 0;
+
+    /**
+     * Date_ day.
+     * @member {number} day
+     * @memberof Date_
+     * @instance
+     */
+    Date_.prototype.day = 0;
+
+    /**
+     * Creates a new Date_ instance using the specified properties.
+     * @function create
+     * @memberof Date_
+     * @static
+     * @param {IDate_=} [properties] Properties to set
+     * @returns {Date_} Date_ instance
+     */
+    Date_.create = function create(properties) {
+        return new Date_(properties);
+    };
+
+    /**
+     * Encodes the specified Date_ message. Does not implicitly {@link Date_.verify|verify} messages.
+     * @function encode
+     * @memberof Date_
+     * @static
+     * @param {IDate_} message Date_ message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    Date_.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        writer.uint32(/* id 1, wireType 0 =*/8).int32(message.year);
+        writer.uint32(/* id 2, wireType 0 =*/16).int32(message.month);
+        writer.uint32(/* id 3, wireType 0 =*/24).int32(message.day);
+        return writer;
+    };
+
+    /**
+     * Encodes the specified Date_ message, length delimited. Does not implicitly {@link Date_.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof Date_
+     * @static
+     * @param {IDate_} message Date_ message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    Date_.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a Date_ message from the specified reader or buffer.
+     * @function decode
+     * @memberof Date_
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {Date_} Date_
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    Date_.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Date_();
+        while (reader.pos < end) {
+            var tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                message.year = reader.int32();
+                break;
+            case 2:
+                message.month = reader.int32();
+                break;
+            case 3:
+                message.day = reader.int32();
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        if (!message.hasOwnProperty("year"))
+            throw $util.ProtocolError("missing required 'year'", { instance: message });
+        if (!message.hasOwnProperty("month"))
+            throw $util.ProtocolError("missing required 'month'", { instance: message });
+        if (!message.hasOwnProperty("day"))
+            throw $util.ProtocolError("missing required 'day'", { instance: message });
+        return message;
+    };
+
+    /**
+     * Decodes a Date_ message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof Date_
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {Date_} Date_
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    Date_.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a Date_ message.
+     * @function verify
+     * @memberof Date_
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    Date_.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (!$util.isInteger(message.year))
+            return "year: integer expected";
+        if (!$util.isInteger(message.month))
+            return "month: integer expected";
+        if (!$util.isInteger(message.day))
+            return "day: integer expected";
+        return null;
+    };
+
+    /**
+     * Creates a Date_ message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof Date_
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {Date_} Date_
+     */
+    Date_.fromObject = function fromObject(object) {
+        if (object instanceof $root.Date_)
+            return object;
+        var message = new $root.Date_();
+        if (object.year != null)
+            message.year = object.year | 0;
+        if (object.month != null)
+            message.month = object.month | 0;
+        if (object.day != null)
+            message.day = object.day | 0;
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a Date_ message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof Date_
+     * @static
+     * @param {Date_} message Date_
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    Date_.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        var object = {};
+        if (options.defaults) {
+            object.year = 0;
+            object.month = 0;
+            object.day = 0;
+        }
+        if (message.year != null && message.hasOwnProperty("year"))
+            object.year = message.year;
+        if (message.month != null && message.hasOwnProperty("month"))
+            object.month = message.month;
+        if (message.day != null && message.hasOwnProperty("day"))
+            object.day = message.day;
+        return object;
+    };
+
+    /**
+     * Converts this Date_ to JSON.
+     * @function toJSON
+     * @memberof Date_
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    Date_.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    return Date_;
+})();
+
+$root.Month = (function() {
+
+    /**
+     * Properties of a Month.
+     * @exports IMonth
+     * @interface IMonth
+     * @property {number} year Month year
+     * @property {number} month Month month
+     */
+
+    /**
+     * Constructs a new Month.
+     * @exports Month
+     * @classdesc Represents a Month.
+     * @implements IMonth
+     * @constructor
+     * @param {IMonth=} [properties] Properties to set
+     */
+    function Month(properties) {
+        if (properties)
+            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * Month year.
+     * @member {number} year
+     * @memberof Month
+     * @instance
+     */
+    Month.prototype.year = 0;
+
+    /**
+     * Month month.
+     * @member {number} month
+     * @memberof Month
+     * @instance
+     */
+    Month.prototype.month = 0;
+
+    /**
+     * Creates a new Month instance using the specified properties.
+     * @function create
+     * @memberof Month
+     * @static
+     * @param {IMonth=} [properties] Properties to set
+     * @returns {Month} Month instance
+     */
+    Month.create = function create(properties) {
+        return new Month(properties);
+    };
+
+    /**
+     * Encodes the specified Month message. Does not implicitly {@link Month.verify|verify} messages.
+     * @function encode
+     * @memberof Month
+     * @static
+     * @param {IMonth} message Month message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    Month.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        writer.uint32(/* id 1, wireType 0 =*/8).int32(message.year);
+        writer.uint32(/* id 2, wireType 0 =*/16).int32(message.month);
+        return writer;
+    };
+
+    /**
+     * Encodes the specified Month message, length delimited. Does not implicitly {@link Month.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof Month
+     * @static
+     * @param {IMonth} message Month message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    Month.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a Month message from the specified reader or buffer.
+     * @function decode
+     * @memberof Month
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {Month} Month
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    Month.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Month();
+        while (reader.pos < end) {
+            var tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                message.year = reader.int32();
+                break;
+            case 2:
+                message.month = reader.int32();
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        if (!message.hasOwnProperty("year"))
+            throw $util.ProtocolError("missing required 'year'", { instance: message });
+        if (!message.hasOwnProperty("month"))
+            throw $util.ProtocolError("missing required 'month'", { instance: message });
+        return message;
+    };
+
+    /**
+     * Decodes a Month message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof Month
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {Month} Month
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    Month.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a Month message.
+     * @function verify
+     * @memberof Month
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    Month.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (!$util.isInteger(message.year))
+            return "year: integer expected";
+        if (!$util.isInteger(message.month))
+            return "month: integer expected";
+        return null;
+    };
+
+    /**
+     * Creates a Month message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof Month
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {Month} Month
+     */
+    Month.fromObject = function fromObject(object) {
+        if (object instanceof $root.Month)
+            return object;
+        var message = new $root.Month();
+        if (object.year != null)
+            message.year = object.year | 0;
+        if (object.month != null)
+            message.month = object.month | 0;
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a Month message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof Month
+     * @static
+     * @param {Month} message Month
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    Month.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        var object = {};
+        if (options.defaults) {
+            object.year = 0;
+            object.month = 0;
+        }
+        if (message.year != null && message.hasOwnProperty("year"))
+            object.year = message.year;
+        if (message.month != null && message.hasOwnProperty("month"))
+            object.month = message.month;
+        return object;
+    };
+
+    /**
+     * Converts this Month to JSON.
+     * @function toJSON
+     * @memberof Month
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    Month.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    return Month;
+})();
+
+$root.Year = (function() {
+
+    /**
+     * Properties of a Year.
+     * @exports IYear
+     * @interface IYear
+     * @property {number} value Year value
+     */
+
+    /**
+     * Constructs a new Year.
+     * @exports Year
+     * @classdesc Represents a Year.
+     * @implements IYear
+     * @constructor
+     * @param {IYear=} [properties] Properties to set
+     */
+    function Year(properties) {
+        if (properties)
+            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * Year value.
+     * @member {number} value
+     * @memberof Year
+     * @instance
+     */
+    Year.prototype.value = 0;
+
+    /**
+     * Creates a new Year instance using the specified properties.
+     * @function create
+     * @memberof Year
+     * @static
+     * @param {IYear=} [properties] Properties to set
+     * @returns {Year} Year instance
+     */
+    Year.create = function create(properties) {
+        return new Year(properties);
+    };
+
+    /**
+     * Encodes the specified Year message. Does not implicitly {@link Year.verify|verify} messages.
+     * @function encode
+     * @memberof Year
+     * @static
+     * @param {IYear} message Year message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    Year.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        writer.uint32(/* id 1, wireType 0 =*/8).int32(message.value);
+        return writer;
+    };
+
+    /**
+     * Encodes the specified Year message, length delimited. Does not implicitly {@link Year.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof Year
+     * @static
+     * @param {IYear} message Year message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    Year.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a Year message from the specified reader or buffer.
+     * @function decode
+     * @memberof Year
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {Year} Year
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    Year.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Year();
+        while (reader.pos < end) {
+            var tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                message.value = reader.int32();
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        if (!message.hasOwnProperty("value"))
+            throw $util.ProtocolError("missing required 'value'", { instance: message });
+        return message;
+    };
+
+    /**
+     * Decodes a Year message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof Year
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {Year} Year
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    Year.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a Year message.
+     * @function verify
+     * @memberof Year
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    Year.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (!$util.isInteger(message.value))
+            return "value: integer expected";
+        return null;
+    };
+
+    /**
+     * Creates a Year message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof Year
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {Year} Year
+     */
+    Year.fromObject = function fromObject(object) {
+        if (object instanceof $root.Year)
+            return object;
+        var message = new $root.Year();
+        if (object.value != null)
+            message.value = object.value | 0;
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a Year message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof Year
+     * @static
+     * @param {Year} message Year
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    Year.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        var object = {};
+        if (options.defaults)
+            object.value = 0;
+        if (message.value != null && message.hasOwnProperty("value"))
+            object.value = message.value;
+        return object;
+    };
+
+    /**
+     * Converts this Year to JSON.
+     * @function toJSON
+     * @memberof Year
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    Year.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    return Year;
+})();
+
+$root.Summary = (function() {
+
+    /**
+     * Properties of a Summary.
+     * @exports ISummary
+     * @interface ISummary
+     * @property {number|Long} amount Summary amount
+     * @property {number} share Summary share
+     * @property {boolean|null} [useInShare] Summary useInShare
+     */
+
+    /**
+     * Constructs a new Summary.
+     * @exports Summary
+     * @classdesc Represents a Summary.
+     * @implements ISummary
+     * @constructor
+     * @param {ISummary=} [properties] Properties to set
+     */
+    function Summary(properties) {
+        if (properties)
+            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * Summary amount.
+     * @member {number|Long} amount
+     * @memberof Summary
+     * @instance
+     */
+    Summary.prototype.amount = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
+     * Summary share.
+     * @member {number} share
+     * @memberof Summary
+     * @instance
+     */
+    Summary.prototype.share = 0;
+
+    /**
+     * Summary useInShare.
+     * @member {boolean} useInShare
+     * @memberof Summary
+     * @instance
+     */
+    Summary.prototype.useInShare = true;
+
+    /**
+     * Creates a new Summary instance using the specified properties.
+     * @function create
+     * @memberof Summary
+     * @static
+     * @param {ISummary=} [properties] Properties to set
+     * @returns {Summary} Summary instance
+     */
+    Summary.create = function create(properties) {
+        return new Summary(properties);
+    };
+
+    /**
+     * Encodes the specified Summary message. Does not implicitly {@link Summary.verify|verify} messages.
+     * @function encode
+     * @memberof Summary
+     * @static
+     * @param {ISummary} message Summary message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    Summary.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        writer.uint32(/* id 1, wireType 0 =*/8).int64(message.amount);
+        writer.uint32(/* id 2, wireType 1 =*/17).double(message.share);
+        if (message.useInShare != null && message.hasOwnProperty("useInShare"))
+            writer.uint32(/* id 3, wireType 0 =*/24).bool(message.useInShare);
+        return writer;
+    };
+
+    /**
+     * Encodes the specified Summary message, length delimited. Does not implicitly {@link Summary.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof Summary
+     * @static
+     * @param {ISummary} message Summary message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    Summary.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a Summary message from the specified reader or buffer.
+     * @function decode
+     * @memberof Summary
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {Summary} Summary
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    Summary.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Summary();
+        while (reader.pos < end) {
+            var tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                message.amount = reader.int64();
+                break;
+            case 2:
+                message.share = reader.double();
+                break;
+            case 3:
+                message.useInShare = reader.bool();
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        if (!message.hasOwnProperty("amount"))
+            throw $util.ProtocolError("missing required 'amount'", { instance: message });
+        if (!message.hasOwnProperty("share"))
+            throw $util.ProtocolError("missing required 'share'", { instance: message });
+        return message;
+    };
+
+    /**
+     * Decodes a Summary message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof Summary
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {Summary} Summary
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    Summary.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a Summary message.
+     * @function verify
+     * @memberof Summary
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    Summary.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (!$util.isInteger(message.amount) && !(message.amount && $util.isInteger(message.amount.low) && $util.isInteger(message.amount.high)))
+            return "amount: integer|Long expected";
+        if (typeof message.share !== "number")
+            return "share: number expected";
+        if (message.useInShare != null && message.hasOwnProperty("useInShare"))
+            if (typeof message.useInShare !== "boolean")
+                return "useInShare: boolean expected";
+        return null;
+    };
+
+    /**
+     * Creates a Summary message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof Summary
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {Summary} Summary
+     */
+    Summary.fromObject = function fromObject(object) {
+        if (object instanceof $root.Summary)
+            return object;
+        var message = new $root.Summary();
+        if (object.amount != null)
+            if ($util.Long)
+                (message.amount = $util.Long.fromValue(object.amount)).unsigned = false;
+            else if (typeof object.amount === "string")
+                message.amount = parseInt(object.amount, 10);
+            else if (typeof object.amount === "number")
+                message.amount = object.amount;
+            else if (typeof object.amount === "object")
+                message.amount = new $util.LongBits(object.amount.low >>> 0, object.amount.high >>> 0).toNumber();
+        if (object.share != null)
+            message.share = Number(object.share);
+        if (object.useInShare != null)
+            message.useInShare = Boolean(object.useInShare);
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a Summary message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof Summary
+     * @static
+     * @param {Summary} message Summary
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    Summary.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        var object = {};
+        if (options.defaults) {
+            if ($util.Long) {
+                var long = new $util.Long(0, 0, false);
+                object.amount = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.amount = options.longs === String ? "0" : 0;
+            object.share = 0;
+            object.useInShare = true;
+        }
+        if (message.amount != null && message.hasOwnProperty("amount"))
+            if (typeof message.amount === "number")
+                object.amount = options.longs === String ? String(message.amount) : message.amount;
+            else
+                object.amount = options.longs === String ? $util.Long.prototype.toString.call(message.amount) : options.longs === Number ? new $util.LongBits(message.amount.low >>> 0, message.amount.high >>> 0).toNumber() : message.amount;
+        if (message.share != null && message.hasOwnProperty("share"))
+            object.share = options.json && !isFinite(message.share) ? String(message.share) : message.share;
+        if (message.useInShare != null && message.hasOwnProperty("useInShare"))
+            object.useInShare = message.useInShare;
+        return object;
+    };
+
+    /**
+     * Converts this Summary to JSON.
+     * @function toJSON
+     * @memberof Summary
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    Summary.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    return Summary;
 })();
 
 module.exports = $root;

@@ -6,12 +6,11 @@
       "installMode": "prefetch",
       "resources": {
         "files": [
-          "/favicon.ico",
           "/index.html",
+          "/favicon.ico",
           "/ngsw-worker.js",
-          "/*.bundle.css",
-          "/*.bundle.js",
-          "/*.chunk.js"
+          "/*.css",
+          "/*.js"
         ]
       }
     },
@@ -21,9 +20,13 @@
       "updateMode": "prefetch",
       "resources": {
         "files": [
-          "/assets/**"
+          "/assets/**",
+          "/*.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani)"
         ]
       }
     }
+  ],
+  "navigationUrls": [
+    "/**"
   ]
 }

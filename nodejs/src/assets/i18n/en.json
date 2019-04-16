@@ -1,5 +1,6 @@
 {
   "common": {
+    "access_link": "Access link",
     "settings": "Settings",
     "name": "Name",
     "use_in_transactions": "Use in transactions",
@@ -7,11 +8,16 @@
     "save": "Save",
     "delete": "Delete",
     "income": "Income",
-    "expense": "Expense"
+    "expense": "Expense",
+    "date": "Date",
+    "title": "Finance",
+    "category": "Category",
+    "sub_category": "Subcategory"
   },
   "account_detail": {
     "add": "Add account",
     "edit": "Edit account",
+    "updated_balance": "Updated balance",
     "currency": "Currency"
   },
   "account_list": {
@@ -22,9 +28,6 @@
     "add": "Add category",
     "edit": "Edit category",
     "type": "Category type"
-  },
-  "category_list": {
-    "category": "Category"
   },
   "family_member_detail": {
     "add": "Add family member",
@@ -40,24 +43,50 @@
     "title": "Finance",
     "exit": "Sign out",
     "add_transaction": "Add transaction",
-    "transaction": "Incomes and expences",
+    "transaction": "Transactions",
+    "all_transactions": "All transactions",
+    "incomes": "Incomes",
+    "expences": "Expences",
+    "transfers": "Transfers",
+    "reports": "Reports",
+    "date_report": "By days",
+    "month_report": "By months",
+    "year_report": "By years",
     "other": "Other",
     "account": "Accounts",
-    "transfer": "Transfers",
     "category": "Categories",
     "sub_category": "Subcategories",
     "family_member": "Family members"
   },
   "settings": {
-    "language": "Language"
+    "language": "Language",
+    "currency": "Currency"
   },
   "sub_category_detail": {
     "add": "Add subcategory",
-    "edit": "Edit subcategory",
-    "category": "Category"
+    "edit": "Edit subcategory"
   },
-  "sub_category_list": {
-    "sub_category": "Subcategory",
-    "category": "Category"
+  "transaction_detail": {
+    "add": "Add transaction",
+    "edit": "Edit transaction",
+    "action": "Transaction type",
+    "transfer": "Transfer",
+    "account": "Account",
+    "account_from": "Charge account",
+    "account_to": "Receipt account",
+    "amount_from": "Charge amount",
+    "amount_to": "Amount of receipt",
+    "family_member": "Family member",
+    "comment": "Comment"
+  },
+  "transaction_list": {
+    "amount": "Amount"
+  },
+  "report": {
+    "summary": "Summary"
+  },
+  "error": {
+    "message": "Something goes wrong",
+    "popup_blocked": "Pop up blocked by browser"
   }
 }

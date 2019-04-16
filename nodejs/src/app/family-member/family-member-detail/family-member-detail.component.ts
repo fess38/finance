@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { FamilyMember } from '../../core/model/model';
-import { UserDataService } from '../../core/user-data.service';
+import { UserDataService } from '../../core/user-data/user-data.service';
 
 @Component({
   templateUrl: 'family-member-detail.component.html'
@@ -19,7 +19,7 @@ export class FamilyMemberDetailComponent implements OnInit, OnDestroy {
     const id = this.route.snapshot.paramMap.get('id');
     if (id != 'new') {
       const callback = () => {
-        const navigatedFamilyMember = this.userdata.familyMembers.filter(x => x.id == +id)[0];
+        const navigatedFamilyMember = this.userdata.familyMembers().filter(x => x.id == +id)[0];
         if (navigatedFamilyMember == null) {
           this.router.navigate(['/family_member']);
         } else {
@@ -43,18 +43,24 @@ export class FamilyMemberDetailComponent implements OnInit, OnDestroy {
           this.router.navigate(['/family_member/' + newFamilyMember.id]);
           this.familyMember = newFamilyMember;
         })
-        .catch(error => console.error(error.message));
+        .catch(error => {
+          console.error(error.message);
+          this.router.navigate(['/error']);
+        });
     } else {
       this.userdata.updateFamilyMember(familyMember)
         .then(() => this.router.navigate(['/family_member']))
-        .catch(error => console.error(error.message));
+        .catch(error => {
+          familyMember.isDeleted = false;
+          console.error(error.message);
+          this.router.navigate(['/error']);
+        });
     }
   }
 
   delete(familyMember: FamilyMember) {
     familyMember.isDeleted = true;
     this.update(familyMember);
-    this.router.navigate(['/family_member']);
   }
 
   isNewFamilyMember() {
@@ -67,5 +73,15 @@ export class FamilyMemberDetailComponent implements OnInit, OnDestroy {
 
   isValidForm() {
     return this.familyMember.name.length > 0;
+  }
+
+  viewTransactions(familyMember: FamilyMember) {
+    this.router.navigate(['/transaction'], {
+      queryParams: {
+        family_member_id: familyMember.id,
+        transaction_amount: familyMember.transactionAmount,
+        source: 'family_member'
+      }
+    });
   }
 }

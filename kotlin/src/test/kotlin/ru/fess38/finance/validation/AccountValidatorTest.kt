@@ -16,7 +16,7 @@ internal class AccountValidatorTest {
         .setName("name")
         .setCurrencyId(1)
         .build()
-    val expected = ValidatorResponse(true, "ok")
+    val expected = ValidatorResponse()
     val actual = validator.validate(account)
     Assert.assertEquals(expected, actual)
   }
@@ -27,7 +27,7 @@ internal class AccountValidatorTest {
         .setName("name")
         .setCurrencyId(0)
         .build()
-    val expected = ValidatorResponse(false, "unknown currency [0]")
+    val expected = ValidatorResponse("unknown currency [0]")
     val actual = validator.validate(account)
     Assert.assertEquals(expected, actual)
   }

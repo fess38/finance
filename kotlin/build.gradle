@@ -21,6 +21,7 @@ buildscript {
   }
 }
 
+apply plugin: "application"
 apply plugin: "idea"
 apply plugin: "java"
 apply plugin: "kotlin"
@@ -28,6 +29,8 @@ apply plugin: "kotlin-jpa"
 apply plugin: "kotlin-spring"
 apply plugin: "org.springframework.boot"
 apply plugin: "com.google.protobuf"
+
+mainClassName = "ru.fess38.finance.MainKt"
 
 repositories {
   mavenLocal()

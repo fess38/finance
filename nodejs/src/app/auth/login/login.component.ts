@@ -6,10 +6,11 @@ import { AuthService } from '../auth.service';
   templateUrl: 'login.component.html'
 })
 export class LoginComponent implements OnInit {
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private auth: AuthService,
+              private router: Router) {}
 
   ngOnInit() {
-    if (this.auth.isSignIn()) {
+    if (this.auth.hasToken()) {
       this.router.navigate(['']);
     }
   }

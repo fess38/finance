@@ -2,16 +2,23 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AccountDetailComponent } from './account/account-detail/account-detail.component';
 import { AccountListComponent } from './account/account-list/account-list.component';
+import { AccessLinkComponent } from './auth/access-link/access-link.component';
 import { AuthGuardService } from './auth/auth-guard.service';
 import { LoginComponent } from './auth/login/login.component';
 import { CategoryDetailComponent } from './category/category-detail/category-detail.component';
 import { CategoryListComponent } from './category/category-list/category-list.component';
+import { ErrorPageComponent } from './core/error-page/error-page.component';
 import { MainPageComponent } from './core/main-page/main-page.component';
 import { SettingsComponent } from './core/settings/settings.component';
 import { FamilyMemberDetailComponent } from './family-member/family-member-detail/family-member-detail.component';
 import { FamilyMemberListComponent } from './family-member/family-member-list/family-member-list.component';
 import { SubCategoryDetailComponent } from './sub-category/sub-category-detail/sub-category-detail.component';
 import { SubCategoryListComponent } from './sub-category/sub-category-list/sub-category-list.component';
+import { TransactionDateComponent } from './transaction/transaction-date/transaction-date.component';
+import { TransactionDetailComponent } from './transaction/transaction-detail/transaction-detail.component';
+import { TransactionListComponent } from './transaction/transaction-list/transaction-list.component';
+import { TransactionMonthComponent } from './transaction/transaction-month/transaction-month.component';
+import { TransactionYearComponent } from './transaction/transaction-year/transaction-year.component';
 
 const appRoutes: Routes = [
   {
@@ -22,6 +29,14 @@ const appRoutes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'error',
+    component: ErrorPageComponent,
+  },
+  {
+    path: 'access_link/:token',
+    component: AccessLinkComponent
   },
   {
     path: 'settings',
@@ -66,6 +81,31 @@ const appRoutes: Routes = [
   {
     path: 'family_member/:id',
     component: FamilyMemberDetailComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'transaction',
+    component: TransactionListComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'transaction/:id',
+    component: TransactionDetailComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'report/date',
+    component: TransactionDateComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'report/month',
+    component: TransactionMonthComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'report/year',
+    component: TransactionYearComponent,
     canActivate: [AuthGuardService]
   },
   {
