@@ -23,7 +23,7 @@ class CompositeValidator(private val messageService: MessageService): MessageVal
     val validatorResponse: ValidatorResponse
 
     if (value.id != 0L && !messageService.isExist(value.id, value.type)) {
-      val error = "try to update uknown [${value.type}] with id [${value.id}]"
+      val error = "try to update unknown [${value.type}] with id [${value.id}]"
       validatorResponse = ValidatorResponse(error)
     }
     else {

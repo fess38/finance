@@ -28,7 +28,11 @@ class UserServiceImpl: UserService {
   }
 
   override fun find(token: String): User? {
-    return tokenCache.get(token)
+    return try {
+      tokenCache.get(token)
+    } catch (e: Exception) {
+      null
+    }
   }
 
   override fun find(outerId: String, authType: AuthType): User? {
@@ -54,7 +58,7 @@ class UserServiceImpl: UserService {
   private fun createCache(): LoadingCache<String, User?> {
     return CacheBuilder.newBuilder()
         .maximumSize(100)
-        .expireAfterWrite(10, TimeUnit.MINUTES)
+        .expireAfterWrite(240, TimeUnit.MINUTES)
         .build(
             object: CacheLoader<String, User?>() {
               override fun load(key: String): User? {

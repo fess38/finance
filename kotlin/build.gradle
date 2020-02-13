@@ -2,11 +2,11 @@ group "ru.fess38.finance"
 version "0.1"
 
 buildscript {
-  ext.kotlin_version = "1.2.51"
-  ext.spring_version = "4.3.10.RELEASE"
-  ext.spring_boot_version = "1.5.4.RELEASE"
-  ext.hibernate_version = "5.1.0.Final"
-  ext.proto_version = "3.5.1"
+  ext.kotlin_version = "1.3.61"
+  ext.spring_version = "5.2.3.RELEASE"
+  ext.spring_boot_version = "2.2.4.RELEASE"
+  ext.hibernate_version = "5.4.11.Final"
+  ext.proto_version = "3.11.3"
 
   repositories {
     mavenCentral()
@@ -16,8 +16,9 @@ buildscript {
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"
     classpath "org.jetbrains.kotlin:kotlin-noarg:$kotlin_version"
+    classpath "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     classpath "org.springframework.boot:spring-boot-gradle-plugin:$spring_boot_version"
-    classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.4'
+    classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.11'
   }
 }
 
@@ -43,7 +44,7 @@ dependencies {
   }
 
   // test
-  testCompile "junit:junit:4.12"
+  testCompile "junit:junit:4.13"
   testCompile "org.jetbrains.kotlin:kotlin-test"
   testCompile "org.jetbrains.kotlin:kotlin-test-junit"
   testCompile "org.mockito:mockito-all:1.10.19"
@@ -72,26 +73,21 @@ dependencies {
 
   // Other
   compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-  compile "org.apache.commons:commons-dbcp2:2.3.0"
-  compile "org.postgresql:postgresql:42.1.3"
-  compile "com.google.guava:guava:19.0"
-  compile "com.typesafe:config:1.3.1"
-  compile "com.google.api-client:google-api-client:1.22.0"
-  compile "org.apache.commons:commons-text:1.1"
-  compile "io.github.microutils:kotlin-logging:1.4.9"
+  compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+  compile "org.apache.commons:commons-dbcp2:2.7.0"
+  compile "org.postgresql:postgresql:42.2.10"
+  compile "com.google.guava:guava:28.2-jre"
+  compile "com.typesafe:config:1.4.0"
+  compile "com.google.api-client:google-api-client:1.30.3"
+  compile "org.apache.commons:commons-text:1.8"
+  compile "io.github.microutils:kotlin-logging:1.7.8"
 }
 
 sourceCompatibility = 1.8
 [compileJava, compileTestJava]*.options*.encoding = "UTF-8"
 
-jar {
-  baseName = "finance"
-  version = "0.1"
-  manifest.attributes "Main-Class": "ru.fess38.finance.MainKt"
-
-  from {
-    configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-  }
+bootJar {
+   archiveName = "finance-0.1.jar"
 }
 
 protobuf {

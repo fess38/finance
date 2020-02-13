@@ -35,13 +35,13 @@ class HibernateEntityRepositoryImpl: EntityRepository {
 
   override fun save(message: Message, user: User): Message {
     val hibernateEntity = HibernateEntity.from(message, user)
-    sessionFactory.openSession().apply {save(hibernateEntity)}.apply {flush()}.apply {close()}
+    sessionFactory.currentSession.apply {save(hibernateEntity)}.apply {flush()}
     return message.withId(hibernateEntity.id)
   }
 
   override fun update(message: Message, user: User) {
     val hibernateEntity = HibernateEntity.from(message, user)
-    sessionFactory.openSession().apply {update(hibernateEntity)}.apply {flush()}.apply {close()}
+    sessionFactory.currentSession.apply {update(hibernateEntity)}.apply {flush()}
   }
 
   override fun isExist(id: Long, type: EntityType, user: User): Boolean {
@@ -53,10 +53,7 @@ class HibernateEntityRepositoryImpl: EntityRepository {
           .add(Restrictions.eq("type", type))
           .add(Restrictions.eq("id", id))
           .setProjection(Projections.rowCount())
-      val session = sessionFactory.openSession()
-      val rowCount = criteria.getExecutableCriteria(session).uniqueResult() as Long
-      session.close()
-      rowCount > 0
+      criteria.getExecutableCriteria(sessionFactory.currentSession).uniqueResult() as Long > 0
     }
   }
 
@@ -66,10 +63,8 @@ class HibernateEntityRepositoryImpl: EntityRepository {
     if (modifiedAfter > 0) {
       criteria.add(Restrictions.gt("modified", modifiedAfter))
     }
-    val session = sessionFactory.openSession()
-    return criteria.getExecutableCriteria(session).list()
+    return criteria.getExecutableCriteria(sessionFactory.currentSession).list()
         .map {parse((it as HibernateEntity))}
-        .apply {session.close()}
   }
 
   private fun parse(hibernateEntity: HibernateEntity): Message {

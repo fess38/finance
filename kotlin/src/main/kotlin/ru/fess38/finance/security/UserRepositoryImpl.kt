@@ -15,11 +15,11 @@ class UserRepositoryImpl: UserRepository {
   lateinit var sessionFactory: SessionFactory
 
   override fun save(user: User) {
-    sessionFactory.openSession().apply {save(user)}.apply {flush()}.apply {close()}
+    sessionFactory.currentSession.apply {save(user)}.apply {flush()}
   }
 
   override fun update(user: User) {
-    sessionFactory.openSession().apply {update(user)}.apply {flush()}.apply {close()}
+    sessionFactory.currentSession.apply {update(user)}.apply {flush()}
   }
 
   override fun find(token: String): User? {
@@ -27,21 +27,17 @@ class UserRepositoryImpl: UserRepository {
         .createAlias("user.sessions", "s")
         .add(Restrictions.eq("s.token", token))
         .add(Restrictions.gt("s.expired", System.currentTimeMillis()))
-    val session = sessionFactory.openSession()
-    return criteria.getExecutableCriteria(session).list()
+    return criteria.getExecutableCriteria(sessionFactory.currentSession).list()
         .map {it as User}
         .firstOrNull()
-        .apply {session.close()}
   }
 
   override fun find(outerId: String, authType: AuthType): User? {
     val criteria = DetachedCriteria.forClass(User::class.java)
         .add(Restrictions.eq("outerId", outerId))
         .add(Restrictions.eq("authType", authType))
-    val session = sessionFactory.openSession()
-    return criteria.getExecutableCriteria(session).list()
+    return criteria.getExecutableCriteria(sessionFactory.currentSession).list()
         .map {it as User}
         .firstOrNull()
-        .apply {session.close()}
   }
 }
