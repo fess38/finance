@@ -67,6 +67,7 @@ export class TransactionYearComponent implements OnInit, OnDestroy {
     const types: Transaction.Type[] = [Transaction.Type.INCOME, Transaction.Type.EXPENSE];
     this.allTransactions = _.chain(this.userdata.transactions())
       .filter(x => types.includes(Utils.type(x)))
+      .map(x => x)
       .value();
     this.transactions = this.allTransactions
       .filter(x => {
@@ -83,50 +84,47 @@ export class TransactionYearComponent implements OnInit, OnDestroy {
 
   private updateYearCategorySummaries(): void {
     this.yearCategorySummaries.clear();
-    const value: Transaction[][] = _.chain(this.transactions)
+    _.chain(this.transactions)
       .groupBy(x => [DateUtils.parseYear(x.created).value, x.categoryId])
-      .value();
-    for (let key in value) {
-      const category = this.userdata.findCategory(+key.split(',')[1]);
-      const amount: number = _.chain(value[key])
-        .map(x => Math.max(Number(x.amountFrom), Number(x.amountTo)))
-        .reduce((x1, x2) => x1 + x2, 0)
-        .value();
-      const sum: number = category.isIncome ? this.income : this.expense;
-      this.yearCategorySummaries.set(key, new Summary({ amount: amount, share: amount / sum }));
-    }
+      .forEach((value, key: string) => {
+        const category = this.userdata.findCategory(+key.split(',')[1]);
+        const amount: number = _.chain(value)
+          .map(x => Math.max(Number(x.amountFrom), Number(x.amountTo)))
+          .reduce((x1, x2) => x1 + x2, 0)
+          .value();
+        const sum: number = category.isIncome ? this.income : this.expense;
+        this.yearCategorySummaries.set(key, new Summary({ amount: amount, share: amount / sum }));
+      });
   }
 
   private updateYearSubCategorySummaries(): void {
     this.yearSubCategorySummaries.clear();
-    const value: Transaction[][] = _.chain(this.transactions)
+    _.chain(this.transactions)
       .filter(x => x.subCategoryId > 0)
       .groupBy(x => [DateUtils.parseYear(x.created).value, x.subCategoryId])
-      .value();
-    for (let key in value) {
-      const subCategory = this.userdata.findSubCategory(+key.split(',')[1]);
-      const category = this.userdata.findCategory(subCategory.categoryId);
-      const amount: number = _.chain(value[key])
-        .map(x => Math.max(Number(x.amountFrom), Number(x.amountTo)))
-        .reduce((x1, x2) => x1 + x2, 0)
-        .value();
-      const sum: number = category.isIncome ? this.income : this.expense;
-      this.yearSubCategorySummaries.set(key, new Summary({ amount: amount, share: amount / sum }));
-    }
+      .forEach((value, key: string) => {
+        const subCategory = this.userdata.findSubCategory(+key.split(',')[1]);
+        const category = this.userdata.findCategory(subCategory.categoryId);
+        const amount: number = _.chain(value)
+          .map(x => Math.max(Number(x.amountFrom), Number(x.amountTo)))
+          .reduce((x1, x2) => x1 + x2, 0)
+          .value();
+        const sum: number = category.isIncome ? this.income : this.expense;
+        this.yearSubCategorySummaries.set(key, new Summary({ amount: amount, share: amount / sum }));
+      });
   }
 
   private yearSummaries(transactions: Transaction[], sum: number): Map<number, Summary> {
     const result = new Map<number, Summary>();
-    const value = _.chain(transactions)
+    _.chain(transactions)
       .groupBy(x => DateUtils.parseYear(x.created).value)
-      .value();
-    for (let key in value) {
-      const amount: number = _.chain(value[key])
-        .map(x => Math.abs(Number(x.amountFrom)) + Math.abs(Number(x.amountTo)))
-        .reduce((x1, x2) => x1 + x2, 0)
-        .value();
-      result.set(+key, new Summary({ amount: amount, share: amount / sum }));
-    }
+      .forEach((value, key) => {
+        const amount: number = _.chain(value)
+          .map(x => Math.abs(Number(x.amountFrom)) + Math.abs(Number(x.amountTo)))
+          .reduce((x1, x2) => x1 + x2, 0)
+          .value();
+        result.set(+key, new Summary({ amount: amount, share: amount / sum }));
+      });
     return result;
   }
 

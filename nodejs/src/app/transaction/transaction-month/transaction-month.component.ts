@@ -75,6 +75,7 @@ export class TransactionMonthComponent implements OnInit, OnDestroy {
     this.allTransactions = _.chain(this.userdata.transactions())
       .filter(x => types.includes(Utils.type(x)))
       .filter(x => DateUtils.parseDate_(x.created).year == this.criteria.year)
+      .map(x => x)
       .value();
     this.transactions = this.allTransactions
       .filter(x => {
@@ -85,48 +86,47 @@ export class TransactionMonthComponent implements OnInit, OnDestroy {
 
   private updateMonthCategorySummaries(): void {
     this.monthCategorySummaries.clear();
-    const value: Transaction[][] = _.chain(this.transactions)
+    _.chain(this.transactions)
       .groupBy(x => [DateUtils.parseAndFormatMonth(x.created), x.categoryId])
-      .value();
-    for (let key in value) {
-      const category = this.userdata.findCategory(+key.split(',')[1]);
-      const amount: number = _.chain(value[key])
-        .map(x => Math.max(Number(x.amountFrom), Number(x.amountTo)))
-        .reduce((x1, x2) => x1 + x2, 0)
-        .value();
-      const sum: number = category.isIncome ? this.income : this.expense;
-      this.monthCategorySummaries.set(key, new Summary({ amount: amount, share: amount / sum }));
-    }
+      .forEach((value, key: string) => {
+        const category = this.userdata.findCategory(+key.split(',')[1]);
+        const amount: number = _.chain(value)
+          .map(x => Math.max(Number(x.amountFrom), Number(x.amountTo)))
+          .reduce((x1, x2) => x1 + x2, 0)
+          .value();
+        const sum: number = category.isIncome ? this.income : this.expense;
+        this.monthCategorySummaries.set(key, new Summary({ amount: amount, share: amount / sum }));
+      });
   }
 
   private updateMonthSubCategorySummaries(): void {
     this.monthSubCategorySummaries.clear();
-    const value: Transaction[][] = _.chain(this.transactions)
+    _.chain(this.transactions)
       .filter(x => x.subCategoryId > 0)
       .groupBy(x => [DateUtils.parseAndFormatMonth(x.created), x.subCategoryId])
-      .value();
-    for (let key in value) {
-      const subCategory = this.userdata.findSubCategory(+key.split(',')[1]);
-      const category = this.userdata.findCategory(subCategory.categoryId);
-      const amount: number = _.chain(value[key])
-        .map(x => Math.max(Number(x.amountFrom), Number(x.amountTo)))
-        .reduce((x1, x2) => x1 + x2, 0)
-        .value();
-      const sum: number = category.isIncome ? this.income : this.expense;
-      this.monthSubCategorySummaries.set(key, new Summary({ amount: amount, share: amount / sum }));
-    }
+      .forEach((value, key: string) => {
+        const subCategory = this.userdata.findSubCategory(+key.split(',')[1]);
+        const category = this.userdata.findCategory(subCategory.categoryId);
+        const amount: number = _.chain(value)
+          .map(x => Math.max(Number(x.amountFrom), Number(x.amountTo)))
+          .reduce((x1, x2) => x1 + x2, 0)
+          .value();
+        const sum: number = category.isIncome ? this.income : this.expense;
+        this.monthSubCategorySummaries.set(key, new Summary({ amount: amount, share: amount / sum }));
+      });
   }
 
   private monthSummaries(transactions: Transaction[], sum: number): Map<string, Summary> {
     const result = new Map<string, Summary>();
-    const value = _.chain(transactions).groupBy(x => DateUtils.parseAndFormatMonth(x.created)).value();
-    for (let key in value) {
-      const amount: number = _.chain(value[key])
-        .map(x => Math.abs(Number(x.amountFrom)) + Math.abs(Number(x.amountTo)))
-        .reduce((x1, x2) => x1 + x2, 0)
-        .value();
-      result.set(key, new Summary({ amount: amount, share: amount / sum }));
-    }
+    _.chain(transactions)
+      .groupBy(x => DateUtils.parseAndFormatMonth(x.created))
+      .forEach((value, key: string) => {
+        const amount: number = _.chain(value)
+          .map(x => Math.abs(Number(x.amountFrom)) + Math.abs(Number(x.amountTo)))
+          .reduce((x1, x2) => x1 + x2, 0)
+          .value();
+        result.set(key, new Summary({ amount: amount, share: amount / sum }));
+      });
     return result;
   }
 
@@ -197,7 +197,7 @@ export class TransactionMonthComponent implements OnInit, OnDestroy {
         transaction_amount: 1000,
         source: 'report/month',
         year: month.year,
-        month: month.month,
+        month: month.month
       }
     });
   }
@@ -209,7 +209,7 @@ export class TransactionMonthComponent implements OnInit, OnDestroy {
         transaction_amount: 1000,
         source: 'report/month',
         year: month.year,
-        month: month.month,
+        month: month.month
       }
     });
   }

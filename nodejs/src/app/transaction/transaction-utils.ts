@@ -69,33 +69,33 @@ export class TransactionUtils {
   static categorySummaries(transactions: Transaction[], income: number,
                            expense: number): Map<number, Summary> {
     const result = new Map<number, Summary>();
-    const value = _.chain(transactions).groupBy(x => x.categoryId).value();
-    for (let key in value) {
-      const amount: number = _.chain(value[key])
-        .map(x => Math.abs(Number(x.amountFrom)) + Math.abs(Number(x.amountTo)))
-        .reduce((x1, x2) => x1 + x2, 0)
-        .value();
-      const sum = this.type(value[key][0]) == Type.INCOME ? income : expense;
-      result.set(+key, new Summary({ amount: amount, share: amount / sum }));
-    }
+    _.chain(transactions)
+      .groupBy(x => x.categoryId)
+      .forEach((value, key) => {
+        const amount: number = _.chain(value)
+          .map(x => Math.abs(Number(x.amountFrom)) + Math.abs(Number(x.amountTo)))
+          .reduce((x1, x2) => x1 + x2, 0)
+          .value();
+        const sum = this.type(value[0]) == Type.INCOME ? income : expense;
+        result.set(+key, new Summary({ amount: amount, share: amount / sum }));
+      });
     return result;
   }
 
   static subCategorySummaries(transactions: Transaction[], income: number,
                               expense: number): Map<number, Summary> {
     const result = new Map<number, Summary>();
-    const value = _.chain(transactions)
+    _.chain(transactions)
       .filter(x => x.subCategoryId > 0)
       .groupBy(x => x.subCategoryId)
-      .value();
-    for (let key in value) {
-      const amount: number = _.chain(value[key])
-        .map(x => Math.abs(Number(x.amountFrom)) + Math.abs(Number(x.amountTo)))
-        .reduce((x1, x2) => x1 + x2, 0)
-        .value();
-      const sum = this.type(value[key][0]) == Type.INCOME ? income : expense;
-      result.set(+key, new Summary({ amount: amount, share: amount / sum }));
-    }
+      .forEach((value, key) => {
+        const amount: number = _.chain(value)
+          .map(x => Math.abs(Number(x.amountFrom)) + Math.abs(Number(x.amountTo)))
+          .reduce((x1, x2) => x1 + x2, 0)
+          .value();
+        const sum = this.type(value[0]) == Type.INCOME ? income : expense;
+        result.set(+key, new Summary({ amount: amount, share: amount / sum }));
+      });
     return result;
   }
 }

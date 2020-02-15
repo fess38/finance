@@ -32,12 +32,14 @@ export class TransactionListComponent implements OnInit, OnDestroy {
       .filter(x => this.criteria.isFit(x))
       .sortBy(x => x.created)
       .reverse()
+      .map(x => x)
       .value();
     _.chain(this.transactions)
       .sortBy(x => x.created)
       .reverse()
       .map(x => DateUtils.parseMonth(x.created))
       .unique(true, (x) => String(x.year) + String(x.month))
+      .map(x => x)
       .value()
       .forEach(x => {
         if (!this.months.includes(x)) {
@@ -90,6 +92,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
       })
       .sortBy(x => x.created)
       .reverse()
+      .map(x => x)
       .value();
   }
 

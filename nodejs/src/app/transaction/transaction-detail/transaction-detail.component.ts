@@ -142,6 +142,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
     const subCategories: SubCategory[] = _.chain(this.userdata.subCategories())
       .filter(x => !x.isDeleted && x.isVisible)
       .filter(x => x.categoryId == this.transaction.categoryId)
+      .map(x => x)
       .value();
     if (this.transaction.subCategoryId) {
       const subCategory: SubCategory = this.userdata.findSubCategory(this.transaction.subCategoryId);
@@ -149,7 +150,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
         subCategories.push(subCategory);
       }
     }
-    return _.chain(subCategories).sortBy(x => x.name).value();
+    return _.sortBy(subCategories, x => x.name);
   }
 
   familyMembers(): FamilyMember[] {
