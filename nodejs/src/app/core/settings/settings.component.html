@@ -1,27 +1,29 @@
 <div class="clr-row">
-  <div class="clr-col-12 clr-col-lg-6">
-    <form>
-      <section class="form-block">
-        <label>{{'common.settings' | translate}}</label>
-        <div class="form-group">
-          <a routerLink="/access_link/create_link">{{'common.access_link' | translate}}</a>
-        </div>
-        <div class="form-group">
-          <label>{{'settings.language' | translate}}</label>
-          <div class="select form-control">
-            <select name="language"
-                    required
-                    [(ngModel)]="settings.language">
+  <div class="clr-col-12 clr-col-sm-6">
+    <form class="clr-form clr-form-compact">
+      <div class="clr-form-control clr-row clr-col-12">
+        <label class="clr-control-label">{{'common.settings' | translate}}</label>
+      </div>
+      <div class="clr-form-control clr-row clr-col-12">
+        <a routerLink="/access_link/create_link">{{'common.access_link' | translate}}</a>
+      </div>
+      <div class="clr-form-control clr-row">
+        <label class="clr-control-label clr-col-3">{{'settings.language' | translate}}</label>
+        <div class="clr-control-container">
+          <div class="clr-select-wrapper">
+            <select class="clr-select" name="language" required [(ngModel)]="settings.language">
               <option selected *ngFor="let language of languages" [ngValue]="language.code">
                 {{language.value}}
               </option>
             </select>
           </div>
         </div>
-        <div class="form-group">
-          <label>{{'settings.currency' | translate}}</label>
-          <div class="select form-control">
-            <select name="currency" required [(ngModel)]="settings.currencyId">
+      </div>
+      <div class="clr-form-control clr-row">
+        <label class="clr-control-label clr-col-3">{{'settings.currency' | translate}}</label>
+        <div class="clr-control-container">
+          <div class="clr-select-wrapper">
+            <select class="clr-select" name="currency" required [(ngModel)]="settings.currencyId">
               <option selected *ngFor="let currency of currencies()" [ngValue]="currency.id">
                 <span *ngIf="language() == 'RU'">{{currency.nameRu}} ({{currency.symbol}})</span>
                 <span *ngIf="language() == 'EN'">{{currency.nameEn}} ({{currency.symbol}})</span>
@@ -29,14 +31,14 @@
             </select>
           </div>
         </div>
-      </section>
+      </div>
+      <div class="clr-form-control clr-row clr-col-9 clr-col-sm-6">
+        <button class="btn btn-primary btn-sm btn-block"
+                (click)="updateSettings()"
+                [disabled]="this.isReadOnly()">
+          {{'common.save' | translate}}
+        </button>
+      </div>
     </form>
-    <div class="btn-group btn-primary">
-      <button class="btn btn-primary btn-sm"
-              (click)="updateSettings()"
-              [disabled]="this.isReadOnly()">
-        {{'common.save' | translate}}
-      </button>
-    </div>
   </div>
 </div>
