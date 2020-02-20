@@ -9,8 +9,8 @@
     "test": "ng test --browsers ChromeHeadless"
   },
   "engines": {
-    "node": "8.9.4",
-    "npm": "6.1.0"
+    "node": "12.16.1",
+    "npm": "6.13.4"
   },
   "private": true,
   "dependencies": {

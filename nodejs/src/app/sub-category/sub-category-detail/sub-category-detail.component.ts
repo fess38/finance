@@ -9,12 +9,12 @@ import { UserDataService } from '../../core/user-data/user-data.service';
   templateUrl: 'sub-category-detail.component.html'
 })
 export class SubCategoryDetailComponent implements OnInit, OnDestroy {
-  subCategory: SubCategory = new SubCategory();
-  private subscription: Subscription;
-
   constructor(private userdata: UserDataService,
               private route: ActivatedRoute,
               private router: Router) {}
+
+  private subscription: Subscription;
+  subCategory: SubCategory = new SubCategory();
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -35,6 +35,10 @@ export class SubCategoryDetailComponent implements OnInit, OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+  }
+
+  isReadOnly(): boolean {
+    return this.userdata.isReadOnly();
   }
 
   categories() {

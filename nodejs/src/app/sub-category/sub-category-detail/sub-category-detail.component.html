@@ -43,13 +43,15 @@
     <button type="submit"
             class="btn btn-primary btn-block"
             (click)="update(subCategory)"
-            [disabled]="!isValidForm()">{{'common.save' | translate}}
+            [disabled]="!isValidForm() || isReadOnly()">
+      {{'common.save' | translate}}
     </button>
     <button type="submit"
             class="btn btn-danger btn-block"
             (click)="delete(subCategory)"
             [hidden]="isNewSubCategory()"
-            [disabled]="hasTransations()">{{'common.delete' | translate}}
+            [disabled]="hasTransations() || isReadOnly()">
+      {{'common.delete' | translate}}
     </button>
   </div>
 </div>

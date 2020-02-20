@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import * as _ from 'underscore';
-import { Account, Currency } from '../../core/model/model';
+import { Account } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 
 @Component({
@@ -22,9 +22,5 @@ export class AccountListComponent {
 
   currencySymbol(account: Account): String {
     return this.userdata.findCurrency(account.currencyId).symbol;
-  }
-
-  private currencies(): Currency[] {
-    return this.userdata.currencies();
   }
 }

@@ -8,12 +8,12 @@ import { UserDataService } from '../../core/user-data/user-data.service';
   templateUrl: 'category-detail.component.html'
 })
 export class CategoryDetailComponent implements OnInit, OnDestroy {
-  category: Category = new Category();
-  private subscription: Subscription;
-
   constructor(private userdata: UserDataService,
               private route: ActivatedRoute,
               private router: Router) {}
+
+  private subscription: Subscription;
+  category: Category = new Category();
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -34,6 +34,10 @@ export class CategoryDetailComponent implements OnInit, OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+  }
+
+  isReadOnly(): boolean {
+    return this.userdata.isReadOnly();
   }
 
   update(category: Category): void {

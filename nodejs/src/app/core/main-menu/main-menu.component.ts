@@ -9,8 +9,6 @@ import { UserDataService } from '../user-data/user-data.service';
   templateUrl: 'main-menu.component.html'
 })
 export class MainMenuComponent implements OnDestroy {
-  private readonly subscription: Subscription;
-
   constructor(private auth: AuthService,
               private userdata: UserDataService,
               private router: Router) {
@@ -24,6 +22,8 @@ export class MainMenuComponent implements OnDestroy {
       () => hasActiveAttempt
     );
   }
+
+  private readonly subscription: Subscription;
 
   signout(): void {
     this.auth.signOut();

@@ -11,25 +11,30 @@ import Language = Settings.Language;
 
 @Injectable()
 export class UserDataService {
-  private enricher = new UserDataEnricherService();
-  private isInit: AsyncSubject<boolean> = new AsyncSubject();
-  private dump: Dump = new Dump();
-
   constructor(private http: HttpService,
               private translate: TranslateService,
               private titleService: Title) {
     this.setDefaultLang();
   }
 
+  private enricher = new UserDataEnricherService();
+  private isInit: AsyncSubject<boolean> = new AsyncSubject();
+  private dump: Dump = new Dump();
+  private isReadOnly_: boolean = true;
+
   subscribeOnInit(callback): Subscription {
     return this.isInit.subscribe(() => callback());
+  }
+
+  isReadOnly(): boolean {
+    return this.isReadOnly_;
   }
 
   readCache(): void {
     get('dump').then(dump => {
       if (dump) {
         this.dump = this.enricher.merge(this.dump, Dump.fromObject(dump));
-        this.init();
+        this.setInit();
       }
     });
   }
@@ -40,14 +45,11 @@ export class UserDataService {
         const modifiedAfter = (ts as number - 7 * 86400 * 1000) || 0;
         return this.http.get('/api/data/dump/get?ts=' + modifiedAfter);
       })
-      .then(data => Dump.decode(data))
       .then(data => {
-        return data;
-      })
-      .then(dump => {
-        this.dump = this.enricher.merge(this.dump, dump);
-        this.init();
+        this.dump = this.enricher.merge(this.dump, Dump.decode(data));
         this.updateCache();
+        this.setInit();
+        this.isReadOnly_ = false;
         set('ts', new Date().getTime());
       })
       .catch(error => {
@@ -56,7 +58,7 @@ export class UserDataService {
       });
   }
 
-  private init(): void {
+  private setInit(): void {
     this.enricher.enrich(this.dump);
     this.isInit.next(true);
     this.isInit.complete();

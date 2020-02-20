@@ -13,6 +13,11 @@ import { TransactionUtils as Utils } from '../transaction-utils';
   styleUrls: ['./transaction-date.component.css']
 })
 export class TransactionDateComponent implements OnInit, OnDestroy {
+  constructor(private userdata: UserDataService,
+              private criteria: Criteria,
+              private route: ActivatedRoute,
+              private router: Router) { }
+
   private subscription: Subscription;
   private allTransactions: Transaction[] = [];
   private transactions: Transaction[] = [];
@@ -20,6 +25,7 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
   private expenseTransactions: Transaction[] = [];
   private categories: Category[] = [];
   private subCategories: SubCategory[] = [];
+
   incomeCategories: Category[] = [];
   expenseCategories: Category[] = [];
   dates: Date_[] = [];
@@ -33,11 +39,6 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
   subCategorySummaries = new Map<number, Summary>();
   income: number;
   expense: number;
-
-  constructor(private userdata: UserDataService,
-              private criteria: Criteria,
-              private route: ActivatedRoute,
-              private router: Router) { }
 
   ngOnInit() {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;

@@ -12,6 +12,8 @@ import { TransactionUtils as Utils } from '../transaction-utils';
   styleUrls: ['../transaction-date/transaction-date.component.css']
 })
 export class TransactionYearComponent implements OnInit, OnDestroy {
+  constructor(private userdata: UserDataService, private router: Router) { }
+
   private subscription: Subscription;
   private allTransactions: Transaction[] = [];
   private transactions: Transaction[] = [];
@@ -19,6 +21,7 @@ export class TransactionYearComponent implements OnInit, OnDestroy {
   private expenseTransactions: Transaction[] = [];
   private categories: Category[] = [];
   private subCategories: SubCategory[] = [];
+
   incomeCategories: Category[] = [];
   expenseCategories: Category[] = [];
   years: Year[] = [];
@@ -32,8 +35,6 @@ export class TransactionYearComponent implements OnInit, OnDestroy {
   subCategorySummaries = new Map<number, Summary>();
   income: number;
   expense: number;
-
-  constructor(private userdata: UserDataService, private router: Router) { }
 
   ngOnInit() {
     this.subscription = this.userdata.subscribeOnInit(() => this.onInitCallback());
@@ -77,7 +78,7 @@ export class TransactionYearComponent implements OnInit, OnDestroy {
     this.years = _.chain(this.transactions)
       .map(x => DateUtils.parseYear(x.created).value)
       .unique()
-      .map(x => new Year({value: x}))
+      .map(x => new Year({ value: x }))
       .sortBy(x => x.value)
       .value();
   }

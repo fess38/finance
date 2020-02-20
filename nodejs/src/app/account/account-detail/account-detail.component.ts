@@ -10,9 +10,9 @@ import Language = Settings.Language;
   templateUrl: 'account-detail.component.html'
 })
 export class AccountDetailComponent implements OnInit, OnDestroy {
+  private subscription: Subscription;
   account: Account = new Account();
   updatedBalance: number = undefined;
-  private subscription: Subscription;
 
   constructor(private userdata: UserDataService,
               private route: ActivatedRoute,
@@ -39,11 +39,15 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     }
   }
 
+  isReadOnly(): boolean {
+    return this.userdata.isReadOnly();
+  }
+
   currencies(): Currency[] {
     return this.userdata.currencies();
   }
 
-  private language(): string {
+  language(): string {
     return Language[this.userdata.settings().language];
   }
 

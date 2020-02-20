@@ -12,6 +12,11 @@ import { TransactionUtils } from '../transaction-utils';
   templateUrl: 'transaction-detail.component.html'
 })
 export class TransactionDetailComponent implements OnInit, OnDestroy {
+  constructor(private userdata: UserDataService,
+              private criteria: Criteria,
+              private route: ActivatedRoute,
+              private router: Router) { }
+
   private subscription: Subscription;
   private maxTransactionsAccountId: number = 0;
 
@@ -22,11 +27,6 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
     { type: Transaction.Type.EXPENSE, label: 'common.expense' },
     { type: Transaction.Type.TRANSFER, label: 'transaction_detail.transfer' }
   ];
-
-  constructor(private userdata: UserDataService,
-              private criteria: Criteria,
-              private route: ActivatedRoute,
-              private router: Router) { }
 
   ngOnInit(): void {
     // to reload component on params change
@@ -40,6 +40,10 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
       this.subscription = this.userdata.subscribeOnInit(this.newTransactionCallback());
       this.onChangeTransactionType();
     }
+  }
+
+  isReadOnly(): boolean {
+    return this.userdata.isReadOnly();
   }
 
   private updateTransactionCallback(id: number): any {

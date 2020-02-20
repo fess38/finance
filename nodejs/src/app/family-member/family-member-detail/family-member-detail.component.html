@@ -29,12 +29,14 @@
     </form>
     <button class="btn btn-primary btn-block"
             (click)="update(familyMember)"
-            [disabled]="!isValidForm()">{{'common.save' | translate}}
+            [disabled]="!isValidForm() || isReadOnly()">
+      {{'common.save' | translate}}
     </button>
     <button class="btn btn-danger btn-block"
             (click)="delete(familyMember)"
             [hidden]="isNewFamilyMember()"
-            [disabled]="hasTransations()">{{'common.delete' | translate}}
+            [disabled]="hasTransations() || isReadOnly()">
+      {{'common.delete' | translate}}
     </button>
   </div>
 </div>

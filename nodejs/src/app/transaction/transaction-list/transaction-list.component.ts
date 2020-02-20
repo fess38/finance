@@ -12,14 +12,14 @@ import { TransactionUtils } from '../transaction-utils';
   templateUrl: './transaction-list.component.html'
 })
 export class TransactionListComponent implements OnInit, OnDestroy {
-  private subscription: Subscription;
-  months: Month[] = [];
-  transactions: Transaction[];
-
   constructor(private userdata: UserDataService,
               private criteria: Criteria,
               private route: ActivatedRoute,
               private router: Router) {}
+
+  private subscription: Subscription;
+  months: Month[] = [];
+  transactions: Transaction[];
 
   ngOnInit(): void {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
@@ -101,7 +101,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     const category: Category = this.userdata.findCategory(transaction.categoryId);
     const subCategory: SubCategory = this.userdata.findSubCategory(transaction.subCategoryId);
     if (subCategory) {
-      result = subCategory.name
+      result = subCategory.name;
     } else if (category) {
       result = category.name;
     }

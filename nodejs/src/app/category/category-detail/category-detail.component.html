@@ -46,12 +46,14 @@
     </form>
     <button class="btn btn-primary btn-block"
             (click)="update(category)"
-            [disabled]="!isValidForm()">{{'common.save' | translate}}
+            [disabled]="!isValidForm() || isReadOnly()">
+      {{'common.save' | translate}}
     </button>
     <button class="btn btn-danger btn-block"
             (click)="delete(category)"
             [hidden]="isNewCategory()"
-            [disabled]="hasLinkedEntities()">{{'common.delete' | translate}}
+            [disabled]="hasLinkedEntities() || isReadOnly()">
+      {{'common.delete' | translate}}
     </button>
   </div>
 </div>

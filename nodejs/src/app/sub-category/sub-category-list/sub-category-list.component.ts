@@ -7,9 +7,9 @@ import { UserDataService } from '../../core/user-data/user-data.service';
   templateUrl: 'sub-category-list.component.html'
 })
 export class SubCategoryListComponent {
-  filterCategoryId: number;
-
   constructor(private userdata: UserDataService) {}
+
+  filterCategoryId: number;
 
   categories(): Category[] {
     return _.chain(this.userdata.categories())

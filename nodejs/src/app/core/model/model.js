@@ -1,13 +1,11 @@
 /*eslint-disable block-scoped-var, id-length, no-control-regex, no-magic-numbers, no-prototype-builtins, no-redeclare, no-shadow, no-var, sort-vars*/
-"use strict";
-
-var $protobuf = require("protobufjs/minimal");
+import * as $protobuf from "protobufjs/minimal";
 
 // Common aliases
-var $Reader = $protobuf.Reader, $Writer = $protobuf.Writer, $util = $protobuf.util;
+const $Reader = $protobuf.Reader, $Writer = $protobuf.Writer, $util = $protobuf.util;
 
 // Exported root namespace
-var $root = $protobuf.roots["default"] || ($protobuf.roots["default"] = {});
+const $root = $protobuf.roots["default"] || ($protobuf.roots["default"] = {});
 
 /**
  * EntityType enum.
@@ -23,7 +21,7 @@ var $root = $protobuf.roots["default"] || ($protobuf.roots["default"] = {});
  * @property {number} TRANSACTION=6 TRANSACTION value
  */
 $root.EntityType = (function() {
-    var valuesById = {}, values = Object.create(valuesById);
+    const valuesById = {}, values = Object.create(valuesById);
     values[valuesById[0] = "UNDEFINED"] = 0;
     values[valuesById[7] = "SETTINGS"] = 7;
     values[valuesById[1] = "CURRENCY"] = 1;
@@ -35,7 +33,7 @@ $root.EntityType = (function() {
     return values;
 })();
 
-$root.Dump = (function() {
+export const Dump = $root.Dump = (() => {
 
     /**
      * Properties of a Dump.
@@ -66,7 +64,7 @@ $root.Dump = (function() {
         this.familyMembers = [];
         this.transactions = [];
         if (properties)
-            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
                     this[keys[i]] = properties[keys[i]];
     }
@@ -152,38 +150,25 @@ $root.Dump = (function() {
         if (!writer)
             writer = $Writer.create();
         if (message.currencies != null && message.currencies.length)
-            for (var i = 0; i < message.currencies.length; ++i)
+            for (let i = 0; i < message.currencies.length; ++i)
                 $root.Currency.encode(message.currencies[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
         if (message.accounts != null && message.accounts.length)
-            for (var i = 0; i < message.accounts.length; ++i)
+            for (let i = 0; i < message.accounts.length; ++i)
                 $root.Account.encode(message.accounts[i], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
         if (message.categories != null && message.categories.length)
-            for (var i = 0; i < message.categories.length; ++i)
+            for (let i = 0; i < message.categories.length; ++i)
                 $root.Category.encode(message.categories[i], writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
         if (message.subCategories != null && message.subCategories.length)
-            for (var i = 0; i < message.subCategories.length; ++i)
+            for (let i = 0; i < message.subCategories.length; ++i)
                 $root.SubCategory.encode(message.subCategories[i], writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
         if (message.familyMembers != null && message.familyMembers.length)
-            for (var i = 0; i < message.familyMembers.length; ++i)
+            for (let i = 0; i < message.familyMembers.length; ++i)
                 $root.FamilyMember.encode(message.familyMembers[i], writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
         if (message.transactions != null && message.transactions.length)
-            for (var i = 0; i < message.transactions.length; ++i)
+            for (let i = 0; i < message.transactions.length; ++i)
                 $root.Transaction.encode(message.transactions[i], writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
         $root.Settings.encode(message.settings, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
         return writer;
-    };
-
-    /**
-     * Encodes the specified Dump message, length delimited. Does not implicitly {@link Dump.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof Dump
-     * @static
-     * @param {IDump} message Dump message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    Dump.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
     };
 
     /**
@@ -200,9 +185,9 @@ $root.Dump = (function() {
     Dump.decode = function decode(reader, length) {
         if (!(reader instanceof $Reader))
             reader = $Reader.create(reader);
-        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Dump();
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Dump();
         while (reader.pos < end) {
-            var tag = reader.uint32();
+            let tag = reader.uint32();
             switch (tag >>> 3) {
             case 7:
                 message.settings = $root.Settings.decode(reader, reader.uint32());
@@ -248,95 +233,6 @@ $root.Dump = (function() {
     };
 
     /**
-     * Decodes a Dump message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof Dump
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {Dump} Dump
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    Dump.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
-
-    /**
-     * Verifies a Dump message.
-     * @function verify
-     * @memberof Dump
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    Dump.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        {
-            var error = $root.Settings.verify(message.settings);
-            if (error)
-                return "settings." + error;
-        }
-        if (message.currencies != null && message.hasOwnProperty("currencies")) {
-            if (!Array.isArray(message.currencies))
-                return "currencies: array expected";
-            for (var i = 0; i < message.currencies.length; ++i) {
-                var error = $root.Currency.verify(message.currencies[i]);
-                if (error)
-                    return "currencies." + error;
-            }
-        }
-        if (message.accounts != null && message.hasOwnProperty("accounts")) {
-            if (!Array.isArray(message.accounts))
-                return "accounts: array expected";
-            for (var i = 0; i < message.accounts.length; ++i) {
-                var error = $root.Account.verify(message.accounts[i]);
-                if (error)
-                    return "accounts." + error;
-            }
-        }
-        if (message.categories != null && message.hasOwnProperty("categories")) {
-            if (!Array.isArray(message.categories))
-                return "categories: array expected";
-            for (var i = 0; i < message.categories.length; ++i) {
-                var error = $root.Category.verify(message.categories[i]);
-                if (error)
-                    return "categories." + error;
-            }
-        }
-        if (message.subCategories != null && message.hasOwnProperty("subCategories")) {
-            if (!Array.isArray(message.subCategories))
-                return "subCategories: array expected";
-            for (var i = 0; i < message.subCategories.length; ++i) {
-                var error = $root.SubCategory.verify(message.subCategories[i]);
-                if (error)
-                    return "subCategories." + error;
-            }
-        }
-        if (message.familyMembers != null && message.hasOwnProperty("familyMembers")) {
-            if (!Array.isArray(message.familyMembers))
-                return "familyMembers: array expected";
-            for (var i = 0; i < message.familyMembers.length; ++i) {
-                var error = $root.FamilyMember.verify(message.familyMembers[i]);
-                if (error)
-                    return "familyMembers." + error;
-            }
-        }
-        if (message.transactions != null && message.hasOwnProperty("transactions")) {
-            if (!Array.isArray(message.transactions))
-                return "transactions: array expected";
-            for (var i = 0; i < message.transactions.length; ++i) {
-                var error = $root.Transaction.verify(message.transactions[i]);
-                if (error)
-                    return "transactions." + error;
-            }
-        }
-        return null;
-    };
-
-    /**
      * Creates a Dump message from a plain object. Also converts values to their respective internal types.
      * @function fromObject
      * @memberof Dump
@@ -347,7 +243,7 @@ $root.Dump = (function() {
     Dump.fromObject = function fromObject(object) {
         if (object instanceof $root.Dump)
             return object;
-        var message = new $root.Dump();
+        let message = new $root.Dump();
         if (object.settings != null) {
             if (typeof object.settings !== "object")
                 throw TypeError(".Dump.settings: object expected");
@@ -357,7 +253,7 @@ $root.Dump = (function() {
             if (!Array.isArray(object.currencies))
                 throw TypeError(".Dump.currencies: array expected");
             message.currencies = [];
-            for (var i = 0; i < object.currencies.length; ++i) {
+            for (let i = 0; i < object.currencies.length; ++i) {
                 if (typeof object.currencies[i] !== "object")
                     throw TypeError(".Dump.currencies: object expected");
                 message.currencies[i] = $root.Currency.fromObject(object.currencies[i]);
@@ -367,7 +263,7 @@ $root.Dump = (function() {
             if (!Array.isArray(object.accounts))
                 throw TypeError(".Dump.accounts: array expected");
             message.accounts = [];
-            for (var i = 0; i < object.accounts.length; ++i) {
+            for (let i = 0; i < object.accounts.length; ++i) {
                 if (typeof object.accounts[i] !== "object")
                     throw TypeError(".Dump.accounts: object expected");
                 message.accounts[i] = $root.Account.fromObject(object.accounts[i]);
@@ -377,7 +273,7 @@ $root.Dump = (function() {
             if (!Array.isArray(object.categories))
                 throw TypeError(".Dump.categories: array expected");
             message.categories = [];
-            for (var i = 0; i < object.categories.length; ++i) {
+            for (let i = 0; i < object.categories.length; ++i) {
                 if (typeof object.categories[i] !== "object")
                     throw TypeError(".Dump.categories: object expected");
                 message.categories[i] = $root.Category.fromObject(object.categories[i]);
@@ -387,7 +283,7 @@ $root.Dump = (function() {
             if (!Array.isArray(object.subCategories))
                 throw TypeError(".Dump.subCategories: array expected");
             message.subCategories = [];
-            for (var i = 0; i < object.subCategories.length; ++i) {
+            for (let i = 0; i < object.subCategories.length; ++i) {
                 if (typeof object.subCategories[i] !== "object")
                     throw TypeError(".Dump.subCategories: object expected");
                 message.subCategories[i] = $root.SubCategory.fromObject(object.subCategories[i]);
@@ -397,7 +293,7 @@ $root.Dump = (function() {
             if (!Array.isArray(object.familyMembers))
                 throw TypeError(".Dump.familyMembers: array expected");
             message.familyMembers = [];
-            for (var i = 0; i < object.familyMembers.length; ++i) {
+            for (let i = 0; i < object.familyMembers.length; ++i) {
                 if (typeof object.familyMembers[i] !== "object")
                     throw TypeError(".Dump.familyMembers: object expected");
                 message.familyMembers[i] = $root.FamilyMember.fromObject(object.familyMembers[i]);
@@ -407,7 +303,7 @@ $root.Dump = (function() {
             if (!Array.isArray(object.transactions))
                 throw TypeError(".Dump.transactions: array expected");
             message.transactions = [];
-            for (var i = 0; i < object.transactions.length; ++i) {
+            for (let i = 0; i < object.transactions.length; ++i) {
                 if (typeof object.transactions[i] !== "object")
                     throw TypeError(".Dump.transactions: object expected");
                 message.transactions[i] = $root.Transaction.fromObject(object.transactions[i]);
@@ -428,7 +324,7 @@ $root.Dump = (function() {
     Dump.toObject = function toObject(message, options) {
         if (!options)
             options = {};
-        var object = {};
+        let object = {};
         if (options.arrays || options.defaults) {
             object.currencies = [];
             object.accounts = [];
@@ -441,32 +337,32 @@ $root.Dump = (function() {
             object.settings = null;
         if (message.currencies && message.currencies.length) {
             object.currencies = [];
-            for (var j = 0; j < message.currencies.length; ++j)
+            for (let j = 0; j < message.currencies.length; ++j)
                 object.currencies[j] = $root.Currency.toObject(message.currencies[j], options);
         }
         if (message.accounts && message.accounts.length) {
             object.accounts = [];
-            for (var j = 0; j < message.accounts.length; ++j)
+            for (let j = 0; j < message.accounts.length; ++j)
                 object.accounts[j] = $root.Account.toObject(message.accounts[j], options);
         }
         if (message.categories && message.categories.length) {
             object.categories = [];
-            for (var j = 0; j < message.categories.length; ++j)
+            for (let j = 0; j < message.categories.length; ++j)
                 object.categories[j] = $root.Category.toObject(message.categories[j], options);
         }
         if (message.subCategories && message.subCategories.length) {
             object.subCategories = [];
-            for (var j = 0; j < message.subCategories.length; ++j)
+            for (let j = 0; j < message.subCategories.length; ++j)
                 object.subCategories[j] = $root.SubCategory.toObject(message.subCategories[j], options);
         }
         if (message.familyMembers && message.familyMembers.length) {
             object.familyMembers = [];
-            for (var j = 0; j < message.familyMembers.length; ++j)
+            for (let j = 0; j < message.familyMembers.length; ++j)
                 object.familyMembers[j] = $root.FamilyMember.toObject(message.familyMembers[j], options);
         }
         if (message.transactions && message.transactions.length) {
             object.transactions = [];
-            for (var j = 0; j < message.transactions.length; ++j)
+            for (let j = 0; j < message.transactions.length; ++j)
                 object.transactions[j] = $root.Transaction.toObject(message.transactions[j], options);
         }
         if (message.settings != null && message.hasOwnProperty("settings"))
@@ -488,13 +384,13 @@ $root.Dump = (function() {
     return Dump;
 })();
 
-$root.Currency = (function() {
+export const Currency = $root.Currency = (() => {
 
     /**
      * Properties of a Currency.
      * @exports ICurrency
      * @interface ICurrency
-     * @property {number|Long} id Currency id
+     * @property {number} id Currency id
      * @property {string} nameRu Currency nameRu
      * @property {string} nameEn Currency nameEn
      * @property {string} symbol Currency symbol
@@ -511,14 +407,14 @@ $root.Currency = (function() {
      */
     function Currency(properties) {
         if (properties)
-            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
                     this[keys[i]] = properties[keys[i]];
     }
 
     /**
      * Currency id.
-     * @member {number|Long} id
+     * @member {number} id
      * @memberof Currency
      * @instance
      */
@@ -589,19 +485,6 @@ $root.Currency = (function() {
     };
 
     /**
-     * Encodes the specified Currency message, length delimited. Does not implicitly {@link Currency.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof Currency
-     * @static
-     * @param {ICurrency} message Currency message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    Currency.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
      * Decodes a Currency message from the specified reader or buffer.
      * @function decode
      * @memberof Currency
@@ -615,9 +498,9 @@ $root.Currency = (function() {
     Currency.decode = function decode(reader, length) {
         if (!(reader instanceof $Reader))
             reader = $Reader.create(reader);
-        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Currency();
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Currency();
         while (reader.pos < end) {
-            var tag = reader.uint32();
+            let tag = reader.uint32();
             switch (tag >>> 3) {
             case 1:
                 message.id = reader.int64();
@@ -653,46 +536,6 @@ $root.Currency = (function() {
     };
 
     /**
-     * Decodes a Currency message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof Currency
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {Currency} Currency
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    Currency.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
-
-    /**
-     * Verifies a Currency message.
-     * @function verify
-     * @memberof Currency
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    Currency.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
-            return "id: integer|Long expected";
-        if (!$util.isString(message.nameRu))
-            return "nameRu: string expected";
-        if (!$util.isString(message.nameEn))
-            return "nameEn: string expected";
-        if (!$util.isString(message.symbol))
-            return "symbol: string expected";
-        if (!$util.isString(message.code))
-            return "code: string expected";
-        return null;
-    };
-
-    /**
      * Creates a Currency message from a plain object. Also converts values to their respective internal types.
      * @function fromObject
      * @memberof Currency
@@ -703,7 +546,7 @@ $root.Currency = (function() {
     Currency.fromObject = function fromObject(object) {
         if (object instanceof $root.Currency)
             return object;
-        var message = new $root.Currency();
+        let message = new $root.Currency();
         if (object.id != null)
             if ($util.Long)
                 (message.id = $util.Long.fromValue(object.id)).unsigned = false;
@@ -736,10 +579,10 @@ $root.Currency = (function() {
     Currency.toObject = function toObject(message, options) {
         if (!options)
             options = {};
-        var object = {};
+        let object = {};
         if (options.defaults) {
             if ($util.Long) {
-                var long = new $util.Long(0, 0, false);
+                let long = new $util.Long(0, 0, false);
                 object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.id = options.longs === String ? "0" : 0;
@@ -778,7 +621,7 @@ $root.Currency = (function() {
     return Currency;
 })();
 
-$root.Currencies = (function() {
+export const Currencies = $root.Currencies = (() => {
 
     /**
      * Properties of a Currencies.
@@ -798,7 +641,7 @@ $root.Currencies = (function() {
     function Currencies(properties) {
         this.items = [];
         if (properties)
-            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
                     this[keys[i]] = properties[keys[i]];
     }
@@ -836,22 +679,9 @@ $root.Currencies = (function() {
         if (!writer)
             writer = $Writer.create();
         if (message.items != null && message.items.length)
-            for (var i = 0; i < message.items.length; ++i)
+            for (let i = 0; i < message.items.length; ++i)
                 $root.Currency.encode(message.items[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
         return writer;
-    };
-
-    /**
-     * Encodes the specified Currencies message, length delimited. Does not implicitly {@link Currencies.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof Currencies
-     * @static
-     * @param {ICurrencies} message Currencies message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    Currencies.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
     };
 
     /**
@@ -868,9 +698,9 @@ $root.Currencies = (function() {
     Currencies.decode = function decode(reader, length) {
         if (!(reader instanceof $Reader))
             reader = $Reader.create(reader);
-        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Currencies();
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Currencies();
         while (reader.pos < end) {
-            var tag = reader.uint32();
+            let tag = reader.uint32();
             switch (tag >>> 3) {
             case 1:
                 if (!(message.items && message.items.length))
@@ -886,45 +716,6 @@ $root.Currencies = (function() {
     };
 
     /**
-     * Decodes a Currencies message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof Currencies
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {Currencies} Currencies
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    Currencies.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
-
-    /**
-     * Verifies a Currencies message.
-     * @function verify
-     * @memberof Currencies
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    Currencies.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        if (message.items != null && message.hasOwnProperty("items")) {
-            if (!Array.isArray(message.items))
-                return "items: array expected";
-            for (var i = 0; i < message.items.length; ++i) {
-                var error = $root.Currency.verify(message.items[i]);
-                if (error)
-                    return "items." + error;
-            }
-        }
-        return null;
-    };
-
-    /**
      * Creates a Currencies message from a plain object. Also converts values to their respective internal types.
      * @function fromObject
      * @memberof Currencies
@@ -935,12 +726,12 @@ $root.Currencies = (function() {
     Currencies.fromObject = function fromObject(object) {
         if (object instanceof $root.Currencies)
             return object;
-        var message = new $root.Currencies();
+        let message = new $root.Currencies();
         if (object.items) {
             if (!Array.isArray(object.items))
                 throw TypeError(".Currencies.items: array expected");
             message.items = [];
-            for (var i = 0; i < object.items.length; ++i) {
+            for (let i = 0; i < object.items.length; ++i) {
                 if (typeof object.items[i] !== "object")
                     throw TypeError(".Currencies.items: object expected");
                 message.items[i] = $root.Currency.fromObject(object.items[i]);
@@ -961,12 +752,12 @@ $root.Currencies = (function() {
     Currencies.toObject = function toObject(message, options) {
         if (!options)
             options = {};
-        var object = {};
+        let object = {};
         if (options.arrays || options.defaults)
             object.items = [];
         if (message.items && message.items.length) {
             object.items = [];
-            for (var j = 0; j < message.items.length; ++j)
+            for (let j = 0; j < message.items.length; ++j)
                 object.items[j] = $root.Currency.toObject(message.items[j], options);
         }
         return object;
@@ -986,19 +777,19 @@ $root.Currencies = (function() {
     return Currencies;
 })();
 
-$root.Account = (function() {
+export const Account = $root.Account = (() => {
 
     /**
      * Properties of an Account.
      * @exports IAccount
      * @interface IAccount
-     * @property {number|Long|null} [id] Account id
+     * @property {number|null} [id] Account id
      * @property {boolean|null} [isDeleted] Account isDeleted
      * @property {boolean|null} [isVisible] Account isVisible
-     * @property {number|Long|null} [transactionAmount] Account transactionAmount
+     * @property {number|null} [transactionAmount] Account transactionAmount
      * @property {string} name Account name
-     * @property {number|Long|null} [balance] Account balance
-     * @property {number|Long} currencyId Account currencyId
+     * @property {number|null} [balance] Account balance
+     * @property {number} currencyId Account currencyId
      */
 
     /**
@@ -1011,14 +802,14 @@ $root.Account = (function() {
      */
     function Account(properties) {
         if (properties)
-            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
                     this[keys[i]] = properties[keys[i]];
     }
 
     /**
      * Account id.
-     * @member {number|Long} id
+     * @member {number} id
      * @memberof Account
      * @instance
      */
@@ -1042,7 +833,7 @@ $root.Account = (function() {
 
     /**
      * Account transactionAmount.
-     * @member {number|Long} transactionAmount
+     * @member {number} transactionAmount
      * @memberof Account
      * @instance
      */
@@ -1058,7 +849,7 @@ $root.Account = (function() {
 
     /**
      * Account balance.
-     * @member {number|Long} balance
+     * @member {number} balance
      * @memberof Account
      * @instance
      */
@@ -1066,7 +857,7 @@ $root.Account = (function() {
 
     /**
      * Account currencyId.
-     * @member {number|Long} currencyId
+     * @member {number} currencyId
      * @memberof Account
      * @instance
      */
@@ -1112,19 +903,6 @@ $root.Account = (function() {
     };
 
     /**
-     * Encodes the specified Account message, length delimited. Does not implicitly {@link Account.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof Account
-     * @static
-     * @param {IAccount} message Account message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    Account.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
      * Decodes an Account message from the specified reader or buffer.
      * @function decode
      * @memberof Account
@@ -1138,9 +916,9 @@ $root.Account = (function() {
     Account.decode = function decode(reader, length) {
         if (!(reader instanceof $Reader))
             reader = $Reader.create(reader);
-        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Account();
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Account();
         while (reader.pos < end) {
-            var tag = reader.uint32();
+            let tag = reader.uint32();
             switch (tag >>> 3) {
             case 1:
                 message.id = reader.int64();
@@ -1176,55 +954,6 @@ $root.Account = (function() {
     };
 
     /**
-     * Decodes an Account message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof Account
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {Account} Account
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    Account.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
-
-    /**
-     * Verifies an Account message.
-     * @function verify
-     * @memberof Account
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    Account.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        if (message.id != null && message.hasOwnProperty("id"))
-            if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
-                return "id: integer|Long expected";
-        if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
-            if (typeof message.isDeleted !== "boolean")
-                return "isDeleted: boolean expected";
-        if (message.isVisible != null && message.hasOwnProperty("isVisible"))
-            if (typeof message.isVisible !== "boolean")
-                return "isVisible: boolean expected";
-        if (message.transactionAmount != null && message.hasOwnProperty("transactionAmount"))
-            if (!$util.isInteger(message.transactionAmount) && !(message.transactionAmount && $util.isInteger(message.transactionAmount.low) && $util.isInteger(message.transactionAmount.high)))
-                return "transactionAmount: integer|Long expected";
-        if (!$util.isString(message.name))
-            return "name: string expected";
-        if (message.balance != null && message.hasOwnProperty("balance"))
-            if (!$util.isInteger(message.balance) && !(message.balance && $util.isInteger(message.balance.low) && $util.isInteger(message.balance.high)))
-                return "balance: integer|Long expected";
-        if (!$util.isInteger(message.currencyId) && !(message.currencyId && $util.isInteger(message.currencyId.low) && $util.isInteger(message.currencyId.high)))
-            return "currencyId: integer|Long expected";
-        return null;
-    };
-
-    /**
      * Creates an Account message from a plain object. Also converts values to their respective internal types.
      * @function fromObject
      * @memberof Account
@@ -1235,7 +964,7 @@ $root.Account = (function() {
     Account.fromObject = function fromObject(object) {
         if (object instanceof $root.Account)
             return object;
-        var message = new $root.Account();
+        let message = new $root.Account();
         if (object.id != null)
             if ($util.Long)
                 (message.id = $util.Long.fromValue(object.id)).unsigned = false;
@@ -1293,27 +1022,27 @@ $root.Account = (function() {
     Account.toObject = function toObject(message, options) {
         if (!options)
             options = {};
-        var object = {};
+        let object = {};
         if (options.defaults) {
             if ($util.Long) {
-                var long = new $util.Long(0, 0, false);
+                let long = new $util.Long(0, 0, false);
                 object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.id = options.longs === String ? "0" : 0;
             object.isDeleted = false;
             object.name = "";
             if ($util.Long) {
-                var long = new $util.Long(0, 0, false);
+                let long = new $util.Long(0, 0, false);
                 object.balance = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.balance = options.longs === String ? "0" : 0;
             if ($util.Long) {
-                var long = new $util.Long(0, 0, false);
+                let long = new $util.Long(0, 0, false);
                 object.currencyId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.currencyId = options.longs === String ? "0" : 0;
             if ($util.Long) {
-                var long = new $util.Long(0, 0, false);
+                let long = new $util.Long(0, 0, false);
                 object.transactionAmount = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.transactionAmount = options.longs === String ? "0" : 0;
@@ -1362,16 +1091,16 @@ $root.Account = (function() {
     return Account;
 })();
 
-$root.Category = (function() {
+export const Category = $root.Category = (() => {
 
     /**
      * Properties of a Category.
      * @exports ICategory
      * @interface ICategory
-     * @property {number|Long|null} [id] Category id
+     * @property {number|null} [id] Category id
      * @property {boolean|null} [isDeleted] Category isDeleted
      * @property {boolean|null} [isVisible] Category isVisible
-     * @property {number|Long|null} [transactionAmount] Category transactionAmount
+     * @property {number|null} [transactionAmount] Category transactionAmount
      * @property {string} name Category name
      * @property {boolean|null} [isIncome] Category isIncome
      * @property {boolean|null} [isExpense] Category isExpense
@@ -1387,14 +1116,14 @@ $root.Category = (function() {
      */
     function Category(properties) {
         if (properties)
-            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
                     this[keys[i]] = properties[keys[i]];
     }
 
     /**
      * Category id.
-     * @member {number|Long} id
+     * @member {number} id
      * @memberof Category
      * @instance
      */
@@ -1418,7 +1147,7 @@ $root.Category = (function() {
 
     /**
      * Category transactionAmount.
-     * @member {number|Long} transactionAmount
+     * @member {number} transactionAmount
      * @memberof Category
      * @instance
      */
@@ -1489,19 +1218,6 @@ $root.Category = (function() {
     };
 
     /**
-     * Encodes the specified Category message, length delimited. Does not implicitly {@link Category.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof Category
-     * @static
-     * @param {ICategory} message Category message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    Category.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
      * Decodes a Category message from the specified reader or buffer.
      * @function decode
      * @memberof Category
@@ -1515,9 +1231,9 @@ $root.Category = (function() {
     Category.decode = function decode(reader, length) {
         if (!(reader instanceof $Reader))
             reader = $Reader.create(reader);
-        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Category();
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Category();
         while (reader.pos < end) {
-            var tag = reader.uint32();
+            let tag = reader.uint32();
             switch (tag >>> 3) {
             case 1:
                 message.id = reader.int64();
@@ -1551,56 +1267,6 @@ $root.Category = (function() {
     };
 
     /**
-     * Decodes a Category message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof Category
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {Category} Category
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    Category.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
-
-    /**
-     * Verifies a Category message.
-     * @function verify
-     * @memberof Category
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    Category.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        if (message.id != null && message.hasOwnProperty("id"))
-            if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
-                return "id: integer|Long expected";
-        if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
-            if (typeof message.isDeleted !== "boolean")
-                return "isDeleted: boolean expected";
-        if (message.isVisible != null && message.hasOwnProperty("isVisible"))
-            if (typeof message.isVisible !== "boolean")
-                return "isVisible: boolean expected";
-        if (message.transactionAmount != null && message.hasOwnProperty("transactionAmount"))
-            if (!$util.isInteger(message.transactionAmount) && !(message.transactionAmount && $util.isInteger(message.transactionAmount.low) && $util.isInteger(message.transactionAmount.high)))
-                return "transactionAmount: integer|Long expected";
-        if (!$util.isString(message.name))
-            return "name: string expected";
-        if (message.isIncome != null && message.hasOwnProperty("isIncome"))
-            if (typeof message.isIncome !== "boolean")
-                return "isIncome: boolean expected";
-        if (message.isExpense != null && message.hasOwnProperty("isExpense"))
-            if (typeof message.isExpense !== "boolean")
-                return "isExpense: boolean expected";
-        return null;
-    };
-
-    /**
      * Creates a Category message from a plain object. Also converts values to their respective internal types.
      * @function fromObject
      * @memberof Category
@@ -1611,7 +1277,7 @@ $root.Category = (function() {
     Category.fromObject = function fromObject(object) {
         if (object instanceof $root.Category)
             return object;
-        var message = new $root.Category();
+        let message = new $root.Category();
         if (object.id != null)
             if ($util.Long)
                 (message.id = $util.Long.fromValue(object.id)).unsigned = false;
@@ -1655,10 +1321,10 @@ $root.Category = (function() {
     Category.toObject = function toObject(message, options) {
         if (!options)
             options = {};
-        var object = {};
+        let object = {};
         if (options.defaults) {
             if ($util.Long) {
-                var long = new $util.Long(0, 0, false);
+                let long = new $util.Long(0, 0, false);
                 object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.id = options.longs === String ? "0" : 0;
@@ -1667,7 +1333,7 @@ $root.Category = (function() {
             object.isIncome = false;
             object.isExpense = false;
             if ($util.Long) {
-                var long = new $util.Long(0, 0, false);
+                let long = new $util.Long(0, 0, false);
                 object.transactionAmount = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.transactionAmount = options.longs === String ? "0" : 0;
@@ -1710,18 +1376,18 @@ $root.Category = (function() {
     return Category;
 })();
 
-$root.SubCategory = (function() {
+export const SubCategory = $root.SubCategory = (() => {
 
     /**
      * Properties of a SubCategory.
      * @exports ISubCategory
      * @interface ISubCategory
-     * @property {number|Long|null} [id] SubCategory id
+     * @property {number|null} [id] SubCategory id
      * @property {boolean|null} [isDeleted] SubCategory isDeleted
      * @property {boolean|null} [isVisible] SubCategory isVisible
-     * @property {number|Long|null} [transactionAmount] SubCategory transactionAmount
+     * @property {number|null} [transactionAmount] SubCategory transactionAmount
      * @property {string} name SubCategory name
-     * @property {number|Long} categoryId SubCategory categoryId
+     * @property {number} categoryId SubCategory categoryId
      */
 
     /**
@@ -1734,14 +1400,14 @@ $root.SubCategory = (function() {
      */
     function SubCategory(properties) {
         if (properties)
-            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
                     this[keys[i]] = properties[keys[i]];
     }
 
     /**
      * SubCategory id.
-     * @member {number|Long} id
+     * @member {number} id
      * @memberof SubCategory
      * @instance
      */
@@ -1765,7 +1431,7 @@ $root.SubCategory = (function() {
 
     /**
      * SubCategory transactionAmount.
-     * @member {number|Long} transactionAmount
+     * @member {number} transactionAmount
      * @memberof SubCategory
      * @instance
      */
@@ -1781,7 +1447,7 @@ $root.SubCategory = (function() {
 
     /**
      * SubCategory categoryId.
-     * @member {number|Long} categoryId
+     * @member {number} categoryId
      * @memberof SubCategory
      * @instance
      */
@@ -1825,19 +1491,6 @@ $root.SubCategory = (function() {
     };
 
     /**
-     * Encodes the specified SubCategory message, length delimited. Does not implicitly {@link SubCategory.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof SubCategory
-     * @static
-     * @param {ISubCategory} message SubCategory message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    SubCategory.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
      * Decodes a SubCategory message from the specified reader or buffer.
      * @function decode
      * @memberof SubCategory
@@ -1851,9 +1504,9 @@ $root.SubCategory = (function() {
     SubCategory.decode = function decode(reader, length) {
         if (!(reader instanceof $Reader))
             reader = $Reader.create(reader);
-        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.SubCategory();
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.SubCategory();
         while (reader.pos < end) {
-            var tag = reader.uint32();
+            let tag = reader.uint32();
             switch (tag >>> 3) {
             case 1:
                 message.id = reader.int64();
@@ -1886,52 +1539,6 @@ $root.SubCategory = (function() {
     };
 
     /**
-     * Decodes a SubCategory message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof SubCategory
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {SubCategory} SubCategory
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    SubCategory.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
-
-    /**
-     * Verifies a SubCategory message.
-     * @function verify
-     * @memberof SubCategory
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    SubCategory.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        if (message.id != null && message.hasOwnProperty("id"))
-            if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
-                return "id: integer|Long expected";
-        if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
-            if (typeof message.isDeleted !== "boolean")
-                return "isDeleted: boolean expected";
-        if (message.isVisible != null && message.hasOwnProperty("isVisible"))
-            if (typeof message.isVisible !== "boolean")
-                return "isVisible: boolean expected";
-        if (message.transactionAmount != null && message.hasOwnProperty("transactionAmount"))
-            if (!$util.isInteger(message.transactionAmount) && !(message.transactionAmount && $util.isInteger(message.transactionAmount.low) && $util.isInteger(message.transactionAmount.high)))
-                return "transactionAmount: integer|Long expected";
-        if (!$util.isString(message.name))
-            return "name: string expected";
-        if (!$util.isInteger(message.categoryId) && !(message.categoryId && $util.isInteger(message.categoryId.low) && $util.isInteger(message.categoryId.high)))
-            return "categoryId: integer|Long expected";
-        return null;
-    };
-
-    /**
      * Creates a SubCategory message from a plain object. Also converts values to their respective internal types.
      * @function fromObject
      * @memberof SubCategory
@@ -1942,7 +1549,7 @@ $root.SubCategory = (function() {
     SubCategory.fromObject = function fromObject(object) {
         if (object instanceof $root.SubCategory)
             return object;
-        var message = new $root.SubCategory();
+        let message = new $root.SubCategory();
         if (object.id != null)
             if ($util.Long)
                 (message.id = $util.Long.fromValue(object.id)).unsigned = false;
@@ -1991,22 +1598,22 @@ $root.SubCategory = (function() {
     SubCategory.toObject = function toObject(message, options) {
         if (!options)
             options = {};
-        var object = {};
+        let object = {};
         if (options.defaults) {
             if ($util.Long) {
-                var long = new $util.Long(0, 0, false);
+                let long = new $util.Long(0, 0, false);
                 object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.id = options.longs === String ? "0" : 0;
             object.isDeleted = false;
             object.name = "";
             if ($util.Long) {
-                var long = new $util.Long(0, 0, false);
+                let long = new $util.Long(0, 0, false);
                 object.categoryId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.categoryId = options.longs === String ? "0" : 0;
             if ($util.Long) {
-                var long = new $util.Long(0, 0, false);
+                let long = new $util.Long(0, 0, false);
                 object.transactionAmount = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.transactionAmount = options.longs === String ? "0" : 0;
@@ -2050,16 +1657,16 @@ $root.SubCategory = (function() {
     return SubCategory;
 })();
 
-$root.FamilyMember = (function() {
+export const FamilyMember = $root.FamilyMember = (() => {
 
     /**
      * Properties of a FamilyMember.
      * @exports IFamilyMember
      * @interface IFamilyMember
-     * @property {number|Long|null} [id] FamilyMember id
+     * @property {number|null} [id] FamilyMember id
      * @property {boolean|null} [isDeleted] FamilyMember isDeleted
      * @property {boolean|null} [isVisible] FamilyMember isVisible
-     * @property {number|Long|null} [transactionAmount] FamilyMember transactionAmount
+     * @property {number|null} [transactionAmount] FamilyMember transactionAmount
      * @property {string} name FamilyMember name
      */
 
@@ -2073,14 +1680,14 @@ $root.FamilyMember = (function() {
      */
     function FamilyMember(properties) {
         if (properties)
-            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
                     this[keys[i]] = properties[keys[i]];
     }
 
     /**
      * FamilyMember id.
-     * @member {number|Long} id
+     * @member {number} id
      * @memberof FamilyMember
      * @instance
      */
@@ -2104,7 +1711,7 @@ $root.FamilyMember = (function() {
 
     /**
      * FamilyMember transactionAmount.
-     * @member {number|Long} transactionAmount
+     * @member {number} transactionAmount
      * @memberof FamilyMember
      * @instance
      */
@@ -2155,19 +1762,6 @@ $root.FamilyMember = (function() {
     };
 
     /**
-     * Encodes the specified FamilyMember message, length delimited. Does not implicitly {@link FamilyMember.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof FamilyMember
-     * @static
-     * @param {IFamilyMember} message FamilyMember message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    FamilyMember.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
      * Decodes a FamilyMember message from the specified reader or buffer.
      * @function decode
      * @memberof FamilyMember
@@ -2181,9 +1775,9 @@ $root.FamilyMember = (function() {
     FamilyMember.decode = function decode(reader, length) {
         if (!(reader instanceof $Reader))
             reader = $Reader.create(reader);
-        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.FamilyMember();
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.FamilyMember();
         while (reader.pos < end) {
-            var tag = reader.uint32();
+            let tag = reader.uint32();
             switch (tag >>> 3) {
             case 1:
                 message.id = reader.int64();
@@ -2211,50 +1805,6 @@ $root.FamilyMember = (function() {
     };
 
     /**
-     * Decodes a FamilyMember message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof FamilyMember
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {FamilyMember} FamilyMember
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    FamilyMember.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
-
-    /**
-     * Verifies a FamilyMember message.
-     * @function verify
-     * @memberof FamilyMember
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    FamilyMember.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        if (message.id != null && message.hasOwnProperty("id"))
-            if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
-                return "id: integer|Long expected";
-        if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
-            if (typeof message.isDeleted !== "boolean")
-                return "isDeleted: boolean expected";
-        if (message.isVisible != null && message.hasOwnProperty("isVisible"))
-            if (typeof message.isVisible !== "boolean")
-                return "isVisible: boolean expected";
-        if (message.transactionAmount != null && message.hasOwnProperty("transactionAmount"))
-            if (!$util.isInteger(message.transactionAmount) && !(message.transactionAmount && $util.isInteger(message.transactionAmount.low) && $util.isInteger(message.transactionAmount.high)))
-                return "transactionAmount: integer|Long expected";
-        if (!$util.isString(message.name))
-            return "name: string expected";
-        return null;
-    };
-
-    /**
      * Creates a FamilyMember message from a plain object. Also converts values to their respective internal types.
      * @function fromObject
      * @memberof FamilyMember
@@ -2265,7 +1815,7 @@ $root.FamilyMember = (function() {
     FamilyMember.fromObject = function fromObject(object) {
         if (object instanceof $root.FamilyMember)
             return object;
-        var message = new $root.FamilyMember();
+        let message = new $root.FamilyMember();
         if (object.id != null)
             if ($util.Long)
                 (message.id = $util.Long.fromValue(object.id)).unsigned = false;
@@ -2305,17 +1855,17 @@ $root.FamilyMember = (function() {
     FamilyMember.toObject = function toObject(message, options) {
         if (!options)
             options = {};
-        var object = {};
+        let object = {};
         if (options.defaults) {
             if ($util.Long) {
-                var long = new $util.Long(0, 0, false);
+                let long = new $util.Long(0, 0, false);
                 object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.id = options.longs === String ? "0" : 0;
             object.isDeleted = false;
             object.name = "";
             if ($util.Long) {
-                var long = new $util.Long(0, 0, false);
+                let long = new $util.Long(0, 0, false);
                 object.transactionAmount = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.transactionAmount = options.longs === String ? "0" : 0;
@@ -2354,22 +1904,22 @@ $root.FamilyMember = (function() {
     return FamilyMember;
 })();
 
-$root.Transaction = (function() {
+export const Transaction = $root.Transaction = (() => {
 
     /**
      * Properties of a Transaction.
      * @exports ITransaction
      * @interface ITransaction
-     * @property {number|Long|null} [id] Transaction id
+     * @property {number|null} [id] Transaction id
      * @property {boolean|null} [isDeleted] Transaction isDeleted
      * @property {string} created Transaction created
-     * @property {number|Long} accountIdFrom Transaction accountIdFrom
-     * @property {number|Long} accountIdTo Transaction accountIdTo
-     * @property {number|Long} amountFrom Transaction amountFrom
-     * @property {number|Long} amountTo Transaction amountTo
-     * @property {number|Long} categoryId Transaction categoryId
-     * @property {number|Long|null} [subCategoryId] Transaction subCategoryId
-     * @property {number|Long|null} [familyMemberId] Transaction familyMemberId
+     * @property {number} accountIdFrom Transaction accountIdFrom
+     * @property {number} accountIdTo Transaction accountIdTo
+     * @property {number} amountFrom Transaction amountFrom
+     * @property {number} amountTo Transaction amountTo
+     * @property {number} categoryId Transaction categoryId
+     * @property {number|null} [subCategoryId] Transaction subCategoryId
+     * @property {number|null} [familyMemberId] Transaction familyMemberId
      * @property {string|null} [comment] Transaction comment
      */
 
@@ -2383,14 +1933,14 @@ $root.Transaction = (function() {
      */
     function Transaction(properties) {
         if (properties)
-            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
                     this[keys[i]] = properties[keys[i]];
     }
 
     /**
      * Transaction id.
-     * @member {number|Long} id
+     * @member {number} id
      * @memberof Transaction
      * @instance
      */
@@ -2414,7 +1964,7 @@ $root.Transaction = (function() {
 
     /**
      * Transaction accountIdFrom.
-     * @member {number|Long} accountIdFrom
+     * @member {number} accountIdFrom
      * @memberof Transaction
      * @instance
      */
@@ -2422,7 +1972,7 @@ $root.Transaction = (function() {
 
     /**
      * Transaction accountIdTo.
-     * @member {number|Long} accountIdTo
+     * @member {number} accountIdTo
      * @memberof Transaction
      * @instance
      */
@@ -2430,7 +1980,7 @@ $root.Transaction = (function() {
 
     /**
      * Transaction amountFrom.
-     * @member {number|Long} amountFrom
+     * @member {number} amountFrom
      * @memberof Transaction
      * @instance
      */
@@ -2438,7 +1988,7 @@ $root.Transaction = (function() {
 
     /**
      * Transaction amountTo.
-     * @member {number|Long} amountTo
+     * @member {number} amountTo
      * @memberof Transaction
      * @instance
      */
@@ -2446,7 +1996,7 @@ $root.Transaction = (function() {
 
     /**
      * Transaction categoryId.
-     * @member {number|Long} categoryId
+     * @member {number} categoryId
      * @memberof Transaction
      * @instance
      */
@@ -2454,7 +2004,7 @@ $root.Transaction = (function() {
 
     /**
      * Transaction subCategoryId.
-     * @member {number|Long} subCategoryId
+     * @member {number} subCategoryId
      * @memberof Transaction
      * @instance
      */
@@ -2462,7 +2012,7 @@ $root.Transaction = (function() {
 
     /**
      * Transaction familyMemberId.
-     * @member {number|Long} familyMemberId
+     * @member {number} familyMemberId
      * @memberof Transaction
      * @instance
      */
@@ -2520,19 +2070,6 @@ $root.Transaction = (function() {
     };
 
     /**
-     * Encodes the specified Transaction message, length delimited. Does not implicitly {@link Transaction.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof Transaction
-     * @static
-     * @param {ITransaction} message Transaction message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    Transaction.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
      * Decodes a Transaction message from the specified reader or buffer.
      * @function decode
      * @memberof Transaction
@@ -2546,9 +2083,9 @@ $root.Transaction = (function() {
     Transaction.decode = function decode(reader, length) {
         if (!(reader instanceof $Reader))
             reader = $Reader.create(reader);
-        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Transaction();
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Transaction();
         while (reader.pos < end) {
-            var tag = reader.uint32();
+            let tag = reader.uint32();
             switch (tag >>> 3) {
             case 1:
                 message.id = reader.int64();
@@ -2604,63 +2141,6 @@ $root.Transaction = (function() {
     };
 
     /**
-     * Decodes a Transaction message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof Transaction
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {Transaction} Transaction
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    Transaction.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
-
-    /**
-     * Verifies a Transaction message.
-     * @function verify
-     * @memberof Transaction
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    Transaction.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        if (message.id != null && message.hasOwnProperty("id"))
-            if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
-                return "id: integer|Long expected";
-        if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
-            if (typeof message.isDeleted !== "boolean")
-                return "isDeleted: boolean expected";
-        if (!$util.isString(message.created))
-            return "created: string expected";
-        if (!$util.isInteger(message.accountIdFrom) && !(message.accountIdFrom && $util.isInteger(message.accountIdFrom.low) && $util.isInteger(message.accountIdFrom.high)))
-            return "accountIdFrom: integer|Long expected";
-        if (!$util.isInteger(message.accountIdTo) && !(message.accountIdTo && $util.isInteger(message.accountIdTo.low) && $util.isInteger(message.accountIdTo.high)))
-            return "accountIdTo: integer|Long expected";
-        if (!$util.isInteger(message.amountFrom) && !(message.amountFrom && $util.isInteger(message.amountFrom.low) && $util.isInteger(message.amountFrom.high)))
-            return "amountFrom: integer|Long expected";
-        if (!$util.isInteger(message.amountTo) && !(message.amountTo && $util.isInteger(message.amountTo.low) && $util.isInteger(message.amountTo.high)))
-            return "amountTo: integer|Long expected";
-        if (!$util.isInteger(message.categoryId) && !(message.categoryId && $util.isInteger(message.categoryId.low) && $util.isInteger(message.categoryId.high)))
-            return "categoryId: integer|Long expected";
-        if (message.subCategoryId != null && message.hasOwnProperty("subCategoryId"))
-            if (!$util.isInteger(message.subCategoryId) && !(message.subCategoryId && $util.isInteger(message.subCategoryId.low) && $util.isInteger(message.subCategoryId.high)))
-                return "subCategoryId: integer|Long expected";
-        if (message.familyMemberId != null && message.hasOwnProperty("familyMemberId"))
-            if (!$util.isInteger(message.familyMemberId) && !(message.familyMemberId && $util.isInteger(message.familyMemberId.low) && $util.isInteger(message.familyMemberId.high)))
-                return "familyMemberId: integer|Long expected";
-        if (message.comment != null && message.hasOwnProperty("comment"))
-            if (!$util.isString(message.comment))
-                return "comment: string expected";
-        return null;
-    };
-
-    /**
      * Creates a Transaction message from a plain object. Also converts values to their respective internal types.
      * @function fromObject
      * @memberof Transaction
@@ -2671,7 +2151,7 @@ $root.Transaction = (function() {
     Transaction.fromObject = function fromObject(object) {
         if (object instanceof $root.Transaction)
             return object;
-        var message = new $root.Transaction();
+        let message = new $root.Transaction();
         if (object.id != null)
             if ($util.Long)
                 (message.id = $util.Long.fromValue(object.id)).unsigned = false;
@@ -2765,47 +2245,47 @@ $root.Transaction = (function() {
     Transaction.toObject = function toObject(message, options) {
         if (!options)
             options = {};
-        var object = {};
+        let object = {};
         if (options.defaults) {
             if ($util.Long) {
-                var long = new $util.Long(0, 0, false);
+                let long = new $util.Long(0, 0, false);
                 object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.id = options.longs === String ? "0" : 0;
             object.isDeleted = false;
             object.created = "";
             if ($util.Long) {
-                var long = new $util.Long(0, 0, false);
+                let long = new $util.Long(0, 0, false);
                 object.accountIdFrom = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.accountIdFrom = options.longs === String ? "0" : 0;
             if ($util.Long) {
-                var long = new $util.Long(0, 0, false);
+                let long = new $util.Long(0, 0, false);
                 object.accountIdTo = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.accountIdTo = options.longs === String ? "0" : 0;
             if ($util.Long) {
-                var long = new $util.Long(0, 0, false);
+                let long = new $util.Long(0, 0, false);
                 object.amountFrom = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.amountFrom = options.longs === String ? "0" : 0;
             if ($util.Long) {
-                var long = new $util.Long(0, 0, false);
+                let long = new $util.Long(0, 0, false);
                 object.amountTo = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.amountTo = options.longs === String ? "0" : 0;
             if ($util.Long) {
-                var long = new $util.Long(0, 0, false);
+                let long = new $util.Long(0, 0, false);
                 object.categoryId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.categoryId = options.longs === String ? "0" : 0;
             if ($util.Long) {
-                var long = new $util.Long(0, 0, false);
+                let long = new $util.Long(0, 0, false);
                 object.subCategoryId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.subCategoryId = options.longs === String ? "0" : 0;
             if ($util.Long) {
-                var long = new $util.Long(0, 0, false);
+                let long = new $util.Long(0, 0, false);
                 object.familyMemberId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.familyMemberId = options.longs === String ? "0" : 0;
@@ -2881,7 +2361,7 @@ $root.Transaction = (function() {
      * @property {number} TRANSFER=3 TRANSFER value
      */
     Transaction.Type = (function() {
-        var valuesById = {}, values = Object.create(valuesById);
+        const valuesById = {}, values = Object.create(valuesById);
         values[valuesById[0] = "UNDEFINED"] = 0;
         values[valuesById[1] = "INCOME"] = 1;
         values[valuesById[2] = "EXPENSE"] = 2;
@@ -2892,15 +2372,15 @@ $root.Transaction = (function() {
     return Transaction;
 })();
 
-$root.Settings = (function() {
+export const Settings = $root.Settings = (() => {
 
     /**
      * Properties of a Settings.
      * @exports ISettings
      * @interface ISettings
-     * @property {number|Long|null} [id] Settings id
+     * @property {number|null} [id] Settings id
      * @property {Settings.Language|null} [language] Settings language
-     * @property {number|Long|null} [currencyId] Settings currencyId
+     * @property {number|null} [currencyId] Settings currencyId
      */
 
     /**
@@ -2913,14 +2393,14 @@ $root.Settings = (function() {
      */
     function Settings(properties) {
         if (properties)
-            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
                     this[keys[i]] = properties[keys[i]];
     }
 
     /**
      * Settings id.
-     * @member {number|Long} id
+     * @member {number} id
      * @memberof Settings
      * @instance
      */
@@ -2936,7 +2416,7 @@ $root.Settings = (function() {
 
     /**
      * Settings currencyId.
-     * @member {number|Long} currencyId
+     * @member {number} currencyId
      * @memberof Settings
      * @instance
      */
@@ -2976,19 +2456,6 @@ $root.Settings = (function() {
     };
 
     /**
-     * Encodes the specified Settings message, length delimited. Does not implicitly {@link Settings.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof Settings
-     * @static
-     * @param {ISettings} message Settings message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    Settings.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
      * Decodes a Settings message from the specified reader or buffer.
      * @function decode
      * @memberof Settings
@@ -3002,9 +2469,9 @@ $root.Settings = (function() {
     Settings.decode = function decode(reader, length) {
         if (!(reader instanceof $Reader))
             reader = $Reader.create(reader);
-        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Settings();
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Settings();
         while (reader.pos < end) {
-            var tag = reader.uint32();
+            let tag = reader.uint32();
             switch (tag >>> 3) {
             case 1:
                 message.id = reader.int64();
@@ -3024,50 +2491,6 @@ $root.Settings = (function() {
     };
 
     /**
-     * Decodes a Settings message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof Settings
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {Settings} Settings
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    Settings.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
-
-    /**
-     * Verifies a Settings message.
-     * @function verify
-     * @memberof Settings
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    Settings.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        if (message.id != null && message.hasOwnProperty("id"))
-            if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
-                return "id: integer|Long expected";
-        if (message.language != null && message.hasOwnProperty("language"))
-            switch (message.language) {
-            default:
-                return "language: enum value expected";
-            case 0:
-            case 1:
-                break;
-            }
-        if (message.currencyId != null && message.hasOwnProperty("currencyId"))
-            if (!$util.isInteger(message.currencyId) && !(message.currencyId && $util.isInteger(message.currencyId.low) && $util.isInteger(message.currencyId.high)))
-                return "currencyId: integer|Long expected";
-        return null;
-    };
-
-    /**
      * Creates a Settings message from a plain object. Also converts values to their respective internal types.
      * @function fromObject
      * @memberof Settings
@@ -3078,7 +2501,7 @@ $root.Settings = (function() {
     Settings.fromObject = function fromObject(object) {
         if (object instanceof $root.Settings)
             return object;
-        var message = new $root.Settings();
+        let message = new $root.Settings();
         if (object.id != null)
             if ($util.Long)
                 (message.id = $util.Long.fromValue(object.id)).unsigned = false;
@@ -3122,16 +2545,16 @@ $root.Settings = (function() {
     Settings.toObject = function toObject(message, options) {
         if (!options)
             options = {};
-        var object = {};
+        let object = {};
         if (options.defaults) {
             if ($util.Long) {
-                var long = new $util.Long(0, 0, false);
+                let long = new $util.Long(0, 0, false);
                 object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.id = options.longs === String ? "0" : 0;
             object.language = options.enums === String ? "RU" : 0;
             if ($util.Long) {
-                var long = new $util.Long(1, 0, false);
+                let long = new $util.Long(1, 0, false);
                 object.currencyId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.currencyId = options.longs === String ? "1" : 1;
@@ -3170,7 +2593,7 @@ $root.Settings = (function() {
      * @property {number} EN=1 EN value
      */
     Settings.Language = (function() {
-        var valuesById = {}, values = Object.create(valuesById);
+        const valuesById = {}, values = Object.create(valuesById);
         values[valuesById[0] = "RU"] = 0;
         values[valuesById[1] = "EN"] = 1;
         return values;
@@ -3179,14 +2602,14 @@ $root.Settings = (function() {
     return Settings;
 })();
 
-$root.AccessToken = (function() {
+export const AccessToken = $root.AccessToken = (() => {
 
     /**
      * Properties of an AccessToken.
      * @exports IAccessToken
      * @interface IAccessToken
      * @property {string|null} [value] AccessToken value
-     * @property {number|Long|null} [expired] AccessToken expired
+     * @property {number|null} [expired] AccessToken expired
      */
 
     /**
@@ -3199,7 +2622,7 @@ $root.AccessToken = (function() {
      */
     function AccessToken(properties) {
         if (properties)
-            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
                     this[keys[i]] = properties[keys[i]];
     }
@@ -3214,7 +2637,7 @@ $root.AccessToken = (function() {
 
     /**
      * AccessToken expired.
-     * @member {number|Long} expired
+     * @member {number} expired
      * @memberof AccessToken
      * @instance
      */
@@ -3252,19 +2675,6 @@ $root.AccessToken = (function() {
     };
 
     /**
-     * Encodes the specified AccessToken message, length delimited. Does not implicitly {@link AccessToken.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof AccessToken
-     * @static
-     * @param {IAccessToken} message AccessToken message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    AccessToken.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
      * Decodes an AccessToken message from the specified reader or buffer.
      * @function decode
      * @memberof AccessToken
@@ -3278,9 +2688,9 @@ $root.AccessToken = (function() {
     AccessToken.decode = function decode(reader, length) {
         if (!(reader instanceof $Reader))
             reader = $Reader.create(reader);
-        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.AccessToken();
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.AccessToken();
         while (reader.pos < end) {
-            var tag = reader.uint32();
+            let tag = reader.uint32();
             switch (tag >>> 3) {
             case 1:
                 message.value = reader.string();
@@ -3297,42 +2707,6 @@ $root.AccessToken = (function() {
     };
 
     /**
-     * Decodes an AccessToken message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof AccessToken
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {AccessToken} AccessToken
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    AccessToken.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
-
-    /**
-     * Verifies an AccessToken message.
-     * @function verify
-     * @memberof AccessToken
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    AccessToken.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        if (message.value != null && message.hasOwnProperty("value"))
-            if (!$util.isString(message.value))
-                return "value: string expected";
-        if (message.expired != null && message.hasOwnProperty("expired"))
-            if (!$util.isInteger(message.expired) && !(message.expired && $util.isInteger(message.expired.low) && $util.isInteger(message.expired.high)))
-                return "expired: integer|Long expected";
-        return null;
-    };
-
-    /**
      * Creates an AccessToken message from a plain object. Also converts values to their respective internal types.
      * @function fromObject
      * @memberof AccessToken
@@ -3343,7 +2717,7 @@ $root.AccessToken = (function() {
     AccessToken.fromObject = function fromObject(object) {
         if (object instanceof $root.AccessToken)
             return object;
-        var message = new $root.AccessToken();
+        let message = new $root.AccessToken();
         if (object.value != null)
             message.value = String(object.value);
         if (object.expired != null)
@@ -3370,11 +2744,11 @@ $root.AccessToken = (function() {
     AccessToken.toObject = function toObject(message, options) {
         if (!options)
             options = {};
-        var object = {};
+        let object = {};
         if (options.defaults) {
             object.value = "";
             if ($util.Long) {
-                var long = new $util.Long(0, 0, false);
+                let long = new $util.Long(0, 0, false);
                 object.expired = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.expired = options.longs === String ? "0" : 0;
@@ -3403,7 +2777,7 @@ $root.AccessToken = (function() {
     return AccessToken;
 })();
 
-$root.RefreshToken = (function() {
+export const RefreshToken = $root.RefreshToken = (() => {
 
     /**
      * Properties of a RefreshToken.
@@ -3423,7 +2797,7 @@ $root.RefreshToken = (function() {
      */
     function RefreshToken(properties) {
         if (properties)
-            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
                     this[keys[i]] = properties[keys[i]];
     }
@@ -3474,19 +2848,6 @@ $root.RefreshToken = (function() {
     };
 
     /**
-     * Encodes the specified RefreshToken message, length delimited. Does not implicitly {@link RefreshToken.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof RefreshToken
-     * @static
-     * @param {IRefreshToken} message RefreshToken message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    RefreshToken.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
      * Decodes a RefreshToken message from the specified reader or buffer.
      * @function decode
      * @memberof RefreshToken
@@ -3500,9 +2861,9 @@ $root.RefreshToken = (function() {
     RefreshToken.decode = function decode(reader, length) {
         if (!(reader instanceof $Reader))
             reader = $Reader.create(reader);
-        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.RefreshToken();
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.RefreshToken();
         while (reader.pos < end) {
-            var tag = reader.uint32();
+            let tag = reader.uint32();
             switch (tag >>> 3) {
             case 1:
                 message.value = reader.string();
@@ -3523,47 +2884,6 @@ $root.RefreshToken = (function() {
     };
 
     /**
-     * Decodes a RefreshToken message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof RefreshToken
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {RefreshToken} RefreshToken
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    RefreshToken.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
-
-    /**
-     * Verifies a RefreshToken message.
-     * @function verify
-     * @memberof RefreshToken
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    RefreshToken.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        if (!$util.isString(message.value))
-            return "value: string expected";
-        switch (message.type) {
-        default:
-            return "type: enum value expected";
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-            break;
-        }
-        return null;
-    };
-
-    /**
      * Creates a RefreshToken message from a plain object. Also converts values to their respective internal types.
      * @function fromObject
      * @memberof RefreshToken
@@ -3574,7 +2894,7 @@ $root.RefreshToken = (function() {
     RefreshToken.fromObject = function fromObject(object) {
         if (object instanceof $root.RefreshToken)
             return object;
-        var message = new $root.RefreshToken();
+        let message = new $root.RefreshToken();
         if (object.value != null)
             message.value = String(object.value);
         switch (object.type) {
@@ -3610,7 +2930,7 @@ $root.RefreshToken = (function() {
     RefreshToken.toObject = function toObject(message, options) {
         if (!options)
             options = {};
-        var object = {};
+        let object = {};
         if (options.defaults) {
             object.value = "";
             object.type = options.enums === String ? "UNDEFINED" : 0;
@@ -3643,7 +2963,7 @@ $root.RefreshToken = (function() {
      * @property {number} VK=3 VK value
      */
     RefreshToken.AuthType = (function() {
-        var valuesById = {}, values = Object.create(valuesById);
+        const valuesById = {}, values = Object.create(valuesById);
         values[valuesById[0] = "UNDEFINED"] = 0;
         values[valuesById[1] = "GOOGLE"] = 1;
         values[valuesById[2] = "FACEBOOK"] = 2;
@@ -3654,7 +2974,7 @@ $root.RefreshToken = (function() {
     return RefreshToken;
 })();
 
-$root.Date_ = (function() {
+export const Date_ = $root.Date_ = (() => {
 
     /**
      * Properties of a Date_.
@@ -3675,7 +2995,7 @@ $root.Date_ = (function() {
      */
     function Date_(properties) {
         if (properties)
-            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
                     this[keys[i]] = properties[keys[i]];
     }
@@ -3735,19 +3055,6 @@ $root.Date_ = (function() {
     };
 
     /**
-     * Encodes the specified Date_ message, length delimited. Does not implicitly {@link Date_.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof Date_
-     * @static
-     * @param {IDate_} message Date_ message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    Date_.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
      * Decodes a Date_ message from the specified reader or buffer.
      * @function decode
      * @memberof Date_
@@ -3761,9 +3068,9 @@ $root.Date_ = (function() {
     Date_.decode = function decode(reader, length) {
         if (!(reader instanceof $Reader))
             reader = $Reader.create(reader);
-        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Date_();
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Date_();
         while (reader.pos < end) {
-            var tag = reader.uint32();
+            let tag = reader.uint32();
             switch (tag >>> 3) {
             case 1:
                 message.year = reader.int32();
@@ -3789,42 +3096,6 @@ $root.Date_ = (function() {
     };
 
     /**
-     * Decodes a Date_ message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof Date_
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {Date_} Date_
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    Date_.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
-
-    /**
-     * Verifies a Date_ message.
-     * @function verify
-     * @memberof Date_
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    Date_.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        if (!$util.isInteger(message.year))
-            return "year: integer expected";
-        if (!$util.isInteger(message.month))
-            return "month: integer expected";
-        if (!$util.isInteger(message.day))
-            return "day: integer expected";
-        return null;
-    };
-
-    /**
      * Creates a Date_ message from a plain object. Also converts values to their respective internal types.
      * @function fromObject
      * @memberof Date_
@@ -3835,7 +3106,7 @@ $root.Date_ = (function() {
     Date_.fromObject = function fromObject(object) {
         if (object instanceof $root.Date_)
             return object;
-        var message = new $root.Date_();
+        let message = new $root.Date_();
         if (object.year != null)
             message.year = object.year | 0;
         if (object.month != null)
@@ -3857,7 +3128,7 @@ $root.Date_ = (function() {
     Date_.toObject = function toObject(message, options) {
         if (!options)
             options = {};
-        var object = {};
+        let object = {};
         if (options.defaults) {
             object.year = 0;
             object.month = 0;
@@ -3886,7 +3157,7 @@ $root.Date_ = (function() {
     return Date_;
 })();
 
-$root.Month = (function() {
+export const Month = $root.Month = (() => {
 
     /**
      * Properties of a Month.
@@ -3906,7 +3177,7 @@ $root.Month = (function() {
      */
     function Month(properties) {
         if (properties)
-            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
                     this[keys[i]] = properties[keys[i]];
     }
@@ -3957,19 +3228,6 @@ $root.Month = (function() {
     };
 
     /**
-     * Encodes the specified Month message, length delimited. Does not implicitly {@link Month.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof Month
-     * @static
-     * @param {IMonth} message Month message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    Month.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
      * Decodes a Month message from the specified reader or buffer.
      * @function decode
      * @memberof Month
@@ -3983,9 +3241,9 @@ $root.Month = (function() {
     Month.decode = function decode(reader, length) {
         if (!(reader instanceof $Reader))
             reader = $Reader.create(reader);
-        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Month();
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Month();
         while (reader.pos < end) {
-            var tag = reader.uint32();
+            let tag = reader.uint32();
             switch (tag >>> 3) {
             case 1:
                 message.year = reader.int32();
@@ -4006,40 +3264,6 @@ $root.Month = (function() {
     };
 
     /**
-     * Decodes a Month message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof Month
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {Month} Month
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    Month.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
-
-    /**
-     * Verifies a Month message.
-     * @function verify
-     * @memberof Month
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    Month.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        if (!$util.isInteger(message.year))
-            return "year: integer expected";
-        if (!$util.isInteger(message.month))
-            return "month: integer expected";
-        return null;
-    };
-
-    /**
      * Creates a Month message from a plain object. Also converts values to their respective internal types.
      * @function fromObject
      * @memberof Month
@@ -4050,7 +3274,7 @@ $root.Month = (function() {
     Month.fromObject = function fromObject(object) {
         if (object instanceof $root.Month)
             return object;
-        var message = new $root.Month();
+        let message = new $root.Month();
         if (object.year != null)
             message.year = object.year | 0;
         if (object.month != null)
@@ -4070,7 +3294,7 @@ $root.Month = (function() {
     Month.toObject = function toObject(message, options) {
         if (!options)
             options = {};
-        var object = {};
+        let object = {};
         if (options.defaults) {
             object.year = 0;
             object.month = 0;
@@ -4096,7 +3320,7 @@ $root.Month = (function() {
     return Month;
 })();
 
-$root.Year = (function() {
+export const Year = $root.Year = (() => {
 
     /**
      * Properties of a Year.
@@ -4115,7 +3339,7 @@ $root.Year = (function() {
      */
     function Year(properties) {
         if (properties)
-            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
                     this[keys[i]] = properties[keys[i]];
     }
@@ -4157,19 +3381,6 @@ $root.Year = (function() {
     };
 
     /**
-     * Encodes the specified Year message, length delimited. Does not implicitly {@link Year.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof Year
-     * @static
-     * @param {IYear} message Year message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    Year.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
      * Decodes a Year message from the specified reader or buffer.
      * @function decode
      * @memberof Year
@@ -4183,9 +3394,9 @@ $root.Year = (function() {
     Year.decode = function decode(reader, length) {
         if (!(reader instanceof $Reader))
             reader = $Reader.create(reader);
-        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Year();
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Year();
         while (reader.pos < end) {
-            var tag = reader.uint32();
+            let tag = reader.uint32();
             switch (tag >>> 3) {
             case 1:
                 message.value = reader.int32();
@@ -4201,38 +3412,6 @@ $root.Year = (function() {
     };
 
     /**
-     * Decodes a Year message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof Year
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {Year} Year
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    Year.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
-
-    /**
-     * Verifies a Year message.
-     * @function verify
-     * @memberof Year
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    Year.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        if (!$util.isInteger(message.value))
-            return "value: integer expected";
-        return null;
-    };
-
-    /**
      * Creates a Year message from a plain object. Also converts values to their respective internal types.
      * @function fromObject
      * @memberof Year
@@ -4243,7 +3422,7 @@ $root.Year = (function() {
     Year.fromObject = function fromObject(object) {
         if (object instanceof $root.Year)
             return object;
-        var message = new $root.Year();
+        let message = new $root.Year();
         if (object.value != null)
             message.value = object.value | 0;
         return message;
@@ -4261,7 +3440,7 @@ $root.Year = (function() {
     Year.toObject = function toObject(message, options) {
         if (!options)
             options = {};
-        var object = {};
+        let object = {};
         if (options.defaults)
             object.value = 0;
         if (message.value != null && message.hasOwnProperty("value"))
@@ -4283,13 +3462,13 @@ $root.Year = (function() {
     return Year;
 })();
 
-$root.Summary = (function() {
+export const Summary = $root.Summary = (() => {
 
     /**
      * Properties of a Summary.
      * @exports ISummary
      * @interface ISummary
-     * @property {number|Long} amount Summary amount
+     * @property {number} amount Summary amount
      * @property {number} share Summary share
      * @property {boolean|null} [useInShare] Summary useInShare
      */
@@ -4304,14 +3483,14 @@ $root.Summary = (function() {
      */
     function Summary(properties) {
         if (properties)
-            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
                     this[keys[i]] = properties[keys[i]];
     }
 
     /**
      * Summary amount.
-     * @member {number|Long} amount
+     * @member {number} amount
      * @memberof Summary
      * @instance
      */
@@ -4365,19 +3544,6 @@ $root.Summary = (function() {
     };
 
     /**
-     * Encodes the specified Summary message, length delimited. Does not implicitly {@link Summary.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof Summary
-     * @static
-     * @param {ISummary} message Summary message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    Summary.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
      * Decodes a Summary message from the specified reader or buffer.
      * @function decode
      * @memberof Summary
@@ -4391,9 +3557,9 @@ $root.Summary = (function() {
     Summary.decode = function decode(reader, length) {
         if (!(reader instanceof $Reader))
             reader = $Reader.create(reader);
-        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Summary();
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Summary();
         while (reader.pos < end) {
-            var tag = reader.uint32();
+            let tag = reader.uint32();
             switch (tag >>> 3) {
             case 1:
                 message.amount = reader.int64();
@@ -4417,43 +3583,6 @@ $root.Summary = (function() {
     };
 
     /**
-     * Decodes a Summary message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof Summary
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {Summary} Summary
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    Summary.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
-
-    /**
-     * Verifies a Summary message.
-     * @function verify
-     * @memberof Summary
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    Summary.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        if (!$util.isInteger(message.amount) && !(message.amount && $util.isInteger(message.amount.low) && $util.isInteger(message.amount.high)))
-            return "amount: integer|Long expected";
-        if (typeof message.share !== "number")
-            return "share: number expected";
-        if (message.useInShare != null && message.hasOwnProperty("useInShare"))
-            if (typeof message.useInShare !== "boolean")
-                return "useInShare: boolean expected";
-        return null;
-    };
-
-    /**
      * Creates a Summary message from a plain object. Also converts values to their respective internal types.
      * @function fromObject
      * @memberof Summary
@@ -4464,7 +3593,7 @@ $root.Summary = (function() {
     Summary.fromObject = function fromObject(object) {
         if (object instanceof $root.Summary)
             return object;
-        var message = new $root.Summary();
+        let message = new $root.Summary();
         if (object.amount != null)
             if ($util.Long)
                 (message.amount = $util.Long.fromValue(object.amount)).unsigned = false;
@@ -4493,10 +3622,10 @@ $root.Summary = (function() {
     Summary.toObject = function toObject(message, options) {
         if (!options)
             options = {};
-        var object = {};
+        let object = {};
         if (options.defaults) {
             if ($util.Long) {
-                var long = new $util.Long(0, 0, false);
+                let long = new $util.Long(0, 0, false);
                 object.amount = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.amount = options.longs === String ? "0" : 0;
@@ -4529,4 +3658,4 @@ $root.Summary = (function() {
     return Summary;
 })();
 
-module.exports = $root;
+export { $root as default };
