@@ -111,6 +111,18 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     return result;
   }
 
+  isShowTooltip(transaction: Transaction): boolean {
+    return transaction.comment.length > 0;
+  }
+
+  formatTooltip(transaction: Transaction): string {
+    let result = '';
+    if (transaction.comment) {
+      result = transaction.comment;
+    }
+    return result;
+  }
+
   isIncome(transaction: Transaction): boolean {
     return TransactionUtils.type(transaction) == Transaction.Type.INCOME;
   }

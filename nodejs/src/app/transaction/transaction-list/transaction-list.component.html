@@ -36,10 +36,10 @@
             <span routerLink="/transaction/{{transaction.id}}">
               {{formatCategory(transaction) | translate}}
             </span>
-            <clr-tooltip *ngIf="transaction.comment">
+            <clr-tooltip *ngIf="isShowTooltip(transaction)">
               <clr-icon clrTooltipTrigger shape="info-circle" size="16"></clr-icon>
               <clr-tooltip-content clrPosition="top-right" clrSize="sm" *clrIfOpen>
-                <span>{{transaction.comment}}</span>
+                <span>{{formatTooltip(transaction)}}</span>
               </clr-tooltip-content>
             </clr-tooltip>
           </td>
