@@ -30,14 +30,12 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   private onInitCallback(): void {
     this.transactions = _.chain(this.userdata.transactions())
       .filter(x => this.criteria.isFit(x))
-      .sortBy(x => x.created)
-      .sortBy(x => x.id)
+      .sortBy(x => x.created + x.id.toString())
       .reverse()
       .map(x => x)
       .value();
     _.chain(this.transactions)
-      .sortBy(x => x.created)
-      .sortBy(x => x.id)
+      .sortBy(x => x.created + x.id.toString())
       .reverse()
       .map(x => DateUtils.parseMonth(x.created))
       .unique(true, (x) => String(x.year) + String(x.month))
@@ -92,8 +90,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
         const currentMonth = DateUtils.parseMonth(x.created);
         return currentMonth.year == month.year && currentMonth.month == month.month;
       })
-      .sortBy(x => x.created)
-      .sortBy(x => x.id)
+      .sortBy(x => x.created + x.id.toString())
       .reverse()
       .map(x => x)
       .value();
