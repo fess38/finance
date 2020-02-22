@@ -31,11 +31,13 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     this.transactions = _.chain(this.userdata.transactions())
       .filter(x => this.criteria.isFit(x))
       .sortBy(x => x.created)
+      .sortBy(x => x.id)
       .reverse()
       .map(x => x)
       .value();
     _.chain(this.transactions)
       .sortBy(x => x.created)
+      .sortBy(x => x.id)
       .reverse()
       .map(x => DateUtils.parseMonth(x.created))
       .unique(true, (x) => String(x.year) + String(x.month))
@@ -91,6 +93,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
         return currentMonth.year == month.year && currentMonth.month == month.month;
       })
       .sortBy(x => x.created)
+      .sortBy(x => x.id)
       .reverse()
       .map(x => x)
       .value();
