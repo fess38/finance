@@ -1,137 +1,177 @@
-<div class="clr-row">
-  <div class="clr-col-12 clr-col-lg-6">
-    <form>
-      <section class="form-block">
+<div class="clr-row clr-col-12 clr-col-lg-6">
+  <form class="clr-form">
+    <div class="clr-form-control clr-row">
+      <label>
         <button type="button" class="btn btn-icon btn-link" (click)="viewTransactions()">
           <clr-icon shape="undo"></clr-icon>
         </button>
-        <label [hidden]="!isNewTransaction()">
+        <span [hidden]="!isNewTransaction()">
           {{'transaction_detail.add' | translate}}
-        </label>
-        <label [hidden]="isNewTransaction()">
+        </span>
+        <span [hidden]="isNewTransaction()">
           {{'transaction_detail.edit' | translate}}
-        </label>
-        <div class="form-group">
-          <label>{{'common.date' | translate}}</label>
-          <input name="date" type="date" [(ngModel)]="this.transaction.created">
+        </span>
+      </label>
+    </div>
+    <div class="clr-form-control clr-row">
+      <label>{{'common.date' | translate}}</label>
+      <div class="clr-control-container">
+        <div class="clr-input-wrapper">
+          <input type="date" name="date" class="clr-input" [(ngModel)]="this.transaction.created"/>
         </div>
-        <div class="form-group">
-          <label>{{'transaction_detail.action' | translate}}</label>
-          <div class="select form-control">
-            <select name="type"
-                    [(ngModel)]="type"
-                    (ngModelChange)="onChangeTransactionType()"
-                    [disabled]="!isNewTransaction()">
-              <option *ngFor="let typeWithLabel of typesWithLabels" [value]="typeWithLabel.type">
-                {{typeWithLabel.label | translate}}
-              </option>
-            </select>
-          </div>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row">
+      <label>{{'transaction_detail.action' | translate}}</label>
+      <div class="clr-control-container">
+        <div class="clr-select-wrapper">
+          <select name="type"
+                  class="clr-select"
+                  [(ngModel)]="type"
+                  (ngModelChange)="onChangeTransactionType()"
+                  [disabled]="!isNewTransaction()">
+            <option *ngFor="let typeWithLabel of typesWithLabels" [value]="typeWithLabel.type">
+              {{typeWithLabel.label | translate}}
+            </option>
+          </select>
         </div>
-        <div class="form-group" [hidden]="isIncome()">
-          <label>{{'transaction_detail.account_from' | translate}}</label>
-          <div class="select form-control">
-            <select name="accountIdFrom" [(ngModel)]="transaction.accountIdFrom">
-              <option disabled>{{'transaction_detail.account' | translate}}</option>
-              <option selected *ngFor="let account of accounts()"
-                      [ngValue]="account.id"
-                      [hidden]="account.id == transaction.accountIdTo">
-                <span>{{account.name}}</span>
-                <span> ({{currency(account)}})</span>
-              </option>
-            </select>
-          </div>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row" [hidden]="isIncome()">
+      <label>{{'transaction_detail.account_from' | translate}}</label>
+      <div class="clr-control-container">
+        <div class="clr-select-wrapper">
+          <select name="accountIdFrom"
+                  class="clr-select"
+                  [(ngModel)]="transaction.accountIdFrom">
+            <option disabled>{{'transaction_detail.account' | translate}}</option>
+            <option selected *ngFor="let account of accounts()"
+                    [ngValue]="account.id"
+                    [hidden]="account.id == transaction.accountIdTo">
+              <span>{{account.name}}</span>
+              <span> ({{currency(account)}})</span>
+            </option>
+          </select>
         </div>
-        <div class="form-group" [hidden]="isExpense()">
-          <label>{{'transaction_detail.account_to' | translate}}</label>
-          <div class="select form-control">
-            <select name="accountIdTo" [(ngModel)]="transaction.accountIdTo">
-              <option disabled>{{'transaction_detail.account' | translate}}</option>
-              <option selected *ngFor="let account of accounts()"
-                      [ngValue]="account.id"
-                      [hidden]="account.id == transaction.accountIdFrom">
-                <span>{{account.name}}</span>
-                <span> ({{currency(account)}})</span>
-              </option>
-            </select>
-          </div>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row" [hidden]="isExpense()">
+      <label>{{'transaction_detail.account_to' | translate}}</label>
+      <div class="clr-control-container">
+        <div class="clr-select-wrapper">
+          <select name="accountIdTo"
+                  class="clr-select"
+                  [(ngModel)]="transaction.accountIdTo">
+            <option disabled>{{'transaction_detail.account' | translate}}</option>
+            <option selected *ngFor="let account of accounts()"
+                    [ngValue]="account.id"
+                    [hidden]="account.id == transaction.accountIdFrom">
+              <span>{{account.name}}</span>
+              <span> ({{currency(account)}})</span>
+            </option>
+          </select>
         </div>
-        <div class="form-group" [hidden]="isIncome()">
-          <label>{{'transaction_detail.amount_from' | translate}}</label>
-          <input class="form-control"
-                 type="number"
-                 min="0"
-                 pattern="\d*"
+      </div>
+    </div>
+    <div class="clr-form-control clr-row" [hidden]="isIncome()">
+      <label>{{'transaction_detail.amount_from' | translate}}</label>
+      <div class="clr-control-container">
+        <div class="clr-input-wrapper">
+          <input type="number"
                  name="amount_from"
+                 class="clr-input"
+                 pattern="\d*"
+                 min="0"
                  [(ngModel)]="transaction.amountFrom"/>
         </div>
-        <div class="form-group" [hidden]="isExpense()">
-          <label>{{'transaction_detail.amount_to' | translate}}</label>
-          <input class="form-control"
-                 type="number"
-                 min="0"
-                 pattern="\d*"
+      </div>
+    </div>
+    <div class="clr-form-control clr-row" [hidden]="isExpense()">
+      <label>{{'transaction_detail.amount_to' | translate}}</label>
+      <div class="clr-control-container">
+        <div class="clr-input-wrapper">
+          <input type="number"
                  name="amount_to"
+                 class="clr-input"
+                 pattern="\d*"
+                 min="0"
                  [(ngModel)]="transaction.amountTo"/>
         </div>
-        <div class="form-group" [hidden]="isTransfer()">
-          <label>{{'common.category' | translate}}</label>
-          <div class="select form-control">
-            <select name="categoryId"
-                    [(ngModel)]="transaction.categoryId"
-                    (ngModelChange)="onChangeCategory()">
-              <option disabled>{{'common.category' | translate}}</option>
-              <option selected *ngFor="let category of categories()" [ngValue]="category.id">
-                <span>{{category.name}}</span>
-              </option>
-            </select>
-          </div>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row" [hidden]="isTransfer()">
+      <label>{{'common.category' | translate}}</label>
+      <div class="clr-control-container">
+        <div class="clr-select-wrapper">
+          <select name="categoryId"
+                  class="clr-select"
+                  [(ngModel)]="transaction.categoryId"
+                  (ngModelChange)="onChangeCategory()">
+            <option disabled>{{'common.category' | translate}}</option>
+            <option selected *ngFor="let category of categories()" [ngValue]="category.id">
+              <span>{{category.name}}</span>
+            </option>
+          </select>
         </div>
-        <div class="form-group" [hidden]="isTransfer()">
-          <label>{{'common.sub_category' | translate}}</label>
-          <div class="select form-control">
-            <select name="subCategoryId" [(ngModel)]="transaction.subCategoryId">
-              <option disabled>{{'common.sub_category' | translate}}</option>
-              <option [ngValue]="null"></option>
-              <option selected
-                      *ngFor="let subCategory of subCategories()"
-                      [ngValue]="subCategory.id">
-                <span>{{subCategory.name}}</span>
-              </option>
-            </select>
-          </div>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row" [hidden]="isTransfer()">
+      <label>{{'common.sub_category' | translate}}</label>
+      <div class="clr-control-container">
+        <div class="clr-select-wrapper">
+          <select name="subCategoryId"
+                  class="clr-select"
+                  [(ngModel)]="transaction.subCategoryId">
+            <option disabled>{{'common.sub_category' | translate}}</option>
+            <option [ngValue]="null"></option>
+            <option selected
+                    *ngFor="let subCategory of subCategories()"
+                    [ngValue]="subCategory.id">
+              <span>{{subCategory.name}}</span>
+            </option>
+          </select>
         </div>
-        <div class="form-group" [hidden]="isTransfer()">
-          <label>{{'transaction_detail.family_member' | translate}}</label>
-          <div class="select form-control">
-            <select name="familyMemberId" [(ngModel)]="transaction.familyMemberId">
-              <option disabled>{{'transaction_detail.family_member' | translate}}</option>
-              <option [ngValue]="null"></option>
-              <option selected
-                      *ngFor="let familyMember of familyMembers()"
-                      [ngValue]="familyMember.id">
-                <span>{{familyMember.name}}</span>
-              </option>
-            </select>
-          </div>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row" [hidden]="isTransfer()">
+      <label>{{'transaction_detail.family_member' | translate}}</label>
+      <div class="clr-control-container">
+        <div class="clr-select-wrapper">
+          <select name="familyMemberId"
+                  class="clr-select"
+                  [(ngModel)]="transaction.familyMemberId">
+            <option disabled>{{'transaction_detail.family_member' | translate}}</option>
+            <option [ngValue]="null"></option>
+            <option selected
+                    *ngFor="let familyMember of familyMembers()"
+                    [ngValue]="familyMember.id">
+              <span>{{familyMember.name}}</span>
+            </option>
+          </select>
         </div>
-        <div class="form-group">
-          <label>{{'transaction_detail.comment' | translate}}</label>
-          <input class="form-control" name="comment" [(ngModel)]="transaction.comment"/>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row">
+      <label>{{'transaction_detail.comment' | translate}}</label>
+      <div class="clr-control-container">
+        <div class="clr-input-wrapper">
+          <input type="text" name="comment" class="clr-input" [(ngModel)]="transaction.comment"/>
         </div>
-      </section>
-    </form>
-    <button class="btn btn-primary btn-block"
-            [classList]=""
-            (click)="update(transaction)"
-            [disabled]="!isValidForm() || isReadOnly()">
-      {{'common.save' | translate}}
-    </button>
-    <button class="btn btn-danger btn-block"
-            (click)="delete(transaction)"
-            [hidden]="isNewTransaction()"
-            [disabled]="isReadOnly()">
-      {{'common.delete' | translate}}
-    </button>
-  </div>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row">
+      <button class="btn btn-primary btn-sm btn-block"
+              [classList]=""
+              (click)="update(transaction)"
+              [disabled]="!isValidForm() || isReadOnly()">
+        {{'common.save' | translate}}
+      </button>
+      <button class="btn btn-danger btn-sm btn-block"
+              (click)="delete(transaction)"
+              [hidden]="isNewTransaction()"
+              [disabled]="isReadOnly()">
+        {{'common.delete' | translate}}
+      </button>
+    </div>
+  </form>
 </div>

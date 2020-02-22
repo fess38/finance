@@ -1,72 +1,99 @@
-<div class="clr-row">
-  <div class="clr-col-12 clr-col-lg-6">
-    <form>
-      <section class="form-block">
-        <alert></alert>
+<div class="clr-row clr-col-12 clr-col-lg-6">
+  <form class="clr-form">
+    <div class="clr-form-control clr-row">
+      <alert></alert>
+      <label>
         <button type="button" class="btn btn-icon btn-link" routerLink="/account">
           <clr-icon shape="undo"></clr-icon>
         </button>
-        <label [hidden]="!isNewAccount()">{{'account_detail.add' | translate}}</label>
-        <label [hidden]="isNewAccount()">{{'account_detail.edit' | translate}}</label>
-        <div class="form-group">
-          <label>{{'common.name' | translate}}</label>
-          <input class="form-control" type="text" name="name" [(ngModel)]="account.name"/>
+        <span [hidden]="!isNewAccount()">
+          {{'account_detail.add' | translate}}
+        </span>
+        <span [hidden]="isNewAccount()">
+          {{'account_detail.edit' | translate}}
+        </span>
+      </label>
+    </div>
+    <div class="clr-form-control clr-row">
+      <label>{{'common.name' | translate}}</label>
+      <div class="clr-control-container">
+        <div class="clr-input-wrapper">
+          <input type="text" name="name" class="clr-input" [(ngModel)]="account.name"/>
         </div>
-        <div class="form-group">
-          <label>{{'account_list.balance_title' | translate}}</label>
-          <input class="form-control"
-                 type="number"
+      </div>
+    </div>
+    <div class="clr-form-control clr-row">
+      <label>{{'account_list.balance_title' | translate}}</label>
+      <div class="clr-control-container">
+        <div class="clr-input-wrapper">
+          <input type="number"
                  name="balance"
+                 class="clr-input"
                  [(ngModel)]="account.balance"
                  [disabled]="true"/>
         </div>
-        <div class="form-group" [hidden]="isNewAccount()">
-          <label>{{'account_detail.updated_balance' | translate}}</label>
-          <input class="form-control"
-                 type="number"
-                 pattern="\d*"
-                 name="updatedBalance"
-                 [(ngModel)]="updatedBalance"/>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row" [hidden]="isNewAccount()">
+      <label>{{'account_detail.updated_balance' | translate}}</label>
+      <input type="number"
+             name="updatedBalance"
+             class="clr-input"
+             pattern="\d*"
+             [(ngModel)]="updatedBalance"/>
+    </div>
+    <div class="clr-form-control clr-row">
+      <label>{{'account_detail.currency' | translate}}</label>
+      <div class="clr-control-container">
+        <div class="clr-select-wrapper">
+          <select name="currencyId"
+                  class="clr-select"
+                  required
+                  [(ngModel)]="account.currencyId"
+                  [disabled]="!isNewAccount()">
+            <option disabled>{{'account_detail.currency' | translate}}</option>
+            <option selected *ngFor="let currency of currencies()" [ngValue]="currency.id">
+              <span *ngIf="language() == 'RU'">{{currency.nameRu}}</span>
+              <span *ngIf="language() == 'EN'">{{currency.nameEn}}</span>
+              <span> ({{currency.symbol}})</span>
+            </option>
+          </select>
         </div>
-        <div class="form-group">
-          <label>{{'account_detail.currency' | translate}}</label>
-          <div class="select form-control">
-            <select name="currencyId"
-                    required
-                    [(ngModel)]="account.currencyId"
-                    [disabled]="!isNewAccount()">
-              <option disabled>{{'account_detail.currency' | translate}}</option>
-              <option selected *ngFor="let currency of currencies()" [ngValue]="currency.id">
-                <span *ngIf="language() == 'RU'">{{currency.nameRu}}</span>
-                <span *ngIf="language() == 'EN'">{{currency.nameEn}}</span>
-                <span> ({{currency.symbol}})</span>
-              </option>
-            </select>
-          </div>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row" [hidden]="isNewAccount()">
+      <div class="clr-control-container">
+        <div class="clr-checkbox-wrapper">
+          <input type="checkbox"
+                 id="account-is-visible"
+                 name="isVisible"
+                 class="clr-checkbox"
+                 [(ngModel)]="account.isVisible"/>
+          <label for="account-is-visible">
+            {{'common.use_in_transactions' | translate}}
+          </label>
         </div>
-        <div class="form-group-single" [hidden]="isNewAccount()">
-          <clr-checkbox-wrapper>
-            <input type="checkbox" clrCheckbox name="isVisible" [(ngModel)]="account.isVisible"/>
-            <label>{{'common.use_in_transactions' | translate}}</label>
-          </clr-checkbox-wrapper>
-        </div>
-        <div class="form-group-single"
-             [hidden]="isNewAccount()"
-             (click)="viewTransactions(account)">
-          <span>{{'common.amount' | translate}}: {{account.transactionAmount}}</span>
-        </div>
-      </section>
-    </form>
-    <button class="btn btn-primary btn-block"
-            (click)="update(account)"
-            [disabled]="!isValidForm() || isReadOnly()">
-      {{'common.save' | translate}}
-    </button>
-    <button class="btn btn-danger btn-block"
-            (click)="delete(account)"
-            [hidden]="isNewAccount()"
-            [disabled]="hasTransations() || isReadOnly()">
-      {{'common.delete' | translate}}
-    </button>
-  </div>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row"
+         [hidden]="isNewAccount()"
+         (click)="viewTransactions(account)">
+      <lable>
+        {{'common.amount' | translate}}: {{account.transactionAmount}}
+      </lable>
+    </div>
+    <div class="clr-form-control clr-row">
+      <button class="btn btn-primary btn-sm btn-block"
+              (click)="update(account)"
+              [disabled]="!isValidForm() || isReadOnly()">
+        {{'common.save' | translate}}
+      </button>
+      <button class="btn btn-danger btn-sm btn-block"
+              (click)="delete(account)"
+              [hidden]="isNewAccount()"
+              [disabled]="hasTransations() || isReadOnly()">
+        {{'common.delete' | translate}}
+      </button>
+    </div>
+  </form>
 </div>

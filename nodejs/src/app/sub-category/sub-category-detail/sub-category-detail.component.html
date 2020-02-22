@@ -1,57 +1,75 @@
-<div class="clr-row">
-  <div class="clr-col-12 clr-col-lg-6">
-    <form>
-      <section class="form-block">
+<div class="clr-row clr-col-12 clr-col-lg-6">
+  <form class="clr-form">
+    <div class="clr-form-control clr-row">
+      <label>
         <button type="button" class="btn btn-icon btn-link" routerLink="/sub_category">
           <clr-icon shape="undo"></clr-icon>
         </button>
-        <label [hidden]="!isNewSubCategory()">{{'sub_category_detail.add' | translate}}</label>
-        <label [hidden]="isNewSubCategory()">{{'sub_category_detail.edit' | translate}}</label>
-        <div class="form-group">
-          <label>{{'common.name' | translate}}</label>
-          <input class="form-control" type="text" name="name" [(ngModel)]="subCategory.name"/>
+        <span [hidden]="!isNewSubCategory()">
+          {{'sub_category_detail.add' | translate}}
+        </span>
+        <span [hidden]="isNewSubCategory()">
+          {{'sub_category_detail.edit' | translate}}
+        </span>
+      </label>
+    </div>
+    <div class="clr-form-control clr-row">
+      <label>{{'common.name' | translate}}</label>
+      <div class="clr-control-container">
+        <div class="clr-input-wrapper">
+          <input type="text" name="name" class="clr-input" [(ngModel)]="subCategory.name"/>
         </div>
-        <div class="form-group">
-          <label>{{'common.category' | translate}}</label>
-          <div class="select">
-            <select name="category"
-                    [(ngModel)]="subCategory.categoryId"
-                    [disabled]="!isNewSubCategory()">
-              <option disabled>{{'common.category' | translate}}</option>
-              <option selected *ngFor="let category of categories()" [ngValue]="category.id">
-                {{category.name}}
-              </option>
-            </select>
-          </div>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row">
+      <label>{{'common.category' | translate}}</label>
+      <div class="clr-control-container">
+        <div class="clr-select-wrapper">
+          <select name="category"
+                  class="clr-select"
+                  [(ngModel)]="subCategory.categoryId"
+                  [disabled]="!isNewSubCategory()">
+            <option disabled>{{'common.category' | translate}}</option>
+            <option selected *ngFor="let category of categories()" [ngValue]="category.id">
+              {{category.name}}
+            </option>
+          </select>
         </div>
-        <div class="form-group-single" [hidden]="isNewSubCategory()">
-          <clr-checkbox-wrapper>
-            <input type="checkbox"
-                   clrCheckbox
-                   name="isVisible"
-                   [(ngModel)]="subCategory.isVisible"/>
-            <label>{{'common.use_in_transactions' | translate}}</label>
-          </clr-checkbox-wrapper>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row" [hidden]="isNewSubCategory()">
+      <div class="clr-control-container">
+        <div class="clr-checkbox-wrapper">
+          <input type="checkbox"
+                 id="subcategory-is-visible"
+                 name="isVisible"
+                 class="clr-checkbox"
+                 [(ngModel)]="subCategory.isVisible"/>
+          <label for="subcategory-is-visible">
+            {{'common.use_in_transactions' | translate}}
+          </label>
         </div>
-        <div class="form-group-single"
-             [hidden]="isNewSubCategory()"
-             (click)="viewTransactions(subCategory)">
-          <span>{{'common.amount' | translate}}: {{subCategory.transactionAmount}}</span>
-        </div>
-      </section>
-    </form>
-    <button type="submit"
-            class="btn btn-primary btn-block"
-            (click)="update(subCategory)"
-            [disabled]="!isValidForm() || isReadOnly()">
-      {{'common.save' | translate}}
-    </button>
-    <button type="submit"
-            class="btn btn-danger btn-block"
-            (click)="delete(subCategory)"
-            [hidden]="isNewSubCategory()"
-            [disabled]="hasTransations() || isReadOnly()">
-      {{'common.delete' | translate}}
-    </button>
-  </div>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row"
+         [hidden]="isNewSubCategory()"
+         (click)="viewTransactions(subCategory)">
+      <label>
+        {{'common.amount' | translate}}: {{subCategory.transactionAmount}}
+      </label>
+    </div>
+    <div class="clr-form-control clr-row">
+      <button class="btn btn-primary btn-sm btn-block"
+              (click)="update(subCategory)"
+              [disabled]="!isValidForm() || isReadOnly()">
+        {{'common.save' | translate}}
+      </button>
+      <button class="btn btn-danger btn-sm btn-block"
+              (click)="delete(subCategory)"
+              [hidden]="isNewSubCategory()"
+              [disabled]="hasTransations() || isReadOnly()">
+        {{'common.delete' | translate}}
+      </button>
+    </div>
+  </form>
 </div>
