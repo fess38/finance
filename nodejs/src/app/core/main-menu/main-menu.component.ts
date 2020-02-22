@@ -29,10 +29,6 @@ export class MainMenuComponent implements OnDestroy {
     this.auth.signOut();
   }
 
-  allTransactions(): void {
-    this.router.navigate(['/transaction']);
-  }
-
   incomes(): void {
     this.router.navigate(['/transaction'], { queryParams: { transaction_type: 1 } });
   }
