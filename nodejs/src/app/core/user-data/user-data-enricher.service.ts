@@ -59,7 +59,7 @@ export class UserDataEnricherService {
     update.familyMembers.forEach(x => idsToUpdate.push(x.id));
     update.transactions.forEach(x => idsToUpdate.push(x.id));
 
-    result.settings = source.settings || result.settings;
+    result.settings = result.settings || source.settings;
 
     source.accounts
       .filter(x => !idsToUpdate.includes(x.id))

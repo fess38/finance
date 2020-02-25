@@ -11,10 +11,12 @@ import ru.fess38.finance.core.Model.EntityType.FAMILY_MEMBER
 import ru.fess38.finance.core.Model.EntityType.SETTINGS
 import ru.fess38.finance.core.Model.EntityType.SUB_CATEGORY
 import ru.fess38.finance.core.Model.EntityType.TRANSACTION
+import ru.fess38.finance.core.Model.EntityType.TRANSACTION_ARCHIVE
 import ru.fess38.finance.core.Model.FamilyMember
 import ru.fess38.finance.core.Model.Settings
 import ru.fess38.finance.core.Model.SubCategory
 import ru.fess38.finance.core.Model.Transaction
+import ru.fess38.finance.core.Model.TransactionArchive
 
 private val Message.idField: FieldDescriptor
   get() = this.descriptorForType.findFieldByName("id")!!
@@ -32,6 +34,7 @@ val Message.type: EntityType
     is SubCategory -> SUB_CATEGORY
     is FamilyMember -> FAMILY_MEMBER
     is Transaction -> TRANSACTION
+    is TransactionArchive -> TRANSACTION_ARCHIVE
     else -> throw IllegalArgumentException("Unknown entity: $this")
   }
 

@@ -42,7 +42,7 @@ export class UserDataService {
   refresh(catchCallback = () => {}): void {
     get('ts')
       .then(ts => {
-        const modifiedAfter = (ts as number - 7 * 86400 * 1000) || 0;
+        const modifiedAfter = (ts as number - 3600 * 1000) || 0;
         return this.http.get('/api/data/dump/get?ts=' + modifiedAfter);
       })
       .then(data => {

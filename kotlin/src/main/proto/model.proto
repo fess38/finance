@@ -12,6 +12,7 @@ enum EntityType {
     SUB_CATEGORY = 4;
     FAMILY_MEMBER = 5;
     TRANSACTION = 6;
+    TRANSACTION_ARCHIVE = 8;
 }
 
 message Dump {
@@ -92,6 +93,12 @@ message Transaction {
         EXPENSE = 2;
         TRANSFER = 3;
     }
+}
+
+message TransactionArchive {
+    optional int64 id = 1 [default = 0];
+    optional bool is_deleted = 2 [default = false];
+    repeated Transaction transactions = 3;
 }
 
 message Settings {

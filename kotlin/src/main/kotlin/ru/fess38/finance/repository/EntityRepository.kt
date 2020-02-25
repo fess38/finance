@@ -10,9 +10,14 @@ interface EntityRepository {
 
   fun update(message: Message, user: User)
 
+  fun doCreateUpdateDelete(toSave: List<Message>, toUpdate: List<Message>,
+                           toDelete: List<Message>, user: User)
+
   fun isExist(id: Long, type: EntityType, user: User): Boolean
 
-  fun get(user: User, modifiedAfter: Long): List<Message>
+  fun get(user: User, modifiedAfter: Long, types: List<EntityType>): List<Message>
+
+  fun count(user: User, type: EntityType): Long
 
   fun currencies(): List<Currency>
 }
