@@ -48,6 +48,7 @@
     "incomes": "Incomes",
     "expences": "Expences",
     "transfers": "Transfers",
+    "templates": "Templates",
     "reports": "Reports",
     "date_report": "By days",
     "month_report": "By months",
@@ -81,6 +82,16 @@
   },
   "transaction_list": {
     "amount": "Amount"
+  },
+  "transaction_template_detail": {
+    "add": "Add template",
+    "edit": "Edit template",
+    "interval": "Frequency (in days)",
+    "days_of_week": "Days of week",
+    "days_of_month": "Days of month"
+  },
+  "transaction_template_list": {
+    "transaction_template": "Transaction template"
   },
   "report": {
     "summary": "Summary"

@@ -15,11 +15,13 @@ import ru.fess38.finance.core.Model.EntityType.SETTINGS
 import ru.fess38.finance.core.Model.EntityType.SUB_CATEGORY
 import ru.fess38.finance.core.Model.EntityType.TRANSACTION
 import ru.fess38.finance.core.Model.EntityType.TRANSACTION_ARCHIVE
+import ru.fess38.finance.core.Model.EntityType.TRANSACTION_TEMPLATE
 import ru.fess38.finance.core.Model.FamilyMember
 import ru.fess38.finance.core.Model.Settings
 import ru.fess38.finance.core.Model.SubCategory
 import ru.fess38.finance.core.Model.Transaction
 import ru.fess38.finance.core.Model.TransactionArchive
+import ru.fess38.finance.core.Model.TransactionTemplate
 import ru.fess38.finance.repository.EntityRepository
 import ru.fess38.finance.security.User
 import ru.fess38.finance.security.UserService
@@ -71,6 +73,8 @@ class MessageServiceImpl: MessageService {
     val subCategories = messages.filter {it.type == SUB_CATEGORY}.map {it as SubCategory}
     val familyMembers = messages.filter {it.type == FAMILY_MEMBER}.map {it as FamilyMember}
     val transactions = transactions(messages)
+    val transactionTemplates = messages.filter {it.type == TRANSACTION_TEMPLATE}
+        .map {it as TransactionTemplate}
     val settings = settings(messages, user)
 
     log.info {"Create dump for user [${user.id}]"}
@@ -82,6 +86,7 @@ class MessageServiceImpl: MessageService {
         .addAllSubCategories(subCategories)
         .addAllFamilyMembers(familyMembers)
         .addAllTransactions(transactions)
+        .addAllTransactionTemplates(transactionTemplates)
         .build()
   }
 

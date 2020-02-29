@@ -9,7 +9,7 @@ import { TransactionCriteriaService as Criteria } from '../transaction-criteria.
 import { TransactionUtils } from '../transaction-utils';
 
 @Component({
-  templateUrl: './transaction-list.component.html'
+  templateUrl: 'transaction-list.component.html'
 })
 export class TransactionListComponent implements OnInit, OnDestroy {
   constructor(private userdata: UserDataService,

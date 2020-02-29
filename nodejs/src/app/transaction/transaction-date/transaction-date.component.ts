@@ -9,8 +9,8 @@ import { TransactionCriteriaService as Criteria } from '../transaction-criteria.
 import { TransactionUtils as Utils } from '../transaction-utils';
 
 @Component({
-  templateUrl: './transaction-date.component.html',
-  styleUrls: ['./transaction-date.component.css']
+  templateUrl: 'transaction-date.component.html',
+  styleUrls: ['transaction-date.component.css']
 })
 export class TransactionDateComponent implements OnInit, OnDestroy {
   constructor(private userdata: UserDataService,

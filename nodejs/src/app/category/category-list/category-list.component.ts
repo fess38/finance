@@ -11,7 +11,6 @@ export class CategoryListComponent {
 
   categories(): Category[] {
     return _.chain(this.userdata.categories())
-      .filter(x => !x.isDeleted)
       .filter(x => x.isIncome || x.isExpense)
       .sortBy(x => x.name.toLowerCase())
       .sortBy(x => !x.isIncome)

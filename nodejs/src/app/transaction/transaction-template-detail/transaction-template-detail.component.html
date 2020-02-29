@@ -1,0 +1,86 @@
+<div class="clr-row clr-col-12 clr-col-lg-6">
+  <form class="clr-form">
+    <div class="clr-form-control clr-row">
+      <label>
+        <button type="button" class="btn btn-icon btn-link" (click)="viewTransactionTemplates()">
+          <clr-icon shape="undo"></clr-icon>
+        </button>
+        <span [hidden]="!isNewTransactionTemplate()">
+          {{'transaction_template_detail.add' | translate}}
+        </span>
+        <span [hidden]="isNewTransactionTemplate()">
+          {{'transaction_template_detail.edit' | translate}}
+        </span>
+      </label>
+    </div>
+    <div class="clr-form-control clr-row">
+      <label>{{'common.name' | translate}}</label>
+      <div class="clr-control-container">
+        <div class="clr-input-wrapper">
+          <input type="text" name="name" class="clr-input" [(ngModel)]="transactionTemplate.name"/>
+        </div>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row">
+      <label>{{'transaction_template_detail.interval' | translate}}</label>
+      <div class="clr-control-container">
+        <div class="clr-input-wrapper">
+          <input type="number"
+                 name="interval"
+                 class="clr-input"
+                 pattern="\d*"
+                 min="0"
+                 [(ngModel)]="transactionTemplate.interval"/>
+        </div>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row">
+      <label>{{'transaction_template_detail.days_of_week' | translate}}</label>
+      <div class="clr-control-container">
+        <div class="clr-input-wrapper">
+          <input type="text"
+                 name="daysOfWeek"
+                 class="clr-input"
+                 placeholder="1,4,7"
+                 [(ngModel)]="daysOfWeek"
+                 (keyup)="onDaysOfWeekChange()"
+                 (paste)="onDaysOfWeekChange()"/>
+        </div>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row">
+      <label>{{'transaction_template_detail.days_of_month' | translate}}</label>
+      <div class="clr-control-container">
+        <div class="clr-input-wrapper">
+          <input type="text"
+                 name="daysOfMonth"
+                 class="clr-input"
+                 placeholder="1,15,31"
+                 [(ngModel)]="daysOfMonth"
+                 (keyup)="onDaysOfMonthChange()"
+                 (paste)="onDaysOfMonthChange()"/>
+        </div>
+      </div>
+    </div>
+    <div>
+      <tranaction-detail [forTemplate]="true"
+                         [observable]="observable"
+                         [transaction]="transaction()"
+                         (notify)="onChildNotify($event)">
+      </tranaction-detail>
+    </div>
+    <div class="clr-form-control clr-row">
+      <button class="btn btn-primary btn-sm btn-block"
+              (click)="update(transactionTemplate)"
+              [disabled]="!isValidForm() || isReadOnly()">
+        {{'common.save' | translate}}
+      </button>
+      <button class="btn btn-danger btn-sm btn-block"
+              (click)="delete(transactionTemplate)"
+              [hidden]="isNewTransactionTemplate()"
+              [disabled]="!isValidForm() || isReadOnly()">
+        {{'common.delete' | translate}}
+      </button>
+    </div>
+  </form>
+</div>

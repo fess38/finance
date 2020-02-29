@@ -48,6 +48,7 @@
     "incomes": "Доходы",
     "expences": "Расходы",
     "transfers": "Переводы",
+    "templates": "Шаблоны",
     "reports": "Отчеты",
     "date_report": "По дням ",
     "month_report": "По месяцам",
@@ -81,6 +82,16 @@
   },
   "transaction_list": {
     "amount": "Сумма"
+  },
+  "transaction_template_detail": {
+    "add": "Добавление шаблона",
+    "edit": "Редактирование шаблона",
+    "interval": "Регулярность (в днях)",
+    "days_of_week": "Дни недели",
+    "days_of_month": "Дни месяца"
+  },
+  "transaction_template_list": {
+    "transaction_template": "Шаблон транзакции"
   },
   "report": {
     "summary": "Итого"

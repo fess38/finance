@@ -73,7 +73,7 @@ export class CategoryDetailComponent implements OnInit, OnDestroy {
 
   hasLinkedEntities(): boolean {
     const subCategoryAmount = this.userdata.subCategories()
-      .filter(x => !x.isDeleted && x.categoryId == this.category.id)
+      .filter(x => x.categoryId == this.category.id)
       .length;
     return this.category.transactionAmount > 0 || subCategoryAmount > 0;
   }

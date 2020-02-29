@@ -8,13 +8,16 @@ import { TransactionDateComponent } from './transaction-date/transaction-date.co
 import { TransactionDetailComponent } from './transaction-detail/transaction-detail.component';
 import { TransactionListComponent } from './transaction-list/transaction-list.component';
 import { TransactionMonthComponent } from './transaction-month/transaction-month.component';
+import { TransactionTemplateDetailComponent } from './transaction-template-detail/transaction-template-detail.component';
+import { TransactionTemplateListComponent } from './transaction-template-list/transaction-template-list.component';
 import { TransactionYearComponent } from './transaction-year/transaction-year.component';
 
 @NgModule({
   declarations: [
     CreatedFormatPipe, MonthFormatPipe,
     TransactionDateComponent, TransactionMonthComponent, TransactionYearComponent,
-    TransactionDetailComponent, TransactionListComponent
+    TransactionDetailComponent, TransactionListComponent, TransactionTemplateDetailComponent,
+    TransactionTemplateListComponent
   ],
   imports: [
     SharedModule

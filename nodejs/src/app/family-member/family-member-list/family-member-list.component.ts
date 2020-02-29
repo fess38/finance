@@ -11,7 +11,6 @@ export class FamilyMemberListComponent {
 
   familyMembers(): FamilyMember[] {
     return _.chain(this.userdata.familyMembers())
-      .filter(x => !x.isDeleted)
       .sortBy(x => x.name.toLowerCase())
       .value();
   }

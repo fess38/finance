@@ -9,7 +9,9 @@ export const enum EntityType {
     CATEGORY = 3,
     SUB_CATEGORY = 4,
     FAMILY_MEMBER = 5,
-    TRANSACTION = 6
+    TRANSACTION = 6,
+    TRANSACTION_ARCHIVE = 8,
+    TRANSACTION_TEMPLATE = 9
 }
 
 /** Properties of a Dump. */
@@ -35,6 +37,9 @@ export interface IDump {
 
     /** Dump transactions */
     transactions?: (ITransaction[]|null);
+
+    /** Dump transactionTemplates */
+    transactionTemplates?: (ITransactionTemplate[]|null);
 }
 
 /** Represents a Dump. */
@@ -66,6 +71,9 @@ export class Dump implements IDump {
 
     /** Dump transactions. */
     public transactions: ITransaction[];
+
+    /** Dump transactionTemplates. */
+    public transactionTemplates: ITransactionTemplate[];
 
     /**
      * Creates a new Dump instance using the specified properties.
@@ -795,6 +803,186 @@ export namespace Transaction {
         EXPENSE = 2,
         TRANSFER = 3
     }
+}
+
+/** Properties of a TransactionTemplate. */
+export interface ITransactionTemplate {
+
+    /** TransactionTemplate id */
+    id?: (number|null);
+
+    /** TransactionTemplate isDeleted */
+    isDeleted?: (boolean|null);
+
+    /** TransactionTemplate name */
+    name: string;
+
+    /** TransactionTemplate transaction */
+    transaction: ITransaction;
+
+    /** TransactionTemplate interval */
+    interval?: (number|null);
+
+    /** TransactionTemplate daysOfWeek */
+    daysOfWeek?: (number[]|null);
+
+    /** TransactionTemplate daysOfMonth */
+    daysOfMonth?: (number[]|null);
+}
+
+/** Represents a TransactionTemplate. */
+export class TransactionTemplate implements ITransactionTemplate {
+
+    /**
+     * Constructs a new TransactionTemplate.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: ITransactionTemplate);
+
+    /** TransactionTemplate id. */
+    public id: number;
+
+    /** TransactionTemplate isDeleted. */
+    public isDeleted: boolean;
+
+    /** TransactionTemplate name. */
+    public name: string;
+
+    /** TransactionTemplate transaction. */
+    public transaction: ITransaction;
+
+    /** TransactionTemplate interval. */
+    public interval: number;
+
+    /** TransactionTemplate daysOfWeek. */
+    public daysOfWeek: number[];
+
+    /** TransactionTemplate daysOfMonth. */
+    public daysOfMonth: number[];
+
+    /**
+     * Creates a new TransactionTemplate instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns TransactionTemplate instance
+     */
+    public static create(properties?: ITransactionTemplate): TransactionTemplate;
+
+    /**
+     * Encodes the specified TransactionTemplate message. Does not implicitly {@link TransactionTemplate.verify|verify} messages.
+     * @param message TransactionTemplate message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: ITransactionTemplate, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a TransactionTemplate message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns TransactionTemplate
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): TransactionTemplate;
+
+    /**
+     * Creates a TransactionTemplate message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns TransactionTemplate
+     */
+    public static fromObject(object: { [k: string]: any }): TransactionTemplate;
+
+    /**
+     * Creates a plain object from a TransactionTemplate message. Also converts values to other types if specified.
+     * @param message TransactionTemplate
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: TransactionTemplate, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this TransactionTemplate to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a TransactionArchive. */
+export interface ITransactionArchive {
+
+    /** TransactionArchive id */
+    id?: (number|null);
+
+    /** TransactionArchive isDeleted */
+    isDeleted?: (boolean|null);
+
+    /** TransactionArchive transactions */
+    transactions?: (ITransaction[]|null);
+}
+
+/** Represents a TransactionArchive. */
+export class TransactionArchive implements ITransactionArchive {
+
+    /**
+     * Constructs a new TransactionArchive.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: ITransactionArchive);
+
+    /** TransactionArchive id. */
+    public id: number;
+
+    /** TransactionArchive isDeleted. */
+    public isDeleted: boolean;
+
+    /** TransactionArchive transactions. */
+    public transactions: ITransaction[];
+
+    /**
+     * Creates a new TransactionArchive instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns TransactionArchive instance
+     */
+    public static create(properties?: ITransactionArchive): TransactionArchive;
+
+    /**
+     * Encodes the specified TransactionArchive message. Does not implicitly {@link TransactionArchive.verify|verify} messages.
+     * @param message TransactionArchive message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: ITransactionArchive, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a TransactionArchive message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns TransactionArchive
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): TransactionArchive;
+
+    /**
+     * Creates a TransactionArchive message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns TransactionArchive
+     */
+    public static fromObject(object: { [k: string]: any }): TransactionArchive;
+
+    /**
+     * Creates a plain object from a TransactionArchive message. Also converts values to other types if specified.
+     * @param message TransactionArchive
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: TransactionArchive, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this TransactionArchive to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
 }
 
 /** Properties of a Settings. */

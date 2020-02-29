@@ -21,6 +21,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
     });
   }
 
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+
   isReadOnly(): boolean {
     return this.userdata.isReadOnly();
   }
@@ -39,11 +45,5 @@ export class SettingsComponent implements OnInit, OnDestroy {
         console.error(error.message);
         this.router.navigate(['/error']);
       });
-  }
-
-  ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
   }
 }

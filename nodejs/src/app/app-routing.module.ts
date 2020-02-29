@@ -18,6 +18,8 @@ import { TransactionDateComponent } from './transaction/transaction-date/transac
 import { TransactionDetailComponent } from './transaction/transaction-detail/transaction-detail.component';
 import { TransactionListComponent } from './transaction/transaction-list/transaction-list.component';
 import { TransactionMonthComponent } from './transaction/transaction-month/transaction-month.component';
+import { TransactionTemplateDetailComponent } from './transaction/transaction-template-detail/transaction-template-detail.component';
+import { TransactionTemplateListComponent } from './transaction/transaction-template-list/transaction-template-list.component';
 import { TransactionYearComponent } from './transaction/transaction-year/transaction-year.component';
 
 const appRoutes: Routes = [
@@ -91,6 +93,16 @@ const appRoutes: Routes = [
   {
     path: 'transaction/:id',
     component: TransactionDetailComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'transaction_template',
+    component: TransactionTemplateListComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'transaction_template/:id',
+    component: TransactionTemplateDetailComponent,
     canActivate: [AuthGuardService]
   },
   {

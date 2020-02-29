@@ -1,6 +1,6 @@
-<div class="clr-row clr-col-12 clr-col-lg-6">
-  <form class="clr-form">
-    <div class="clr-form-control clr-row">
+<div [className]="forTemplate ? '' : 'clr-row clr-col-12 clr-col-lg-6'">
+  <form [className]="forTemplate ? '' : 'clr-form'">
+    <div class="clr-form-control clr-row" [hidden]="forTemplate">
       <label>
         <button type="button" class="btn btn-icon btn-link" (click)="viewTransactions()">
           <clr-icon shape="undo"></clr-icon>
@@ -13,11 +13,11 @@
         </span>
       </label>
     </div>
-    <div class="clr-form-control clr-row">
+    <div class="clr-form-control clr-row" [hidden]="forTemplate">
       <label>{{'common.date' | translate}}</label>
       <div class="clr-control-container">
         <div class="clr-input-wrapper">
-          <input type="date" name="date" class="clr-input" [(ngModel)]="this.transaction.created"/>
+          <input type="date" name="date" class="clr-input" [(ngModel)]="transaction.created"/>
         </div>
       </div>
     </div>
@@ -151,7 +151,7 @@
         </div>
       </div>
     </div>
-    <div class="clr-form-control clr-row">
+    <div class="clr-form-control clr-row" [hidden]="forTemplate">
       <label>{{'transaction_detail.comment' | translate}}</label>
       <div class="clr-control-container">
         <div class="clr-input-wrapper">
@@ -159,9 +159,8 @@
         </div>
       </div>
     </div>
-    <div class="clr-form-control clr-row">
+    <div class="clr-form-control clr-row" [hidden]="forTemplate">
       <button class="btn btn-primary btn-sm btn-block"
-              [classList]=""
               (click)="update(transaction)"
               [disabled]="!isValidForm() || isReadOnly()">
         {{'common.save' | translate}}
@@ -169,7 +168,7 @@
       <button class="btn btn-danger btn-sm btn-block"
               (click)="delete(transaction)"
               [hidden]="isNewTransaction()"
-              [disabled]="isReadOnly()">
+              [disabled]="!isValidForm() || isReadOnly()">
         {{'common.delete' | translate}}
       </button>
     </div>

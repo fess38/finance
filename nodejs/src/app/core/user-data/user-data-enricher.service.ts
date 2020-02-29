@@ -1,6 +1,6 @@
 import { Long } from 'protobufjs';
 import * as _ from 'underscore';
-import { Account, Category, Dump, FamilyMember, SubCategory, Transaction } from '../model/model';
+import { Account, Category, Dump, FamilyMember, SubCategory, Transaction, TransactionTemplate } from '../model/model';
 
 export class UserDataEnricherService {
   enrich(dump: Dump): void {
@@ -58,8 +58,9 @@ export class UserDataEnricherService {
     update.subCategories.forEach(x => idsToUpdate.push(x.id));
     update.familyMembers.forEach(x => idsToUpdate.push(x.id));
     update.transactions.forEach(x => idsToUpdate.push(x.id));
+    update.transactionTemplates.forEach(x => idsToUpdate.push(x.id));
 
-    result.settings = result.settings || source.settings;
+    result.settings = update.settings || source.settings;
 
     source.accounts
       .filter(x => !idsToUpdate.includes(x.id))
@@ -81,6 +82,9 @@ export class UserDataEnricherService {
       .filter(x => !idsToUpdate.includes(x.id))
       .forEach(x => result.transactions.push(x as Transaction));
 
+    source.transactionTemplates
+      .filter(x => !idsToUpdate.includes(x.id))
+      .forEach(x => result.transactionTemplates.push(x as TransactionTemplate));
     return result;
   }
 }

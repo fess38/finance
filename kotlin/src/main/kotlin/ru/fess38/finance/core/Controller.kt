@@ -18,6 +18,7 @@ import ru.fess38.finance.core.Model.FamilyMember
 import ru.fess38.finance.core.Model.Settings
 import ru.fess38.finance.core.Model.SubCategory
 import ru.fess38.finance.core.Model.Transaction
+import ru.fess38.finance.core.Model.TransactionTemplate
 import ru.fess38.finance.utils.id
 import ru.fess38.finance.utils.type
 import ru.fess38.finance.validation.MessageValidator
@@ -77,6 +78,9 @@ class Controller {
   @PostMapping("transaction/save")
   fun save(@RequestBody value: Transaction) = saveMessage(value)
 
+  @PostMapping("transaction_template/save")
+  fun save(@RequestBody value: TransactionTemplate) = saveMessage(value)
+
   private fun updateMessage(message: Message): ResponseEntity<Any> {
     var httpStatus: HttpStatus
     val validatorResponse = validator.validate(message)
@@ -112,4 +116,7 @@ class Controller {
 
   @PostMapping("transaction/update")
   fun update(@RequestBody value: Transaction) = updateMessage(value)
+
+  @PostMapping("transaction_template/update")
+  fun update(@RequestBody value: TransactionTemplate) = updateMessage(value)
 }

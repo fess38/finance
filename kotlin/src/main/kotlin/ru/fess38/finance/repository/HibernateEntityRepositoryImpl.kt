@@ -20,6 +20,7 @@ import ru.fess38.finance.core.Model.Settings
 import ru.fess38.finance.core.Model.SubCategory
 import ru.fess38.finance.core.Model.Transaction
 import ru.fess38.finance.core.Model.TransactionArchive
+import ru.fess38.finance.core.Model.TransactionTemplate
 import ru.fess38.finance.security.User
 import ru.fess38.finance.utils.id
 import ru.fess38.finance.utils.type
@@ -104,6 +105,7 @@ class HibernateEntityRepositoryImpl: EntityRepository {
             EntityType.FAMILY_MEMBER -> FamilyMember.parseFrom(bytes)
             EntityType.TRANSACTION -> Transaction.parseFrom(bytes)
             EntityType.TRANSACTION_ARCHIVE -> TransactionArchive.parseFrom(bytes)
+            EntityType.TRANSACTION_TEMPLATE -> TransactionTemplate.parseFrom(bytes)
             else -> throw IllegalArgumentException("Unknown type: $hibernateEntity.type")
           }.withId(hibernateEntity.id)
         }

@@ -5,7 +5,7 @@ import { get, set } from 'idb-keyval';
 import { Long } from 'protobufjs';
 import { AsyncSubject, Subscription } from 'rxjs';
 import { HttpService } from '../../utils/http.service';
-import { Account, Category, Currency, Dump, FamilyMember, Settings, SubCategory, Transaction } from '../model/model';
+import { Account, Category, Currency, Dump, FamilyMember, Settings, SubCategory, Transaction, TransactionTemplate } from '../model/model';
 import { UserDataEnricherService } from './user-data-enricher.service';
 import Language = Settings.Language;
 
@@ -90,23 +90,27 @@ export class UserDataService {
   }
 
   accounts(): Account[] {
-    return this.dump.accounts as Account[];
+    return this.dump.accounts.filter(x => !x.isDeleted) as Account[];
   }
 
   categories(): Category[] {
-    return this.dump.categories as Category[];
+    return this.dump.categories.filter(x => !x.isDeleted) as Category[];
   }
 
   subCategories(): SubCategory[] {
-    return this.dump.subCategories as SubCategory[];
+    return this.dump.subCategories.filter(x => !x.isDeleted) as SubCategory[];
   }
 
   familyMembers(): FamilyMember[] {
-    return this.dump.familyMembers as FamilyMember[];
+    return this.dump.familyMembers.filter(x => !x.isDeleted) as FamilyMember[];
   }
 
   transactions(): Transaction[] {
     return this.dump.transactions.filter(x => !x.isDeleted) as Transaction[];
+  }
+
+  transactionTemplates(): TransactionTemplate[] {
+    return this.dump.transactionTemplates.filter(x => !x.isDeleted) as TransactionTemplate[];
   }
 
   findCurrency(id: number | Long): Currency {
@@ -127,6 +131,14 @@ export class UserDataService {
 
   findFamilyMember(id: number | Long): FamilyMember {
     return this.familyMembers().filter(x => x.id == id)[0];
+  }
+
+  findTranasction(id: number | Long): Transaction {
+    return this.transactions().filter(x => x.id == id)[0];
+  }
+
+  findTranasctionTemplate(id: number | Long): TransactionTemplate {
+    return this.transactionTemplates().filter(x => x.id == id)[0];
   }
 
   saveAccount(account: Account): Promise<Account> {
@@ -180,36 +192,79 @@ export class UserDataService {
       });
   }
 
+  saveTransactionTemplate(transactionTemplate: TransactionTemplate): Promise<TransactionTemplate> {
+    return this.http.post('/api/data/transaction_template/save',
+      TransactionTemplate.encode(transactionTemplate))
+      .then(data => TransactionTemplate.decode(data))
+      .then(newTransactionTemplate => {
+        this.dump.transactionTemplates.push(newTransactionTemplate);
+        this.updateCache();
+        return newTransactionTemplate;
+      });
+  }
+
   updateSettings(settings: Settings): Promise<any> {
     this.setDefaultLang();
     return this.http.post('/api/data/settings/update', Settings.encode(settings))
-      .then(() => this.updateCache());
+      .then(() => {
+        this.dump.settings = settings;
+        this.updateCache();
+      });
   }
 
   updateAccount(account: Account): Promise<any> {
     return this.http.post('/api/data/account/update', Account.encode(account))
-      .then(() => this.updateCache());
+      .then(() => {
+        this.dump.accounts = this.dump.accounts.filter(x => x.id != account.id);
+        this.dump.accounts.push(account);
+        this.updateCache();
+      });
   }
 
   updateCategory(category: Category): Promise<any> {
     return this.http.post('/api/data/category/update', Category.encode(category))
-      .then(() => this.updateCache());
+      .then(() => {
+        this.dump.categories = this.dump.categories.filter(x => x.id != category.id);
+        this.dump.categories.push(category);
+        this.updateCache();
+      });
   }
 
   updateSubCategory(subCategory: SubCategory): Promise<any> {
     return this.http.post('/api/data/sub_category/update', SubCategory.encode(subCategory))
-      .then(() => this.updateCache());
+      .then(() => {
+        this.dump.subCategories = this.dump.subCategories.filter(x => x.id != subCategory.id);
+        this.dump.subCategories.push(subCategory);
+        this.updateCache();
+      });
   }
 
   updateFamilyMember(familyMember: FamilyMember): Promise<any> {
     return this.http.post('/api/data/family_member/update', FamilyMember.encode(familyMember))
-      .then(() => this.updateCache());
+      .then(() => {
+        this.dump.familyMembers = this.dump.familyMembers.filter(x => x.id != familyMember.id);
+        this.dump.familyMembers.push(familyMember);
+        this.updateCache();
+      });
   }
 
   updateTransaction(transaction: Transaction): Promise<any> {
     return this.http.post('/api/data/transaction/update', Transaction.encode(transaction))
       .then(() => {
+        this.dump.transactions = this.dump.transactions.filter(x => x.id != transaction.id);
+        this.dump.transactions.push(transaction);
         this.enricher.enrich(this.dump);
+        this.updateCache();
+      });
+  }
+
+  updateTransactionTemplate(transactionTemplate: TransactionTemplate): Promise<any> {
+    return this.http.post('/api/data/transaction_template/update',
+      TransactionTemplate.encode(transactionTemplate))
+      .then(() => {
+        this.dump.transactionTemplates = this.dump.transactionTemplates
+          .filter(x => x.id != transactionTemplate.id);
+        this.dump.transactionTemplates.push(transactionTemplate);
         this.updateCache();
       });
   }
