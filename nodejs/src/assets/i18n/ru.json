@@ -49,6 +49,7 @@
     "expences": "Расходы",
     "transfers": "Переводы",
     "templates": "Шаблоны",
+    "future": "Запланированные",
     "reports": "Отчеты",
     "date_report": "По дням ",
     "month_report": "По месяцам",
@@ -92,6 +93,11 @@
   },
   "transaction_template_list": {
     "transaction_template": "Шаблон транзакции"
+  },
+  "transaction_future": {
+    "name": "Название шаблона",
+    "future": "Запланированные транзакции",
+    "skip": "Пропустить"
   },
   "report": {
     "summary": "Итого"

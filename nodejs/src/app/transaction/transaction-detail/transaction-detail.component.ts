@@ -22,11 +22,9 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   private maxTransactionsAccountId: number = 0;
   private parentNotifyCallerSubscription: Subscription;
 
-  @Input() transaction: Transaction = new Transaction();
-  @Input() private forTemplate: boolean = false;
-  @Input() private observable: Subject<Transaction>;
-  @Output() private notify: EventEmitter<boolean> = new EventEmitter<boolean>();
-
+  @Input() transaction = new Transaction();
+  @Input() context = new TransactionDetailContext();
+  @Output() private notify = new EventEmitter<boolean>();
   typesWithLabels = [
     { type: Transaction.Type.INCOME, label: 'common.income' },
     { type: Transaction.Type.EXPENSE, label: 'common.expense' },
@@ -35,12 +33,12 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   type: Transaction.Type = Transaction.Type.EXPENSE;
 
   ngOnInit(): void {
-    if (this.forTemplate && this.observable) {
-      this.transaction.created = DateUtils.formatDate();
-      if (!this.isValidForm()) {
-        this.onChangeTransactionType();
+    if (this.context.forEmbed && this.context.parentObservable) {
+      if (this.transaction.created.length == 0) {
+        this.transaction.created = DateUtils.formatDate();
+        this.subscription = this.userdata.subscribeOnInit(this.newTransactionCallback());
       }
-      this.parentNotifyCallerSubscription = this.observable.subscribe(() => {
+      this.parentNotifyCallerSubscription = this.context.parentObservable.subscribe(() => {
         if (this.isValidForm()) {
           this.transaction.amountFrom = this.transaction.amountFrom || 0;
           this.transaction.amountTo = this.transaction.amountTo || 0;
@@ -268,4 +266,13 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   viewTransactions(): void {
     this.router.navigate(['/transaction'], { queryParams: this.criteria.toQueryParams() });
   }
+}
+
+export class TransactionDetailContext {
+  forEmbed: boolean = false;
+  showHeader: boolean = true;
+  showDate: boolean = true;
+  showComment: boolean = true;
+  showButtons: boolean = true;
+  parentObservable: Subject<any>;
 }

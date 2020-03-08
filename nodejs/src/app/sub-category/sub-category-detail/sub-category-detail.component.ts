@@ -14,7 +14,7 @@ export class SubCategoryDetailComponent implements OnInit, OnDestroy {
               private router: Router) {}
 
   private subscription: Subscription;
-  subCategory: SubCategory = new SubCategory();
+  subCategory = new SubCategory();
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');

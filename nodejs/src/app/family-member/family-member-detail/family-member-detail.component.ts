@@ -13,7 +13,7 @@ export class FamilyMemberDetailComponent implements OnInit, OnDestroy {
               private router: Router) {}
 
   private subscription: Subscription;
-  familyMember: FamilyMember = new FamilyMember();
+  familyMember = new FamilyMember();
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');

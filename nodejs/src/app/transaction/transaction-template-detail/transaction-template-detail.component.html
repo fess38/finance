@@ -63,8 +63,7 @@
       </div>
     </div>
     <div>
-      <tranaction-detail [forTemplate]="true"
-                         [observable]="observable"
+      <tranaction-detail [context]="transactionDetailContext"
                          [transaction]="transaction()"
                          (notify)="onChildNotify($event)">
       </tranaction-detail>

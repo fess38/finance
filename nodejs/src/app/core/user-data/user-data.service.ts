@@ -18,8 +18,8 @@ export class UserDataService {
   }
 
   private enricher = new UserDataEnricherService();
-  private isInit: AsyncSubject<boolean> = new AsyncSubject();
-  private dump: Dump = new Dump();
+  private isInit = new AsyncSubject<boolean>();
+  private dump = new Dump();
   private isReadOnly_: boolean = true;
 
   subscribeOnInit(callback): Subscription {
@@ -106,7 +106,11 @@ export class UserDataService {
   }
 
   transactions(): Transaction[] {
-    return this.dump.transactions.filter(x => !x.isDeleted) as Transaction[];
+    return this.allTransactions().filter(x => !x.isDeleted);
+  }
+
+  allTransactions(): Transaction[] {
+    return this.dump.transactions as Transaction[];
   }
 
   transactionTemplates(): TransactionTemplate[] {

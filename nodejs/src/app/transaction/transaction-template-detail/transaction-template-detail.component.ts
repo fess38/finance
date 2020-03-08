@@ -4,6 +4,7 @@ import { interval, Subject, Subscription } from 'rxjs';
 import * as _ from 'underscore';
 import { Transaction, TransactionTemplate } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
+import { TransactionDetailContext } from '../transaction-detail/transaction-detail.component';
 
 @Component({
   templateUrl: 'transaction-template-detail.component.html'
@@ -14,17 +15,24 @@ export class TransactionTemplateDetailComponent implements OnInit, OnDestroy {
               private router: Router) {}
 
   private subscription: Subscription;
-  private observable = new Subject<any>();
-  private isValidChildForm = false;
   private childPingerSubscription: Subscription;
-  transactionTemplate: TransactionTemplate = new TransactionTemplate();
+  private isValidChildForm = false;
+  transactionTemplate = new TransactionTemplate();
+  transactionDetailContext: TransactionDetailContext = {
+    forEmbed: true,
+    showHeader: false,
+    showDate: false,
+    showComment: false,
+    showButtons: false,
+    parentObservable: new Subject<any>()
+  };
   daysOfWeek: string = '';
   daysOfMonth: string = '';
 
   ngOnInit(): void {
     this.transactionTemplate.transaction = new Transaction();
     this.childPingerSubscription = interval(500).subscribe(() => {
-      this.observable.next(0);
+      this.transactionDetailContext.parentObservable.next(0);
     });
 
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
@@ -64,13 +72,13 @@ export class TransactionTemplateDetailComponent implements OnInit, OnDestroy {
 
   update(transactionTemplate: TransactionTemplate): void {
     if (transactionTemplate.id == 0) {
-      console.log(transactionTemplate);
       this.userdata.saveTransactionTemplate(transactionTemplate)
         .then(() => {
           this.transactionTemplate.name = '';
           this.transactionTemplate.interval = 0;
           this.transactionTemplate.daysOfWeek = [];
           this.transactionTemplate.daysOfMonth = [];
+          this.router.navigate(['/transaction_template']);
         })
         .catch(error => {
           console.error(error.message);

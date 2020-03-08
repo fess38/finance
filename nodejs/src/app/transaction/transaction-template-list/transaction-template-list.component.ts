@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import * as _ from 'underscore';
 import { TransactionTemplate } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 
@@ -10,6 +9,8 @@ export class TransactionTemplateListComponent {
   constructor(private userdata: UserDataService) {}
 
   transactionTemplates(): TransactionTemplate[] {
-    return _.sortBy(this.userdata.transactionTemplates(), x => x.name.toLowerCase());
+    return this.userdata.transactionTemplates().sort((a, b) => {
+      return a.name < b.name ? -1 : 1;
+    });
   }
 }

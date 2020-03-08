@@ -11,7 +11,7 @@ import Language = Settings.Language;
 })
 export class AccountDetailComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
-  account: Account = new Account();
+  account = new Account();
   updatedBalance: number = undefined;
 
   constructor(private userdata: UserDataService,
@@ -81,7 +81,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   }
 
   createAccountBalanceCorrection(account: Account, updatedBalance: number): Transaction {
-    const transaction: Transaction = new Transaction({
+    const transaction = new Transaction({
       created: DateUtils.formatDate(),
       accountIdFrom: account.id,
       amountFrom: 0,

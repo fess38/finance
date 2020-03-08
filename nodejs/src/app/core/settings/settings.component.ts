@@ -12,7 +12,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   constructor(private userdata: UserDataService, private router: Router) {}
 
   private subscription: Subscription;
-  settings: Settings = new Settings();
+  settings = new Settings();
   languages: any[] = [{ code: Language.RU, value: 'RU' }, { code: Language.EN, value: 'EN' }];
 
   ngOnInit(): void {

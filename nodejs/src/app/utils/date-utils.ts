@@ -72,4 +72,8 @@ export class DateUtils {
     }
     return months;
   }
+
+  static addDays(date: Date, increment: number): void {
+    date.setDate(date.getDate() + increment);
+  }
 }

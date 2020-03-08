@@ -13,7 +13,7 @@ export class CategoryDetailComponent implements OnInit, OnDestroy {
               private router: Router) {}
 
   private subscription: Subscription;
-  category: Category = new Category();
+  category = new Category();
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');

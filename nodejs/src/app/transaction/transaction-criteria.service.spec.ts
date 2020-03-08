@@ -5,7 +5,7 @@ import { DateUtils } from '../utils/date-utils';
 import { TransactionCriteriaService as Criteria } from './transaction-criteria.service';
 
 describe('TransactionCriteriaService', () => {
-  let criteria;
+  let criteria: Criteria;
 
   beforeEach(() => {
     criteria = new Criteria();
@@ -14,7 +14,7 @@ describe('TransactionCriteriaService', () => {
   it('should fit criteria true 1', () => {
     const params: Params = { account_id: 123, family_member_id: 234 };
     criteria.update(params);
-    const transaction: Transaction = new Transaction({
+    const transaction = new Transaction({
       id: 0,
       created: DateUtils.formatDate(),
       categoryId: 4,
@@ -30,7 +30,7 @@ describe('TransactionCriteriaService', () => {
   it('should fit criteria true 2', () => {
     const params: Params = { account_id: 123, category_id: 1239 };
     criteria.update(params);
-    const transaction: Transaction = new Transaction({
+    const transaction = new Transaction({
       id: 0,
       created: DateUtils.formatDate(),
       categoryId: 1239,
@@ -46,7 +46,7 @@ describe('TransactionCriteriaService', () => {
   it('should fit criteria false 1', () => {
     const params: Params = { account_id: 123 };
     criteria.update(params);
-    const transaction: Transaction = new Transaction({
+    const transaction = new Transaction({
       id: 0,
       created: DateUtils.formatDate(),
       categoryId: 1239,

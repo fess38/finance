@@ -16,6 +16,7 @@ import { SubCategoryDetailComponent } from './sub-category/sub-category-detail/s
 import { SubCategoryListComponent } from './sub-category/sub-category-list/sub-category-list.component';
 import { TransactionDateComponent } from './transaction/transaction-date/transaction-date.component';
 import { TransactionDetailComponent } from './transaction/transaction-detail/transaction-detail.component';
+import { TransactionFutureListComponent } from './transaction/transaction-future-list/transaction-future-list.component';
 import { TransactionListComponent } from './transaction/transaction-list/transaction-list.component';
 import { TransactionMonthComponent } from './transaction/transaction-month/transaction-month.component';
 import { TransactionTemplateDetailComponent } from './transaction/transaction-template-detail/transaction-template-detail.component';
@@ -93,6 +94,11 @@ const appRoutes: Routes = [
   {
     path: 'transaction/:id',
     component: TransactionDetailComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'transaction_future',
+    component: TransactionFutureListComponent,
     canActivate: [AuthGuardService]
   },
   {

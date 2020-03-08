@@ -49,6 +49,7 @@
     "expences": "Expences",
     "transfers": "Transfers",
     "templates": "Templates",
+    "future": "Planned",
     "reports": "Reports",
     "date_report": "By days",
     "month_report": "By months",
@@ -92,6 +93,11 @@
   },
   "transaction_template_list": {
     "transaction_template": "Transaction template"
+  },
+  "transaction_future": {
+    "name": "Template name",
+    "future": "Planned transactions",
+    "skip": "Skip"
   },
   "report": {
     "summary": "Summary"

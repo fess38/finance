@@ -1,6 +1,6 @@
-<div [className]="forTemplate ? '' : 'clr-row clr-col-12 clr-col-lg-6'">
-  <form [className]="forTemplate ? '' : 'clr-form'">
-    <div class="clr-form-control clr-row" [hidden]="forTemplate">
+<div [className]="context.forEmbed ? '' : 'clr-row clr-col-12 clr-col-lg-6'">
+  <form [className]="context.forEmbed ? '' : 'clr-form'">
+    <div class="clr-form-control clr-row" [hidden]="!context.showHeader">
       <label>
         <button type="button" class="btn btn-icon btn-link" (click)="viewTransactions()">
           <clr-icon shape="undo"></clr-icon>
@@ -13,7 +13,7 @@
         </span>
       </label>
     </div>
-    <div class="clr-form-control clr-row" [hidden]="forTemplate">
+    <div class="clr-form-control clr-row" [hidden]="!context.showDate">
       <label>{{'common.date' | translate}}</label>
       <div class="clr-control-container">
         <div class="clr-input-wrapper">
@@ -151,7 +151,7 @@
         </div>
       </div>
     </div>
-    <div class="clr-form-control clr-row" [hidden]="forTemplate">
+    <div class="clr-form-control clr-row" [hidden]="!context.showComment">
       <label>{{'transaction_detail.comment' | translate}}</label>
       <div class="clr-control-container">
         <div class="clr-input-wrapper">
@@ -159,7 +159,7 @@
         </div>
       </div>
     </div>
-    <div class="clr-form-control clr-row" [hidden]="forTemplate">
+    <div class="clr-form-control clr-row" [hidden]="!context.showButtons">
       <button class="btn btn-primary btn-sm btn-block"
               (click)="update(transaction)"
               [disabled]="!isValidForm() || isReadOnly()">
