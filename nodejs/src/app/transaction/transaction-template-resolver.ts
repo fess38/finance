@@ -1,5 +1,6 @@
 import { Transaction, TransactionTemplate } from '../core/model/model';
 import { DateUtils } from '../utils/date-utils';
+import { TransactionMatcher } from '../utils/transaction-matcher';
 
 export class TransactionTemplateResolver {
   resolve(transactionTemplates: TransactionTemplate[], transactions: Transaction[])
@@ -39,7 +40,7 @@ export class TransactionTemplateResolver {
   lastTransactionDate(defaultTransaction: Transaction, transactions: Transaction[]): Date {
     let result: Date = DateUtils.parseDate(defaultTransaction.created);
     const matchedDates: Date[] = transactions
-      .filter(x => this.match(defaultTransaction, x))
+      .filter(x => TransactionMatcher.match(defaultTransaction, x))
       .map(x => DateUtils.parseDate(x.created))
       .sort((a, b) => a < b ? -1 : 1);
     if (matchedDates.length > 0) {
@@ -60,7 +61,7 @@ export class TransactionTemplateResolver {
   private nextDateByDayOfWeek(dayOfWeek: number, lastTransactionDate: Date): string {
     let result = new Date(lastTransactionDate.getTime());
     DateUtils.addDays(result, 1);
-    while (result.getDay()  != dayOfWeek % 7) {
+    while (result.getDay() != dayOfWeek % 7) {
       DateUtils.addDays(result, 1);
     }
     return DateUtils.formatDate(result);
@@ -78,22 +79,6 @@ export class TransactionTemplateResolver {
       correctedDayOfMonth = Math.min(dayOfMonth, daysInMonth(result));
     }
     return DateUtils.formatDate(result);
-  }
-
-  match(template: Transaction, transaction: Transaction): boolean {
-    let result: boolean = true;
-    if (template.accountIdFrom != transaction.accountIdFrom) {
-      result = false;
-    } else if (template.accountIdTo != transaction.accountIdTo) {
-      result = false;
-    } else if (template.categoryId != transaction.categoryId) {
-      result = false;
-    } else if (template.subCategoryId != transaction.subCategoryId) {
-      result = false;
-    } else if (template.familyMemberId != transaction.familyMemberId) {
-      result = false;
-    }
-    return result;
   }
 }
 

@@ -87,7 +87,8 @@
   "transaction_template_detail": {
     "add": "Добавление шаблона",
     "edit": "Редактирование шаблона",
-    "interval": "Регулярность (в днях)",
+    "interval": "Регулярность",
+    "average": "в среднем",
     "days_of_week": "Дни недели",
     "days_of_month": "Дни месяца"
   },

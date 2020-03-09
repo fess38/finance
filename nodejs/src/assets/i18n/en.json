@@ -87,7 +87,8 @@
   "transaction_template_detail": {
     "add": "Add template",
     "edit": "Edit template",
-    "interval": "Frequency (in days)",
+    "interval": "Frequency",
+    "average": "in average",
     "days_of_week": "Days of week",
     "days_of_month": "Days of month"
   },

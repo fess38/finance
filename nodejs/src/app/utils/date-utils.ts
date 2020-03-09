@@ -73,7 +73,8 @@ export class DateUtils {
     return months;
   }
 
-  static addDays(date: Date, increment: number): void {
+  static addDays(date: Date, increment: number): Date {
     date.setDate(date.getDate() + increment);
+    return date;
   }
 }

@@ -22,7 +22,12 @@
       </div>
     </div>
     <div class="clr-form-control clr-row">
-      <label>{{'transaction_template_detail.interval' | translate}}</label>
+      <label>
+        <span>{{'transaction_template_detail.interval' | translate}} </span>
+        <span [hidden]="this.transactionFrequency.frequency == 0">
+          ({{'transaction_template_detail.average' | translate}} {{this.transactionFrequency.frequency}})
+        </span>
+      </label>
       <div class="clr-control-container">
         <div class="clr-input-wrapper">
           <input type="number"

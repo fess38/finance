@@ -4,6 +4,8 @@ import { interval, Subject, Subscription } from 'rxjs';
 import * as _ from 'underscore';
 import { Transaction, TransactionTemplate } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
+import { DateUtils } from '../../utils/date-utils';
+import { TransactionMatcher } from '../../utils/transaction-matcher';
 import { TransactionDetailContext } from '../transaction-detail/transaction-detail.component';
 
 @Component({
@@ -17,6 +19,7 @@ export class TransactionTemplateDetailComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
   private childPingerSubscription: Subscription;
   private isValidChildForm = false;
+  transactionFrequency = new TransactionFrequency();
   transactionTemplate = new TransactionTemplate();
   transactionDetailContext: TransactionDetailContext = {
     forEmbed: true,
@@ -33,6 +36,10 @@ export class TransactionTemplateDetailComponent implements OnInit, OnDestroy {
     this.transactionTemplate.transaction = new Transaction();
     this.childPingerSubscription = interval(500).subscribe(() => {
       this.transactionDetailContext.parentObservable.next(0);
+      if (!TransactionMatcher.match(this.transactionFrequency.transaction, this.transaction())) {
+        this.transactionFrequency.transaction = new Transaction(this.transaction());
+        this.transactionFrequency.updateFrequency(this.userdata.transactions());
+      }
     });
 
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
@@ -146,5 +153,24 @@ export class TransactionTemplateDetailComponent implements OnInit, OnDestroy {
       .sortBy(x => x)
       .map(x => x)
       .value();
+  }
+}
+
+class TransactionFrequency {
+  transaction: Transaction = new Transaction();
+  frequency: number = 0;
+
+  updateFrequency(transactions: Transaction[]): void {
+    const yearAgo: string = DateUtils.formatDate(DateUtils.addDays(new Date(), -365));
+    const matchedTransactionsAmount: number = new Set<string>(transactions
+      .filter(x => x.created > yearAgo)
+      .filter(x => TransactionMatcher.match(x, this.transaction))
+      .map(x => x.created)
+    ).size;
+    if (matchedTransactionsAmount > 0) {
+      this.frequency = Math.round(365. / matchedTransactionsAmount);
+    } else {
+      this.frequency = 0;
+    }
   }
 }
