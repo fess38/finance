@@ -4,7 +4,7 @@
     "settings": "Settings",
     "name": "Name",
     "use_in_transactions": "Use in transactions",
-    "amount": "Transaction amount",
+    "amount": "Transaction/template amount",
     "save": "Save",
     "delete": "Delete",
     "income": "Income",

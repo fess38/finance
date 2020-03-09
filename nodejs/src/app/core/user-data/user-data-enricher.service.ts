@@ -24,7 +24,10 @@ export class UserDataEnricherService {
     const map = new Map<number, Account | Category | SubCategory | FamilyMember>();
     values.forEach(x => map.set(x.id as number, x));
 
-    _.chain(dump.transactions)
+    const templateTransactions: Transaction[] = dump.transactionTemplates
+      .filter(x => !x.isDeleted)
+      .map(x => x.transaction as Transaction);
+    _.chain(dump.transactions.concat(templateTransactions))
       .filter(x => !x.isDeleted && x[attributeName] > 0)
       .filter(x => map.has(x[attributeName]))
       .groupBy(x => x[attributeName])

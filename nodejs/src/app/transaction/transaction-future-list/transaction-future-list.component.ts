@@ -57,7 +57,7 @@ export class TransactionFutureListComponent implements OnInit, OnDestroy {
   }
 
   onTransactionClick(transaction: Transaction): void {
-    this.activeTransaction = Transaction.create(transaction);
+    this.activeTransaction = new Transaction(transaction);
     this.isShowForm = true;
   }
 

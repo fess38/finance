@@ -149,7 +149,7 @@ export class UserDataService {
     return this.http.post('/api/data/account/save', Account.encode(account))
       .then(data => Account.decode(data))
       .then(newAccount => {
-        this.accounts().push(newAccount);
+        this.dump.accounts.push(newAccount);
         this.updateCache();
         return newAccount;
       });
@@ -159,7 +159,7 @@ export class UserDataService {
     return this.http.post('/api/data/category/save', Category.encode(category))
       .then(data => Category.decode(data))
       .then(newCategory => {
-        this.categories().push(newCategory);
+        this.dump.categories.push(newCategory);
         this.updateCache();
         return newCategory;
       });
@@ -169,7 +169,7 @@ export class UserDataService {
     return this.http.post('/api/data/sub_category/save', SubCategory.encode(subCategory))
       .then(data => SubCategory.decode(data))
       .then(newSubCategory => {
-        this.subCategories().push(newSubCategory);
+        this.dump.subCategories.push(newSubCategory);
         this.updateCache();
         return newSubCategory;
       });
@@ -179,7 +179,7 @@ export class UserDataService {
     return this.http.post('/api/data/family_member/save', FamilyMember.encode(familyMember))
       .then(data => FamilyMember.decode(data))
       .then(newFamilyMember => {
-        this.familyMembers().push(newFamilyMember);
+        this.dump.familyMembers.push(newFamilyMember);
         this.updateCache();
         return newFamilyMember;
       });
@@ -202,6 +202,7 @@ export class UserDataService {
       .then(data => TransactionTemplate.decode(data))
       .then(newTransactionTemplate => {
         this.dump.transactionTemplates.push(newTransactionTemplate);
+        this.enricher.enrich(this.dump);
         this.updateCache();
         return newTransactionTemplate;
       });
@@ -269,6 +270,7 @@ export class UserDataService {
         this.dump.transactionTemplates = this.dump.transactionTemplates
           .filter(x => x.id != transactionTemplate.id);
         this.dump.transactionTemplates.push(transactionTemplate);
+        this.enricher.enrich(this.dump);
         this.updateCache();
       });
   }

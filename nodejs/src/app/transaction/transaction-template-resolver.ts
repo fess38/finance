@@ -30,7 +30,7 @@ export class TransactionTemplateResolver {
     return Array.from(dates)
       .sort((a, b) => a < b ? -1 : 1)
       .map(x => {
-        let transaction = Transaction.create(defaultTransaction);
+        let transaction = new Transaction(defaultTransaction);
         transaction.created = x;
         return transaction;
       });
