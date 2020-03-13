@@ -1,5 +1,4 @@
 import { Long } from 'protobufjs';
-import * as _ from 'underscore';
 import { Account, Category, Dump, FamilyMember, SubCategory, Transaction, TransactionTemplate } from '../model/model';
 
 export class UserDataEnricherService {
@@ -27,29 +26,31 @@ export class UserDataEnricherService {
     const templateTransactions: Transaction[] = dump.transactionTemplates
       .filter(x => !x.isDeleted)
       .map(x => x.transaction as Transaction);
-    _.chain(dump.transactions.concat(templateTransactions))
+    const group = new Map<number, Transaction[]>();
+    dump.transactions.concat(templateTransactions)
       .filter(x => !x.isDeleted && x[attributeName] > 0)
       .filter(x => map.has(x[attributeName]))
-      .groupBy(x => x[attributeName])
-      .forEach((v, k) => {
-        const entity = map.get(Number(k));
-        entity.transactionAmount = entity.transactionAmount as number + v.length;
-        if ('balance' in entity && map.size > 0) {
-          if (attributeName == 'accountIdFrom') {
-            const amount = this.sum(v as Transaction[], x => x.amountFrom);
-            entity.balance = entity.balance as number - amount;
-          } else if (attributeName == 'accountIdTo') {
-            const amount = this.sum(v as Transaction[], x => x.amountTo);
-            entity.balance = entity.balance as number + amount;
-          }
-        }
+      .forEach(x => {
+        const key: number = x[attributeName];
+        group.set(key, (group.get(key) || []).concat(x as Transaction));
       });
+    group.forEach((v, k) => {
+      const entity = map.get(Number(k));
+      entity.transactionAmount = entity.transactionAmount as number + v.length;
+      if ('balance' in entity && map.size > 0) {
+        if (attributeName == 'accountIdFrom') {
+          const amount = this.sum(v as Transaction[], x => x.amountFrom);
+          entity.balance = entity.balance as number - amount;
+        } else if (attributeName == 'accountIdTo') {
+          const amount = this.sum(v as Transaction[], x => x.amountTo);
+          entity.balance = entity.balance as number + amount;
+        }
+      }
+    });
   }
 
   private sum(transactions: Transaction[], mapper): number {
-    return Number(_.chain(transactions)
-      .map(mapper)
-      .reduce((x1, x2) => Number(x1) + Number(x2), 0)) || 0;
+    return Number(transactions.map(mapper).reduce((x1, x2) => Number(x1) + Number(x2), 0)) || 0;
   }
 
   merge(source: Dump, update: Dump): Dump {

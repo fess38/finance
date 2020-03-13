@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import * as _ from 'underscore';
 import { Category, Currency, Date_, Month, SubCategory, Summary, Transaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 import { DateUtils } from '../../utils/date-utils';
@@ -73,11 +72,9 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
 
   private updateTransactions(): void {
     const types: Transaction.Type[] = [Transaction.Type.INCOME, Transaction.Type.EXPENSE];
-    this.allTransactions = _.chain(this.userdata.transactions())
+    this.allTransactions = this.userdata.transactions()
       .filter(x => types.includes(Utils.type(x)))
-      .filter(x => this.criteria.isFit(x))
-      .map(x => x)
-      .value();
+      .filter(x => this.criteria.isFit(x));
     this.transactions = this.allTransactions
       .filter(x => {
         const accountId: number = Math.max(Number(x.accountIdFrom), Number(x.accountIdTo));
@@ -87,31 +84,36 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
 
   private updateDateCategorySummaries(): void {
     this.dateCategorySummaries.clear();
-    _.chain(this.transactions)
-      .groupBy(x => [x.created, x.categoryId])
-      .forEach((value, key: string) => {
-        const category = this.userdata.findCategory(+key.split(',')[1]);
-        const amount: number = _.chain(value)
-          .map(x => Math.max(Number(x.amountFrom), Number(x.amountTo)))
-          .reduce((x1, x2) => x1 + x2, 0)
-          .value();
-        const sum: number = category.isIncome ? this.income : this.expense;
-        this.dateCategorySummaries.set(key, new Summary({ amount: amount, share: amount / sum }));
-      });
+    const group = new Map<string, Transaction[]>();
+    this.transactions.forEach(x => {
+      const key: string = x.created + ',' + x.categoryId.toString();
+      group.set(key, (group.get(key) || []).concat(x));
+    });
+    group.forEach((value, key) => {
+      const category = this.userdata.findCategory(+key.split(',')[1]);
+      const amount: number = value
+        .map(x => Math.max(Number(x.amountFrom), Number(x.amountTo)))
+        .reduce((x1, x2) => x1 + x2, 0);
+      const sum: number = category.isIncome ? this.income : this.expense;
+      this.dateCategorySummaries.set(key, new Summary({ amount: amount, share: amount / sum }));
+    });
   }
 
   private updateDateSubCategorySummaries(): void {
     this.dateSubCategorySummaries.clear();
-    _.chain(this.transactions)
+    const group = new Map<string, Transaction[]>();
+    this.transactions
       .filter(x => x.subCategoryId > 0)
-      .groupBy(x => [x.created, x.subCategoryId])
-      .forEach((value, key: string) => {
+      .forEach(x => {
+        const key: string = x.created + ',' + x.subCategoryId.toString();
+        group.set(key, (group.get(key) || []).concat(x));
+      });
+    group.forEach((value, key: string) => {
         const subCategory = this.userdata.findSubCategory(+key.split(',')[1]);
         const category = this.userdata.findCategory(subCategory.categoryId);
-        const amount: number = _.chain(value)
+        const amount: number = value
           .map(x => Math.max(Number(x.amountFrom), Number(x.amountTo)))
-          .reduce((x1, x2) => x1 + x2, 0)
-          .value();
+          .reduce((x1, x2) => x1 + x2, 0);
         const sum: number = category.isIncome ? this.income : this.expense;
         this.dateSubCategorySummaries.set(key, new Summary({ amount: amount, share: amount / sum }));
       });
@@ -119,15 +121,14 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
 
   private dateSummaries(transactions: Transaction[], sum: number): Map<string, Summary> {
     const result = new Map<string, Summary>();
-    _.chain(transactions)
-      .groupBy(x => x.created)
-      .forEach((value, key: string) => {
-        const amount: number = _.chain(value)
-          .map(x => Math.abs(Number(x.amountFrom)) + Math.abs(Number(x.amountTo)))
-          .reduce((x1, x2) => x1 + x2, 0)
-          .value();
-        result.set(key, new Summary({ amount: amount, share: amount / sum }));
-      });
+    const group = new Map<string, Transaction[]>();
+    transactions.forEach(x => group.set(x.created, (group.get(x.created) || []).concat(x)));
+    group.forEach((value, key: string) => {
+      const amount: number = value
+        .map(x => Math.abs(Number(x.amountFrom)) + Math.abs(Number(x.amountTo)))
+        .reduce((x1, x2) => x1 + x2, 0);
+      result.set(key, new Summary({ amount: amount, share: amount / sum }));
+    });
     return result;
   }
 

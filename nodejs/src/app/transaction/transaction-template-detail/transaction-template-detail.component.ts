@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { interval, Subject, Subscription } from 'rxjs';
-import * as _ from 'underscore';
 import { Transaction, TransactionTemplate } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 import { DateUtils } from '../../utils/date-utils';
@@ -146,13 +145,12 @@ export class TransactionTemplateDetailComponent implements OnInit, OnDestroy {
   }
 
   private formatDays(value: string): number[] {
-    return _.chain(value.split(','))
+    const days = new Set<number>();
+    value.split(',')
       .filter(x => x != '')
       .map(x => Number(x))
-      .unique()
-      .sortBy(x => x)
-      .map(x => x)
-      .value();
+      .forEach(x => days.add(x));
+    return Array.from(days).sort((a, b) => a < b ? -1 : 1);
   }
 }
 

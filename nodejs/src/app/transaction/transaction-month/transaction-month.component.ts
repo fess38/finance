@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import * as _ from 'underscore';
 import { Category, Currency, Month, SubCategory, Summary, Transaction, Year } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 import { DateUtils } from '../../utils/date-utils';
@@ -73,61 +72,66 @@ export class TransactionMonthComponent implements OnInit, OnDestroy {
 
   private updateTransactions(): void {
     const types: Transaction.Type[] = [Transaction.Type.INCOME, Transaction.Type.EXPENSE];
-    this.allTransactions = _.chain(this.userdata.transactions())
+    this.allTransactions = this.userdata.transactions()
       .filter(x => types.includes(Utils.type(x)))
-      .filter(x => DateUtils.parseDate_(x.created).year == this.criteria.year)
-      .map(x => x)
-      .value();
-    this.transactions = this.allTransactions
-      .filter(x => {
-        const accountId: number = Math.max(Number(x.accountIdFrom), Number(x.accountIdTo));
-        return this.userdata.findAccount(accountId).currencyId == this.currency.id;
-      });
+      .filter(x => DateUtils.parseDate_(x.created).year == this.criteria.year);
+    this.transactions = this.allTransactions.filter(x => {
+      const accountId: number = Math.max(Number(x.accountIdFrom), Number(x.accountIdTo));
+      return this.userdata.findAccount(accountId).currencyId == this.currency.id;
+    });
   }
 
   private updateMonthCategorySummaries(): void {
     this.monthCategorySummaries.clear();
-    _.chain(this.transactions)
-      .groupBy(x => [DateUtils.parseAndFormatMonth(x.created), x.categoryId])
-      .forEach((value, key: string) => {
-        const category = this.userdata.findCategory(+key.split(',')[1]);
-        const amount: number = _.chain(value)
-          .map(x => Math.max(Number(x.amountFrom), Number(x.amountTo)))
-          .reduce((x1, x2) => x1 + x2, 0)
-          .value();
-        const sum: number = category.isIncome ? this.income : this.expense;
-        this.monthCategorySummaries.set(key, new Summary({ amount: amount, share: amount / sum }));
-      });
+    const group = new Map<string, Transaction[]>();
+    this.transactions.forEach(x => {
+      const key: string = DateUtils.parseAndFormatMonth(x.created) + ',' + x.categoryId.toString();
+      group.set(key, (group.get(key) || []).concat(x));
+    });
+    group.forEach((value, key: string) => {
+      const category = this.userdata.findCategory(+key.split(',')[1]);
+      const amount: number = value
+        .map(x => Math.max(Number(x.amountFrom), Number(x.amountTo)))
+        .reduce((x1, x2) => x1 + x2, 0);
+      const sum: number = category.isIncome ? this.income : this.expense;
+      this.monthCategorySummaries.set(key, new Summary({ amount: amount, share: amount / sum }));
+    });
   }
 
   private updateMonthSubCategorySummaries(): void {
     this.monthSubCategorySummaries.clear();
-    _.chain(this.transactions)
+    const group = new Map<string, Transaction[]>();
+    this.transactions
       .filter(x => x.subCategoryId > 0)
-      .groupBy(x => [DateUtils.parseAndFormatMonth(x.created), x.subCategoryId])
-      .forEach((value, key: string) => {
-        const subCategory = this.userdata.findSubCategory(+key.split(',')[1]);
-        const category = this.userdata.findCategory(subCategory.categoryId);
-        const amount: number = _.chain(value)
-          .map(x => Math.max(Number(x.amountFrom), Number(x.amountTo)))
-          .reduce((x1, x2) => x1 + x2, 0)
-          .value();
-        const sum: number = category.isIncome ? this.income : this.expense;
-        this.monthSubCategorySummaries.set(key, new Summary({ amount: amount, share: amount / sum }));
+      .forEach(x => {
+        const key: string = DateUtils.parseAndFormatMonth(x.created) + ','
+          + x.subCategoryId.toString();
+        group.set(key, (group.get(key) || []).concat(x));
       });
+    group.forEach((value, key: string) => {
+      const subCategory = this.userdata.findSubCategory(+key.split(',')[1]);
+      const category = this.userdata.findCategory(subCategory.categoryId);
+      const amount: number = value
+        .map(x => Math.max(Number(x.amountFrom), Number(x.amountTo)))
+        .reduce((x1, x2) => x1 + x2, 0);
+      const sum: number = category.isIncome ? this.income : this.expense;
+      this.monthSubCategorySummaries.set(key, new Summary({ amount: amount, share: amount / sum }));
+    });
   }
 
   private monthSummaries(transactions: Transaction[], sum: number): Map<string, Summary> {
     const result = new Map<string, Summary>();
-    _.chain(transactions)
-      .groupBy(x => DateUtils.parseAndFormatMonth(x.created))
-      .forEach((value, key: string) => {
-        const amount: number = _.chain(value)
-          .map(x => Math.abs(Number(x.amountFrom)) + Math.abs(Number(x.amountTo)))
-          .reduce((x1, x2) => x1 + x2, 0)
-          .value();
-        result.set(key, new Summary({ amount: amount, share: amount / sum }));
-      });
+    const group = new Map<string, Transaction[]>();
+    transactions.forEach(x => {
+      const key: string = DateUtils.parseAndFormatMonth(x.created);
+      group.set(key, (group.get(key) || []).concat(x));
+    });
+    group.forEach((value, key: string) => {
+      const amount: number = value
+        .map(x => Math.abs(Number(x.amountFrom)) + Math.abs(Number(x.amountTo)))
+        .reduce((x1, x2) => x1 + x2, 0);
+      result.set(key, new Summary({ amount: amount, share: amount / sum }));
+    });
     return result;
   }
 

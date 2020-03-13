@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import * as _ from 'underscore';
 import { Category, SubCategory } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 
@@ -12,18 +11,29 @@ export class SubCategoryListComponent {
   filterCategoryId: number;
 
   categories(): Category[] {
-    return _.chain(this.userdata.categories())
-      .sortBy(x => x.isIncome)
-      .sortBy(x => x.name.toLowerCase())
-      .value();
+    return this.userdata.categories()
+      .sort((a, b) => {
+        if (a.isIncome != b.isIncome) {
+          return a.isIncome < b.isIncome ? 1 : -1;
+        } else {
+          return a.name < b.name ? -1 : 1;
+        }
+      });
   }
 
   subCategories(): SubCategory[] {
-    let result = _.chain(this.userdata.subCategories())
-      .sortBy(x => x.name.toLowerCase())
-      .sortBy(x => this.userdata.findCategory(x.categoryId).name)
-      .sortBy(x => !this.userdata.findCategory(x.categoryId).isIncome)
-      .value();
+    let result = this.userdata.subCategories()
+      .sort((x, y) => {
+        const a: Category = this.userdata.findCategory(x.categoryId);
+        const b: Category = this.userdata.findCategory(y.categoryId);
+        if (a.isIncome != b.isIncome) {
+          return a.isIncome < b.isIncome ? 1 : -1;
+        } else if (a.name != b.name) {
+          return a.name < b.name ? -1 : 1;
+        } else {
+          return x.name < y.name ? -1 : 1;
+        }
+      });
     if (this.filterCategoryId != null) {
       result = result.filter(x => x.categoryId == this.filterCategoryId);
     }

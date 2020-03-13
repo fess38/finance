@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import * as _ from 'underscore';
 import { Account } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 
@@ -10,9 +9,7 @@ export class AccountListComponent {
   constructor(private userdata: UserDataService) {}
 
   accounts(): Account[] {
-    return _.chain(this.userdata.accounts())
-      .sortBy(x => x.name.toLowerCase())
-      .value();
+    return this.userdata.accounts().sort((a, b) => a.name < b.name ? -1 : 1);
   }
 
   locale(): string {

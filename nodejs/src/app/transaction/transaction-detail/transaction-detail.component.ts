@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
-import * as _ from 'underscore';
 import { Account, Category, FamilyMember, SubCategory, Transaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 import { DateUtils } from '../../utils/date-utils';
@@ -75,11 +74,9 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
 
   private newTransactionCallback(): any {
     return () => {
-      this.maxTransactionsAccountId = _.chain(this.accounts())
-        .sortBy(x => x.transactionAmount)
-        .reverse()
-        .map(x => Number(x.id))
-        .value()[0] || 0;
+      this.maxTransactionsAccountId = this.accounts()
+        .sort((a, b) => a.transactionAmount < b.transactionAmount ? 1 : -1)
+        .map(x => Number(x.id))[0] || 0;
       this.onChangeTransactionType();
     };
   }
@@ -153,11 +150,10 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   }
 
   categories(): Category[] {
-    return _.chain(this.userdata.categories())
+    return this.userdata.categories()
       .filter(x => x.isVisible)
       .filter(x => (this.isIncome() && x.isIncome) || (this.isExpense() && x.isExpense))
-      .sortBy(x => x.name)
-      .value();
+      .sort((a, b) => a.name < b.name ? -1 : 1);
   }
 
   onChangeCategory(): void {
@@ -165,25 +161,22 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   }
 
   subCategories(): SubCategory[] {
-    const subCategories: SubCategory[] = _.chain(this.userdata.subCategories())
+    const subCategories: SubCategory[] = this.userdata.subCategories()
       .filter(x => x.isVisible)
-      .filter(x => x.categoryId == this.transaction.categoryId)
-      .map(x => x)
-      .value();
+      .filter(x => x.categoryId == this.transaction.categoryId);
     if (this.transaction.subCategoryId) {
       const subCategory: SubCategory = this.userdata.findSubCategory(this.transaction.subCategoryId);
       if (!subCategory.isVisible) {
         subCategories.push(subCategory);
       }
     }
-    return _.sortBy(subCategories, x => x.name);
+    return subCategories.sort((a, b) => a.name < b.name ? -1 : 1);
   }
 
   familyMembers(): FamilyMember[] {
-    return _.chain(this.userdata.familyMembers())
+    return this.userdata.familyMembers()
       .filter(x => x.isVisible)
-      .sortBy(x => x.name)
-      .value();
+      .sort((a, b) => a.name < b.name ? -1 : 1);
   }
 
   currency(account: Account): string {

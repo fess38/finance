@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import * as _ from 'underscore';
 import { Category } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 
@@ -10,10 +9,14 @@ export class CategoryListComponent {
   constructor(private userdata: UserDataService) {}
 
   categories(): Category[] {
-    return _.chain(this.userdata.categories())
+    return this.userdata.categories()
       .filter(x => x.isIncome || x.isExpense)
-      .sortBy(x => x.name.toLowerCase())
-      .sortBy(x => !x.isIncome)
-      .value();
+      .sort((a, b) => {
+        if (a.isIncome != b.isIncome) {
+          return a.isIncome < b.isIncome ? 1 : -1;
+        } else {
+          return a.name < b.name ? -1 : 1;
+        }
+      });
   }
 }

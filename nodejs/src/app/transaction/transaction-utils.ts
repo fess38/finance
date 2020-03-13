@@ -1,4 +1,3 @@
-import * as _ from 'underscore';
 import { Category, Currency, SubCategory, Summary, Transaction } from '../core/model/model';
 import { UserDataService } from '../core/user-data/user-data.service';
 import Type = Transaction.Type;
@@ -17,45 +16,39 @@ export class TransactionUtils {
   }
 
   static currencies(transactions: Transaction[], userdata: UserDataService): Currency[] {
-    return _.chain(transactions)
+    const unique = new Set<number>();
+    transactions
       .map(x => Math.max(Number(x.accountIdFrom), Number(x.accountIdTo)))
-      .unique()
+      .forEach(x => unique.add(x));
+    return Array.from(unique)
       .map(x => userdata.findAccount(x).currencyId)
-      .map(x => userdata.findCurrency(x))
-      .value();
+      .map(x => userdata.findCurrency(x));
   }
 
   static categories(transactions: Transaction[], userdata: UserDataService): Category[] {
-    return _.chain(transactions)
-      .map(x => x.categoryId)
-      .unique()
+    const unique = new Set<number>();
+    transactions.map(x => x.categoryId).forEach(x => unique.add(x));
+    return Array.from(unique)
       .map(x => userdata.findCategory(x))
-      .sortBy(x => x.name)
-      .value();
+      .sort((a, b) => a.name < b.name ? -1 : 1);
   }
 
   static subCategories(transactions: Transaction[], userdata: UserDataService): SubCategory[] {
-    return _.chain(transactions)
-      .map(x => x.subCategoryId)
-      .filter(x => x > 0)
-      .unique()
+    const unique = new Set<number>();
+    transactions.map(x => x.subCategoryId).filter(x => x > 0).forEach(x => unique.add(x));
+    return Array.from(unique)
       .map(x => userdata.findSubCategory(x))
-      .sortBy(x => x.name)
-      .value();
+      .sort((a, b) => a.name < b.name ? -1 : 1);
   }
 
   static income(transactions: Transaction[]): number {
-    return _.chain(transactions)
-      .map(x => Number(x.amountTo))
-      .reduce((x1, x2) => x1 + x2, 0)
-      .value();
+    return transactions.map(x => Number(x.amountTo)).reduce((x1, x2) => x1 + x2, 0);
   }
 
   static expense(transactions: Transaction[]): number {
-    return _.chain(transactions)
+    return transactions
       .map(x => Number(x.amountFrom))
-      .reduce((x1, x2) => x1 + x2, 0)
-      .value();
+      .reduce((x1, x2) => x1 + x2, 0);
   }
 
   static incomeTransactions(transactions: Transaction[]): Transaction[] {
@@ -69,33 +62,32 @@ export class TransactionUtils {
   static categorySummaries(transactions: Transaction[], income: number,
                            expense: number): Map<number, Summary> {
     const result = new Map<number, Summary>();
-    _.chain(transactions)
-      .groupBy(x => x.categoryId)
-      .forEach((value, key) => {
-        const amount: number = _.chain(value)
-          .map(x => Math.abs(Number(x.amountFrom)) + Math.abs(Number(x.amountTo)))
-          .reduce((x1, x2) => x1 + x2, 0)
-          .value();
-        const sum = this.type(value[0]) == Type.INCOME ? income : expense;
-        result.set(+key, new Summary({ amount: amount, share: amount / sum }));
-      });
+    const group = new Map<number, Transaction[]>();
+    transactions.forEach(x => group.set(x.categoryId, (group.get(x.categoryId) || []).concat(x)));
+    group.forEach((value, key) => {
+      const amount: number = value
+        .map(x => Math.abs(Number(x.amountFrom)) + Math.abs(Number(x.amountTo)))
+        .reduce((x1, x2) => x1 + x2, 0);
+      const sum = this.type(value[0]) == Type.INCOME ? income : expense;
+      result.set(+key, new Summary({ amount: amount, share: amount / sum }));
+    });
     return result;
   }
 
   static subCategorySummaries(transactions: Transaction[], income: number,
                               expense: number): Map<number, Summary> {
     const result = new Map<number, Summary>();
-    _.chain(transactions)
+    const group = new Map<number, Transaction[]>();
+    transactions
       .filter(x => x.subCategoryId > 0)
-      .groupBy(x => x.subCategoryId)
-      .forEach((value, key) => {
-        const amount: number = _.chain(value)
-          .map(x => Math.abs(Number(x.amountFrom)) + Math.abs(Number(x.amountTo)))
-          .reduce((x1, x2) => x1 + x2, 0)
-          .value();
-        const sum = this.type(value[0]) == Type.INCOME ? income : expense;
-        result.set(+key, new Summary({ amount: amount, share: amount / sum }));
-      });
+      .forEach(x => group.set(x.subCategoryId, (group.get(x.subCategoryId) || []).concat(x)));
+    group.forEach((value, key) => {
+      const amount: number = value
+        .map(x => Math.abs(Number(x.amountFrom)) + Math.abs(Number(x.amountTo)))
+        .reduce((x1, x2) => x1 + x2, 0);
+      const sum = this.type(value[0]) == Type.INCOME ? income : expense;
+      result.set(+key, new Summary({ amount: amount, share: amount / sum }));
+    });
     return result;
   }
 }
