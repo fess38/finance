@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import * as _ from 'underscore';
 import { Category, Month, SubCategory, Transaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 import { DateUtils } from '../../utils/date-utils';
@@ -9,17 +8,17 @@ import { TransactionCriteriaService as Criteria } from '../transaction-criteria.
 import { TransactionUtils } from '../transaction-utils';
 
 @Component({
-  templateUrl: './transaction-list.component.html'
+  templateUrl: 'transaction-list.component.html'
 })
 export class TransactionListComponent implements OnInit, OnDestroy {
-  private subscription: Subscription;
-  months: Month[] = [];
-  transactions: Transaction[];
-
   constructor(private userdata: UserDataService,
               private criteria: Criteria,
               private route: ActivatedRoute,
               private router: Router) {}
+
+  private subscription: Subscription;
+  months: Month[] = [];
+  transactions: Transaction[];
 
   ngOnInit(): void {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
@@ -28,22 +27,23 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   }
 
   private onInitCallback(): void {
-    this.transactions = _.chain(this.userdata.transactions())
+    this.transactions = this.userdata.transactions()
       .filter(x => this.criteria.isFit(x))
-      .sortBy(x => x.created)
-      .reverse()
-      .value();
-    _.chain(this.transactions)
-      .sortBy(x => x.created)
-      .reverse()
-      .map(x => DateUtils.parseMonth(x.created))
-      .unique(true, (x) => String(x.year) + String(x.month))
-      .value()
-      .forEach(x => {
-        if (!this.months.includes(x)) {
-          this.months.push(x);
-        }
+      .sort((a, b) => {
+        return a.created + a.id.toString() < b.created + b.id.toString() ? 1 : -1;
       });
+    const months = new Map<string, Month>();
+    this.transactions
+      .sort((a, b) => {
+        return a.created + a.id.toString() < b.created + b.id.toString() ? 1 : -1;
+      })
+      .map(x => DateUtils.parseMonth(x.created))
+      .forEach(x => months.set(String(x.year) + String(x.month), x));
+    months.forEach((month) => {
+      if (!this.months.includes(month)) {
+        this.months.push(month);
+      }
+    });
     if (this.months.length == 0) {
       this.months.push(new Month({ year: this.criteria.year, month: this.criteria.month }));
     }
@@ -83,14 +83,13 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   }
 
   private filterTransactions(month: Month): Transaction[] {
-    return _.chain(this.transactions)
-      .filter(x => {
-        const currentMonth = DateUtils.parseMonth(x.created);
-        return currentMonth.year == month.year && currentMonth.month == month.month;
-      })
-      .sortBy(x => x.created)
-      .reverse()
-      .value();
+    return this.transactions.filter(x => {
+      const currentMonth = DateUtils.parseMonth(x.created);
+      return currentMonth.year == month.year && currentMonth.month == month.month;
+    })
+      .sort((a, b) => {
+        return a.created + a.id.toString() < b.created + b.id.toString() ? 1 : -1;
+      });
   }
 
   formatCategory(transaction: Transaction): string {
@@ -98,9 +97,21 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     const category: Category = this.userdata.findCategory(transaction.categoryId);
     const subCategory: SubCategory = this.userdata.findSubCategory(transaction.subCategoryId);
     if (subCategory) {
-      result = subCategory.name
+      result = subCategory.name;
     } else if (category) {
       result = category.name;
+    }
+    return result;
+  }
+
+  isShowTooltip(transaction: Transaction): boolean {
+    return transaction.comment.length > 0;
+  }
+
+  formatTooltip(transaction: Transaction): string {
+    let result = '';
+    if (transaction.comment) {
+      result = transaction.comment;
     }
     return result;
   }

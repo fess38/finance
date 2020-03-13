@@ -10,9 +10,9 @@ import Language = Settings.Language;
   templateUrl: 'account-detail.component.html'
 })
 export class AccountDetailComponent implements OnInit, OnDestroy {
-  account: Account = new Account();
-  updatedBalance: number = undefined;
   private subscription: Subscription;
+  account = new Account();
+  updatedBalance: number = undefined;
 
   constructor(private userdata: UserDataService,
               private route: ActivatedRoute,
@@ -39,11 +39,15 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     }
   }
 
+  isReadOnly(): boolean {
+    return this.userdata.isReadOnly();
+  }
+
   currencies(): Currency[] {
     return this.userdata.currencies();
   }
 
-  private language(): string {
+  language(): string {
     return Language[this.userdata.settings().language];
   }
 
@@ -77,7 +81,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   }
 
   createAccountBalanceCorrection(account: Account, updatedBalance: number): Transaction {
-    const transaction: Transaction = new Transaction({
+    const transaction = new Transaction({
       created: DateUtils.formatDate(),
       accountIdFrom: account.id,
       amountFrom: 0,

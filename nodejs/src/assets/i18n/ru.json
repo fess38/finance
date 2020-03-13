@@ -4,7 +4,7 @@
     "settings": "Настройки",
     "name": "Название",
     "use_in_transactions": "Использовать в транзакциях",
-    "amount": "Транзакций",
+    "amount": "Транзакций/шаблонов",
     "save": "Сохранить",
     "delete": "Удалить",
     "income": "Доход",
@@ -48,6 +48,8 @@
     "incomes": "Доходы",
     "expences": "Расходы",
     "transfers": "Переводы",
+    "templates": "Шаблоны",
+    "future": "Запланированные",
     "reports": "Отчеты",
     "date_report": "По дням ",
     "month_report": "По месяцам",
@@ -81,6 +83,22 @@
   },
   "transaction_list": {
     "amount": "Сумма"
+  },
+  "transaction_template_detail": {
+    "add": "Добавление шаблона",
+    "edit": "Редактирование шаблона",
+    "interval": "Регулярность",
+    "average": "в среднем",
+    "days_of_week": "Дни недели",
+    "days_of_month": "Дни месяца"
+  },
+  "transaction_template_list": {
+    "transaction_template": "Шаблон транзакции"
+  },
+  "transaction_future": {
+    "name": "Название шаблона",
+    "future": "Запланированные транзакции",
+    "skip": "Пропустить"
   },
   "report": {
     "summary": "Итого"

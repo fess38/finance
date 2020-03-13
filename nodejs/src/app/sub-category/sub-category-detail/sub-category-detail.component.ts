@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import * as _ from 'underscore';
 import { SubCategory } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 
@@ -9,12 +8,12 @@ import { UserDataService } from '../../core/user-data/user-data.service';
   templateUrl: 'sub-category-detail.component.html'
 })
 export class SubCategoryDetailComponent implements OnInit, OnDestroy {
-  subCategory: SubCategory = new SubCategory();
-  private subscription: Subscription;
-
   constructor(private userdata: UserDataService,
               private route: ActivatedRoute,
               private router: Router) {}
+
+  private subscription: Subscription;
+  subCategory = new SubCategory();
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -37,13 +36,20 @@ export class SubCategoryDetailComponent implements OnInit, OnDestroy {
     }
   }
 
+  isReadOnly(): boolean {
+    return this.userdata.isReadOnly();
+  }
+
   categories() {
-    return _.chain(this.userdata.categories())
-      .filter(x => !x.isDeleted)
+    return this.userdata.categories()
       .filter(x => x.isVisible)
-      .sortBy(x => x.name.toLowerCase())
-      .sortBy(x => !x.isIncome)
-      .value();
+      .sort((a, b) => {
+        if (a.isIncome != b.isIncome) {
+          return a.isIncome < b.isIncome ? 1 : -1;
+        } else {
+          return a.name < b.name ? -1 : 1;
+        }
+      });
   }
 
   update(subCategory: SubCategory) {

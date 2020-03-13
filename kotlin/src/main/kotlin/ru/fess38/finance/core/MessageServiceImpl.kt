@@ -14,24 +14,36 @@ import ru.fess38.finance.core.Model.EntityType.FAMILY_MEMBER
 import ru.fess38.finance.core.Model.EntityType.SETTINGS
 import ru.fess38.finance.core.Model.EntityType.SUB_CATEGORY
 import ru.fess38.finance.core.Model.EntityType.TRANSACTION
+import ru.fess38.finance.core.Model.EntityType.TRANSACTION_ARCHIVE
+import ru.fess38.finance.core.Model.EntityType.TRANSACTION_TEMPLATE
 import ru.fess38.finance.core.Model.FamilyMember
 import ru.fess38.finance.core.Model.Settings
 import ru.fess38.finance.core.Model.SubCategory
 import ru.fess38.finance.core.Model.Transaction
+import ru.fess38.finance.core.Model.TransactionArchive
+import ru.fess38.finance.core.Model.TransactionTemplate
 import ru.fess38.finance.repository.EntityRepository
+import ru.fess38.finance.security.User
 import ru.fess38.finance.security.UserService
 import ru.fess38.finance.utils.id
 import ru.fess38.finance.utils.type
+import javax.annotation.PostConstruct
 
 @Service
 class MessageServiceImpl: MessageService {
   private val log = KotlinLogging.logger {}
+  private lateinit var transactionArchiver: TransactionArchiver
 
   @Autowired
   lateinit var repository: EntityRepository
 
   @Autowired
   lateinit var userService: UserService
+
+  @PostConstruct
+  fun init() {
+    transactionArchiver = TransactionArchiver(repository)
+  }
 
   override fun save(message: Message): Message {
     val user = userService.findByContext()
@@ -48,35 +60,86 @@ class MessageServiceImpl: MessageService {
 
   override fun dump(modifiedAfter: Long): Dump {
     val user = userService.findByContext()
+    if (repository.count(user, TRANSACTION) > 250) {
+      if (repository.count(user, TRANSACTION_ARCHIVE) == 0L) {
+        repository.save(TransactionArchive.newBuilder().build(), user)
+      }
+      transactionArchiver.archive(user)
+    }
     val builder = Dump.newBuilder()
-    val messages = repository.get(user, modifiedAfter)
+    val messages = repository.get(user, modifiedAfter, emptyList())
     val accounts = messages.filter {it.type == ACCOUNT}.map {it as Account}
     val categories = messages.filter {it.type == CATEGORY}.map {it as Category}
     val subCategories = messages.filter {it.type == SUB_CATEGORY}.map {it as SubCategory}
     val familyMembers = messages.filter {it.type == FAMILY_MEMBER}.map {it as FamilyMember}
-    val transactions = messages.filter {it.type == TRANSACTION}.map {it as Transaction}
+    val transactions = transactions(messages)
+    val transactionTemplates = messages.filter {it.type == TRANSACTION_TEMPLATE}
+        .map {it as TransactionTemplate}
+    val settings = settings(messages, user)
 
     log.info {"Create dump for user [${user.id}]"}
     return builder
-        .setSettings(settings(messages))
+        .setSettings(settings)
         .addAllCurrencies(repository.currencies())
         .addAllAccounts(accounts)
         .addAllCategories(categories)
         .addAllSubCategories(subCategories)
         .addAllFamilyMembers(familyMembers)
         .addAllTransactions(transactions)
+        .addAllTransactionTemplates(transactionTemplates)
         .build()
   }
 
-  private fun settings(messages: List<Message>): Settings {
-    return messages.asSequence()
+  internal fun transactions(messages: List<Message>): List<Transaction> {
+    val transactions = messages.filter {it.type == TRANSACTION_ARCHIVE}
+        .map {it as TransactionArchive}
+        .flatMap {it.transactionsList}
+        .map {it.id to it}
+        .toMap()
+        .toMutableMap()
+    messages.filter {it.type == TRANSACTION}
+        .map {it as Transaction}
+        .forEach {transactions[it.id] = it}
+    return transactions.values.toList()
+  }
+
+  private fun settings(messages: List<Message>, user: User): Settings {
+    var settings: Settings? = messages
         .filter {it.type == SETTINGS}
         .map {it as Settings}
-        .toList()
-        .getOrElse(0) { save(Settings.getDefaultInstance()) as Settings }
+        .getOrNull(0)
+    if (settings == null) {
+      settings = repository.get(user, 0, listOf(SETTINGS)).map {it as Settings}.getOrNull(0)
+    }
+    if (settings == null) {
+      settings = save(Settings.getDefaultInstance()) as Settings
+    }
+    return settings
   }
 
   override fun isExist(id: Long, type: EntityType): Boolean {
-    return repository.isExist(id, type, userService.findByContext())
+    val user = userService.findByContext()
+    var isExist: Boolean = repository.isExist(id, type, user)
+    if (!isExist && type == TRANSACTION) {
+      val transactionArchive = repository.get(user, 0, listOf(TRANSACTION_ARCHIVE))
+          .map {it as TransactionArchive}
+          .getOrNull(0)
+      isExist = isExistInTransactionArchive(id, transactionArchive)
+    }
+    return isExist
+  }
+
+  internal fun isExistInTransactionArchive(id: Long, transactionArchive: TransactionArchive?)
+      : Boolean {
+    var isExist = false
+    if (transactionArchive != null) {
+      for (transaction in transactionArchive.transactionsList) {
+        if (transaction.id == id) {
+          isExist = true
+          break
+        }
+      }
+    }
+    return isExist
   }
 }

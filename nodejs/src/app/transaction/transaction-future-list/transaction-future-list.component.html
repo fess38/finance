@@ -1,0 +1,49 @@
+<div class="clr-row">
+  <div class="clr-col-12 clr-col-sm-9 clr-col-md-6" [hidden]="isShowForm">
+    <table class="table table-noborder table-compact">
+      <tr>
+        <th class="left">
+          {{'transaction_future.name' | translate}}
+        </th>
+        <th class="left">
+          {{'common.date' | translate}}
+        </th>
+      </tr>
+      <tr *ngFor="let namedTransaction of namedTransactions"
+          (click)="onTransactionClick(namedTransaction.transaction)">
+        <td class="left">{{namedTransaction.name}}</td>
+        <td class="left">{{namedTransaction.transaction.created | date:'dd MMMM':'':locale()}}</td>
+      </tr>
+    </table>
+  </div>
+</div>
+<div class="clr-row clr-col-12 clr-col-lg-6" [hidden]="!isShowForm">
+  <form class="clr-form">
+    <div class="clr-form-control clr-row">
+      <label>
+        <button type="button" class="btn btn-icon btn-link" (click)="isShowForm = false">
+          <clr-icon shape="undo"></clr-icon>
+        </button>
+        <span>
+          {{'transaction_future.future' | translate}}
+        </span>
+      </label>
+    </div>
+    <tranaction-detail [context]="transactionDetailContext"
+                       [transaction]="activeTransaction"
+                       (notify)="onChildNotify($event)">
+    </tranaction-detail>
+    <div class="clr-form-control clr-row">
+      <button class="btn btn-primary btn-sm btn-block"
+              (click)="save(activeTransaction)"
+              [disabled]="!isValidForm || isReadOnly()">
+        {{'common.save' | translate}}
+      </button>
+      <button class="btn btn-danger btn-sm btn-block"
+              (click)="delete(activeTransaction)"
+              [disabled]="!isValidForm || isReadOnly()">
+        {{'transaction_future.skip' | translate}}
+      </button>
+    </div>
+  </form>
+</div>

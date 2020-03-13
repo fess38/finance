@@ -3,8 +3,8 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie';
-import { interval, Subscription } from 'rxjs';
-import { filter, takeWhile } from 'rxjs/operators';
+import { of, range, Subscription } from 'rxjs';
+import { concatMap, delay, filter, takeWhile } from 'rxjs/operators';
 import { AccessToken, RefreshToken } from '../core/model/model';
 import { google } from '../core/model/wrappers';
 import { AlertService } from '../utils/alert/alert.service';
@@ -21,20 +21,22 @@ export class AuthService {
               private http: HttpService,
               private router: Router,
               private alertService: AlertService) {
-    interval(1000)
+    range(0, 100)
+      .pipe(concatMap(this.delayFunction))
       .pipe(filter(() => this.hasToken()))
-      .pipe(takeWhile(x => !this.isSignIn() && x < 5))
+      .pipe(takeWhile(() => !this.isSignIn()))
       .subscribe(() => this.validateToken(this.token()));
   }
 
   private loginTryCounter = 0;
   private isValidToken = false;
+  private delayFunction = (x: number) => of(x).pipe(delay(Math.sqrt(x) * 1000));
 
   subscribeOnSignIn(callback, hasActiveAttemptCallback = () => false): Subscription {
-    return interval(1000)
-      .pipe(filter(() => this.isSignIn()))
-      .pipe(filter(() => !hasActiveAttemptCallback()))
-      .pipe(takeWhile(x => x < 5))
+    return range(1, 100)
+      .pipe(concatMap(this.delayFunction))
+      .pipe(filter(() => this.isSignIn() && !hasActiveAttemptCallback()))
+      .pipe(takeWhile(() => !hasActiveAttemptCallback()))
       .subscribe(() => callback());
   }
 

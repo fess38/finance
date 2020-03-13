@@ -8,12 +8,12 @@ import { UserDataService } from '../../core/user-data/user-data.service';
   templateUrl: 'category-detail.component.html'
 })
 export class CategoryDetailComponent implements OnInit, OnDestroy {
-  category: Category = new Category();
-  private subscription: Subscription;
-
   constructor(private userdata: UserDataService,
               private route: ActivatedRoute,
               private router: Router) {}
+
+  private subscription: Subscription;
+  category = new Category();
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -34,6 +34,10 @@ export class CategoryDetailComponent implements OnInit, OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+  }
+
+  isReadOnly(): boolean {
+    return this.userdata.isReadOnly();
   }
 
   update(category: Category): void {
@@ -69,7 +73,7 @@ export class CategoryDetailComponent implements OnInit, OnDestroy {
 
   hasLinkedEntities(): boolean {
     const subCategoryAmount = this.userdata.subCategories()
-      .filter(x => !x.isDeleted && x.categoryId == this.category.id)
+      .filter(x => x.categoryId == this.category.id)
       .length;
     return this.category.transactionAmount > 0 || subCategoryAmount > 0;
   }

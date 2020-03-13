@@ -1,6 +1,5 @@
 import { Long } from 'protobufjs';
-import * as _ from 'underscore';
-import { Account, Category, Dump, FamilyMember, SubCategory, Transaction } from '../model/model';
+import { Account, Category, Dump, FamilyMember, SubCategory, Transaction, TransactionTemplate } from '../model/model';
 
 export class UserDataEnricherService {
   enrich(dump: Dump): void {
@@ -24,29 +23,34 @@ export class UserDataEnricherService {
     const map = new Map<number, Account | Category | SubCategory | FamilyMember>();
     values.forEach(x => map.set(x.id as number, x));
 
-    _.chain(dump.transactions)
+    const templateTransactions: Transaction[] = dump.transactionTemplates
+      .filter(x => !x.isDeleted)
+      .map(x => x.transaction as Transaction);
+    const group = new Map<number, Transaction[]>();
+    dump.transactions.concat(templateTransactions)
       .filter(x => !x.isDeleted && x[attributeName] > 0)
       .filter(x => map.has(x[attributeName]))
-      .groupBy(x => x[attributeName])
-      .forEach((v, k) => {
-        const entity = map.get(Number(k));
-        entity.transactionAmount = entity.transactionAmount as number + v.length;
-        if ('balance' in entity && map.size > 0) {
-          if (attributeName == 'accountIdFrom') {
-            const amount = this.sum(v as Transaction[], x => x.amountFrom);
-            entity.balance = entity.balance as number - amount;
-          } else if (attributeName == 'accountIdTo') {
-            const amount = this.sum(v as Transaction[], x => x.amountTo);
-            entity.balance = entity.balance as number + amount;
-          }
-        }
+      .forEach(x => {
+        const key: number = x[attributeName];
+        group.set(key, (group.get(key) || []).concat(x as Transaction));
       });
+    group.forEach((v, k) => {
+      const entity = map.get(Number(k));
+      entity.transactionAmount = entity.transactionAmount as number + v.length;
+      if ('balance' in entity && map.size > 0) {
+        if (attributeName == 'accountIdFrom') {
+          const amount = this.sum(v as Transaction[], x => x.amountFrom);
+          entity.balance = entity.balance as number - amount;
+        } else if (attributeName == 'accountIdTo') {
+          const amount = this.sum(v as Transaction[], x => x.amountTo);
+          entity.balance = entity.balance as number + amount;
+        }
+      }
+    });
   }
 
   private sum(transactions: Transaction[], mapper): number {
-    return Number(_.chain(transactions)
-      .map(mapper)
-      .reduce((x1, x2) => Number(x1) + Number(x2), 0)) || 0;
+    return Number(transactions.map(mapper).reduce((x1, x2) => Number(x1) + Number(x2), 0)) || 0;
   }
 
   merge(source: Dump, update: Dump): Dump {
@@ -58,8 +62,9 @@ export class UserDataEnricherService {
     update.subCategories.forEach(x => idsToUpdate.push(x.id));
     update.familyMembers.forEach(x => idsToUpdate.push(x.id));
     update.transactions.forEach(x => idsToUpdate.push(x.id));
+    update.transactionTemplates.forEach(x => idsToUpdate.push(x.id));
 
-    result.settings = source.settings || result.settings;
+    result.settings = update.settings || source.settings;
 
     source.accounts
       .filter(x => !idsToUpdate.includes(x.id))
@@ -81,6 +86,9 @@ export class UserDataEnricherService {
       .filter(x => !idsToUpdate.includes(x.id))
       .forEach(x => result.transactions.push(x as Transaction));
 
+    source.transactionTemplates
+      .filter(x => !idsToUpdate.includes(x.id))
+      .forEach(x => result.transactionTemplates.push(x as TransactionTemplate));
     return result;
   }
 }

@@ -1,7 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import * as _ from 'underscore';
+import { Subject, Subscription } from 'rxjs';
 import { Account, Category, FamilyMember, SubCategory, Transaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 import { DateUtils } from '../../utils/date-utils';
@@ -9,26 +8,45 @@ import { TransactionCriteriaService as Criteria } from '../transaction-criteria.
 import { TransactionUtils } from '../transaction-utils';
 
 @Component({
-  templateUrl: 'transaction-detail.component.html'
+  templateUrl: 'transaction-detail.component.html',
+  selector: 'tranaction-detail'
 })
 export class TransactionDetailComponent implements OnInit, OnDestroy {
-  private subscription: Subscription;
-  private maxTransactionsAccountId: number = 0;
-
-  transaction: Transaction = new Transaction();
-  type: Transaction.Type = Transaction.Type.EXPENSE;
-  typesWithLabels = [
-    { type: Transaction.Type.INCOME, label: 'common.income' },
-    { type: Transaction.Type.EXPENSE, label: 'common.expense' },
-    { type: Transaction.Type.TRANSFER, label: 'transaction_detail.transfer' }
-  ];
-
   constructor(private userdata: UserDataService,
               private criteria: Criteria,
               private route: ActivatedRoute,
               private router: Router) { }
 
+  private subscription: Subscription;
+  private maxTransactionsAccountId: number = 0;
+  private parentNotifyCallerSubscription: Subscription;
+
+  @Input() transaction = new Transaction();
+  @Input() context = new TransactionDetailContext();
+  @Output() private notify = new EventEmitter<boolean>();
+  typesWithLabels = [
+    { type: Transaction.Type.INCOME, label: 'common.income' },
+    { type: Transaction.Type.EXPENSE, label: 'common.expense' },
+    { type: Transaction.Type.TRANSFER, label: 'transaction_detail.transfer' }
+  ];
+  type: Transaction.Type = Transaction.Type.EXPENSE;
+
   ngOnInit(): void {
+    if (this.context.forEmbed && this.context.parentObservable) {
+      if (this.transaction.created.length == 0) {
+        this.transaction.created = DateUtils.formatDate();
+        this.subscription = this.userdata.subscribeOnInit(this.newTransactionCallback());
+      }
+      this.parentNotifyCallerSubscription = this.context.parentObservable.subscribe(() => {
+        if (this.isValidForm()) {
+          this.transaction.amountFrom = this.transaction.amountFrom || 0;
+          this.transaction.amountTo = this.transaction.amountTo || 0;
+        }
+        this.notify.emit(this.isValidForm());
+      });
+      return;
+    }
+
     // to reload component on params change
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
@@ -44,7 +62,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
 
   private updateTransactionCallback(id: number): any {
     return () => {
-      const navigatedTransaction = this.userdata.transactions().filter(x => x.id == id)[0];
+      const navigatedTransaction = this.userdata.findTranasction(id);
       if (navigatedTransaction == null) {
         this.router.navigate(['/transaction']);
       } else {
@@ -56,11 +74,9 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
 
   private newTransactionCallback(): any {
     return () => {
-      this.maxTransactionsAccountId = _.chain(this.accounts())
-        .sortBy(x => x.transactionAmount)
-        .reverse()
-        .map(x => Number(x.id))
-        .value()[0] || 0;
+      this.maxTransactionsAccountId = this.accounts()
+        .sort((a, b) => a.transactionAmount < b.transactionAmount ? 1 : -1)
+        .map(x => Number(x.id))[0] || 0;
       this.onChangeTransactionType();
     };
   }
@@ -69,6 +85,13 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+    if (this.parentNotifyCallerSubscription) {
+      this.parentNotifyCallerSubscription.unsubscribe();
+    }
+  }
+
+  isReadOnly(): boolean {
+    return this.userdata.isReadOnly();
   }
 
   update(transaction: Transaction): void {
@@ -123,15 +146,14 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   }
 
   accounts(): Account[] {
-    return this.userdata.accounts().filter(x => !x.isDeleted && x.isVisible);
+    return this.userdata.accounts().filter(x => x.isVisible);
   }
 
   categories(): Category[] {
-    return _.chain(this.userdata.categories())
-      .filter(x => !x.isDeleted && x.isVisible)
+    return this.userdata.categories()
+      .filter(x => x.isVisible)
       .filter(x => (this.isIncome() && x.isIncome) || (this.isExpense() && x.isExpense))
-      .sortBy(x => x.name)
-      .value();
+      .sort((a, b) => a.name < b.name ? -1 : 1);
   }
 
   onChangeCategory(): void {
@@ -139,24 +161,22 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   }
 
   subCategories(): SubCategory[] {
-    const subCategories: SubCategory[] = _.chain(this.userdata.subCategories())
-      .filter(x => !x.isDeleted && x.isVisible)
-      .filter(x => x.categoryId == this.transaction.categoryId)
-      .value();
+    const subCategories: SubCategory[] = this.userdata.subCategories()
+      .filter(x => x.isVisible)
+      .filter(x => x.categoryId == this.transaction.categoryId);
     if (this.transaction.subCategoryId) {
       const subCategory: SubCategory = this.userdata.findSubCategory(this.transaction.subCategoryId);
       if (!subCategory.isVisible) {
         subCategories.push(subCategory);
       }
     }
-    return _.chain(subCategories).sortBy(x => x.name).value();
+    return subCategories.sort((a, b) => a.name < b.name ? -1 : 1);
   }
 
   familyMembers(): FamilyMember[] {
-    return _.chain(this.userdata.familyMembers())
-      .filter(x => !x.isDeleted && x.isVisible)
-      .sortBy(x => x.name)
-      .value();
+    return this.userdata.familyMembers()
+      .filter(x => x.isVisible)
+      .sort((a, b) => a.name < b.name ? -1 : 1);
   }
 
   currency(account: Account): string {
@@ -239,4 +259,13 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   viewTransactions(): void {
     this.router.navigate(['/transaction'], { queryParams: this.criteria.toQueryParams() });
   }
+}
+
+export class TransactionDetailContext {
+  forEmbed: boolean = false;
+  showHeader: boolean = true;
+  showDate: boolean = true;
+  showComment: boolean = true;
+  showButtons: boolean = true;
+  parentObservable: Subject<any>;
 }

@@ -1,4 +1,4 @@
-import { Account, Dump, FamilyMember, Transaction } from '../model/model';
+import { Account, Dump, FamilyMember, Transaction, TransactionTemplate } from '../model/model';
 import { UserDataEnricherService } from './user-data-enricher.service';
 
 describe('UserDataEnricherService', () => {
@@ -22,12 +22,19 @@ describe('UserDataEnricherService', () => {
     dump.transactions[1].familyMemberId = 100;
     dump.transactions[1].isDeleted = true;
     dump.transactions[2].familyMemberId = 100;
-    dump.familyMembers = Array.from(Array(1).keys())
-      .map(() => new FamilyMember(familyMember));
+    dump.familyMembers = [new FamilyMember(familyMember)];
     dump.familyMembers[0].transactionAmount = 100;
+    dump.transactionTemplates = Array.from(Array(2).keys())
+      .map(x => new TransactionTemplate({
+        name: 'foo',
+        interval: 1,
+        transaction: new Transaction(transaction)
+      }));
+    dump.transactionTemplates[0].transaction.familyMemberId = 100;
+    dump.transactionTemplates[1].transaction.familyMemberId = 110;
 
     enricher.enrich(dump);
-    expect(2).toEqual(<number>dump.familyMembers[0].transactionAmount);
+    expect(3).toEqual(<number>dump.familyMembers[0].transactionAmount);
   });
 
   it('#enrich account balance', () => {

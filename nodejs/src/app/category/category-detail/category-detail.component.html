@@ -1,57 +1,83 @@
-<div class="clr-row">
-  <div class="clr-col-12 clr-col-lg-6">
-    <form>
-      <section class="form-block">
+<div class="clr-row clr-col-12 clr-col-lg-6">
+  <form class="clr-form">
+    <div class="clr-form-control clr-row">
+      <label>
         <button type="button" class="btn btn-icon btn-link" routerLink="/category">
           <clr-icon shape="undo"></clr-icon>
         </button>
-        <label [hidden]="!isNewCategory()">{{'category_detail.add' | translate}}</label>
-        <label [hidden]="isNewCategory()">{{'category_detail.edit' | translate}}</label>
-        <div class="form-group">
-          <label>{{'common.name' | translate}}</label>
-          <input class="form-control" type="text" name="name" [(ngModel)]="category.name"/>
+        <span [hidden]="!isNewCategory()">
+          {{'category_detail.add' | translate}}
+        </span>
+        <span [hidden]="isNewCategory()">
+          {{'category_detail.edit' | translate}}
+        </span>
+      </label>
+    </div>
+    <div class="clr-form-control clr-row">
+      <label>{{'common.name' | translate}}</label>
+      <div class="clr-control-container">
+        <div class="clr-input-wrapper">
+          <input type="text" name="name" class="clr-input" [(ngModel)]="category.name"/>
         </div>
-        <div class="form-group">
-          <label>{{'category_detail.type' | translate}}</label>
-          <clr-checkbox-wrapper>
-            <input type="checkbox"
-                   clrCheckbox
-                   name="incomeCheckbox"
-                   [(ngModel)]="category.isIncome"
-                   [disabled]="!isNewCategory()"/>
-            <label>{{'common.income' | translate}}</label>
-          </clr-checkbox-wrapper>
-          <span> </span>
-          <clr-checkbox-wrapper>
-            <input type="checkbox"
-                   clrCheckbox
-                   name="expenseCheckbox"
-                   [(ngModel)]="category.isExpense"
-                   [disabled]="!isNewCategory()"/>
-            <label>{{'common.expense' | translate}}</label>
-          </clr-checkbox-wrapper>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row">
+      <label>{{'category_detail.type' | translate}}</label>
+      <div class="clr-control-container clr-control-inline">
+        <div class="clr-checkbox-wrapper">
+          <input type="checkbox"
+                 id="category-income"
+                 name="incomeCheckbox"
+                 class="clr-checkbox"
+                 [(ngModel)]="category.isIncome"
+                 [disabled]="!isNewCategory()"/>
+          <label for="category-income">{{'common.income' | translate}}</label>
         </div>
-        <div class="form-group-single" [hidden]="isNewCategory()">
-          <clr-checkbox-wrapper>
-            <input type="checkbox" clrCheckbox name="isVisible" [(ngModel)]="category.isVisible"/>
-            <label>{{'common.use_in_transactions' | translate}}</label>
-          </clr-checkbox-wrapper>
+        <span>&nbsp;&nbsp;</span>
+        <div class="clr-checkbox-wrapper">
+          <input type="checkbox"
+                 id="category-expense"
+                 name="expenseCheckbox"
+                 class="clr-checkbox"
+                 [(ngModel)]="category.isExpense"
+                 [disabled]="!isNewCategory()"/>
+          <label for="category-expense">{{'common.expense' | translate}}</label>
         </div>
-        <div class="form-group-single"
-             [hidden]="isNewCategory()"
-             (click)="viewTransactions(category)">
-          <span>{{'common.amount' | translate}}: {{category.transactionAmount}}</span>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row" [hidden]="isNewCategory()">
+      <div class="clr-control-container">
+        <div class="clr-checkbox-wrapper">
+          <input type="checkbox"
+                 id="category-is-visible"
+                 name="isVisible"
+                 class="clr-checkbox"
+                 [(ngModel)]="category.isVisible"/>
+          <label for="category-is-visible">
+            {{'common.use_in_transactions' | translate}}
+          </label>
         </div>
-      </section>
-    </form>
-    <button class="btn btn-primary btn-block"
-            (click)="update(category)"
-            [disabled]="!isValidForm()">{{'common.save' | translate}}
-    </button>
-    <button class="btn btn-danger btn-block"
-            (click)="delete(category)"
-            [hidden]="isNewCategory()"
-            [disabled]="hasLinkedEntities()">{{'common.delete' | translate}}
-    </button>
-  </div>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row"
+         [hidden]="isNewCategory()"
+         (click)="viewTransactions(category)">
+      <label>
+        {{'common.amount' | translate}}: {{category.transactionAmount}}
+      </label>
+    </div>
+    <div class="clr-form-control clr-row">
+      <button class="btn btn-primary btn-sm btn-block"
+              (click)="update(category)"
+              [disabled]="!isValidForm() || isReadOnly()">
+        {{'common.save' | translate}}
+      </button>
+      <button class="btn btn-danger btn-sm btn-block"
+              (click)="delete(category)"
+              [hidden]="isNewCategory()"
+              [disabled]="hasLinkedEntities() || isReadOnly()">
+        {{'common.delete' | translate}}
+      </button>
+    </div>
+  </form>
 </div>

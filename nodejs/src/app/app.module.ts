@@ -18,7 +18,7 @@ import { SubCategoryModule } from './sub-category/sub-category.module';
 import { TransactionModule } from './transaction/transaction.module';
 
 export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http);
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
 registerLocaleData(localeRu, 'ru');

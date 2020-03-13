@@ -7,15 +7,14 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es5",
+    "target": "ES6",
     "typeRoots": [
       "node_modules/@types"
     ],
     "types": [
       "gapi",
       "gapi.auth2",
-      "jasmine",
-      "underscore"
+      "jasmine"
     ],
     "lib": [
       "es2017",

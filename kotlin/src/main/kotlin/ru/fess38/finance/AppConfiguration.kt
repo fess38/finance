@@ -8,7 +8,7 @@ import com.typesafe.config.Config
 import com.typesafe.config.ConfigFactory
 import org.apache.commons.dbcp2.BasicDataSource
 import org.hibernate.SessionFactory
-import org.springframework.boot.autoconfigure.web.HttpMessageConverters
+import org.springframework.boot.autoconfigure.http.HttpMessageConverters
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.converter.protobuf.ProtobufHttpMessageConverter
@@ -27,7 +27,7 @@ import javax.sql.DataSource
 @Configuration
 class AppConfiguration {
   @Bean
-  fun config() = ConfigFactory.load().getConfig(System.getenv("env") ?: "dev")!!
+  fun config() = ConfigFactory.load()!!
 
   @Bean
   fun dataSource(config: Config): DataSource {
@@ -50,7 +50,7 @@ class AppConfiguration {
     factoryBean.hibernateProperties = config.getConfig("hibernate").toProperties()
     factoryBean.setAnnotatedClasses(HibernateEntity::class.java, User::class.java)
     factoryBean.afterPropertiesSet()
-    return factoryBean.`object`
+    return factoryBean.`object`!!
   }
 
   @Bean

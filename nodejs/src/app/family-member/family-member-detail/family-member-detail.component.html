@@ -1,40 +1,59 @@
-<div class="clr-row">
-  <div class="clr-col-12 clr-col-lg-6">
-    <form>
-      <section class="form-block">
+<div class="clr-row clr-col-12 clr-col-lg-6">
+  <form class="clr-form">
+    <div class="clr-form-control clr-row">
+      <label>
         <button type="button" class="btn btn-icon btn-link" routerLink="/family_member">
           <clr-icon shape="undo"></clr-icon>
         </button>
-        <label [hidden]="!isNewFamilyMember()">{{'family_member_detail.add' | translate}}</label>
-        <label [hidden]="isNewFamilyMember()">{{'family_member_detail.edit' | translate}}</label>
-        <div class="form-group">
-          <label>{{'common.name' | translate}}</label>
-          <input class="form-control" type="text" name="name" [(ngModel)]="familyMember.name"/>
+        <span [hidden]="!isNewFamilyMember()">
+          {{'family_member_detail.add' | translate}}
+        </span>
+        <span [hidden]="isNewFamilyMember()">
+          {{'family_member_detail.edit' | translate}}
+        </span>
+      </label>
+    </div>
+    <div class="clr-form-control clr-row">
+      <label>{{'common.name' | translate}}</label>
+      <div class="clr-control-container">
+        <div class="clr-input-wrapper">
+          <input type="text" name="name" class="clr-input" [(ngModel)]="familyMember.name"/>
         </div>
-        <div class="form-group-single" [hidden]="isNewFamilyMember()">
-          <clr-checkbox-wrapper>
-            <input type="checkbox"
-                   clrCheckbox
-                   name="isVisible"
-                   [(ngModel)]="familyMember.isVisible"/>
-            <label>{{'common.use_in_transactions' | translate}}</label>
-          </clr-checkbox-wrapper>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row" [hidden]="isNewFamilyMember()">
+      <div class="clr-control-container">
+        <div class="clr-checkbox-wrapper">
+          <input type="checkbox"
+                 id="family-member-is-visible"
+                 name="isVisible"
+                 class="clr-checkbox"
+                 [(ngModel)]="familyMember.isVisible"/>
+          <label for="family-member-is-visible">
+            {{'common.use_in_transactions' | translate}}
+          </label>
         </div>
-        <div class="form-group-single"
-             [hidden]="isNewFamilyMember()"
-             (click)="viewTransactions(familyMember)">
-          <span>{{'common.amount' | translate}}: {{familyMember.transactionAmount}}</span>
-        </div>
-      </section>
-    </form>
-    <button class="btn btn-primary btn-block"
-            (click)="update(familyMember)"
-            [disabled]="!isValidForm()">{{'common.save' | translate}}
-    </button>
-    <button class="btn btn-danger btn-block"
-            (click)="delete(familyMember)"
-            [hidden]="isNewFamilyMember()"
-            [disabled]="hasTransations()">{{'common.delete' | translate}}
-    </button>
-  </div>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row"
+         [hidden]="isNewFamilyMember()"
+         (click)="viewTransactions(familyMember)">
+      <label>
+        {{'common.amount' | translate}}: {{familyMember.transactionAmount}}
+      </label>
+    </div>
+    <div class="clr-form-control clr-row">
+      <button class="btn btn-primary btn-sm btn-block"
+              (click)="update(familyMember)"
+              [disabled]="!isValidForm() || isReadOnly()">
+        {{'common.save' | translate}}
+      </button>
+      <button class="btn btn-danger btn-sm btn-block"
+              (click)="delete(familyMember)"
+              [hidden]="isNewFamilyMember()"
+              [disabled]="hasTransations() || isReadOnly()">
+        {{'common.delete' | translate}}
+      </button>
+    </div>
+  </form>
 </div>

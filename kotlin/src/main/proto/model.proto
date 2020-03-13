@@ -12,6 +12,8 @@ enum EntityType {
     SUB_CATEGORY = 4;
     FAMILY_MEMBER = 5;
     TRANSACTION = 6;
+    TRANSACTION_ARCHIVE = 8;
+    TRANSACTION_TEMPLATE = 9;
 }
 
 message Dump {
@@ -22,6 +24,7 @@ message Dump {
     repeated SubCategory sub_categories = 4;
     repeated FamilyMember family_members = 5;
     repeated Transaction transactions = 6;
+    repeated TransactionTemplate transactionTemplates = 8;
 }
 
 message Currency {
@@ -92,6 +95,22 @@ message Transaction {
         EXPENSE = 2;
         TRANSFER = 3;
     }
+}
+
+message TransactionTemplate {
+    optional int64 id = 1 [default = 0];
+    optional bool is_deleted = 2 [default = false];
+    required string name = 3;
+    required Transaction transaction = 4;
+    optional int32 interval = 5 [default = 0];
+    repeated int32 days_of_week = 6;
+    repeated int32 days_of_month = 7;
+}
+
+message TransactionArchive {
+    optional int64 id = 1 [default = 0];
+    optional bool is_deleted = 2 [default = false];
+    repeated Transaction transactions = 3;
 }
 
 message Settings {

@@ -31,7 +31,7 @@ internal class CompositeValidatorTest {
         .setId(20)
         .setName("name")
         .build()
-    val error = "try to update uknown [FAMILY_MEMBER] with id [20]"
+    val error = "try to update unknown [FAMILY_MEMBER] with id [20]"
     val expected = ValidatorResponse(error)
     val actual = validator.validate(familyMember)
     Assert.assertEquals(expected, actual)

@@ -4,7 +4,7 @@
     "settings": "Settings",
     "name": "Name",
     "use_in_transactions": "Use in transactions",
-    "amount": "Transaction amount",
+    "amount": "Transaction/template amount",
     "save": "Save",
     "delete": "Delete",
     "income": "Income",
@@ -48,6 +48,8 @@
     "incomes": "Incomes",
     "expences": "Expences",
     "transfers": "Transfers",
+    "templates": "Templates",
+    "future": "Planned",
     "reports": "Reports",
     "date_report": "By days",
     "month_report": "By months",
@@ -81,6 +83,22 @@
   },
   "transaction_list": {
     "amount": "Amount"
+  },
+  "transaction_template_detail": {
+    "add": "Add template",
+    "edit": "Edit template",
+    "interval": "Frequency",
+    "average": "in average",
+    "days_of_week": "Days of week",
+    "days_of_month": "Days of month"
+  },
+  "transaction_template_list": {
+    "transaction_template": "Transaction template"
+  },
+  "transaction_future": {
+    "name": "Template name",
+    "future": "Planned transactions",
+    "skip": "Skip"
   },
   "report": {
     "summary": "Summary"

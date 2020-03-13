@@ -9,16 +9,26 @@ import Language = Settings.Language;
   templateUrl: 'settings.component.html'
 })
 export class SettingsComponent implements OnInit, OnDestroy {
-  private subscription: Subscription;
-  settings: Settings = new Settings();
-  languages: any[] = [{ code: Language.RU, value: 'RU' }, { code: Language.EN, value: 'EN' }];
-
   constructor(private userdata: UserDataService, private router: Router) {}
+
+  private subscription: Subscription;
+  settings = new Settings();
+  languages: any[] = [{ code: Language.RU, value: 'RU' }, { code: Language.EN, value: 'EN' }];
 
   ngOnInit(): void {
     this.subscription = this.userdata.subscribeOnInit(() => {
       this.settings = this.userdata.settings();
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+
+  isReadOnly(): boolean {
+    return this.userdata.isReadOnly();
   }
 
   currencies(): Currency[] {
@@ -35,11 +45,5 @@ export class SettingsComponent implements OnInit, OnDestroy {
         console.error(error.message);
         this.router.navigate(['/error']);
       });
-  }
-
-  ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
   }
 }

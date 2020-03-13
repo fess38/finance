@@ -1,8 +1,7 @@
 import * as $protobuf from 'protobufjs';
-import { Long } from 'protobufjs';
 
 /** EntityType enum. */
-export enum EntityType {
+export const enum EntityType {
     UNDEFINED = 0,
     SETTINGS = 7,
     CURRENCY = 1,
@@ -10,7 +9,9 @@ export enum EntityType {
     CATEGORY = 3,
     SUB_CATEGORY = 4,
     FAMILY_MEMBER = 5,
-    TRANSACTION = 6
+    TRANSACTION = 6,
+    TRANSACTION_ARCHIVE = 8,
+    TRANSACTION_TEMPLATE = 9
 }
 
 /** Properties of a Dump. */
@@ -36,6 +37,9 @@ export interface IDump {
 
     /** Dump transactions */
     transactions?: (ITransaction[]|null);
+
+    /** Dump transactionTemplates */
+    transactionTemplates?: (ITransactionTemplate[]|null);
 }
 
 /** Represents a Dump. */
@@ -68,6 +72,9 @@ export class Dump implements IDump {
     /** Dump transactions. */
     public transactions: ITransaction[];
 
+    /** Dump transactionTemplates. */
+    public transactionTemplates: ITransactionTemplate[];
+
     /**
      * Creates a new Dump instance using the specified properties.
      * @param [properties] Properties to set
@@ -84,14 +91,6 @@ export class Dump implements IDump {
     public static encode(message: IDump, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified Dump message, length delimited. Does not implicitly {@link Dump.verify|verify} messages.
-     * @param message Dump message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: IDump, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes a Dump message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -100,22 +99,6 @@ export class Dump implements IDump {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Dump;
-
-    /**
-     * Decodes a Dump message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns Dump
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Dump;
-
-    /**
-     * Verifies a Dump message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
 
     /**
      * Creates a Dump message from a plain object. Also converts values to their respective internal types.
@@ -143,7 +126,7 @@ export class Dump implements IDump {
 export interface ICurrency {
 
     /** Currency id */
-    id: (number|Long);
+    id: number;
 
     /** Currency nameRu */
     nameRu: string;
@@ -168,7 +151,7 @@ export class Currency implements ICurrency {
     constructor(properties?: ICurrency);
 
     /** Currency id. */
-    public id: (number|Long);
+    public id: number;
 
     /** Currency nameRu. */
     public nameRu: string;
@@ -198,14 +181,6 @@ export class Currency implements ICurrency {
     public static encode(message: ICurrency, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified Currency message, length delimited. Does not implicitly {@link Currency.verify|verify} messages.
-     * @param message Currency message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: ICurrency, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes a Currency message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -214,22 +189,6 @@ export class Currency implements ICurrency {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Currency;
-
-    /**
-     * Decodes a Currency message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns Currency
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Currency;
-
-    /**
-     * Verifies a Currency message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
 
     /**
      * Creates a Currency message from a plain object. Also converts values to their respective internal types.
@@ -288,14 +247,6 @@ export class Currencies implements ICurrencies {
     public static encode(message: ICurrencies, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified Currencies message, length delimited. Does not implicitly {@link Currencies.verify|verify} messages.
-     * @param message Currencies message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: ICurrencies, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes a Currencies message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -304,22 +255,6 @@ export class Currencies implements ICurrencies {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Currencies;
-
-    /**
-     * Decodes a Currencies message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns Currencies
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Currencies;
-
-    /**
-     * Verifies a Currencies message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
 
     /**
      * Creates a Currencies message from a plain object. Also converts values to their respective internal types.
@@ -347,7 +282,7 @@ export class Currencies implements ICurrencies {
 export interface IAccount {
 
     /** Account id */
-    id?: (number|Long|null);
+    id?: (number|null);
 
     /** Account isDeleted */
     isDeleted?: (boolean|null);
@@ -356,16 +291,16 @@ export interface IAccount {
     isVisible?: (boolean|null);
 
     /** Account transactionAmount */
-    transactionAmount?: (number|Long|null);
+    transactionAmount?: (number|null);
 
     /** Account name */
     name: string;
 
     /** Account balance */
-    balance?: (number|Long|null);
+    balance?: (number|null);
 
     /** Account currencyId */
-    currencyId: (number|Long);
+    currencyId: number;
 }
 
 /** Represents an Account. */
@@ -378,7 +313,7 @@ export class Account implements IAccount {
     constructor(properties?: IAccount);
 
     /** Account id. */
-    public id: (number|Long);
+    public id: number;
 
     /** Account isDeleted. */
     public isDeleted: boolean;
@@ -387,16 +322,16 @@ export class Account implements IAccount {
     public isVisible: boolean;
 
     /** Account transactionAmount. */
-    public transactionAmount: (number|Long);
+    public transactionAmount: number;
 
     /** Account name. */
     public name: string;
 
     /** Account balance. */
-    public balance: (number|Long);
+    public balance: number;
 
     /** Account currencyId. */
-    public currencyId: (number|Long);
+    public currencyId: number;
 
     /**
      * Creates a new Account instance using the specified properties.
@@ -414,14 +349,6 @@ export class Account implements IAccount {
     public static encode(message: IAccount, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified Account message, length delimited. Does not implicitly {@link Account.verify|verify} messages.
-     * @param message Account message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: IAccount, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes an Account message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -430,22 +357,6 @@ export class Account implements IAccount {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Account;
-
-    /**
-     * Decodes an Account message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns Account
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Account;
-
-    /**
-     * Verifies an Account message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
 
     /**
      * Creates an Account message from a plain object. Also converts values to their respective internal types.
@@ -473,7 +384,7 @@ export class Account implements IAccount {
 export interface ICategory {
 
     /** Category id */
-    id?: (number|Long|null);
+    id?: (number|null);
 
     /** Category isDeleted */
     isDeleted?: (boolean|null);
@@ -482,7 +393,7 @@ export interface ICategory {
     isVisible?: (boolean|null);
 
     /** Category transactionAmount */
-    transactionAmount?: (number|Long|null);
+    transactionAmount?: (number|null);
 
     /** Category name */
     name: string;
@@ -504,7 +415,7 @@ export class Category implements ICategory {
     constructor(properties?: ICategory);
 
     /** Category id. */
-    public id: (number|Long);
+    public id: number;
 
     /** Category isDeleted. */
     public isDeleted: boolean;
@@ -513,7 +424,7 @@ export class Category implements ICategory {
     public isVisible: boolean;
 
     /** Category transactionAmount. */
-    public transactionAmount: (number|Long);
+    public transactionAmount: number;
 
     /** Category name. */
     public name: string;
@@ -540,14 +451,6 @@ export class Category implements ICategory {
     public static encode(message: ICategory, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified Category message, length delimited. Does not implicitly {@link Category.verify|verify} messages.
-     * @param message Category message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: ICategory, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes a Category message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -556,22 +459,6 @@ export class Category implements ICategory {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Category;
-
-    /**
-     * Decodes a Category message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns Category
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Category;
-
-    /**
-     * Verifies a Category message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
 
     /**
      * Creates a Category message from a plain object. Also converts values to their respective internal types.
@@ -599,7 +486,7 @@ export class Category implements ICategory {
 export interface ISubCategory {
 
     /** SubCategory id */
-    id?: (number|Long|null);
+    id?: (number|null);
 
     /** SubCategory isDeleted */
     isDeleted?: (boolean|null);
@@ -608,13 +495,13 @@ export interface ISubCategory {
     isVisible?: (boolean|null);
 
     /** SubCategory transactionAmount */
-    transactionAmount?: (number|Long|null);
+    transactionAmount?: (number|null);
 
     /** SubCategory name */
     name: string;
 
     /** SubCategory categoryId */
-    categoryId: (number|Long);
+    categoryId: number;
 }
 
 /** Represents a SubCategory. */
@@ -627,7 +514,7 @@ export class SubCategory implements ISubCategory {
     constructor(properties?: ISubCategory);
 
     /** SubCategory id. */
-    public id: (number|Long);
+    public id: number;
 
     /** SubCategory isDeleted. */
     public isDeleted: boolean;
@@ -636,13 +523,13 @@ export class SubCategory implements ISubCategory {
     public isVisible: boolean;
 
     /** SubCategory transactionAmount. */
-    public transactionAmount: (number|Long);
+    public transactionAmount: number;
 
     /** SubCategory name. */
     public name: string;
 
     /** SubCategory categoryId. */
-    public categoryId: (number|Long);
+    public categoryId: number;
 
     /**
      * Creates a new SubCategory instance using the specified properties.
@@ -660,14 +547,6 @@ export class SubCategory implements ISubCategory {
     public static encode(message: ISubCategory, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified SubCategory message, length delimited. Does not implicitly {@link SubCategory.verify|verify} messages.
-     * @param message SubCategory message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: ISubCategory, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes a SubCategory message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -676,22 +555,6 @@ export class SubCategory implements ISubCategory {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): SubCategory;
-
-    /**
-     * Decodes a SubCategory message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns SubCategory
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): SubCategory;
-
-    /**
-     * Verifies a SubCategory message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
 
     /**
      * Creates a SubCategory message from a plain object. Also converts values to their respective internal types.
@@ -719,7 +582,7 @@ export class SubCategory implements ISubCategory {
 export interface IFamilyMember {
 
     /** FamilyMember id */
-    id?: (number|Long|null);
+    id?: (number|null);
 
     /** FamilyMember isDeleted */
     isDeleted?: (boolean|null);
@@ -728,7 +591,7 @@ export interface IFamilyMember {
     isVisible?: (boolean|null);
 
     /** FamilyMember transactionAmount */
-    transactionAmount?: (number|Long|null);
+    transactionAmount?: (number|null);
 
     /** FamilyMember name */
     name: string;
@@ -744,7 +607,7 @@ export class FamilyMember implements IFamilyMember {
     constructor(properties?: IFamilyMember);
 
     /** FamilyMember id. */
-    public id: (number|Long);
+    public id: number;
 
     /** FamilyMember isDeleted. */
     public isDeleted: boolean;
@@ -753,7 +616,7 @@ export class FamilyMember implements IFamilyMember {
     public isVisible: boolean;
 
     /** FamilyMember transactionAmount. */
-    public transactionAmount: (number|Long);
+    public transactionAmount: number;
 
     /** FamilyMember name. */
     public name: string;
@@ -774,14 +637,6 @@ export class FamilyMember implements IFamilyMember {
     public static encode(message: IFamilyMember, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified FamilyMember message, length delimited. Does not implicitly {@link FamilyMember.verify|verify} messages.
-     * @param message FamilyMember message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: IFamilyMember, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes a FamilyMember message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -790,22 +645,6 @@ export class FamilyMember implements IFamilyMember {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): FamilyMember;
-
-    /**
-     * Decodes a FamilyMember message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns FamilyMember
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): FamilyMember;
-
-    /**
-     * Verifies a FamilyMember message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
 
     /**
      * Creates a FamilyMember message from a plain object. Also converts values to their respective internal types.
@@ -833,7 +672,7 @@ export class FamilyMember implements IFamilyMember {
 export interface ITransaction {
 
     /** Transaction id */
-    id?: (number|Long|null);
+    id?: (number|null);
 
     /** Transaction isDeleted */
     isDeleted?: (boolean|null);
@@ -842,25 +681,25 @@ export interface ITransaction {
     created: string;
 
     /** Transaction accountIdFrom */
-    accountIdFrom: (number|Long);
+    accountIdFrom: number;
 
     /** Transaction accountIdTo */
-    accountIdTo: (number|Long);
+    accountIdTo: number;
 
     /** Transaction amountFrom */
-    amountFrom: (number|Long);
+    amountFrom: number;
 
     /** Transaction amountTo */
-    amountTo: (number|Long);
+    amountTo: number;
 
     /** Transaction categoryId */
-    categoryId: (number|Long);
+    categoryId: number;
 
     /** Transaction subCategoryId */
-    subCategoryId?: (number|Long|null);
+    subCategoryId?: (number|null);
 
     /** Transaction familyMemberId */
-    familyMemberId?: (number|Long|null);
+    familyMemberId?: (number|null);
 
     /** Transaction comment */
     comment?: (string|null);
@@ -876,7 +715,7 @@ export class Transaction implements ITransaction {
     constructor(properties?: ITransaction);
 
     /** Transaction id. */
-    public id: (number|Long);
+    public id: number;
 
     /** Transaction isDeleted. */
     public isDeleted: boolean;
@@ -885,25 +724,25 @@ export class Transaction implements ITransaction {
     public created: string;
 
     /** Transaction accountIdFrom. */
-    public accountIdFrom: (number|Long);
+    public accountIdFrom: number;
 
     /** Transaction accountIdTo. */
-    public accountIdTo: (number|Long);
+    public accountIdTo: number;
 
     /** Transaction amountFrom. */
-    public amountFrom: (number|Long);
+    public amountFrom: number;
 
     /** Transaction amountTo. */
-    public amountTo: (number|Long);
+    public amountTo: number;
 
     /** Transaction categoryId. */
-    public categoryId: (number|Long);
+    public categoryId: number;
 
     /** Transaction subCategoryId. */
-    public subCategoryId: (number|Long);
+    public subCategoryId: number;
 
     /** Transaction familyMemberId. */
-    public familyMemberId: (number|Long);
+    public familyMemberId: number;
 
     /** Transaction comment. */
     public comment: string;
@@ -924,14 +763,6 @@ export class Transaction implements ITransaction {
     public static encode(message: ITransaction, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified Transaction message, length delimited. Does not implicitly {@link Transaction.verify|verify} messages.
-     * @param message Transaction message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: ITransaction, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes a Transaction message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -940,22 +771,6 @@ export class Transaction implements ITransaction {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Transaction;
-
-    /**
-     * Decodes a Transaction message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns Transaction
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Transaction;
-
-    /**
-     * Verifies a Transaction message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
 
     /**
      * Creates a Transaction message from a plain object. Also converts values to their respective internal types.
@@ -990,17 +805,197 @@ export namespace Transaction {
     }
 }
 
+/** Properties of a TransactionTemplate. */
+export interface ITransactionTemplate {
+
+    /** TransactionTemplate id */
+    id?: (number|null);
+
+    /** TransactionTemplate isDeleted */
+    isDeleted?: (boolean|null);
+
+    /** TransactionTemplate name */
+    name: string;
+
+    /** TransactionTemplate transaction */
+    transaction: ITransaction;
+
+    /** TransactionTemplate interval */
+    interval?: (number|null);
+
+    /** TransactionTemplate daysOfWeek */
+    daysOfWeek?: (number[]|null);
+
+    /** TransactionTemplate daysOfMonth */
+    daysOfMonth?: (number[]|null);
+}
+
+/** Represents a TransactionTemplate. */
+export class TransactionTemplate implements ITransactionTemplate {
+
+    /**
+     * Constructs a new TransactionTemplate.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: ITransactionTemplate);
+
+    /** TransactionTemplate id. */
+    public id: number;
+
+    /** TransactionTemplate isDeleted. */
+    public isDeleted: boolean;
+
+    /** TransactionTemplate name. */
+    public name: string;
+
+    /** TransactionTemplate transaction. */
+    public transaction: ITransaction;
+
+    /** TransactionTemplate interval. */
+    public interval: number;
+
+    /** TransactionTemplate daysOfWeek. */
+    public daysOfWeek: number[];
+
+    /** TransactionTemplate daysOfMonth. */
+    public daysOfMonth: number[];
+
+    /**
+     * Creates a new TransactionTemplate instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns TransactionTemplate instance
+     */
+    public static create(properties?: ITransactionTemplate): TransactionTemplate;
+
+    /**
+     * Encodes the specified TransactionTemplate message. Does not implicitly {@link TransactionTemplate.verify|verify} messages.
+     * @param message TransactionTemplate message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: ITransactionTemplate, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a TransactionTemplate message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns TransactionTemplate
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): TransactionTemplate;
+
+    /**
+     * Creates a TransactionTemplate message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns TransactionTemplate
+     */
+    public static fromObject(object: { [k: string]: any }): TransactionTemplate;
+
+    /**
+     * Creates a plain object from a TransactionTemplate message. Also converts values to other types if specified.
+     * @param message TransactionTemplate
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: TransactionTemplate, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this TransactionTemplate to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a TransactionArchive. */
+export interface ITransactionArchive {
+
+    /** TransactionArchive id */
+    id?: (number|null);
+
+    /** TransactionArchive isDeleted */
+    isDeleted?: (boolean|null);
+
+    /** TransactionArchive transactions */
+    transactions?: (ITransaction[]|null);
+}
+
+/** Represents a TransactionArchive. */
+export class TransactionArchive implements ITransactionArchive {
+
+    /**
+     * Constructs a new TransactionArchive.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: ITransactionArchive);
+
+    /** TransactionArchive id. */
+    public id: number;
+
+    /** TransactionArchive isDeleted. */
+    public isDeleted: boolean;
+
+    /** TransactionArchive transactions. */
+    public transactions: ITransaction[];
+
+    /**
+     * Creates a new TransactionArchive instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns TransactionArchive instance
+     */
+    public static create(properties?: ITransactionArchive): TransactionArchive;
+
+    /**
+     * Encodes the specified TransactionArchive message. Does not implicitly {@link TransactionArchive.verify|verify} messages.
+     * @param message TransactionArchive message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: ITransactionArchive, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a TransactionArchive message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns TransactionArchive
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): TransactionArchive;
+
+    /**
+     * Creates a TransactionArchive message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns TransactionArchive
+     */
+    public static fromObject(object: { [k: string]: any }): TransactionArchive;
+
+    /**
+     * Creates a plain object from a TransactionArchive message. Also converts values to other types if specified.
+     * @param message TransactionArchive
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: TransactionArchive, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this TransactionArchive to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
 /** Properties of a Settings. */
 export interface ISettings {
 
     /** Settings id */
-    id?: (number|Long|null);
+    id?: (number|null);
 
     /** Settings language */
     language?: (Settings.Language|null);
 
     /** Settings currencyId */
-    currencyId?: (number|Long|null);
+    currencyId?: (number|null);
 }
 
 /** Represents a Settings. */
@@ -1013,13 +1008,13 @@ export class Settings implements ISettings {
     constructor(properties?: ISettings);
 
     /** Settings id. */
-    public id: (number|Long);
+    public id: number;
 
     /** Settings language. */
     public language: Settings.Language;
 
     /** Settings currencyId. */
-    public currencyId: (number|Long);
+    public currencyId: number;
 
     /**
      * Creates a new Settings instance using the specified properties.
@@ -1037,14 +1032,6 @@ export class Settings implements ISettings {
     public static encode(message: ISettings, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified Settings message, length delimited. Does not implicitly {@link Settings.verify|verify} messages.
-     * @param message Settings message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: ISettings, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes a Settings message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -1053,22 +1040,6 @@ export class Settings implements ISettings {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Settings;
-
-    /**
-     * Decodes a Settings message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns Settings
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Settings;
-
-    /**
-     * Verifies a Settings message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
 
     /**
      * Creates a Settings message from a plain object. Also converts values to their respective internal types.
@@ -1108,7 +1079,7 @@ export interface IAccessToken {
     value?: (string|null);
 
     /** AccessToken expired */
-    expired?: (number|Long|null);
+    expired?: (number|null);
 }
 
 /** Represents an AccessToken. */
@@ -1124,7 +1095,7 @@ export class AccessToken implements IAccessToken {
     public value: string;
 
     /** AccessToken expired. */
-    public expired: (number|Long);
+    public expired: number;
 
     /**
      * Creates a new AccessToken instance using the specified properties.
@@ -1142,14 +1113,6 @@ export class AccessToken implements IAccessToken {
     public static encode(message: IAccessToken, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified AccessToken message, length delimited. Does not implicitly {@link AccessToken.verify|verify} messages.
-     * @param message AccessToken message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: IAccessToken, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes an AccessToken message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -1158,22 +1121,6 @@ export class AccessToken implements IAccessToken {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): AccessToken;
-
-    /**
-     * Decodes an AccessToken message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns AccessToken
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): AccessToken;
-
-    /**
-     * Verifies an AccessToken message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
 
     /**
      * Creates an AccessToken message from a plain object. Also converts values to their respective internal types.
@@ -1238,14 +1185,6 @@ export class RefreshToken implements IRefreshToken {
     public static encode(message: IRefreshToken, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified RefreshToken message, length delimited. Does not implicitly {@link RefreshToken.verify|verify} messages.
-     * @param message RefreshToken message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: IRefreshToken, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes a RefreshToken message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -1254,22 +1193,6 @@ export class RefreshToken implements IRefreshToken {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): RefreshToken;
-
-    /**
-     * Decodes a RefreshToken message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns RefreshToken
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): RefreshToken;
-
-    /**
-     * Verifies a RefreshToken message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
 
     /**
      * Creates a RefreshToken message from a plain object. Also converts values to their respective internal types.
@@ -1351,14 +1274,6 @@ export class Date_ implements IDate_ {
     public static encode(message: IDate_, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified Date_ message, length delimited. Does not implicitly {@link Date_.verify|verify} messages.
-     * @param message Date_ message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: IDate_, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes a Date_ message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -1367,22 +1282,6 @@ export class Date_ implements IDate_ {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Date_;
-
-    /**
-     * Decodes a Date_ message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns Date_
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Date_;
-
-    /**
-     * Verifies a Date_ message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
 
     /**
      * Creates a Date_ message from a plain object. Also converts values to their respective internal types.
@@ -1447,14 +1346,6 @@ export class Month implements IMonth {
     public static encode(message: IMonth, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified Month message, length delimited. Does not implicitly {@link Month.verify|verify} messages.
-     * @param message Month message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: IMonth, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes a Month message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -1463,22 +1354,6 @@ export class Month implements IMonth {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Month;
-
-    /**
-     * Decodes a Month message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns Month
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Month;
-
-    /**
-     * Verifies a Month message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
 
     /**
      * Creates a Month message from a plain object. Also converts values to their respective internal types.
@@ -1537,14 +1412,6 @@ export class Year implements IYear {
     public static encode(message: IYear, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified Year message, length delimited. Does not implicitly {@link Year.verify|verify} messages.
-     * @param message Year message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: IYear, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes a Year message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -1553,22 +1420,6 @@ export class Year implements IYear {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Year;
-
-    /**
-     * Decodes a Year message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns Year
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Year;
-
-    /**
-     * Verifies a Year message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
 
     /**
      * Creates a Year message from a plain object. Also converts values to their respective internal types.
@@ -1596,7 +1447,7 @@ export class Year implements IYear {
 export interface ISummary {
 
     /** Summary amount */
-    amount: (number|Long);
+    amount: number;
 
     /** Summary share */
     share: number;
@@ -1615,7 +1466,7 @@ export class Summary implements ISummary {
     constructor(properties?: ISummary);
 
     /** Summary amount. */
-    public amount: (number|Long);
+    public amount: number;
 
     /** Summary share. */
     public share: number;
@@ -1639,14 +1490,6 @@ export class Summary implements ISummary {
     public static encode(message: ISummary, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified Summary message, length delimited. Does not implicitly {@link Summary.verify|verify} messages.
-     * @param message Summary message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: ISummary, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes a Summary message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -1655,22 +1498,6 @@ export class Summary implements ISummary {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Summary;
-
-    /**
-     * Decodes a Summary message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns Summary
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Summary;
-
-    /**
-     * Verifies a Summary message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
 
     /**
      * Creates a Summary message from a plain object. Also converts values to their respective internal types.

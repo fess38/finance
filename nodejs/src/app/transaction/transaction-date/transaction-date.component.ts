@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import * as _ from 'underscore';
 import { Category, Currency, Date_, Month, SubCategory, Summary, Transaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 import { DateUtils } from '../../utils/date-utils';
@@ -9,10 +8,15 @@ import { TransactionCriteriaService as Criteria } from '../transaction-criteria.
 import { TransactionUtils as Utils } from '../transaction-utils';
 
 @Component({
-  templateUrl: './transaction-date.component.html',
-  styleUrls: ['./transaction-date.component.css']
+  templateUrl: 'transaction-date.component.html',
+  styleUrls: ['transaction-date.component.css']
 })
 export class TransactionDateComponent implements OnInit, OnDestroy {
+  constructor(private userdata: UserDataService,
+              private criteria: Criteria,
+              private route: ActivatedRoute,
+              private router: Router) { }
+
   private subscription: Subscription;
   private allTransactions: Transaction[] = [];
   private transactions: Transaction[] = [];
@@ -20,6 +24,7 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
   private expenseTransactions: Transaction[] = [];
   private categories: Category[] = [];
   private subCategories: SubCategory[] = [];
+
   incomeCategories: Category[] = [];
   expenseCategories: Category[] = [];
   dates: Date_[] = [];
@@ -33,11 +38,6 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
   subCategorySummaries = new Map<number, Summary>();
   income: number;
   expense: number;
-
-  constructor(private userdata: UserDataService,
-              private criteria: Criteria,
-              private route: ActivatedRoute,
-              private router: Router) { }
 
   ngOnInit() {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
@@ -72,10 +72,9 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
 
   private updateTransactions(): void {
     const types: Transaction.Type[] = [Transaction.Type.INCOME, Transaction.Type.EXPENSE];
-    this.allTransactions = _.chain(this.userdata.transactions())
+    this.allTransactions = this.userdata.transactions()
       .filter(x => types.includes(Utils.type(x)))
-      .filter(x => this.criteria.isFit(x))
-      .value();
+      .filter(x => this.criteria.isFit(x));
     this.transactions = this.allTransactions
       .filter(x => {
         const accountId: number = Math.max(Number(x.accountIdFrom), Number(x.accountIdTo));
@@ -85,48 +84,51 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
 
   private updateDateCategorySummaries(): void {
     this.dateCategorySummaries.clear();
-    const value: Transaction[][] = _.chain(this.transactions)
-      .groupBy(x => [x.created, x.categoryId])
-      .value();
-    for (let key in value) {
+    const group = new Map<string, Transaction[]>();
+    this.transactions.forEach(x => {
+      const key: string = x.created + ',' + x.categoryId.toString();
+      group.set(key, (group.get(key) || []).concat(x));
+    });
+    group.forEach((value, key) => {
       const category = this.userdata.findCategory(+key.split(',')[1]);
-      const amount: number = _.chain(value[key])
+      const amount: number = value
         .map(x => Math.max(Number(x.amountFrom), Number(x.amountTo)))
-        .reduce((x1, x2) => x1 + x2, 0)
-        .value();
+        .reduce((x1, x2) => x1 + x2, 0);
       const sum: number = category.isIncome ? this.income : this.expense;
       this.dateCategorySummaries.set(key, new Summary({ amount: amount, share: amount / sum }));
-    }
+    });
   }
 
   private updateDateSubCategorySummaries(): void {
     this.dateSubCategorySummaries.clear();
-    const value: Transaction[][] = _.chain(this.transactions)
+    const group = new Map<string, Transaction[]>();
+    this.transactions
       .filter(x => x.subCategoryId > 0)
-      .groupBy(x => [x.created, x.subCategoryId])
-      .value();
-    for (let key in value) {
-      const subCategory = this.userdata.findSubCategory(+key.split(',')[1]);
-      const category = this.userdata.findCategory(subCategory.categoryId);
-      const amount: number = _.chain(value[key])
-        .map(x => Math.max(Number(x.amountFrom), Number(x.amountTo)))
-        .reduce((x1, x2) => x1 + x2, 0)
-        .value();
-      const sum: number = category.isIncome ? this.income : this.expense;
-      this.dateSubCategorySummaries.set(key, new Summary({ amount: amount, share: amount / sum }));
-    }
+      .forEach(x => {
+        const key: string = x.created + ',' + x.subCategoryId.toString();
+        group.set(key, (group.get(key) || []).concat(x));
+      });
+    group.forEach((value, key: string) => {
+        const subCategory = this.userdata.findSubCategory(+key.split(',')[1]);
+        const category = this.userdata.findCategory(subCategory.categoryId);
+        const amount: number = value
+          .map(x => Math.max(Number(x.amountFrom), Number(x.amountTo)))
+          .reduce((x1, x2) => x1 + x2, 0);
+        const sum: number = category.isIncome ? this.income : this.expense;
+        this.dateSubCategorySummaries.set(key, new Summary({ amount: amount, share: amount / sum }));
+      });
   }
 
   private dateSummaries(transactions: Transaction[], sum: number): Map<string, Summary> {
     const result = new Map<string, Summary>();
-    const value = _.chain(transactions).groupBy(x => x.created).value();
-    for (let key in value) {
-      const amount: number = _.chain(value[key])
+    const group = new Map<string, Transaction[]>();
+    transactions.forEach(x => group.set(x.created, (group.get(x.created) || []).concat(x)));
+    group.forEach((value, key: string) => {
+      const amount: number = value
         .map(x => Math.abs(Number(x.amountFrom)) + Math.abs(Number(x.amountTo)))
-        .reduce((x1, x2) => x1 + x2, 0)
-        .value();
+        .reduce((x1, x2) => x1 + x2, 0);
       result.set(key, new Summary({ amount: amount, share: amount / sum }));
-    }
+    });
     return result;
   }
 

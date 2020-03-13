@@ -1,0 +1,16 @@
+<div class="clr-row">
+  <div class="clr-col-12 clr-col-sm-9 clr-col-md-6">
+    <table class="table table-noborder table-compact">
+      <tr>
+        <th class="left" routerLink="/transaction_template/new">
+          <span>{{'transaction_template_list.transaction_template' | translate}} </span>
+          <clr-icon shape="plus-circle"></clr-icon>
+        </th>
+      </tr>
+      <tr *ngFor="let transactionTemplate of transactionTemplates()"
+          routerLink="/transaction_template/{{transactionTemplate.id}}">
+        <td class="left">{{transactionTemplate.name}}</td>
+      </tr>
+    </table>
+  </div>
+</div>
