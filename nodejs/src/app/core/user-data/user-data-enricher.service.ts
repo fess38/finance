@@ -25,7 +25,11 @@ export class UserDataEnricherService {
 
     const templateTransactions: Transaction[] = dump.transactionTemplates
       .filter(x => !x.isDeleted)
-      .map(x => x.transaction as Transaction);
+      .map(x => Transaction.create(x.transaction));
+    templateTransactions.forEach(x => {
+      x.amountFrom = 0;
+      x.amountTo = 0;
+    });
     const group = new Map<number, Transaction[]>();
     dump.transactions.concat(templateTransactions)
       .filter(x => !x.isDeleted && x[attributeName] > 0)

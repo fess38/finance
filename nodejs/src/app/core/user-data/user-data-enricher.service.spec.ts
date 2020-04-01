@@ -40,14 +40,20 @@ describe('UserDataEnricherService', () => {
   it('#enrich account balance', () => {
     const dump = new Dump();
     dump.transactions = Array.from(Array(5).keys()).map(x => new Transaction(transaction));
+    dump.transactionTemplates = Array.from(Array(2).keys())
+      .map(x => new TransactionTemplate({
+        name: 'foo',
+        interval: 1,
+        transaction: new Transaction(transaction)
+      }));
     dump.accounts = [new Account(account), new Account(account)];
     dump.accounts[0].id = 10;
     dump.accounts[1].id = 11;
     enricher.enrich(dump);
 
     expect(-500).toEqual(<number>dump.accounts[0].balance);
-    expect(5).toEqual(<number>dump.accounts[0].transactionAmount);
+    expect(7).toEqual(<number>dump.accounts[0].transactionAmount);
     expect(505).toEqual(<number>dump.accounts[1].balance);
-    expect(5).toEqual(<number>dump.accounts[1].transactionAmount);
+    expect(7).toEqual(<number>dump.accounts[1].transactionAmount);
   });
 });
