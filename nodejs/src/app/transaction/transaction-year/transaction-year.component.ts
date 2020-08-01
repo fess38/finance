@@ -118,7 +118,7 @@ export class TransactionYearComponent implements OnInit, OnDestroy {
   private yearSummaries(transactions: Transaction[], sum: number): Map<number, Summary> {
     const result = new Map<number, Summary>();
     const group = new Map<number, Transaction[]>();
-    this.transactions.forEach(x => {
+    transactions.forEach(x => {
         const key: number = DateUtils.parseYear(x.created).value;
         group.set(key, (group.get(key) || []).concat(x));
       });
