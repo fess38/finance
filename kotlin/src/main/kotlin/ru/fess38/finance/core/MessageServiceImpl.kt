@@ -4,24 +4,8 @@ import com.google.protobuf.Message
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import ru.fess38.finance.core.Model.Account
-import ru.fess38.finance.core.Model.Category
-import ru.fess38.finance.core.Model.Dump
-import ru.fess38.finance.core.Model.EntityType
-import ru.fess38.finance.core.Model.EntityType.ACCOUNT
-import ru.fess38.finance.core.Model.EntityType.CATEGORY
-import ru.fess38.finance.core.Model.EntityType.FAMILY_MEMBER
-import ru.fess38.finance.core.Model.EntityType.SETTINGS
-import ru.fess38.finance.core.Model.EntityType.SUB_CATEGORY
-import ru.fess38.finance.core.Model.EntityType.TRANSACTION
-import ru.fess38.finance.core.Model.EntityType.TRANSACTION_ARCHIVE
-import ru.fess38.finance.core.Model.EntityType.TRANSACTION_TEMPLATE
-import ru.fess38.finance.core.Model.FamilyMember
-import ru.fess38.finance.core.Model.Settings
-import ru.fess38.finance.core.Model.SubCategory
-import ru.fess38.finance.core.Model.Transaction
-import ru.fess38.finance.core.Model.TransactionArchive
-import ru.fess38.finance.core.Model.TransactionTemplate
+import ru.fess38.finance.core.Model.*
+import ru.fess38.finance.core.Model.EntityType.*
 import ru.fess38.finance.repository.EntityRepository
 import ru.fess38.finance.security.User
 import ru.fess38.finance.security.UserService
@@ -63,7 +47,7 @@ class MessageServiceImpl: MessageService {
     if (repository.count(user, TRANSACTION) > 250) {
       if (repository.count(user, TRANSACTION_ARCHIVE) == 0L) {
         repository.save(TransactionArchive.newBuilder().build(), user)
-      }
+    }
       transactionArchiver.archive(user)
     }
     val builder = Dump.newBuilder()
@@ -76,6 +60,7 @@ class MessageServiceImpl: MessageService {
     val transactionTemplates = messages.filter {it.type == TRANSACTION_TEMPLATE}
         .map {it as TransactionTemplate}
     val settings = settings(messages, user)
+    // new entity
 
     log.info {"Create dump for user [${user.id}]"}
     return builder

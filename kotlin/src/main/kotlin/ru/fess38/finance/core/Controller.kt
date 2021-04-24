@@ -5,20 +5,8 @@ import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
-import ru.fess38.finance.core.Model.Account
-import ru.fess38.finance.core.Model.Category
-import ru.fess38.finance.core.Model.Dump
-import ru.fess38.finance.core.Model.FamilyMember
-import ru.fess38.finance.core.Model.Settings
-import ru.fess38.finance.core.Model.SubCategory
-import ru.fess38.finance.core.Model.Transaction
-import ru.fess38.finance.core.Model.TransactionTemplate
+import org.springframework.web.bind.annotation.*
+import ru.fess38.finance.core.Model.*
 import ru.fess38.finance.utils.id
 import ru.fess38.finance.utils.type
 import ru.fess38.finance.validation.MessageValidator
@@ -81,6 +69,8 @@ class Controller {
   @PostMapping("transaction_template/save")
   fun save(@RequestBody value: TransactionTemplate) = saveMessage(value)
 
+  // new entity
+
   private fun updateMessage(message: Message): ResponseEntity<Any> {
     var httpStatus: HttpStatus
     val validatorResponse = validator.validate(message)
@@ -119,4 +109,6 @@ class Controller {
 
   @PostMapping("transaction_template/update")
   fun update(@RequestBody value: TransactionTemplate) = updateMessage(value)
+
+  // new entity
 }

@@ -2,13 +2,7 @@ package ru.fess38.finance.validation
 
 import com.google.protobuf.Message
 import ru.fess38.finance.core.MessageService
-import ru.fess38.finance.core.Model.Account
-import ru.fess38.finance.core.Model.Category
-import ru.fess38.finance.core.Model.FamilyMember
-import ru.fess38.finance.core.Model.Settings
-import ru.fess38.finance.core.Model.SubCategory
-import ru.fess38.finance.core.Model.Transaction
-import ru.fess38.finance.core.Model.TransactionTemplate
+import ru.fess38.finance.core.Model.*
 import ru.fess38.finance.utils.id
 import ru.fess38.finance.utils.type
 
@@ -39,6 +33,7 @@ class CompositeValidator(private val messageService: MessageService): MessageVal
           ValidatorResponse(transactionTemplateValidator.validate(value).errors
               + transactionValidator.validate(value.transaction).errors)
         }
+        // new entity
         else -> throw IllegalArgumentException("Unknown entity $value")
       }
     }

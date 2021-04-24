@@ -14,6 +14,7 @@ enum EntityType {
     TRANSACTION = 6;
     TRANSACTION_ARCHIVE = 8;
     TRANSACTION_TEMPLATE = 9;
+    // new entity
 }
 
 message Dump {
@@ -25,6 +26,7 @@ message Dump {
     repeated FamilyMember family_members = 5;
     repeated Transaction transactions = 6;
     repeated TransactionTemplate transactionTemplates = 8;
+    // new entity
 }
 
 message Currency {
@@ -112,6 +114,8 @@ message TransactionArchive {
     optional bool is_deleted = 2 [default = false];
     repeated Transaction transactions = 3;
 }
+
+// new entity
 
 message Settings {
     optional int64 id = 1 [default = 0];

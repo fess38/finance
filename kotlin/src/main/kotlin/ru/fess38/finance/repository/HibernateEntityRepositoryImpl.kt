@@ -9,18 +9,8 @@ import org.hibernate.criterion.Restrictions
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
-import ru.fess38.finance.core.Model.Account
-import ru.fess38.finance.core.Model.Category
-import ru.fess38.finance.core.Model.Currencies
-import ru.fess38.finance.core.Model.Currency
-import ru.fess38.finance.core.Model.EntityType
+import ru.fess38.finance.core.Model.*
 import ru.fess38.finance.core.Model.EntityType.TRANSACTION
-import ru.fess38.finance.core.Model.FamilyMember
-import ru.fess38.finance.core.Model.Settings
-import ru.fess38.finance.core.Model.SubCategory
-import ru.fess38.finance.core.Model.Transaction
-import ru.fess38.finance.core.Model.TransactionArchive
-import ru.fess38.finance.core.Model.TransactionTemplate
 import ru.fess38.finance.security.User
 import ru.fess38.finance.utils.id
 import ru.fess38.finance.utils.type
@@ -106,6 +96,7 @@ class HibernateEntityRepositoryImpl: EntityRepository {
             EntityType.TRANSACTION -> Transaction.parseFrom(bytes)
             EntityType.TRANSACTION_ARCHIVE -> TransactionArchive.parseFrom(bytes)
             EntityType.TRANSACTION_TEMPLATE -> TransactionTemplate.parseFrom(bytes)
+            // new entity
             else -> throw IllegalArgumentException("Unknown type: $hibernateEntity.type")
           }.withId(hibernateEntity.id)
         }
