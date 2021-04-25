@@ -18,7 +18,7 @@
             "polyfills": "src/polyfills.ts",
             "assets": [
               "src/assets",
-              "src/favicon.ico"
+              "src/manifest.json"
             ],
             "styles": [
               "src/styles.css",
@@ -82,7 +82,7 @@
             ],
             "assets": [
               "src/assets",
-              "src/favicon.ico"
+              "src/manifest.json"
             ]
           }
         },
@@ -130,7 +130,8 @@
   "cli": {
     "warnings": {
       "typescriptMismatch": false
-    }
+    },
+    "analytics": false
   },
   "schematics": {
     "@schematics/angular:component": {
