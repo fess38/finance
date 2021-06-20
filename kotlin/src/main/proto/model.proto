@@ -3,20 +3,6 @@ syntax = "proto2";
 option java_package = "ru.fess38.finance.core";
 option java_outer_classname = "Model";
 
-enum EntityType {
-    UNDEFINED = 0;
-    SETTINGS = 7;
-    CURRENCY = 1;
-    ACCOUNT = 2;
-    CATEGORY = 3;
-    SUB_CATEGORY = 4;
-    FAMILY_MEMBER = 5;
-    TRANSACTION = 6;
-    TRANSACTION_ARCHIVE = 8;
-    TRANSACTION_TEMPLATE = 9;
-    // new entity
-}
-
 message Dump {
     required Settings settings = 7;
     repeated Currency currencies = 1;
@@ -164,4 +150,18 @@ message Summary {
     required int64 amount = 1;
     required double share = 2;
     optional bool use_in_share = 3 [default = true];
+}
+
+enum EntityType {
+    UNDEFINED = 0;
+    SETTINGS = 7;
+    CURRENCY = 1;
+    ACCOUNT = 2;
+    CATEGORY = 3;
+    SUB_CATEGORY = 4;
+    FAMILY_MEMBER = 5;
+    TRANSACTION = 6;
+    TRANSACTION_ARCHIVE = 8;
+    TRANSACTION_TEMPLATE = 9;
+    // new entity
 }

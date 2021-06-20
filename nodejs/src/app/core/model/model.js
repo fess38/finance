@@ -1,41 +1,13 @@
 /*eslint-disable block-scoped-var, id-length, no-control-regex, no-magic-numbers, no-prototype-builtins, no-redeclare, no-shadow, no-var, sort-vars*/
-import * as $protobuf from "protobufjs/minimal";
+"use strict";
+
+var $protobuf = require("protobufjs/minimal");
 
 // Common aliases
 const $Reader = $protobuf.Reader, $Writer = $protobuf.Writer, $util = $protobuf.util;
 
 // Exported root namespace
 const $root = $protobuf.roots["default"] || ($protobuf.roots["default"] = {});
-
-/**
- * EntityType enum.
- * @exports EntityType
- * @enum {string}
- * @property {number} UNDEFINED=0 UNDEFINED value
- * @property {number} SETTINGS=7 SETTINGS value
- * @property {number} CURRENCY=1 CURRENCY value
- * @property {number} ACCOUNT=2 ACCOUNT value
- * @property {number} CATEGORY=3 CATEGORY value
- * @property {number} SUB_CATEGORY=4 SUB_CATEGORY value
- * @property {number} FAMILY_MEMBER=5 FAMILY_MEMBER value
- * @property {number} TRANSACTION=6 TRANSACTION value
- * @property {number} TRANSACTION_ARCHIVE=8 TRANSACTION_ARCHIVE value
- * @property {number} TRANSACTION_TEMPLATE=9 TRANSACTION_TEMPLATE value
- */
-$root.EntityType = (function() {
-    const valuesById = {}, values = Object.create(valuesById);
-    values[valuesById[0] = "UNDEFINED"] = 0;
-    values[valuesById[7] = "SETTINGS"] = 7;
-    values[valuesById[1] = "CURRENCY"] = 1;
-    values[valuesById[2] = "ACCOUNT"] = 2;
-    values[valuesById[3] = "CATEGORY"] = 3;
-    values[valuesById[4] = "SUB_CATEGORY"] = 4;
-    values[valuesById[5] = "FAMILY_MEMBER"] = 5;
-    values[valuesById[6] = "TRANSACTION"] = 6;
-    values[valuesById[8] = "TRANSACTION_ARCHIVE"] = 8;
-    values[valuesById[9] = "TRANSACTION_TEMPLATE"] = 9;
-    return values;
-})();
 
 export const Dump = $root.Dump = (() => {
 
@@ -925,17 +897,17 @@ export const Account = $root.Account = (() => {
     Account.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.id != null && message.hasOwnProperty("id"))
+        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
             writer.uint32(/* id 1, wireType 0 =*/8).int64(message.id);
-        if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
+        if (message.isDeleted != null && Object.hasOwnProperty.call(message, "isDeleted"))
             writer.uint32(/* id 2, wireType 0 =*/16).bool(message.isDeleted);
         writer.uint32(/* id 3, wireType 2 =*/26).string(message.name);
-        if (message.balance != null && message.hasOwnProperty("balance"))
+        if (message.balance != null && Object.hasOwnProperty.call(message, "balance"))
             writer.uint32(/* id 4, wireType 0 =*/32).int64(message.balance);
         writer.uint32(/* id 5, wireType 0 =*/40).int64(message.currencyId);
-        if (message.transactionAmount != null && message.hasOwnProperty("transactionAmount"))
+        if (message.transactionAmount != null && Object.hasOwnProperty.call(message, "transactionAmount"))
             writer.uint32(/* id 6, wireType 0 =*/48).int64(message.transactionAmount);
-        if (message.isVisible != null && message.hasOwnProperty("isVisible"))
+        if (message.isVisible != null && Object.hasOwnProperty.call(message, "isVisible"))
             writer.uint32(/* id 7, wireType 0 =*/56).bool(message.isVisible);
         return writer;
     };
@@ -1239,18 +1211,18 @@ export const Category = $root.Category = (() => {
     Category.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.id != null && message.hasOwnProperty("id"))
+        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
             writer.uint32(/* id 1, wireType 0 =*/8).int64(message.id);
-        if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
+        if (message.isDeleted != null && Object.hasOwnProperty.call(message, "isDeleted"))
             writer.uint32(/* id 2, wireType 0 =*/16).bool(message.isDeleted);
         writer.uint32(/* id 3, wireType 2 =*/26).string(message.name);
-        if (message.isIncome != null && message.hasOwnProperty("isIncome"))
+        if (message.isIncome != null && Object.hasOwnProperty.call(message, "isIncome"))
             writer.uint32(/* id 4, wireType 0 =*/32).bool(message.isIncome);
-        if (message.isExpense != null && message.hasOwnProperty("isExpense"))
+        if (message.isExpense != null && Object.hasOwnProperty.call(message, "isExpense"))
             writer.uint32(/* id 5, wireType 0 =*/40).bool(message.isExpense);
-        if (message.transactionAmount != null && message.hasOwnProperty("transactionAmount"))
+        if (message.transactionAmount != null && Object.hasOwnProperty.call(message, "transactionAmount"))
             writer.uint32(/* id 6, wireType 0 =*/48).int64(message.transactionAmount);
-        if (message.isVisible != null && message.hasOwnProperty("isVisible"))
+        if (message.isVisible != null && Object.hasOwnProperty.call(message, "isVisible"))
             writer.uint32(/* id 7, wireType 0 =*/56).bool(message.isVisible);
         return writer;
     };
@@ -1515,15 +1487,15 @@ export const SubCategory = $root.SubCategory = (() => {
     SubCategory.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.id != null && message.hasOwnProperty("id"))
+        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
             writer.uint32(/* id 1, wireType 0 =*/8).int64(message.id);
-        if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
+        if (message.isDeleted != null && Object.hasOwnProperty.call(message, "isDeleted"))
             writer.uint32(/* id 2, wireType 0 =*/16).bool(message.isDeleted);
         writer.uint32(/* id 3, wireType 2 =*/26).string(message.name);
         writer.uint32(/* id 4, wireType 0 =*/32).int64(message.categoryId);
-        if (message.transactionAmount != null && message.hasOwnProperty("transactionAmount"))
+        if (message.transactionAmount != null && Object.hasOwnProperty.call(message, "transactionAmount"))
             writer.uint32(/* id 5, wireType 0 =*/40).int64(message.transactionAmount);
-        if (message.isVisible != null && message.hasOwnProperty("isVisible"))
+        if (message.isVisible != null && Object.hasOwnProperty.call(message, "isVisible"))
             writer.uint32(/* id 6, wireType 0 =*/48).bool(message.isVisible);
         return writer;
     };
@@ -1787,14 +1759,14 @@ export const FamilyMember = $root.FamilyMember = (() => {
     FamilyMember.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.id != null && message.hasOwnProperty("id"))
+        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
             writer.uint32(/* id 1, wireType 0 =*/8).int64(message.id);
-        if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
+        if (message.isDeleted != null && Object.hasOwnProperty.call(message, "isDeleted"))
             writer.uint32(/* id 2, wireType 0 =*/16).bool(message.isDeleted);
         writer.uint32(/* id 3, wireType 2 =*/26).string(message.name);
-        if (message.transactionAmount != null && message.hasOwnProperty("transactionAmount"))
+        if (message.transactionAmount != null && Object.hasOwnProperty.call(message, "transactionAmount"))
             writer.uint32(/* id 4, wireType 0 =*/32).int64(message.transactionAmount);
-        if (message.isVisible != null && message.hasOwnProperty("isVisible"))
+        if (message.isVisible != null && Object.hasOwnProperty.call(message, "isVisible"))
             writer.uint32(/* id 5, wireType 0 =*/40).bool(message.isVisible);
         return writer;
     };
@@ -2088,9 +2060,9 @@ export const Transaction = $root.Transaction = (() => {
     Transaction.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.id != null && message.hasOwnProperty("id"))
+        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
             writer.uint32(/* id 1, wireType 0 =*/8).int64(message.id);
-        if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
+        if (message.isDeleted != null && Object.hasOwnProperty.call(message, "isDeleted"))
             writer.uint32(/* id 2, wireType 0 =*/16).bool(message.isDeleted);
         writer.uint32(/* id 3, wireType 2 =*/26).string(message.created);
         writer.uint32(/* id 4, wireType 0 =*/32).int64(message.accountIdFrom);
@@ -2098,11 +2070,11 @@ export const Transaction = $root.Transaction = (() => {
         writer.uint32(/* id 6, wireType 0 =*/48).int64(message.amountFrom);
         writer.uint32(/* id 7, wireType 0 =*/56).int64(message.amountTo);
         writer.uint32(/* id 8, wireType 0 =*/64).int64(message.categoryId);
-        if (message.subCategoryId != null && message.hasOwnProperty("subCategoryId"))
+        if (message.subCategoryId != null && Object.hasOwnProperty.call(message, "subCategoryId"))
             writer.uint32(/* id 9, wireType 0 =*/72).int64(message.subCategoryId);
-        if (message.familyMemberId != null && message.hasOwnProperty("familyMemberId"))
+        if (message.familyMemberId != null && Object.hasOwnProperty.call(message, "familyMemberId"))
             writer.uint32(/* id 10, wireType 0 =*/80).int64(message.familyMemberId);
-        if (message.comment != null && message.hasOwnProperty("comment"))
+        if (message.comment != null && Object.hasOwnProperty.call(message, "comment"))
             writer.uint32(/* id 11, wireType 2 =*/90).string(message.comment);
         return writer;
     };
@@ -2392,7 +2364,7 @@ export const Transaction = $root.Transaction = (() => {
     /**
      * Type enum.
      * @name Transaction.Type
-     * @enum {string}
+     * @enum {number}
      * @property {number} UNDEFINED=0 UNDEFINED value
      * @property {number} INCOME=1 INCOME value
      * @property {number} EXPENSE=2 EXPENSE value
@@ -2522,13 +2494,13 @@ export const TransactionTemplate = $root.TransactionTemplate = (() => {
     TransactionTemplate.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.id != null && message.hasOwnProperty("id"))
+        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
             writer.uint32(/* id 1, wireType 0 =*/8).int64(message.id);
-        if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
+        if (message.isDeleted != null && Object.hasOwnProperty.call(message, "isDeleted"))
             writer.uint32(/* id 2, wireType 0 =*/16).bool(message.isDeleted);
         writer.uint32(/* id 3, wireType 2 =*/26).string(message.name);
         $root.Transaction.encode(message.transaction, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
-        if (message.interval != null && message.hasOwnProperty("interval"))
+        if (message.interval != null && Object.hasOwnProperty.call(message, "interval"))
             writer.uint32(/* id 5, wireType 0 =*/40).int32(message.interval);
         if (message.daysOfWeek != null && message.daysOfWeek.length)
             for (let i = 0; i < message.daysOfWeek.length; ++i)
@@ -2796,9 +2768,9 @@ export const TransactionArchive = $root.TransactionArchive = (() => {
     TransactionArchive.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.id != null && message.hasOwnProperty("id"))
+        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
             writer.uint32(/* id 1, wireType 0 =*/8).int64(message.id);
-        if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
+        if (message.isDeleted != null && Object.hasOwnProperty.call(message, "isDeleted"))
             writer.uint32(/* id 2, wireType 0 =*/16).bool(message.isDeleted);
         if (message.transactions != null && message.transactions.length)
             for (let i = 0; i < message.transactions.length; ++i)
@@ -3005,11 +2977,11 @@ export const Settings = $root.Settings = (() => {
     Settings.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.id != null && message.hasOwnProperty("id"))
+        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
             writer.uint32(/* id 1, wireType 0 =*/8).int64(message.id);
-        if (message.language != null && message.hasOwnProperty("language"))
+        if (message.language != null && Object.hasOwnProperty.call(message, "language"))
             writer.uint32(/* id 2, wireType 0 =*/16).int32(message.language);
-        if (message.currencyId != null && message.hasOwnProperty("currencyId"))
+        if (message.currencyId != null && Object.hasOwnProperty.call(message, "currencyId"))
             writer.uint32(/* id 3, wireType 0 =*/24).int64(message.currencyId);
         return writer;
     };
@@ -3147,7 +3119,7 @@ export const Settings = $root.Settings = (() => {
     /**
      * Language enum.
      * @name Settings.Language
-     * @enum {string}
+     * @enum {number}
      * @property {number} RU=0 RU value
      * @property {number} EN=1 EN value
      */
@@ -3226,9 +3198,9 @@ export const AccessToken = $root.AccessToken = (() => {
     AccessToken.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.value != null && message.hasOwnProperty("value"))
+        if (message.value != null && Object.hasOwnProperty.call(message, "value"))
             writer.uint32(/* id 1, wireType 2 =*/10).string(message.value);
-        if (message.expired != null && message.hasOwnProperty("expired"))
+        if (message.expired != null && Object.hasOwnProperty.call(message, "expired"))
             writer.uint32(/* id 2, wireType 0 =*/16).int64(message.expired);
         return writer;
     };
@@ -3515,7 +3487,7 @@ export const RefreshToken = $root.RefreshToken = (() => {
     /**
      * AuthType enum.
      * @name RefreshToken.AuthType
-     * @enum {string}
+     * @enum {number}
      * @property {number} UNDEFINED=0 UNDEFINED value
      * @property {number} GOOGLE=1 GOOGLE value
      * @property {number} FACEBOOK=2 FACEBOOK value
@@ -4097,7 +4069,7 @@ export const Summary = $root.Summary = (() => {
             writer = $Writer.create();
         writer.uint32(/* id 1, wireType 0 =*/8).int64(message.amount);
         writer.uint32(/* id 2, wireType 1 =*/17).double(message.share);
-        if (message.useInShare != null && message.hasOwnProperty("useInShare"))
+        if (message.useInShare != null && Object.hasOwnProperty.call(message, "useInShare"))
             writer.uint32(/* id 3, wireType 0 =*/24).bool(message.useInShare);
         return writer;
     };
@@ -4215,6 +4187,36 @@ export const Summary = $root.Summary = (() => {
     };
 
     return Summary;
+})();
+
+/**
+ * EntityType enum.
+ * @exports EntityType
+ * @enum {number}
+ * @property {number} UNDEFINED=0 UNDEFINED value
+ * @property {number} SETTINGS=7 SETTINGS value
+ * @property {number} CURRENCY=1 CURRENCY value
+ * @property {number} ACCOUNT=2 ACCOUNT value
+ * @property {number} CATEGORY=3 CATEGORY value
+ * @property {number} SUB_CATEGORY=4 SUB_CATEGORY value
+ * @property {number} FAMILY_MEMBER=5 FAMILY_MEMBER value
+ * @property {number} TRANSACTION=6 TRANSACTION value
+ * @property {number} TRANSACTION_ARCHIVE=8 TRANSACTION_ARCHIVE value
+ * @property {number} TRANSACTION_TEMPLATE=9 TRANSACTION_TEMPLATE value
+ */
+export const EntityType = $root.EntityType = (() => {
+    const valuesById = {}, values = Object.create(valuesById);
+    values[valuesById[0] = "UNDEFINED"] = 0;
+    values[valuesById[7] = "SETTINGS"] = 7;
+    values[valuesById[1] = "CURRENCY"] = 1;
+    values[valuesById[2] = "ACCOUNT"] = 2;
+    values[valuesById[3] = "CATEGORY"] = 3;
+    values[valuesById[4] = "SUB_CATEGORY"] = 4;
+    values[valuesById[5] = "FAMILY_MEMBER"] = 5;
+    values[valuesById[6] = "TRANSACTION"] = 6;
+    values[valuesById[8] = "TRANSACTION_ARCHIVE"] = 8;
+    values[valuesById[9] = "TRANSACTION_TEMPLATE"] = 9;
+    return values;
 })();
 
 export { $root as default };

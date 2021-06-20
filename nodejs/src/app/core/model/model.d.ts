@@ -1,19 +1,5 @@
 import * as $protobuf from 'protobufjs';
 
-/** EntityType enum. */
-export const enum EntityType {
-    UNDEFINED = 0,
-    SETTINGS = 7,
-    CURRENCY = 1,
-    ACCOUNT = 2,
-    CATEGORY = 3,
-    SUB_CATEGORY = 4,
-    FAMILY_MEMBER = 5,
-    TRANSACTION = 6,
-    TRANSACTION_ARCHIVE = 8,
-    TRANSACTION_TEMPLATE = 9
-}
-
 /** Properties of a Dump. */
 export interface IDump {
 
@@ -1519,4 +1505,18 @@ export class Summary implements ISummary {
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
+}
+
+/** EntityType enum. */
+export enum EntityType {
+    UNDEFINED = 0,
+    SETTINGS = 7,
+    CURRENCY = 1,
+    ACCOUNT = 2,
+    CATEGORY = 3,
+    SUB_CATEGORY = 4,
+    FAMILY_MEMBER = 5,
+    TRANSACTION = 6,
+    TRANSACTION_ARCHIVE = 8,
+    TRANSACTION_TEMPLATE = 9
 }

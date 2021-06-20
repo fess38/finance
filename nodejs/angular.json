@@ -32,10 +32,16 @@
           },
           "configurations": {
             "production": {
-              "optimization": true,
+              "optimization": {
+                "fonts": true,
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": false
+                }
+              },
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -135,8 +141,7 @@
   },
   "schematics": {
     "@schematics/angular:component": {
-      "prefix": "app",
-      "styleext": "css"
+      "prefix": "app"
     },
     "@schematics/angular:directive": {
       "prefix": "app"

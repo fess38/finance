@@ -2,7 +2,7 @@ group "ru.fess38.finance"
 version "0.1"
 
 buildscript {
-    ext.kotlin_version = "1.4.32"
+    ext.kotlin_version = "1.5.10"
     ext.spring_version = "5.2.13.RELEASE"
     ext.spring_boot_version = "2.2.13.RELEASE"
     ext.hibernate_version = "5.4.29.Final"
@@ -44,43 +44,43 @@ dependencies {
     }
 
     // test
-    testCompile "junit:junit:4.13"
-    testCompile "org.jetbrains.kotlin:kotlin-test"
-    testCompile "org.jetbrains.kotlin:kotlin-test-junit"
-    testCompile "org.mockito:mockito-all:1.10.19"
+    testImplementation "junit:junit:4.13"
+    testImplementation "org.jetbrains.kotlin:kotlin-test"
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit"
+    testImplementation "org.mockito:mockito-all:1.10.19"
 
     // Spring
-    compile "org.springframework:spring-core:$spring_version"
-    compile "org.springframework:spring-context:$spring_version"
-    compile "org.springframework:spring-orm:$spring_version"
-    compile "org.springframework:spring-tx:$spring_version"
+    implementation "org.springframework:spring-core:$spring_version"
+    implementation "org.springframework:spring-context:$spring_version"
+    implementation "org.springframework:spring-orm:$spring_version"
+    implementation "org.springframework:spring-tx:$spring_version"
 
     // Spring Boot
-    compile "org.springframework.boot:spring-boot-starter-web:$spring_boot_version", {
+    implementation "org.springframework.boot:spring-boot-starter-web:$spring_boot_version", {
         exclude group: "org.springframework.boot", module: "spring-boot-starter-tomcat"
         exclude group: "com.fasterxml.jackson.core"
     }
-    compile "org.springframework.boot:spring-boot-starter-jetty:$spring_boot_version"
-    compile "org.springframework.boot:spring-boot-starter-security:$spring_boot_version"
+    implementation "org.springframework.boot:spring-boot-starter-jetty:$spring_boot_version"
+    implementation "org.springframework.boot:spring-boot-starter-security:$spring_boot_version"
 
     // Hibernate
-    compile "org.hibernate:hibernate-core:$hibernate_version"
-    compile "org.hibernate:hibernate-java8:$hibernate_version"
+    implementation "org.hibernate:hibernate-core:$hibernate_version"
+    implementation "org.hibernate:hibernate-java8:$hibernate_version"
 
     // Protobuf
-    compile "com.google.protobuf:protobuf-java:$proto_version"
-    compile "com.googlecode.protobuf-java-format:protobuf-java-format:1.4"
+    implementation "com.google.protobuf:protobuf-java:$proto_version"
+    implementation "com.googlecode.protobuf-java-format:protobuf-java-format:1.4"
 
     // Other
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    compile "org.apache.commons:commons-dbcp2:2.8.0"
-    compile "org.postgresql:postgresql:42.2.19"
-    compile "com.google.guava:guava:30.1.1-jre"
-    compile "com.typesafe:config:1.4.1"
-    compile "com.google.api-client:google-api-client:1.31.3"
-    compile "org.apache.commons:commons-text:1.9"
-    compile "io.github.microutils:kotlin-logging:2.0.6"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    implementation "org.apache.commons:commons-dbcp2:2.8.0"
+    implementation "org.postgresql:postgresql:42.2.19"
+    implementation "com.google.guava:guava:30.1.1-jre"
+    implementation "com.typesafe:config:1.4.1"
+    implementation "com.google.api-client:google-api-client:1.31.3"
+    implementation "org.apache.commons:commons-text:1.9"
+    implementation "io.github.microutils:kotlin-logging:2.0.6"
 }
 
 sourceCompatibility = 1.8
