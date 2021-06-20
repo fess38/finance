@@ -38,6 +38,12 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
         this.subscription = this.userdata.subscribeOnInit(this.newTransactionCallback());
       }
       this.parentNotifyCallerSubscription = this.context.parentObservable.subscribe(() => {
+        // for async parent transaction creation
+        const newType = TransactionUtils.type(this.transaction);
+        if (this.type != newType && newType != Transaction.Type.UNDEFINED) {
+          this.type = newType;
+        }
+
         if (this.isValidForm()) {
           this.transaction.amountFrom = this.transaction.amountFrom || 0;
           this.transaction.amountTo = this.transaction.amountTo || 0;

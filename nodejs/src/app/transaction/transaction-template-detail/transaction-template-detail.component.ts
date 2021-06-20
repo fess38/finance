@@ -59,6 +59,7 @@ export class TransactionTemplateDetailComponent implements OnInit, OnDestroy {
         this.transactionTemplate = navigatedTransactionTemplate;
         this.daysOfWeek = this.transactionTemplate.daysOfWeek.join(',');
         this.daysOfMonth = this.transactionTemplate.daysOfMonth.join(',');
+        this.transactionDetailContext.parentObservable.next(0);
       }
     };
   }

@@ -28,7 +28,7 @@
           <select name="type"
                   class="clr-select"
                   [(ngModel)]="type"
-                  (ngModelChange)="onChangeTransactionType()"
+                  (change)="onChangeTransactionType()"
                   [disabled]="!isNewTransaction()">
             <option *ngFor="let typeWithLabel of typesWithLabels" [value]="typeWithLabel.type">
               {{typeWithLabel.label | translate}}
