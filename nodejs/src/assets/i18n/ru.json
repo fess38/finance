@@ -12,7 +12,8 @@
     "date": "Дата",
     "title": "Финансы",
     "category": "Категория",
-    "sub_category": "Подкатегория"
+    "sub_category": "Подкатегория",
+    "no_off_budget": "Без внебюджетных"
   },
   "account_detail": {
     "add": "Добавление счета",
@@ -80,7 +81,8 @@
     "amount_from": "Сумма списания",
     "amount_to": "Сумма получения",
     "family_member": "Член семьи",
-    "comment": "Комментарий"
+    "comment": "Комментарий",
+    "off_budget": "Вне бюджета"
   },
   "transaction_list": {
     "title": "Поиск транзакций",

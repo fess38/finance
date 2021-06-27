@@ -18,12 +18,13 @@ export class TransactionListComponent implements OnInit, OnDestroy {
               private router: Router) {}
 
   private subscription: Subscription;
-  months: Month[] = [];
+  month: Month;
   transactions: Transaction[];
 
   ngOnInit(): void {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.criteria.update(this.route.snapshot.queryParams);
+    this.month = new Month({ year: this.criteria.year, month: this.criteria.month });
     this.subscription = this.userdata.subscribeOnInit(() => this.onInitCallback());
   }
 
@@ -33,15 +34,6 @@ export class TransactionListComponent implements OnInit, OnDestroy {
       .sort((a, b) => {
         return a.created + a.id.toString() < b.created + b.id.toString() ? 1 : -1;
       });
-
-    let months = new Map<string, Month>();
-    this.transactions
-      .map(x => DateUtils.parseMonth(x.created))
-      .forEach(x => months.set(String(x.year) + String(x.month), x));
-    this.months = Array.from(months.values());
-    if (this.months.length == 0) {
-      this.months.push(new Month({ year: this.criteria.year, month: this.criteria.month }));
-    }
   }
 
   ngOnDestroy(): void {
@@ -88,27 +80,33 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     return this.userdata.familyMembers().sort((a, b) => a.name < b.name ? -1 : 1);
   }
 
-  search(params: any): void {
-    for (const [key, value] of Object.entries(params)) {
-      if (key == 'comment') {
-        this.criteria.comment = String(value) ?? null;
-        continue;
-      }
-
+  search(key: string, value: string): void {
+    if (key == 'comment') {
+      this.criteria.comment = value ?? null;
+    } else {
       let numberValue = Number(value) ?? null;
       if (isNaN(numberValue)) {
         numberValue = null;
       }
-      if (key == 'transaction_type') {
-        this.criteria.transactionType = numberValue;
-      } else if (key == 'account_id') {
-        this.criteria.accountId = numberValue;
-      } else if (key == 'category_id') {
-        this.criteria.categoryId = numberValue;
-      } else if (key == 'sub_category_id') {
-        this.criteria.subCategoryId = numberValue;
-      } else if (key == 'family_member_id') {
-        this.criteria.familyMemberId = numberValue;
+      switch (key) {
+        case 'transaction_type':
+          this.criteria.transactionType = numberValue;
+          break;
+        case 'account_id':
+          this.criteria.accountId = numberValue;
+          break;
+        case 'category_id':
+          this.criteria.categoryId = numberValue;
+          break;
+        case 'sub_category_id':
+          this.criteria.subCategoryId = numberValue;
+          break;
+        case 'family_member_id':
+          this.criteria.familyMemberId = numberValue;
+          break;
+        case 'no_off_budget':
+          this.criteria.noOffBudget = numberValue == 1 ? 1 : null;
+          break;
       }
     }
     this.router.navigate(['/transaction'], { queryParams: this.criteria.toQueryParams() });
@@ -119,7 +117,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   }
 
   private switchMonth(next: boolean) {
-    const criteriaMonth = new Month({year: this.criteria.year, month: this.criteria.month});
+    const criteriaMonth = new Month({ year: this.criteria.year, month: this.criteria.month });
     const monthsToSwitch = this.userdata.transactions()
       .filter(x => this.criteria.isFit(x, false))
       .map(x => (DateUtils.parseMonth(x.created)))
@@ -129,7 +127,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     if (monthToSwitch) {
       this.criteria.year = monthToSwitch.year;
       this.criteria.month = monthToSwitch.month;
-      this.criteria.is_search = null;
+      this.criteria.isSearch = null;
       this.router.navigate(['/transaction'], { queryParams: this.criteria.toQueryParams() });
     }
   }

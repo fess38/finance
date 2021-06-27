@@ -159,6 +159,20 @@
         </div>
       </div>
     </div>
+    <div class="clr-form-control clr-row" [hidden]="isTransfer() || !context.showOffBudget">
+      <div class="clr-control-container">
+        <div class="clr-checkbox-wrapper">
+          <input type="checkbox"
+                 id="transaction-off-budget"
+                 name="isVisible"
+                 class="clr-checkbox"
+                 [(ngModel)]="transaction.offBudget"/>
+          <label for="transaction-off-budget">
+            {{'transaction_detail.off_budget' | translate}}
+          </label>
+        </div>
+      </div>
+    </div>
     <div class="clr-form-control clr-row" [hidden]="!context.showButtons">
       <button class="btn btn-primary btn-sm btn-block"
               (click)="update(transaction)"

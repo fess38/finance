@@ -1931,6 +1931,7 @@ export const Transaction = $root.Transaction = (() => {
      * @property {number|null} [subCategoryId] Transaction subCategoryId
      * @property {number|null} [familyMemberId] Transaction familyMemberId
      * @property {string|null} [comment] Transaction comment
+     * @property {boolean|null} [offBudget] Transaction offBudget
      */
 
     /**
@@ -2037,6 +2038,14 @@ export const Transaction = $root.Transaction = (() => {
     Transaction.prototype.comment = "";
 
     /**
+     * Transaction offBudget.
+     * @member {boolean} offBudget
+     * @memberof Transaction
+     * @instance
+     */
+    Transaction.prototype.offBudget = false;
+
+    /**
      * Creates a new Transaction instance using the specified properties.
      * @function create
      * @memberof Transaction
@@ -2076,6 +2085,8 @@ export const Transaction = $root.Transaction = (() => {
             writer.uint32(/* id 10, wireType 0 =*/80).int64(message.familyMemberId);
         if (message.comment != null && Object.hasOwnProperty.call(message, "comment"))
             writer.uint32(/* id 11, wireType 2 =*/90).string(message.comment);
+        if (message.offBudget != null && Object.hasOwnProperty.call(message, "offBudget"))
+            writer.uint32(/* id 12, wireType 0 =*/96).bool(message.offBudget);
         return writer;
     };
 
@@ -2129,6 +2140,9 @@ export const Transaction = $root.Transaction = (() => {
                 break;
             case 11:
                 message.comment = reader.string();
+                break;
+            case 12:
+                message.offBudget = reader.bool();
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -2240,6 +2254,8 @@ export const Transaction = $root.Transaction = (() => {
                 message.familyMemberId = new $util.LongBits(object.familyMemberId.low >>> 0, object.familyMemberId.high >>> 0).toNumber();
         if (object.comment != null)
             message.comment = String(object.comment);
+        if (object.offBudget != null)
+            message.offBudget = Boolean(object.offBudget);
         return message;
     };
 
@@ -2300,6 +2316,7 @@ export const Transaction = $root.Transaction = (() => {
             } else
                 object.familyMemberId = options.longs === String ? "0" : 0;
             object.comment = "";
+            object.offBudget = false;
         }
         if (message.id != null && message.hasOwnProperty("id"))
             if (typeof message.id === "number")
@@ -2347,6 +2364,8 @@ export const Transaction = $root.Transaction = (() => {
                 object.familyMemberId = options.longs === String ? $util.Long.prototype.toString.call(message.familyMemberId) : options.longs === Number ? new $util.LongBits(message.familyMemberId.low >>> 0, message.familyMemberId.high >>> 0).toNumber() : message.familyMemberId;
         if (message.comment != null && message.hasOwnProperty("comment"))
             object.comment = message.comment;
+        if (message.offBudget != null && message.hasOwnProperty("offBudget"))
+            object.offBudget = message.offBudget;
         return object;
     };
 

@@ -689,6 +689,9 @@ export interface ITransaction {
 
     /** Transaction comment */
     comment?: (string|null);
+
+    /** Transaction offBudget */
+    offBudget?: (boolean|null);
 }
 
 /** Represents a Transaction. */
@@ -732,6 +735,9 @@ export class Transaction implements ITransaction {
 
     /** Transaction comment. */
     public comment: string;
+
+    /** Transaction offBudget. */
+    public offBudget: boolean;
 
     /**
      * Creates a new Transaction instance using the specified properties.

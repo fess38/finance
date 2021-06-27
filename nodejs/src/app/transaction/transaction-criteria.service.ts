@@ -7,14 +7,15 @@ export class TransactionCriteriaService {
   year: number = DateUtils.currentYear();
   month: number = DateUtils.currentMonth();
   day: number;
+  transactionType: number;
   accountId: number;
   categoryId: number;
   subCategoryId: number;
   familyMemberId: number;
   comment: string = '';
-  transactionType: number;
   source: string = '';
-  is_search: number;
+  isSearch: number;
+  noOffBudget: number;
 
   update(params: Params): void {
     if (params.year) {
@@ -24,14 +25,15 @@ export class TransactionCriteriaService {
       this.month = params.month;
     }
     this.day = params.day;
+    this.transactionType = params.transaction_type;
     this.accountId = params.account_id;
     this.categoryId = params.category_id;
     this.subCategoryId = params.sub_category_id;
     this.familyMemberId = params.family_member_id;
     this.comment = this.formatComment(params.comment);
-    this.transactionType = params.transaction_type;
     this.source = params.source;
-    this.is_search = params.is_search;
+    this.isSearch = params.is_search;
+    this.noOffBudget = params.no_off_budget;
   }
 
   previousMonth(): void {
@@ -72,6 +74,9 @@ export class TransactionCriteriaService {
     if (usingDate && this.day && this.day != date.day) {
       result = false;
     }
+    if (this.transactionType && this.transactionType != TransactionUtils.type(t)) {
+      result = false;
+    }
     if (this.accountId && this.accountId != t.accountIdFrom && this.accountId != t.accountIdTo) {
       result = false;
     }
@@ -87,7 +92,7 @@ export class TransactionCriteriaService {
     if (this.comment && (!t.comment || !this.formatComment(t.comment).match(this.comment))) {
       result = false;
     }
-    if (this.transactionType && this.transactionType != TransactionUtils.type(t)) {
+    if (this.noOffBudget && t.offBudget) {
       result = false;
     }
     return result;
@@ -109,7 +114,8 @@ export class TransactionCriteriaService {
       comment: this.comment,
       transaction_type: this.transactionType,
       source: this.source,
-      is_search: this.is_search
+      is_search: this.isSearch,
+      no_off_budget: this.noOffBudget
     };
   }
 }

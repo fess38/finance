@@ -12,7 +12,8 @@
     "date": "Date",
     "title": "Finance",
     "category": "Category",
-    "sub_category": "Subcategory"
+    "sub_category": "Subcategory",
+    "no_off_budget": "No off-budget"
   },
   "account_detail": {
     "add": "Add account",
@@ -80,7 +81,8 @@
     "amount_from": "Charge amount",
     "amount_to": "Amount of receipt",
     "family_member": "Family member",
-    "comment": "Comment"
+    "comment": "Comment",
+    "off_budget": "Off budget"
   },
   "transaction_list": {
     "title": "Transactions search",

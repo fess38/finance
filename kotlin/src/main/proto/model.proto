@@ -76,6 +76,7 @@ message Transaction {
     optional int64 sub_category_id = 9;
     optional int64 family_member_id = 10;
     optional string comment = 11;
+    optional bool off_budget = 12 [default = false];
 
     enum Type {
         UNDEFINED = 0;

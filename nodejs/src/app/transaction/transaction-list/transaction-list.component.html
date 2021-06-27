@@ -1,13 +1,13 @@
 <div class="clr-row">
   <div class="clr-col-12 clr-col-sm-9 clr-col-md-6">
-    <form class="clr-form" *ngIf="params().is_search">
+    <form class="clr-form" *ngIf="params().isSearch">
       <div class="clr-form-control clr-row">
         <label>{{'transaction_detail.action' | translate}}</label>
         <div class="clr-control-container">
           <div class="clr-select-wrapper">
             <select name="type"
                     class="clr-select"
-                    (change)="search({'transaction_type' : $event.target['value']})">
+                    (change)="search('transaction_type', $event.target['value'])">
               <option [value]="null">{{'transaction_list.all_actions' | translate}}</option>
               <option *ngFor="let typeWithLabel of typesWithLabels()"
                       [value]="typeWithLabel.type"
@@ -24,7 +24,7 @@
           <div class="clr-select-wrapper">
             <select name="account"
                     class="clr-select"
-                    (change)="search({'account_id' : $event.target['value']})">
+                    (change)="search('account_id', $event.target['value'])">
               <option [value]="null">{{'transaction_list.all_accounts' | translate}}</option>
               <option *ngFor="let account of accounts()"
                       [value]="account.id"
@@ -42,7 +42,7 @@
           <div class="clr-select-wrapper">
             <select name="categoryId"
                     class="clr-select"
-                    (change)="search({'category_id' : $event.target['value']})">
+                    (change)="search('category_id', $event.target['value'])">
               <option [value]="null">{{'transaction_list.all_categories' | translate}}</option>
               <option *ngFor="let category of categories()"
                       [value]="category.id"
@@ -59,7 +59,7 @@
           <div class="clr-select-wrapper">
             <select name="subCategoryId"
                     class="clr-select"
-                    (change)="search({'sub_category_id' : $event.target['value']})">
+                    (change)="search('sub_category_id', $event.target['value'])">
               <option [value]="null">{{'transaction_list.all_sub_categories' | translate}}</option>
               <option *ngFor="let subCategory of subCategories()"
                       [value]="subCategory.id"
@@ -76,7 +76,7 @@
           <div class="clr-select-wrapper">
             <select name="familyMemberId"
                     class="clr-select"
-                    (change)="search({'family_member_id' : $event.target['value']})">
+                    (change)="search('family_member_id', $event.target['value'])">
               <option [value]="null">{{'transaction_list.all_family_members' | translate}}</option>
               <option *ngFor="let familyMember of familyMembers()"
                       [value]="familyMember.id"
@@ -96,7 +96,22 @@
               name="comment"
               class="clr-input"
               [value]="params().comment"
-              (keydown.enter)="search({'comment' : $event.target['value']})"/>
+              (keydown.enter)="search('comment', $event.target['value'])"/>
+          </div>
+        </div>
+      </div>
+      <div class="clr-form-control clr-row">
+        <div class="clr-control-container">
+          <div class="clr-checkbox-wrapper">
+            <input type="checkbox"
+                   id="no-off-budget"
+                   name="isVisible"
+                   class="clr-checkbox"
+                   [checked]="params().noOffBudget == '1'"
+                   (change)="search('no_off_budget', $event.target['checked'])"/>
+            <label for="no-off-budget">
+              {{'common.no_off_budget' | translate}}
+            </label>
           </div>
         </div>
       </div>
@@ -116,7 +131,7 @@
         </td>
         <td class="left">
           <button class="btn btn-link btn-sm" disabled>
-            {{months[0] | monthFormat | date:'MMM yyyy':'':locale()}}
+            {{month | monthFormat | date:'MMM yyyy':'':locale()}}
           </button>
         </td>
         <td class="left" (click)="nextMonth()">
@@ -133,7 +148,8 @@
       <tr *ngFor="let transaction of transactions">
         <td class="left">{{transaction.created | createdFormat | date:'dd'}}</td>
         <td class="left">
-          <span routerLink="/transaction/{{transaction.id}}">
+          <span routerLink="/transaction/{{transaction.id}}"
+                [ngStyle]="{'background-color': transaction.offBudget ? '#79C6E6' : '#FFFFFF'}">
             {{formatCategory(transaction) | translate}}
           </span>
           <clr-tooltip *ngIf="isShowTooltip(transaction)">

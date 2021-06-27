@@ -25,6 +25,7 @@ export class TransactionTemplateDetailComponent implements OnInit, OnDestroy {
     showHeader: false,
     showDate: false,
     showComment: false,
+    showOffBudget: false,
     showButtons: false,
     parentObservable: new Subject<any>()
   };

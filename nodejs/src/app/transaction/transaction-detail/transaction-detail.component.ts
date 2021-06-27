@@ -271,6 +271,7 @@ export class TransactionDetailContext {
   showHeader: boolean = true;
   showDate: boolean = true;
   showComment: boolean = true;
+  showOffBudget: boolean = true;
   showButtons: boolean = true;
   parentObservable: Subject<any>;
 }

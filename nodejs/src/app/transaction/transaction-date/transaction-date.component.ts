@@ -74,6 +74,7 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
     const types: Transaction.Type[] = [Transaction.Type.INCOME, Transaction.Type.EXPENSE];
     this.allTransactions = this.userdata.transactions()
       .filter(x => types.includes(Utils.type(x)))
+      .filter(x => !this.criteria.noOffBudget || !x.offBudget)
       .filter(x => this.criteria.isFit(x));
     this.transactions = this.allTransactions
       .filter(x => {
