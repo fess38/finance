@@ -2,6 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../auth/auth.service';
+import { TransactionCriteriaService } from '../../transaction/transaction-criteria.service';
 import { UserDataService } from '../user-data/user-data.service';
 
 @Component({
@@ -11,6 +12,7 @@ import { UserDataService } from '../user-data/user-data.service';
 export class MainMenuComponent implements OnDestroy {
   constructor(private auth: AuthService,
               private userdata: UserDataService,
+              private criteria: TransactionCriteriaService,
               private router: Router) {
     let hasActiveAttempt = false;
     this.userdata.readCache();
@@ -30,15 +32,27 @@ export class MainMenuComponent implements OnDestroy {
   }
 
   incomes(): void {
-    this.router.navigate(['/transaction'], { queryParams: { transaction_type: 1 } });
+    this.router.navigate(['/transaction'], { queryParams:
+        { transaction_type: 1, year: this.criteria.year, month: this.criteria.month }
+    });
   }
 
   expences(): void {
-    this.router.navigate(['/transaction'], { queryParams: { transaction_type: 2 } });
+    this.router.navigate(['/transaction'], { queryParams:
+        { transaction_type: 2, year: this.criteria.year, month: this.criteria.month }
+    });
   }
 
   transfers(): void {
-    this.router.navigate(['/transaction'], { queryParams: { transaction_type: 3 } });
+    this.router.navigate(['/transaction'], { queryParams:
+        { transaction_type: 3, year: this.criteria.year, month: this.criteria.month }
+    });
+  }
+
+  search(): void {
+    this.router.navigate(['/transaction'], { queryParams:
+        {...this.criteria.toQueryParams(), is_search: 1}
+    });
   }
 
   ngOnDestroy(): void {

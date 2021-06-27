@@ -199,7 +199,6 @@ export class TransactionMonthComponent implements OnInit, OnDestroy {
     this.router.navigate(['/transaction'], {
       queryParams: {
         category_id: category.id,
-        transaction_amount: 1000,
         source: 'report/month',
         year: month.year,
         month: month.month
@@ -211,7 +210,6 @@ export class TransactionMonthComponent implements OnInit, OnDestroy {
     this.router.navigate(['/transaction'], {
       queryParams: {
         sub_category_id: subCategory.id,
-        transaction_amount: 1000,
         source: 'report/month',
         year: month.year,
         month: month.month

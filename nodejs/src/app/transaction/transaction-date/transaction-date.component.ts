@@ -196,7 +196,6 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
     this.router.navigate(['/transaction'], {
       queryParams: {
         category_id: category.id,
-        transaction_amount: 1000,
         source: 'report/date',
         year: this.criteria.year,
         month: this.criteria.month
@@ -208,7 +207,6 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
     this.router.navigate(['/transaction'], {
       queryParams: {
         sub_category_id: subCategory.id,
-        transaction_amount: 1000,
         source: 'report/date',
         year: this.criteria.year,
         month: this.criteria.month
@@ -220,7 +218,6 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
     this.router.navigate(['/transaction'], {
       queryParams: {
         transaction_type: 1,
-        transaction_amount: 1000,
         source: 'report/date',
         year: this.criteria.year,
         month: this.criteria.month
@@ -232,7 +229,6 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
     this.router.navigate(['/transaction'], {
       queryParams: {
         transaction_type: 2,
-        transaction_amount: 1000,
         source: 'report/date',
         year: this.criteria.year,
         month: this.criteria.month
@@ -243,7 +239,6 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
   routeDate(date: Date_): void {
     this.router.navigate(['/transaction'], {
       queryParams: {
-        transaction_amount: 1000,
         source: 'report/date',
         year: this.criteria.year,
         month: this.criteria.month,

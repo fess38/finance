@@ -30,7 +30,7 @@
                   [(ngModel)]="type"
                   (change)="onChangeTransactionType()"
                   [disabled]="!isNewTransaction()">
-            <option *ngFor="let typeWithLabel of typesWithLabels" [value]="typeWithLabel.type">
+            <option *ngFor="let typeWithLabel of typesWithLabels()" [value]="typeWithLabel.type">
               {{typeWithLabel.label | translate}}
             </option>
           </select>
@@ -49,7 +49,7 @@
                     [ngValue]="account.id"
                     [hidden]="account.id == transaction.accountIdTo">
               <span>{{account.name}}</span>
-              <span> ({{currency(account)}})</span>
+              <span> ({{currencySymbol(account)}})</span>
             </option>
           </select>
         </div>
@@ -67,7 +67,7 @@
                     [ngValue]="account.id"
                     [hidden]="account.id == transaction.accountIdFrom">
               <span>{{account.name}}</span>
-              <span> ({{currency(account)}})</span>
+              <span> ({{currencySymbol(account)}})</span>
             </option>
           </select>
         </div>

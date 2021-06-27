@@ -1,63 +1,162 @@
 <div class="clr-row">
   <div class="clr-col-12 clr-col-sm-9 clr-col-md-6">
-    <div *ngFor="let month of months; let i = index">
-      <table class="table table-noborder table-compact">
-        <tr>
-          <td class="left" (click)="previousMonth()">
-            <button [hidden]="manyMonths()" class="btn btn-link btn-sm btn-icon">
-              <clr-icon shape="rewind"></clr-icon>
-            </button>
-            <button [hidden]="i > 0 || !hasSource()"
-                    (click)="return()"
-                    type="button"
-                    class="btn btn-icon btn-link">
-              <clr-icon shape="undo"></clr-icon>
-            </button>
-          </td>
-          <td class="left">
-            <button class="btn btn-link btn-sm" disabled>
-              {{month | monthFormat | date:'MMM yyyy':'':locale()}}
-            </button>
-          </td>
-          <td class="left" (click)="nextMonth()">
-            <button [hidden]="manyMonths()" class="btn btn-link btn-sm btn-icon">
-              <clr-icon shape="fast-forward"></clr-icon>
-            </button>
-          </td>
-        </tr>
-        <tr>
-          <th class="left">{{'common.date' | translate}}</th>
-          <th class="left">{{'common.category' | translate}}</th>
-          <th class="left">{{'transaction_list.amount' | translate}}</th>
-        </tr>
-        <tr *ngFor="let transaction of filterTransactions(month)">
-          <td class="left">{{transaction.created | createdFormat | date:'dd'}}</td>
-          <td class="left">
-            <span routerLink="/transaction/{{transaction.id}}">
-              {{formatCategory(transaction) | translate}}
-            </span>
-            <clr-tooltip *ngIf="isShowTooltip(transaction)">
-              <clr-icon clrTooltipTrigger shape="info-circle" size="16"></clr-icon>
-              <clr-tooltip-content clrPosition="top-right" clrSize="sm" *clrIfOpen>
-                <span>{{formatTooltip(transaction)}}</span>
-              </clr-tooltip-content>
-            </clr-tooltip>
-          </td>
-          <td class="left">
-            <span *ngIf="isIncome(transaction)">
-              {{transaction.amountTo | number:'':locale()}}{{currencySymbol(transaction.accountIdTo)}}
-            </span>
-            <span *ngIf="isExpence(transaction)">
-              {{transaction.amountFrom | number:'':locale()}}{{currencySymbol(transaction.accountIdFrom)}}
-            </span>
-            <span *ngIf="isTransfer(transaction)">
-              {{transaction.amountFrom | number:'':locale()}}{{currencySymbol(transaction.accountIdFrom)}}
-              =>
-              {{transaction.amountTo | number:'':locale()}}{{currencySymbol(transaction.accountIdTo)}}
-            </span>
-          </td>
-        </tr>
-      </table>
-    </div>
+    <form class="clr-form" *ngIf="params().is_search">
+      <div class="clr-form-control clr-row">
+        <label>{{'transaction_detail.action' | translate}}</label>
+        <div class="clr-control-container">
+          <div class="clr-select-wrapper">
+            <select name="type"
+                    class="clr-select"
+                    (change)="search({'transaction_type' : $event.target['value']})">
+              <option [value]="null">{{'transaction_list.all_actions' | translate}}</option>
+              <option *ngFor="let typeWithLabel of typesWithLabels()"
+                      [value]="typeWithLabel.type"
+                      [selected]="typeWithLabel.type == params().transactionType">
+                {{typeWithLabel.label | translate}}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="clr-form-control clr-row">
+        <label>{{'transaction_detail.account' | translate}}</label>
+        <div class="clr-control-container">
+          <div class="clr-select-wrapper">
+            <select name="account"
+                    class="clr-select"
+                    (change)="search({'account_id' : $event.target['value']})">
+              <option [value]="null">{{'transaction_list.all_accounts' | translate}}</option>
+              <option *ngFor="let account of accounts()"
+                      [value]="account.id"
+                      [selected]="account.id == params().accountId">
+                <span>{{account.name}}</span>
+                <span> ({{currencySymbol(account)}})</span>
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="clr-form-control clr-row">
+        <label>{{'common.category' | translate}}</label>
+        <div class="clr-control-container">
+          <div class="clr-select-wrapper">
+            <select name="categoryId"
+                    class="clr-select"
+                    (change)="search({'category_id' : $event.target['value']})">
+              <option [value]="null">{{'transaction_list.all_categories' | translate}}</option>
+              <option *ngFor="let category of categories()"
+                      [value]="category.id"
+                      [selected]="category.id == params().categoryId">
+                <span>{{category.name}}</span>
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="clr-form-control clr-row">
+        <label>{{'common.sub_category' | translate}}</label>
+        <div class="clr-control-container">
+          <div class="clr-select-wrapper">
+            <select name="subCategoryId"
+                    class="clr-select"
+                    (change)="search({'sub_category_id' : $event.target['value']})">
+              <option [value]="null">{{'transaction_list.all_sub_categories' | translate}}</option>
+              <option *ngFor="let subCategory of subCategories()"
+                      [value]="subCategory.id"
+                      [selected]="subCategory.id == params().subCategoryId">
+                <span>{{subCategory.name}}</span>
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="clr-form-control clr-row">
+        <label>{{'transaction_detail.family_member' | translate}}</label>
+        <div class="clr-control-container">
+          <div class="clr-select-wrapper">
+            <select name="familyMemberId"
+                    class="clr-select"
+                    (change)="search({'family_member_id' : $event.target['value']})">
+              <option [value]="null">{{'transaction_list.all_family_members' | translate}}</option>
+              <option *ngFor="let familyMember of familyMembers()"
+                      [value]="familyMember.id"
+                      [selected]="familyMember.id == params().familyMemberId">
+                <span>{{familyMember.name}}</span>
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="clr-form-control clr-row">
+        <label>{{'transaction_detail.comment' | translate}}</label>
+        <div class="clr-control-container">
+          <div class="clr-input-wrapper">
+            <input
+              type="text"
+              name="comment"
+              class="clr-input"
+              [value]="params().comment"
+              (keydown.enter)="search({'comment' : $event.target['value']})"/>
+          </div>
+        </div>
+      </div>
+    </form>
+    <table class="table table-noborder table-compact">
+      <tr>
+        <td class="left" (click)="previousMonth()">
+          <button class="btn btn-link btn-sm btn-icon">
+            <clr-icon shape="rewind"></clr-icon>
+          </button>
+          <button [hidden]="!hasSource()"
+                  (click)="return()"
+                  type="button"
+                  class="btn btn-icon btn-link">
+            <clr-icon shape="undo"></clr-icon>
+          </button>
+        </td>
+        <td class="left">
+          <button class="btn btn-link btn-sm" disabled>
+            {{months[0] | monthFormat | date:'MMM yyyy':'':locale()}}
+          </button>
+        </td>
+        <td class="left" (click)="nextMonth()">
+          <button class="btn btn-link btn-sm btn-icon">
+            <clr-icon shape="fast-forward"></clr-icon>
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <th class="left">{{'common.date' | translate}}</th>
+        <th class="left">{{'common.category' | translate}}</th>
+        <th class="left">{{'transaction_list.amount' | translate}}</th>
+      </tr>
+      <tr *ngFor="let transaction of transactions">
+        <td class="left">{{transaction.created | createdFormat | date:'dd'}}</td>
+        <td class="left">
+          <span routerLink="/transaction/{{transaction.id}}">
+            {{formatCategory(transaction) | translate}}
+          </span>
+          <clr-tooltip *ngIf="isShowTooltip(transaction)">
+            <clr-icon clrTooltipTrigger shape="info-circle" size="16"></clr-icon>
+            <clr-tooltip-content clrPosition="top-right" clrSize="sm" *clrIfOpen>
+              <span>{{formatTooltip(transaction)}}</span>
+            </clr-tooltip-content>
+          </clr-tooltip>
+        </td>
+        <td class="left">
+          <span *ngIf="isIncome(transaction)">
+            {{transaction.amountTo | number:'':locale()}}{{currencySymbol(transaction.accountIdTo)}}
+          </span>
+          <span *ngIf="isExpence(transaction)">
+            {{transaction.amountFrom | number:'':locale()}}{{currencySymbol(transaction.accountIdFrom)}}
+          </span>
+          <span *ngIf="isTransfer(transaction)">
+            {{transaction.amountFrom | number:'':locale()}}{{currencySymbol(transaction.accountIdFrom)}}
+            =>
+            {{transaction.amountTo | number:'':locale()}}{{currencySymbol(transaction.accountIdTo)}}
+          </span>
+        </td>
+      </tr>
+    </table>
   </div>
 </div>

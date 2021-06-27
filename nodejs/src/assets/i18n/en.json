@@ -50,6 +50,7 @@
     "transfers": "Transfers",
     "templates": "Templates",
     "future": "Planned",
+    "search": "Search",
     "reports": "Reports",
     "date_report": "By days",
     "month_report": "By months",
@@ -82,6 +83,12 @@
     "comment": "Comment"
   },
   "transaction_list": {
+    "title": "Transactions search",
+    "all_actions": "All transaction types",
+    "all_accounts": "All accounts",
+    "all_categories": "All categories",
+    "all_sub_categories": "All subcategories",
+    "all_family_members": "All family members",
     "amount": "Amount"
   },
   "transaction_template_detail": {

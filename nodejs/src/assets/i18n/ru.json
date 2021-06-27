@@ -50,6 +50,7 @@
     "transfers": "Переводы",
     "templates": "Шаблоны",
     "future": "Запланированные",
+    "search": "Поиск",
     "reports": "Отчеты",
     "date_report": "По дням ",
     "month_report": "По месяцам",
@@ -82,6 +83,12 @@
     "comment": "Комментарий"
   },
   "transaction_list": {
+    "title": "Поиск транзакций",
+    "all_actions": "Все операция",
+    "all_accounts": "Все счета",
+    "all_categories": "Все категории",
+    "all_sub_categories": "Все подкатегории",
+    "all_family_members": "Все члены семьи",
     "amount": "Сумма"
   },
   "transaction_template_detail": {

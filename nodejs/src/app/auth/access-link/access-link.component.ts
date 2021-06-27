@@ -20,7 +20,7 @@ export class AccessLinkComponent implements OnInit, OnDestroy {
       if (token == 'create_link') {
         this.link = '/access_link/' + this.auth.token();
       } else {
-        setTimeout(() => this.router.navigate(['/']), 5000);
+        setTimeout(() => this.router.navigate(['/']), 15000);
       }
     } else {
       this.auth.validateToken(token);

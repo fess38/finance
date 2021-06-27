@@ -3,14 +3,20 @@ import { UserDataService } from '../core/user-data/user-data.service';
 import Type = Transaction.Type;
 
 export class TransactionUtils {
-  static type(transaction: Transaction): Transaction.Type {
-    let type: Transaction.Type = Transaction.Type.UNDEFINED;
+  static typesWithLabels = [
+    { type: Type.INCOME, label: 'common.income' },
+    { type: Type.EXPENSE, label: 'common.expense' },
+    { type: Type.TRANSFER, label: 'transaction_detail.transfer' }
+  ];
+
+  static type(transaction: Transaction): Type {
+    let type = Type.UNDEFINED;
     if (transaction.accountIdFrom == -1 && transaction.accountIdTo > 0) {
-      type = Transaction.Type.INCOME;
+      type = Type.INCOME;
     } else if (transaction.accountIdFrom > 0 && transaction.accountIdTo == -1) {
-      type = Transaction.Type.EXPENSE;
+      type = Type.EXPENSE;
     } else if (transaction.accountIdFrom > 0 && transaction.accountIdTo > 0) {
-      type = Transaction.Type.TRANSFER;
+      type = Type.TRANSFER;
     }
     return type;
   }
@@ -52,11 +58,11 @@ export class TransactionUtils {
   }
 
   static incomeTransactions(transactions: Transaction[]): Transaction[] {
-    return transactions.filter(x => TransactionUtils.type(x) == Transaction.Type.INCOME);
+    return transactions.filter(x => TransactionUtils.type(x) == Type.INCOME);
   }
 
   static expenseTransactions(transactions: Transaction[]): Transaction[] {
-    return transactions.filter(x => TransactionUtils.type(x) == Transaction.Type.EXPENSE);
+    return transactions.filter(x => TransactionUtils.type(x) == Type.EXPENSE);
   }
 
   static categorySummaries(transactions: Transaction[], income: number,

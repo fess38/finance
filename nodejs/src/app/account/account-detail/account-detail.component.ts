@@ -118,8 +118,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     this.router.navigate(['/transaction'], {
       queryParams: {
         account_id: account.id,
-        transaction_amount: account.transactionAmount,
-        source: 'account'
+        source: `account/${account.id}`
       }
     });
   }

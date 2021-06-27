@@ -87,8 +87,7 @@ export class CategoryDetailComponent implements OnInit, OnDestroy {
     this.router.navigate(['/transaction'], {
       queryParams: {
         category_id: category.id,
-        transaction_amount: category.transactionAmount,
-        source: 'category'
+        source: `category/${category.id}`
       }
     });
   }

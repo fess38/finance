@@ -4,7 +4,6 @@ import { DateUtils } from '../utils/date-utils';
 import { TransactionUtils } from './transaction-utils';
 
 export class TransactionCriteriaService {
-  readonly amountThreshold = 250;
   year: number = DateUtils.currentYear();
   month: number = DateUtils.currentMonth();
   day: number;
@@ -12,9 +11,10 @@ export class TransactionCriteriaService {
   categoryId: number;
   subCategoryId: number;
   familyMemberId: number;
-  transactionAmount: number;
+  comment: string = '';
   transactionType: number;
-  source: string;
+  source: string = '';
+  is_search: number;
 
   update(params: Params): void {
     if (params.year) {
@@ -28,9 +28,10 @@ export class TransactionCriteriaService {
     this.categoryId = params.category_id;
     this.subCategoryId = params.sub_category_id;
     this.familyMemberId = params.family_member_id;
-    this.transactionAmount = params.transaction_amount;
+    this.comment = this.formatComment(params.comment);
     this.transactionType = params.transaction_type;
     this.source = params.source;
+    this.is_search = params.is_search;
   }
 
   previousMonth(): void {
@@ -59,16 +60,16 @@ export class TransactionCriteriaService {
     this.year++;
   }
 
-  isFit(t: Transaction): boolean {
+  isFit(t: Transaction, usingDate: boolean = true): boolean {
     let result = true;
     const date: Date_ = DateUtils.parseDate_(t.created);
-    if (this.filterByDate() && this.year && this.year != date.year) {
+    if (usingDate && this.year && this.year != date.year) {
       result = false;
     }
-    if (this.filterByDate() && this.month && this.month != date.month) {
+    if (usingDate && this.month && this.month != date.month) {
       result = false;
     }
-    if (this.filterByDate() && this.day && this.day != date.day) {
+    if (usingDate && this.day && this.day != date.day) {
       result = false;
     }
     if (this.accountId && this.accountId != t.accountIdFrom && this.accountId != t.accountIdTo) {
@@ -83,15 +84,17 @@ export class TransactionCriteriaService {
     if (this.familyMemberId && this.familyMemberId != t.familyMemberId) {
       result = false;
     }
+    if (this.comment && (!t.comment || !this.formatComment(t.comment).match(this.comment))) {
+      result = false;
+    }
     if (this.transactionType && this.transactionType != TransactionUtils.type(t)) {
       result = false;
     }
     return result;
   }
 
-  private filterByDate(): boolean {
-    return (this.accountId == null && this.categoryId == null && this.subCategoryId == null
-      && this.familyMemberId == null) || (this.transactionAmount || 0) > this.amountThreshold;
+  private formatComment(comment: string): string {
+    return (comment ?? '').toLowerCase().trim();
   }
 
   toQueryParams(): any {
@@ -103,8 +106,10 @@ export class TransactionCriteriaService {
       category_id: this.categoryId,
       sub_category_id: this.subCategoryId,
       family_member_id: this.familyMemberId,
-      transaction_amount: this.transactionAmount,
-      transaction_type: this.transactionType
+      comment: this.comment,
+      transaction_type: this.transactionType,
+      source: this.source,
+      is_search: this.is_search
     };
   }
 }

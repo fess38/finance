@@ -24,11 +24,6 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   @Input() transaction = new Transaction();
   @Input() context = new TransactionDetailContext();
   @Output() private notify = new EventEmitter<boolean>();
-  typesWithLabels = [
-    { type: Transaction.Type.INCOME, label: 'common.income' },
-    { type: Transaction.Type.EXPENSE, label: 'common.expense' },
-    { type: Transaction.Type.TRANSFER, label: 'transaction_detail.transfer' }
-  ];
   type: Transaction.Type = Transaction.Type.EXPENSE;
 
   ngOnInit(): void {
@@ -98,6 +93,10 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
 
   isReadOnly(): boolean {
     return this.userdata.isReadOnly();
+  }
+
+  typesWithLabels(): any[] {
+    return TransactionUtils.typesWithLabels;
   }
 
   update(transaction: Transaction): void {
@@ -185,7 +184,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
       .sort((a, b) => a.name < b.name ? -1 : 1);
   }
 
-  currency(account: Account): string {
+  currencySymbol(account: Account): string {
     return this.userdata.currencies().filter(x => x.id == account.currencyId)[0].symbol;
   }
 
