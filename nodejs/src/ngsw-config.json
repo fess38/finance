@@ -7,21 +7,29 @@
       "updateMode": "prefetch",
       "resources": {
         "files": [
-          "/assets/favicon.ico",
-          "/manifest.json",
           "/*.css",
-          "/*.js"
+          "/*.html",
+          "/*.js",
+          "/*.json"
+        ],
+        "urls": [
+          "https://apis.google.com/js/platform.js"
         ]
       }
     },
     {
       "name": "assets",
-      "installMode": "lazy",
+      "installMode": "prefetch",
       "updateMode": "prefetch",
       "resources": {
         "files": [
+          "/assets/favicon.ico",
+          "/assets/favicon-192.png",
+          "/assets/favicon-512.png",
+          "/assets/i18n/en.json",
+          "/assets/i18n/ru.json",
           "/assets/**",
-          "/*.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani)"
+          "/**.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani)"
         ]
       }
     }

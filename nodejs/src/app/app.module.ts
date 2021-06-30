@@ -29,7 +29,7 @@ registerLocaleData(localeEn, 'en');
     AppComponent
   ],
   imports: [
-    ServiceWorkerModule.register('/ngsw-worker.js', {
+    ServiceWorkerModule.register('./ngsw-worker.js', {
       enabled: environment.production,
       registrationStrategy: 'registerImmediately'
   }),
