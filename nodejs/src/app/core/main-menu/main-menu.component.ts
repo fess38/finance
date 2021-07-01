@@ -64,6 +64,10 @@ export class MainMenuComponent implements OnDestroy {
     this.router.navigate([path], { queryParams: { no_off_budget: 1 } });
   }
 
+  isOnline(): boolean {
+    return window.navigator.onLine ?? false;
+  }
+
   ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();

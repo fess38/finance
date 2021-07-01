@@ -8,7 +8,7 @@
     "start": "node server.js",
     "test": "ng test --browsers ChromeHeadless",
     "build-proto": "rm src/app/core/model/model.* && /bin/bash build_proto.sh",
-    "install_force": "rm -rf node_modules package-lock.json && npm install --force"
+    "install_force": "rm -rf package-lock.json && npm install --force"
   },
   "engines": {
     "node": "^14.17.1",
