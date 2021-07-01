@@ -120,13 +120,13 @@
       <tr>
         <td class="left" (click)="previousMonth()">
           <button class="btn btn-link btn-sm btn-icon">
-            <clr-icon shape="rewind"></clr-icon>
+            <cds-icon shape="rewind"></cds-icon>
           </button>
           <button [hidden]="!hasSource()"
                   (click)="return()"
                   type="button"
                   class="btn btn-icon btn-link">
-            <clr-icon shape="undo"></clr-icon>
+            <cds-icon shape="undo"></cds-icon>
           </button>
         </td>
         <td class="left">
@@ -136,7 +136,7 @@
         </td>
         <td class="left" (click)="nextMonth()">
           <button class="btn btn-link btn-sm btn-icon">
-            <clr-icon shape="fast-forward"></clr-icon>
+            <cds-icon shape="fast-forward"></cds-icon>
           </button>
         </td>
       </tr>
@@ -153,7 +153,7 @@
             {{formatCategory(transaction) | translate}}
           </span>
           <clr-tooltip *ngIf="isShowTooltip(transaction)">
-            <clr-icon clrTooltipTrigger shape="info-circle" size="16"></clr-icon>
+            <cds-icon clrTooltipTrigger shape="info-circle"></cds-icon>
             <clr-tooltip-content clrPosition="top-right" clrSize="sm" *clrIfOpen>
               <span>{{formatTooltip(transaction)}}</span>
             </clr-tooltip-content>

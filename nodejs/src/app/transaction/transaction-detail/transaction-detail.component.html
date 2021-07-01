@@ -3,7 +3,7 @@
     <div class="clr-form-control clr-row" [hidden]="!context.showHeader">
       <label>
         <button type="button" class="btn btn-icon btn-link" (click)="viewTransactions()">
-          <clr-icon shape="undo"></clr-icon>
+          <cds-icon shape="undo"></cds-icon>
         </button>
         <span [hidden]="!isNewTransaction()">
           {{'transaction_detail.add' | translate}}

@@ -4,7 +4,7 @@
       <tr>
         <th class="left" routerLink="/family_member/new">
           <span>{{'family_member_list.family_member' | translate}} </span>
-          <clr-icon shape="plus-circle"></clr-icon>
+          <cds-icon shape="plus-circle"></cds-icon>
         </th>
       </tr>
       <tr *ngFor="let familyMember of familyMembers()" routerLink="/family_member/{{familyMember.id}}">
