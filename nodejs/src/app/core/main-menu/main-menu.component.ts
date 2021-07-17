@@ -21,12 +21,14 @@ export class MainMenuComponent implements OnDestroy {
       () => {
         hasActiveAttempt = true;
         userdata.refresh(() => hasActiveAttempt = false);
+        this.isOnline = true;
       },
       () => hasActiveAttempt
     );
   }
 
   private readonly subscription: Subscription;
+  isOnline = false;
 
   signout(): void {
     this.auth.signOut();
@@ -34,8 +36,10 @@ export class MainMenuComponent implements OnDestroy {
 
   incomes(): void {
     this.router.navigate(['/transaction'], {
-      queryParams:
-        { transaction_type: Transaction.Type.INCOME, year: this.criteria.year, month: this.criteria.month }
+      queryParams: {
+        transaction_type: Transaction.Type.INCOME,
+        year: this.criteria.year, month: this.criteria.month
+      }
     });
   }
 
@@ -58,10 +62,6 @@ export class MainMenuComponent implements OnDestroy {
       queryParams:
         { ...this.criteria.toQueryParams(), is_search: 1 }
     });
-  }
-
-  isOnline(): boolean {
-    return window.navigator.onLine ?? false;
   }
 
   ngOnDestroy(): void {
