@@ -108,6 +108,7 @@ message Settings {
     optional int64 id = 1 [default = 0];
     optional Language language = 2 [default = RU];
     optional int64 currency_id = 3 [default = 1];
+    optional bool no_off_budget = 4 [default = false];
 
     enum Language {
         RU = 0;

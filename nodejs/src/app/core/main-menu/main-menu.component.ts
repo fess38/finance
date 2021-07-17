@@ -60,10 +60,6 @@ export class MainMenuComponent implements OnDestroy {
     });
   }
 
-  reportNoOffBudget(path: string): void {
-    this.router.navigate([path], { queryParams: { no_off_budget: 1 } });
-  }
-
   isOnline(): boolean {
     return window.navigator.onLine ?? false;
   }

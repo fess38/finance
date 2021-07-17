@@ -74,7 +74,7 @@ export class TransactionMonthComponent implements OnInit, OnDestroy {
     const types: Transaction.Type[] = [Transaction.Type.INCOME, Transaction.Type.EXPENSE];
     this.allTransactions = this.userdata.transactions()
       .filter(x => types.includes(Utils.type(x)))
-      .filter(x => !this.criteria.noOffBudget || !x.offBudget)
+      .filter(x => !this.userdata.settings().noOffBudget || !x.offBudget)
       .filter(x => DateUtils.parseDate_(x.created).year == this.criteria.year);
     this.transactions = this.allTransactions.filter(x => {
       const accountId: number = Math.max(Number(x.accountIdFrom), Number(x.accountIdTo));

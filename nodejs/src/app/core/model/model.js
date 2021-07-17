@@ -2931,6 +2931,7 @@ export const Settings = $root.Settings = (() => {
      * @property {number|null} [id] Settings id
      * @property {Settings.Language|null} [language] Settings language
      * @property {number|null} [currencyId] Settings currencyId
+     * @property {boolean|null} [noOffBudget] Settings noOffBudget
      */
 
     /**
@@ -2973,6 +2974,14 @@ export const Settings = $root.Settings = (() => {
     Settings.prototype.currencyId = $util.Long ? $util.Long.fromBits(1,0,false) : 1;
 
     /**
+     * Settings noOffBudget.
+     * @member {boolean} noOffBudget
+     * @memberof Settings
+     * @instance
+     */
+    Settings.prototype.noOffBudget = false;
+
+    /**
      * Creates a new Settings instance using the specified properties.
      * @function create
      * @memberof Settings
@@ -3002,6 +3011,8 @@ export const Settings = $root.Settings = (() => {
             writer.uint32(/* id 2, wireType 0 =*/16).int32(message.language);
         if (message.currencyId != null && Object.hasOwnProperty.call(message, "currencyId"))
             writer.uint32(/* id 3, wireType 0 =*/24).int64(message.currencyId);
+        if (message.noOffBudget != null && Object.hasOwnProperty.call(message, "noOffBudget"))
+            writer.uint32(/* id 4, wireType 0 =*/32).bool(message.noOffBudget);
         return writer;
     };
 
@@ -3031,6 +3042,9 @@ export const Settings = $root.Settings = (() => {
                 break;
             case 3:
                 message.currencyId = reader.int64();
+                break;
+            case 4:
+                message.noOffBudget = reader.bool();
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -3080,6 +3094,8 @@ export const Settings = $root.Settings = (() => {
                 message.currencyId = object.currencyId;
             else if (typeof object.currencyId === "object")
                 message.currencyId = new $util.LongBits(object.currencyId.low >>> 0, object.currencyId.high >>> 0).toNumber();
+        if (object.noOffBudget != null)
+            message.noOffBudget = Boolean(object.noOffBudget);
         return message;
     };
 
@@ -3108,6 +3124,7 @@ export const Settings = $root.Settings = (() => {
                 object.currencyId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.currencyId = options.longs === String ? "1" : 1;
+            object.noOffBudget = false;
         }
         if (message.id != null && message.hasOwnProperty("id"))
             if (typeof message.id === "number")
@@ -3121,6 +3138,8 @@ export const Settings = $root.Settings = (() => {
                 object.currencyId = options.longs === String ? String(message.currencyId) : message.currencyId;
             else
                 object.currencyId = options.longs === String ? $util.Long.prototype.toString.call(message.currencyId) : options.longs === Number ? new $util.LongBits(message.currencyId.low >>> 0, message.currencyId.high >>> 0).toNumber() : message.currencyId;
+        if (message.noOffBudget != null && message.hasOwnProperty("noOffBudget"))
+            object.noOffBudget = message.noOffBudget;
         return object;
     };
 

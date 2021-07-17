@@ -64,7 +64,8 @@
   },
   "settings": {
     "language": "Язык",
-    "currency": "Валюта"
+    "currency": "Валюта",
+    "no_off_budget": "Скрывать транзакции вне бюджета"
   },
   "sub_category_detail": {
     "add": "Добавление подкатегории",

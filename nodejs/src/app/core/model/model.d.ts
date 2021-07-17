@@ -988,6 +988,9 @@ export interface ISettings {
 
     /** Settings currencyId */
     currencyId?: (number|null);
+
+    /** Settings noOffBudget */
+    noOffBudget?: (boolean|null);
 }
 
 /** Represents a Settings. */
@@ -1007,6 +1010,9 @@ export class Settings implements ISettings {
 
     /** Settings currencyId. */
     public currencyId: number;
+
+    /** Settings noOffBudget. */
+    public noOffBudget: boolean;
 
     /**
      * Creates a new Settings instance using the specified properties.

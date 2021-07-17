@@ -64,7 +64,8 @@
   },
   "settings": {
     "language": "Language",
-    "currency": "Currency"
+    "currency": "Currency",
+    "no_off_budget": "Hide off budget transactions"
   },
   "sub_category_detail": {
     "add": "Add subcategory",

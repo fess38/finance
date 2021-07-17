@@ -34,6 +34,20 @@
       </div>
     </div>
     <div class="clr-form-control clr-row">
+      <div class="clr-control-container">
+        <div class="clr-checkbox-wrapper">
+          <input type="checkbox"
+                 id="transaction-off-budget"
+                 name="noOffBudget"
+                 class="clr-checkbox"
+                 [(ngModel)]="settings.noOffBudget"/>
+          <label for="transaction-off-budget">
+            {{'settings.no_off_budget' | translate}}
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row">
       <button class="btn btn-primary btn-sm btn-block"
               (click)="updateSettings()"
               [disabled]="this.isReadOnly()">

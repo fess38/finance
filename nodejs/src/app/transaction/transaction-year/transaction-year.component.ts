@@ -16,7 +16,6 @@ export class TransactionYearComponent implements OnInit, OnDestroy {
               private router: Router) { }
 
   private subscription: Subscription;
-  private noOffBudget = false;
   private allTransactions: Transaction[] = [];
   private transactions: Transaction[] = [];
   private incomeTransactions: Transaction[] = [];
@@ -39,7 +38,6 @@ export class TransactionYearComponent implements OnInit, OnDestroy {
   expense: number;
 
   ngOnInit() {
-    this.noOffBudget = this.route.snapshot.queryParams.no_off_budget == '1';
     this.subscription = this.userdata.subscribeOnInit(() => this.onInitCallback());
   }
 
@@ -71,7 +69,7 @@ export class TransactionYearComponent implements OnInit, OnDestroy {
     const types: Transaction.Type[] = [Transaction.Type.INCOME, Transaction.Type.EXPENSE];
     this.allTransactions = this.userdata.transactions()
       .filter(x => types.includes(Utils.type(x)))
-      .filter(x => !this.noOffBudget || !x.offBudget);
+      .filter(x => !this.userdata.settings().noOffBudget || !x.offBudget)
     this.transactions = this.allTransactions
       .filter(x => {
         const accountId: number = Math.max(Number(x.accountIdFrom), Number(x.accountIdTo));
