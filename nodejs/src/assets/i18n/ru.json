@@ -63,6 +63,7 @@
     "family_member": "Члены семьи"
   },
   "settings": {
+    "export_data": "Выгрузка данных",
     "language": "Язык",
     "currency": "Валюта",
     "no_off_budget": "Скрывать транзакции вне бюджета"

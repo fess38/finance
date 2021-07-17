@@ -63,6 +63,7 @@
     "family_member": "Family members"
   },
   "settings": {
+    "export_data": "Export data",
     "language": "Language",
     "currency": "Currency",
     "no_off_budget": "Hide off budget transactions"

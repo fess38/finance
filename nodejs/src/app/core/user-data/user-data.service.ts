@@ -73,6 +73,10 @@ export class UserDataService {
     });
   }
 
+  jsonDump(): any {
+    return Dump.toObject(this.dump);
+  }
+
   locale(): string {
     return this.language().toLowerCase();
   }
