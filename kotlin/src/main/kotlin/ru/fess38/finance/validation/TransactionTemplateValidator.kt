@@ -2,8 +2,8 @@ package ru.fess38.finance.validation
 
 import ru.fess38.finance.core.Model.TransactionTemplate
 
-class TransactionTemplateValidator: MessageValidator<TransactionTemplate> {
-  override fun validate(value: TransactionTemplate): ValidatorResponse {
+class TransactionTemplateValidator : MessageValidator<TransactionTemplate> {
+  override fun validate(value: TransactionTemplate, isCreate: Boolean): ValidatorResponse {
     val errors = mutableListOf<String>()
 
     val hasInterval = value.interval > 0

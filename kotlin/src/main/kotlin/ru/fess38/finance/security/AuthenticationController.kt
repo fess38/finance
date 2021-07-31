@@ -8,11 +8,7 @@ import org.apache.commons.text.CharacterPredicates
 import org.apache.commons.text.RandomStringGenerator
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.BadCredentialsException
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import ru.fess38.finance.core.Model.AccessToken
 import ru.fess38.finance.core.Model.RefreshToken
 import ru.fess38.finance.core.Model.RefreshToken.AuthType
@@ -20,9 +16,9 @@ import java.time.Duration
 
 @RestController
 @RequestMapping(
-    path = ["/api"],
-    produces = ["application/x-protobuf"],
-    consumes = ["application/x-protobuf"]
+  path = ["/api"],
+  produces = ["application/x-protobuf"],
+  consumes = ["application/x-protobuf"]
 )
 class AuthenticationController {
   @Autowired
@@ -35,9 +31,9 @@ class AuthenticationController {
   lateinit var userService: UserService
 
   val tokenGenerator = RandomStringGenerator.Builder()
-      .filteredBy(CharacterPredicates.LETTERS, CharacterPredicates.DIGITS)
-      .withinRange(48, 122)
-      .build()!!
+    .filteredBy(CharacterPredicates.LETTERS, CharacterPredicates.DIGITS)
+    .withinRange(48, 122)
+    .build()!!
 
   @GetMapping("/auth/google-client-id")
   fun googleclientId(): StringValue {
@@ -50,8 +46,8 @@ class AuthenticationController {
     val token = refreshToken.value
     when (authType) {
       AuthType.GOOGLE -> {
-        val googleIdToken = googleIdTokenVerifier.verify(token) ?:
-            throw BadCredentialsException("Invalid token: $token")
+        val googleIdToken =
+          googleIdTokenVerifier.verify(token) ?: throw BadCredentialsException("Invalid token: $token")
         val googleId = googleIdToken.payload.subject
         val accessToken = tokenGenerator.generate(50)
         val expired = System.currentTimeMillis() + Duration.ofDays(90).toMillis()

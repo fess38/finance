@@ -10,10 +10,10 @@ internal class FamilyMemberValidatorTest {
   @Test
   fun valid() {
     val familyMember = FamilyMember.newBuilder()
-        .setName("name")
-        .build()
+      .setName("name")
+      .build()
     val expected = ValidatorResponse()
-    val actual = validator.validate(familyMember)
+    val actual = validator.validate(familyMember, true)
     Assert.assertEquals(expected, actual)
   }
 }

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Currency, Settings } from '../model/model';
+import { Currency, Dump, Settings } from '../model/model';
 import { UserDataService } from '../user-data/user-data.service';
 import Language = Settings.Language;
 
@@ -19,6 +19,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   settings = new Settings();
   languages: any[] = [{ code: Language.RU, value: 'RU' }, { code: Language.EN, value: 'EN' }];
   exportDataUrl: SafeUrl;
+  isDataImport = false;
 
   ngOnInit(): void {
     this.subscription = this.userdata.subscribeOnInit(() => {
@@ -47,10 +48,29 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   updateSettings() {
-    this.userdata.updateSettings(this.settings)
+    this.userdata.updateSettings(this.settings).catch(error => {
+      console.error(error.message);
+      this.router.navigate(['/error']);
+    });
+  }
+
+  importData(file: File) {
+    file.text()
+      .then(data => {
+        this.isDataImport = true;
+        this.userdata.saveDump(Dump.fromObject(JSON.parse(data))).then(() => this.isDataImport = false)
+      })
       .catch(error => {
+        this.isDataImport = false;
         console.error(error.message);
         this.router.navigate(['/error']);
       });
+  }
+
+  deleteData() {
+    this.userdata.deleteDump().catch(error => {
+      console.error(error.message);
+      this.router.navigate(['/error']);
+    });
   }
 }

@@ -45,6 +45,7 @@ class AppConfiguration {
 
   @Bean
   fun sessionFactory(dataSource: DataSource, config: Config): SessionFactory {
+    dataSource.connection.createStatement().execute("CREATE SCHEMA IF NOT EXISTS model;")
     val factoryBean = LocalSessionFactoryBean()
     factoryBean.setDataSource(dataSource)
     factoryBean.hibernateProperties = config.getConfig("hibernate").toProperties()
@@ -73,9 +74,9 @@ class AppConfiguration {
 
   @Bean
   fun googleIdTokenVerifier(config: Config) = GoogleIdTokenVerifier
-      .Builder(GoogleNetHttpTransport.newTrustedTransport(), GsonFactory.getDefaultInstance())
-      .setAudience(listOf(config.getString("security.google.clientId")))
-      .build()!!
+    .Builder(GoogleNetHttpTransport.newTrustedTransport(), GsonFactory.getDefaultInstance())
+    .setAudience(listOf(config.getString("security.google.clientId")))
+    .build()!!
 
   @Bean
   fun messageValidator(messageService: MessageService): MessageValidator<Message> {
@@ -88,3 +89,5 @@ fun Config.toProperties(): Properties {
   this.entrySet().forEach {properties[it.key] = it.value.unwrapped()}
   return properties
 }
+
+const val IDSEQ_ALLOCATION_SIZE = 100

@@ -9,12 +9,202 @@ const $Reader = $protobuf.Reader, $Writer = $protobuf.Writer, $util = $protobuf.
 // Exported root namespace
 const $root = $protobuf.roots["default"] || ($protobuf.roots["default"] = {});
 
+export const IdHolder = $root.IdHolder = (() => {
+
+    /**
+     * Properties of an IdHolder.
+     * @exports IIdHolder
+     * @interface IIdHolder
+     * @property {number|null} [from] IdHolder from
+     * @property {number|null} [to] IdHolder to
+     */
+
+    /**
+     * Constructs a new IdHolder.
+     * @exports IdHolder
+     * @classdesc Represents an IdHolder.
+     * @implements IIdHolder
+     * @constructor
+     * @param {IIdHolder=} [properties] Properties to set
+     */
+    function IdHolder(properties) {
+        if (properties)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * IdHolder from.
+     * @member {number} from
+     * @memberof IdHolder
+     * @instance
+     */
+    IdHolder.prototype.from = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
+     * IdHolder to.
+     * @member {number} to
+     * @memberof IdHolder
+     * @instance
+     */
+    IdHolder.prototype.to = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
+     * Creates a new IdHolder instance using the specified properties.
+     * @function create
+     * @memberof IdHolder
+     * @static
+     * @param {IIdHolder=} [properties] Properties to set
+     * @returns {IdHolder} IdHolder instance
+     */
+    IdHolder.create = function create(properties) {
+        return new IdHolder(properties);
+    };
+
+    /**
+     * Encodes the specified IdHolder message. Does not implicitly {@link IdHolder.verify|verify} messages.
+     * @function encode
+     * @memberof IdHolder
+     * @static
+     * @param {IIdHolder} message IdHolder message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    IdHolder.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.from != null && Object.hasOwnProperty.call(message, "from"))
+            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.from);
+        if (message.to != null && Object.hasOwnProperty.call(message, "to"))
+            writer.uint32(/* id 2, wireType 0 =*/16).int64(message.to);
+        return writer;
+    };
+
+    /**
+     * Decodes an IdHolder message from the specified reader or buffer.
+     * @function decode
+     * @memberof IdHolder
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {IdHolder} IdHolder
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    IdHolder.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.IdHolder();
+        while (reader.pos < end) {
+            let tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                message.from = reader.int64();
+                break;
+            case 2:
+                message.to = reader.int64();
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Creates an IdHolder message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof IdHolder
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {IdHolder} IdHolder
+     */
+    IdHolder.fromObject = function fromObject(object) {
+        if (object instanceof $root.IdHolder)
+            return object;
+        let message = new $root.IdHolder();
+        if (object.from != null)
+            if ($util.Long)
+                (message.from = $util.Long.fromValue(object.from)).unsigned = false;
+            else if (typeof object.from === "string")
+                message.from = parseInt(object.from, 10);
+            else if (typeof object.from === "number")
+                message.from = object.from;
+            else if (typeof object.from === "object")
+                message.from = new $util.LongBits(object.from.low >>> 0, object.from.high >>> 0).toNumber();
+        if (object.to != null)
+            if ($util.Long)
+                (message.to = $util.Long.fromValue(object.to)).unsigned = false;
+            else if (typeof object.to === "string")
+                message.to = parseInt(object.to, 10);
+            else if (typeof object.to === "number")
+                message.to = object.to;
+            else if (typeof object.to === "object")
+                message.to = new $util.LongBits(object.to.low >>> 0, object.to.high >>> 0).toNumber();
+        return message;
+    };
+
+    /**
+     * Creates a plain object from an IdHolder message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof IdHolder
+     * @static
+     * @param {IdHolder} message IdHolder
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    IdHolder.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        let object = {};
+        if (options.defaults) {
+            if ($util.Long) {
+                let long = new $util.Long(0, 0, false);
+                object.from = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.from = options.longs === String ? "0" : 0;
+            if ($util.Long) {
+                let long = new $util.Long(0, 0, false);
+                object.to = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.to = options.longs === String ? "0" : 0;
+        }
+        if (message.from != null && message.hasOwnProperty("from"))
+            if (typeof message.from === "number")
+                object.from = options.longs === String ? String(message.from) : message.from;
+            else
+                object.from = options.longs === String ? $util.Long.prototype.toString.call(message.from) : options.longs === Number ? new $util.LongBits(message.from.low >>> 0, message.from.high >>> 0).toNumber() : message.from;
+        if (message.to != null && message.hasOwnProperty("to"))
+            if (typeof message.to === "number")
+                object.to = options.longs === String ? String(message.to) : message.to;
+            else
+                object.to = options.longs === String ? $util.Long.prototype.toString.call(message.to) : options.longs === Number ? new $util.LongBits(message.to.low >>> 0, message.to.high >>> 0).toNumber() : message.to;
+        return object;
+    };
+
+    /**
+     * Converts this IdHolder to JSON.
+     * @function toJSON
+     * @memberof IdHolder
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    IdHolder.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    return IdHolder;
+})();
+
 export const Dump = $root.Dump = (() => {
 
     /**
      * Properties of a Dump.
      * @exports IDump
      * @interface IDump
+     * @property {IIdHolder|null} [idHolder] Dump idHolder
      * @property {ISettings} settings Dump settings
      * @property {Array.<ICurrency>|null} [currencies] Dump currencies
      * @property {Array.<IAccount>|null} [accounts] Dump accounts
@@ -46,6 +236,14 @@ export const Dump = $root.Dump = (() => {
                 if (properties[keys[i]] != null)
                     this[keys[i]] = properties[keys[i]];
     }
+
+    /**
+     * Dump idHolder.
+     * @member {IIdHolder|null|undefined} idHolder
+     * @memberof Dump
+     * @instance
+     */
+    Dump.prototype.idHolder = null;
 
     /**
      * Dump settings.
@@ -157,6 +355,8 @@ export const Dump = $root.Dump = (() => {
         if (message.transactionTemplates != null && message.transactionTemplates.length)
             for (let i = 0; i < message.transactionTemplates.length; ++i)
                 $root.TransactionTemplate.encode(message.transactionTemplates[i], writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
+        if (message.idHolder != null && Object.hasOwnProperty.call(message, "idHolder"))
+            $root.IdHolder.encode(message.idHolder, writer.uint32(/* id 9, wireType 2 =*/74).fork()).ldelim();
         return writer;
     };
 
@@ -178,6 +378,9 @@ export const Dump = $root.Dump = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
+            case 9:
+                message.idHolder = $root.IdHolder.decode(reader, reader.uint32());
+                break;
             case 7:
                 message.settings = $root.Settings.decode(reader, reader.uint32());
                 break;
@@ -238,6 +441,11 @@ export const Dump = $root.Dump = (() => {
         if (object instanceof $root.Dump)
             return object;
         let message = new $root.Dump();
+        if (object.idHolder != null) {
+            if (typeof object.idHolder !== "object")
+                throw TypeError(".Dump.idHolder: object expected");
+            message.idHolder = $root.IdHolder.fromObject(object.idHolder);
+        }
         if (object.settings != null) {
             if (typeof object.settings !== "object")
                 throw TypeError(".Dump.settings: object expected");
@@ -338,8 +546,10 @@ export const Dump = $root.Dump = (() => {
             object.transactions = [];
             object.transactionTemplates = [];
         }
-        if (options.defaults)
+        if (options.defaults) {
             object.settings = null;
+            object.idHolder = null;
+        }
         if (message.currencies && message.currencies.length) {
             object.currencies = [];
             for (let j = 0; j < message.currencies.length; ++j)
@@ -377,6 +587,8 @@ export const Dump = $root.Dump = (() => {
             for (let j = 0; j < message.transactionTemplates.length; ++j)
                 object.transactionTemplates[j] = $root.TransactionTemplate.toObject(message.transactionTemplates[j], options);
         }
+        if (message.idHolder != null && message.hasOwnProperty("idHolder"))
+            object.idHolder = $root.IdHolder.toObject(message.idHolder, options);
         return object;
     };
 
@@ -2712,216 +2924,6 @@ export const TransactionTemplate = $root.TransactionTemplate = (() => {
     return TransactionTemplate;
 })();
 
-export const TransactionArchive = $root.TransactionArchive = (() => {
-
-    /**
-     * Properties of a TransactionArchive.
-     * @exports ITransactionArchive
-     * @interface ITransactionArchive
-     * @property {number|null} [id] TransactionArchive id
-     * @property {boolean|null} [isDeleted] TransactionArchive isDeleted
-     * @property {Array.<ITransaction>|null} [transactions] TransactionArchive transactions
-     */
-
-    /**
-     * Constructs a new TransactionArchive.
-     * @exports TransactionArchive
-     * @classdesc Represents a TransactionArchive.
-     * @implements ITransactionArchive
-     * @constructor
-     * @param {ITransactionArchive=} [properties] Properties to set
-     */
-    function TransactionArchive(properties) {
-        this.transactions = [];
-        if (properties)
-            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                if (properties[keys[i]] != null)
-                    this[keys[i]] = properties[keys[i]];
-    }
-
-    /**
-     * TransactionArchive id.
-     * @member {number} id
-     * @memberof TransactionArchive
-     * @instance
-     */
-    TransactionArchive.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-
-    /**
-     * TransactionArchive isDeleted.
-     * @member {boolean} isDeleted
-     * @memberof TransactionArchive
-     * @instance
-     */
-    TransactionArchive.prototype.isDeleted = false;
-
-    /**
-     * TransactionArchive transactions.
-     * @member {Array.<ITransaction>} transactions
-     * @memberof TransactionArchive
-     * @instance
-     */
-    TransactionArchive.prototype.transactions = $util.emptyArray;
-
-    /**
-     * Creates a new TransactionArchive instance using the specified properties.
-     * @function create
-     * @memberof TransactionArchive
-     * @static
-     * @param {ITransactionArchive=} [properties] Properties to set
-     * @returns {TransactionArchive} TransactionArchive instance
-     */
-    TransactionArchive.create = function create(properties) {
-        return new TransactionArchive(properties);
-    };
-
-    /**
-     * Encodes the specified TransactionArchive message. Does not implicitly {@link TransactionArchive.verify|verify} messages.
-     * @function encode
-     * @memberof TransactionArchive
-     * @static
-     * @param {ITransactionArchive} message TransactionArchive message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    TransactionArchive.encode = function encode(message, writer) {
-        if (!writer)
-            writer = $Writer.create();
-        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
-            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.id);
-        if (message.isDeleted != null && Object.hasOwnProperty.call(message, "isDeleted"))
-            writer.uint32(/* id 2, wireType 0 =*/16).bool(message.isDeleted);
-        if (message.transactions != null && message.transactions.length)
-            for (let i = 0; i < message.transactions.length; ++i)
-                $root.Transaction.encode(message.transactions[i], writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-        return writer;
-    };
-
-    /**
-     * Decodes a TransactionArchive message from the specified reader or buffer.
-     * @function decode
-     * @memberof TransactionArchive
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @param {number} [length] Message length if known beforehand
-     * @returns {TransactionArchive} TransactionArchive
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    TransactionArchive.decode = function decode(reader, length) {
-        if (!(reader instanceof $Reader))
-            reader = $Reader.create(reader);
-        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.TransactionArchive();
-        while (reader.pos < end) {
-            let tag = reader.uint32();
-            switch (tag >>> 3) {
-            case 1:
-                message.id = reader.int64();
-                break;
-            case 2:
-                message.isDeleted = reader.bool();
-                break;
-            case 3:
-                if (!(message.transactions && message.transactions.length))
-                    message.transactions = [];
-                message.transactions.push($root.Transaction.decode(reader, reader.uint32()));
-                break;
-            default:
-                reader.skipType(tag & 7);
-                break;
-            }
-        }
-        return message;
-    };
-
-    /**
-     * Creates a TransactionArchive message from a plain object. Also converts values to their respective internal types.
-     * @function fromObject
-     * @memberof TransactionArchive
-     * @static
-     * @param {Object.<string,*>} object Plain object
-     * @returns {TransactionArchive} TransactionArchive
-     */
-    TransactionArchive.fromObject = function fromObject(object) {
-        if (object instanceof $root.TransactionArchive)
-            return object;
-        let message = new $root.TransactionArchive();
-        if (object.id != null)
-            if ($util.Long)
-                (message.id = $util.Long.fromValue(object.id)).unsigned = false;
-            else if (typeof object.id === "string")
-                message.id = parseInt(object.id, 10);
-            else if (typeof object.id === "number")
-                message.id = object.id;
-            else if (typeof object.id === "object")
-                message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber();
-        if (object.isDeleted != null)
-            message.isDeleted = Boolean(object.isDeleted);
-        if (object.transactions) {
-            if (!Array.isArray(object.transactions))
-                throw TypeError(".TransactionArchive.transactions: array expected");
-            message.transactions = [];
-            for (let i = 0; i < object.transactions.length; ++i) {
-                if (typeof object.transactions[i] !== "object")
-                    throw TypeError(".TransactionArchive.transactions: object expected");
-                message.transactions[i] = $root.Transaction.fromObject(object.transactions[i]);
-            }
-        }
-        return message;
-    };
-
-    /**
-     * Creates a plain object from a TransactionArchive message. Also converts values to other types if specified.
-     * @function toObject
-     * @memberof TransactionArchive
-     * @static
-     * @param {TransactionArchive} message TransactionArchive
-     * @param {$protobuf.IConversionOptions} [options] Conversion options
-     * @returns {Object.<string,*>} Plain object
-     */
-    TransactionArchive.toObject = function toObject(message, options) {
-        if (!options)
-            options = {};
-        let object = {};
-        if (options.arrays || options.defaults)
-            object.transactions = [];
-        if (options.defaults) {
-            if ($util.Long) {
-                let long = new $util.Long(0, 0, false);
-                object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-            } else
-                object.id = options.longs === String ? "0" : 0;
-            object.isDeleted = false;
-        }
-        if (message.id != null && message.hasOwnProperty("id"))
-            if (typeof message.id === "number")
-                object.id = options.longs === String ? String(message.id) : message.id;
-            else
-                object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber() : message.id;
-        if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
-            object.isDeleted = message.isDeleted;
-        if (message.transactions && message.transactions.length) {
-            object.transactions = [];
-            for (let j = 0; j < message.transactions.length; ++j)
-                object.transactions[j] = $root.Transaction.toObject(message.transactions[j], options);
-        }
-        return object;
-    };
-
-    /**
-     * Converts this TransactionArchive to JSON.
-     * @function toJSON
-     * @memberof TransactionArchive
-     * @instance
-     * @returns {Object.<string,*>} JSON object
-     */
-    TransactionArchive.prototype.toJSON = function toJSON() {
-        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-    };
-
-    return TransactionArchive;
-})();
-
 export const Settings = $root.Settings = (() => {
 
     /**
@@ -4225,6 +4227,147 @@ export const Summary = $root.Summary = (() => {
     };
 
     return Summary;
+})();
+
+export const TextHolder = $root.TextHolder = (() => {
+
+    /**
+     * Properties of a TextHolder.
+     * @exports ITextHolder
+     * @interface ITextHolder
+     * @property {string|null} [value] TextHolder value
+     */
+
+    /**
+     * Constructs a new TextHolder.
+     * @exports TextHolder
+     * @classdesc Represents a TextHolder.
+     * @implements ITextHolder
+     * @constructor
+     * @param {ITextHolder=} [properties] Properties to set
+     */
+    function TextHolder(properties) {
+        if (properties)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * TextHolder value.
+     * @member {string} value
+     * @memberof TextHolder
+     * @instance
+     */
+    TextHolder.prototype.value = "";
+
+    /**
+     * Creates a new TextHolder instance using the specified properties.
+     * @function create
+     * @memberof TextHolder
+     * @static
+     * @param {ITextHolder=} [properties] Properties to set
+     * @returns {TextHolder} TextHolder instance
+     */
+    TextHolder.create = function create(properties) {
+        return new TextHolder(properties);
+    };
+
+    /**
+     * Encodes the specified TextHolder message. Does not implicitly {@link TextHolder.verify|verify} messages.
+     * @function encode
+     * @memberof TextHolder
+     * @static
+     * @param {ITextHolder} message TextHolder message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    TextHolder.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.value != null && Object.hasOwnProperty.call(message, "value"))
+            writer.uint32(/* id 1, wireType 2 =*/10).string(message.value);
+        return writer;
+    };
+
+    /**
+     * Decodes a TextHolder message from the specified reader or buffer.
+     * @function decode
+     * @memberof TextHolder
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {TextHolder} TextHolder
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    TextHolder.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.TextHolder();
+        while (reader.pos < end) {
+            let tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                message.value = reader.string();
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Creates a TextHolder message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof TextHolder
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {TextHolder} TextHolder
+     */
+    TextHolder.fromObject = function fromObject(object) {
+        if (object instanceof $root.TextHolder)
+            return object;
+        let message = new $root.TextHolder();
+        if (object.value != null)
+            message.value = String(object.value);
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a TextHolder message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof TextHolder
+     * @static
+     * @param {TextHolder} message TextHolder
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    TextHolder.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        let object = {};
+        if (options.defaults)
+            object.value = "";
+        if (message.value != null && message.hasOwnProperty("value"))
+            object.value = message.value;
+        return object;
+    };
+
+    /**
+     * Converts this TextHolder to JSON.
+     * @function toJSON
+     * @memberof TextHolder
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    TextHolder.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    return TextHolder;
 })();
 
 /**

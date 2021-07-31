@@ -13,22 +13,22 @@ internal class AccountValidatorTest {
   @Test
   fun valid() {
     val account = Account.newBuilder()
-        .setName("name")
-        .setCurrencyId(1)
-        .build()
+      .setName("name")
+      .setCurrencyId(1)
+      .build()
     val expected = ValidatorResponse()
-    val actual = validator.validate(account)
+    val actual = validator.validate(account, true)
     Assert.assertEquals(expected, actual)
   }
 
   @Test
   fun invalidCurrencyId() {
     val account = Account.newBuilder()
-        .setName("name")
-        .setCurrencyId(0)
-        .build()
+      .setName("name")
+      .setCurrencyId(0)
+      .build()
     val expected = ValidatorResponse("unknown currency [0]")
-    val actual = validator.validate(account)
+    val actual = validator.validate(account, true)
     Assert.assertEquals(expected, actual)
   }
 

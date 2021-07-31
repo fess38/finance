@@ -69,6 +69,7 @@ export class UserDataEnricherService {
     update.transactionTemplates.forEach(x => idsToUpdate.push(x.id));
 
     result.settings = update.settings || source.settings;
+    result.idHolder = update.idHolder || source.idHolder;
 
     source.accounts
       .filter(x => !idsToUpdate.includes(x.id))

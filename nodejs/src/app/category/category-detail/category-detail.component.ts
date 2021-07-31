@@ -43,10 +43,7 @@ export class CategoryDetailComponent implements OnInit, OnDestroy {
   update(category: Category): void {
     if (category.id == 0) {
       this.userdata.saveCategory(category)
-        .then(newCategory => {
-          this.router.navigate(['/category/' + newCategory.id]);
-          this.category = newCategory;
-        })
+        .then(() => this.router.navigate(['/category/' + category.id]))
         .catch(error => {
           console.error(error.message);
           this.router.navigate(['/error']);

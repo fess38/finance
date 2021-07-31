@@ -15,7 +15,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   constructor(private userdata: UserDataService,
               private criteria: Criteria,
               private route: ActivatedRoute,
-              private router: Router) { }
+              private router: Router) {}
 
   private subscription: Subscription;
   private maxTransactionsAccountId: number = 0;
@@ -106,10 +106,11 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
     if (transaction.id == 0) {
       this.userdata.saveTransaction(transaction)
         .then(() => {
+          this.transaction = new Transaction(transaction);
+          this.transaction.id = 0;
           this.transaction.amountFrom = null;
           this.transaction.amountTo = null;
           this.transaction.comment = '';
-          this.transaction.subCategoryId = 0;
           this.transaction.familyMemberId = 0;
         })
         .catch(error => {

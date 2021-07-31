@@ -4,8 +4,8 @@ import ru.fess38.finance.core.MessageService
 import ru.fess38.finance.core.Model.Account
 import ru.fess38.finance.core.Model.EntityType.CURRENCY
 
-class AccountValidator(private val messageService: MessageService): MessageValidator<Account> {
-  override fun validate(value: Account): ValidatorResponse {
+class AccountValidator(private val messageService: MessageService) : MessageValidator<Account> {
+  override fun validate(value: Account, isCreate: Boolean): ValidatorResponse {
     val errors = mutableListOf<String>()
 
     if (!messageService.isExist(value.currencyId, CURRENCY)) {

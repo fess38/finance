@@ -15,7 +15,7 @@ export class TransactionMonthComponent implements OnInit, OnDestroy {
   constructor(private userdata: UserDataService,
               private criteria: Criteria,
               private route: ActivatedRoute,
-              private router: Router) { }
+              private router: Router) {}
 
   private subscription: Subscription;
   private allTransactions: Transaction[] = [];

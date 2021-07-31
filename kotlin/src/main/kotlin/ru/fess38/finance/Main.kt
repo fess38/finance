@@ -13,9 +13,11 @@ fun main(args: Array<String>) {
   springApplication.run(*args)
 }
 
-@EnableAutoConfiguration(exclude = [
-  (HttpMessageConvertersAutoConfiguration::class),
-  (HibernateJpaAutoConfiguration::class)
-])
+@EnableAutoConfiguration(
+  exclude = [
+    (HttpMessageConvertersAutoConfiguration::class),
+    (HibernateJpaAutoConfiguration::class)
+  ]
+)
 @ComponentScan(basePackages = ["ru.fess38.finance"])
 class Application

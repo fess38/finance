@@ -1,7 +1,81 @@
-import * as $protobuf from 'protobufjs';
+import * as $protobuf from "protobufjs";
+/** Properties of an IdHolder. */
+export interface IIdHolder {
+
+    /** IdHolder from */
+    from?: (number|null);
+
+    /** IdHolder to */
+    to?: (number|null);
+}
+
+/** Represents an IdHolder. */
+export class IdHolder implements IIdHolder {
+
+    /**
+     * Constructs a new IdHolder.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IIdHolder);
+
+    /** IdHolder from. */
+    public from: number;
+
+    /** IdHolder to. */
+    public to: number;
+
+    /**
+     * Creates a new IdHolder instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns IdHolder instance
+     */
+    public static create(properties?: IIdHolder): IdHolder;
+
+    /**
+     * Encodes the specified IdHolder message. Does not implicitly {@link IdHolder.verify|verify} messages.
+     * @param message IdHolder message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IIdHolder, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes an IdHolder message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns IdHolder
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): IdHolder;
+
+    /**
+     * Creates an IdHolder message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns IdHolder
+     */
+    public static fromObject(object: { [k: string]: any }): IdHolder;
+
+    /**
+     * Creates a plain object from an IdHolder message. Also converts values to other types if specified.
+     * @param message IdHolder
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: IdHolder, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this IdHolder to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
 
 /** Properties of a Dump. */
 export interface IDump {
+
+    /** Dump idHolder */
+    idHolder?: (IIdHolder|null);
 
     /** Dump settings */
     settings: ISettings;
@@ -36,6 +110,9 @@ export class Dump implements IDump {
      * @param [properties] Properties to set
      */
     constructor(properties?: IDump);
+
+    /** Dump idHolder. */
+    public idHolder?: (IIdHolder|null);
 
     /** Dump settings. */
     public settings: ISettings;
@@ -899,84 +976,6 @@ export class TransactionTemplate implements ITransactionTemplate {
     public toJSON(): { [k: string]: any };
 }
 
-/** Properties of a TransactionArchive. */
-export interface ITransactionArchive {
-
-    /** TransactionArchive id */
-    id?: (number|null);
-
-    /** TransactionArchive isDeleted */
-    isDeleted?: (boolean|null);
-
-    /** TransactionArchive transactions */
-    transactions?: (ITransaction[]|null);
-}
-
-/** Represents a TransactionArchive. */
-export class TransactionArchive implements ITransactionArchive {
-
-    /**
-     * Constructs a new TransactionArchive.
-     * @param [properties] Properties to set
-     */
-    constructor(properties?: ITransactionArchive);
-
-    /** TransactionArchive id. */
-    public id: number;
-
-    /** TransactionArchive isDeleted. */
-    public isDeleted: boolean;
-
-    /** TransactionArchive transactions. */
-    public transactions: ITransaction[];
-
-    /**
-     * Creates a new TransactionArchive instance using the specified properties.
-     * @param [properties] Properties to set
-     * @returns TransactionArchive instance
-     */
-    public static create(properties?: ITransactionArchive): TransactionArchive;
-
-    /**
-     * Encodes the specified TransactionArchive message. Does not implicitly {@link TransactionArchive.verify|verify} messages.
-     * @param message TransactionArchive message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encode(message: ITransactionArchive, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
-     * Decodes a TransactionArchive message from the specified reader or buffer.
-     * @param reader Reader or buffer to decode from
-     * @param [length] Message length if known beforehand
-     * @returns TransactionArchive
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): TransactionArchive;
-
-    /**
-     * Creates a TransactionArchive message from a plain object. Also converts values to their respective internal types.
-     * @param object Plain object
-     * @returns TransactionArchive
-     */
-    public static fromObject(object: { [k: string]: any }): TransactionArchive;
-
-    /**
-     * Creates a plain object from a TransactionArchive message. Also converts values to other types if specified.
-     * @param message TransactionArchive
-     * @param [options] Conversion options
-     * @returns Plain object
-     */
-    public static toObject(message: TransactionArchive, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-    /**
-     * Converts this TransactionArchive to JSON.
-     * @returns JSON object
-     */
-    public toJSON(): { [k: string]: any };
-}
-
 /** Properties of a Settings. */
 export interface ISettings {
 
@@ -1514,6 +1513,72 @@ export class Summary implements ISummary {
 
     /**
      * Converts this Summary to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a TextHolder. */
+export interface ITextHolder {
+
+    /** TextHolder value */
+    value?: (string|null);
+}
+
+/** Represents a TextHolder. */
+export class TextHolder implements ITextHolder {
+
+    /**
+     * Constructs a new TextHolder.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: ITextHolder);
+
+    /** TextHolder value. */
+    public value: string;
+
+    /**
+     * Creates a new TextHolder instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns TextHolder instance
+     */
+    public static create(properties?: ITextHolder): TextHolder;
+
+    /**
+     * Encodes the specified TextHolder message. Does not implicitly {@link TextHolder.verify|verify} messages.
+     * @param message TextHolder message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: ITextHolder, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a TextHolder message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns TextHolder
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): TextHolder;
+
+    /**
+     * Creates a TextHolder message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns TextHolder
+     */
+    public static fromObject(object: { [k: string]: any }): TextHolder;
+
+    /**
+     * Creates a plain object from a TextHolder message. Also converts values to other types if specified.
+     * @param message TextHolder
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: TextHolder, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this TextHolder to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

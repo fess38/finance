@@ -21,9 +21,22 @@ val Message.type: EntityType
     is SubCategory -> SUB_CATEGORY
     is FamilyMember -> FAMILY_MEMBER
     is Transaction -> TRANSACTION
-    is TransactionArchive -> TRANSACTION_ARCHIVE
     is TransactionTemplate -> TRANSACTION_TEMPLATE
     // new entity
     else -> throw IllegalArgumentException("Unknown entity: $this")
   }
 
+val Message.isDeleted: Boolean
+  get() = when (this) {
+    is Settings -> false
+    is Account -> this.isDeleted
+    is Category -> this.isDeleted
+    is SubCategory -> this.isDeleted
+    is FamilyMember -> this.isDeleted
+    is Transaction -> this.isDeleted
+    is TransactionTemplate -> this.isDeleted
+    // new entity
+    else -> throw IllegalArgumentException("Unknown entity: $this")
+  }
+
+fun createTextHolder(value: String = "") = TextHolder.newBuilder().setValue(value).build()!!

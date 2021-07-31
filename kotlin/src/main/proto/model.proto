@@ -3,7 +3,13 @@ syntax = "proto2";
 option java_package = "ru.fess38.finance.core";
 option java_outer_classname = "Model";
 
+message IdHolder {
+    optional int64 from = 1;
+    optional int64 to = 2;
+}
+
 message Dump {
+    optional IdHolder id_holder = 9;
     required Settings settings = 7;
     repeated Currency currencies = 1;
     repeated Account accounts = 2;
@@ -96,12 +102,6 @@ message TransactionTemplate {
     repeated int32 days_of_month = 7;
 }
 
-message TransactionArchive {
-    optional int64 id = 1 [default = 0];
-    optional bool is_deleted = 2 [default = false];
-    repeated Transaction transactions = 3;
-}
-
 // new entity
 
 message Settings {
@@ -152,6 +152,10 @@ message Summary {
     required int64 amount = 1;
     required double share = 2;
     optional bool use_in_share = 3 [default = true];
+}
+
+message TextHolder {
+    optional string value = 1;
 }
 
 enum EntityType {

@@ -6,16 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import ru.fess38.finance.IDSEQ_ALLOCATION_SIZE
 import ru.fess38.finance.core.Model.*
+import ru.fess38.finance.utils.createTextHolder
 import ru.fess38.finance.utils.id
 import ru.fess38.finance.utils.type
 import ru.fess38.finance.validation.MessageValidator
 
 @RestController
 @RequestMapping(
-    path = ["/api/data"],
-    produces = ["application/x-protobuf"],
-    consumes = ["application/x-protobuf"]
+  path = ["/api/data"],
+  produces = ["application/x-protobuf"],
+  consumes = ["application/x-protobuf"]
 )
 class Controller {
   private val log = KotlinLogging.logger {}
@@ -26,29 +28,138 @@ class Controller {
   @Autowired
   lateinit var validator: MessageValidator<Message>
 
+  @GetMapping("next_id")
+  fun nextId(@RequestParam("amount", required = false) amount: Int?): ResponseEntity<Any> {
+    var httpStatus: HttpStatus = HttpStatus.OK
+    var idHolder: IdHolder? = null
+
+    try {
+      idHolder = messageService.idHolder(amount ?: IDSEQ_ALLOCATION_SIZE)
+    } catch (e: Exception) {
+      httpStatus = HttpStatus.INTERNAL_SERVER_ERROR
+      log.info {"Unable to get next id: ${e.message}"}
+    }
+
+    return ResponseEntity(idHolder, httpStatus)
+  }
+
   @GetMapping("dump/get")
-  fun get(@RequestParam("ts", required = false) modifiedAfter: Long?): Dump {
-    return messageService.dump(modifiedAfter ?: 0)
+  fun get(@RequestParam("ts", required = false) modifiedAfter: Long?): ResponseEntity<Any> {
+    var httpStatus: HttpStatus = HttpStatus.OK
+    var dump: Dump? = null
+
+    try {
+      dump = messageService.dump(modifiedAfter ?: 0)
+    } catch (e: Exception) {
+      httpStatus = HttpStatus.INTERNAL_SERVER_ERROR
+      log.error {"Unable to get dump: ${e.message}"}
+    }
+
+    return ResponseEntity(dump, httpStatus)
+  }
+
+  @PostMapping("dump/save")
+  fun save(@RequestBody value: Dump): ResponseEntity<Any> {
+    var httpStatus: HttpStatus = HttpStatus.OK
+    val savedMessages = mutableListOf<Message>()
+
+    try {
+      if (httpStatus == HttpStatus.OK) {
+        saveMessages(value.accountsList).also {
+          savedMessages.addAll(value.accountsList)
+          httpStatus = it
+        }
+      }
+      if (httpStatus == HttpStatus.OK) {
+        saveMessages(value.categoriesList).also {
+          savedMessages.addAll(value.categoriesList)
+          httpStatus = it
+        }
+      }
+      if (httpStatus == HttpStatus.OK) {
+        saveMessages(value.subCategoriesList).also {
+          savedMessages.addAll(value.subCategoriesList)
+          httpStatus = it
+        }
+      }
+      if (httpStatus == HttpStatus.OK) {
+        saveMessages(value.familyMembersList).also {
+          savedMessages.addAll(value.familyMembersList)
+          httpStatus = it
+        }
+      }
+      if (httpStatus == HttpStatus.OK) {
+        saveMessages(value.transactionsList).also {
+          savedMessages.addAll(value.transactionsList)
+          httpStatus = it
+        }
+      }
+      if (httpStatus == HttpStatus.OK) {
+        saveMessages(value.transactionTemplatesList).also {
+          savedMessages.addAll(value.transactionTemplatesList)
+          httpStatus = it
+        }
+      }
+
+      // new entity
+    } catch (e: Exception) {
+      httpStatus = HttpStatus.INTERNAL_SERVER_ERROR
+      log.info {"Unable to save dump: ${e.message}"}
+    }
+
+    if (httpStatus != HttpStatus.OK) {
+      try {
+        messageService.delete(savedMessages)
+      } catch (e: Exception) {
+        log.info {"Unable to delete already saved entities: ${e.message}"}
+      }
+    }
+
+    return ResponseEntity(createTextHolder(), httpStatus)
+  }
+
+  private fun saveMessages(messages: List<Message>): HttpStatus {
+    var httpStatus: HttpStatus = HttpStatus.OK
+
+    for (message in messages) {
+      val validatorResponse = validator.validate(message, true)
+      if (!validatorResponse.isValid()) {
+        httpStatus = HttpStatus.BAD_REQUEST
+        val errors = validatorResponse.errors.joinToString("; ")
+        log.info {"Invalid [${message.type}] with id [${message.id}]: $errors"}
+        break
+      }
+    }
+
+    if (httpStatus == HttpStatus.OK) {
+      try {
+        messageService.save(messages)
+      } catch (e: Exception) {
+        log.info {"Unable to save entities: ${e.message}"}
+      }
+    }
+
+    return httpStatus
   }
 
   private fun saveMessage(message: Message): ResponseEntity<Any> {
-    var httpStatus: HttpStatus
-    var savedValue: Message? = null
+    var httpStatus: HttpStatus = HttpStatus.OK
 
-    val validatorResponse = validator.validate(message)
-    val errors = validatorResponse.errors.joinToString("; ")
-    if (validatorResponse.isValid()) {
-      httpStatus = HttpStatus.OK
-      try {
-        savedValue = messageService.save(message)
-      } catch (e: Exception) {
-        httpStatus = HttpStatus.INTERNAL_SERVER_ERROR
+    try {
+      val validatorResponse = validator.validate(message, true)
+      if (validatorResponse.isValid()) {
+        messageService.save(message)
+      } else {
+        httpStatus = HttpStatus.BAD_REQUEST
+        val errors = validatorResponse.errors.joinToString("; ")
+        log.info {"Invalid [${message.type}] with id [${message.id}]: $errors"}
       }
-    } else {
-      log.info{"Unable to save [${message.type}]: $errors"}
-      httpStatus = HttpStatus.BAD_REQUEST
+    } catch (e: Exception) {
+      httpStatus = HttpStatus.INTERNAL_SERVER_ERROR
+      log.info {"Unable to save [${message.type}]: ${e.message}"}
     }
-    return ResponseEntity(savedValue ?: errors, httpStatus)
+
+    return ResponseEntity(createTextHolder(), httpStatus)
   }
 
   @PostMapping("account/save")
@@ -72,21 +183,23 @@ class Controller {
   // new entity
 
   private fun updateMessage(message: Message): ResponseEntity<Any> {
-    var httpStatus: HttpStatus
-    val validatorResponse = validator.validate(message)
-    val errors = validatorResponse.errors.joinToString("; ")
-    if (validatorResponse.isValid()) {
-      httpStatus = HttpStatus.OK
-      try {
+    var httpStatus: HttpStatus = HttpStatus.OK
+
+    try {
+      val validatorResponse = validator.validate(message, false)
+      if (validatorResponse.isValid()) {
         messageService.update(message)
-      } catch (e: Exception) {
-        httpStatus = HttpStatus.INTERNAL_SERVER_ERROR
+      } else {
+        httpStatus = HttpStatus.BAD_REQUEST
+        val errors = validatorResponse.errors.joinToString("; ")
+        log.info {"Invalid [${message.type}] with id [${message.id}]: $errors"}
       }
-    } else {
-      log.info{"Unable to update [${message.type}] [${message.id}]: $errors"}
-      httpStatus = HttpStatus.BAD_REQUEST
+    } catch (e: Exception) {
+      httpStatus = HttpStatus.INTERNAL_SERVER_ERROR
+      log.info {"Unable to update [${message.type}] [${message.id}]: ${e.message}"}
     }
-    return ResponseEntity(errors, httpStatus)
+
+    return ResponseEntity(createTextHolder(), httpStatus)
   }
 
   @PostMapping("settings/update")
@@ -111,4 +224,18 @@ class Controller {
   fun update(@RequestBody value: TransactionTemplate) = updateMessage(value)
 
   // new entity
+
+  @PostMapping("dump/delete")
+  fun delete(): ResponseEntity<Any> {
+    var httpStatus: HttpStatus = HttpStatus.OK
+
+    try {
+      messageService.delete()
+    } catch (e: Exception) {
+      log.info {"Unable to delete user data: ${e.message}}"}
+      httpStatus = HttpStatus.INTERNAL_SERVER_ERROR
+    }
+
+    return ResponseEntity(createTextHolder(), httpStatus)
+  }
 }

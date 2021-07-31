@@ -6,10 +6,10 @@ import ru.fess38.finance.core.Model.Transaction
 import ru.fess38.finance.core.Model.Transaction.Type
 import java.time.LocalDate
 
-class TransactionValidator(private val messageService: MessageService): MessageValidator<Transaction> {
+class TransactionValidator(private val messageService: MessageService) : MessageValidator<Transaction> {
   private val EMPTY_VALUE: Long = -1
 
-  override fun validate(value: Transaction): ValidatorResponse {
+  override fun validate(value: Transaction, isCreate: Boolean): ValidatorResponse {
     val errors = mutableListOf<String>()
 
     try {

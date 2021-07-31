@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
   templateUrl: 'error-page.component.html'
 })
 export class ErrorPageComponent implements OnInit {
-  constructor(private router: Router) { }
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     setTimeout(() => this.router.navigate(['/']), 5000);

@@ -11,20 +11,19 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
 @Configuration
-class SecurityConfig: WebSecurityConfigurerAdapter() {
+class SecurityConfig : WebSecurityConfigurerAdapter() {
   @Autowired
   lateinit var userService: UserService
 
   @Override
   override fun configure(http: HttpSecurity) {
     http
-        .csrf().disable()
-        .addFilterBefore(TokenAuthenticationFilter(userService),
-            UsernamePasswordAuthenticationFilter::class.java)
-        .authorizeRequests()
-        .antMatchers("/api/data/**").hasAuthority("USER")
-        .and()
-        .authorizeRequests()
-        .antMatchers("/api/auth/**").permitAll()
+      .csrf().disable()
+      .addFilterBefore(TokenAuthenticationFilter(userService), UsernamePasswordAuthenticationFilter::class.java)
+      .authorizeRequests()
+      .antMatchers("/api/data/**").hasAuthority("USER")
+      .and()
+      .authorizeRequests()
+      .antMatchers("/api/auth/**").permitAll()
   }
 }

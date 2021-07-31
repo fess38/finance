@@ -13,7 +13,7 @@ import { TransactionUtils as Utils } from '../transaction-utils';
 export class TransactionYearComponent implements OnInit, OnDestroy {
   constructor(private userdata: UserDataService,
               private route: ActivatedRoute,
-              private router: Router) { }
+              private router: Router) {}
 
   private subscription: Subscription;
   private allTransactions: Transaction[] = [];
