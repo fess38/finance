@@ -1,29 +1,29 @@
 import { Long } from 'protobufjs';
-import { Account, Category, Dump, FamilyMember, SubCategory, Transaction, TransactionTemplate } from '../model/model';
+import { Account, Category, DataStorage, FamilyMember, SubCategory, Transaction, TransactionTemplate } from '../model/model';
 
 export class UserDataEnricherService {
-  enrich(dump: Dump): void {
-    dump.accounts.forEach(x => {
+  enrich(dataStorage: DataStorage): void {
+    dataStorage.accounts.forEach(x => {
       x.transactionAmount = 0;
       x.balance = 0;
     });
-    dump.categories.forEach(x => x.transactionAmount = 0);
-    dump.subCategories.forEach(x => x.transactionAmount = 0);
-    dump.familyMembers.forEach(x => x.transactionAmount = 0);
+    dataStorage.categories.forEach(x => x.transactionAmount = 0);
+    dataStorage.subCategories.forEach(x => x.transactionAmount = 0);
+    dataStorage.familyMembers.forEach(x => x.transactionAmount = 0);
 
-    this.enrichEnity(dump, dump.accounts as Account[], 'accountIdFrom');
-    this.enrichEnity(dump, dump.accounts as Account[], 'accountIdTo');
-    this.enrichEnity(dump, dump.categories as Category[], 'categoryId');
-    this.enrichEnity(dump, dump.subCategories as SubCategory[], 'subCategoryId');
-    this.enrichEnity(dump, dump.familyMembers as FamilyMember[], 'familyMemberId');
+    this.enrichEnity(dataStorage, dataStorage.accounts as Account[], 'accountIdFrom');
+    this.enrichEnity(dataStorage, dataStorage.accounts as Account[], 'accountIdTo');
+    this.enrichEnity(dataStorage, dataStorage.categories as Category[], 'categoryId');
+    this.enrichEnity(dataStorage, dataStorage.subCategories as SubCategory[], 'subCategoryId');
+    this.enrichEnity(dataStorage, dataStorage.familyMembers as FamilyMember[], 'familyMemberId');
   }
 
-  private enrichEnity(dump: Dump, values: Account[] | Category[] | SubCategory[] | FamilyMember[],
+  private enrichEnity(dataStorage: DataStorage, values: Account[] | Category[] | SubCategory[] | FamilyMember[],
                       attributeName: string): void {
     const map = new Map<number, Account | Category | SubCategory | FamilyMember>();
     values.forEach(x => map.set(x.id as number, x));
 
-    const templateTransactions: Transaction[] = dump.transactionTemplates
+    const templateTransactions: Transaction[] = dataStorage.transactionTemplates
       .filter(x => !x.isDeleted)
       .map(x => Transaction.create(x.transaction));
     templateTransactions.forEach(x => {
@@ -31,7 +31,7 @@ export class UserDataEnricherService {
       x.amountTo = 0;
     });
     const group = new Map<number, Transaction[]>();
-    dump.transactions.concat(templateTransactions)
+    dataStorage.transactions.concat(templateTransactions)
       .filter(x => !x.isDeleted && x[attributeName] > 0)
       .filter(x => map.has(x[attributeName]))
       .forEach(x => {
@@ -57,8 +57,8 @@ export class UserDataEnricherService {
     return Number(transactions.map(mapper).reduce((x1, x2) => Number(x1) + Number(x2), 0)) || 0;
   }
 
-  merge(source: Dump, update: Dump): Dump {
-    const result: Dump = Dump.fromObject(update);
+  merge(source: DataStorage, update: DataStorage): DataStorage {
+    const result: DataStorage = DataStorage.fromObject(update);
 
     const idsToUpdate: (number | Long)[] = [];
     update.accounts.forEach(x => idsToUpdate.push(x.id));

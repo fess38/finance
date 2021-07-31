@@ -8,9 +8,9 @@ message IdHolder {
     optional int64 to = 2;
 }
 
-message Dump {
+message DataStorage {
     optional IdHolder id_holder = 9;
-    required Settings settings = 7;
+    optional Settings settings = 7;
     repeated Currency currencies = 1;
     repeated Account accounts = 2;
     repeated Category categories = 3;

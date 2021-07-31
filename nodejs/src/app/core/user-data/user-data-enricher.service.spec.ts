@@ -1,4 +1,4 @@
-import { Account, Dump, FamilyMember, Transaction, TransactionTemplate } from '../model/model';
+import { Account, DataStorage, FamilyMember, Transaction, TransactionTemplate } from '../model/model';
 import { UserDataEnricherService } from './user-data-enricher.service';
 
 describe('UserDataEnricherService', () => {
@@ -15,45 +15,44 @@ describe('UserDataEnricherService', () => {
   });
 
   it('#enrich familyMember', () => {
-    const dump = new Dump();
-    dump.transactions = Array.from(Array(5).keys())
-      .map(x => new Transaction(transaction));
-    dump.transactions[0].familyMemberId = 100;
-    dump.transactions[1].familyMemberId = 100;
-    dump.transactions[1].isDeleted = true;
-    dump.transactions[2].familyMemberId = 100;
-    dump.familyMembers = [new FamilyMember(familyMember)];
-    dump.familyMembers[0].transactionAmount = 100;
-    dump.transactionTemplates = Array.from(Array(2).keys())
+    const dataStorage = new DataStorage();
+    dataStorage.transactions = Array.from(Array(5).keys()).map(x => new Transaction(transaction));
+    dataStorage.transactions[0].familyMemberId = 100;
+    dataStorage.transactions[1].familyMemberId = 100;
+    dataStorage.transactions[1].isDeleted = true;
+    dataStorage.transactions[2].familyMemberId = 100;
+    dataStorage.familyMembers = [new FamilyMember(familyMember)];
+    dataStorage.familyMembers[0].transactionAmount = 100;
+    dataStorage.transactionTemplates = Array.from(Array(2).keys())
       .map(x => new TransactionTemplate({
         name: 'foo',
         interval: 1,
         transaction: new Transaction(transaction)
       }));
-    dump.transactionTemplates[0].transaction.familyMemberId = 100;
-    dump.transactionTemplates[1].transaction.familyMemberId = 110;
+    dataStorage.transactionTemplates[0].transaction.familyMemberId = 100;
+    dataStorage.transactionTemplates[1].transaction.familyMemberId = 110;
 
-    enricher.enrich(dump);
-    expect(3).toEqual(<number>dump.familyMembers[0].transactionAmount);
+    enricher.enrich(dataStorage);
+    expect(3).toEqual(<number>dataStorage.familyMembers[0].transactionAmount);
   });
 
   it('#enrich account balance', () => {
-    const dump = new Dump();
-    dump.transactions = Array.from(Array(5).keys()).map(x => new Transaction(transaction));
-    dump.transactionTemplates = Array.from(Array(2).keys())
+    const dataStorage = new DataStorage();
+    dataStorage.transactions = Array.from(Array(5).keys()).map(x => new Transaction(transaction));
+    dataStorage.transactionTemplates = Array.from(Array(2).keys())
       .map(x => new TransactionTemplate({
         name: 'foo',
         interval: 1,
         transaction: new Transaction(transaction)
       }));
-    dump.accounts = [new Account(account), new Account(account)];
-    dump.accounts[0].id = 10;
-    dump.accounts[1].id = 11;
-    enricher.enrich(dump);
+    dataStorage.accounts = [new Account(account), new Account(account)];
+    dataStorage.accounts[0].id = 10;
+    dataStorage.accounts[1].id = 11;
+    enricher.enrich(dataStorage);
 
-    expect(-500).toEqual(<number>dump.accounts[0].balance);
-    expect(7).toEqual(<number>dump.accounts[0].transactionAmount);
-    expect(505).toEqual(<number>dump.accounts[1].balance);
-    expect(7).toEqual(<number>dump.accounts[1].transactionAmount);
+    expect(-500).toEqual(<number>dataStorage.accounts[0].balance);
+    expect(7).toEqual(<number>dataStorage.accounts[0].transactionAmount);
+    expect(505).toEqual(<number>dataStorage.accounts[1].balance);
+    expect(7).toEqual(<number>dataStorage.accounts[1].transactionAmount);
   });
 });

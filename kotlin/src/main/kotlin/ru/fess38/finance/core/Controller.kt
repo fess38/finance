@@ -43,23 +43,23 @@ class Controller {
     return ResponseEntity(idHolder, httpStatus)
   }
 
-  @GetMapping("dump/get")
+  @GetMapping("storage/get")
   fun get(@RequestParam("ts", required = false) modifiedAfter: Long?): ResponseEntity<Any> {
     var httpStatus: HttpStatus = HttpStatus.OK
-    var dump: Dump? = null
+    var dataStorage: DataStorage? = null
 
     try {
-      dump = messageService.dump(modifiedAfter ?: 0)
+      dataStorage = messageService.dataStorage(modifiedAfter ?: 0)
     } catch (e: Exception) {
       httpStatus = HttpStatus.INTERNAL_SERVER_ERROR
-      log.error {"Unable to get dump: ${e.message}"}
+      log.error {"Unable to get user data: ${e.message}"}
     }
 
-    return ResponseEntity(dump, httpStatus)
+    return ResponseEntity(dataStorage, httpStatus)
   }
 
-  @PostMapping("dump/save")
-  fun save(@RequestBody value: Dump): ResponseEntity<Any> {
+  @PostMapping("storage/save")
+  fun save(@RequestBody value: DataStorage): ResponseEntity<Any> {
     var httpStatus: HttpStatus = HttpStatus.OK
     val savedMessages = mutableListOf<Message>()
 
@@ -104,7 +104,7 @@ class Controller {
       // new entity
     } catch (e: Exception) {
       httpStatus = HttpStatus.INTERNAL_SERVER_ERROR
-      log.info {"Unable to save dump: ${e.message}"}
+      log.info {"Unable to save user data: ${e.message}"}
     }
 
     if (httpStatus != HttpStatus.OK) {
@@ -225,7 +225,7 @@ class Controller {
 
   // new entity
 
-  @PostMapping("dump/delete")
+  @PostMapping("storage/delete")
   fun delete(): ResponseEntity<Any> {
     var httpStatus: HttpStatus = HttpStatus.OK
 

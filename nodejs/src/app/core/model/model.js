@@ -198,32 +198,32 @@ export const IdHolder = $root.IdHolder = (() => {
     return IdHolder;
 })();
 
-export const Dump = $root.Dump = (() => {
+export const DataStorage = $root.DataStorage = (() => {
 
     /**
-     * Properties of a Dump.
-     * @exports IDump
-     * @interface IDump
-     * @property {IIdHolder|null} [idHolder] Dump idHolder
-     * @property {ISettings} settings Dump settings
-     * @property {Array.<ICurrency>|null} [currencies] Dump currencies
-     * @property {Array.<IAccount>|null} [accounts] Dump accounts
-     * @property {Array.<ICategory>|null} [categories] Dump categories
-     * @property {Array.<ISubCategory>|null} [subCategories] Dump subCategories
-     * @property {Array.<IFamilyMember>|null} [familyMembers] Dump familyMembers
-     * @property {Array.<ITransaction>|null} [transactions] Dump transactions
-     * @property {Array.<ITransactionTemplate>|null} [transactionTemplates] Dump transactionTemplates
+     * Properties of a DataStorage.
+     * @exports IDataStorage
+     * @interface IDataStorage
+     * @property {IIdHolder|null} [idHolder] DataStorage idHolder
+     * @property {ISettings|null} [settings] DataStorage settings
+     * @property {Array.<ICurrency>|null} [currencies] DataStorage currencies
+     * @property {Array.<IAccount>|null} [accounts] DataStorage accounts
+     * @property {Array.<ICategory>|null} [categories] DataStorage categories
+     * @property {Array.<ISubCategory>|null} [subCategories] DataStorage subCategories
+     * @property {Array.<IFamilyMember>|null} [familyMembers] DataStorage familyMembers
+     * @property {Array.<ITransaction>|null} [transactions] DataStorage transactions
+     * @property {Array.<ITransactionTemplate>|null} [transactionTemplates] DataStorage transactionTemplates
      */
 
     /**
-     * Constructs a new Dump.
-     * @exports Dump
-     * @classdesc Represents a Dump.
-     * @implements IDump
+     * Constructs a new DataStorage.
+     * @exports DataStorage
+     * @classdesc Represents a DataStorage.
+     * @implements IDataStorage
      * @constructor
-     * @param {IDump=} [properties] Properties to set
+     * @param {IDataStorage=} [properties] Properties to set
      */
-    function Dump(properties) {
+    function DataStorage(properties) {
         this.currencies = [];
         this.accounts = [];
         this.categories = [];
@@ -238,99 +238,99 @@ export const Dump = $root.Dump = (() => {
     }
 
     /**
-     * Dump idHolder.
+     * DataStorage idHolder.
      * @member {IIdHolder|null|undefined} idHolder
-     * @memberof Dump
+     * @memberof DataStorage
      * @instance
      */
-    Dump.prototype.idHolder = null;
+    DataStorage.prototype.idHolder = null;
 
     /**
-     * Dump settings.
-     * @member {ISettings} settings
-     * @memberof Dump
+     * DataStorage settings.
+     * @member {ISettings|null|undefined} settings
+     * @memberof DataStorage
      * @instance
      */
-    Dump.prototype.settings = null;
+    DataStorage.prototype.settings = null;
 
     /**
-     * Dump currencies.
+     * DataStorage currencies.
      * @member {Array.<ICurrency>} currencies
-     * @memberof Dump
+     * @memberof DataStorage
      * @instance
      */
-    Dump.prototype.currencies = $util.emptyArray;
+    DataStorage.prototype.currencies = $util.emptyArray;
 
     /**
-     * Dump accounts.
+     * DataStorage accounts.
      * @member {Array.<IAccount>} accounts
-     * @memberof Dump
+     * @memberof DataStorage
      * @instance
      */
-    Dump.prototype.accounts = $util.emptyArray;
+    DataStorage.prototype.accounts = $util.emptyArray;
 
     /**
-     * Dump categories.
+     * DataStorage categories.
      * @member {Array.<ICategory>} categories
-     * @memberof Dump
+     * @memberof DataStorage
      * @instance
      */
-    Dump.prototype.categories = $util.emptyArray;
+    DataStorage.prototype.categories = $util.emptyArray;
 
     /**
-     * Dump subCategories.
+     * DataStorage subCategories.
      * @member {Array.<ISubCategory>} subCategories
-     * @memberof Dump
+     * @memberof DataStorage
      * @instance
      */
-    Dump.prototype.subCategories = $util.emptyArray;
+    DataStorage.prototype.subCategories = $util.emptyArray;
 
     /**
-     * Dump familyMembers.
+     * DataStorage familyMembers.
      * @member {Array.<IFamilyMember>} familyMembers
-     * @memberof Dump
+     * @memberof DataStorage
      * @instance
      */
-    Dump.prototype.familyMembers = $util.emptyArray;
+    DataStorage.prototype.familyMembers = $util.emptyArray;
 
     /**
-     * Dump transactions.
+     * DataStorage transactions.
      * @member {Array.<ITransaction>} transactions
-     * @memberof Dump
+     * @memberof DataStorage
      * @instance
      */
-    Dump.prototype.transactions = $util.emptyArray;
+    DataStorage.prototype.transactions = $util.emptyArray;
 
     /**
-     * Dump transactionTemplates.
+     * DataStorage transactionTemplates.
      * @member {Array.<ITransactionTemplate>} transactionTemplates
-     * @memberof Dump
+     * @memberof DataStorage
      * @instance
      */
-    Dump.prototype.transactionTemplates = $util.emptyArray;
+    DataStorage.prototype.transactionTemplates = $util.emptyArray;
 
     /**
-     * Creates a new Dump instance using the specified properties.
+     * Creates a new DataStorage instance using the specified properties.
      * @function create
-     * @memberof Dump
+     * @memberof DataStorage
      * @static
-     * @param {IDump=} [properties] Properties to set
-     * @returns {Dump} Dump instance
+     * @param {IDataStorage=} [properties] Properties to set
+     * @returns {DataStorage} DataStorage instance
      */
-    Dump.create = function create(properties) {
-        return new Dump(properties);
+    DataStorage.create = function create(properties) {
+        return new DataStorage(properties);
     };
 
     /**
-     * Encodes the specified Dump message. Does not implicitly {@link Dump.verify|verify} messages.
+     * Encodes the specified DataStorage message. Does not implicitly {@link DataStorage.verify|verify} messages.
      * @function encode
-     * @memberof Dump
+     * @memberof DataStorage
      * @static
-     * @param {IDump} message Dump message or plain object to encode
+     * @param {IDataStorage} message DataStorage message or plain object to encode
      * @param {$protobuf.Writer} [writer] Writer to encode to
      * @returns {$protobuf.Writer} Writer
      */
-    Dump.encode = function encode(message, writer) {
+    DataStorage.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
         if (message.currencies != null && message.currencies.length)
@@ -351,7 +351,8 @@ export const Dump = $root.Dump = (() => {
         if (message.transactions != null && message.transactions.length)
             for (let i = 0; i < message.transactions.length; ++i)
                 $root.Transaction.encode(message.transactions[i], writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
-        $root.Settings.encode(message.settings, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
+        if (message.settings != null && Object.hasOwnProperty.call(message, "settings"))
+            $root.Settings.encode(message.settings, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
         if (message.transactionTemplates != null && message.transactionTemplates.length)
             for (let i = 0; i < message.transactionTemplates.length; ++i)
                 $root.TransactionTemplate.encode(message.transactionTemplates[i], writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
@@ -361,20 +362,20 @@ export const Dump = $root.Dump = (() => {
     };
 
     /**
-     * Decodes a Dump message from the specified reader or buffer.
+     * Decodes a DataStorage message from the specified reader or buffer.
      * @function decode
-     * @memberof Dump
+     * @memberof DataStorage
      * @static
      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
      * @param {number} [length] Message length if known beforehand
-     * @returns {Dump} Dump
+     * @returns {DataStorage} DataStorage
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    Dump.decode = function decode(reader, length) {
+    DataStorage.decode = function decode(reader, length) {
         if (!(reader instanceof $Reader))
             reader = $Reader.create(reader);
-        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Dump();
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.DataStorage();
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
@@ -424,100 +425,98 @@ export const Dump = $root.Dump = (() => {
                 break;
             }
         }
-        if (!message.hasOwnProperty("settings"))
-            throw $util.ProtocolError("missing required 'settings'", { instance: message });
         return message;
     };
 
     /**
-     * Creates a Dump message from a plain object. Also converts values to their respective internal types.
+     * Creates a DataStorage message from a plain object. Also converts values to their respective internal types.
      * @function fromObject
-     * @memberof Dump
+     * @memberof DataStorage
      * @static
      * @param {Object.<string,*>} object Plain object
-     * @returns {Dump} Dump
+     * @returns {DataStorage} DataStorage
      */
-    Dump.fromObject = function fromObject(object) {
-        if (object instanceof $root.Dump)
+    DataStorage.fromObject = function fromObject(object) {
+        if (object instanceof $root.DataStorage)
             return object;
-        let message = new $root.Dump();
+        let message = new $root.DataStorage();
         if (object.idHolder != null) {
             if (typeof object.idHolder !== "object")
-                throw TypeError(".Dump.idHolder: object expected");
+                throw TypeError(".DataStorage.idHolder: object expected");
             message.idHolder = $root.IdHolder.fromObject(object.idHolder);
         }
         if (object.settings != null) {
             if (typeof object.settings !== "object")
-                throw TypeError(".Dump.settings: object expected");
+                throw TypeError(".DataStorage.settings: object expected");
             message.settings = $root.Settings.fromObject(object.settings);
         }
         if (object.currencies) {
             if (!Array.isArray(object.currencies))
-                throw TypeError(".Dump.currencies: array expected");
+                throw TypeError(".DataStorage.currencies: array expected");
             message.currencies = [];
             for (let i = 0; i < object.currencies.length; ++i) {
                 if (typeof object.currencies[i] !== "object")
-                    throw TypeError(".Dump.currencies: object expected");
+                    throw TypeError(".DataStorage.currencies: object expected");
                 message.currencies[i] = $root.Currency.fromObject(object.currencies[i]);
             }
         }
         if (object.accounts) {
             if (!Array.isArray(object.accounts))
-                throw TypeError(".Dump.accounts: array expected");
+                throw TypeError(".DataStorage.accounts: array expected");
             message.accounts = [];
             for (let i = 0; i < object.accounts.length; ++i) {
                 if (typeof object.accounts[i] !== "object")
-                    throw TypeError(".Dump.accounts: object expected");
+                    throw TypeError(".DataStorage.accounts: object expected");
                 message.accounts[i] = $root.Account.fromObject(object.accounts[i]);
             }
         }
         if (object.categories) {
             if (!Array.isArray(object.categories))
-                throw TypeError(".Dump.categories: array expected");
+                throw TypeError(".DataStorage.categories: array expected");
             message.categories = [];
             for (let i = 0; i < object.categories.length; ++i) {
                 if (typeof object.categories[i] !== "object")
-                    throw TypeError(".Dump.categories: object expected");
+                    throw TypeError(".DataStorage.categories: object expected");
                 message.categories[i] = $root.Category.fromObject(object.categories[i]);
             }
         }
         if (object.subCategories) {
             if (!Array.isArray(object.subCategories))
-                throw TypeError(".Dump.subCategories: array expected");
+                throw TypeError(".DataStorage.subCategories: array expected");
             message.subCategories = [];
             for (let i = 0; i < object.subCategories.length; ++i) {
                 if (typeof object.subCategories[i] !== "object")
-                    throw TypeError(".Dump.subCategories: object expected");
+                    throw TypeError(".DataStorage.subCategories: object expected");
                 message.subCategories[i] = $root.SubCategory.fromObject(object.subCategories[i]);
             }
         }
         if (object.familyMembers) {
             if (!Array.isArray(object.familyMembers))
-                throw TypeError(".Dump.familyMembers: array expected");
+                throw TypeError(".DataStorage.familyMembers: array expected");
             message.familyMembers = [];
             for (let i = 0; i < object.familyMembers.length; ++i) {
                 if (typeof object.familyMembers[i] !== "object")
-                    throw TypeError(".Dump.familyMembers: object expected");
+                    throw TypeError(".DataStorage.familyMembers: object expected");
                 message.familyMembers[i] = $root.FamilyMember.fromObject(object.familyMembers[i]);
             }
         }
         if (object.transactions) {
             if (!Array.isArray(object.transactions))
-                throw TypeError(".Dump.transactions: array expected");
+                throw TypeError(".DataStorage.transactions: array expected");
             message.transactions = [];
             for (let i = 0; i < object.transactions.length; ++i) {
                 if (typeof object.transactions[i] !== "object")
-                    throw TypeError(".Dump.transactions: object expected");
+                    throw TypeError(".DataStorage.transactions: object expected");
                 message.transactions[i] = $root.Transaction.fromObject(object.transactions[i]);
             }
         }
         if (object.transactionTemplates) {
             if (!Array.isArray(object.transactionTemplates))
-                throw TypeError(".Dump.transactionTemplates: array expected");
+                throw TypeError(".DataStorage.transactionTemplates: array expected");
             message.transactionTemplates = [];
             for (let i = 0; i < object.transactionTemplates.length; ++i) {
                 if (typeof object.transactionTemplates[i] !== "object")
-                    throw TypeError(".Dump.transactionTemplates: object expected");
+                    throw TypeError(".DataStorage.transactionTemplates: object expected");
                 message.transactionTemplates[i] = $root.TransactionTemplate.fromObject(object.transactionTemplates[i]);
             }
         }
@@ -525,15 +524,15 @@ export const Dump = $root.Dump = (() => {
     };
 
     /**
-     * Creates a plain object from a Dump message. Also converts values to other types if specified.
+     * Creates a plain object from a DataStorage message. Also converts values to other types if specified.
      * @function toObject
-     * @memberof Dump
+     * @memberof DataStorage
      * @static
-     * @param {Dump} message Dump
+     * @param {DataStorage} message DataStorage
      * @param {$protobuf.IConversionOptions} [options] Conversion options
      * @returns {Object.<string,*>} Plain object
      */
-    Dump.toObject = function toObject(message, options) {
+    DataStorage.toObject = function toObject(message, options) {
         if (!options)
             options = {};
         let object = {};
@@ -593,17 +592,17 @@ export const Dump = $root.Dump = (() => {
     };
 
     /**
-     * Converts this Dump to JSON.
+     * Converts this DataStorage to JSON.
      * @function toJSON
-     * @memberof Dump
+     * @memberof DataStorage
      * @instance
      * @returns {Object.<string,*>} JSON object
      */
-    Dump.prototype.toJSON = function toJSON() {
+    DataStorage.prototype.toJSON = function toJSON() {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
-    return Dump;
+    return DataStorage;
 })();
 
 export const Currency = $root.Currency = (() => {

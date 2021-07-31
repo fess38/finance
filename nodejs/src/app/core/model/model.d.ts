@@ -1,4 +1,5 @@
-import * as $protobuf from "protobufjs";
+import * as $protobuf from 'protobufjs';
+
 /** Properties of an IdHolder. */
 export interface IIdHolder {
 
@@ -71,115 +72,115 @@ export class IdHolder implements IIdHolder {
     public toJSON(): { [k: string]: any };
 }
 
-/** Properties of a Dump. */
-export interface IDump {
+/** Properties of a DataStorage. */
+export interface IDataStorage {
 
-    /** Dump idHolder */
+    /** DataStorage idHolder */
     idHolder?: (IIdHolder|null);
 
-    /** Dump settings */
-    settings: ISettings;
+    /** DataStorage settings */
+    settings?: (ISettings|null);
 
-    /** Dump currencies */
+    /** DataStorage currencies */
     currencies?: (ICurrency[]|null);
 
-    /** Dump accounts */
+    /** DataStorage accounts */
     accounts?: (IAccount[]|null);
 
-    /** Dump categories */
+    /** DataStorage categories */
     categories?: (ICategory[]|null);
 
-    /** Dump subCategories */
+    /** DataStorage subCategories */
     subCategories?: (ISubCategory[]|null);
 
-    /** Dump familyMembers */
+    /** DataStorage familyMembers */
     familyMembers?: (IFamilyMember[]|null);
 
-    /** Dump transactions */
+    /** DataStorage transactions */
     transactions?: (ITransaction[]|null);
 
-    /** Dump transactionTemplates */
+    /** DataStorage transactionTemplates */
     transactionTemplates?: (ITransactionTemplate[]|null);
 }
 
-/** Represents a Dump. */
-export class Dump implements IDump {
+/** Represents a DataStorage. */
+export class DataStorage implements IDataStorage {
 
     /**
-     * Constructs a new Dump.
+     * Constructs a new DataStorage.
      * @param [properties] Properties to set
      */
-    constructor(properties?: IDump);
+    constructor(properties?: IDataStorage);
 
-    /** Dump idHolder. */
+    /** DataStorage idHolder. */
     public idHolder?: (IIdHolder|null);
 
-    /** Dump settings. */
-    public settings: ISettings;
+    /** DataStorage settings. */
+    public settings?: (ISettings|null);
 
-    /** Dump currencies. */
+    /** DataStorage currencies. */
     public currencies: ICurrency[];
 
-    /** Dump accounts. */
+    /** DataStorage accounts. */
     public accounts: IAccount[];
 
-    /** Dump categories. */
+    /** DataStorage categories. */
     public categories: ICategory[];
 
-    /** Dump subCategories. */
+    /** DataStorage subCategories. */
     public subCategories: ISubCategory[];
 
-    /** Dump familyMembers. */
+    /** DataStorage familyMembers. */
     public familyMembers: IFamilyMember[];
 
-    /** Dump transactions. */
+    /** DataStorage transactions. */
     public transactions: ITransaction[];
 
-    /** Dump transactionTemplates. */
+    /** DataStorage transactionTemplates. */
     public transactionTemplates: ITransactionTemplate[];
 
     /**
-     * Creates a new Dump instance using the specified properties.
+     * Creates a new DataStorage instance using the specified properties.
      * @param [properties] Properties to set
-     * @returns Dump instance
+     * @returns DataStorage instance
      */
-    public static create(properties?: IDump): Dump;
+    public static create(properties?: IDataStorage): DataStorage;
 
     /**
-     * Encodes the specified Dump message. Does not implicitly {@link Dump.verify|verify} messages.
-     * @param message Dump message or plain object to encode
+     * Encodes the specified DataStorage message. Does not implicitly {@link DataStorage.verify|verify} messages.
+     * @param message DataStorage message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encode(message: IDump, writer?: $protobuf.Writer): $protobuf.Writer;
+    public static encode(message: IDataStorage, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Decodes a Dump message from the specified reader or buffer.
+     * Decodes a DataStorage message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
-     * @returns Dump
+     * @returns DataStorage
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Dump;
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): DataStorage;
 
     /**
-     * Creates a Dump message from a plain object. Also converts values to their respective internal types.
+     * Creates a DataStorage message from a plain object. Also converts values to their respective internal types.
      * @param object Plain object
-     * @returns Dump
+     * @returns DataStorage
      */
-    public static fromObject(object: { [k: string]: any }): Dump;
+    public static fromObject(object: { [k: string]: any }): DataStorage;
 
     /**
-     * Creates a plain object from a Dump message. Also converts values to other types if specified.
-     * @param message Dump
+     * Creates a plain object from a DataStorage message. Also converts values to other types if specified.
+     * @param message DataStorage
      * @param [options] Conversion options
      * @returns Plain object
      */
-    public static toObject(message: Dump, options?: $protobuf.IConversionOptions): { [k: string]: any };
+    public static toObject(message: DataStorage, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
     /**
-     * Converts this Dump to JSON.
+     * Converts this DataStorage to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

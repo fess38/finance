@@ -66,9 +66,9 @@ class MessageServiceImpl: MessageService {
     log.info {"Update [${message.type}] with id [${message.id}] for user [${user.id}]"}
   }
 
-  override fun dump(modifiedAfter: Long): Dump {
+  override fun dataStorage(modifiedAfter: Long): DataStorage {
     val user = userService.findByContext()
-    val builder = Dump.newBuilder()
+    val builder = DataStorage.newBuilder()
     val messages = repository.get(user, modifiedAfter, emptyList())
     val settings = settings(messages, user)
     val accounts = messages.filter {it.type == ACCOUNT && !it.isDeleted}.map {it as Account}
@@ -82,7 +82,7 @@ class MessageServiceImpl: MessageService {
 
     // new entity
 
-    log.info {"Create dump for user [${user.id}]"}
+    log.info {"Create data storage for user [${user.id}]"}
     return builder
         .setSettings(settings)
         .addAllCurrencies(repository.currencies())
