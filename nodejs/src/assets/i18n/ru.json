@@ -12,7 +12,8 @@
     "date": "Дата",
     "title": "Финансы",
     "category": "Категория",
-    "sub_category": "Подкатегория"
+    "sub_category": "Подкатегория",
+    "no_off_budget": "Без внебюджетных"
   },
   "account_detail": {
     "add": "Добавление счета",
@@ -50,6 +51,7 @@
     "transfers": "Переводы",
     "templates": "Шаблоны",
     "future": "Запланированные",
+    "search": "Поиск",
     "reports": "Отчеты",
     "date_report": "По дням ",
     "month_report": "По месяцам",
@@ -61,8 +63,12 @@
     "family_member": "Члены семьи"
   },
   "settings": {
+    "data_export": "Выгрузка данных",
+    "data_import": "Загрузка данных",
+    "data_delete": "Удаление данных",
     "language": "Язык",
-    "currency": "Валюта"
+    "currency": "Валюта",
+    "no_off_budget": "Скрывать транзакции вне бюджета"
   },
   "sub_category_detail": {
     "add": "Добавление подкатегории",
@@ -79,9 +85,16 @@
     "amount_from": "Сумма списания",
     "amount_to": "Сумма получения",
     "family_member": "Член семьи",
-    "comment": "Комментарий"
+    "comment": "Комментарий",
+    "off_budget": "Вне бюджета"
   },
   "transaction_list": {
+    "title": "Поиск транзакций",
+    "all_actions": "Все операция",
+    "all_accounts": "Все счета",
+    "all_categories": "Все категории",
+    "all_sub_categories": "Все подкатегории",
+    "all_family_members": "Все члены семьи",
     "amount": "Сумма"
   },
   "transaction_template_detail": {

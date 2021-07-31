@@ -7,8 +7,8 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class TokenAuthenticationFilter(private val userService: UserService):
-    AbstractAuthenticationProcessingFilter("/api/data/**") {
+class TokenAuthenticationFilter(private val userService: UserService) :
+  AbstractAuthenticationProcessingFilter("/api/data/**") {
 
   init {
     super.setContinueChainBeforeSuccessfulAuthentication(true)
@@ -19,14 +19,14 @@ class TokenAuthenticationFilter(private val userService: UserService):
     val authentication: TokenAuthentication
 
     val token = (request.getHeader("Cookie") ?: "")
-        .split(";")
-        .filter {it.trim().startsWith("token")}
-        .map {it.split("=")}
-        .filter {it.size == 2}
-        .map {it[1]}
-        .firstOrNull()
-        ?: request.getHeader("token")
-        ?: throw BadCredentialsException("Token is required")
+      .split(";")
+      .filter {it.trim().startsWith("token")}
+      .map {it.split("=")}
+      .filter {it.size == 2}
+      .map {it[1]}
+      .firstOrNull()
+      ?: request.getHeader("token")
+      ?: throw BadCredentialsException("Token is required")
 
     val user = userService.find(token) ?: throw IllegalArgumentException("Invalid token: $token")
     authentication = TokenAuthentication(user.outerId, token, user.authType)

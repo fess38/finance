@@ -8,6 +8,31 @@
         <a routerLink="/access_link/create_link">{{'common.access_link' | translate}}</a>
       </label>
     </div>
+    <div class="clr-form-control clr-row" [hidden]="this.isReadOnly()">
+      <label>
+        <a [href]="exportDataUrl" download="export.json">{{'settings.data_export' | translate}}</a>
+      </label>
+    </div>
+    <div class="clr-form-control clr-row" [hidden]="this.isReadOnly()">
+      <div class="clr-file-wrapper">
+        <input type="file"
+               id="data-import"
+               name="dataImport"
+               class="clr-file"
+               (change)="importData($event.target['files'][0])"/>
+        <label for="data-import">{{'settings.data_import' | translate}}</label>
+      </div>
+      <div class="progress loop" [hidden]="!isDataImport">
+        <progress></progress>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row" [hidden]="this.isReadOnly()">
+      <label>
+        <a [href]="exportDataUrl" download="export.json" (click)="deleteData()">
+          {{'settings.data_delete' | translate}}
+        </a>
+      </label>
+    </div>
     <div class="clr-form-control clr-row">
       <label>{{'settings.language' | translate}}</label>
       <div class="clr-control-container">
@@ -30,6 +55,18 @@
               <span *ngIf="language() == 'EN'">{{currency.nameEn}} ({{currency.symbol}})</span>
             </option>
           </select>
+        </div>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row">
+      <div class="clr-control-container">
+        <div class="clr-checkbox-wrapper">
+          <input type="checkbox"
+                 id="transaction-off-budget"
+                 name="noOffBudget"
+                 class="clr-checkbox"
+                 [(ngModel)]="settings.noOffBudget"/>
+          <label for="transaction-off-budget">{{'settings.no_off_budget' | translate}}</label>
         </div>
       </div>
     </div>

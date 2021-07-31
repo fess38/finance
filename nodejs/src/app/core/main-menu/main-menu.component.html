@@ -1,12 +1,12 @@
 <clr-main-container class="main-container">
   <clr-header>
     <div class="branding">
-      <span routerLink="/" class="title">{{'main_menu.title' | translate}}</span>
+      <span class="title" routerLink="/">{{'main_menu.title' | translate}}</span>
     </div>
     <div class="header-actions">
       <clr-dropdown>
         <button class="nav-icon" clrDropdownTrigger>
-          <clr-icon shape="cog"></clr-icon>
+          <cds-icon shape="cog" [attr.badge]="isOnline ? 'success' : 'danger'" ></cds-icon>
         </button>
         <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
           <a routerLink="/settings" clrDropdownItem>{{'common.settings' | translate}}</a>
@@ -21,35 +21,40 @@
     </div>
     <nav class="sidenav" [clr-nav-level]="1">
       <section class="sidenav-content">
-        <a routerLink="/transaction/new" class="nav-link">
+        <a class="nav-link" routerLink="/transaction/new">
           {{'main_menu.add_transaction' | translate}}
         </a>
         <section class="nav-group">
           <label>{{'main_menu.transaction' | translate}}</label>
           <ul class="nav-list">
             <li>
-              <a (click)="incomes()" class="nav-link">
+              <a class="nav-link" (click)="incomes()">
                 {{'main_menu.incomes' | translate}}
               </a>
             </li>
             <li>
-              <a (click)="expences()" class="nav-link">
+              <a class="nav-link" (click)="expences()">
                 {{'main_menu.expences' | translate}}
               </a>
             </li>
             <li>
-              <a (click)="transfers()" class="nav-link">
+              <a class="nav-link" (click)="transfers()">
                 {{'main_menu.transfers' | translate}}
               </a>
             </li>
             <li>
-              <a routerLink="/transaction_template" class="nav-link">
+              <a class="nav-link" routerLink="/transaction_template">
                 {{'main_menu.templates' | translate}}
               </a>
             </li>
             <li>
-              <a routerLink="/transaction_future" class="nav-link">
+              <a class="nav-link" routerLink="/transaction_future">
                 {{'main_menu.future' | translate}}
+              </a>
+            </li>
+            <li>
+              <a (click)="search()" class="nav-link">
+                {{'main_menu.search' | translate}}
               </a>
             </li>
           </ul>
@@ -58,17 +63,17 @@
           <label>{{'main_menu.reports' | translate}}</label>
           <ul class="nav-list">
             <li>
-              <a routerLink="/report/date" class="nav-link">
+              <a class="nav-link" routerLink="/report/date">
                 {{'main_menu.date_report' | translate}}
               </a>
             </li>
             <li>
-              <a routerLink="/report/month" class="nav-link">
+              <a class="nav-link" routerLink="/report/month">
                 {{'main_menu.month_report' | translate}}
               </a>
             </li>
             <li>
-              <a routerLink="/report/year" class="nav-link">
+              <a class="nav-link" routerLink="/report/year">
                 {{'main_menu.year_report' | translate}}
               </a>
             </li>
@@ -78,22 +83,22 @@
           <label>{{'main_menu.other' | translate}}</label>
           <ul class="nav-list">
             <li>
-              <a routerLink="/account" class="nav-link">
+              <a class="nav-link" routerLink="/account">
                 {{'main_menu.account' | translate}}
               </a>
             </li>
             <li>
-              <a routerLink="/category" class="nav-link">
+              <a class="nav-link" routerLink="/category">
                 {{'main_menu.category' | translate}}
               </a>
             </li>
             <li>
-              <a routerLink="/sub_category" class="nav-link">
+              <a class="nav-link" routerLink="/sub_category">
                 {{'main_menu.sub_category' | translate}}
               </a>
             </li>
             <li>
-              <a routerLink="/family_member" class="nav-link">
+              <a class="nav-link" routerLink="/family_member">
                 {{'main_menu.family_member' | translate}}
               </a>
             </li>

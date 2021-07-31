@@ -10,35 +10,35 @@ internal class CategoryValidatorTest {
   @Test
   fun valid() {
     val category = Category.newBuilder()
-        .setName("name")
-        .setIsIncome(true)
-        .build()
+      .setName("name")
+      .setIsIncome(true)
+      .build()
     val expected = ValidatorResponse()
-    val actual = validator.validate(category)
+    val actual = validator.validate(category, true)
     Assert.assertEquals(expected, actual)
   }
 
   @Test
   fun unknownStateTrueTrue() {
     val category = Category.newBuilder()
-        .setName(" ")
-        .setIsIncome(true)
-        .setIsExpense(true)
-        .build()
+      .setName(" ")
+      .setIsIncome(true)
+      .setIsExpense(true)
+      .build()
     val message = "unknown category state: is_income=true, is_expense=true"
     val expected = ValidatorResponse(message)
-    val actual = validator.validate(category)
+    val actual = validator.validate(category, true)
     Assert.assertEquals(expected, actual)
   }
 
   @Test
   fun unknownStateFalseFalse() {
     val category = Category.newBuilder()
-        .setName(" ")
-        .build()
+      .setName(" ")
+      .build()
     val message = "unknown category state: is_income=false, is_expense=false"
     val expected = ValidatorResponse(message)
-    val actual = validator.validate(category)
+    val actual = validator.validate(category, true)
     Assert.assertEquals(expected, actual)
   }
 }

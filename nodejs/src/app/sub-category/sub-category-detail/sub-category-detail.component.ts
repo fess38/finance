@@ -55,10 +55,7 @@ export class SubCategoryDetailComponent implements OnInit, OnDestroy {
   update(subCategory: SubCategory) {
     if (subCategory.id == 0) {
       this.userdata.saveSubCategory(subCategory)
-        .then(newSubCategory => {
-          this.router.navigate(['/sub_category/' + newSubCategory.id]);
-          this.subCategory = newSubCategory;
-        })
+        .then(() => this.router.navigate(['/sub_category/' + subCategory.id]))
         .catch(error => {
           console.error(error.message);
           this.router.navigate(['/error']);
@@ -95,8 +92,7 @@ export class SubCategoryDetailComponent implements OnInit, OnDestroy {
     this.router.navigate(['/transaction'], {
       queryParams: {
         sub_category_id: subCategory.id,
-        transaction_amount: subCategory.transactionAmount,
-        source: 'sub_category'
+        source: `sub_category/${subCategory.id}`
       }
     });
   }

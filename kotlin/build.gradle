@@ -2,24 +2,24 @@ group "ru.fess38.finance"
 version "0.1"
 
 buildscript {
-  ext.kotlin_version = "1.3.61"
-  ext.spring_version = "5.2.3.RELEASE"
-  ext.spring_boot_version = "2.2.4.RELEASE"
-  ext.hibernate_version = "5.4.11.Final"
-  ext.proto_version = "3.11.3"
+    ext.kotlin_version = "1.5.21"
+    ext.spring_version = "5.2.13.RELEASE"
+    ext.spring_boot_version = "2.2.13.RELEASE"
+    ext.hibernate_version = "5.4.29.Final"
+    ext.proto_version = "3.15.6"
 
-  repositories {
-    mavenCentral()
-  }
+    repositories {
+        mavenCentral()
+    }
 
-  dependencies {
-    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"
-    classpath "org.jetbrains.kotlin:kotlin-noarg:$kotlin_version"
-    classpath "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    classpath "org.springframework.boot:spring-boot-gradle-plugin:$spring_boot_version"
-    classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.11'
-  }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-noarg:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:$spring_boot_version"
+        classpath "com.google.protobuf:protobuf-gradle-plugin:0.8.15"
+    }
 }
 
 apply plugin: "application"
@@ -34,73 +34,69 @@ apply plugin: "com.google.protobuf"
 mainClassName = "ru.fess38.finance.MainKt"
 
 repositories {
-  mavenLocal()
-  mavenCentral()
+    mavenLocal()
+    mavenCentral()
 }
 
 dependencies {
-  configurations.all {
-    exclude group: "commons-logging"
-  }
+    configurations.all {
+        exclude group: "commons-logging"
+    }
 
-  // test
-  testCompile "junit:junit:4.13"
-  testCompile "org.jetbrains.kotlin:kotlin-test"
-  testCompile "org.jetbrains.kotlin:kotlin-test-junit"
-  testCompile "org.mockito:mockito-all:1.10.19"
+    // test
+    testImplementation "junit:junit:4.13"
+    testImplementation "org.jetbrains.kotlin:kotlin-test"
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit"
+    testImplementation "org.mockito:mockito-all:1.10.19"
 
-  // Spring
-  compile "org.springframework:spring-core:$spring_version"
-  compile "org.springframework:spring-context:$spring_version"
-  compile "org.springframework:spring-orm:$spring_version"
-  compile "org.springframework:spring-tx:$spring_version"
+    // Spring
+    implementation "org.springframework:spring-core:$spring_version"
+    implementation "org.springframework:spring-context:$spring_version"
+    implementation "org.springframework:spring-orm:$spring_version"
+    implementation "org.springframework:spring-tx:$spring_version"
 
-  // Spring Boot
-  compile "org.springframework.boot:spring-boot-starter-web:$spring_boot_version", {
-    exclude group: "org.springframework.boot", module: "spring-boot-starter-tomcat"
-    exclude group: "com.fasterxml.jackson.core"
-  }
-  compile "org.springframework.boot:spring-boot-starter-jetty:$spring_boot_version"
-  compile "org.springframework.boot:spring-boot-starter-security:$spring_boot_version"
+    // Spring Boot
+    implementation "org.springframework.boot:spring-boot-starter-web:$spring_boot_version", {
+        exclude group: "org.springframework.boot", module: "spring-boot-starter-tomcat"
+        exclude group: "com.fasterxml.jackson.core"
+    }
+    implementation "org.springframework.boot:spring-boot-starter-jetty:$spring_boot_version"
+    implementation "org.springframework.boot:spring-boot-starter-security:$spring_boot_version"
 
-  // Hibernate
-  compile "org.hibernate:hibernate-core:$hibernate_version"
-  compile "org.hibernate:hibernate-java8:$hibernate_version"
+    // Hibernate
+    implementation "org.hibernate:hibernate-core:$hibernate_version"
+    implementation "org.hibernate:hibernate-java8:$hibernate_version"
 
-  // Protobuf
-  compile "com.google.protobuf:protobuf-java:$proto_version"
-  compile "com.googlecode.protobuf-java-format:protobuf-java-format:1.4"
+    // Protobuf
+    implementation "com.google.protobuf:protobuf-java:$proto_version"
+    implementation "com.googlecode.protobuf-java-format:protobuf-java-format:1.4"
 
-  // Other
-  compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-  compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-  compile "org.apache.commons:commons-dbcp2:2.7.0"
-  compile "org.postgresql:postgresql:42.2.10"
-  compile "com.google.guava:guava:28.2-jre"
-  compile "com.typesafe:config:1.4.0"
-  compile "com.google.api-client:google-api-client:1.30.3"
-  compile "org.apache.commons:commons-text:1.8"
-  compile "io.github.microutils:kotlin-logging:1.7.8"
+    // Other
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    implementation "org.apache.commons:commons-dbcp2:2.8.0"
+    implementation "org.postgresql:postgresql:42.2.19"
+    implementation "com.google.guava:guava:30.1.1-jre"
+    implementation "com.typesafe:config:1.4.1"
+    implementation "com.google.api-client:google-api-client:1.31.3"
+    implementation "org.apache.commons:commons-text:1.9"
+    implementation "io.github.microutils:kotlin-logging:2.0.6"
 }
 
 sourceCompatibility = 1.8
 [compileJava, compileTestJava]*.options*.encoding = "UTF-8"
 
 bootJar {
-   archiveName = "finance-0.1.jar"
+    archiveFileName = "finance-0.1.jar"
 }
 
 protobuf {
-  protoc {
-    artifact = "com.google.protobuf:protoc:$proto_version"
-  }
+    protoc {
+        artifact = "com.google.protobuf:protoc:$proto_version"
+    }
 }
 
 sourceSets {
-  main.kotlin.srcDirs += "src/main/kotlin"
-  main.resources.srcDirs += "src/main/resources"
-  main.proto.srcDirs += "src/main/proto"
-  test.kotlin.srcDirs += "src/test/kotlin"
-  test.resources.srcDirs += "src/test/resources"
-  test.proto.srcDirs += "src/test/proto"
+    main.kotlin.srcDirs += "src/main/kotlin"
+    test.kotlin.srcDirs += "src/test/kotlin"
 }

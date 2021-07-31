@@ -13,22 +13,22 @@ internal class SubCategoryValidatorTest {
   @Test
   fun valid() {
     val subCategory = SubCategory.newBuilder()
-        .setName("name")
-        .setCategoryId(1)
-        .build()
+      .setName("name")
+      .setCategoryId(1)
+      .build()
     val expected = ValidatorResponse()
-    val actual = validator.validate(subCategory)
+    val actual = validator.validate(subCategory, true)
     Assert.assertEquals(expected, actual)
   }
 
   @Test
   fun unknownCategory() {
     val subCategory = SubCategory.newBuilder()
-        .setName("name")
-        .setCategoryId(2)
-        .build()
+      .setName("name")
+      .setCategoryId(2)
+      .build()
     val expected = ValidatorResponse("unknown category [2]")
-    val actual = validator.validate(subCategory)
+    val actual = validator.validate(subCategory, true)
     Assert.assertEquals(expected, actual)
   }
 

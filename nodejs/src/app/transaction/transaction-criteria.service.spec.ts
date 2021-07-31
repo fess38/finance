@@ -11,7 +11,7 @@ describe('TransactionCriteriaService', () => {
     criteria = new Criteria();
   });
 
-  it('should fit criteria true 1', () => {
+  it('TransactionCriteriaService 1', () => {
     const params: Params = { account_id: 123, family_member_id: 234 };
     criteria.update(params);
     const transaction = new Transaction({
@@ -27,7 +27,7 @@ describe('TransactionCriteriaService', () => {
     expect(criteria.isFit(transaction)).toBe(true);
   });
 
-  it('should fit criteria true 2', () => {
+  it('TransactionCriteriaService 2', () => {
     const params: Params = { account_id: 123, category_id: 1239 };
     criteria.update(params);
     const transaction = new Transaction({
@@ -43,8 +43,58 @@ describe('TransactionCriteriaService', () => {
     expect(criteria.isFit(transaction)).toBe(true);
   });
 
-  it('should fit criteria false 1', () => {
+  it('TransactionCriteriaService 3', () => {
     const params: Params = { account_id: 123 };
+    criteria.update(params);
+    const transaction = new Transaction({
+      id: 0,
+      created: DateUtils.formatDate(),
+      categoryId: 1239,
+      accountIdFrom: -1,
+      accountIdTo: 1234,
+      amountFrom: 10,
+      amountTo: -1,
+      familyMemberId: 234
+    });
+    expect(criteria.isFit(transaction)).toBe(false);
+  });
+
+  it('TransactionCriteriaService comment 1', () => {
+    const params: Params = { comment: "Foo" };
+    criteria.update(params);
+    const transaction = new Transaction({
+      id: 0,
+      created: DateUtils.formatDate(),
+      categoryId: 1239,
+      accountIdFrom: -1,
+      accountIdTo: 1234,
+      amountFrom: 10,
+      amountTo: -1,
+      familyMemberId: 234,
+      comment: "bar foo bar"
+    });
+    expect(criteria.isFit(transaction)).toBe(true);
+  });
+
+  it('TransactionCriteriaService comment 2', () => {
+    const params: Params = { comment: "fooz" };
+    criteria.update(params);
+    const transaction = new Transaction({
+      id: 0,
+      created: DateUtils.formatDate(),
+      categoryId: 1239,
+      accountIdFrom: -1,
+      accountIdTo: 1234,
+      amountFrom: 10,
+      amountTo: -1,
+      familyMemberId: 234,
+      comment: "bar foo bar"
+    });
+    expect(criteria.isFit(transaction)).toBe(false);
+  });
+
+  it('TransactionCriteriaService comment 3', () => {
+    const params: Params = { comment: "foo" };
     criteria.update(params);
     const transaction = new Transaction({
       id: 0,

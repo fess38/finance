@@ -3,7 +3,7 @@
     <div class="clr-form-control clr-row" [hidden]="!context.showHeader">
       <label>
         <button type="button" class="btn btn-icon btn-link" (click)="viewTransactions()">
-          <clr-icon shape="undo"></clr-icon>
+          <cds-icon shape="undo"></cds-icon>
         </button>
         <span [hidden]="!isNewTransaction()">
           {{'transaction_detail.add' | translate}}
@@ -28,9 +28,9 @@
           <select name="type"
                   class="clr-select"
                   [(ngModel)]="type"
-                  (ngModelChange)="onChangeTransactionType()"
+                  (change)="onChangeTransactionType()"
                   [disabled]="!isNewTransaction()">
-            <option *ngFor="let typeWithLabel of typesWithLabels" [value]="typeWithLabel.type">
+            <option *ngFor="let typeWithLabel of typesWithLabels()" [value]="typeWithLabel.type">
               {{typeWithLabel.label | translate}}
             </option>
           </select>
@@ -49,7 +49,7 @@
                     [ngValue]="account.id"
                     [hidden]="account.id == transaction.accountIdTo">
               <span>{{account.name}}</span>
-              <span> ({{currency(account)}})</span>
+              <span> ({{currencySymbol(account)}})</span>
             </option>
           </select>
         </div>
@@ -67,7 +67,7 @@
                     [ngValue]="account.id"
                     [hidden]="account.id == transaction.accountIdFrom">
               <span>{{account.name}}</span>
-              <span> ({{currency(account)}})</span>
+              <span> ({{currencySymbol(account)}})</span>
             </option>
           </select>
         </div>
@@ -156,6 +156,20 @@
       <div class="clr-control-container">
         <div class="clr-input-wrapper">
           <input type="text" name="comment" class="clr-input" [(ngModel)]="transaction.comment"/>
+        </div>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row" [hidden]="isTransfer() || !context.showOffBudget">
+      <div class="clr-control-container">
+        <div class="clr-checkbox-wrapper">
+          <input type="checkbox"
+                 id="transaction-off-budget"
+                 name="offBudget"
+                 class="clr-checkbox"
+                 [(ngModel)]="transaction.offBudget"/>
+          <label for="transaction-off-budget">
+            {{'transaction_detail.off_budget' | translate}}
+          </label>
         </div>
       </div>
     </div>

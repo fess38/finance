@@ -2,7 +2,7 @@ package ru.fess38.finance
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
-import com.google.api.client.json.jackson2.JacksonFactory
+import com.google.api.client.json.gson.GsonFactory
 import com.google.protobuf.Message
 import com.typesafe.config.Config
 import com.typesafe.config.ConfigFactory
@@ -21,7 +21,7 @@ import ru.fess38.finance.repository.HibernateEntity
 import ru.fess38.finance.security.User
 import ru.fess38.finance.validation.CompositeValidator
 import ru.fess38.finance.validation.MessageValidator
-import java.util.Properties
+import java.util.*
 import javax.sql.DataSource
 
 @Configuration
@@ -45,6 +45,7 @@ class AppConfiguration {
 
   @Bean
   fun sessionFactory(dataSource: DataSource, config: Config): SessionFactory {
+    dataSource.connection.createStatement().execute("CREATE SCHEMA IF NOT EXISTS model;")
     val factoryBean = LocalSessionFactoryBean()
     factoryBean.setDataSource(dataSource)
     factoryBean.hibernateProperties = config.getConfig("hibernate").toProperties()
@@ -73,9 +74,9 @@ class AppConfiguration {
 
   @Bean
   fun googleIdTokenVerifier(config: Config) = GoogleIdTokenVerifier
-      .Builder(GoogleNetHttpTransport.newTrustedTransport(), JacksonFactory.getDefaultInstance())
-      .setAudience(listOf(config.getString("security.google.clientId")))
-      .build()!!
+    .Builder(GoogleNetHttpTransport.newTrustedTransport(), GsonFactory.getDefaultInstance())
+    .setAudience(listOf(config.getString("security.google.clientId")))
+    .build()!!
 
   @Bean
   fun messageValidator(messageService: MessageService): MessageValidator<Message> {
@@ -88,3 +89,5 @@ fun Config.toProperties(): Properties {
   this.entrySet().forEach {properties[it.key] = it.value.unwrapped()}
   return properties
 }
+
+const val IDSEQ_ALLOCATION_SIZE = 100

@@ -77,4 +77,16 @@ export class DateUtils {
     date.setDate(date.getDate() + increment);
     return date;
   }
+
+  static sortMonths(a: Month, b: Month): number {
+    if (a.year == b.year) {
+      if (a.month == b.month) {
+        return 0;
+      } else {
+        return a.month < b.month ? -1 : 1;
+      }
+    } else {
+      return a.year < b.year ? -1 : 1;
+    }
+  };
 }

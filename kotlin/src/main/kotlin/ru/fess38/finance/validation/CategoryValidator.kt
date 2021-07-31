@@ -2,8 +2,8 @@ package ru.fess38.finance.validation
 
 import ru.fess38.finance.core.Model.Category
 
-class CategoryValidator: MessageValidator<Category> {
-  override fun validate(value: Category): ValidatorResponse {
+class CategoryValidator : MessageValidator<Category> {
+  override fun validate(value: Category, isCreate: Boolean): ValidatorResponse {
     val errors = mutableListOf<String>()
 
     if (value.isIncome == value.isExpense) {

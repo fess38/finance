@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { AuthModule } from '../auth/auth.module';
+import { TransactionCriteriaService } from '../transaction/transaction-criteria.service';
 import { ErrorPageComponent } from './error-page/error-page.component';
 import { MainMenuComponent } from './main-menu/main-menu.component';
 import { MainPageComponent } from './main-page/main-page.component';
@@ -15,7 +16,7 @@ import { UserDataService } from './user-data/user-data.service';
     SharedModule, AuthModule
   ],
   providers: [
-    UserDataService
+    TransactionCriteriaService, UserDataService
   ],
   exports: [
     MainMenuComponent

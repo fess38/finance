@@ -22,6 +22,7 @@ export class TransactionFutureListComponent implements OnInit, OnDestroy {
     showHeader: false,
     showDate: true,
     showComment: false,
+    showOffBudget: true,
     showButtons: false,
     parentObservable: new Subject<any>()
   };

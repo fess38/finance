@@ -15,7 +15,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   constructor(private userdata: UserDataService,
               private criteria: Criteria,
               private route: ActivatedRoute,
-              private router: Router) { }
+              private router: Router) {}
 
   private subscription: Subscription;
   private maxTransactionsAccountId: number = 0;
@@ -24,11 +24,6 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   @Input() transaction = new Transaction();
   @Input() context = new TransactionDetailContext();
   @Output() private notify = new EventEmitter<boolean>();
-  typesWithLabels = [
-    { type: Transaction.Type.INCOME, label: 'common.income' },
-    { type: Transaction.Type.EXPENSE, label: 'common.expense' },
-    { type: Transaction.Type.TRANSFER, label: 'transaction_detail.transfer' }
-  ];
   type: Transaction.Type = Transaction.Type.EXPENSE;
 
   ngOnInit(): void {
@@ -38,6 +33,12 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
         this.subscription = this.userdata.subscribeOnInit(this.newTransactionCallback());
       }
       this.parentNotifyCallerSubscription = this.context.parentObservable.subscribe(() => {
+        // for async parent transaction creation
+        const newType = TransactionUtils.type(this.transaction);
+        if (this.type != newType && newType != Transaction.Type.UNDEFINED) {
+          this.type = newType;
+        }
+
         if (this.isValidForm()) {
           this.transaction.amountFrom = this.transaction.amountFrom || 0;
           this.transaction.amountTo = this.transaction.amountTo || 0;
@@ -94,6 +95,10 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
     return this.userdata.isReadOnly();
   }
 
+  typesWithLabels(): any[] {
+    return TransactionUtils.typesWithLabels;
+  }
+
   update(transaction: Transaction): void {
     transaction.amountFrom = transaction.amountFrom || 0;
     transaction.amountTo = transaction.amountTo || 0;
@@ -101,10 +106,11 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
     if (transaction.id == 0) {
       this.userdata.saveTransaction(transaction)
         .then(() => {
+          this.transaction = new Transaction(transaction);
+          this.transaction.id = 0;
           this.transaction.amountFrom = null;
           this.transaction.amountTo = null;
           this.transaction.comment = '';
-          this.transaction.subCategoryId = 0;
           this.transaction.familyMemberId = 0;
         })
         .catch(error => {
@@ -179,7 +185,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
       .sort((a, b) => a.name < b.name ? -1 : 1);
   }
 
-  currency(account: Account): string {
+  currencySymbol(account: Account): string {
     return this.userdata.currencies().filter(x => x.id == account.currencyId)[0].symbol;
   }
 
@@ -266,6 +272,7 @@ export class TransactionDetailContext {
   showHeader: boolean = true;
   showDate: boolean = true;
   showComment: boolean = true;
+  showOffBudget: boolean = true;
   showButtons: boolean = true;
   parentObservable: Subject<any>;
 }

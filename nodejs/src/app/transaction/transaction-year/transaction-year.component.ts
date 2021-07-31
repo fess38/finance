@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Category, Currency, SubCategory, Summary, Transaction, Year } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
@@ -11,7 +11,9 @@ import { TransactionUtils as Utils } from '../transaction-utils';
   styleUrls: ['../transaction-date/transaction-date.component.css']
 })
 export class TransactionYearComponent implements OnInit, OnDestroy {
-  constructor(private userdata: UserDataService, private router: Router) { }
+  constructor(private userdata: UserDataService,
+              private route: ActivatedRoute,
+              private router: Router) {}
 
   private subscription: Subscription;
   private allTransactions: Transaction[] = [];
@@ -65,7 +67,9 @@ export class TransactionYearComponent implements OnInit, OnDestroy {
 
   private updateTransactions(): void {
     const types: Transaction.Type[] = [Transaction.Type.INCOME, Transaction.Type.EXPENSE];
-    this.allTransactions = this.userdata.transactions().filter(x => types.includes(Utils.type(x)));
+    this.allTransactions = this.userdata.transactions()
+      .filter(x => types.includes(Utils.type(x)))
+      .filter(x => !this.userdata.settings().noOffBudget || !x.offBudget)
     this.transactions = this.allTransactions
       .filter(x => {
         const accountId: number = Math.max(Number(x.accountIdFrom), Number(x.accountIdTo));
@@ -119,9 +123,9 @@ export class TransactionYearComponent implements OnInit, OnDestroy {
     const result = new Map<number, Summary>();
     const group = new Map<number, Transaction[]>();
     transactions.forEach(x => {
-        const key: number = DateUtils.parseYear(x.created).value;
-        group.set(key, (group.get(key) || []).concat(x));
-      });
+      const key: number = DateUtils.parseYear(x.created).value;
+      group.set(key, (group.get(key) || []).concat(x));
+    });
     group.forEach((value, key) => {
       const amount: number = value
         .map(x => Math.abs(Number(x.amountFrom)) + Math.abs(Number(x.amountTo)))

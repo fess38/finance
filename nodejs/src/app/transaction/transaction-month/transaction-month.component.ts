@@ -15,7 +15,7 @@ export class TransactionMonthComponent implements OnInit, OnDestroy {
   constructor(private userdata: UserDataService,
               private criteria: Criteria,
               private route: ActivatedRoute,
-              private router: Router) { }
+              private router: Router) {}
 
   private subscription: Subscription;
   private allTransactions: Transaction[] = [];
@@ -74,6 +74,7 @@ export class TransactionMonthComponent implements OnInit, OnDestroy {
     const types: Transaction.Type[] = [Transaction.Type.INCOME, Transaction.Type.EXPENSE];
     this.allTransactions = this.userdata.transactions()
       .filter(x => types.includes(Utils.type(x)))
+      .filter(x => !this.userdata.settings().noOffBudget || !x.offBudget)
       .filter(x => DateUtils.parseDate_(x.created).year == this.criteria.year);
     this.transactions = this.allTransactions.filter(x => {
       const accountId: number = Math.max(Number(x.accountIdFrom), Number(x.accountIdTo));
@@ -199,7 +200,6 @@ export class TransactionMonthComponent implements OnInit, OnDestroy {
     this.router.navigate(['/transaction'], {
       queryParams: {
         category_id: category.id,
-        transaction_amount: 1000,
         source: 'report/month',
         year: month.year,
         month: month.month
@@ -211,7 +211,6 @@ export class TransactionMonthComponent implements OnInit, OnDestroy {
     this.router.navigate(['/transaction'], {
       queryParams: {
         sub_category_id: subCategory.id,
-        transaction_amount: 1000,
         source: 'report/month',
         year: month.year,
         month: month.month

@@ -15,7 +15,7 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
   constructor(private userdata: UserDataService,
               private criteria: Criteria,
               private route: ActivatedRoute,
-              private router: Router) { }
+              private router: Router) {}
 
   private subscription: Subscription;
   private allTransactions: Transaction[] = [];
@@ -74,6 +74,7 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
     const types: Transaction.Type[] = [Transaction.Type.INCOME, Transaction.Type.EXPENSE];
     this.allTransactions = this.userdata.transactions()
       .filter(x => types.includes(Utils.type(x)))
+      .filter(x => !this.userdata.settings().noOffBudget || !x.offBudget)
       .filter(x => this.criteria.isFit(x));
     this.transactions = this.allTransactions
       .filter(x => {
@@ -196,7 +197,6 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
     this.router.navigate(['/transaction'], {
       queryParams: {
         category_id: category.id,
-        transaction_amount: 1000,
         source: 'report/date',
         year: this.criteria.year,
         month: this.criteria.month
@@ -208,7 +208,6 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
     this.router.navigate(['/transaction'], {
       queryParams: {
         sub_category_id: subCategory.id,
-        transaction_amount: 1000,
         source: 'report/date',
         year: this.criteria.year,
         month: this.criteria.month
@@ -220,7 +219,6 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
     this.router.navigate(['/transaction'], {
       queryParams: {
         transaction_type: 1,
-        transaction_amount: 1000,
         source: 'report/date',
         year: this.criteria.year,
         month: this.criteria.month
@@ -232,7 +230,6 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
     this.router.navigate(['/transaction'], {
       queryParams: {
         transaction_type: 2,
-        transaction_amount: 1000,
         source: 'report/date',
         year: this.criteria.year,
         month: this.criteria.month
@@ -243,7 +240,6 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
   routeDate(date: Date_): void {
     this.router.navigate(['/transaction'], {
       queryParams: {
-        transaction_amount: 1000,
         source: 'report/date',
         year: this.criteria.year,
         month: this.criteria.month,

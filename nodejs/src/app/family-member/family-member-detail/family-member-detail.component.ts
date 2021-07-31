@@ -43,10 +43,7 @@ export class FamilyMemberDetailComponent implements OnInit, OnDestroy {
   update(familyMember: FamilyMember) {
     if (familyMember.id == 0) {
       this.userdata.saveFamilyMember(familyMember)
-        .then(newFamilyMember => {
-          this.router.navigate(['/family_member/' + newFamilyMember.id]);
-          this.familyMember = newFamilyMember;
-        })
+        .then(() => this.router.navigate(['/family_member/' + familyMember.id]))
         .catch(error => {
           console.error(error.message);
           this.router.navigate(['/error']);
@@ -83,8 +80,7 @@ export class FamilyMemberDetailComponent implements OnInit, OnDestroy {
     this.router.navigate(['/transaction'], {
       queryParams: {
         family_member_id: familyMember.id,
-        transaction_amount: familyMember.transactionAmount,
-        source: 'family_member'
+        source: `family_member/${familyMember.id}`
       }
     });
   }

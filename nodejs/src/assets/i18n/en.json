@@ -12,7 +12,8 @@
     "date": "Date",
     "title": "Finance",
     "category": "Category",
-    "sub_category": "Subcategory"
+    "sub_category": "Subcategory",
+    "no_off_budget": "No off-budget"
   },
   "account_detail": {
     "add": "Add account",
@@ -50,6 +51,7 @@
     "transfers": "Transfers",
     "templates": "Templates",
     "future": "Planned",
+    "search": "Search",
     "reports": "Reports",
     "date_report": "By days",
     "month_report": "By months",
@@ -61,8 +63,12 @@
     "family_member": "Family members"
   },
   "settings": {
+    "data_export": "Export data",
+    "data_import": "Import data",
+    "data_delete": "Delete data",
     "language": "Language",
-    "currency": "Currency"
+    "currency": "Currency",
+    "no_off_budget": "Hide off budget transactions"
   },
   "sub_category_detail": {
     "add": "Add subcategory",
@@ -79,9 +85,16 @@
     "amount_from": "Charge amount",
     "amount_to": "Amount of receipt",
     "family_member": "Family member",
-    "comment": "Comment"
+    "comment": "Comment",
+    "off_budget": "Off budget"
   },
   "transaction_list": {
+    "title": "Transactions search",
+    "all_actions": "All transaction types",
+    "all_accounts": "All accounts",
+    "all_categories": "All categories",
+    "all_sub_categories": "All subcategories",
+    "all_family_members": "All family members",
     "amount": "Amount"
   },
   "transaction_template_detail": {

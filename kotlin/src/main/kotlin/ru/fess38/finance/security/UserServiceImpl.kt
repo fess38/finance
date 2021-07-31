@@ -11,7 +11,7 @@ import ru.fess38.finance.core.Model.RefreshToken.AuthType
 import java.util.concurrent.TimeUnit
 
 @Service
-class UserServiceImpl: UserService {
+class UserServiceImpl : UserService {
   @Autowired
   lateinit var repository: UserRepository
 
@@ -57,14 +57,14 @@ class UserServiceImpl: UserService {
 
   private fun createCache(): LoadingCache<String, User?> {
     return CacheBuilder.newBuilder()
-        .maximumSize(100)
-        .expireAfterWrite(240, TimeUnit.MINUTES)
-        .build(
-            object: CacheLoader<String, User?>() {
-              override fun load(key: String): User? {
-                return repository.find(key)
-              }
-            }
-        )
+      .maximumSize(100)
+      .expireAfterWrite(240, TimeUnit.MINUTES)
+      .build(
+        object : CacheLoader<String, User?>() {
+          override fun load(key: String): User? {
+            return repository.find(key)
+          }
+        }
+      )
   }
 }

@@ -54,10 +54,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   update(account: Account): void {
     if (account.id == 0) {
       this.userdata.saveAccount(account)
-        .then(newAccount => {
-          this.router.navigate(['/account/' + newAccount.id]);
-          this.account = newAccount;
-        })
+        .then(() => this.router.navigate(['/account/' + account.id]))
         .catch(error => {
           console.error(error.message);
           this.router.navigate(['/error']);
@@ -118,8 +115,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     this.router.navigate(['/transaction'], {
       queryParams: {
         account_id: account.id,
-        transaction_amount: account.transactionAmount,
-        source: 'account'
+        source: `account/${account.id}`
       }
     });
   }

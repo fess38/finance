@@ -3,20 +3,13 @@ syntax = "proto2";
 option java_package = "ru.fess38.finance.core";
 option java_outer_classname = "Model";
 
-enum EntityType {
-    UNDEFINED = 0;
-    SETTINGS = 7;
-    CURRENCY = 1;
-    ACCOUNT = 2;
-    CATEGORY = 3;
-    SUB_CATEGORY = 4;
-    FAMILY_MEMBER = 5;
-    TRANSACTION = 6;
-    TRANSACTION_ARCHIVE = 8;
-    TRANSACTION_TEMPLATE = 9;
+message IdHolder {
+    optional int64 from = 1;
+    optional int64 to = 2;
 }
 
 message Dump {
+    optional IdHolder id_holder = 9;
     required Settings settings = 7;
     repeated Currency currencies = 1;
     repeated Account accounts = 2;
@@ -25,6 +18,7 @@ message Dump {
     repeated FamilyMember family_members = 5;
     repeated Transaction transactions = 6;
     repeated TransactionTemplate transactionTemplates = 8;
+    // new entity
 }
 
 message Currency {
@@ -88,6 +82,7 @@ message Transaction {
     optional int64 sub_category_id = 9;
     optional int64 family_member_id = 10;
     optional string comment = 11;
+    optional bool off_budget = 12 [default = false];
 
     enum Type {
         UNDEFINED = 0;
@@ -107,16 +102,13 @@ message TransactionTemplate {
     repeated int32 days_of_month = 7;
 }
 
-message TransactionArchive {
-    optional int64 id = 1 [default = 0];
-    optional bool is_deleted = 2 [default = false];
-    repeated Transaction transactions = 3;
-}
+// new entity
 
 message Settings {
     optional int64 id = 1 [default = 0];
     optional Language language = 2 [default = RU];
     optional int64 currency_id = 3 [default = 1];
+    optional bool no_off_budget = 4 [default = false];
 
     enum Language {
         RU = 0;
@@ -160,4 +152,22 @@ message Summary {
     required int64 amount = 1;
     required double share = 2;
     optional bool use_in_share = 3 [default = true];
+}
+
+message TextHolder {
+    optional string value = 1;
+}
+
+enum EntityType {
+    UNDEFINED = 0;
+    SETTINGS = 7;
+    CURRENCY = 1;
+    ACCOUNT = 2;
+    CATEGORY = 3;
+    SUB_CATEGORY = 4;
+    FAMILY_MEMBER = 5;
+    TRANSACTION = 6;
+    TRANSACTION_ARCHIVE = 8;
+    TRANSACTION_TEMPLATE = 9;
+    // new entity
 }

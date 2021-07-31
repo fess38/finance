@@ -2,23 +2,8 @@ package ru.fess38.finance.utils
 
 import com.google.protobuf.Descriptors.FieldDescriptor
 import com.google.protobuf.Message
-import ru.fess38.finance.core.Model.Account
-import ru.fess38.finance.core.Model.Category
-import ru.fess38.finance.core.Model.EntityType
-import ru.fess38.finance.core.Model.EntityType.ACCOUNT
-import ru.fess38.finance.core.Model.EntityType.CATEGORY
-import ru.fess38.finance.core.Model.EntityType.FAMILY_MEMBER
-import ru.fess38.finance.core.Model.EntityType.SETTINGS
-import ru.fess38.finance.core.Model.EntityType.SUB_CATEGORY
-import ru.fess38.finance.core.Model.EntityType.TRANSACTION
-import ru.fess38.finance.core.Model.EntityType.TRANSACTION_ARCHIVE
-import ru.fess38.finance.core.Model.EntityType.TRANSACTION_TEMPLATE
-import ru.fess38.finance.core.Model.FamilyMember
-import ru.fess38.finance.core.Model.Settings
-import ru.fess38.finance.core.Model.SubCategory
-import ru.fess38.finance.core.Model.Transaction
-import ru.fess38.finance.core.Model.TransactionArchive
-import ru.fess38.finance.core.Model.TransactionTemplate
+import ru.fess38.finance.core.Model.*
+import ru.fess38.finance.core.Model.EntityType.*
 
 private val Message.idField: FieldDescriptor
   get() = this.descriptorForType.findFieldByName("id")!!
@@ -36,8 +21,22 @@ val Message.type: EntityType
     is SubCategory -> SUB_CATEGORY
     is FamilyMember -> FAMILY_MEMBER
     is Transaction -> TRANSACTION
-    is TransactionArchive -> TRANSACTION_ARCHIVE
     is TransactionTemplate -> TRANSACTION_TEMPLATE
+    // new entity
     else -> throw IllegalArgumentException("Unknown entity: $this")
   }
 
+val Message.isDeleted: Boolean
+  get() = when (this) {
+    is Settings -> false
+    is Account -> this.isDeleted
+    is Category -> this.isDeleted
+    is SubCategory -> this.isDeleted
+    is FamilyMember -> this.isDeleted
+    is Transaction -> this.isDeleted
+    is TransactionTemplate -> this.isDeleted
+    // new entity
+    else -> throw IllegalArgumentException("Unknown entity: $this")
+  }
+
+fun createTextHolder(value: String = "") = TextHolder.newBuilder().setValue(value).build()!!
