@@ -90,6 +90,8 @@ class HibernateEntityRepositoryImpl : EntityRepository {
             EntityType.FAMILY_MEMBER -> FamilyMember.parseFrom(bytes)
             EntityType.TRANSACTION -> Transaction.parseFrom(bytes)
             EntityType.TRANSACTION_TEMPLATE -> TransactionTemplate.parseFrom(bytes)
+            EntityType.SECURITY -> Security.parseFrom(bytes)
+            EntityType.SECURITY_TRANSACTION -> SecurityTransaction.parseFrom(bytes)
             // new entity
             else -> throw IllegalArgumentException("Unknown type: $hibernateEntity.type")
           }.withId(hibernateEntity.id)

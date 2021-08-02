@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit
 import javax.annotation.PostConstruct
 
 @Service
-class MessageServiceImpl: MessageService {
+class MessageServiceImpl : MessageService {
   private val log = KotlinLogging.logger {}
 
   @Autowired
@@ -77,29 +77,35 @@ class MessageServiceImpl: MessageService {
     val familyMembers = messages.filter {it.type == FAMILY_MEMBER && !it.isDeleted}.map {it as FamilyMember}
     val transactions = messages.filter {it.type == TRANSACTION && !it.isDeleted}.map {it as Transaction}
     val transactionTemplates = messages
-        .filter {it.type == TRANSACTION_TEMPLATE && !it.isDeleted}
-        .map {it as TransactionTemplate}
+      .filter {it.type == TRANSACTION_TEMPLATE && !it.isDeleted}
+      .map {it as TransactionTemplate}
+    val securities = messages.filter {it.type == SECURITY && !it.isDeleted}.map {it as Security}
+    val securityTransactions = messages
+      .filter {it.type == SECURITY_TRANSACTION && !it.isDeleted}
+      .map {it as SecurityTransaction}
 
     // new entity
 
     log.info {"Create data storage for user [${user.id}]"}
     return builder
-        .setSettings(settings)
-        .addAllCurrencies(repository.currencies())
-        .addAllAccounts(accounts)
-        .addAllCategories(categories)
-        .addAllSubCategories(subCategories)
-        .addAllFamilyMembers(familyMembers)
-        .addAllTransactions(transactions)
-        .addAllTransactionTemplates(transactionTemplates)
-        .build()
+      .setSettings(settings)
+      .addAllCurrencies(repository.currencies())
+      .addAllAccounts(accounts)
+      .addAllCategories(categories)
+      .addAllSubCategories(subCategories)
+      .addAllFamilyMembers(familyMembers)
+      .addAllTransactions(transactions)
+      .addAllTransactionTemplates(transactionTemplates)
+      .addAllSecurities(securities)
+      .addAllSecurityTransactions(securityTransactions)
+      .build()
   }
 
   private fun settings(messages: List<Message>, user: User): Settings {
     var settings: Settings? = messages
-        .filter {it.type == SETTINGS}
-        .map {it as Settings}
-        .getOrNull(0)
+      .filter {it.type == SETTINGS}
+      .map {it as Settings}
+      .getOrNull(0)
     if (settings == null) {
       settings = repository.get(user, 0, listOf(SETTINGS)).map {it as Settings}.getOrNull(0)
     }
@@ -150,7 +156,7 @@ class MessageServiceImpl: MessageService {
       .maximumSize(100)
       .expireAfterWrite(1, TimeUnit.HOURS)
       .build(
-        object: CacheLoader<CacheKey, Boolean>() {
+        object : CacheLoader<CacheKey, Boolean>() {
           override fun load(key: CacheKey): Boolean {
             return repository.isExist(key.id, key.type, key.user)
           }

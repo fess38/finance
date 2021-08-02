@@ -1,6 +1,7 @@
 package ru.fess38.finance.core
 
 import com.google.protobuf.Message
+import com.google.protobuf.StringValue
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -8,7 +9,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import ru.fess38.finance.IDSEQ_ALLOCATION_SIZE
 import ru.fess38.finance.core.Model.*
-import ru.fess38.finance.utils.createTextHolder
 import ru.fess38.finance.utils.id
 import ru.fess38.finance.utils.type
 import ru.fess38.finance.validation.MessageValidator
@@ -100,6 +100,18 @@ class Controller {
           httpStatus = it
         }
       }
+      if (httpStatus == HttpStatus.OK) {
+        saveMessages(value.securitiesList).also {
+          savedMessages.addAll(value.securitiesList)
+          httpStatus = it
+        }
+      }
+      if (httpStatus == HttpStatus.OK) {
+        saveMessages(value.securityTransactionsList).also {
+          savedMessages.addAll(value.securityTransactionsList)
+          httpStatus = it
+        }
+      }
 
       // new entity
     } catch (e: Exception) {
@@ -115,7 +127,7 @@ class Controller {
       }
     }
 
-    return ResponseEntity(createTextHolder(), httpStatus)
+    return ResponseEntity(StringValue.getDefaultInstance(), httpStatus)
   }
 
   private fun saveMessages(messages: List<Message>): HttpStatus {
@@ -159,7 +171,7 @@ class Controller {
       log.info {"Unable to save [${message.type}]: ${e.message}"}
     }
 
-    return ResponseEntity(createTextHolder(), httpStatus)
+    return ResponseEntity(StringValue.getDefaultInstance(), httpStatus)
   }
 
   @PostMapping("account/save")
@@ -180,6 +192,12 @@ class Controller {
   @PostMapping("transaction_template/save")
   fun save(@RequestBody value: TransactionTemplate) = saveMessage(value)
 
+  @PostMapping("security/save")
+  fun save(@RequestBody value: Security) = saveMessage(value)
+
+  @PostMapping("security_transaction/save")
+  fun save(@RequestBody value: SecurityTransaction) = saveMessage(value)
+
   // new entity
 
   private fun updateMessage(message: Message): ResponseEntity<Any> {
@@ -199,7 +217,7 @@ class Controller {
       log.info {"Unable to update [${message.type}] [${message.id}]: ${e.message}"}
     }
 
-    return ResponseEntity(createTextHolder(), httpStatus)
+    return ResponseEntity(StringValue.getDefaultInstance(), httpStatus)
   }
 
   @PostMapping("settings/update")
@@ -223,6 +241,12 @@ class Controller {
   @PostMapping("transaction_template/update")
   fun update(@RequestBody value: TransactionTemplate) = updateMessage(value)
 
+  @PostMapping("security/update")
+  fun update(@RequestBody value: Security) = updateMessage(value)
+
+  @PostMapping("security_transaction/update")
+  fun update(@RequestBody value: SecurityTransaction) = updateMessage(value)
+
   // new entity
 
   @PostMapping("storage/delete")
@@ -236,6 +260,6 @@ class Controller {
       httpStatus = HttpStatus.INTERNAL_SERVER_ERROR
     }
 
-    return ResponseEntity(createTextHolder(), httpStatus)
+    return ResponseEntity(StringValue.getDefaultInstance(), httpStatus)
   }
 }
