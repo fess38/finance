@@ -13,13 +13,15 @@
     "title": "Finance",
     "category": "Category",
     "sub_category": "Subcategory",
-    "no_off_budget": "No off-budget"
+    "no_off_budget": "No off-budget",
+    "security": "Security paper",
+    "currency": "Currency",
+    "price": "Price"
   },
   "account_detail": {
     "add": "Add account",
     "edit": "Edit account",
-    "updated_balance": "Updated balance",
-    "currency": "Currency"
+    "updated_balance": "Updated balance"
   },
   "account_list": {
     "account_title": "Account",
@@ -36,6 +38,11 @@
   },
   "family_member_list": {
     "family_member": "Family member"
+  },
+  "security_detail": {
+    "add": "Add security paper",
+    "edit": "Edit security paper",
+    "amount": "Transactions"
   },
   "login": {
     "google": "Log in by Google"
@@ -60,14 +67,15 @@
     "account": "Accounts",
     "category": "Categories",
     "sub_category": "Subcategories",
-    "family_member": "Family members"
+    "family_member": "Family members",
+    "investment": "Investment",
+    "security": "Security papers"
   },
   "settings": {
     "data_export": "Export data",
     "data_import": "Import data",
     "data_delete": "Delete data",
     "language": "Language",
-    "currency": "Currency",
     "no_off_budget": "Hide off budget transactions"
   },
   "sub_category_detail": {

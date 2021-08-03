@@ -101,6 +101,12 @@ export interface IDataStorage {
 
     /** DataStorage transactionTemplates */
     transactionTemplates?: (ITransactionTemplate[]|null);
+
+    /** DataStorage securities */
+    securities?: (ISecurity[]|null);
+
+    /** DataStorage securityTransactions */
+    securityTransactions?: (ISecurityTransaction[]|null);
 }
 
 /** Represents a DataStorage. */
@@ -138,6 +144,12 @@ export class DataStorage implements IDataStorage {
 
     /** DataStorage transactionTemplates. */
     public transactionTemplates: ITransactionTemplate[];
+
+    /** DataStorage securities. */
+    public securities: ISecurity[];
+
+    /** DataStorage securityTransactions. */
+    public securityTransactions: ISecurityTransaction[];
 
     /**
      * Creates a new DataStorage instance using the specified properties.
@@ -977,6 +989,339 @@ export class TransactionTemplate implements ITransactionTemplate {
     public toJSON(): { [k: string]: any };
 }
 
+/** Properties of a Security. */
+export interface ISecurity {
+
+    /** Security id */
+    id?: (number|null);
+
+    /** Security isDeleted */
+    isDeleted?: (boolean|null);
+
+    /** Security isVisible */
+    isVisible?: (boolean|null);
+
+    /** Security transactionAmount */
+    transactionAmount?: (number|null);
+
+    /** Security name */
+    name: string;
+
+    /** Security currencyId */
+    currencyId: number;
+
+    /** Security price */
+    price: IMoney;
+}
+
+/** Represents a Security. */
+export class Security implements ISecurity {
+
+    /**
+     * Constructs a new Security.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: ISecurity);
+
+    /** Security id. */
+    public id: number;
+
+    /** Security isDeleted. */
+    public isDeleted: boolean;
+
+    /** Security isVisible. */
+    public isVisible: boolean;
+
+    /** Security transactionAmount. */
+    public transactionAmount: number;
+
+    /** Security name. */
+    public name: string;
+
+    /** Security currencyId. */
+    public currencyId: number;
+
+    /** Security price. */
+    public price: IMoney;
+
+    /**
+     * Creates a new Security instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns Security instance
+     */
+    public static create(properties?: ISecurity): Security;
+
+    /**
+     * Encodes the specified Security message. Does not implicitly {@link Security.verify|verify} messages.
+     * @param message Security message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: ISecurity, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a Security message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns Security
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Security;
+
+    /**
+     * Creates a Security message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns Security
+     */
+    public static fromObject(object: { [k: string]: any }): Security;
+
+    /**
+     * Creates a plain object from a Security message. Also converts values to other types if specified.
+     * @param message Security
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: Security, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this Security to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a SecurityTransaction. */
+export interface ISecurityTransaction {
+
+    /** SecurityTransaction id */
+    id?: (number|null);
+
+    /** SecurityTransaction isDeleted */
+    isDeleted?: (boolean|null);
+
+    /** SecurityTransaction date */
+    date: string;
+
+    /** SecurityTransaction securityId */
+    securityId: number;
+
+    /** SecurityTransaction type */
+    type: SecurityTransaction.Type;
+
+    /** SecurityTransaction price */
+    price: IMoney;
+
+    /** SecurityTransaction exchangeRate */
+    exchangeRate: IMoney;
+
+    /** SecurityTransaction amount */
+    amount?: (number|null);
+}
+
+/** Represents a SecurityTransaction. */
+export class SecurityTransaction implements ISecurityTransaction {
+
+    /**
+     * Constructs a new SecurityTransaction.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: ISecurityTransaction);
+
+    /** SecurityTransaction id. */
+    public id: number;
+
+    /** SecurityTransaction isDeleted. */
+    public isDeleted: boolean;
+
+    /** SecurityTransaction date. */
+    public date: string;
+
+    /** SecurityTransaction securityId. */
+    public securityId: number;
+
+    /** SecurityTransaction type. */
+    public type: SecurityTransaction.Type;
+
+    /** SecurityTransaction price. */
+    public price: IMoney;
+
+    /** SecurityTransaction exchangeRate. */
+    public exchangeRate: IMoney;
+
+    /** SecurityTransaction amount. */
+    public amount: number;
+
+    /**
+     * Creates a new SecurityTransaction instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns SecurityTransaction instance
+     */
+    public static create(properties?: ISecurityTransaction): SecurityTransaction;
+
+    /**
+     * Encodes the specified SecurityTransaction message. Does not implicitly {@link SecurityTransaction.verify|verify} messages.
+     * @param message SecurityTransaction message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: ISecurityTransaction, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a SecurityTransaction message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns SecurityTransaction
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): SecurityTransaction;
+
+    /**
+     * Creates a SecurityTransaction message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns SecurityTransaction
+     */
+    public static fromObject(object: { [k: string]: any }): SecurityTransaction;
+
+    /**
+     * Creates a plain object from a SecurityTransaction message. Also converts values to other types if specified.
+     * @param message SecurityTransaction
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: SecurityTransaction, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this SecurityTransaction to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+export namespace SecurityTransaction {
+
+    /** Type enum. */
+    enum Type {
+        UNDEFINED = 0,
+        BUY = 1,
+        SELL = 2,
+        PURCHASE_FEE = 3,
+        SERVICE_FEE = 4,
+        COUPON = 5,
+        DIVIDEND = 6,
+        TAX = 7
+    }
+}
+
+/** Properties of a SecurityReport. */
+export interface ISecurityReport {
+
+    /** SecurityReport buyDate */
+    buyDate: string;
+
+    /** SecurityReport sellDate */
+    sellDate?: (string|null);
+
+    /** SecurityReport days */
+    days: number;
+
+    /** SecurityReport amount */
+    amount: number;
+
+    /** SecurityReport income */
+    income: IMoney;
+
+    /** SecurityReport expense */
+    expense: IMoney;
+
+    /** SecurityReport profit */
+    profit: IMoney;
+
+    /** SecurityReport annualProfit */
+    annualProfit: number;
+}
+
+/** Represents a SecurityReport. */
+export class SecurityReport implements ISecurityReport {
+
+    /**
+     * Constructs a new SecurityReport.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: ISecurityReport);
+
+    /** SecurityReport buyDate. */
+    public buyDate: string;
+
+    /** SecurityReport sellDate. */
+    public sellDate: string;
+
+    /** SecurityReport days. */
+    public days: number;
+
+    /** SecurityReport amount. */
+    public amount: number;
+
+    /** SecurityReport income. */
+    public income: IMoney;
+
+    /** SecurityReport expense. */
+    public expense: IMoney;
+
+    /** SecurityReport profit. */
+    public profit: IMoney;
+
+    /** SecurityReport annualProfit. */
+    public annualProfit: number;
+
+    /**
+     * Creates a new SecurityReport instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns SecurityReport instance
+     */
+    public static create(properties?: ISecurityReport): SecurityReport;
+
+    /**
+     * Encodes the specified SecurityReport message. Does not implicitly {@link SecurityReport.verify|verify} messages.
+     * @param message SecurityReport message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: ISecurityReport, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a SecurityReport message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns SecurityReport
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): SecurityReport;
+
+    /**
+     * Creates a SecurityReport message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns SecurityReport
+     */
+    public static fromObject(object: { [k: string]: any }): SecurityReport;
+
+    /**
+     * Creates a plain object from a SecurityReport message. Also converts values to other types if specified.
+     * @param message SecurityReport
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: SecurityReport, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this SecurityReport to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
 /** Properties of a Settings. */
 export interface ISettings {
 
@@ -1519,67 +1864,73 @@ export class Summary implements ISummary {
     public toJSON(): { [k: string]: any };
 }
 
-/** Properties of a TextHolder. */
-export interface ITextHolder {
+/** Properties of a Money. */
+export interface IMoney {
 
-    /** TextHolder value */
-    value?: (string|null);
+    /** Money units */
+    units: number;
+
+    /** Money micros */
+    micros?: (number|null);
 }
 
-/** Represents a TextHolder. */
-export class TextHolder implements ITextHolder {
+/** Represents a Money. */
+export class Money implements IMoney {
 
     /**
-     * Constructs a new TextHolder.
+     * Constructs a new Money.
      * @param [properties] Properties to set
      */
-    constructor(properties?: ITextHolder);
+    constructor(properties?: IMoney);
 
-    /** TextHolder value. */
-    public value: string;
+    /** Money units. */
+    public units: number;
+
+    /** Money micros. */
+    public micros: number;
 
     /**
-     * Creates a new TextHolder instance using the specified properties.
+     * Creates a new Money instance using the specified properties.
      * @param [properties] Properties to set
-     * @returns TextHolder instance
+     * @returns Money instance
      */
-    public static create(properties?: ITextHolder): TextHolder;
+    public static create(properties?: IMoney): Money;
 
     /**
-     * Encodes the specified TextHolder message. Does not implicitly {@link TextHolder.verify|verify} messages.
-     * @param message TextHolder message or plain object to encode
+     * Encodes the specified Money message. Does not implicitly {@link Money.verify|verify} messages.
+     * @param message Money message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encode(message: ITextHolder, writer?: $protobuf.Writer): $protobuf.Writer;
+    public static encode(message: IMoney, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Decodes a TextHolder message from the specified reader or buffer.
+     * Decodes a Money message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
-     * @returns TextHolder
+     * @returns Money
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): TextHolder;
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Money;
 
     /**
-     * Creates a TextHolder message from a plain object. Also converts values to their respective internal types.
+     * Creates a Money message from a plain object. Also converts values to their respective internal types.
      * @param object Plain object
-     * @returns TextHolder
+     * @returns Money
      */
-    public static fromObject(object: { [k: string]: any }): TextHolder;
+    public static fromObject(object: { [k: string]: any }): Money;
 
     /**
-     * Creates a plain object from a TextHolder message. Also converts values to other types if specified.
-     * @param message TextHolder
+     * Creates a plain object from a Money message. Also converts values to other types if specified.
+     * @param message Money
      * @param [options] Conversion options
      * @returns Plain object
      */
-    public static toObject(message: TextHolder, options?: $protobuf.IConversionOptions): { [k: string]: any };
+    public static toObject(message: Money, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
     /**
-     * Converts this TextHolder to JSON.
+     * Converts this Money to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };
@@ -1596,5 +1947,7 @@ export enum EntityType {
     FAMILY_MEMBER = 5,
     TRANSACTION = 6,
     TRANSACTION_ARCHIVE = 8,
-    TRANSACTION_TEMPLATE = 9
+    TRANSACTION_TEMPLATE = 9,
+    SECURITY = 10,
+    SECURITY_TRANSACTION = 11
 }

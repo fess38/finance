@@ -5,7 +5,7 @@ import { del, get, set } from 'idb-keyval';
 import { Long } from 'protobufjs';
 import { AsyncSubject, Subscription } from 'rxjs';
 import { HttpService } from '../../utils/http.service';
-import { Account, Category, Currency, DataStorage, FamilyMember, IdHolder, Settings, SubCategory, TextHolder, Transaction, TransactionTemplate } from '../model/model';
+import { Account, Category, Currency, DataStorage, FamilyMember, IdHolder, Security, SecurityTransaction, Settings, SubCategory, Transaction, TransactionTemplate } from '../model/model';
 import { UserDataEnricherService } from './user-data-enricher.service';
 import Language = Settings.Language;
 
@@ -126,6 +126,16 @@ export class UserDataService {
     return this.ds.transactionTemplates.filter(x => !x.isDeleted) as TransactionTemplate[];
   }
 
+  securities(): Security[] {
+    return this.ds.securities.filter(x => !x.isDeleted) as Security[];
+  }
+
+  securityTransactions(): SecurityTransaction[] {
+    return this.ds.securityTransactions.filter(x => !x.isDeleted) as SecurityTransaction[];
+  }
+
+  // new entity
+
   findCurrency(id: number | Long): Currency {
     return this.currencies().filter(x => x.id == id)[0];
   }
@@ -153,6 +163,16 @@ export class UserDataService {
   findTranasctionTemplate(id: number | Long): TransactionTemplate {
     return this.transactionTemplates().filter(x => x.id == id)[0];
   }
+
+  findSecurity(id: number | Long): Security {
+    return this.securities().filter(x => x.id == id)[0];
+  }
+
+  findSecurityTransaction(id: number | Long): SecurityTransaction {
+    return this.securityTransactions().filter(x => x.id == id)[0];
+  }
+
+  // new entity
 
   private isObsoleteIdHolder(): boolean {
     return !this.ds.idHolder || this.ds.idHolder.from > this.ds.idHolder.to;
@@ -186,7 +206,9 @@ export class UserDataService {
     };
 
     const idsAmount = ds.accounts.length + ds.categories.length + ds.subCategories.length
-      + ds.familyMembers.length + ds.transactions.length + ds.transactionTemplates.length;
+      + ds.familyMembers.length + ds.transactions.length + ds.transactionTemplates.length
+      + ds.securities.length + ds.securityTransactions.length;
+    // new entity
     await this.nextIds(idsAmount);
 
     ds.accounts.forEach(account => {
@@ -268,6 +290,20 @@ export class UserDataService {
       transactionTemplate.id = nextIdSync();
     });
 
+    ds.securities.forEach(security => {
+      const oldId = security.id;
+      security.id = nextIdSync();
+      ds.securityTransactions.forEach(securityTransaction => {
+        if (securityTransaction.securityId == oldId) {
+          securityTransaction.securityId = security.id;
+        }
+      });
+    });
+
+    ds.securityTransactions.forEach(securityTransaction => {
+      securityTransaction.id = nextIdSync();
+    });
+
     // new entity
 
     await this.http.post('/api/data/storage/save', DataStorage.encode(ds), 600000);
@@ -317,6 +353,24 @@ export class UserDataService {
     this.enricher.enrich(this.ds);
     this.updateCache();
   }
+
+  async saveSecurity(security: Security): Promise<any> {
+    await this.nextId().then(id => security.id = id);
+    await this.http.post('/api/data/security/save', Security.encode(security));
+    this.ds.securities.push(security);
+    this.enricher.enrich(this.ds);
+    this.updateCache();
+  }
+
+  async saveSecurityTransaction(securityTransaction: SecurityTransaction): Promise<any> {
+    await this.nextId().then(id => securityTransaction.id = id);
+    await this.http.post('/api/data/security_transaction/save', SecurityTransaction.encode(securityTransaction));
+    this.ds.securityTransactions.push(securityTransaction);
+    this.enricher.enrich(this.ds);
+    this.updateCache();
+  }
+
+  // new entity
 
   async updateSettings(settings: Settings): Promise<any> {
     this.setDefaultLang();
@@ -369,8 +423,26 @@ export class UserDataService {
     this.updateCache();
   }
 
+  async updateSecurity(security: Security): Promise<any> {
+    await this.http.post('/api/data/security/update', Security.encode(security));
+    this.ds.securities = this.ds.securities.filter(x => x.id != security.id);
+    this.ds.securities.push(security);
+    this.enricher.enrich(this.ds);
+    this.updateCache();
+  }
+
+  async updateSecurityTransaction(securityTransaction: SecurityTransaction): Promise<any> {
+    await this.http.post('/api/data/security_transaction/update', SecurityTransaction.encode(securityTransaction));
+    this.ds.securityTransactions = this.ds.securityTransactions.filter(x => x.id != securityTransaction.id);
+    this.ds.securityTransactions.push(securityTransaction);
+    this.enricher.enrich(this.ds);
+    this.updateCache();
+  }
+
+  // new entity
+
   async deleteDataStorage(): Promise<any> {
-    await this.http.post('/api/data/storage/delete', TextHolder.encode(new TextHolder()), 600000);
+    await this.http.post('/api/data/storage/delete', Settings.encode(new Settings()), 600000);
     this.ds = new DataStorage();
     await del('ts');
     await this.refresh();

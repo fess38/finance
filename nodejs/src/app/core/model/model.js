@@ -213,6 +213,8 @@ export const DataStorage = $root.DataStorage = (() => {
      * @property {Array.<IFamilyMember>|null} [familyMembers] DataStorage familyMembers
      * @property {Array.<ITransaction>|null} [transactions] DataStorage transactions
      * @property {Array.<ITransactionTemplate>|null} [transactionTemplates] DataStorage transactionTemplates
+     * @property {Array.<ISecurity>|null} [securities] DataStorage securities
+     * @property {Array.<ISecurityTransaction>|null} [securityTransactions] DataStorage securityTransactions
      */
 
     /**
@@ -231,6 +233,8 @@ export const DataStorage = $root.DataStorage = (() => {
         this.familyMembers = [];
         this.transactions = [];
         this.transactionTemplates = [];
+        this.securities = [];
+        this.securityTransactions = [];
         if (properties)
             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
@@ -310,6 +314,22 @@ export const DataStorage = $root.DataStorage = (() => {
     DataStorage.prototype.transactionTemplates = $util.emptyArray;
 
     /**
+     * DataStorage securities.
+     * @member {Array.<ISecurity>} securities
+     * @memberof DataStorage
+     * @instance
+     */
+    DataStorage.prototype.securities = $util.emptyArray;
+
+    /**
+     * DataStorage securityTransactions.
+     * @member {Array.<ISecurityTransaction>} securityTransactions
+     * @memberof DataStorage
+     * @instance
+     */
+    DataStorage.prototype.securityTransactions = $util.emptyArray;
+
+    /**
      * Creates a new DataStorage instance using the specified properties.
      * @function create
      * @memberof DataStorage
@@ -358,6 +378,12 @@ export const DataStorage = $root.DataStorage = (() => {
                 $root.TransactionTemplate.encode(message.transactionTemplates[i], writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
         if (message.idHolder != null && Object.hasOwnProperty.call(message, "idHolder"))
             $root.IdHolder.encode(message.idHolder, writer.uint32(/* id 9, wireType 2 =*/74).fork()).ldelim();
+        if (message.securities != null && message.securities.length)
+            for (let i = 0; i < message.securities.length; ++i)
+                $root.Security.encode(message.securities[i], writer.uint32(/* id 10, wireType 2 =*/82).fork()).ldelim();
+        if (message.securityTransactions != null && message.securityTransactions.length)
+            for (let i = 0; i < message.securityTransactions.length; ++i)
+                $root.SecurityTransaction.encode(message.securityTransactions[i], writer.uint32(/* id 11, wireType 2 =*/90).fork()).ldelim();
         return writer;
     };
 
@@ -419,6 +445,16 @@ export const DataStorage = $root.DataStorage = (() => {
                 if (!(message.transactionTemplates && message.transactionTemplates.length))
                     message.transactionTemplates = [];
                 message.transactionTemplates.push($root.TransactionTemplate.decode(reader, reader.uint32()));
+                break;
+            case 10:
+                if (!(message.securities && message.securities.length))
+                    message.securities = [];
+                message.securities.push($root.Security.decode(reader, reader.uint32()));
+                break;
+            case 11:
+                if (!(message.securityTransactions && message.securityTransactions.length))
+                    message.securityTransactions = [];
+                message.securityTransactions.push($root.SecurityTransaction.decode(reader, reader.uint32()));
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -520,6 +556,26 @@ export const DataStorage = $root.DataStorage = (() => {
                 message.transactionTemplates[i] = $root.TransactionTemplate.fromObject(object.transactionTemplates[i]);
             }
         }
+        if (object.securities) {
+            if (!Array.isArray(object.securities))
+                throw TypeError(".DataStorage.securities: array expected");
+            message.securities = [];
+            for (let i = 0; i < object.securities.length; ++i) {
+                if (typeof object.securities[i] !== "object")
+                    throw TypeError(".DataStorage.securities: object expected");
+                message.securities[i] = $root.Security.fromObject(object.securities[i]);
+            }
+        }
+        if (object.securityTransactions) {
+            if (!Array.isArray(object.securityTransactions))
+                throw TypeError(".DataStorage.securityTransactions: array expected");
+            message.securityTransactions = [];
+            for (let i = 0; i < object.securityTransactions.length; ++i) {
+                if (typeof object.securityTransactions[i] !== "object")
+                    throw TypeError(".DataStorage.securityTransactions: object expected");
+                message.securityTransactions[i] = $root.SecurityTransaction.fromObject(object.securityTransactions[i]);
+            }
+        }
         return message;
     };
 
@@ -544,6 +600,8 @@ export const DataStorage = $root.DataStorage = (() => {
             object.familyMembers = [];
             object.transactions = [];
             object.transactionTemplates = [];
+            object.securities = [];
+            object.securityTransactions = [];
         }
         if (options.defaults) {
             object.settings = null;
@@ -588,6 +646,16 @@ export const DataStorage = $root.DataStorage = (() => {
         }
         if (message.idHolder != null && message.hasOwnProperty("idHolder"))
             object.idHolder = $root.IdHolder.toObject(message.idHolder, options);
+        if (message.securities && message.securities.length) {
+            object.securities = [];
+            for (let j = 0; j < message.securities.length; ++j)
+                object.securities[j] = $root.Security.toObject(message.securities[j], options);
+        }
+        if (message.securityTransactions && message.securityTransactions.length) {
+            object.securityTransactions = [];
+            for (let j = 0; j < message.securityTransactions.length; ++j)
+                object.securityTransactions[j] = $root.SecurityTransaction.toObject(message.securityTransactions[j], options);
+        }
         return object;
     };
 
@@ -2923,6 +2991,1015 @@ export const TransactionTemplate = $root.TransactionTemplate = (() => {
     return TransactionTemplate;
 })();
 
+export const Security = $root.Security = (() => {
+
+    /**
+     * Properties of a Security.
+     * @exports ISecurity
+     * @interface ISecurity
+     * @property {number|null} [id] Security id
+     * @property {boolean|null} [isDeleted] Security isDeleted
+     * @property {boolean|null} [isVisible] Security isVisible
+     * @property {number|null} [transactionAmount] Security transactionAmount
+     * @property {string} name Security name
+     * @property {number} currencyId Security currencyId
+     * @property {IMoney} price Security price
+     */
+
+    /**
+     * Constructs a new Security.
+     * @exports Security
+     * @classdesc Represents a Security.
+     * @implements ISecurity
+     * @constructor
+     * @param {ISecurity=} [properties] Properties to set
+     */
+    function Security(properties) {
+        if (properties)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * Security id.
+     * @member {number} id
+     * @memberof Security
+     * @instance
+     */
+    Security.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
+     * Security isDeleted.
+     * @member {boolean} isDeleted
+     * @memberof Security
+     * @instance
+     */
+    Security.prototype.isDeleted = false;
+
+    /**
+     * Security isVisible.
+     * @member {boolean} isVisible
+     * @memberof Security
+     * @instance
+     */
+    Security.prototype.isVisible = true;
+
+    /**
+     * Security transactionAmount.
+     * @member {number} transactionAmount
+     * @memberof Security
+     * @instance
+     */
+    Security.prototype.transactionAmount = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
+     * Security name.
+     * @member {string} name
+     * @memberof Security
+     * @instance
+     */
+    Security.prototype.name = "";
+
+    /**
+     * Security currencyId.
+     * @member {number} currencyId
+     * @memberof Security
+     * @instance
+     */
+    Security.prototype.currencyId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
+     * Security price.
+     * @member {IMoney} price
+     * @memberof Security
+     * @instance
+     */
+    Security.prototype.price = null;
+
+    /**
+     * Creates a new Security instance using the specified properties.
+     * @function create
+     * @memberof Security
+     * @static
+     * @param {ISecurity=} [properties] Properties to set
+     * @returns {Security} Security instance
+     */
+    Security.create = function create(properties) {
+        return new Security(properties);
+    };
+
+    /**
+     * Encodes the specified Security message. Does not implicitly {@link Security.verify|verify} messages.
+     * @function encode
+     * @memberof Security
+     * @static
+     * @param {ISecurity} message Security message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    Security.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
+            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.id);
+        if (message.isDeleted != null && Object.hasOwnProperty.call(message, "isDeleted"))
+            writer.uint32(/* id 2, wireType 0 =*/16).bool(message.isDeleted);
+        if (message.isVisible != null && Object.hasOwnProperty.call(message, "isVisible"))
+            writer.uint32(/* id 3, wireType 0 =*/24).bool(message.isVisible);
+        if (message.transactionAmount != null && Object.hasOwnProperty.call(message, "transactionAmount"))
+            writer.uint32(/* id 4, wireType 0 =*/32).int64(message.transactionAmount);
+        writer.uint32(/* id 5, wireType 2 =*/42).string(message.name);
+        writer.uint32(/* id 6, wireType 0 =*/48).int64(message.currencyId);
+        $root.Money.encode(message.price, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
+        return writer;
+    };
+
+    /**
+     * Decodes a Security message from the specified reader or buffer.
+     * @function decode
+     * @memberof Security
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {Security} Security
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    Security.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Security();
+        while (reader.pos < end) {
+            let tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                message.id = reader.int64();
+                break;
+            case 2:
+                message.isDeleted = reader.bool();
+                break;
+            case 3:
+                message.isVisible = reader.bool();
+                break;
+            case 4:
+                message.transactionAmount = reader.int64();
+                break;
+            case 5:
+                message.name = reader.string();
+                break;
+            case 6:
+                message.currencyId = reader.int64();
+                break;
+            case 7:
+                message.price = $root.Money.decode(reader, reader.uint32());
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        if (!message.hasOwnProperty("name"))
+            throw $util.ProtocolError("missing required 'name'", { instance: message });
+        if (!message.hasOwnProperty("currencyId"))
+            throw $util.ProtocolError("missing required 'currencyId'", { instance: message });
+        if (!message.hasOwnProperty("price"))
+            throw $util.ProtocolError("missing required 'price'", { instance: message });
+        return message;
+    };
+
+    /**
+     * Creates a Security message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof Security
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {Security} Security
+     */
+    Security.fromObject = function fromObject(object) {
+        if (object instanceof $root.Security)
+            return object;
+        let message = new $root.Security();
+        if (object.id != null)
+            if ($util.Long)
+                (message.id = $util.Long.fromValue(object.id)).unsigned = false;
+            else if (typeof object.id === "string")
+                message.id = parseInt(object.id, 10);
+            else if (typeof object.id === "number")
+                message.id = object.id;
+            else if (typeof object.id === "object")
+                message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber();
+        if (object.isDeleted != null)
+            message.isDeleted = Boolean(object.isDeleted);
+        if (object.isVisible != null)
+            message.isVisible = Boolean(object.isVisible);
+        if (object.transactionAmount != null)
+            if ($util.Long)
+                (message.transactionAmount = $util.Long.fromValue(object.transactionAmount)).unsigned = false;
+            else if (typeof object.transactionAmount === "string")
+                message.transactionAmount = parseInt(object.transactionAmount, 10);
+            else if (typeof object.transactionAmount === "number")
+                message.transactionAmount = object.transactionAmount;
+            else if (typeof object.transactionAmount === "object")
+                message.transactionAmount = new $util.LongBits(object.transactionAmount.low >>> 0, object.transactionAmount.high >>> 0).toNumber();
+        if (object.name != null)
+            message.name = String(object.name);
+        if (object.currencyId != null)
+            if ($util.Long)
+                (message.currencyId = $util.Long.fromValue(object.currencyId)).unsigned = false;
+            else if (typeof object.currencyId === "string")
+                message.currencyId = parseInt(object.currencyId, 10);
+            else if (typeof object.currencyId === "number")
+                message.currencyId = object.currencyId;
+            else if (typeof object.currencyId === "object")
+                message.currencyId = new $util.LongBits(object.currencyId.low >>> 0, object.currencyId.high >>> 0).toNumber();
+        if (object.price != null) {
+            if (typeof object.price !== "object")
+                throw TypeError(".Security.price: object expected");
+            message.price = $root.Money.fromObject(object.price);
+        }
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a Security message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof Security
+     * @static
+     * @param {Security} message Security
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    Security.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        let object = {};
+        if (options.defaults) {
+            if ($util.Long) {
+                let long = new $util.Long(0, 0, false);
+                object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.id = options.longs === String ? "0" : 0;
+            object.isDeleted = false;
+            object.isVisible = true;
+            if ($util.Long) {
+                let long = new $util.Long(0, 0, false);
+                object.transactionAmount = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.transactionAmount = options.longs === String ? "0" : 0;
+            object.name = "";
+            if ($util.Long) {
+                let long = new $util.Long(0, 0, false);
+                object.currencyId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.currencyId = options.longs === String ? "0" : 0;
+            object.price = null;
+        }
+        if (message.id != null && message.hasOwnProperty("id"))
+            if (typeof message.id === "number")
+                object.id = options.longs === String ? String(message.id) : message.id;
+            else
+                object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber() : message.id;
+        if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
+            object.isDeleted = message.isDeleted;
+        if (message.isVisible != null && message.hasOwnProperty("isVisible"))
+            object.isVisible = message.isVisible;
+        if (message.transactionAmount != null && message.hasOwnProperty("transactionAmount"))
+            if (typeof message.transactionAmount === "number")
+                object.transactionAmount = options.longs === String ? String(message.transactionAmount) : message.transactionAmount;
+            else
+                object.transactionAmount = options.longs === String ? $util.Long.prototype.toString.call(message.transactionAmount) : options.longs === Number ? new $util.LongBits(message.transactionAmount.low >>> 0, message.transactionAmount.high >>> 0).toNumber() : message.transactionAmount;
+        if (message.name != null && message.hasOwnProperty("name"))
+            object.name = message.name;
+        if (message.currencyId != null && message.hasOwnProperty("currencyId"))
+            if (typeof message.currencyId === "number")
+                object.currencyId = options.longs === String ? String(message.currencyId) : message.currencyId;
+            else
+                object.currencyId = options.longs === String ? $util.Long.prototype.toString.call(message.currencyId) : options.longs === Number ? new $util.LongBits(message.currencyId.low >>> 0, message.currencyId.high >>> 0).toNumber() : message.currencyId;
+        if (message.price != null && message.hasOwnProperty("price"))
+            object.price = $root.Money.toObject(message.price, options);
+        return object;
+    };
+
+    /**
+     * Converts this Security to JSON.
+     * @function toJSON
+     * @memberof Security
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    Security.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    return Security;
+})();
+
+export const SecurityTransaction = $root.SecurityTransaction = (() => {
+
+    /**
+     * Properties of a SecurityTransaction.
+     * @exports ISecurityTransaction
+     * @interface ISecurityTransaction
+     * @property {number|null} [id] SecurityTransaction id
+     * @property {boolean|null} [isDeleted] SecurityTransaction isDeleted
+     * @property {string} date SecurityTransaction date
+     * @property {number} securityId SecurityTransaction securityId
+     * @property {SecurityTransaction.Type} type SecurityTransaction type
+     * @property {IMoney} price SecurityTransaction price
+     * @property {IMoney} exchangeRate SecurityTransaction exchangeRate
+     * @property {number|null} [amount] SecurityTransaction amount
+     */
+
+    /**
+     * Constructs a new SecurityTransaction.
+     * @exports SecurityTransaction
+     * @classdesc Represents a SecurityTransaction.
+     * @implements ISecurityTransaction
+     * @constructor
+     * @param {ISecurityTransaction=} [properties] Properties to set
+     */
+    function SecurityTransaction(properties) {
+        if (properties)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * SecurityTransaction id.
+     * @member {number} id
+     * @memberof SecurityTransaction
+     * @instance
+     */
+    SecurityTransaction.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
+     * SecurityTransaction isDeleted.
+     * @member {boolean} isDeleted
+     * @memberof SecurityTransaction
+     * @instance
+     */
+    SecurityTransaction.prototype.isDeleted = false;
+
+    /**
+     * SecurityTransaction date.
+     * @member {string} date
+     * @memberof SecurityTransaction
+     * @instance
+     */
+    SecurityTransaction.prototype.date = "";
+
+    /**
+     * SecurityTransaction securityId.
+     * @member {number} securityId
+     * @memberof SecurityTransaction
+     * @instance
+     */
+    SecurityTransaction.prototype.securityId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
+     * SecurityTransaction type.
+     * @member {SecurityTransaction.Type} type
+     * @memberof SecurityTransaction
+     * @instance
+     */
+    SecurityTransaction.prototype.type = 0;
+
+    /**
+     * SecurityTransaction price.
+     * @member {IMoney} price
+     * @memberof SecurityTransaction
+     * @instance
+     */
+    SecurityTransaction.prototype.price = null;
+
+    /**
+     * SecurityTransaction exchangeRate.
+     * @member {IMoney} exchangeRate
+     * @memberof SecurityTransaction
+     * @instance
+     */
+    SecurityTransaction.prototype.exchangeRate = null;
+
+    /**
+     * SecurityTransaction amount.
+     * @member {number} amount
+     * @memberof SecurityTransaction
+     * @instance
+     */
+    SecurityTransaction.prototype.amount = $util.Long ? $util.Long.fromBits(1,0,false) : 1;
+
+    /**
+     * Creates a new SecurityTransaction instance using the specified properties.
+     * @function create
+     * @memberof SecurityTransaction
+     * @static
+     * @param {ISecurityTransaction=} [properties] Properties to set
+     * @returns {SecurityTransaction} SecurityTransaction instance
+     */
+    SecurityTransaction.create = function create(properties) {
+        return new SecurityTransaction(properties);
+    };
+
+    /**
+     * Encodes the specified SecurityTransaction message. Does not implicitly {@link SecurityTransaction.verify|verify} messages.
+     * @function encode
+     * @memberof SecurityTransaction
+     * @static
+     * @param {ISecurityTransaction} message SecurityTransaction message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    SecurityTransaction.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
+            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.id);
+        if (message.isDeleted != null && Object.hasOwnProperty.call(message, "isDeleted"))
+            writer.uint32(/* id 2, wireType 0 =*/16).bool(message.isDeleted);
+        writer.uint32(/* id 3, wireType 2 =*/26).string(message.date);
+        writer.uint32(/* id 4, wireType 0 =*/32).int64(message.securityId);
+        writer.uint32(/* id 5, wireType 0 =*/40).int32(message.type);
+        $root.Money.encode(message.price, writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
+        $root.Money.encode(message.exchangeRate, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
+        if (message.amount != null && Object.hasOwnProperty.call(message, "amount"))
+            writer.uint32(/* id 8, wireType 0 =*/64).int64(message.amount);
+        return writer;
+    };
+
+    /**
+     * Decodes a SecurityTransaction message from the specified reader or buffer.
+     * @function decode
+     * @memberof SecurityTransaction
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {SecurityTransaction} SecurityTransaction
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    SecurityTransaction.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.SecurityTransaction();
+        while (reader.pos < end) {
+            let tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                message.id = reader.int64();
+                break;
+            case 2:
+                message.isDeleted = reader.bool();
+                break;
+            case 3:
+                message.date = reader.string();
+                break;
+            case 4:
+                message.securityId = reader.int64();
+                break;
+            case 5:
+                message.type = reader.int32();
+                break;
+            case 6:
+                message.price = $root.Money.decode(reader, reader.uint32());
+                break;
+            case 7:
+                message.exchangeRate = $root.Money.decode(reader, reader.uint32());
+                break;
+            case 8:
+                message.amount = reader.int64();
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        if (!message.hasOwnProperty("date"))
+            throw $util.ProtocolError("missing required 'date'", { instance: message });
+        if (!message.hasOwnProperty("securityId"))
+            throw $util.ProtocolError("missing required 'securityId'", { instance: message });
+        if (!message.hasOwnProperty("type"))
+            throw $util.ProtocolError("missing required 'type'", { instance: message });
+        if (!message.hasOwnProperty("price"))
+            throw $util.ProtocolError("missing required 'price'", { instance: message });
+        if (!message.hasOwnProperty("exchangeRate"))
+            throw $util.ProtocolError("missing required 'exchangeRate'", { instance: message });
+        return message;
+    };
+
+    /**
+     * Creates a SecurityTransaction message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof SecurityTransaction
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {SecurityTransaction} SecurityTransaction
+     */
+    SecurityTransaction.fromObject = function fromObject(object) {
+        if (object instanceof $root.SecurityTransaction)
+            return object;
+        let message = new $root.SecurityTransaction();
+        if (object.id != null)
+            if ($util.Long)
+                (message.id = $util.Long.fromValue(object.id)).unsigned = false;
+            else if (typeof object.id === "string")
+                message.id = parseInt(object.id, 10);
+            else if (typeof object.id === "number")
+                message.id = object.id;
+            else if (typeof object.id === "object")
+                message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber();
+        if (object.isDeleted != null)
+            message.isDeleted = Boolean(object.isDeleted);
+        if (object.date != null)
+            message.date = String(object.date);
+        if (object.securityId != null)
+            if ($util.Long)
+                (message.securityId = $util.Long.fromValue(object.securityId)).unsigned = false;
+            else if (typeof object.securityId === "string")
+                message.securityId = parseInt(object.securityId, 10);
+            else if (typeof object.securityId === "number")
+                message.securityId = object.securityId;
+            else if (typeof object.securityId === "object")
+                message.securityId = new $util.LongBits(object.securityId.low >>> 0, object.securityId.high >>> 0).toNumber();
+        switch (object.type) {
+        case "UNDEFINED":
+        case 0:
+            message.type = 0;
+            break;
+        case "BUY":
+        case 1:
+            message.type = 1;
+            break;
+        case "SELL":
+        case 2:
+            message.type = 2;
+            break;
+        case "PURCHASE_FEE":
+        case 3:
+            message.type = 3;
+            break;
+        case "SERVICE_FEE":
+        case 4:
+            message.type = 4;
+            break;
+        case "COUPON":
+        case 5:
+            message.type = 5;
+            break;
+        case "DIVIDEND":
+        case 6:
+            message.type = 6;
+            break;
+        case "TAX":
+        case 7:
+            message.type = 7;
+            break;
+        }
+        if (object.price != null) {
+            if (typeof object.price !== "object")
+                throw TypeError(".SecurityTransaction.price: object expected");
+            message.price = $root.Money.fromObject(object.price);
+        }
+        if (object.exchangeRate != null) {
+            if (typeof object.exchangeRate !== "object")
+                throw TypeError(".SecurityTransaction.exchangeRate: object expected");
+            message.exchangeRate = $root.Money.fromObject(object.exchangeRate);
+        }
+        if (object.amount != null)
+            if ($util.Long)
+                (message.amount = $util.Long.fromValue(object.amount)).unsigned = false;
+            else if (typeof object.amount === "string")
+                message.amount = parseInt(object.amount, 10);
+            else if (typeof object.amount === "number")
+                message.amount = object.amount;
+            else if (typeof object.amount === "object")
+                message.amount = new $util.LongBits(object.amount.low >>> 0, object.amount.high >>> 0).toNumber();
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a SecurityTransaction message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof SecurityTransaction
+     * @static
+     * @param {SecurityTransaction} message SecurityTransaction
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    SecurityTransaction.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        let object = {};
+        if (options.defaults) {
+            if ($util.Long) {
+                let long = new $util.Long(0, 0, false);
+                object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.id = options.longs === String ? "0" : 0;
+            object.isDeleted = false;
+            object.date = "";
+            if ($util.Long) {
+                let long = new $util.Long(0, 0, false);
+                object.securityId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.securityId = options.longs === String ? "0" : 0;
+            object.type = options.enums === String ? "UNDEFINED" : 0;
+            object.price = null;
+            object.exchangeRate = null;
+            if ($util.Long) {
+                let long = new $util.Long(1, 0, false);
+                object.amount = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.amount = options.longs === String ? "1" : 1;
+        }
+        if (message.id != null && message.hasOwnProperty("id"))
+            if (typeof message.id === "number")
+                object.id = options.longs === String ? String(message.id) : message.id;
+            else
+                object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber() : message.id;
+        if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
+            object.isDeleted = message.isDeleted;
+        if (message.date != null && message.hasOwnProperty("date"))
+            object.date = message.date;
+        if (message.securityId != null && message.hasOwnProperty("securityId"))
+            if (typeof message.securityId === "number")
+                object.securityId = options.longs === String ? String(message.securityId) : message.securityId;
+            else
+                object.securityId = options.longs === String ? $util.Long.prototype.toString.call(message.securityId) : options.longs === Number ? new $util.LongBits(message.securityId.low >>> 0, message.securityId.high >>> 0).toNumber() : message.securityId;
+        if (message.type != null && message.hasOwnProperty("type"))
+            object.type = options.enums === String ? $root.SecurityTransaction.Type[message.type] : message.type;
+        if (message.price != null && message.hasOwnProperty("price"))
+            object.price = $root.Money.toObject(message.price, options);
+        if (message.exchangeRate != null && message.hasOwnProperty("exchangeRate"))
+            object.exchangeRate = $root.Money.toObject(message.exchangeRate, options);
+        if (message.amount != null && message.hasOwnProperty("amount"))
+            if (typeof message.amount === "number")
+                object.amount = options.longs === String ? String(message.amount) : message.amount;
+            else
+                object.amount = options.longs === String ? $util.Long.prototype.toString.call(message.amount) : options.longs === Number ? new $util.LongBits(message.amount.low >>> 0, message.amount.high >>> 0).toNumber() : message.amount;
+        return object;
+    };
+
+    /**
+     * Converts this SecurityTransaction to JSON.
+     * @function toJSON
+     * @memberof SecurityTransaction
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    SecurityTransaction.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * Type enum.
+     * @name SecurityTransaction.Type
+     * @enum {number}
+     * @property {number} UNDEFINED=0 UNDEFINED value
+     * @property {number} BUY=1 BUY value
+     * @property {number} SELL=2 SELL value
+     * @property {number} PURCHASE_FEE=3 PURCHASE_FEE value
+     * @property {number} SERVICE_FEE=4 SERVICE_FEE value
+     * @property {number} COUPON=5 COUPON value
+     * @property {number} DIVIDEND=6 DIVIDEND value
+     * @property {number} TAX=7 TAX value
+     */
+    SecurityTransaction.Type = (function() {
+        const valuesById = {}, values = Object.create(valuesById);
+        values[valuesById[0] = "UNDEFINED"] = 0;
+        values[valuesById[1] = "BUY"] = 1;
+        values[valuesById[2] = "SELL"] = 2;
+        values[valuesById[3] = "PURCHASE_FEE"] = 3;
+        values[valuesById[4] = "SERVICE_FEE"] = 4;
+        values[valuesById[5] = "COUPON"] = 5;
+        values[valuesById[6] = "DIVIDEND"] = 6;
+        values[valuesById[7] = "TAX"] = 7;
+        return values;
+    })();
+
+    return SecurityTransaction;
+})();
+
+export const SecurityReport = $root.SecurityReport = (() => {
+
+    /**
+     * Properties of a SecurityReport.
+     * @exports ISecurityReport
+     * @interface ISecurityReport
+     * @property {string} buyDate SecurityReport buyDate
+     * @property {string|null} [sellDate] SecurityReport sellDate
+     * @property {number} days SecurityReport days
+     * @property {number} amount SecurityReport amount
+     * @property {IMoney} income SecurityReport income
+     * @property {IMoney} expense SecurityReport expense
+     * @property {IMoney} profit SecurityReport profit
+     * @property {number} annualProfit SecurityReport annualProfit
+     */
+
+    /**
+     * Constructs a new SecurityReport.
+     * @exports SecurityReport
+     * @classdesc Represents a SecurityReport.
+     * @implements ISecurityReport
+     * @constructor
+     * @param {ISecurityReport=} [properties] Properties to set
+     */
+    function SecurityReport(properties) {
+        if (properties)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * SecurityReport buyDate.
+     * @member {string} buyDate
+     * @memberof SecurityReport
+     * @instance
+     */
+    SecurityReport.prototype.buyDate = "";
+
+    /**
+     * SecurityReport sellDate.
+     * @member {string} sellDate
+     * @memberof SecurityReport
+     * @instance
+     */
+    SecurityReport.prototype.sellDate = "";
+
+    /**
+     * SecurityReport days.
+     * @member {number} days
+     * @memberof SecurityReport
+     * @instance
+     */
+    SecurityReport.prototype.days = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
+     * SecurityReport amount.
+     * @member {number} amount
+     * @memberof SecurityReport
+     * @instance
+     */
+    SecurityReport.prototype.amount = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
+     * SecurityReport income.
+     * @member {IMoney} income
+     * @memberof SecurityReport
+     * @instance
+     */
+    SecurityReport.prototype.income = null;
+
+    /**
+     * SecurityReport expense.
+     * @member {IMoney} expense
+     * @memberof SecurityReport
+     * @instance
+     */
+    SecurityReport.prototype.expense = null;
+
+    /**
+     * SecurityReport profit.
+     * @member {IMoney} profit
+     * @memberof SecurityReport
+     * @instance
+     */
+    SecurityReport.prototype.profit = null;
+
+    /**
+     * SecurityReport annualProfit.
+     * @member {number} annualProfit
+     * @memberof SecurityReport
+     * @instance
+     */
+    SecurityReport.prototype.annualProfit = 0;
+
+    /**
+     * Creates a new SecurityReport instance using the specified properties.
+     * @function create
+     * @memberof SecurityReport
+     * @static
+     * @param {ISecurityReport=} [properties] Properties to set
+     * @returns {SecurityReport} SecurityReport instance
+     */
+    SecurityReport.create = function create(properties) {
+        return new SecurityReport(properties);
+    };
+
+    /**
+     * Encodes the specified SecurityReport message. Does not implicitly {@link SecurityReport.verify|verify} messages.
+     * @function encode
+     * @memberof SecurityReport
+     * @static
+     * @param {ISecurityReport} message SecurityReport message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    SecurityReport.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        writer.uint32(/* id 1, wireType 2 =*/10).string(message.buyDate);
+        if (message.sellDate != null && Object.hasOwnProperty.call(message, "sellDate"))
+            writer.uint32(/* id 2, wireType 2 =*/18).string(message.sellDate);
+        writer.uint32(/* id 3, wireType 0 =*/24).int64(message.days);
+        writer.uint32(/* id 4, wireType 0 =*/32).int64(message.amount);
+        $root.Money.encode(message.income, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
+        $root.Money.encode(message.expense, writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
+        $root.Money.encode(message.profit, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
+        writer.uint32(/* id 8, wireType 1 =*/65).double(message.annualProfit);
+        return writer;
+    };
+
+    /**
+     * Decodes a SecurityReport message from the specified reader or buffer.
+     * @function decode
+     * @memberof SecurityReport
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {SecurityReport} SecurityReport
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    SecurityReport.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.SecurityReport();
+        while (reader.pos < end) {
+            let tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                message.buyDate = reader.string();
+                break;
+            case 2:
+                message.sellDate = reader.string();
+                break;
+            case 3:
+                message.days = reader.int64();
+                break;
+            case 4:
+                message.amount = reader.int64();
+                break;
+            case 5:
+                message.income = $root.Money.decode(reader, reader.uint32());
+                break;
+            case 6:
+                message.expense = $root.Money.decode(reader, reader.uint32());
+                break;
+            case 7:
+                message.profit = $root.Money.decode(reader, reader.uint32());
+                break;
+            case 8:
+                message.annualProfit = reader.double();
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        if (!message.hasOwnProperty("buyDate"))
+            throw $util.ProtocolError("missing required 'buyDate'", { instance: message });
+        if (!message.hasOwnProperty("days"))
+            throw $util.ProtocolError("missing required 'days'", { instance: message });
+        if (!message.hasOwnProperty("amount"))
+            throw $util.ProtocolError("missing required 'amount'", { instance: message });
+        if (!message.hasOwnProperty("income"))
+            throw $util.ProtocolError("missing required 'income'", { instance: message });
+        if (!message.hasOwnProperty("expense"))
+            throw $util.ProtocolError("missing required 'expense'", { instance: message });
+        if (!message.hasOwnProperty("profit"))
+            throw $util.ProtocolError("missing required 'profit'", { instance: message });
+        if (!message.hasOwnProperty("annualProfit"))
+            throw $util.ProtocolError("missing required 'annualProfit'", { instance: message });
+        return message;
+    };
+
+    /**
+     * Creates a SecurityReport message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof SecurityReport
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {SecurityReport} SecurityReport
+     */
+    SecurityReport.fromObject = function fromObject(object) {
+        if (object instanceof $root.SecurityReport)
+            return object;
+        let message = new $root.SecurityReport();
+        if (object.buyDate != null)
+            message.buyDate = String(object.buyDate);
+        if (object.sellDate != null)
+            message.sellDate = String(object.sellDate);
+        if (object.days != null)
+            if ($util.Long)
+                (message.days = $util.Long.fromValue(object.days)).unsigned = false;
+            else if (typeof object.days === "string")
+                message.days = parseInt(object.days, 10);
+            else if (typeof object.days === "number")
+                message.days = object.days;
+            else if (typeof object.days === "object")
+                message.days = new $util.LongBits(object.days.low >>> 0, object.days.high >>> 0).toNumber();
+        if (object.amount != null)
+            if ($util.Long)
+                (message.amount = $util.Long.fromValue(object.amount)).unsigned = false;
+            else if (typeof object.amount === "string")
+                message.amount = parseInt(object.amount, 10);
+            else if (typeof object.amount === "number")
+                message.amount = object.amount;
+            else if (typeof object.amount === "object")
+                message.amount = new $util.LongBits(object.amount.low >>> 0, object.amount.high >>> 0).toNumber();
+        if (object.income != null) {
+            if (typeof object.income !== "object")
+                throw TypeError(".SecurityReport.income: object expected");
+            message.income = $root.Money.fromObject(object.income);
+        }
+        if (object.expense != null) {
+            if (typeof object.expense !== "object")
+                throw TypeError(".SecurityReport.expense: object expected");
+            message.expense = $root.Money.fromObject(object.expense);
+        }
+        if (object.profit != null) {
+            if (typeof object.profit !== "object")
+                throw TypeError(".SecurityReport.profit: object expected");
+            message.profit = $root.Money.fromObject(object.profit);
+        }
+        if (object.annualProfit != null)
+            message.annualProfit = Number(object.annualProfit);
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a SecurityReport message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof SecurityReport
+     * @static
+     * @param {SecurityReport} message SecurityReport
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    SecurityReport.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        let object = {};
+        if (options.defaults) {
+            object.buyDate = "";
+            object.sellDate = "";
+            if ($util.Long) {
+                let long = new $util.Long(0, 0, false);
+                object.days = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.days = options.longs === String ? "0" : 0;
+            if ($util.Long) {
+                let long = new $util.Long(0, 0, false);
+                object.amount = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.amount = options.longs === String ? "0" : 0;
+            object.income = null;
+            object.expense = null;
+            object.profit = null;
+            object.annualProfit = 0;
+        }
+        if (message.buyDate != null && message.hasOwnProperty("buyDate"))
+            object.buyDate = message.buyDate;
+        if (message.sellDate != null && message.hasOwnProperty("sellDate"))
+            object.sellDate = message.sellDate;
+        if (message.days != null && message.hasOwnProperty("days"))
+            if (typeof message.days === "number")
+                object.days = options.longs === String ? String(message.days) : message.days;
+            else
+                object.days = options.longs === String ? $util.Long.prototype.toString.call(message.days) : options.longs === Number ? new $util.LongBits(message.days.low >>> 0, message.days.high >>> 0).toNumber() : message.days;
+        if (message.amount != null && message.hasOwnProperty("amount"))
+            if (typeof message.amount === "number")
+                object.amount = options.longs === String ? String(message.amount) : message.amount;
+            else
+                object.amount = options.longs === String ? $util.Long.prototype.toString.call(message.amount) : options.longs === Number ? new $util.LongBits(message.amount.low >>> 0, message.amount.high >>> 0).toNumber() : message.amount;
+        if (message.income != null && message.hasOwnProperty("income"))
+            object.income = $root.Money.toObject(message.income, options);
+        if (message.expense != null && message.hasOwnProperty("expense"))
+            object.expense = $root.Money.toObject(message.expense, options);
+        if (message.profit != null && message.hasOwnProperty("profit"))
+            object.profit = $root.Money.toObject(message.profit, options);
+        if (message.annualProfit != null && message.hasOwnProperty("annualProfit"))
+            object.annualProfit = options.json && !isFinite(message.annualProfit) ? String(message.annualProfit) : message.annualProfit;
+        return object;
+    };
+
+    /**
+     * Converts this SecurityReport to JSON.
+     * @function toJSON
+     * @memberof SecurityReport
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    SecurityReport.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    return SecurityReport;
+})();
+
 export const Settings = $root.Settings = (() => {
 
     /**
@@ -4228,24 +5305,25 @@ export const Summary = $root.Summary = (() => {
     return Summary;
 })();
 
-export const TextHolder = $root.TextHolder = (() => {
+export const Money = $root.Money = (() => {
 
     /**
-     * Properties of a TextHolder.
-     * @exports ITextHolder
-     * @interface ITextHolder
-     * @property {string|null} [value] TextHolder value
+     * Properties of a Money.
+     * @exports IMoney
+     * @interface IMoney
+     * @property {number} units Money units
+     * @property {number|null} [micros] Money micros
      */
 
     /**
-     * Constructs a new TextHolder.
-     * @exports TextHolder
-     * @classdesc Represents a TextHolder.
-     * @implements ITextHolder
+     * Constructs a new Money.
+     * @exports Money
+     * @classdesc Represents a Money.
+     * @implements IMoney
      * @constructor
-     * @param {ITextHolder=} [properties] Properties to set
+     * @param {IMoney=} [properties] Properties to set
      */
-    function TextHolder(properties) {
+    function Money(properties) {
         if (properties)
             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
@@ -4253,120 +5331,154 @@ export const TextHolder = $root.TextHolder = (() => {
     }
 
     /**
-     * TextHolder value.
-     * @member {string} value
-     * @memberof TextHolder
+     * Money units.
+     * @member {number} units
+     * @memberof Money
      * @instance
      */
-    TextHolder.prototype.value = "";
+    Money.prototype.units = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
     /**
-     * Creates a new TextHolder instance using the specified properties.
-     * @function create
-     * @memberof TextHolder
-     * @static
-     * @param {ITextHolder=} [properties] Properties to set
-     * @returns {TextHolder} TextHolder instance
+     * Money micros.
+     * @member {number} micros
+     * @memberof Money
+     * @instance
      */
-    TextHolder.create = function create(properties) {
-        return new TextHolder(properties);
+    Money.prototype.micros = 0;
+
+    /**
+     * Creates a new Money instance using the specified properties.
+     * @function create
+     * @memberof Money
+     * @static
+     * @param {IMoney=} [properties] Properties to set
+     * @returns {Money} Money instance
+     */
+    Money.create = function create(properties) {
+        return new Money(properties);
     };
 
     /**
-     * Encodes the specified TextHolder message. Does not implicitly {@link TextHolder.verify|verify} messages.
+     * Encodes the specified Money message. Does not implicitly {@link Money.verify|verify} messages.
      * @function encode
-     * @memberof TextHolder
+     * @memberof Money
      * @static
-     * @param {ITextHolder} message TextHolder message or plain object to encode
+     * @param {IMoney} message Money message or plain object to encode
      * @param {$protobuf.Writer} [writer] Writer to encode to
      * @returns {$protobuf.Writer} Writer
      */
-    TextHolder.encode = function encode(message, writer) {
+    Money.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.value != null && Object.hasOwnProperty.call(message, "value"))
-            writer.uint32(/* id 1, wireType 2 =*/10).string(message.value);
+        writer.uint32(/* id 1, wireType 0 =*/8).int64(message.units);
+        if (message.micros != null && Object.hasOwnProperty.call(message, "micros"))
+            writer.uint32(/* id 2, wireType 0 =*/16).int32(message.micros);
         return writer;
     };
 
     /**
-     * Decodes a TextHolder message from the specified reader or buffer.
+     * Decodes a Money message from the specified reader or buffer.
      * @function decode
-     * @memberof TextHolder
+     * @memberof Money
      * @static
      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
      * @param {number} [length] Message length if known beforehand
-     * @returns {TextHolder} TextHolder
+     * @returns {Money} Money
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    TextHolder.decode = function decode(reader, length) {
+    Money.decode = function decode(reader, length) {
         if (!(reader instanceof $Reader))
             reader = $Reader.create(reader);
-        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.TextHolder();
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Money();
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
             case 1:
-                message.value = reader.string();
+                message.units = reader.int64();
+                break;
+            case 2:
+                message.micros = reader.int32();
                 break;
             default:
                 reader.skipType(tag & 7);
                 break;
             }
         }
+        if (!message.hasOwnProperty("units"))
+            throw $util.ProtocolError("missing required 'units'", { instance: message });
         return message;
     };
 
     /**
-     * Creates a TextHolder message from a plain object. Also converts values to their respective internal types.
+     * Creates a Money message from a plain object. Also converts values to their respective internal types.
      * @function fromObject
-     * @memberof TextHolder
+     * @memberof Money
      * @static
      * @param {Object.<string,*>} object Plain object
-     * @returns {TextHolder} TextHolder
+     * @returns {Money} Money
      */
-    TextHolder.fromObject = function fromObject(object) {
-        if (object instanceof $root.TextHolder)
+    Money.fromObject = function fromObject(object) {
+        if (object instanceof $root.Money)
             return object;
-        let message = new $root.TextHolder();
-        if (object.value != null)
-            message.value = String(object.value);
+        let message = new $root.Money();
+        if (object.units != null)
+            if ($util.Long)
+                (message.units = $util.Long.fromValue(object.units)).unsigned = false;
+            else if (typeof object.units === "string")
+                message.units = parseInt(object.units, 10);
+            else if (typeof object.units === "number")
+                message.units = object.units;
+            else if (typeof object.units === "object")
+                message.units = new $util.LongBits(object.units.low >>> 0, object.units.high >>> 0).toNumber();
+        if (object.micros != null)
+            message.micros = object.micros | 0;
         return message;
     };
 
     /**
-     * Creates a plain object from a TextHolder message. Also converts values to other types if specified.
+     * Creates a plain object from a Money message. Also converts values to other types if specified.
      * @function toObject
-     * @memberof TextHolder
+     * @memberof Money
      * @static
-     * @param {TextHolder} message TextHolder
+     * @param {Money} message Money
      * @param {$protobuf.IConversionOptions} [options] Conversion options
      * @returns {Object.<string,*>} Plain object
      */
-    TextHolder.toObject = function toObject(message, options) {
+    Money.toObject = function toObject(message, options) {
         if (!options)
             options = {};
         let object = {};
-        if (options.defaults)
-            object.value = "";
-        if (message.value != null && message.hasOwnProperty("value"))
-            object.value = message.value;
+        if (options.defaults) {
+            if ($util.Long) {
+                let long = new $util.Long(0, 0, false);
+                object.units = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.units = options.longs === String ? "0" : 0;
+            object.micros = 0;
+        }
+        if (message.units != null && message.hasOwnProperty("units"))
+            if (typeof message.units === "number")
+                object.units = options.longs === String ? String(message.units) : message.units;
+            else
+                object.units = options.longs === String ? $util.Long.prototype.toString.call(message.units) : options.longs === Number ? new $util.LongBits(message.units.low >>> 0, message.units.high >>> 0).toNumber() : message.units;
+        if (message.micros != null && message.hasOwnProperty("micros"))
+            object.micros = message.micros;
         return object;
     };
 
     /**
-     * Converts this TextHolder to JSON.
+     * Converts this Money to JSON.
      * @function toJSON
-     * @memberof TextHolder
+     * @memberof Money
      * @instance
      * @returns {Object.<string,*>} JSON object
      */
-    TextHolder.prototype.toJSON = function toJSON() {
+    Money.prototype.toJSON = function toJSON() {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
-    return TextHolder;
+    return Money;
 })();
 
 /**
@@ -4383,6 +5495,8 @@ export const TextHolder = $root.TextHolder = (() => {
  * @property {number} TRANSACTION=6 TRANSACTION value
  * @property {number} TRANSACTION_ARCHIVE=8 TRANSACTION_ARCHIVE value
  * @property {number} TRANSACTION_TEMPLATE=9 TRANSACTION_TEMPLATE value
+ * @property {number} SECURITY=10 SECURITY value
+ * @property {number} SECURITY_TRANSACTION=11 SECURITY_TRANSACTION value
  */
 export const EntityType = $root.EntityType = (() => {
     const valuesById = {}, values = Object.create(valuesById);
@@ -4396,6 +5510,8 @@ export const EntityType = $root.EntityType = (() => {
     values[valuesById[6] = "TRANSACTION"] = 6;
     values[valuesById[8] = "TRANSACTION_ARCHIVE"] = 8;
     values[valuesById[9] = "TRANSACTION_TEMPLATE"] = 9;
+    values[valuesById[10] = "SECURITY"] = 10;
+    values[valuesById[11] = "SECURITY_TRANSACTION"] = 11;
     return values;
 })();
 

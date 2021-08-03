@@ -1,5 +1,5 @@
 import { Long } from 'protobufjs';
-import { Account, Category, DataStorage, FamilyMember, SubCategory, Transaction, TransactionTemplate } from '../model/model';
+import { Account, Category, DataStorage, FamilyMember, Security, SecurityTransaction, SubCategory, Transaction, TransactionTemplate } from '../model/model';
 
 export class UserDataEnricherService {
   enrich(dataStorage: DataStorage): void {
@@ -10,12 +10,24 @@ export class UserDataEnricherService {
     dataStorage.categories.forEach(x => x.transactionAmount = 0);
     dataStorage.subCategories.forEach(x => x.transactionAmount = 0);
     dataStorage.familyMembers.forEach(x => x.transactionAmount = 0);
+    dataStorage.securities.forEach(x => x.transactionAmount = 0);
 
     this.enrichEnity(dataStorage, dataStorage.accounts as Account[], 'accountIdFrom');
     this.enrichEnity(dataStorage, dataStorage.accounts as Account[], 'accountIdTo');
     this.enrichEnity(dataStorage, dataStorage.categories as Category[], 'categoryId');
     this.enrichEnity(dataStorage, dataStorage.subCategories as SubCategory[], 'subCategoryId');
     this.enrichEnity(dataStorage, dataStorage.familyMembers as FamilyMember[], 'familyMemberId');
+
+    const counter = new Map<number, number>();
+    dataStorage.securityTransactions.forEach(securityTransaction => {
+      const securityId = securityTransaction.securityId;
+      counter.set(securityId, (counter.get(securityId) || 0) + 1);
+    });
+    dataStorage.securities.forEach(security => {
+      security.transactionAmount = counter.get(security.id) || 0;
+    });
+
+    // new entity
   }
 
   private enrichEnity(dataStorage: DataStorage, values: Account[] | Category[] | SubCategory[] | FamilyMember[],
@@ -67,6 +79,8 @@ export class UserDataEnricherService {
     update.familyMembers.forEach(x => idsToUpdate.push(x.id));
     update.transactions.forEach(x => idsToUpdate.push(x.id));
     update.transactionTemplates.forEach(x => idsToUpdate.push(x.id));
+    update.securities.forEach(x => idsToUpdate.push(x.id));
+    update.securityTransactions.forEach(x => idsToUpdate.push(x.id));
 
     result.settings = update.settings || source.settings;
     result.idHolder = update.idHolder || source.idHolder;
@@ -94,6 +108,17 @@ export class UserDataEnricherService {
     source.transactionTemplates
       .filter(x => !idsToUpdate.includes(x.id))
       .forEach(x => result.transactionTemplates.push(x as TransactionTemplate));
+
+    source.securities
+      .filter(x => !idsToUpdate.includes(x.id))
+      .forEach(x => result.securities.push(x as Security));
+
+    source.securityTransactions
+      .filter(x => !idsToUpdate.includes(x.id))
+      .forEach(x => result.securityTransactions.push(x as SecurityTransaction));
+
+    // new Entity
+
     return result;
   }
 }

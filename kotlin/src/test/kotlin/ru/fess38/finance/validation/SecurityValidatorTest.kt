@@ -11,7 +11,11 @@ class SecurityValidatorTest {
 
   @Test
   fun valid() {
-    val security = Model.Security.newBuilder().setName("").setCurrencyId(1).build()
+    val security = Model.Security.newBuilder()
+      .setName("")
+      .setCurrencyId(1)
+      .setPrice(Model.Money.newBuilder().setUnits(1).build())
+      .build()
     val expected = ValidatorResponse()
     val actual = validator.validate(security, true)
     Assert.assertEquals(expected, actual)
@@ -19,8 +23,24 @@ class SecurityValidatorTest {
 
   @Test
   fun invalidCurrencyId() {
-    val security = Model.Security.newBuilder().setName("").setCurrencyId(0).build()
+    val security = Model.Security.newBuilder()
+      .setName("")
+      .setCurrencyId(0)
+      .setPrice(Model.Money.newBuilder().setUnits(1).build())
+      .build()
     val expected = ValidatorResponse("unknown currency [0]")
+    val actual = validator.validate(security, true)
+    Assert.assertEquals(expected, actual)
+  }
+
+  @Test
+  fun invalidPrice() {
+    val security = Model.Security.newBuilder()
+      .setName("")
+      .setCurrencyId(1)
+      .setPrice(Model.Money.newBuilder().setUnits(-1).build())
+      .build()
+    val expected = ValidatorResponse("invalid price [-1 0]")
     val actual = validator.validate(security, true)
     Assert.assertEquals(expected, actual)
   }

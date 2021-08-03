@@ -5,7 +5,7 @@ import { DateUtils } from './date-utils';
   name: 'createdFormat'
 })
 export class CreatedFormatPipe implements PipeTransform {
-  transform(created: string, args?: any): any {
+  transform(created: string): any {
     return DateUtils.parseDate(created);
   }
 }

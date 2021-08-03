@@ -3,14 +3,14 @@
     <div class="clr-form-control clr-row">
       <alert></alert>
       <label>
-        <button type="button" class="btn btn-icon btn-link" routerLink="/account">
+        <button type="button" class="btn btn-icon btn-link" routerLink="/security">
           <cds-icon shape="undo"></cds-icon>
         </button>
-        <span [hidden]="!isNewAccount()">
-          {{'account_detail.add' | translate}}
+        <span [hidden]="!isNewSecurity()">
+          {{'security_detail.add' | translate}}
         </span>
-        <span [hidden]="isNewAccount()">
-          {{'account_detail.edit' | translate}}
+        <span [hidden]="isNewSecurity()">
+          {{'security_detail.edit' | translate}}
         </span>
       </label>
     </div>
@@ -18,29 +18,9 @@
       <label>{{'common.name' | translate}}</label>
       <div class="clr-control-container">
         <div class="clr-input-wrapper">
-          <input type="text" name="name" class="clr-input" [(ngModel)]="account.name"/>
+          <input type="text" name="name" class="clr-input" [(ngModel)]="security.name"/>
         </div>
       </div>
-    </div>
-    <div class="clr-form-control clr-row">
-      <label>{{'account_list.balance_title' | translate}}</label>
-      <div class="clr-control-container">
-        <div class="clr-input-wrapper">
-          <input type="number"
-                 name="balance"
-                 class="clr-input"
-                 [(ngModel)]="account.balance"
-                 [disabled]="true"/>
-        </div>
-      </div>
-    </div>
-    <div class="clr-form-control clr-row" [hidden]="isNewAccount()">
-      <label>{{'account_detail.updated_balance' | translate}}</label>
-      <input type="number"
-             name="updatedBalance"
-             class="clr-input"
-             pattern="\d*"
-             [(ngModel)]="updatedBalance"/>
     </div>
     <div class="clr-form-control clr-row">
       <label>{{'common.currency' | translate}}</label>
@@ -49,8 +29,8 @@
           <select name="currencyId"
                   class="clr-select"
                   required
-                  [(ngModel)]="account.currencyId"
-                  [disabled]="!isNewAccount()">
+                  [(ngModel)]="security.currencyId"
+                  [disabled]="!isNewSecurity()">
             <option disabled>{{'common.currency' | translate}}</option>
             <option selected *ngFor="let currency of currencies()" [ngValue]="currency.id">
               <span *ngIf="language() == 'RU'">{{currency.nameRu}}</span>
@@ -61,36 +41,48 @@
         </div>
       </div>
     </div>
-    <div class="clr-form-control clr-row" [hidden]="isNewAccount()">
+    <div class="clr-form-control clr-row">
+      <label>{{'common.price' | translate}}</label>
+      <div class="clr-control-container">
+        <div class="clr-input-wrapper">
+          <input type="number"
+                 name="price"
+                 class="clr-input"
+                 pattern="\d+.?\d+"
+                 min="0"
+                 [ngModel]="security.price | moneyEncoder"
+                 (ngModelChange)="decodePrice($event)"/>
+        </div>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row" [hidden]="isNewSecurity()">
       <div class="clr-control-container">
         <div class="clr-checkbox-wrapper">
           <input type="checkbox"
-                 id="account-is-visible"
+                 id="security-is-visible"
                  name="isVisible"
                  class="clr-checkbox"
-                 [(ngModel)]="account.isVisible"/>
-          <label for="account-is-visible">
+                 [(ngModel)]="security.isVisible"/>
+          <label for="security-is-visible">
             {{'common.use_in_transactions' | translate}}
           </label>
         </div>
       </div>
     </div>
-    <div class="clr-form-control clr-row"
-         [hidden]="isNewAccount()"
-         (click)="viewTransactions(account)">
+    <div class="clr-form-control clr-row" [hidden]="isNewSecurity()">
       <label>
-        {{'common.amount' | translate}}: {{account.transactionAmount}}
+        {{'security_detail.amount' | translate}}: {{security.transactionAmount}}
       </label>
     </div>
     <div class="clr-form-control clr-row">
       <button class="btn btn-primary btn-sm btn-block"
-              (click)="update(account)"
+              (click)="update(security)"
               [disabled]="!isValidForm() || isReadOnly()">
         {{'common.save' | translate}}
       </button>
       <button class="btn btn-danger btn-sm btn-block"
-              (click)="delete(account)"
-              [hidden]="isNewAccount()"
+              (click)="delete(security)"
+              [hidden]="isNewSecurity()"
               [disabled]="hasTransations() || isReadOnly()">
         {{'common.delete' | translate}}
       </button>

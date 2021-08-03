@@ -1,0 +1,19 @@
+<div class="clr-row">
+  <div class="clr-col-12 clr-col-sm-8 clr-col-md-6">
+    <table class="table table-noborder table-compact">
+      <tr>
+        <th class="left" routerLink="/security/new">
+          <span>{{'common.security' | translate}} </span>
+          <cds-icon shape="plus-circle"></cds-icon>
+        </th>
+        <th>
+          <span>{{'common.price' | translate}} </span>
+        </th>
+      </tr>
+      <tr *ngFor="let security of securities()" routerLink="/security/{{security.id}}">
+        <td class="left">{{security.name}}</td>
+        <td class="left">{{security.price | moneyEncoder }}{{currencySymbol(security)}}</td>
+      </tr>
+    </table>
+  </div>
+</div>

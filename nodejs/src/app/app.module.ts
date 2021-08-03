@@ -15,6 +15,7 @@ import { CategoryModule } from './category/category.module';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './core/shared/shared.module';
 import { FamilyMemberModule } from './family-member/family-member.module';
+import { SecurityModule } from './security/security.module';
 import { SubCategoryModule } from './sub-category/sub-category.module';
 import { TransactionModule } from './transaction/transaction.module';
 
@@ -44,7 +45,7 @@ registerLocaleData(localeEn, 'en');
       }
     }),
     AccountModule, CategoryModule, CoreModule, FamilyMemberModule,
-    SharedModule, SubCategoryModule, TransactionModule
+    SecurityModule, SharedModule, SubCategoryModule, TransactionModule
   ],
   providers: [
     Title

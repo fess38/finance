@@ -111,6 +111,7 @@ message Security {
     optional int64 transaction_amount = 4 [default = 0];
     required string name = 5;
     required int64 currency_id = 6;
+    required Money price = 7;
 }
 
 message SecurityTransaction {

@@ -1,5 +1,6 @@
-import { Account, DataStorage, FamilyMember, Transaction, TransactionTemplate } from '../model/model';
+import { Account, DataStorage, FamilyMember, Money, Security, SecurityTransaction, Transaction, TransactionTemplate } from '../model/model';
 import { UserDataEnricherService } from './user-data-enricher.service';
+import Type = SecurityTransaction.Type;
 
 describe('UserDataEnricherService', () => {
   const enricher = new UserDataEnricherService();
@@ -54,5 +55,41 @@ describe('UserDataEnricherService', () => {
     expect(7).toEqual(<number>dataStorage.accounts[0].transactionAmount);
     expect(505).toEqual(<number>dataStorage.accounts[1].balance);
     expect(7).toEqual(<number>dataStorage.accounts[1].transactionAmount);
+  });
+
+  it('#enrich security', () => {
+    const dataStorage = new DataStorage();
+    dataStorage.securities = [new Security({
+      'id': 1,
+      'name': 'foo',
+      'currencyId': 1,
+      'price': new Money({ units: 1 })
+    })];
+    dataStorage.securityTransactions = [
+      new SecurityTransaction({
+        date: '1970-01-01',
+        securityId: 2,
+        type: Type.BUY,
+        price: new Money({ units: 1 }),
+        exchangeRate: new Money({ units: 1 })
+      }),
+      new SecurityTransaction({
+        date: '1970-01-01',
+        securityId: 1,
+        type: Type.BUY,
+        price: new Money({ units: 1 }),
+        exchangeRate: new Money({ units: 1 })
+      }),
+      new SecurityTransaction({
+        date: '1970-01-01',
+        securityId: 1,
+        type: Type.BUY,
+        price: new Money({ units: 1 }),
+        exchangeRate: new Money({ units: 1 })
+      })
+    ];
+    enricher.enrich(dataStorage);
+
+    expect(2).toEqual(<number>dataStorage.securities[0].transactionAmount);
   });
 });

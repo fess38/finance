@@ -13,13 +13,15 @@
     "title": "Финансы",
     "category": "Категория",
     "sub_category": "Подкатегория",
-    "no_off_budget": "Без внебюджетных"
+    "no_off_budget": "Без внебюджетных",
+    "security": "Ценная бумага",
+    "currency": "Валюта",
+    "price": "Цена"
   },
   "account_detail": {
     "add": "Добавление счета",
     "edit": "Редактирование счета",
-    "updated_balance": "Обновленный баланс",
-    "currency": "Валюта"
+    "updated_balance": "Обновленный баланс"
   },
   "account_list": {
     "account_title": "Счет",
@@ -36,6 +38,11 @@
   },
   "family_member_list": {
     "family_member": "Член семьи"
+  },
+  "security_detail": {
+    "add": "Добавление ценной бумаги",
+    "edit": "Редактирование ценной бумаги",
+    "amount": "Транзакций"
   },
   "login": {
     "google": "Войти через Google"
@@ -60,7 +67,9 @@
     "account": "Счета",
     "category": "Категории",
     "sub_category": "Подкатегории",
-    "family_member": "Члены семьи"
+    "family_member": "Члены семьи",
+    "investment": "Инвестиции",
+    "security": "Ценные бумаги"
   },
   "settings": {
     "data_export": "Выгрузка данных",
