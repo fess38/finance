@@ -1,7 +1,6 @@
 <div class="clr-row clr-col-12 clr-col-lg-6">
   <form class="clr-form">
     <div class="clr-form-control clr-row">
-      <alert></alert>
       <label>
         <button type="button" class="btn btn-icon btn-link" routerLink="/security">
           <cds-icon shape="undo"></cds-icon>
@@ -48,7 +47,7 @@
           <input type="number"
                  name="price"
                  class="clr-input"
-                 pattern="\d+.?\d+"
+                 pattern="\d+(\.?\d+)?"
                  min="0"
                  [ngModel]="security.price | moneyEncoder"
                  (ngModelChange)="decodePrice($event)"/>

@@ -3547,7 +3547,7 @@ export const SecurityTransaction = $root.SecurityTransaction = (() => {
         case 5:
             message.type = 5;
             break;
-        case "DIVIDEND":
+        case "DIVIDENDS":
         case 6:
             message.type = 6;
             break;
@@ -3662,7 +3662,7 @@ export const SecurityTransaction = $root.SecurityTransaction = (() => {
      * @property {number} PURCHASE_FEE=3 PURCHASE_FEE value
      * @property {number} SERVICE_FEE=4 SERVICE_FEE value
      * @property {number} COUPON=5 COUPON value
-     * @property {number} DIVIDEND=6 DIVIDEND value
+     * @property {number} DIVIDENDS=6 DIVIDENDS value
      * @property {number} TAX=7 TAX value
      */
     SecurityTransaction.Type = (function() {
@@ -3673,7 +3673,7 @@ export const SecurityTransaction = $root.SecurityTransaction = (() => {
         values[valuesById[3] = "PURCHASE_FEE"] = 3;
         values[valuesById[4] = "SERVICE_FEE"] = 4;
         values[valuesById[5] = "COUPON"] = 5;
-        values[valuesById[6] = "DIVIDEND"] = 6;
+        values[valuesById[6] = "DIVIDENDS"] = 6;
         values[valuesById[7] = "TAX"] = 7;
         return values;
     })();

@@ -21,9 +21,21 @@
     </div>
     <nav class="sidenav" [clr-nav-level]="1">
       <section class="sidenav-content">
-        <a class="nav-link" routerLink="/transaction/new">
-          {{'main_menu.add_transaction' | translate}}
-        </a>
+        <section class="nav-group">
+          <label>{{'main_menu.add_transaction' | translate}}</label>
+          <ul class="nav-list">
+            <li>
+              <a class="nav-link" routerLink="/transaction/new">
+                {{'main_menu.add_transaction_with_account' | translate}}
+              </a>
+            </li>
+            <li>
+              <a class="nav-link" routerLink="/security_transaction/new">
+                {{'main_menu.add_transaction_with_security' | translate}}
+              </a>
+            </li>
+          </ul>
+        </section>
         <section class="nav-group">
           <label>{{'main_menu.transaction' | translate}}</label>
           <ul class="nav-list">
@@ -55,6 +67,11 @@
             <li>
               <a (click)="search()" class="nav-link">
                 {{'main_menu.search' | translate}}
+              </a>
+            </li>
+            <li>
+              <a class="nav-link" routerLink="/security_transaction">
+                {{'main_menu.investment' | translate}}
               </a>
             </li>
           </ul>
@@ -102,11 +119,6 @@
                 {{'main_menu.family_member' | translate}}
               </a>
             </li>
-          </ul>
-        </section>
-        <section class="nav-group">
-          <label>{{'main_menu.investment' | translate}}</label>
-          <ul class="nav-list">
             <li>
               <a class="nav-link" routerLink="/security">
                 {{'main_menu.security' | translate}}

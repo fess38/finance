@@ -19,7 +19,7 @@ export class UserDataEnricherService {
     this.enrichEnity(dataStorage, dataStorage.familyMembers as FamilyMember[], 'familyMemberId');
 
     const counter = new Map<number, number>();
-    dataStorage.securityTransactions.forEach(securityTransaction => {
+    dataStorage.securityTransactions.filter(x => !x.isDeleted).forEach(securityTransaction => {
       const securityId = securityTransaction.securityId;
       counter.set(securityId, (counter.get(securityId) || 0) + 1);
     });

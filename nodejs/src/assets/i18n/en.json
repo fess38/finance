@@ -39,11 +39,6 @@
   "family_member_list": {
     "family_member": "Family member"
   },
-  "security_detail": {
-    "add": "Add security paper",
-    "edit": "Edit security paper",
-    "amount": "Transactions"
-  },
   "login": {
     "google": "Log in by Google"
   },
@@ -51,6 +46,8 @@
     "title": "Finance",
     "exit": "Sign out",
     "add_transaction": "Add transaction",
+    "add_transaction_with_account": "With account",
+    "add_transaction_with_security": "With security",
     "transaction": "Transactions",
     "all_transactions": "All transactions",
     "incomes": "Incomes",
@@ -59,6 +56,7 @@
     "templates": "Templates",
     "future": "Planned",
     "search": "Search",
+    "investment": "Investment",
     "reports": "Reports",
     "date_report": "By days",
     "month_report": "By months",
@@ -68,7 +66,6 @@
     "category": "Categories",
     "sub_category": "Subcategories",
     "family_member": "Family members",
-    "investment": "Investment",
     "security": "Security papers"
   },
   "settings": {
@@ -120,6 +117,26 @@
     "name": "Template name",
     "future": "Planned transactions",
     "skip": "Skip"
+  },
+  "security_detail": {
+    "add": "Add security paper",
+    "edit": "Edit security paper",
+    "amount": "Transactions"
+  },
+  "security_transaction_detail": {
+    "add": "Add transaction",
+    "edit": "Edit transaction",
+    "type": "Type",
+    "buy": "But",
+    "sell": "Sell",
+    "purchase_fee": "Purchase fee",
+    "service_fee": "Service fee",
+    "coupon": "Coupon",
+    "dividends": "Dividends",
+    "tax": "Налог",
+    "exchange_rate": "Exchange rate",
+    "amount": "Amount",
+    "cost": "Cost"
   },
   "report": {
     "summary": "Summary"

@@ -86,6 +86,14 @@ describe('UserDataEnricherService', () => {
         type: Type.BUY,
         price: new Money({ units: 1 }),
         exchangeRate: new Money({ units: 1 })
+      }),
+      new SecurityTransaction({
+        isDeleted: true,
+        date: '1970-01-01',
+        securityId: 1,
+        type: Type.BUY,
+        price: new Money({ units: 1 }),
+        exchangeRate: new Money({ units: 1 })
       })
     ];
     enricher.enrich(dataStorage);

@@ -1209,7 +1209,7 @@ export namespace SecurityTransaction {
         PURCHASE_FEE = 3,
         SERVICE_FEE = 4,
         COUPON = 5,
-        DIVIDEND = 6,
+        DIVIDENDS = 6,
         TAX = 7
     }
 }

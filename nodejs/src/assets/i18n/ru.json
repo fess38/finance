@@ -39,11 +39,6 @@
   "family_member_list": {
     "family_member": "Член семьи"
   },
-  "security_detail": {
-    "add": "Добавление ценной бумаги",
-    "edit": "Редактирование ценной бумаги",
-    "amount": "Транзакций"
-  },
   "login": {
     "google": "Войти через Google"
   },
@@ -51,6 +46,8 @@
     "title": "Финансы",
     "exit": "Выйти",
     "add_transaction": "Добавить транзакцию",
+    "add_transaction_with_account": "Со счетом",
+    "add_transaction_with_security": "С ценной бумагой",
     "transaction": "Транзакции",
     "all_transactions": "Все транзакции",
     "incomes": "Доходы",
@@ -59,6 +56,7 @@
     "templates": "Шаблоны",
     "future": "Запланированные",
     "search": "Поиск",
+    "investment": "Инвестиции",
     "reports": "Отчеты",
     "date_report": "По дням ",
     "month_report": "По месяцам",
@@ -68,7 +66,6 @@
     "category": "Категории",
     "sub_category": "Подкатегории",
     "family_member": "Члены семьи",
-    "investment": "Инвестиции",
     "security": "Ценные бумаги"
   },
   "settings": {
@@ -121,6 +118,26 @@
     "name": "Название шаблона",
     "future": "Запланированные транзакции",
     "skip": "Пропустить"
+  },
+  "security_detail": {
+    "add": "Добавление ценной бумаги",
+    "edit": "Редактирование ценной бумаги",
+    "amount": "Транзакций"
+  },
+  "security_transaction_detail": {
+    "add": "Добавление транзакции",
+    "edit": "Редактирование транзакции",
+    "type": "Тип",
+    "buy": "Покупка",
+    "sell": "Продажа",
+    "purchase_fee": "Комиссия",
+    "service_fee": "Брокерское обслуживание",
+    "coupon": "Купон",
+    "dividends": "Дивиденды",
+    "tax": "Налог",
+    "exchange_rate": "Обменный курс",
+    "amount": "Количество",
+    "cost": "Стоимость"
   },
   "report": {
     "summary": "Итого"

@@ -12,6 +12,8 @@ import { MainPageComponent } from './core/main-page/main-page.component';
 import { SettingsComponent } from './core/settings/settings.component';
 import { FamilyMemberDetailComponent } from './family-member/family-member-detail/family-member-detail.component';
 import { FamilyMemberListComponent } from './family-member/family-member-list/family-member-list.component';
+import { SecurityTransactionDetailComponent } from './security-transaction/security-transaction-detail/security-transaction-detail.component';
+import { SecurityTransactionListComponent } from './security-transaction/security-transaction-list/security-transaction-list.component';
 import { SecurityDetailComponent } from './security/security-detail/security-detail.component';
 import { SecurityListComponent } from './security/security-list/security-list.component';
 import { SubCategoryDetailComponent } from './sub-category/sub-category-detail/sub-category-detail.component';
@@ -121,6 +123,16 @@ const appRoutes: Routes = [
   {
     path: 'security/:id',
     component: SecurityDetailComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'security_transaction',
+    component: SecurityTransactionListComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'security_transaction/:id',
+    component: SecurityTransactionDetailComponent,
     canActivate: [AuthGuardService]
   },
   {

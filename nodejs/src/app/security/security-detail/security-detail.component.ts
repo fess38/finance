@@ -51,7 +51,7 @@ export class SecurityDetailComponent implements OnInit, OnDestroy {
     return Language[this.userdata.settings().language];
   }
 
-  decodePrice(value: string): void {
+  decodePrice(value: number): void {
     this.security.price = this.moneyDecoder.transform(String(value));
   }
 
