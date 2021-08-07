@@ -11,8 +11,8 @@
             </option>
           </select>
         </th>
-        <th class="left">{{'security_transaction_detail.type' | translate}}</th>
-        <th>{{'security_transaction_detail.cost' | translate}}</th>
+        <th class="left">{{'security_transaction.type' | translate}}</th>
+        <th>{{'security_transaction.cost' | translate}}</th>
       </tr>
       <tr *ngFor="let transaction of transactions()" routerLink="/security_transaction/{{transaction.id}}">
         <td class="left">{{transaction.date | date:'dd.MM.yyyy':'':locale()}}</td>

@@ -6,10 +6,10 @@
           <cds-icon shape="undo"></cds-icon>
         </button>
         <span [hidden]="!(transaction | isNewEntity)">
-          {{'transaction_detail.add' | translate}}
+          {{'transaction.add' | translate}}
         </span>
         <span [hidden]="transaction | isNewEntity">
-          {{'transaction_detail.edit' | translate}}
+          {{'transaction.edit' | translate}}
         </span>
       </label>
     </div>
@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="clr-form-control clr-row">
-      <label>{{'transaction_detail.action' | translate}}</label>
+      <label>{{'transaction.action' | translate}}</label>
       <div class="clr-control-container">
         <div class="clr-select-wrapper">
           <select name="type"
@@ -38,13 +38,13 @@
       </div>
     </div>
     <div class="clr-form-control clr-row" [hidden]="isIncome()">
-      <label>{{'transaction_detail.account_from' | translate}}</label>
+      <label>{{'transaction.account_from' | translate}}</label>
       <div class="clr-control-container">
         <div class="clr-select-wrapper">
           <select name="accountIdFrom"
                   class="clr-select"
                   [(ngModel)]="transaction.accountIdFrom">
-            <option disabled>{{'transaction_detail.account' | translate}}</option>
+            <option disabled>{{'transaction.account' | translate}}</option>
             <option selected *ngFor="let account of accounts()"
                     [ngValue]="account.id"
                     [hidden]="account.id == transaction.accountIdTo">
@@ -56,13 +56,13 @@
       </div>
     </div>
     <div class="clr-form-control clr-row" [hidden]="isExpense()">
-      <label>{{'transaction_detail.account_to' | translate}}</label>
+      <label>{{'transaction.account_to' | translate}}</label>
       <div class="clr-control-container">
         <div class="clr-select-wrapper">
           <select name="accountIdTo"
                   class="clr-select"
                   [(ngModel)]="transaction.accountIdTo">
-            <option disabled>{{'transaction_detail.account' | translate}}</option>
+            <option disabled>{{'transaction.account' | translate}}</option>
             <option selected *ngFor="let account of accounts()"
                     [ngValue]="account.id"
                     [hidden]="account.id == transaction.accountIdFrom">
@@ -74,7 +74,7 @@
       </div>
     </div>
     <div class="clr-form-control clr-row" [hidden]="isIncome()">
-      <label>{{'transaction_detail.amount_from' | translate}}</label>
+      <label>{{'transaction.amount_from' | translate}}</label>
       <div class="clr-control-container">
         <div class="clr-input-wrapper">
           <input type="number"
@@ -87,7 +87,7 @@
       </div>
     </div>
     <div class="clr-form-control clr-row" [hidden]="isExpense()">
-      <label>{{'transaction_detail.amount_to' | translate}}</label>
+      <label>{{'transaction.amount_to' | translate}}</label>
       <div class="clr-control-container">
         <div class="clr-input-wrapper">
           <input type="number"
@@ -134,13 +134,13 @@
       </div>
     </div>
     <div class="clr-form-control clr-row" [hidden]="isTransfer()">
-      <label>{{'transaction_detail.family_member' | translate}}</label>
+      <label>{{'transaction.family_member' | translate}}</label>
       <div class="clr-control-container">
         <div class="clr-select-wrapper">
           <select name="familyMemberId"
                   class="clr-select"
                   [(ngModel)]="transaction.familyMemberId">
-            <option disabled>{{'transaction_detail.family_member' | translate}}</option>
+            <option disabled>{{'transaction.family_member' | translate}}</option>
             <option [ngValue]="null"></option>
             <option selected
                     *ngFor="let familyMember of familyMembers()"
@@ -152,7 +152,7 @@
       </div>
     </div>
     <div class="clr-form-control clr-row" [hidden]="!context.showComment">
-      <label>{{'transaction_detail.comment' | translate}}</label>
+      <label>{{'transaction.comment' | translate}}</label>
       <div class="clr-control-container">
         <div class="clr-input-wrapper">
           <input type="text" name="comment" class="clr-input" [(ngModel)]="transaction.comment"/>
@@ -168,7 +168,7 @@
                  class="clr-checkbox"
                  [(ngModel)]="transaction.offBudget"/>
           <label for="transaction-off-budget">
-            {{'transaction_detail.off_budget' | translate}}
+            {{'transaction.off_budget' | translate}}
           </label>
         </div>
       </div>

@@ -6,10 +6,10 @@
           <cds-icon shape="undo"></cds-icon>
         </button>
         <span [hidden]="!(securityTransaction | isNewEntity)">
-          {{'security_transaction_detail.add' | translate}}
+          {{'security_transaction.add' | translate}}
         </span>
         <span [hidden]="securityTransaction | isNewEntity">
-          {{'security_transaction_detail.edit' | translate}}
+          {{'security_transaction.edit' | translate}}
         </span>
       </label>
     </div>
@@ -40,7 +40,7 @@
       </div>
     </div>
     <div class="clr-form-control clr-row">
-      <label>{{'security_transaction_detail.type' | translate}}</label>
+      <label>{{'security_transaction.type' | translate}}</label>
       <div class="clr-control-container">
         <div class="clr-select-wrapper">
           <select name="type"
@@ -48,7 +48,7 @@
                   required
                   [(ngModel)]="securityTransaction.type"
                   [disabled]="!(securityTransaction | isNewEntity)">
-            <option disabled>{{'security_transaction_detail.type' | translate}}</option>
+            <option disabled>{{'security_transaction.type' | translate}}</option>
             <option *ngFor="let typeWithLabel of typesWithLabels()"
                     [value]="typeWithLabel.type"
                     [hidden]="typeWithLabel.type == securityTransaction.type">
@@ -72,7 +72,7 @@
       </div>
     </div>
     <div class="clr-form-control clr-row" *ngIf="isShowExchangeRate()">
-      <label>{{'security_transaction_detail.exchange_rate' | translate}}</label>
+      <label>{{'security_transaction.exchange_rate' | translate}}</label>
       <div class="clr-control-container">
         <div class="clr-input-wrapper">
           <input type="number"
@@ -85,7 +85,7 @@
       </div>
     </div>
     <div class="clr-form-control clr-row" [hidden]="!isShowAmount()">
-      <label>{{'security_transaction_detail.amount' | translate}}</label>
+      <label>{{'security_transaction.amount' | translate}}</label>
       <input type="number"
              name="amount"
              class="clr-input"

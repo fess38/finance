@@ -1,148 +1,140 @@
 {
-  "common": {
-    "access_link": "Access link",
-    "settings": "Settings",
-    "name": "Name",
-    "use_in_transactions": "Use in transactions",
-    "amount": "Transaction/template amount",
-    "save": "Save",
-    "delete": "Delete",
-    "income": "Income",
-    "expense": "Expense",
-    "date": "Date",
-    "title": "Finance",
-    "category": "Category",
-    "sub_category": "Subcategory",
-    "no_off_budget": "No off-budget",
-    "security": "Security paper",
-    "currency": "Currency",
-    "price": "Price"
-  },
-  "account_detail": {
+  "account": {
+    "account_title": "Account",
     "add": "Add account",
+    "balance_title": "Balance",
     "edit": "Edit account",
     "updated_balance": "Updated balance"
   },
-  "account_list": {
-    "account_title": "Account",
-    "balance_title": "Balance"
-  },
-  "category_detail": {
+  "category": {
     "add": "Add category",
     "edit": "Edit category",
     "type": "Category type"
   },
-  "family_member_detail": {
-    "add": "Add family member",
-    "edit": "Edit family member"
+  "common": {
+    "access_link": "Access link",
+    "amount": "Transaction/template amount",
+    "category": "Category",
+    "currency": "Currency",
+    "date": "Date",
+    "delete": "Delete",
+    "expense": "Expense",
+    "income": "Income",
+    "name": "Name",
+    "price": "Price",
+    "save": "Save",
+    "security": "Security paper",
+    "sub_category": "Subcategory",
+    "use_in_transactions": "Use in transactions"
   },
-  "family_member_list": {
-    "family_member": "Family member"
+  "error": {
+    "message": "Something goes wrong",
+    "popup_blocked": "Pop up blocked by browser"
+  },
+  "family_member": {
+    "add": "Add family member",
+    "edit": "Edit family member",
+    "name": "Family member"
   },
   "login": {
     "google": "Log in by Google"
   },
   "main_menu": {
-    "title": "Finance",
-    "exit": "Sign out",
+    "account": "Accounts",
     "add_transaction": "Add transaction",
     "add_transaction_with_account": "With account",
     "add_transaction_with_security": "With security",
-    "transaction": "Transactions",
     "all_transactions": "All transactions",
-    "incomes": "Incomes",
-    "expences": "Expences",
-    "transfers": "Transfers",
-    "templates": "Templates",
-    "future": "Planned",
-    "search": "Search",
-    "investment": "Investment",
-    "reports": "Reports",
-    "date_report": "By days",
-    "month_report": "By months",
-    "year_report": "By years",
-    "other": "Other",
-    "account": "Accounts",
     "category": "Categories",
-    "sub_category": "Subcategories",
+    "date_report": "By days",
+    "exit": "Sign out",
+    "expences": "Expences",
     "family_member": "Family members",
-    "security": "Security papers"
-  },
-  "settings": {
-    "data_export": "Export data",
-    "data_import": "Import data",
-    "data_delete": "Delete data",
-    "language": "Language",
-    "no_off_budget": "Hide off budget transactions"
-  },
-  "sub_category_detail": {
-    "add": "Add subcategory",
-    "edit": "Edit subcategory"
-  },
-  "transaction_detail": {
-    "add": "Add transaction",
-    "edit": "Edit transaction",
-    "action": "Transaction type",
-    "transfer": "Transfer",
-    "account": "Account",
-    "account_from": "Charge account",
-    "account_to": "Receipt account",
-    "amount_from": "Charge amount",
-    "amount_to": "Amount of receipt",
-    "family_member": "Family member",
-    "comment": "Comment",
-    "off_budget": "Off budget"
-  },
-  "transaction_list": {
-    "title": "Transactions search",
-    "all_actions": "All transaction types",
-    "all_accounts": "All accounts",
-    "all_categories": "All categories",
-    "all_sub_categories": "All subcategories",
-    "all_family_members": "All family members",
-    "amount": "Amount"
-  },
-  "transaction_template_detail": {
-    "add": "Add template",
-    "edit": "Edit template",
-    "interval": "Frequency",
-    "average": "in average",
-    "days_of_week": "Days of week",
-    "days_of_month": "Days of month"
-  },
-  "transaction_template_list": {
-    "transaction_template": "Transaction template"
-  },
-  "transaction_future": {
-    "name": "Template name",
-    "future": "Planned transactions",
-    "skip": "Skip"
-  },
-  "security_detail": {
-    "add": "Add security paper",
-    "edit": "Edit security paper",
-    "amount": "Transactions"
-  },
-  "security_transaction_detail": {
-    "add": "Add transaction",
-    "edit": "Edit transaction",
-    "type": "Type",
-    "buy": "But",
-    "sell": "Sell",
-    "purchase_fee": "Purchase fee",
-    "service_fee": "Service fee",
-    "coupon": "Coupon",
-    "dividends": "Dividends",
-    "tax": "Налог",
-    "exchange_rate": "Exchange rate",
-    "amount": "Amount",
-    "cost": "Cost"
+    "future": "Planned",
+    "incomes": "Incomes",
+    "investment": "Investment",
+    "month_report": "By months",
+    "other": "Other",
+    "reports": "Reports",
+    "search": "Search",
+    "security": "Security papers",
+    "settings": "Settings",
+    "sub_category": "Subcategories",
+    "templates": "Templates",
+    "title": "Finance",
+    "transaction": "Transactions",
+    "transfers": "Transfers",
+    "year_report": "By years"
   },
   "report": {
     "summary": "Summary"
   },
-  "error": {
-    "message": "Something goes wrong",
-    "popup_blocked": "Pop up blocked by browser"
+  "security": {
+    "add": "Add security paper",
+    "amount": "Transactions",
+    "edit": "Edit security paper"
+  },
+  "security_transaction": {
+    "add": "Add transaction",
+    "amount": "Amount",
+    "buy": "But",
+    "cost": "Cost",
+    "coupon": "Coupon",
+    "dividends": "Dividends",
+    "edit": "Edit transaction",
+    "exchange_rate": "Exchange rate",
+    "purchase_fee": "Purchase fee",
+    "sell": "Sell",
+    "service_fee": "Service fee",
+    "tax": "Налог",
+    "type": "Type"
+  },
+  "settings": {
+    "currency": "Валюта",
+    "data_delete": "Delete data",
+    "data_export": "Export data",
+    "data_import": "Import data",
+    "language": "Language",
+    "no_off_budget": "Hide off budget transactions"
+  },
+  "sub_category": {
+    "add": "Add subcategory",
+    "edit": "Edit subcategory"
+  },
+  "transaction": {
+    "account": "Account",
+    "account_from": "Charge account",
+    "account_to": "Receipt account",
+    "action": "Transaction type",
+    "add": "Add transaction",
+    "all_accounts": "All accounts",
+    "all_actions": "All transaction types",
+    "all_categories": "All categories",
+    "all_family_members": "All family members",
+    "all_sub_categories": "All subcategories",
+    "amount": "Amount",
+    "amount_from": "Charge amount",
+    "amount_to": "Amount of receipt",
+    "comment": "Comment",
+    "edit": "Edit transaction",
+    "family_member": "Family member",
+    "no_off_budget": "No off-budget",
+    "off_budget": "Off budget",
+    "title": "Transactions search",
+    "transfer": "Transfer"
+  },
+  "transaction_future": {
+    "future": "Planned transactions",
+    "name": "Template name",
+    "skip": "Skip"
+  },
+  "transaction_template": {
+    "add": "Add template",
+    "average": "in average",
+    "days_of_month": "Days of month",
+    "days_of_week": "Days of week",
+    "edit": "Edit template",
+    "interval": "Frequency",
+    "name": "Transaction template"
   }
 }

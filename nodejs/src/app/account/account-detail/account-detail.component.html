@@ -6,10 +6,10 @@
           <cds-icon shape="undo"></cds-icon>
         </button>
         <span [hidden]="!(account | isNewEntity)">
-          {{'account_detail.add' | translate}}
+          {{'account.add' | translate}}
         </span>
         <span [hidden]="account | isNewEntity">
-          {{'account_detail.edit' | translate}}
+          {{'account.edit' | translate}}
         </span>
       </label>
     </div>
@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="clr-form-control clr-row">
-      <label>{{'account_list.balance_title' | translate}}</label>
+      <label>{{'account.balance_title' | translate}}</label>
       <div class="clr-control-container">
         <div class="clr-input-wrapper">
           <input type="number"
@@ -34,7 +34,7 @@
       </div>
     </div>
     <div class="clr-form-control clr-row" [hidden]="account  | isNewEntity">
-      <label>{{'account_detail.updated_balance' | translate}}</label>
+      <label>{{'account.updated_balance' | translate}}</label>
       <input type="number"
              name="updatedBalance"
              class="clr-input"

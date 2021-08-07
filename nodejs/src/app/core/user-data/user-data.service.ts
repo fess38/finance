@@ -68,10 +68,8 @@ export class UserDataService {
 
   private setDefaultLang() {
     this.translate.setDefaultLang('ru');
-    this.translate.use(Language[this.settings().language].toLowerCase());
-    this.translate.get('common.title').subscribe(x => {
-      this.titleService.setTitle(x);
-    });
+    this.translate.use(this.language().toLowerCase());
+    this.translate.get('main_menu.title').subscribe(x => this.titleService.setTitle(x));
   }
 
   dataStorageJson(): any {

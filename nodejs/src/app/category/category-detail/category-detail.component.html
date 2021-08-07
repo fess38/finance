@@ -6,10 +6,10 @@
           <cds-icon shape="undo"></cds-icon>
         </button>
         <span [hidden]="!(category | isNewEntity)">
-          {{'category_detail.add' | translate}}
+          {{'category.add' | translate}}
         </span>
         <span [hidden]="category | isNewEntity">
-          {{'category_detail.edit' | translate}}
+          {{'category.edit' | translate}}
         </span>
       </label>
     </div>
@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="clr-form-control clr-row">
-      <label>{{'category_detail.type' | translate}}</label>
+      <label>{{'category.type' | translate}}</label>
       <div class="clr-control-container clr-control-inline">
         <div class="clr-checkbox-wrapper">
           <input type="checkbox"

@@ -9,7 +9,7 @@
           <cds-icon shape="cog" [attr.badge]="isOnline ? 'success' : 'danger'" ></cds-icon>
         </button>
         <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-          <a routerLink="/settings" clrDropdownItem>{{'common.settings' | translate}}</a>
+          <a routerLink="/settings" clrDropdownItem>{{'main_menu.settings' | translate}}</a>
           <span (click)="signout()" clrDropdownItem>{{'main_menu.exit' | translate}}</span>
         </clr-dropdown-menu>
       </clr-dropdown>

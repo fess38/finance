@@ -6,10 +6,10 @@
           <cds-icon shape="undo"></cds-icon>
         </button>
         <span [hidden]="!(security | isNewEntity)">
-          {{'security_detail.add' | translate}}
+          {{'security.add' | translate}}
         </span>
         <span [hidden]="security | isNewEntity">
-          {{'security_detail.edit' | translate}}
+          {{'security.edit' | translate}}
         </span>
       </label>
     </div>
@@ -70,7 +70,7 @@
     </div>
     <div class="clr-form-control clr-row" [hidden]="security | isNewEntity">
       <label>
-        {{'security_detail.amount' | translate}}: {{security.transactionAmount}}
+        {{'security.amount' | translate}}: {{security.transactionAmount}}
       </label>
     </div>
     <div class="clr-form-control clr-row">

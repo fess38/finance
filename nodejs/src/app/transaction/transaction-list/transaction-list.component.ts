@@ -142,7 +142,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   }
 
   formatCategory(transaction: Transaction): string {
-    let result = 'transaction_detail.transfer';
+    let result = 'transaction.transfer';
     const category: Category = this.userdata.findCategory(transaction.categoryId);
     const subCategory: SubCategory = this.userdata.findSubCategory(transaction.subCategoryId);
     if (subCategory) {

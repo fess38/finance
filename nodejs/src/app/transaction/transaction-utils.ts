@@ -6,7 +6,7 @@ export class TransactionUtils {
   static typesWithLabels = [
     { type: Type.INCOME, label: 'common.income' },
     { type: Type.EXPENSE, label: 'common.expense' },
-    { type: Type.TRANSFER, label: 'transaction_detail.transfer' }
+    { type: Type.TRANSFER, label: 'transaction.transfer' }
   ];
 
   static type(transaction: Transaction): Type {
