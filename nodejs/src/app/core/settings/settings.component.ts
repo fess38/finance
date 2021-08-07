@@ -43,10 +43,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
     return this.userdata.currencies();
   }
 
-  language(): string {
-    return Language[this.userdata.settings().language];
-  }
-
   updateSettings() {
     this.userdata.updateSettings(this.settings).catch(error => {
       console.error(error.message);

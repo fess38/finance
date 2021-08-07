@@ -51,8 +51,7 @@
         <div class="clr-select-wrapper">
           <select class="clr-select" name="currency" required [(ngModel)]="settings.currencyId">
             <option selected *ngFor="let currency of currencies()" [ngValue]="currency.id">
-              <span *ngIf="language() == 'RU'">{{currency.nameRu}} ({{currency.symbol}})</span>
-              <span *ngIf="language() == 'EN'">{{currency.nameEn}} ({{currency.symbol}})</span>
+              {{currency | currencyName}} ({{currency.symbol}})
             </option>
           </select>
         </div>

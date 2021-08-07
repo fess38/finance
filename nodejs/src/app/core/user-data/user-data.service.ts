@@ -68,7 +68,7 @@ export class UserDataService {
 
   private setDefaultLang() {
     this.translate.setDefaultLang('ru');
-    this.translate.use(this.language().toLowerCase());
+    this.translate.use(this.locale());
     this.translate.get('main_menu.title').subscribe(x => this.titleService.setTitle(x));
   }
 
@@ -81,11 +81,7 @@ export class UserDataService {
   }
 
   locale(): string {
-    return this.language().toLowerCase();
-  }
-
-  language(): string {
-    return Language[this.settings().language];
+    return Language[this.settings().language].toLowerCase();
   }
 
   settings(): Settings {

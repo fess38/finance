@@ -52,9 +52,7 @@
                   [disabled]="!(account | isNewEntity)">
             <option disabled>{{'common.currency' | translate}}</option>
             <option selected *ngFor="let currency of currencies()" [ngValue]="currency.id">
-              <span *ngIf="language() == 'RU'">{{currency.nameRu}}</span>
-              <span *ngIf="language() == 'EN'">{{currency.nameEn}}</span>
-              <span> ({{currency.symbol}})</span>
+              {{currency | currencyName}} ({{currency.symbol}})
             </option>
           </select>
         </div>

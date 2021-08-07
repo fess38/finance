@@ -4,7 +4,6 @@ import { Subscription } from 'rxjs';
 import { Currency, Security, Settings } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 import { MoneyDecoderPipe } from '../../utils/money-decoder.pipe';
-import Language = Settings.Language;
 
 @Component({
   templateUrl: './security-detail.component.html'
@@ -45,10 +44,6 @@ export class SecurityDetailComponent implements OnInit, OnDestroy {
 
   currencies(): Currency[] {
     return this.userdata.currencies();
-  }
-
-  language(): string {
-    return Language[this.userdata.settings().language];
   }
 
   update(security: Security): void {

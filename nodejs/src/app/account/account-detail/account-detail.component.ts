@@ -4,7 +4,6 @@ import { Subscription } from 'rxjs';
 import { Account, Currency, Settings, Transaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 import { DateUtils } from '../../utils/date-utils';
-import Language = Settings.Language;
 
 @Component({
   templateUrl: 'account-detail.component.html'
@@ -45,10 +44,6 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
 
   currencies(): Currency[] {
     return this.userdata.currencies();
-  }
-
-  language(): string {
-    return Language[this.userdata.settings().language];
   }
 
   update(account: Account): void {
