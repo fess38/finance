@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { Money } from '../core/model/model';
 
 @Pipe({
-  name: 'moneyDecoder'
+  name: 'decodeMoney'
 })
 export class MoneyDecoderPipe implements PipeTransform {
   transform(value: number | string): Money {

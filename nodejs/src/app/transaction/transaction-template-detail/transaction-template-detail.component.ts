@@ -4,8 +4,8 @@ import { interval, Subject, Subscription } from 'rxjs';
 import { Transaction, TransactionTemplate } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 import { DateUtils } from '../../utils/date-utils';
-import { TransactionMatcher } from '../../utils/transaction-matcher';
 import { TransactionDetailContext } from '../transaction-detail/transaction-detail.component';
+import { TransactionMatcher } from '../transaction-matcher';
 
 @Component({
   templateUrl: 'transaction-template-detail.component.html'

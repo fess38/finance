@@ -7,6 +7,7 @@ import { AppRoutingModule } from '../../app-routing.module';
 import { AlertModule } from '../../utils/alert/alert.module';
 import { CurrencyNamePipe } from '../../utils/currency-name.pipe';
 import { CurrencySymbolPipe } from '../../utils/currency-symbol.pipe';
+import { DateParserPipe } from '../../utils/date-parser.pipe';
 import { IsNewEntityPipe } from '../../utils/is-new-entity.pipe';
 import { IsReadOnlyPipe } from '../../utils/is-read-only.pipe';
 import { LocalePipe } from '../../utils/locale.pipe';
@@ -20,12 +21,12 @@ import { MoneyEncoderPipe } from '../../utils/money-encoder.pipe';
   exports: [
     AlertModule, AppRoutingModule, BrowserModule, ClarityModule, FormsModule, MoneyDecoderPipe,
     MoneyEncoderPipe, TranslateModule,
-    CurrencyNamePipe, CurrencySymbolPipe, IsNewEntityPipe, IsReadOnlyPipe, LocalePipe,
-    MoneyDecoderPipe, MoneyEncoderPipe
+    CurrencyNamePipe, CurrencySymbolPipe, DateParserPipe, IsNewEntityPipe, IsReadOnlyPipe,
+    LocalePipe, MoneyDecoderPipe, MoneyEncoderPipe
   ],
   declarations: [
-    CurrencyNamePipe, CurrencySymbolPipe, IsNewEntityPipe, IsReadOnlyPipe, LocalePipe,
-    MoneyDecoderPipe, MoneyEncoderPipe
+    CurrencyNamePipe, CurrencySymbolPipe, DateParserPipe, IsNewEntityPipe, IsReadOnlyPipe,
+    LocalePipe, MoneyDecoderPipe, MoneyEncoderPipe
   ]
 })
 export class SharedModule {}

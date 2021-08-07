@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../core/shared/shared.module';
 import { UserDataService } from '../core/user-data/user-data.service';
-import { CreatedFormatPipe } from '../utils/created-format.pipe';
 import { MonthFormatPipe } from '../utils/month-format.pipe';
 import { TransactionCriteriaService } from './transaction-criteria.service';
 import { TransactionDateComponent } from './transaction-date/transaction-date.component';
@@ -15,7 +14,7 @@ import { TransactionYearComponent } from './transaction-year/transaction-year.co
 
 @NgModule({
   declarations: [
-    CreatedFormatPipe, MonthFormatPipe,
+    MonthFormatPipe,
     TransactionDateComponent, TransactionMonthComponent, TransactionYearComponent,
     TransactionDetailComponent, TransactionListComponent,
     TransactionTemplateDetailComponent, TransactionTemplateListComponent,

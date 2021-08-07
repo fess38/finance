@@ -146,7 +146,7 @@
         <th class="left">{{'transaction.amount' | translate}}</th>
       </tr>
       <tr *ngFor="let transaction of transactions">
-        <td class="left">{{transaction.created | createdFormat | date:'dd'}}</td>
+        <td class="left">{{transaction.created | parseDate | date:'dd'}}</td>
         <td class="left">
           <span routerLink="/transaction/{{transaction.id}}"
                 [ngStyle]="{'background-color': transaction.offBudget ? '#79C6E6' : '#FFFFFF'}">
