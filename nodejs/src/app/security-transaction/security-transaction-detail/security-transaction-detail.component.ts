@@ -44,10 +44,6 @@ export class SecurityTransactionDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  isReadOnly(): boolean {
-    return this.userdata.isReadOnly();
-  }
-
   securities(): Security[] {
     return this.userdata.securities().filter(x => x.isVisible);
   }

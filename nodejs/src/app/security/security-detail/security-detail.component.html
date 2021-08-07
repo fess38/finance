@@ -74,13 +74,13 @@
     <div class="clr-form-control clr-row">
       <button class="btn btn-primary btn-sm btn-block"
               (click)="update(security)"
-              [disabled]="!isValidForm() || isReadOnly()">
+              [disabled]="!isValidForm() || ('' | isReadOnly)">
         {{'common.save' | translate}}
       </button>
       <button class="btn btn-danger btn-sm btn-block"
               (click)="delete(security)"
               [hidden]="security | isNewEntity"
-              [disabled]="hasTransations() || isReadOnly()">
+              [disabled]="hasTransations() || ('' | isReadOnly)">
         {{'common.delete' | translate}}
       </button>
     </div>

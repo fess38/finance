@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Currency, Security, Settings } from '../../core/model/model';
+import { Currency, Security } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 import { MoneyDecoderPipe } from '../../utils/money-decoder.pipe';
 
@@ -36,10 +36,6 @@ export class SecurityDetailComponent implements OnInit, OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
-  }
-
-  isReadOnly(): boolean {
-    return this.userdata.isReadOnly();
   }
 
   currencies(): Currency[] {

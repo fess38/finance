@@ -36,10 +36,6 @@ export class SubCategoryDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  isReadOnly(): boolean {
-    return this.userdata.isReadOnly();
-  }
-
   categories() {
     return this.userdata.categories()
       .filter(x => x.isVisible)

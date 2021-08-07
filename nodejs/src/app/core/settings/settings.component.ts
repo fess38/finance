@@ -35,10 +35,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
   }
 
-  isReadOnly(): boolean {
-    return this.userdata.isReadOnly();
-  }
-
   currencies(): Currency[] {
     return this.userdata.currencies();
   }

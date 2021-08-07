@@ -74,10 +74,6 @@ export class TransactionTemplateDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  isReadOnly(): boolean {
-    return this.userdata.isReadOnly();
-  }
-
   update(transactionTemplate: TransactionTemplate): void {
     if (transactionTemplate.id == 0) {
       this.userdata.saveTransactionTemplate(transactionTemplate)

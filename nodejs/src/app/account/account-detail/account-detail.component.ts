@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Account, Currency, Settings, Transaction } from '../../core/model/model';
+import { Account, Currency, Transaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 import { DateUtils } from '../../utils/date-utils';
 
@@ -36,10 +36,6 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
-  }
-
-  isReadOnly(): boolean {
-    return this.userdata.isReadOnly();
   }
 
   currencies(): Currency[] {

@@ -36,10 +36,6 @@ export class CategoryDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  isReadOnly(): boolean {
-    return this.userdata.isReadOnly();
-  }
-
   update(category: Category): void {
     if (category.id == 0) {
       this.userdata.saveCategory(category)

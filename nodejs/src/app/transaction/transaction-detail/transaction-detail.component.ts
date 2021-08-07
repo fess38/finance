@@ -91,10 +91,6 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  isReadOnly(): boolean {
-    return this.userdata.isReadOnly();
-  }
-
   typesWithLabels(): any[] {
     return TransactionUtils.typesWithLabels;
   }

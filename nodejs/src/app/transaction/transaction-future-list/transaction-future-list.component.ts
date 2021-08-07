@@ -50,10 +50,6 @@ export class TransactionFutureListComponent implements OnInit, OnDestroy {
     }
   }
 
-  isReadOnly(): boolean {
-    return this.userdata.isReadOnly();
-  }
-
   onTransactionClick(transaction: Transaction): void {
     this.activeTransaction = new Transaction(transaction);
     this.isShowForm = true;

@@ -36,10 +36,6 @@ export class FamilyMemberDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  isReadOnly(): boolean {
-    return this.userdata.isReadOnly();
-  }
-
   update(familyMember: FamilyMember) {
     if (familyMember.id == 0) {
       this.userdata.saveFamilyMember(familyMember)
