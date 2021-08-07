@@ -29,7 +29,7 @@
                   class="clr-select"
                   [(ngModel)]="securityTransaction.securityId">
             <option disabled>{{'common.security' | translate}}</option>
-            <option selected *ngFor="let security of securities()"
+            <option *ngFor="let security of securities()"
                     [ngValue]="security.id"
                     [hidden]="security.id == securityTransaction.securityId">
               <span>{{security.name}}</span>
@@ -66,6 +66,8 @@
                  name="price"
                  class="clr-input"
                  pattern="\d+(\.?\d+)?"
+                 min="0"
+                 placeholder="{{securityTransaction.securityId | currencySymbol:'security'}}"
                  [ngModel]="securityTransaction.price | encodeMoney"
                  (ngModelChange)="securityTransaction.price = this.moneyDecoder.transform($event)"/>
         </div>
@@ -79,6 +81,8 @@
                  name="exchangeRate"
                  class="clr-input"
                  pattern="\d+(\.?\d+)?"
+                 min="0"
+                 placeholder="{{securityTransaction.securityId | currencySymbol:'security'}} => {{'' | currencySymbol}}"
                  [ngModel]="securityTransaction.exchangeRate | encodeMoney"
                  (ngModelChange)="securityTransaction.exchangeRate = this.moneyDecoder.transform($event)"/>
         </div>
@@ -90,7 +94,38 @@
              name="amount"
              class="clr-input"
              pattern="\d*"
+             min="1"
              [(ngModel)]="securityTransaction.amount"/>
+    </div>
+    <div class="clr-form-control clr-row">
+      <label>{{'security_transaction.purchase_fee' | translate}}</label>
+      <div class="clr-control-container">
+        <div class="clr-input-wrapper">
+          <input type="number"
+                 name="purchaseFee"
+                 class="clr-input"
+                 pattern="\d+(\.?\d+)?"
+                 min="0"
+                 placeholder="{{securityTransaction.securityId | currencySymbol:'security'}}"
+                 [ngModel]="securityTransaction.purchaseFee | encodeMoney"
+                 (ngModelChange)="securityTransaction.purchaseFee = this.moneyDecoder.transform($event)"/>
+        </div>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row">
+      <label>{{'security_transaction.service_fee' | translate}}</label>
+      <div class="clr-control-container">
+        <div class="clr-input-wrapper">
+          <input type="number"
+                 name="serviceFee"
+                 class="clr-input"
+                 pattern="\d+(\.?\d+)?"
+                 min="0"
+                 placeholder="{{securityTransaction.securityId | currencySymbol:'security'}}"
+                 [ngModel]="securityTransaction.serviceFee | encodeMoney"
+                 (ngModelChange)="securityTransaction.serviceFee = this.moneyDecoder.transform($event)"/>
+        </div>
+      </div>
     </div>
     <div class="clr-form-control clr-row">
       <button class="btn btn-primary btn-sm btn-block"

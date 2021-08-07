@@ -10,10 +10,14 @@ export class CurrencySymbolPipe implements PipeTransform {
 
   // net entity
   transform(value: Account | Security | number | string, type?: string): string {
-    if (value instanceof Account || value instanceof Security) {
+    if (value == 0 && type) {
+      return '';
+    } else if (value instanceof Account || value instanceof Security) {
       return this.userdata.findCurrency(value.currencyId).symbol;
     } else if (typeof value == 'number' && type == 'account') {
       return this.userdata.findCurrency(this.userdata.findAccount(value).currencyId).symbol;
+    } else if (typeof value == 'number' && type == 'security') {
+      return this.userdata.findCurrency(this.userdata.findSecurity(value).currencyId).symbol;
     } else if (typeof value == 'string') {
       return this.userdata.findCurrency(this.userdata.settings().currencyId).symbol;
     } else {

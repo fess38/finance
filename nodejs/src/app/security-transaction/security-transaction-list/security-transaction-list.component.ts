@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Security, SecurityTransaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
-import { MoneyEncoderPipe } from '../../utils/money-encoder.pipe';
 import { SecurityTransactionUtils } from '../security-transaction-utils';
 
 @Component({
@@ -10,7 +9,6 @@ import { SecurityTransactionUtils } from '../security-transaction-utils';
 export class SecurityTransactionListComponent {
   constructor(private userdata: UserDataService) {}
 
-  private moneyEncoder = new MoneyEncoderPipe();
   filterSecurityId: number;
 
   securities(): Security[] {
@@ -48,10 +46,6 @@ export class SecurityTransactionListComponent {
   }
 
   cost(securityTransaction: SecurityTransaction): number {
-    return Math.round(
-      Number(this.moneyEncoder.transform(securityTransaction.price))
-      * Number(this.moneyEncoder.transform(securityTransaction.exchangeRate))
-      * securityTransaction.amount
-    );
+    return SecurityTransactionUtils.cost(securityTransaction);
   }
 }

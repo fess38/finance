@@ -123,16 +123,15 @@ message SecurityTransaction {
     required Money price = 6;
     required Money exchange_rate = 7;
     optional int64 amount = 8 [default = 1];
+    required Money purchase_fee = 9;
+    required Money service_fee = 10;
 
     enum Type {
         UNDEFINED = 0;
         BUY = 1;
         SELL = 2;
-        PURCHASE_FEE = 3;
-        SERVICE_FEE = 4;
-        COUPON = 5;
-        DIVIDENDS = 6;
-        TAX = 7;
+        DIVIDENDS = 3;
+        COUPON = 4;
     }
 }
 
@@ -146,7 +145,6 @@ message SecurityReport {
     required Money profit = 7;
     required double annual_profit = 8;
 }
-
 
 // new entity
 

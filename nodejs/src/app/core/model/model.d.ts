@@ -1117,6 +1117,12 @@ export interface ISecurityTransaction {
 
     /** SecurityTransaction amount */
     amount?: (number|null);
+
+    /** SecurityTransaction purchaseFee */
+    purchaseFee: IMoney;
+
+    /** SecurityTransaction serviceFee */
+    serviceFee: IMoney;
 }
 
 /** Represents a SecurityTransaction. */
@@ -1151,6 +1157,12 @@ export class SecurityTransaction implements ISecurityTransaction {
 
     /** SecurityTransaction amount. */
     public amount: number;
+
+    /** SecurityTransaction purchaseFee. */
+    public purchaseFee: IMoney;
+
+    /** SecurityTransaction serviceFee. */
+    public serviceFee: IMoney;
 
     /**
      * Creates a new SecurityTransaction instance using the specified properties.
@@ -1206,11 +1218,8 @@ export namespace SecurityTransaction {
         UNDEFINED = 0,
         BUY = 1,
         SELL = 2,
-        PURCHASE_FEE = 3,
-        SERVICE_FEE = 4,
-        COUPON = 5,
-        DIVIDENDS = 6,
-        TAX = 7
+        DIVIDENDS = 3,
+        COUPON = 4
     }
 }
 

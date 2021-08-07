@@ -45,7 +45,7 @@
                   class="clr-select"
                   [(ngModel)]="transaction.accountIdFrom">
             <option disabled>{{'transaction.account' | translate}}</option>
-            <option selected *ngFor="let account of accounts()"
+            <option *ngFor="let account of accounts()"
                     [ngValue]="account.id"
                     [hidden]="account.id == transaction.accountIdTo">
               <span>{{account.name}}</span>
@@ -63,7 +63,7 @@
                   class="clr-select"
                   [(ngModel)]="transaction.accountIdTo">
             <option disabled>{{'transaction.account' | translate}}</option>
-            <option selected *ngFor="let account of accounts()"
+            <option *ngFor="let account of accounts()"
                     [ngValue]="account.id"
                     [hidden]="account.id == transaction.accountIdFrom">
               <span>{{account.name}}</span>
@@ -108,7 +108,7 @@
                   [(ngModel)]="transaction.categoryId"
                   (ngModelChange)="onChangeCategory()">
             <option disabled>{{'common.category' | translate}}</option>
-            <option selected *ngFor="let category of categories()" [ngValue]="category.id">
+            <option *ngFor="let category of categories()" [ngValue]="category.id">
               <span>{{category.name}}</span>
             </option>
           </select>
@@ -124,9 +124,7 @@
                   [(ngModel)]="transaction.subCategoryId">
             <option disabled>{{'common.sub_category' | translate}}</option>
             <option [ngValue]="null"></option>
-            <option selected
-                    *ngFor="let subCategory of subCategories()"
-                    [ngValue]="subCategory.id">
+            <option *ngFor="let subCategory of subCategories()" [ngValue]="subCategory.id">
               <span>{{subCategory.name}}</span>
             </option>
           </select>
@@ -142,9 +140,7 @@
                   [(ngModel)]="transaction.familyMemberId">
             <option disabled>{{'transaction.family_member' | translate}}</option>
             <option [ngValue]="null"></option>
-            <option selected
-                    *ngFor="let familyMember of familyMembers()"
-                    [ngValue]="familyMember.id">
+            <option *ngFor="let familyMember of familyMembers()" [ngValue]="familyMember.id">
               <span>{{familyMember.name}}</span>
             </option>
           </select>

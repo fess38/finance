@@ -51,7 +51,7 @@
                   [(ngModel)]="account.currencyId"
                   [disabled]="!(account | isNewEntity)">
             <option disabled>{{'common.currency' | translate}}</option>
-            <option selected *ngFor="let currency of currencies()" [ngValue]="currency.id">
+            <option *ngFor="let currency of currencies()" [ngValue]="currency.id">
               {{currency | currencyName}} ({{currency.symbol}})
             </option>
           </select>

@@ -3309,6 +3309,8 @@ export const SecurityTransaction = $root.SecurityTransaction = (() => {
      * @property {IMoney} price SecurityTransaction price
      * @property {IMoney} exchangeRate SecurityTransaction exchangeRate
      * @property {number|null} [amount] SecurityTransaction amount
+     * @property {IMoney} purchaseFee SecurityTransaction purchaseFee
+     * @property {IMoney} serviceFee SecurityTransaction serviceFee
      */
 
     /**
@@ -3391,6 +3393,22 @@ export const SecurityTransaction = $root.SecurityTransaction = (() => {
     SecurityTransaction.prototype.amount = $util.Long ? $util.Long.fromBits(1,0,false) : 1;
 
     /**
+     * SecurityTransaction purchaseFee.
+     * @member {IMoney} purchaseFee
+     * @memberof SecurityTransaction
+     * @instance
+     */
+    SecurityTransaction.prototype.purchaseFee = null;
+
+    /**
+     * SecurityTransaction serviceFee.
+     * @member {IMoney} serviceFee
+     * @memberof SecurityTransaction
+     * @instance
+     */
+    SecurityTransaction.prototype.serviceFee = null;
+
+    /**
      * Creates a new SecurityTransaction instance using the specified properties.
      * @function create
      * @memberof SecurityTransaction
@@ -3425,6 +3443,8 @@ export const SecurityTransaction = $root.SecurityTransaction = (() => {
         $root.Money.encode(message.exchangeRate, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
         if (message.amount != null && Object.hasOwnProperty.call(message, "amount"))
             writer.uint32(/* id 8, wireType 0 =*/64).int64(message.amount);
+        $root.Money.encode(message.purchaseFee, writer.uint32(/* id 9, wireType 2 =*/74).fork()).ldelim();
+        $root.Money.encode(message.serviceFee, writer.uint32(/* id 10, wireType 2 =*/82).fork()).ldelim();
         return writer;
     };
 
@@ -3470,6 +3490,12 @@ export const SecurityTransaction = $root.SecurityTransaction = (() => {
             case 8:
                 message.amount = reader.int64();
                 break;
+            case 9:
+                message.purchaseFee = $root.Money.decode(reader, reader.uint32());
+                break;
+            case 10:
+                message.serviceFee = $root.Money.decode(reader, reader.uint32());
+                break;
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -3485,6 +3511,10 @@ export const SecurityTransaction = $root.SecurityTransaction = (() => {
             throw $util.ProtocolError("missing required 'price'", { instance: message });
         if (!message.hasOwnProperty("exchangeRate"))
             throw $util.ProtocolError("missing required 'exchangeRate'", { instance: message });
+        if (!message.hasOwnProperty("purchaseFee"))
+            throw $util.ProtocolError("missing required 'purchaseFee'", { instance: message });
+        if (!message.hasOwnProperty("serviceFee"))
+            throw $util.ProtocolError("missing required 'serviceFee'", { instance: message });
         return message;
     };
 
@@ -3535,25 +3565,13 @@ export const SecurityTransaction = $root.SecurityTransaction = (() => {
         case 2:
             message.type = 2;
             break;
-        case "PURCHASE_FEE":
+        case "DIVIDENDS":
         case 3:
             message.type = 3;
             break;
-        case "SERVICE_FEE":
+        case "COUPON":
         case 4:
             message.type = 4;
-            break;
-        case "COUPON":
-        case 5:
-            message.type = 5;
-            break;
-        case "DIVIDENDS":
-        case 6:
-            message.type = 6;
-            break;
-        case "TAX":
-        case 7:
-            message.type = 7;
             break;
         }
         if (object.price != null) {
@@ -3575,6 +3593,16 @@ export const SecurityTransaction = $root.SecurityTransaction = (() => {
                 message.amount = object.amount;
             else if (typeof object.amount === "object")
                 message.amount = new $util.LongBits(object.amount.low >>> 0, object.amount.high >>> 0).toNumber();
+        if (object.purchaseFee != null) {
+            if (typeof object.purchaseFee !== "object")
+                throw TypeError(".SecurityTransaction.purchaseFee: object expected");
+            message.purchaseFee = $root.Money.fromObject(object.purchaseFee);
+        }
+        if (object.serviceFee != null) {
+            if (typeof object.serviceFee !== "object")
+                throw TypeError(".SecurityTransaction.serviceFee: object expected");
+            message.serviceFee = $root.Money.fromObject(object.serviceFee);
+        }
         return message;
     };
 
@@ -3612,6 +3640,8 @@ export const SecurityTransaction = $root.SecurityTransaction = (() => {
                 object.amount = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.amount = options.longs === String ? "1" : 1;
+            object.purchaseFee = null;
+            object.serviceFee = null;
         }
         if (message.id != null && message.hasOwnProperty("id"))
             if (typeof message.id === "number")
@@ -3638,6 +3668,10 @@ export const SecurityTransaction = $root.SecurityTransaction = (() => {
                 object.amount = options.longs === String ? String(message.amount) : message.amount;
             else
                 object.amount = options.longs === String ? $util.Long.prototype.toString.call(message.amount) : options.longs === Number ? new $util.LongBits(message.amount.low >>> 0, message.amount.high >>> 0).toNumber() : message.amount;
+        if (message.purchaseFee != null && message.hasOwnProperty("purchaseFee"))
+            object.purchaseFee = $root.Money.toObject(message.purchaseFee, options);
+        if (message.serviceFee != null && message.hasOwnProperty("serviceFee"))
+            object.serviceFee = $root.Money.toObject(message.serviceFee, options);
         return object;
     };
 
@@ -3659,22 +3693,16 @@ export const SecurityTransaction = $root.SecurityTransaction = (() => {
      * @property {number} UNDEFINED=0 UNDEFINED value
      * @property {number} BUY=1 BUY value
      * @property {number} SELL=2 SELL value
-     * @property {number} PURCHASE_FEE=3 PURCHASE_FEE value
-     * @property {number} SERVICE_FEE=4 SERVICE_FEE value
-     * @property {number} COUPON=5 COUPON value
-     * @property {number} DIVIDENDS=6 DIVIDENDS value
-     * @property {number} TAX=7 TAX value
+     * @property {number} DIVIDENDS=3 DIVIDENDS value
+     * @property {number} COUPON=4 COUPON value
      */
     SecurityTransaction.Type = (function() {
         const valuesById = {}, values = Object.create(valuesById);
         values[valuesById[0] = "UNDEFINED"] = 0;
         values[valuesById[1] = "BUY"] = 1;
         values[valuesById[2] = "SELL"] = 2;
-        values[valuesById[3] = "PURCHASE_FEE"] = 3;
-        values[valuesById[4] = "SERVICE_FEE"] = 4;
-        values[valuesById[5] = "COUPON"] = 5;
-        values[valuesById[6] = "DIVIDENDS"] = 6;
-        values[valuesById[7] = "TAX"] = 7;
+        values[valuesById[3] = "DIVIDENDS"] = 3;
+        values[valuesById[4] = "COUPON"] = 4;
         return values;
     })();
 

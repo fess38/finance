@@ -6,7 +6,7 @@
           <span>{{'common.security' | translate}} </span>
           <cds-icon shape="plus-circle"></cds-icon>
         </th>
-        <th>{{'common.price' | translate}}</th>
+        <th class="left">{{'common.price' | translate}}</th>
       </tr>
       <tr *ngFor="let security of securities()" routerLink="/security/{{security.id}}">
         <td class="left">{{security.name}}</td>

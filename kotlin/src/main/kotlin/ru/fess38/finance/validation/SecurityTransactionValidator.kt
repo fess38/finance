@@ -19,16 +19,24 @@ class SecurityTransactionValidator(private val messageService: MessageService) :
       errors.add("unknown security [${value.securityId}]")
     }
 
-    if (value.price.units <= 0 || value.price.micros < 0) {
+    if (!(value.price.units > 0 || value.price.micros > 0)) {
       errors.add("invalid price [${value.price.units} ${value.price.micros}]")
     }
 
-    if (value.exchangeRate.units <= 0 || value.exchangeRate.micros < 0) {
+    if (!(value.exchangeRate.units > 0 || value.exchangeRate.micros > 0)) {
       errors.add("invalid exchange rate [${value.exchangeRate.units} ${value.exchangeRate.micros}]")
     }
 
     if (value.amount <= 0) {
       errors.add("invalid amount [${value.amount}]")
+    }
+
+    if (value.purchaseFee.units < 0 || value.purchaseFee.micros < 0) {
+      errors.add("invalid purchase fee [${value.purchaseFee.units} ${value.purchaseFee.micros}]")
+    }
+
+    if (value.serviceFee.units < 0 || value.serviceFee.micros < 0) {
+      errors.add("invalid service fee [${value.serviceFee.units} ${value.serviceFee.micros}]")
     }
 
     return ValidatorResponse(errors)

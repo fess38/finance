@@ -71,21 +71,27 @@ describe('UserDataEnricherService', () => {
         securityId: 2,
         type: Type.BUY,
         price: new Money({ units: 1 }),
-        exchangeRate: new Money({ units: 1 })
+        exchangeRate: new Money({ units: 1 }),
+        purchaseFee: new Money({ units: 0 }),
+        serviceFee: new Money({ units: 0 })
       }),
       new SecurityTransaction({
         date: '1970-01-01',
         securityId: 1,
         type: Type.BUY,
         price: new Money({ units: 1 }),
-        exchangeRate: new Money({ units: 1 })
+        exchangeRate: new Money({ units: 1 }),
+        purchaseFee: new Money({ units: 0 }),
+        serviceFee: new Money({ units: 0 })
       }),
       new SecurityTransaction({
         date: '1970-01-01',
         securityId: 1,
         type: Type.BUY,
         price: new Money({ units: 1 }),
-        exchangeRate: new Money({ units: 1 })
+        exchangeRate: new Money({ units: 1 }),
+        purchaseFee: new Money({ units: 0 }),
+        serviceFee: new Money({ units: 0 })
       }),
       new SecurityTransaction({
         isDeleted: true,
@@ -93,7 +99,9 @@ describe('UserDataEnricherService', () => {
         securityId: 1,
         type: Type.BUY,
         price: new Money({ units: 1 }),
-        exchangeRate: new Money({ units: 1 })
+        exchangeRate: new Money({ units: 1 }),
+        purchaseFee: new Money({ units: 0 }),
+        serviceFee: new Money({ units: 0 })
       })
     ];
     enricher.enrich(dataStorage);

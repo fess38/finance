@@ -35,6 +35,8 @@ export class SecurityTransactionDetailComponent implements OnInit, OnDestroy {
     } else {
       this.securityTransaction.date = DateUtils.formatDate();
       this.securityTransaction.exchangeRate = new Money({ units: 1 });
+      this.securityTransaction.purchaseFee = new Money({ units: 0 });
+      this.securityTransaction.serviceFee = new Money({ units: 0 });
     }
   }
 
@@ -69,10 +71,20 @@ export class SecurityTransactionDetailComponent implements OnInit, OnDestroy {
       && this.securityTransaction.securityId > 0
       && this.securityTransaction.type > 0
       && this.securityTransaction.price != null
-      && this.securityTransaction.price.units > 0
+      && (
+        this.securityTransaction.price.units > 0
+        || this.securityTransaction.price.micros > 0
+      )
       && this.securityTransaction.exchangeRate != null
-      && this.securityTransaction.exchangeRate.units > 0
-      && this.securityTransaction.amount > 0;
+      && (
+        this.securityTransaction.exchangeRate.units > 0
+        || this.securityTransaction.exchangeRate.micros > 0
+      )
+      && this.securityTransaction.amount > 0
+      && this.securityTransaction.purchaseFee != null
+      && this.securityTransaction.purchaseFee.units >= 0
+      && this.securityTransaction.serviceFee != null
+      && this.securityTransaction.serviceFee.units >= 0;
   }
 
   update(securityTransaction: SecurityTransaction): void {
