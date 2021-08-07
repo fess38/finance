@@ -12,7 +12,6 @@ export class SecurityTransactionListComponent {
 
   private moneyEncoder = new MoneyEncoderPipe();
   filterSecurityId: number;
-  filterType: SecurityTransaction.Type;
 
   locale(): string {
     return this.userdata.locale();
@@ -35,9 +34,6 @@ export class SecurityTransactionListComponent {
     if (this.filterSecurityId != null) {
       result = result.filter(x => x.securityId == this.filterSecurityId);
     }
-    if (this.filterType != null) {
-      result = result.filter(x => x.type == this.filterType);
-    }
     return result;
   }
 
@@ -47,7 +43,7 @@ export class SecurityTransactionListComponent {
 
   typeName(securityTransaction: SecurityTransaction): string {
     let name;
-    SecurityTransactionUtils.typesWithLabels.forEach((x) => {
+    this.typesWithNames().forEach((x) => {
       if (x.type == securityTransaction.type) {
         name = x.label;
       }
@@ -55,10 +51,15 @@ export class SecurityTransactionListComponent {
     return name;
   }
 
-  cost(securityTransaction: SecurityTransaction): string {
-    const cost = Number(this.moneyEncoder.transform(securityTransaction.price))
+  cost(securityTransaction: SecurityTransaction): number {
+    return Math.round(
+      Number(this.moneyEncoder.transform(securityTransaction.price))
       * Number(this.moneyEncoder.transform(securityTransaction.exchangeRate))
-      * securityTransaction.amount;
-    return String(Math.round(cost));
+      * securityTransaction.amount
+    );
+  }
+
+  currencySymbol(): string {
+    return this.userdata.findCurrency(this.userdata.settings().currencyId).symbol;
   }
 }

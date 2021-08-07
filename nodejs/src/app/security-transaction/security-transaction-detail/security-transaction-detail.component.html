@@ -67,7 +67,7 @@
                  class="clr-input"
                  pattern="\d+(\.?\d+)?"
                  [ngModel]="securityTransaction.price | moneyEncoder"
-                 (ngModelChange)="decodePrice($event)"/>
+                 (ngModelChange)="securityTransaction.price = this.moneyDecoder.transform($event)"/>
         </div>
       </div>
     </div>
@@ -80,11 +80,11 @@
                  class="clr-input"
                  pattern="\d+(\.?\d+)?"
                  [ngModel]="securityTransaction.exchangeRate | moneyEncoder"
-                 (ngModelChange)="decodeExchangeRate($event)"/>
+                 (ngModelChange)="securityTransaction.exchangeRate = this.moneyDecoder.transform($event)"/>
         </div>
       </div>
     </div>
-    <div class="clr-form-control clr-row" [hidden]="!isTypeWithAmount()">
+    <div class="clr-form-control clr-row" [hidden]="!isShowAmount()">
       <label>{{'security_transaction_detail.amount' | translate}}</label>
       <input type="number"
              name="amount"

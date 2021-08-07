@@ -50,7 +50,7 @@
                  pattern="\d+(\.?\d+)?"
                  min="0"
                  [ngModel]="security.price | moneyEncoder"
-                 (ngModelChange)="decodePrice($event)"/>
+                 (ngModelChange)="security.price=moneyDecoder.transform($event)"/>
         </div>
       </div>
     </div>

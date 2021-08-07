@@ -186,7 +186,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   }
 
   currencySymbol(account: Account): string {
-    return this.userdata.currencies().filter(x => x.id == account.currencyId)[0].symbol;
+    return this.userdata.findCurrency(account.currencyId).symbol;
   }
 
   isNewTransaction(): boolean {

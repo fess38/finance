@@ -10,9 +10,9 @@ import Language = Settings.Language;
   templateUrl: './security-detail.component.html'
 })
 export class SecurityDetailComponent implements OnInit, OnDestroy {
-  private moneyDecoder = new MoneyDecoderPipe();
   private subscription: Subscription;
   security = new Security();
+  moneyDecoder = new MoneyDecoderPipe();
 
   constructor(private userdata: UserDataService,
               private route: ActivatedRoute,
@@ -49,10 +49,6 @@ export class SecurityDetailComponent implements OnInit, OnDestroy {
 
   language(): string {
     return Language[this.userdata.settings().language];
-  }
-
-  decodePrice(value: number): void {
-    this.security.price = this.moneyDecoder.transform(String(value));
   }
 
   update(security: Security): void {

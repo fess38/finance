@@ -5,7 +5,8 @@ import { Money } from '../core/model/model';
   name: 'moneyDecoder'
 })
 export class MoneyDecoderPipe implements PipeTransform {
-  transform(value: string): Money {
+  transform(value: number | string): Money {
+    value = String(value);
     if (!value) {
       return new Money({ units: 0 });
     }

@@ -7,25 +7,20 @@ export class UserDataEnricherService {
       x.transactionAmount = 0;
       x.balance = 0;
     });
-    dataStorage.categories.forEach(x => x.transactionAmount = 0);
-    dataStorage.subCategories.forEach(x => x.transactionAmount = 0);
-    dataStorage.familyMembers.forEach(x => x.transactionAmount = 0);
-    dataStorage.securities.forEach(x => x.transactionAmount = 0);
-
     this.enrichEnity(dataStorage, dataStorage.accounts as Account[], 'accountIdFrom');
     this.enrichEnity(dataStorage, dataStorage.accounts as Account[], 'accountIdTo');
+
+    dataStorage.categories.forEach(x => x.transactionAmount = 0);
     this.enrichEnity(dataStorage, dataStorage.categories as Category[], 'categoryId');
+
+    dataStorage.subCategories.forEach(x => x.transactionAmount = 0);
     this.enrichEnity(dataStorage, dataStorage.subCategories as SubCategory[], 'subCategoryId');
+
+    dataStorage.familyMembers.forEach(x => x.transactionAmount = 0);
     this.enrichEnity(dataStorage, dataStorage.familyMembers as FamilyMember[], 'familyMemberId');
 
-    const counter = new Map<number, number>();
-    dataStorage.securityTransactions.filter(x => !x.isDeleted).forEach(securityTransaction => {
-      const securityId = securityTransaction.securityId;
-      counter.set(securityId, (counter.get(securityId) || 0) + 1);
-    });
-    dataStorage.securities.forEach(security => {
-      security.transactionAmount = counter.get(security.id) || 0;
-    });
+    dataStorage.securities.forEach(x => x.transactionAmount = 0);
+    this.enrichSecurity(dataStorage);
 
     // new entity
   }
@@ -67,6 +62,17 @@ export class UserDataEnricherService {
 
   private sum(transactions: Transaction[], mapper): number {
     return Number(transactions.map(mapper).reduce((x1, x2) => Number(x1) + Number(x2), 0)) || 0;
+  }
+
+  private enrichSecurity(dataStorage: DataStorage): void {
+    const counter = new Map<number, number>();
+    dataStorage.securityTransactions.filter(x => !x.isDeleted).forEach(securityTransaction => {
+      const securityId = securityTransaction.securityId;
+      counter.set(securityId, (counter.get(securityId) || 0) + 1);
+    });
+    dataStorage.securities.forEach(security => {
+      security.transactionAmount = counter.get(security.id) || 0;
+    });
   }
 
   merge(source: DataStorage, update: DataStorage): DataStorage {

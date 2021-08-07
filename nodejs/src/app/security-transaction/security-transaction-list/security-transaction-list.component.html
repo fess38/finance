@@ -2,7 +2,7 @@
   <div class="clr-col-12 clr-col-sm-8 clr-col-md-6">
     <table class="table table-noborder table-compact">
       <tr>
-        <th class="left" routerLink="/security_transaction/new">{{'common.date' | translate}}</th>
+        <th class="left">{{'common.date' | translate}}</th>
         <th>
           <select clrSelect name="security" [(ngModel)]="filterSecurityId">
             <option [ngValue]="undefined" selected>{{'common.security' | translate}}</option>
@@ -11,21 +11,14 @@
             </option>
           </select>
         </th>
-        <th>
-          <select clrSelect name="type" [(ngModel)]="filterType">
-            <option [ngValue]="undefined" selected>{{'security_transaction_detail.type' | translate}}</option>
-            <option *ngFor="let value of typesWithNames()" [ngValue]="value.type">
-              <span>{{value.label | translate}}</span>
-            </option>
-          </select>
-        </th>
+        <th class="left">{{'security_transaction_detail.type' | translate}}</th>
         <th>{{'security_transaction_detail.cost' | translate}}</th>
       </tr>
       <tr *ngFor="let transaction of transactions()" routerLink="/security_transaction/{{transaction.id}}">
         <td class="left">{{transaction.date | date:'dd.MM.yyyy':'':locale()}}</td>
         <td class="left">{{securityName(transaction)}}</td>
         <td class="left">{{typeName(transaction) | translate}}</td>
-        <td class="left">{{cost(transaction)}}</td>
+        <td class="left">{{cost(transaction)}}{{currencySymbol()}}</td>
       </tr>
     </table>
   </div>

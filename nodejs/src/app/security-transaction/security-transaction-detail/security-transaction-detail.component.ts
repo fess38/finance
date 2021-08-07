@@ -16,9 +16,9 @@ export class SecurityTransactionDetailComponent implements OnInit, OnDestroy {
               private route: ActivatedRoute,
               private router: Router) {}
 
-  private moneyDecoder = new MoneyDecoderPipe();
   private subscription: Subscription;
   securityTransaction = new SecurityTransaction();
+  moneyDecoder = new MoneyDecoderPipe();
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
@@ -61,11 +61,7 @@ export class SecurityTransactionDetailComponent implements OnInit, OnDestroy {
   }
 
   currencySymbol(security: Security): string {
-    return this.userdata.currencies().filter(x => x.id == security.currencyId)[0].symbol;
-  }
-
-  decodePrice(value: number): void {
-    this.securityTransaction.price = this.moneyDecoder.transform(String(value));
+    return this.userdata.findCurrency(security.currencyId).symbol;
   }
 
   isShowExchangeRate(): boolean {
@@ -76,11 +72,7 @@ export class SecurityTransactionDetailComponent implements OnInit, OnDestroy {
     return security.currencyId != this.userdata.settings().currencyId;
   }
 
-  decodeExchangeRate(value: number): void {
-    this.securityTransaction.exchangeRate = this.moneyDecoder.transform(String(value));
-  }
-
-  isTypeWithAmount(): boolean {
+  isShowAmount(): boolean {
     return this.securityTransaction.type == Type.BUY || this.securityTransaction.type == Type.SELL;
   }
 
