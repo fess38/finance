@@ -71,18 +71,14 @@ class MessageServiceImpl : MessageService {
     val builder = DataStorage.newBuilder()
     val messages = repository.get(user, modifiedAfter, emptyList())
     val settings = settings(messages, user)
-    val accounts = messages.filter {it.type == ACCOUNT && !it.isDeleted}.map {it as Account}
-    val categories = messages.filter {it.type == CATEGORY && !it.isDeleted}.map {it as Category}
-    val subCategories = messages.filter {it.type == SUB_CATEGORY && !it.isDeleted}.map {it as SubCategory}
-    val familyMembers = messages.filter {it.type == FAMILY_MEMBER && !it.isDeleted}.map {it as FamilyMember}
-    val transactions = messages.filter {it.type == TRANSACTION && !it.isDeleted}.map {it as Transaction}
-    val transactionTemplates = messages
-      .filter {it.type == TRANSACTION_TEMPLATE && !it.isDeleted}
-      .map {it as TransactionTemplate}
-    val securities = messages.filter {it.type == SECURITY && !it.isDeleted}.map {it as Security}
-    val securityTransactions = messages
-      .filter {it.type == SECURITY_TRANSACTION && !it.isDeleted}
-      .map {it as SecurityTransaction}
+    val accounts = messages.filter {it.type == ACCOUNT}.map {it as Account}
+    val categories = messages.filter {it.type == CATEGORY}.map {it as Category}
+    val subCategories = messages.filter {it.type == SUB_CATEGORY}.map {it as SubCategory}
+    val familyMembers = messages.filter {it.type == FAMILY_MEMBER}.map {it as FamilyMember}
+    val transactions = messages.filter {it.type == TRANSACTION}.map {it as Transaction}
+    val transactionTemplates = messages.filter {it.type == TRANSACTION_TEMPLATE}.map {it as TransactionTemplate}
+    val securities = messages.filter {it.type == SECURITY}.map {it as Security}
+    val securityTransactions = messages.filter {it.type == SECURITY_TRANSACTION}.map {it as SecurityTransaction}
 
     // new entity
 
