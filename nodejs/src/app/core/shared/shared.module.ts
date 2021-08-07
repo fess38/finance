@@ -8,6 +8,7 @@ import { AlertModule } from '../../utils/alert/alert.module';
 import { CurrencyNamePipe } from '../../utils/currency-name.pipe';
 import { CurrencySymbolPipe } from '../../utils/currency-symbol.pipe';
 import { IsNewEntityPipe } from '../../utils/is-new-entity.pipe';
+import { LocalePipe } from '../../utils/locale.pipe';
 import { MoneyDecoderPipe } from '../../utils/money-decoder.pipe';
 import { MoneyEncoderPipe } from '../../utils/money-encoder.pipe';
 
@@ -17,10 +18,13 @@ import { MoneyEncoderPipe } from '../../utils/money-encoder.pipe';
   ],
   exports: [
     AlertModule, AppRoutingModule, BrowserModule, ClarityModule, FormsModule, MoneyDecoderPipe,
-    MoneyEncoderPipe, TranslateModule, CurrencySymbolPipe, IsNewEntityPipe, CurrencyNamePipe
+    MoneyEncoderPipe, TranslateModule,
+    CurrencyNamePipe, CurrencySymbolPipe, IsNewEntityPipe, LocalePipe, MoneyDecoderPipe,
+    MoneyEncoderPipe
   ],
   declarations: [
-    CurrencyNamePipe, CurrencySymbolPipe, IsNewEntityPipe, MoneyDecoderPipe, MoneyEncoderPipe
+    CurrencyNamePipe, CurrencySymbolPipe, IsNewEntityPipe, LocalePipe, MoneyDecoderPipe,
+    MoneyEncoderPipe
   ]
 })
 export class SharedModule {}

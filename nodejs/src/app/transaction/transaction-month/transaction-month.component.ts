@@ -150,10 +150,6 @@ export class TransactionMonthComponent implements OnInit, OnDestroy {
     return new Year({ value: this.criteria.year });
   }
 
-  locale(): string {
-    return this.userdata.locale();
-  }
-
   findMonthCategorySummary(month: Month, category: Category): Summary[] {
     const result: Summary[] = [];
     const key: string = `${DateUtils.formatMonth(month)},${category.id}`;

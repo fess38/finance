@@ -1,4 +1,4 @@
-<div class="clr-row">
+<div class="clr-row" *ngIf="('' | locale) as locale">
   <div class="clr-col-12 clr-col-sm-9 clr-col-md-6">
     <form class="clr-form" *ngIf="params().isSearch">
       <div class="clr-form-control clr-row">
@@ -131,7 +131,7 @@
         </td>
         <td class="left">
           <button class="btn btn-link btn-sm" disabled>
-            {{month | monthFormat | date:'MMM yyyy':'':locale()}}
+            {{month | monthFormat | date:'MMM yyyy':'':locale}}
           </button>
         </td>
         <td class="left" (click)="nextMonth()">
@@ -161,15 +161,15 @@
         </td>
         <td class="left">
           <span *ngIf="isIncome(transaction)">
-            {{transaction.amountTo | number:'':locale()}}{{transaction.accountIdTo | currencySymbol:'account'}}
+            {{transaction.amountTo | number:'':locale}}{{transaction.accountIdTo | currencySymbol:'account'}}
           </span>
           <span *ngIf="isExpence(transaction)">
-            {{transaction.amountFrom | number:'':locale()}}{{transaction.accountIdFrom | currencySymbol:'account'}}
+            {{transaction.amountFrom | number:'':locale}}{{transaction.accountIdFrom | currencySymbol:'account'}}
           </span>
           <span *ngIf="isTransfer(transaction)">
-            {{transaction.amountFrom | number:'':locale()}}{{transaction.accountIdFrom | currencySymbol:'account'}}
+            {{transaction.amountFrom | number:'':locale}}{{transaction.accountIdFrom | currencySymbol:'account'}}
             =>
-            {{transaction.amountTo | number:'':locale()}}{{transaction.accountIdTo | currencySymbol:'account'}}
+            {{transaction.amountTo | number:'':locale}}{{transaction.accountIdTo | currencySymbol:'account'}}
           </span>
         </td>
       </tr>

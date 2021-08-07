@@ -1,11 +1,11 @@
-<div class="clr-row">
+<div class="clr-row" *ngIf="('' | locale) as locale">
   <div class="clr-col-12">
     <button (click)="previousMonth()" class="btn btn-link btn-sm btn-icon">
       <cds-icon shape="rewind"></cds-icon>
     </button>
     <span>&nbsp;</span>
     <button class="btn btn-link btn-sm" disabled>
-      {{month() | monthFormat | date:'MMM yyyy':'':locale()}}
+      {{month() | monthFormat | date:'MMM yyyy':'':locale}}
     </button>
     <span>&nbsp;</span>
     <span [hidden]="currencies.length <= 1">
@@ -69,7 +69,7 @@
     </table>
   </div>
 
-  <div id="center-column" class="clr-col-7 clr-col-md-8">
+  <div id="center-column" class="clr-col-7 clr-col-md-8" *ngIf="('' | locale) as locale">
     <table class="table table-compact">
       <thead>
       <tr>
@@ -83,14 +83,14 @@
         <tr class="category-row">
           <td *ngFor="let date of dates">
             <span *ngFor="let summary of findDateCategorySummary(date, category)">
-              {{summary.amount | number:'':locale()}}
+              {{summary.amount | number:'':locale}}
             </span>
           </td>
         </tr>
         <tr *ngFor="let subCategory of findSubCategories(category)">
           <td *ngFor="let date of dates">
             <span *ngFor="let summary of findDateSubCategorySummary(date, subCategory)">
-              {{summary.amount | number:'':locale()}}
+              {{summary.amount | number:'':locale}}
             </span>
           </td>
         </tr>
@@ -98,7 +98,7 @@
       <tr *ngIf="incomeCategories.length > 0">
         <th *ngFor="let date of dates">
           <span (click)="routeDate(date)">
-            {{findIncomeDateSummary(date) | number:'':locale()}}
+            {{findIncomeDateSummary(date) | number:'':locale}}
           </span>
         </th>
       </tr>
@@ -107,7 +107,7 @@
           <td *ngFor="let date of dates">
             <span *ngFor="let summary of findDateCategorySummary(date, category)">
               <span [class.high-share]="summary.share > 0.01">
-                {{summary.amount | number:'':locale()}}
+                {{summary.amount | number:'':locale}}
               </span>
             </span>
           </td>
@@ -115,7 +115,7 @@
         <tr *ngFor="let subCategory of findSubCategories(category)">
           <td *ngFor="let date of dates">
             <span *ngFor="let summary of findDateSubCategorySummary(date, subCategory)">
-              {{summary.amount | number:'':locale()}}
+              {{summary.amount | number:'':locale}}
             </span>
           </td>
         </tr>
@@ -123,7 +123,7 @@
       <tr *ngIf="expenseCategories.length > 0">
         <th *ngFor="let date of dates">
           <span (click)="routeDate(date)">
-            {{findExpenseDateSummary(date) | number:'':locale()}}
+            {{findExpenseDateSummary(date) | number:'':locale}}
           </span>
         </th>
       </tr>
@@ -131,7 +131,7 @@
     </table>
   </div>
 
-  <div id="right-column" class="clr-col-2 clr-col-md-2">
+  <div id="right-column" class="clr-col-2 clr-col-md-2" *ngIf="('' | locale) as locale">
     <table class="table table-compact">
       <thead>
       <tr>
@@ -142,43 +142,43 @@
       <ng-container *ngFor="let category of incomeCategories">
         <tr class="category-row">
           <td>
-            {{findCategorySummary(category).amount | number:'':locale()}}
+            {{findCategorySummary(category).amount | number:'':locale}}
           </td>
           <td>
-            {{findCategorySummary(category).share | percent:'':locale()}}
+            {{findCategorySummary(category).share | percent:'':locale}}
           </td>
         </tr>
         <tr *ngFor="let subCategory of findSubCategories(category)">
           <td>
-            {{findSubCategorySummary(subCategory).amount | number:'':locale()}}
+            {{findSubCategorySummary(subCategory).amount | number:'':locale}}
           </td>
           <td></td>
         </tr>
       </ng-container>
       <tr *ngIf="incomeCategories.length > 0">
         <th colspan="2">
-          {{income | number:'':locale()}}
+          {{income | number:'':locale}}
         </th>
       </tr>
       <ng-container *ngFor="let category of expenseCategories">
         <tr class="category-row">
           <td>
-            {{findCategorySummary(category).amount | number:'':locale()}}
+            {{findCategorySummary(category).amount | number:'':locale}}
           </td>
           <td>
-            {{findCategorySummary(category).share | percent:'':locale()}}
+            {{findCategorySummary(category).share | percent:'':locale}}
           </td>
         </tr>
         <tr *ngFor="let subCategory of findSubCategories(category)">
           <td>
-            {{findSubCategorySummary(subCategory).amount | number:'':locale()}}
+            {{findSubCategorySummary(subCategory).amount | number:'':locale}}
           </td>
           <td></td>
         </tr>
       </ng-container>
       <tr *ngIf="expenseCategories.length > 0">
         <th colspan="2">
-          {{expense | number:'':locale()}}
+          {{expense | number:'':locale}}
         </th>
       </tr>
       </tbody>

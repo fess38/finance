@@ -1,4 +1,4 @@
-<div class="clr-row">
+<div class="clr-row" *ngIf="('' | locale) as locale">
   <div class="clr-col-12 clr-col-sm-8 clr-col-md-6">
     <table class="table table-noborder table-compact">
       <tr>
@@ -10,7 +10,7 @@
       </tr>
       <tr *ngFor="let security of securities()" routerLink="/security/{{security.id}}">
         <td class="left">{{security.name}}</td>
-        <td class="left">{{security.price | moneyEncoder }}{{security | currencySymbol}}</td>
+        <td class="left">{{security.price | moneyEncoder | number:'':locale}}{{security | currencySymbol}}</td>
       </tr>
     </table>
   </div>

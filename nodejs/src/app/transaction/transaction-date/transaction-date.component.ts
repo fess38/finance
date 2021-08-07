@@ -147,10 +147,6 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
     return new Month({ year: this.criteria.year, month: this.criteria.month });
   }
 
-  locale(): string {
-    return this.userdata.locale();
-  }
-
   findDateCategorySummary(date: Date_, category: Category): Summary[] {
     const result: Summary[] = [];
     const key: string = `${DateUtils.formatDate_(date)},${category.id}`;

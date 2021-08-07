@@ -105,10 +105,6 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     this.router.navigate(['/transaction'], { queryParams: this.criteria.toQueryParams() });
   }
 
-  locale(): string {
-    return this.userdata.locale();
-  }
-
   private switchMonth(next: boolean) {
     const criteriaMonth = new Month({ year: this.criteria.year, month: this.criteria.month });
     const monthsToSwitch = this.userdata.transactions()

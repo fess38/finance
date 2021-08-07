@@ -54,10 +54,6 @@ export class TransactionFutureListComponent implements OnInit, OnDestroy {
     return this.userdata.isReadOnly();
   }
 
-  locale(): string {
-    return this.userdata.locale();
-  }
-
   onTransactionClick(transaction: Transaction): void {
     this.activeTransaction = new Transaction(transaction);
     this.isShowForm = true;

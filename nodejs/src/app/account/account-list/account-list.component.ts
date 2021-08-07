@@ -11,8 +11,4 @@ export class AccountListComponent {
   accounts(): Account[] {
     return this.userdata.accounts().sort((a, b) => a.name < b.name ? -1 : 1);
   }
-
-  locale(): string {
-    return this.userdata.locale();
-  }
 }

@@ -13,10 +13,6 @@ export class SecurityTransactionListComponent {
   private moneyEncoder = new MoneyEncoderPipe();
   filterSecurityId: number;
 
-  locale(): string {
-    return this.userdata.locale();
-  }
-
   securities(): Security[] {
     return this.userdata.securities().sort((a, b) => a.name < b.name ? -1 : 1);
   }

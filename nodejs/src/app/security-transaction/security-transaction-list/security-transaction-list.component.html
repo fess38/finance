@@ -1,4 +1,4 @@
-<div class="clr-row">
+<div class="clr-row" *ngIf="('' | locale) as locale">
   <div class="clr-col-12 clr-col-sm-8 clr-col-md-6">
     <table class="table table-noborder table-compact">
       <tr>
@@ -15,10 +15,10 @@
         <th>{{'security_transaction.cost' | translate}}</th>
       </tr>
       <tr *ngFor="let transaction of transactions()" routerLink="/security_transaction/{{transaction.id}}">
-        <td class="left">{{transaction.date | date:'dd.MM.yyyy':'':locale()}}</td>
+        <td class="left">{{transaction.date | date:'dd.MM.yyyy':'':locale}}</td>
         <td class="left">{{securityName(transaction)}}</td>
         <td class="left">{{typeName(transaction) | translate}}</td>
-        <td class="left">{{cost(transaction)}}{{'' | currencySymbol}}</td>
+        <td class="left">{{cost(transaction) | number:'':locale}}{{'' | currencySymbol}}</td>
       </tr>
     </table>
   </div>

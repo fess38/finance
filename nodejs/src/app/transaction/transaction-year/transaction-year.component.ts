@@ -135,10 +135,6 @@ export class TransactionYearComponent implements OnInit, OnDestroy {
     return result;
   }
 
-  locale(): string {
-    return this.userdata.locale();
-  }
-
   findYearCategorySummary(year: Year, category: Category): Summary[] {
     const result: Summary[] = [];
     const key: string = `${year.value},${category.id}`;
