@@ -5,10 +5,10 @@ import { Alert, AlertType } from './alert';
 
 @Injectable()
 export class AlertService {
+  constructor(private translate: TranslateService) {}
+
   private subject = new Subject<Alert>();
   private defaultTimeout: number = 5000;
-
-  constructor(private translate: TranslateService) {}
 
   getAlert(): Observable<any> {
     return this.subject.asObservable();

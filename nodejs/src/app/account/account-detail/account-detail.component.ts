@@ -10,13 +10,13 @@ import Language = Settings.Language;
   templateUrl: 'account-detail.component.html'
 })
 export class AccountDetailComponent implements OnInit, OnDestroy {
-  private subscription: Subscription;
-  account = new Account();
-  updatedBalance: number = undefined;
-
   constructor(private userdata: UserDataService,
               private route: ActivatedRoute,
               private router: Router) {}
+
+  private subscription: Subscription;
+  account = new Account();
+  updatedBalance: number = undefined;
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');

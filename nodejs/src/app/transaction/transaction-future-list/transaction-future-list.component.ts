@@ -10,7 +10,8 @@ import { NamedTransaction, TransactionTemplateResolver } from '../transaction-te
   templateUrl: 'transaction-future-list.component.html'
 })
 export class TransactionFutureListComponent implements OnInit, OnDestroy {
-  constructor(private userdata: UserDataService, private router: Router) {}
+  constructor(private userdata: UserDataService,
+              private router: Router) {}
 
   private subscription: Subscription;
   private childPingerSubscription: Subscription;

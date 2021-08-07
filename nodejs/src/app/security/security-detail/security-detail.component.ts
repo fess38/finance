@@ -10,13 +10,13 @@ import Language = Settings.Language;
   templateUrl: './security-detail.component.html'
 })
 export class SecurityDetailComponent implements OnInit, OnDestroy {
-  private subscription: Subscription;
-  security = new Security();
-  moneyDecoder = new MoneyDecoderPipe();
-
   constructor(private userdata: UserDataService,
               private route: ActivatedRoute,
               private router: Router) {}
+
+  private subscription: Subscription;
+  security = new Security();
+  moneyDecoder = new MoneyDecoderPipe();
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
