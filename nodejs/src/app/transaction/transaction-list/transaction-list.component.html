@@ -30,7 +30,7 @@
                       [value]="account.id"
                       [selected]="account.id == params().accountId">
                 <span>{{account.name}}</span>
-                <span> ({{currencySymbol(account)}})</span>
+                <span> ({{account | currencySymbol}})</span>
               </option>
             </select>
           </div>
@@ -161,15 +161,15 @@
         </td>
         <td class="left">
           <span *ngIf="isIncome(transaction)">
-            {{transaction.amountTo | number:'':locale()}}{{currencySymbol(transaction.accountIdTo)}}
+            {{transaction.amountTo | number:'':locale()}}{{transaction.accountIdTo | currencySymbol:'account'}}
           </span>
           <span *ngIf="isExpence(transaction)">
-            {{transaction.amountFrom | number:'':locale()}}{{currencySymbol(transaction.accountIdFrom)}}
+            {{transaction.amountFrom | number:'':locale()}}{{transaction.accountIdFrom | currencySymbol:'account'}}
           </span>
           <span *ngIf="isTransfer(transaction)">
-            {{transaction.amountFrom | number:'':locale()}}{{currencySymbol(transaction.accountIdFrom)}}
+            {{transaction.amountFrom | number:'':locale()}}{{transaction.accountIdFrom | currencySymbol:'account'}}
             =>
-            {{transaction.amountTo | number:'':locale()}}{{currencySymbol(transaction.accountIdTo)}}
+            {{transaction.amountTo | number:'':locale()}}{{transaction.accountIdTo | currencySymbol:'account'}}
           </span>
         </td>
       </tr>

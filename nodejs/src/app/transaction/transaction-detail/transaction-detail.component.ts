@@ -185,10 +185,6 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
       .sort((a, b) => a.name < b.name ? -1 : 1);
   }
 
-  currencySymbol(account: Account): string {
-    return this.userdata.findCurrency(account.currencyId).symbol;
-  }
-
   isNewTransaction(): boolean {
     return this.transaction.id == 0;
   }

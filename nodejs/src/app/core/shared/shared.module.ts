@@ -5,6 +5,7 @@ import { ClarityModule } from '@clr/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppRoutingModule } from '../../app-routing.module';
 import { AlertModule } from '../../utils/alert/alert.module';
+import { CurrencySymbolPipe } from '../../utils/currency-symbol.pipe';
 import { MoneyDecoderPipe } from '../../utils/money-decoder.pipe';
 import { MoneyEncoderPipe } from '../../utils/money-encoder.pipe';
 
@@ -14,10 +15,10 @@ import { MoneyEncoderPipe } from '../../utils/money-encoder.pipe';
   ],
   exports: [
     AlertModule, AppRoutingModule, BrowserModule, ClarityModule, FormsModule, MoneyDecoderPipe,
-    MoneyEncoderPipe, TranslateModule
+    MoneyEncoderPipe, TranslateModule, CurrencySymbolPipe
   ],
   declarations: [
-    MoneyDecoderPipe, MoneyEncoderPipe
+    CurrencySymbolPipe, MoneyDecoderPipe, MoneyEncoderPipe
   ]
 })
 export class SharedModule {}

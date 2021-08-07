@@ -15,8 +15,4 @@ export class AccountListComponent {
   locale(): string {
     return this.userdata.locale();
   }
-
-  currencySymbol(account: Account): String {
-    return this.userdata.findCurrency(account.currencyId).symbol;
-  }
 }

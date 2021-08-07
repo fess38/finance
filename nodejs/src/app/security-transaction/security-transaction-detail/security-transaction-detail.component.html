@@ -33,7 +33,7 @@
                     [ngValue]="security.id"
                     [hidden]="security.id == securityTransaction.securityId">
               <span>{{security.name}}</span>
-              <span> ({{currencySymbol(security)}})</span>
+              <span> ({{security | currencySymbol}})</span>
             </option>
           </select>
         </div>

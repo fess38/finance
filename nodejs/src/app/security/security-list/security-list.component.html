@@ -10,7 +10,7 @@
       </tr>
       <tr *ngFor="let security of securities()" routerLink="/security/{{security.id}}">
         <td class="left">{{security.name}}</td>
-        <td class="left">{{security.price | moneyEncoder }}{{currencySymbol(security)}}</td>
+        <td class="left">{{security.price | moneyEncoder }}{{security | currencySymbol}}</td>
       </tr>
     </table>
   </div>

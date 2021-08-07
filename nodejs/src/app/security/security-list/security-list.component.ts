@@ -11,8 +11,4 @@ export class SecurityListComponent {
   securities(): Security[] {
     return this.userdata.securities().sort((a, b) => a.name < b.name ? -1 : 1);
   }
-
-  currencySymbol(security: Security): String {
-    return this.userdata.findCurrency(security.currencyId).symbol;
-  }
 }

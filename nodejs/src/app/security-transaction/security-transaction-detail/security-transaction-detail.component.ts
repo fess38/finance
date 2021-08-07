@@ -60,10 +60,6 @@ export class SecurityTransactionDetailComponent implements OnInit, OnDestroy {
     return SecurityTransactionUtils.typesWithLabels;
   }
 
-  currencySymbol(security: Security): string {
-    return this.userdata.findCurrency(security.currencyId).symbol;
-  }
-
   isShowExchangeRate(): boolean {
     if (this.securityTransaction.securityId == 0) {
       return false;

@@ -54,13 +54,6 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     return this.userdata.accounts().sort((a, b) => a.name < b.name ? -1 : 1);
   }
 
-  currencySymbol(account: Account | number): string {
-    if (typeof account == 'number') {
-      account = this.userdata.findAccount(account);
-    }
-    return this.userdata.findCurrency(account.currencyId).symbol;
-  }
-
   categories(): Category[] {
     return this.userdata.categories()
       .filter(x => (

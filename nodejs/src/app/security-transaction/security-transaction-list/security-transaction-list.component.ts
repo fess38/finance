@@ -58,8 +58,4 @@ export class SecurityTransactionListComponent {
       * securityTransaction.amount
     );
   }
-
-  currencySymbol(): string {
-    return this.userdata.findCurrency(this.userdata.settings().currencyId).symbol;
-  }
 }
