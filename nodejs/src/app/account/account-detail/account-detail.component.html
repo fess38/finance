@@ -5,10 +5,10 @@
         <button type="button" class="btn btn-icon btn-link" routerLink="/account">
           <cds-icon shape="undo"></cds-icon>
         </button>
-        <span [hidden]="!isNewAccount()">
+        <span [hidden]="!(account | isNewEntity)">
           {{'account_detail.add' | translate}}
         </span>
-        <span [hidden]="isNewAccount()">
+        <span [hidden]="account | isNewEntity">
           {{'account_detail.edit' | translate}}
         </span>
       </label>
@@ -33,7 +33,7 @@
         </div>
       </div>
     </div>
-    <div class="clr-form-control clr-row" [hidden]="isNewAccount()">
+    <div class="clr-form-control clr-row" [hidden]="account  | isNewEntity">
       <label>{{'account_detail.updated_balance' | translate}}</label>
       <input type="number"
              name="updatedBalance"
@@ -49,7 +49,7 @@
                   class="clr-select"
                   required
                   [(ngModel)]="account.currencyId"
-                  [disabled]="!isNewAccount()">
+                  [disabled]="!(account | isNewEntity)">
             <option disabled>{{'common.currency' | translate}}</option>
             <option selected *ngFor="let currency of currencies()" [ngValue]="currency.id">
               <span *ngIf="language() == 'RU'">{{currency.nameRu}}</span>
@@ -60,7 +60,7 @@
         </div>
       </div>
     </div>
-    <div class="clr-form-control clr-row" [hidden]="isNewAccount()">
+    <div class="clr-form-control clr-row" [hidden]="account | isNewEntity">
       <div class="clr-control-container">
         <div class="clr-checkbox-wrapper">
           <input type="checkbox"
@@ -75,7 +75,7 @@
       </div>
     </div>
     <div class="clr-form-control clr-row"
-         [hidden]="isNewAccount()"
+         [hidden]="account | isNewEntity"
          (click)="viewTransactions(account)">
       <label>
         {{'common.amount' | translate}}: {{account.transactionAmount}}
@@ -89,7 +89,7 @@
       </button>
       <button class="btn btn-danger btn-sm btn-block"
               (click)="delete(account)"
-              [hidden]="isNewAccount()"
+              [hidden]="account | isNewEntity"
               [disabled]="hasTransations() || isReadOnly()">
         {{'common.delete' | translate}}
       </button>

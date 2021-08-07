@@ -48,10 +48,6 @@ export class SecurityTransactionDetailComponent implements OnInit, OnDestroy {
     return this.userdata.isReadOnly();
   }
 
-  isNewSecurityTransaction(): boolean {
-    return this.securityTransaction.id == 0;
-  }
-
   securities(): Security[] {
     return this.userdata.securities().filter(x => x.isVisible);
   }

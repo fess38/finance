@@ -5,10 +5,10 @@
         <button type="button" class="btn btn-icon btn-link" (click)="viewTransactions()">
           <cds-icon shape="undo"></cds-icon>
         </button>
-        <span [hidden]="!isNewTransaction()">
+        <span [hidden]="!(transaction | isNewEntity)">
           {{'transaction_detail.add' | translate}}
         </span>
-        <span [hidden]="isNewTransaction()">
+        <span [hidden]="transaction | isNewEntity">
           {{'transaction_detail.edit' | translate}}
         </span>
       </label>
@@ -29,7 +29,7 @@
                   class="clr-select"
                   [(ngModel)]="type"
                   (change)="onChangeTransactionType()"
-                  [disabled]="!isNewTransaction()">
+                  [disabled]="!(transaction | isNewEntity)">
             <option *ngFor="let typeWithLabel of typesWithLabels()" [value]="typeWithLabel.type">
               {{typeWithLabel.label | translate}}
             </option>
@@ -181,7 +181,7 @@
       </button>
       <button class="btn btn-danger btn-sm btn-block"
               (click)="delete(transaction)"
-              [hidden]="isNewTransaction()"
+              [hidden]="transaction | isNewEntity"
               [disabled]="!isValidForm() || isReadOnly()">
         {{'common.delete' | translate}}
       </button>

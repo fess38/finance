@@ -76,10 +76,6 @@ export class SubCategoryDetailComponent implements OnInit, OnDestroy {
     this.update(subCategory);
   }
 
-  isNewSubCategory() {
-    return this.subCategory.id == 0;
-  }
-
   hasTransations() {
     return this.subCategory.transactionAmount > 0;
   }

@@ -5,10 +5,10 @@
         <button type="button" class="btn btn-icon btn-link" routerLink="/security">
           <cds-icon shape="undo"></cds-icon>
         </button>
-        <span [hidden]="!isNewSecurity()">
+        <span [hidden]="!(security | isNewEntity)">
           {{'security_detail.add' | translate}}
         </span>
-        <span [hidden]="isNewSecurity()">
+        <span [hidden]="security | isNewEntity">
           {{'security_detail.edit' | translate}}
         </span>
       </label>
@@ -29,7 +29,7 @@
                   class="clr-select"
                   required
                   [(ngModel)]="security.currencyId"
-                  [disabled]="!isNewSecurity()">
+                  [disabled]="!(security | isNewEntity)">
             <option disabled>{{'common.currency' | translate}}</option>
             <option selected *ngFor="let currency of currencies()" [ngValue]="currency.id">
               <span *ngIf="language() == 'RU'">{{currency.nameRu}}</span>
@@ -54,7 +54,7 @@
         </div>
       </div>
     </div>
-    <div class="clr-form-control clr-row" [hidden]="isNewSecurity()">
+    <div class="clr-form-control clr-row" [hidden]="security | isNewEntity">
       <div class="clr-control-container">
         <div class="clr-checkbox-wrapper">
           <input type="checkbox"
@@ -68,7 +68,7 @@
         </div>
       </div>
     </div>
-    <div class="clr-form-control clr-row" [hidden]="isNewSecurity()">
+    <div class="clr-form-control clr-row" [hidden]="security | isNewEntity">
       <label>
         {{'security_detail.amount' | translate}}: {{security.transactionAmount}}
       </label>
@@ -81,7 +81,7 @@
       </button>
       <button class="btn btn-danger btn-sm btn-block"
               (click)="delete(security)"
-              [hidden]="isNewSecurity()"
+              [hidden]="security | isNewEntity"
               [disabled]="hasTransations() || isReadOnly()">
         {{'common.delete' | translate}}
       </button>

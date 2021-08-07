@@ -18,7 +18,7 @@
         <td class="left">{{transaction.date | date:'dd.MM.yyyy':'':locale()}}</td>
         <td class="left">{{securityName(transaction)}}</td>
         <td class="left">{{typeName(transaction) | translate}}</td>
-        <td class="left">{{cost(transaction)}}{{null | currencySymbol}}</td>
+        <td class="left">{{cost(transaction)}}{{'' | currencySymbol}}</td>
       </tr>
     </table>
   </div>

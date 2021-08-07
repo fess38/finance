@@ -75,10 +75,6 @@ export class SecurityDetailComponent implements OnInit, OnDestroy {
     this.update(security);
   }
 
-  isNewSecurity(): boolean {
-    return this.security.id == 0;
-  }
-
   hasTransations(): boolean {
     return this.security.transactionAmount > 0;
   }

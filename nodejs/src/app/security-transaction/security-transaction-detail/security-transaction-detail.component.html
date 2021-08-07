@@ -5,10 +5,10 @@
         <button type="button" class="btn btn-icon btn-link" routerLink="/security_transaction">
           <cds-icon shape="undo"></cds-icon>
         </button>
-        <span [hidden]="!isNewSecurityTransaction()">
+        <span [hidden]="!(securityTransaction | isNewEntity)">
           {{'security_transaction_detail.add' | translate}}
         </span>
-        <span [hidden]="isNewSecurityTransaction()">
+        <span [hidden]="securityTransaction | isNewEntity">
           {{'security_transaction_detail.edit' | translate}}
         </span>
       </label>
@@ -47,7 +47,7 @@
                   class="clr-select"
                   required
                   [(ngModel)]="securityTransaction.type"
-                  [disabled]="!isNewSecurityTransaction()">
+                  [disabled]="!(securityTransaction | isNewEntity)">
             <option disabled>{{'security_transaction_detail.type' | translate}}</option>
             <option *ngFor="let typeWithLabel of typesWithLabels()"
                     [value]="typeWithLabel.type"
@@ -100,7 +100,7 @@
       </button>
       <button class="btn btn-danger btn-sm btn-block"
               (click)="delete(securityTransaction)"
-              [hidden]="isNewSecurityTransaction()"
+              [hidden]="securityTransaction | isNewEntity"
               [disabled]="isReadOnly()">
         {{'common.delete' | translate}}
       </button>

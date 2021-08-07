@@ -99,10 +99,6 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     this.update(account);
   }
 
-  isNewAccount(): boolean {
-    return this.account.id == 0;
-  }
-
   hasTransations(): boolean {
     return this.account.transactionAmount > 0;
   }

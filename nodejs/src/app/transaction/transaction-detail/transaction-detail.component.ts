@@ -185,10 +185,6 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
       .sort((a, b) => a.name < b.name ? -1 : 1);
   }
 
-  isNewTransaction(): boolean {
-    return this.transaction.id == 0;
-  }
-
   isIncome(): boolean {
     return this.type == Transaction.Type.INCOME;
   }

@@ -5,10 +5,10 @@
         <button type="button" class="btn btn-icon btn-link" routerLink="/family_member">
           <cds-icon shape="undo"></cds-icon>
         </button>
-        <span [hidden]="!isNewFamilyMember()">
+        <span [hidden]="!(familyMember | isNewEntity)">
           {{'family_member_detail.add' | translate}}
         </span>
-        <span [hidden]="isNewFamilyMember()">
+        <span [hidden]="familyMember | isNewEntity">
           {{'family_member_detail.edit' | translate}}
         </span>
       </label>
@@ -21,7 +21,7 @@
         </div>
       </div>
     </div>
-    <div class="clr-form-control clr-row" [hidden]="isNewFamilyMember()">
+    <div class="clr-form-control clr-row" [hidden]="familyMember | isNewEntity">
       <div class="clr-control-container">
         <div class="clr-checkbox-wrapper">
           <input type="checkbox"
@@ -36,7 +36,7 @@
       </div>
     </div>
     <div class="clr-form-control clr-row"
-         [hidden]="isNewFamilyMember()"
+         [hidden]="familyMember | isNewEntity"
          (click)="viewTransactions(familyMember)">
       <label>
         {{'common.amount' | translate}}: {{familyMember.transactionAmount}}
@@ -50,7 +50,7 @@
       </button>
       <button class="btn btn-danger btn-sm btn-block"
               (click)="delete(familyMember)"
-              [hidden]="isNewFamilyMember()"
+              [hidden]="familyMember | isNewEntity"
               [disabled]="hasTransations() || isReadOnly()">
         {{'common.delete' | translate}}
       </button>

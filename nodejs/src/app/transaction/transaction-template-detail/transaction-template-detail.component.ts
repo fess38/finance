@@ -116,10 +116,6 @@ export class TransactionTemplateDetailComponent implements OnInit, OnDestroy {
     return this.transactionTemplate.transaction as Transaction;
   }
 
-  isNewTransactionTemplate(): boolean {
-    return this.transactionTemplate.id == 0;
-  }
-
   isValidForm(): boolean {
     return this.transactionTemplate.name.length > 0 && this.isValidChildForm
       && (this.transactionTemplate.interval > 0 || this.transactionTemplate.daysOfWeek.length > 0

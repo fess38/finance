@@ -64,10 +64,6 @@ export class FamilyMemberDetailComponent implements OnInit, OnDestroy {
     this.update(familyMember);
   }
 
-  isNewFamilyMember() {
-    return this.familyMember.id == 0;
-  }
-
   hasTransations() {
     return this.familyMember.transactionAmount > 0;
   }

@@ -64,10 +64,6 @@ export class CategoryDetailComponent implements OnInit, OnDestroy {
     this.update(category);
   }
 
-  isNewCategory(): boolean {
-    return this.category.id == 0;
-  }
-
   hasLinkedEntities(): boolean {
     const subCategoryAmount = this.userdata.subCategories()
       .filter(x => x.categoryId == this.category.id)

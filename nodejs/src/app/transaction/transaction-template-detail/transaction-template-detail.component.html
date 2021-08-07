@@ -5,10 +5,10 @@
         <button type="button" class="btn btn-icon btn-link" (click)="viewTransactionTemplates()">
           <cds-icon shape="undo"></cds-icon>
         </button>
-        <span [hidden]="!isNewTransactionTemplate()">
+        <span [hidden]="!(transactionTemplate | isNewEntity)">
           {{'transaction_template_detail.add' | translate}}
         </span>
-        <span [hidden]="isNewTransactionTemplate()">
+        <span [hidden]="transactionTemplate | isNewEntity">
           {{'transaction_template_detail.edit' | translate}}
         </span>
       </label>
@@ -81,7 +81,7 @@
       </button>
       <button class="btn btn-danger btn-sm btn-block"
               (click)="delete(transactionTemplate)"
-              [hidden]="isNewTransactionTemplate()"
+              [hidden]="transactionTemplate | isNewEntity"
               [disabled]="!isValidForm() || isReadOnly()">
         {{'common.delete' | translate}}
       </button>
