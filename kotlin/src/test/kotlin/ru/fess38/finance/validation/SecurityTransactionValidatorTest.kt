@@ -4,7 +4,7 @@ import org.junit.Assert
 import org.junit.Test
 import org.mockito.Mockito
 import ru.fess38.finance.core.MessageService
-import ru.fess38.finance.core.Model
+import ru.fess38.finance.core.Model.*
 import ru.fess38.finance.core.Model.SecurityTransaction.Type
 
 class SecurityTransactionValidatorTest {
@@ -12,14 +12,14 @@ class SecurityTransactionValidatorTest {
 
   @Test
   fun valid() {
-    val securityTransaction = Model.SecurityTransaction.newBuilder()
+    val securityTransaction = SecurityTransaction.newBuilder()
       .setDate("1970-01-01")
       .setSecurityId(1)
       .setType(Type.BUY)
-      .setPrice(Model.Money.newBuilder().setUnits(1).build())
-      .setExchangeRate(Model.Money.newBuilder().setUnits(0).setMicros(234).build())
-      .setPurchaseFee(Model.Money.newBuilder().setUnits(0).build())
-      .setServiceFee(Model.Money.newBuilder().setUnits(0).build())
+      .setPrice(Money.newBuilder().setUnits(1).build())
+      .setExchangeRate(Money.newBuilder().setUnits(0).setMicros(234).build())
+      .setPurchaseFee(Money.newBuilder().setUnits(0).build())
+      .setServiceFee(Money.newBuilder().setUnits(0).build())
       .build()
     val expected = ValidatorResponse()
     val actual = validator.validate(securityTransaction, true)
@@ -28,14 +28,14 @@ class SecurityTransactionValidatorTest {
 
   @Test
   fun invalidDate() {
-    val securityTransaction = Model.SecurityTransaction.newBuilder()
+    val securityTransaction = SecurityTransaction.newBuilder()
       .setDate("foo")
       .setSecurityId(1)
       .setType(Type.BUY)
-      .setPrice(Model.Money.newBuilder().setUnits(1).build())
-      .setExchangeRate(Model.Money.newBuilder().setUnits(1).build())
-      .setPurchaseFee(Model.Money.newBuilder().setUnits(0).build())
-      .setServiceFee(Model.Money.newBuilder().setUnits(0).build())
+      .setPrice(Money.newBuilder().setUnits(1).build())
+      .setExchangeRate(Money.newBuilder().setUnits(1).build())
+      .setPurchaseFee(Money.newBuilder().setUnits(0).build())
+      .setServiceFee(Money.newBuilder().setUnits(0).build())
       .build()
     val expected = ValidatorResponse("invalid transaction date [foo]")
     val actual = validator.validate(securityTransaction, true)
@@ -44,14 +44,14 @@ class SecurityTransactionValidatorTest {
 
   @Test
   fun invalidSecurityId() {
-    val securityTransaction = Model.SecurityTransaction.newBuilder()
+    val securityTransaction = SecurityTransaction.newBuilder()
       .setDate("1970-01-01")
       .setSecurityId(0)
       .setType(Type.BUY)
-      .setPrice(Model.Money.newBuilder().setUnits(1).build())
-      .setExchangeRate(Model.Money.newBuilder().setUnits(1).build())
-      .setPurchaseFee(Model.Money.newBuilder().setUnits(0).build())
-      .setServiceFee(Model.Money.newBuilder().setUnits(0).build())
+      .setPrice(Money.newBuilder().setUnits(1).build())
+      .setExchangeRate(Money.newBuilder().setUnits(1).build())
+      .setPurchaseFee(Money.newBuilder().setUnits(0).build())
+      .setServiceFee(Money.newBuilder().setUnits(0).build())
       .build()
     val expected = ValidatorResponse("unknown security [0]")
     val actual = validator.validate(securityTransaction, true)
@@ -60,14 +60,14 @@ class SecurityTransactionValidatorTest {
 
   @Test
   fun invalidPrice() {
-    val securityTransaction = Model.SecurityTransaction.newBuilder()
+    val securityTransaction = SecurityTransaction.newBuilder()
       .setDate("1970-01-01")
       .setSecurityId(1)
       .setType(Type.BUY)
-      .setPrice(Model.Money.newBuilder().setUnits(-1).build())
-      .setExchangeRate(Model.Money.newBuilder().setUnits(1).build())
-      .setPurchaseFee(Model.Money.newBuilder().setUnits(0).build())
-      .setServiceFee(Model.Money.newBuilder().setUnits(0).build())
+      .setPrice(Money.newBuilder().setUnits(-1).build())
+      .setExchangeRate(Money.newBuilder().setUnits(1).build())
+      .setPurchaseFee(Money.newBuilder().setUnits(0).build())
+      .setServiceFee(Money.newBuilder().setUnits(0).build())
       .build()
     val expected = ValidatorResponse("invalid price [-1 0]")
     val actual = validator.validate(securityTransaction, true)
@@ -76,14 +76,14 @@ class SecurityTransactionValidatorTest {
 
   @Test
   fun invalidExchangeRate() {
-    val securityTransaction = Model.SecurityTransaction.newBuilder()
+    val securityTransaction = SecurityTransaction.newBuilder()
       .setDate("1970-01-01")
       .setSecurityId(1)
       .setType(Type.BUY)
-      .setPrice(Model.Money.newBuilder().setUnits(1).build())
-      .setExchangeRate(Model.Money.newBuilder().setUnits(-1).build())
-      .setPurchaseFee(Model.Money.newBuilder().setUnits(0).build())
-      .setServiceFee(Model.Money.newBuilder().setUnits(0).build())
+      .setPrice(Money.newBuilder().setUnits(1).build())
+      .setExchangeRate(Money.newBuilder().setUnits(-1).build())
+      .setPurchaseFee(Money.newBuilder().setUnits(0).build())
+      .setServiceFee(Money.newBuilder().setUnits(0).build())
       .build()
     val expected = ValidatorResponse("invalid exchange rate [-1 0]")
     val actual = validator.validate(securityTransaction, true)
@@ -92,15 +92,15 @@ class SecurityTransactionValidatorTest {
 
   @Test
   fun invalidAmount() {
-    val securityTransaction = Model.SecurityTransaction.newBuilder()
+    val securityTransaction = SecurityTransaction.newBuilder()
       .setDate("1970-01-01")
       .setSecurityId(1)
       .setType(Type.BUY)
-      .setPrice(Model.Money.newBuilder().setUnits(1).build())
-      .setExchangeRate(Model.Money.newBuilder().setUnits(1).build())
+      .setPrice(Money.newBuilder().setUnits(1).build())
+      .setExchangeRate(Money.newBuilder().setUnits(1).build())
       .setAmount(0)
-      .setPurchaseFee(Model.Money.newBuilder().setUnits(0).build())
-      .setServiceFee(Model.Money.newBuilder().setUnits(0).build())
+      .setPurchaseFee(Money.newBuilder().setUnits(0).build())
+      .setServiceFee(Money.newBuilder().setUnits(0).build())
       .build()
     val expected = ValidatorResponse("invalid amount [0]")
     val actual = validator.validate(securityTransaction, true)
@@ -109,14 +109,14 @@ class SecurityTransactionValidatorTest {
 
   @Test
   fun invalidPurchaseFee() {
-    val securityTransaction = Model.SecurityTransaction.newBuilder()
+    val securityTransaction = SecurityTransaction.newBuilder()
       .setDate("1970-01-01")
       .setSecurityId(1)
       .setType(Type.BUY)
-      .setPrice(Model.Money.newBuilder().setUnits(1).build())
-      .setExchangeRate(Model.Money.newBuilder().setUnits(1).build())
-      .setPurchaseFee(Model.Money.newBuilder().setUnits(-1).build())
-      .setServiceFee(Model.Money.newBuilder().setUnits(0).build())
+      .setPrice(Money.newBuilder().setUnits(1).build())
+      .setExchangeRate(Money.newBuilder().setUnits(1).build())
+      .setPurchaseFee(Money.newBuilder().setUnits(-1).build())
+      .setServiceFee(Money.newBuilder().setUnits(0).build())
       .build()
     val expected = ValidatorResponse("invalid purchase fee [-1 0]")
     val actual = validator.validate(securityTransaction, true)
@@ -125,14 +125,14 @@ class SecurityTransactionValidatorTest {
 
   @Test
   fun invalidServiceFee() {
-    val securityTransaction = Model.SecurityTransaction.newBuilder()
+    val securityTransaction = SecurityTransaction.newBuilder()
       .setDate("1970-01-01")
       .setSecurityId(1)
       .setType(Type.BUY)
-      .setPrice(Model.Money.newBuilder().setUnits(1).build())
-      .setExchangeRate(Model.Money.newBuilder().setUnits(1).build())
-      .setPurchaseFee(Model.Money.newBuilder().setUnits(0).build())
-      .setServiceFee(Model.Money.newBuilder().setUnits(-1).build())
+      .setPrice(Money.newBuilder().setUnits(1).build())
+      .setExchangeRate(Money.newBuilder().setUnits(1).build())
+      .setPurchaseFee(Money.newBuilder().setUnits(0).build())
+      .setServiceFee(Money.newBuilder().setUnits(-1).build())
       .build()
     val expected = ValidatorResponse("invalid service fee [-1 0]")
     val actual = validator.validate(securityTransaction, true)
@@ -141,8 +141,8 @@ class SecurityTransactionValidatorTest {
 
   private fun mockMessageService(): MessageService {
     val messageService = Mockito.mock(MessageService::class.java)
-    Mockito.`when`(messageService.isExist(0, Model.EntityType.SECURITY)).thenReturn(false)
-    Mockito.`when`(messageService.isExist(1, Model.EntityType.SECURITY)).thenReturn(true)
+    Mockito.`when`(messageService.isExist(0, EntityType.SECURITY)).thenReturn(false)
+    Mockito.`when`(messageService.isExist(1, EntityType.SECURITY)).thenReturn(true)
     return messageService
   }
 }

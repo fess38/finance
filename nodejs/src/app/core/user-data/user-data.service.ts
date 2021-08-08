@@ -67,9 +67,11 @@ export class UserDataService {
   }
 
   private setDefaultLang() {
-    this.translate.setDefaultLang('ru');
-    this.translate.use(this.locale());
-    this.translate.get('main_menu.title').subscribe(x => this.titleService.setTitle(x));
+    if (this.translate) {
+      this.translate.setDefaultLang('ru');
+      this.translate.use(this.locale());
+      this.translate.get('main_menu.title').subscribe(x => this.titleService.setTitle(x));
+    }
   }
 
   dataStorageJson(): any {

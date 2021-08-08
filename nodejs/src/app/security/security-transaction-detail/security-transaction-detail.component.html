@@ -27,7 +27,8 @@
         <div class="clr-select-wrapper">
           <select name="securityId"
                   class="clr-select"
-                  [(ngModel)]="securityTransaction.securityId">
+                  [(ngModel)]="securityTransaction.securityId"
+                  [disabled]="!(securityTransaction | isNewEntity)">
             <option disabled>{{'common.security' | translate}}</option>
             <option *ngFor="let security of securities()"
                     [ngValue]="security.id"
@@ -59,7 +60,7 @@
       </div>
     </div>
     <div class="clr-form-control clr-row">
-      <label>{{'common.price' | translate}}</label>
+      <label>{{priceLabel() | translate}}</label>
       <div class="clr-control-container">
         <div class="clr-input-wrapper">
           <input type="number"
@@ -69,12 +70,12 @@
                  min="0"
                  placeholder="{{securityTransaction.securityId | currencySymbol:'security'}}"
                  [ngModel]="securityTransaction.price | encodeMoney"
-                 (ngModelChange)="securityTransaction.price = this.moneyDecoder.transform($event)"/>
+                 (ngModelChange)="securityTransaction.price = valueToMoney($event)"/>
         </div>
       </div>
     </div>
     <div class="clr-form-control clr-row" *ngIf="isShowExchangeRate()">
-      <label>{{'security_transaction.exchange_rate' | translate}}</label>
+      <label>{{'common.exchange_rate' | translate}}</label>
       <div class="clr-control-container">
         <div class="clr-input-wrapper">
           <input type="number"
@@ -84,7 +85,7 @@
                  min="0"
                  placeholder="{{securityTransaction.securityId | currencySymbol:'security'}} => {{'' | currencySymbol}}"
                  [ngModel]="securityTransaction.exchangeRate | encodeMoney"
-                 (ngModelChange)="securityTransaction.exchangeRate = this.moneyDecoder.transform($event)"/>
+                 (ngModelChange)="securityTransaction.exchangeRate = valueToMoney($event)"/>
         </div>
       </div>
     </div>
@@ -108,7 +109,7 @@
                  min="0"
                  placeholder="{{securityTransaction.securityId | currencySymbol:'security'}}"
                  [ngModel]="securityTransaction.purchaseFee | encodeMoney"
-                 (ngModelChange)="securityTransaction.purchaseFee = this.moneyDecoder.transform($event)"/>
+                 (ngModelChange)="securityTransaction.purchaseFee = valueToMoney($event)"/>
         </div>
       </div>
     </div>
@@ -123,7 +124,7 @@
                  min="0"
                  placeholder="{{securityTransaction.securityId | currencySymbol:'security'}}"
                  [ngModel]="securityTransaction.serviceFee | encodeMoney"
-                 (ngModelChange)="securityTransaction.serviceFee = this.moneyDecoder.transform($event)"/>
+                 (ngModelChange)="securityTransaction.serviceFee = valueToMoney($event)"/>
         </div>
       </div>
     </div>

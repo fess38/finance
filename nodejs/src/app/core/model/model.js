@@ -3004,6 +3004,7 @@ export const Security = $root.Security = (() => {
      * @property {string} name Security name
      * @property {number} currencyId Security currencyId
      * @property {IMoney} price Security price
+     * @property {IMoney} exchangeRate Security exchangeRate
      */
 
     /**
@@ -3078,6 +3079,14 @@ export const Security = $root.Security = (() => {
     Security.prototype.price = null;
 
     /**
+     * Security exchangeRate.
+     * @member {IMoney} exchangeRate
+     * @memberof Security
+     * @instance
+     */
+    Security.prototype.exchangeRate = null;
+
+    /**
      * Creates a new Security instance using the specified properties.
      * @function create
      * @memberof Security
@@ -3112,6 +3121,7 @@ export const Security = $root.Security = (() => {
         writer.uint32(/* id 5, wireType 2 =*/42).string(message.name);
         writer.uint32(/* id 6, wireType 0 =*/48).int64(message.currencyId);
         $root.Money.encode(message.price, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
+        $root.Money.encode(message.exchangeRate, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
         return writer;
     };
 
@@ -3154,6 +3164,9 @@ export const Security = $root.Security = (() => {
             case 7:
                 message.price = $root.Money.decode(reader, reader.uint32());
                 break;
+            case 8:
+                message.exchangeRate = $root.Money.decode(reader, reader.uint32());
+                break;
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -3165,6 +3178,8 @@ export const Security = $root.Security = (() => {
             throw $util.ProtocolError("missing required 'currencyId'", { instance: message });
         if (!message.hasOwnProperty("price"))
             throw $util.ProtocolError("missing required 'price'", { instance: message });
+        if (!message.hasOwnProperty("exchangeRate"))
+            throw $util.ProtocolError("missing required 'exchangeRate'", { instance: message });
         return message;
     };
 
@@ -3218,6 +3233,11 @@ export const Security = $root.Security = (() => {
                 throw TypeError(".Security.price: object expected");
             message.price = $root.Money.fromObject(object.price);
         }
+        if (object.exchangeRate != null) {
+            if (typeof object.exchangeRate !== "object")
+                throw TypeError(".Security.exchangeRate: object expected");
+            message.exchangeRate = $root.Money.fromObject(object.exchangeRate);
+        }
         return message;
     };
 
@@ -3254,6 +3274,7 @@ export const Security = $root.Security = (() => {
             } else
                 object.currencyId = options.longs === String ? "0" : 0;
             object.price = null;
+            object.exchangeRate = null;
         }
         if (message.id != null && message.hasOwnProperty("id"))
             if (typeof message.id === "number")
@@ -3278,6 +3299,8 @@ export const Security = $root.Security = (() => {
                 object.currencyId = options.longs === String ? $util.Long.prototype.toString.call(message.currencyId) : options.longs === Number ? new $util.LongBits(message.currencyId.low >>> 0, message.currencyId.high >>> 0).toNumber() : message.currencyId;
         if (message.price != null && message.hasOwnProperty("price"))
             object.price = $root.Money.toObject(message.price, options);
+        if (message.exchangeRate != null && message.hasOwnProperty("exchangeRate"))
+            object.exchangeRate = $root.Money.toObject(message.exchangeRate, options);
         return object;
     };
 
@@ -3715,14 +3738,15 @@ export const SecurityReport = $root.SecurityReport = (() => {
      * Properties of a SecurityReport.
      * @exports ISecurityReport
      * @interface ISecurityReport
+     * @property {number} securityId SecurityReport securityId
      * @property {string} buyDate SecurityReport buyDate
      * @property {string|null} [sellDate] SecurityReport sellDate
-     * @property {number} days SecurityReport days
-     * @property {number} amount SecurityReport amount
-     * @property {IMoney} income SecurityReport income
-     * @property {IMoney} expense SecurityReport expense
-     * @property {IMoney} profit SecurityReport profit
-     * @property {number} annualProfit SecurityReport annualProfit
+     * @property {number|null} [days] SecurityReport days
+     * @property {number|null} [amount] SecurityReport amount
+     * @property {number|null} [income] SecurityReport income
+     * @property {number|null} [expense] SecurityReport expense
+     * @property {number|null} [profit] SecurityReport profit
+     * @property {number|null} [annualProfit] SecurityReport annualProfit
      */
 
     /**
@@ -3739,6 +3763,14 @@ export const SecurityReport = $root.SecurityReport = (() => {
                 if (properties[keys[i]] != null)
                     this[keys[i]] = properties[keys[i]];
     }
+
+    /**
+     * SecurityReport securityId.
+     * @member {number} securityId
+     * @memberof SecurityReport
+     * @instance
+     */
+    SecurityReport.prototype.securityId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
     /**
      * SecurityReport buyDate.
@@ -3774,27 +3806,27 @@ export const SecurityReport = $root.SecurityReport = (() => {
 
     /**
      * SecurityReport income.
-     * @member {IMoney} income
+     * @member {number} income
      * @memberof SecurityReport
      * @instance
      */
-    SecurityReport.prototype.income = null;
+    SecurityReport.prototype.income = 0;
 
     /**
      * SecurityReport expense.
-     * @member {IMoney} expense
+     * @member {number} expense
      * @memberof SecurityReport
      * @instance
      */
-    SecurityReport.prototype.expense = null;
+    SecurityReport.prototype.expense = 0;
 
     /**
      * SecurityReport profit.
-     * @member {IMoney} profit
+     * @member {number} profit
      * @memberof SecurityReport
      * @instance
      */
-    SecurityReport.prototype.profit = null;
+    SecurityReport.prototype.profit = 0;
 
     /**
      * SecurityReport annualProfit.
@@ -3828,15 +3860,22 @@ export const SecurityReport = $root.SecurityReport = (() => {
     SecurityReport.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        writer.uint32(/* id 1, wireType 2 =*/10).string(message.buyDate);
+        writer.uint32(/* id 1, wireType 0 =*/8).int64(message.securityId);
+        writer.uint32(/* id 2, wireType 2 =*/18).string(message.buyDate);
         if (message.sellDate != null && Object.hasOwnProperty.call(message, "sellDate"))
-            writer.uint32(/* id 2, wireType 2 =*/18).string(message.sellDate);
-        writer.uint32(/* id 3, wireType 0 =*/24).int64(message.days);
-        writer.uint32(/* id 4, wireType 0 =*/32).int64(message.amount);
-        $root.Money.encode(message.income, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
-        $root.Money.encode(message.expense, writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
-        $root.Money.encode(message.profit, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
-        writer.uint32(/* id 8, wireType 1 =*/65).double(message.annualProfit);
+            writer.uint32(/* id 3, wireType 2 =*/26).string(message.sellDate);
+        if (message.days != null && Object.hasOwnProperty.call(message, "days"))
+            writer.uint32(/* id 4, wireType 0 =*/32).int64(message.days);
+        if (message.amount != null && Object.hasOwnProperty.call(message, "amount"))
+            writer.uint32(/* id 5, wireType 0 =*/40).int64(message.amount);
+        if (message.income != null && Object.hasOwnProperty.call(message, "income"))
+            writer.uint32(/* id 6, wireType 1 =*/49).double(message.income);
+        if (message.expense != null && Object.hasOwnProperty.call(message, "expense"))
+            writer.uint32(/* id 7, wireType 1 =*/57).double(message.expense);
+        if (message.profit != null && Object.hasOwnProperty.call(message, "profit"))
+            writer.uint32(/* id 8, wireType 1 =*/65).double(message.profit);
+        if (message.annualProfit != null && Object.hasOwnProperty.call(message, "annualProfit"))
+            writer.uint32(/* id 9, wireType 1 =*/73).double(message.annualProfit);
         return writer;
     };
 
@@ -3859,27 +3898,30 @@ export const SecurityReport = $root.SecurityReport = (() => {
             let tag = reader.uint32();
             switch (tag >>> 3) {
             case 1:
-                message.buyDate = reader.string();
+                message.securityId = reader.int64();
                 break;
             case 2:
-                message.sellDate = reader.string();
+                message.buyDate = reader.string();
                 break;
             case 3:
-                message.days = reader.int64();
+                message.sellDate = reader.string();
                 break;
             case 4:
-                message.amount = reader.int64();
+                message.days = reader.int64();
                 break;
             case 5:
-                message.income = $root.Money.decode(reader, reader.uint32());
+                message.amount = reader.int64();
                 break;
             case 6:
-                message.expense = $root.Money.decode(reader, reader.uint32());
+                message.income = reader.double();
                 break;
             case 7:
-                message.profit = $root.Money.decode(reader, reader.uint32());
+                message.expense = reader.double();
                 break;
             case 8:
+                message.profit = reader.double();
+                break;
+            case 9:
                 message.annualProfit = reader.double();
                 break;
             default:
@@ -3887,20 +3929,10 @@ export const SecurityReport = $root.SecurityReport = (() => {
                 break;
             }
         }
+        if (!message.hasOwnProperty("securityId"))
+            throw $util.ProtocolError("missing required 'securityId'", { instance: message });
         if (!message.hasOwnProperty("buyDate"))
             throw $util.ProtocolError("missing required 'buyDate'", { instance: message });
-        if (!message.hasOwnProperty("days"))
-            throw $util.ProtocolError("missing required 'days'", { instance: message });
-        if (!message.hasOwnProperty("amount"))
-            throw $util.ProtocolError("missing required 'amount'", { instance: message });
-        if (!message.hasOwnProperty("income"))
-            throw $util.ProtocolError("missing required 'income'", { instance: message });
-        if (!message.hasOwnProperty("expense"))
-            throw $util.ProtocolError("missing required 'expense'", { instance: message });
-        if (!message.hasOwnProperty("profit"))
-            throw $util.ProtocolError("missing required 'profit'", { instance: message });
-        if (!message.hasOwnProperty("annualProfit"))
-            throw $util.ProtocolError("missing required 'annualProfit'", { instance: message });
         return message;
     };
 
@@ -3916,6 +3948,15 @@ export const SecurityReport = $root.SecurityReport = (() => {
         if (object instanceof $root.SecurityReport)
             return object;
         let message = new $root.SecurityReport();
+        if (object.securityId != null)
+            if ($util.Long)
+                (message.securityId = $util.Long.fromValue(object.securityId)).unsigned = false;
+            else if (typeof object.securityId === "string")
+                message.securityId = parseInt(object.securityId, 10);
+            else if (typeof object.securityId === "number")
+                message.securityId = object.securityId;
+            else if (typeof object.securityId === "object")
+                message.securityId = new $util.LongBits(object.securityId.low >>> 0, object.securityId.high >>> 0).toNumber();
         if (object.buyDate != null)
             message.buyDate = String(object.buyDate);
         if (object.sellDate != null)
@@ -3938,21 +3979,12 @@ export const SecurityReport = $root.SecurityReport = (() => {
                 message.amount = object.amount;
             else if (typeof object.amount === "object")
                 message.amount = new $util.LongBits(object.amount.low >>> 0, object.amount.high >>> 0).toNumber();
-        if (object.income != null) {
-            if (typeof object.income !== "object")
-                throw TypeError(".SecurityReport.income: object expected");
-            message.income = $root.Money.fromObject(object.income);
-        }
-        if (object.expense != null) {
-            if (typeof object.expense !== "object")
-                throw TypeError(".SecurityReport.expense: object expected");
-            message.expense = $root.Money.fromObject(object.expense);
-        }
-        if (object.profit != null) {
-            if (typeof object.profit !== "object")
-                throw TypeError(".SecurityReport.profit: object expected");
-            message.profit = $root.Money.fromObject(object.profit);
-        }
+        if (object.income != null)
+            message.income = Number(object.income);
+        if (object.expense != null)
+            message.expense = Number(object.expense);
+        if (object.profit != null)
+            message.profit = Number(object.profit);
         if (object.annualProfit != null)
             message.annualProfit = Number(object.annualProfit);
         return message;
@@ -3972,6 +4004,11 @@ export const SecurityReport = $root.SecurityReport = (() => {
             options = {};
         let object = {};
         if (options.defaults) {
+            if ($util.Long) {
+                let long = new $util.Long(0, 0, false);
+                object.securityId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.securityId = options.longs === String ? "0" : 0;
             object.buyDate = "";
             object.sellDate = "";
             if ($util.Long) {
@@ -3984,11 +4021,16 @@ export const SecurityReport = $root.SecurityReport = (() => {
                 object.amount = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.amount = options.longs === String ? "0" : 0;
-            object.income = null;
-            object.expense = null;
-            object.profit = null;
+            object.income = 0;
+            object.expense = 0;
+            object.profit = 0;
             object.annualProfit = 0;
         }
+        if (message.securityId != null && message.hasOwnProperty("securityId"))
+            if (typeof message.securityId === "number")
+                object.securityId = options.longs === String ? String(message.securityId) : message.securityId;
+            else
+                object.securityId = options.longs === String ? $util.Long.prototype.toString.call(message.securityId) : options.longs === Number ? new $util.LongBits(message.securityId.low >>> 0, message.securityId.high >>> 0).toNumber() : message.securityId;
         if (message.buyDate != null && message.hasOwnProperty("buyDate"))
             object.buyDate = message.buyDate;
         if (message.sellDate != null && message.hasOwnProperty("sellDate"))
@@ -4004,11 +4046,11 @@ export const SecurityReport = $root.SecurityReport = (() => {
             else
                 object.amount = options.longs === String ? $util.Long.prototype.toString.call(message.amount) : options.longs === Number ? new $util.LongBits(message.amount.low >>> 0, message.amount.high >>> 0).toNumber() : message.amount;
         if (message.income != null && message.hasOwnProperty("income"))
-            object.income = $root.Money.toObject(message.income, options);
+            object.income = options.json && !isFinite(message.income) ? String(message.income) : message.income;
         if (message.expense != null && message.hasOwnProperty("expense"))
-            object.expense = $root.Money.toObject(message.expense, options);
+            object.expense = options.json && !isFinite(message.expense) ? String(message.expense) : message.expense;
         if (message.profit != null && message.hasOwnProperty("profit"))
-            object.profit = $root.Money.toObject(message.profit, options);
+            object.profit = options.json && !isFinite(message.profit) ? String(message.profit) : message.profit;
         if (message.annualProfit != null && message.hasOwnProperty("annualProfit"))
             object.annualProfit = options.json && !isFinite(message.annualProfit) ? String(message.annualProfit) : message.annualProfit;
         return object;

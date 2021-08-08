@@ -11,7 +11,6 @@ import { DateParserPipe } from '../../utils/date-parser.pipe';
 import { IsNewEntityPipe } from '../../utils/is-new-entity.pipe';
 import { IsReadOnlyPipe } from '../../utils/is-read-only.pipe';
 import { LocalePipe } from '../../utils/locale.pipe';
-import { MoneyDecoderPipe } from '../../utils/money-decoder.pipe';
 import { MoneyEncoderPipe } from '../../utils/money-encoder.pipe';
 
 @NgModule({
@@ -19,14 +18,14 @@ import { MoneyEncoderPipe } from '../../utils/money-encoder.pipe';
     AlertModule, AppRoutingModule, BrowserModule, ClarityModule, FormsModule, TranslateModule
   ],
   exports: [
-    AlertModule, AppRoutingModule, BrowserModule, ClarityModule, FormsModule, MoneyDecoderPipe,
+    AlertModule, AppRoutingModule, BrowserModule, ClarityModule, FormsModule,
     MoneyEncoderPipe, TranslateModule,
     CurrencyNamePipe, CurrencySymbolPipe, DateParserPipe, IsNewEntityPipe, IsReadOnlyPipe,
-    LocalePipe, MoneyDecoderPipe, MoneyEncoderPipe
+    LocalePipe, MoneyEncoderPipe
   ],
   declarations: [
     CurrencyNamePipe, CurrencySymbolPipe, DateParserPipe, IsNewEntityPipe, IsReadOnlyPipe,
-    LocalePipe, MoneyDecoderPipe, MoneyEncoderPipe
+    LocalePipe, MoneyEncoderPipe
   ]
 })
 export class SharedModule {}

@@ -18,6 +18,7 @@
     "currency": "Currency",
     "date": "Date",
     "delete": "Delete",
+    "exchange_rate": "Exchange rate",
     "expense": "Expense",
     "income": "Income",
     "name": "Name",
@@ -58,6 +59,7 @@
     "reports": "Reports",
     "search": "Search",
     "security": "Security papers",
+    "security_report": "By securities",
     "settings": "Settings",
     "sub_category": "Subcategories",
     "templates": "Templates",
@@ -74,18 +76,25 @@
     "amount": "Transactions",
     "edit": "Edit security paper"
   },
+  "security_report": {
+    "amount": "Amount",
+    "annual_profit": "Annual interest",
+    "buy_date": "Buy date",
+    "days": "Days",
+    "profit": "Profit",
+    "sell_date": "Sell date"
+  },
   "security_transaction": {
     "add": "Add transaction",
     "amount": "Amount",
     "buy": "But",
-    "cost": "Cost",
     "coupon": "Coupon",
     "dividends": "Dividends",
     "edit": "Edit transaction",
-    "exchange_rate": "Exchange rate",
     "purchase_fee": "Purchase fee",
     "sell": "Sell",
     "service_fee": "Service fee",
+    "sum": "Amount",
     "tax": "Налог",
     "type": "Type"
   },

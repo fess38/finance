@@ -18,6 +18,7 @@
     "currency": "Валюта",
     "date": "Дата",
     "delete": "Удалить",
+    "exchange_rate": "Обменный курс",
     "expense": "Расход",
     "income": "Доход",
     "name": "Название",
@@ -58,6 +59,7 @@
     "reports": "Отчеты",
     "search": "Поиск",
     "security": "Ценные бумаги",
+    "security_report": "По ценным бумагам",
     "settings": "Настройки",
     "sub_category": "Подкатегории",
     "templates": "Шаблоны",
@@ -74,18 +76,25 @@
     "amount": "Транзакций",
     "edit": "Редактирование ценной бумаги"
   },
+  "security_report": {
+    "amount": "Кол-во",
+    "annual_profit": "Процентов годовых",
+    "buy_date": "Дата покупки",
+    "days": "Дней",
+    "profit": "Прибыль",
+    "sell_date": "Дата продажи"
+  },
   "security_transaction": {
     "add": "Добавление транзакции",
     "amount": "Количество",
     "buy": "Покупка",
-    "cost": "Стоимость",
     "coupon": "Купон",
     "dividends": "Дивиденды",
     "edit": "Редактирование транзакции",
-    "exchange_rate": "Обменный курс",
     "purchase_fee": "Комиссия",
     "sell": "Продажа",
     "service_fee": "Брокерское обслуживание",
+    "sum": "Сумма",
     "tax": "Налог",
     "type": "Тип"
   },

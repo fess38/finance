@@ -60,10 +60,11 @@ describe('UserDataEnricherService', () => {
   it('#enrich security', () => {
     const dataStorage = new DataStorage();
     dataStorage.securities = [new Security({
-      'id': 1,
-      'name': 'foo',
-      'currencyId': 1,
-      'price': new Money({ units: 1 })
+      id: 1,
+      name: 'foo',
+      currencyId: 1,
+      price: new Money({ units: 1 }),
+      exchangeRate: new Money({ units: 1 })
     })];
     dataStorage.securityTransactions = [
       new SecurityTransaction({

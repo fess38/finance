@@ -112,6 +112,7 @@ message Security {
     required string name = 5;
     required int64 currency_id = 6;
     required Money price = 7;
+    required Money exchange_rate = 8;
 }
 
 message SecurityTransaction {
@@ -136,14 +137,15 @@ message SecurityTransaction {
 }
 
 message SecurityReport {
-    required string buy_date = 1;
-    optional string sell_date = 2;
-    required int64 days = 3;
-    required int64 amount = 4;
-    required Money income = 5;
-    required Money expense = 6;
-    required Money profit = 7;
-    required double annual_profit = 8;
+    required int64 security_id = 1;
+    required string buy_date = 2;
+    optional string sell_date = 3;
+    optional int64 days = 4;
+    optional int64 amount = 5;
+    optional double income = 6;
+    optional double expense = 7;
+    optional double profit = 8;
+    optional double annual_profit = 9;
 }
 
 // new entity

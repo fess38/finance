@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Security, SecurityTransaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
-import { SecurityTransactionUtils } from '../security-transaction-utils';
+import { SecurityUtils } from '../security-utils';
 
 @Component({
   templateUrl: './security-transaction-list.component.html'
@@ -12,11 +12,13 @@ export class SecurityTransactionListComponent {
   filterSecurityId: number;
 
   securities(): Security[] {
-    return this.userdata.securities().sort((a, b) => a.name < b.name ? -1 : 1);
+    return this.userdata.securities()
+      .filter(x => x.transactionAmount > 0)
+      .sort((a, b) => a.name < b.name ? -1 : 1);
   }
 
   typesWithNames(): any[] {
-    return SecurityTransactionUtils.typesWithLabels;
+    return SecurityUtils.typesWithLabels;
   }
 
   transactions(): SecurityTransaction[] {
@@ -45,7 +47,11 @@ export class SecurityTransactionListComponent {
     return name;
   }
 
-  cost(securityTransaction: SecurityTransaction): number {
-    return SecurityTransactionUtils.cost(securityTransaction);
+  income(securityTransaction: SecurityTransaction): number {
+    return SecurityUtils.income(securityTransaction);
+  }
+
+  expense(securityTransaction: SecurityTransaction): number {
+    return SecurityUtils.expense(securityTransaction);
   }
 }

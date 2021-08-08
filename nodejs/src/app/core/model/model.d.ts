@@ -1012,6 +1012,9 @@ export interface ISecurity {
 
     /** Security price */
     price: IMoney;
+
+    /** Security exchangeRate */
+    exchangeRate: IMoney;
 }
 
 /** Represents a Security. */
@@ -1043,6 +1046,9 @@ export class Security implements ISecurity {
 
     /** Security price. */
     public price: IMoney;
+
+    /** Security exchangeRate. */
+    public exchangeRate: IMoney;
 
     /**
      * Creates a new Security instance using the specified properties.
@@ -1226,6 +1232,9 @@ export namespace SecurityTransaction {
 /** Properties of a SecurityReport. */
 export interface ISecurityReport {
 
+    /** SecurityReport securityId */
+    securityId: number;
+
     /** SecurityReport buyDate */
     buyDate: string;
 
@@ -1233,22 +1242,22 @@ export interface ISecurityReport {
     sellDate?: (string|null);
 
     /** SecurityReport days */
-    days: number;
+    days?: (number|null);
 
     /** SecurityReport amount */
-    amount: number;
+    amount?: (number|null);
 
     /** SecurityReport income */
-    income: IMoney;
+    income?: (number|null);
 
     /** SecurityReport expense */
-    expense: IMoney;
+    expense?: (number|null);
 
     /** SecurityReport profit */
-    profit: IMoney;
+    profit?: (number|null);
 
     /** SecurityReport annualProfit */
-    annualProfit: number;
+    annualProfit?: (number|null);
 }
 
 /** Represents a SecurityReport. */
@@ -1259,6 +1268,9 @@ export class SecurityReport implements ISecurityReport {
      * @param [properties] Properties to set
      */
     constructor(properties?: ISecurityReport);
+
+    /** SecurityReport securityId. */
+    public securityId: number;
 
     /** SecurityReport buyDate. */
     public buyDate: string;
@@ -1273,13 +1285,13 @@ export class SecurityReport implements ISecurityReport {
     public amount: number;
 
     /** SecurityReport income. */
-    public income: IMoney;
+    public income: number;
 
     /** SecurityReport expense. */
-    public expense: IMoney;
+    public expense: number;
 
     /** SecurityReport profit. */
-    public profit: IMoney;
+    public profit: number;
 
     /** SecurityReport annualProfit. */
     public annualProfit: number;

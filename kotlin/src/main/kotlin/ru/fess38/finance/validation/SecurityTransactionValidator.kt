@@ -1,12 +1,13 @@
 package ru.fess38.finance.validation
 
 import ru.fess38.finance.core.MessageService
-import ru.fess38.finance.core.Model
+import ru.fess38.finance.core.Model.EntityType
+import ru.fess38.finance.core.Model.SecurityTransaction
 import java.time.LocalDate
 
 class SecurityTransactionValidator(private val messageService: MessageService) :
-  MessageValidator<Model.SecurityTransaction> {
-  override fun validate(value: Model.SecurityTransaction, isCreate: Boolean): ValidatorResponse {
+  MessageValidator<SecurityTransaction> {
+  override fun validate(value: SecurityTransaction, isCreate: Boolean): ValidatorResponse {
     val errors = mutableListOf<String>()
 
     try {
@@ -15,7 +16,7 @@ class SecurityTransactionValidator(private val messageService: MessageService) :
       errors.add("invalid transaction date [${value.date}]")
     }
 
-    if (!messageService.isExist(value.securityId, Model.EntityType.SECURITY)) {
+    if (!messageService.isExist(value.securityId, EntityType.SECURITY)) {
       errors.add("unknown security [${value.securityId}]")
     }
 

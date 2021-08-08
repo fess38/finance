@@ -48,7 +48,21 @@
                  pattern="\d+(\.?\d+)?"
                  min="0"
                  [ngModel]="security.price | encodeMoney"
-                 (ngModelChange)="security.price=moneyDecoder.transform($event)"/>
+                 (ngModelChange)="security.price=valueToMoney($event)"/>
+        </div>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row" *ngIf="isDifferentCurrency()">
+      <label>{{'common.exchange_rate' | translate}}</label>
+      <div class="clr-control-container">
+        <div class="clr-input-wrapper">
+          <input type="number"
+                 name="exchangeRate"
+                 class="clr-input"
+                 pattern="\d+(\.?\d+)?"
+                 min="0"
+                 [ngModel]="security.exchangeRate | encodeMoney"
+                 (ngModelChange)="security.exchangeRate=valueToMoney($event)"/>
         </div>
       </div>
     </div>

@@ -78,6 +78,16 @@ export class DateUtils {
     return date;
   }
 
+  static dayDiff(a: Date | string, b: Date | string): number {
+    if (typeof a == 'string') {
+      a = DateUtils.parseDate(a);
+    }
+    if (typeof b == 'string') {
+      b = DateUtils.parseDate(b);
+    }
+    return (+a - +b) / 86400000;
+  }
+
   static sortMonths(a: Month, b: Month): number {
     if (a.year == b.year) {
       if (a.month == b.month) {

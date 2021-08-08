@@ -4,8 +4,7 @@ import { Subscription } from 'rxjs';
 import { Money, Security, SecurityTransaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 import { DateUtils } from '../../utils/date-utils';
-import { MoneyDecoderPipe } from '../../utils/money-decoder.pipe';
-import { SecurityTransactionUtils } from '../security-transaction-utils';
+import { SecurityUtils } from '../security-utils';
 import Type = SecurityTransaction.Type;
 
 @Component({
@@ -18,9 +17,10 @@ export class SecurityTransactionDetailComponent implements OnInit, OnDestroy {
 
   private subscription: Subscription;
   securityTransaction = new SecurityTransaction();
-  moneyDecoder = new MoneyDecoderPipe();
+  valueToMoney = (value) => SecurityUtils.valueToMoney(value);
 
   ngOnInit() {
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     const id = this.route.snapshot.paramMap.get('id');
     if (id != 'new') {
       const callback = () => {
@@ -51,7 +51,15 @@ export class SecurityTransactionDetailComponent implements OnInit, OnDestroy {
   }
 
   typesWithLabels(): any[] {
-    return SecurityTransactionUtils.typesWithLabels;
+    return SecurityUtils.typesWithLabels;
+  }
+
+  priceLabel(): string {
+    if (this.securityTransaction.type == Type.COUPON || this.securityTransaction.type == Type.DIVIDENDS) {
+      return 'security_transaction.sum';
+    } else {
+      return 'common.price';
+    }
   }
 
   isShowExchangeRate(): boolean {
@@ -70,24 +78,22 @@ export class SecurityTransactionDetailComponent implements OnInit, OnDestroy {
     return this.securityTransaction.date.length > 0
       && this.securityTransaction.securityId > 0
       && this.securityTransaction.type > 0
-      && this.securityTransaction.price != null
-      && (
-        this.securityTransaction.price.units > 0
-        || this.securityTransaction.price.micros > 0
-      )
-      && this.securityTransaction.exchangeRate != null
-      && (
-        this.securityTransaction.exchangeRate.units > 0
-        || this.securityTransaction.exchangeRate.micros > 0
-      )
+      && this.securityTransaction.price
+      && (this.securityTransaction.price.units > 0 || this.securityTransaction.price.micros > 0)
+      && this.securityTransaction.exchangeRate
+      && (this.securityTransaction.exchangeRate.units > 0 || this.securityTransaction.exchangeRate.micros > 0)
       && this.securityTransaction.amount > 0
-      && this.securityTransaction.purchaseFee != null
-      && this.securityTransaction.purchaseFee.units >= 0
-      && this.securityTransaction.serviceFee != null
-      && this.securityTransaction.serviceFee.units >= 0;
+      && this.securityTransaction.purchaseFee
+      && (this.securityTransaction.purchaseFee.units >= 0 || this.securityTransaction.purchaseFee.micros >= 0)
+      && this.securityTransaction.serviceFee
+      && (this.securityTransaction.serviceFee.units >= 0 || this.securityTransaction.serviceFee.micros >= 0);
   }
 
   update(securityTransaction: SecurityTransaction): void {
+    if (this.userdata.findSecurity(securityTransaction.securityId).currencyId == this.userdata.settings().currencyId) {
+      this.securityTransaction.exchangeRate = new Money({ units: 1 });
+    }
+
     if (securityTransaction.id == 0) {
       this.userdata.saveSecurityTransaction(securityTransaction)
         .then(() => this.router.navigate(['/security_transaction/' + securityTransaction.id]))

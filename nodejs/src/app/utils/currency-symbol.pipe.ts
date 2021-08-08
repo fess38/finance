@@ -3,7 +3,8 @@ import { Account, Security } from '../core/model/model';
 import { UserDataService } from '../core/user-data/user-data.service';
 
 @Pipe({
-  name: 'currencySymbol'
+  name: 'currencySymbol',
+  pure: false
 })
 export class CurrencySymbolPipe implements PipeTransform {
   constructor(private userdata: UserDataService) {}
