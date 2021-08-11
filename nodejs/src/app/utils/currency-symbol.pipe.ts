@@ -11,18 +11,21 @@ export class CurrencySymbolPipe implements PipeTransform {
 
   // net entity
   transform(value: Account | Security | number | string, type?: string): string {
+    let currencyId: number;
     if (value == 0 && type) {
-      return '';
+      currencyId = 0;
     } else if (value instanceof Account || value instanceof Security) {
-      return this.userdata.findCurrency(value.currencyId).symbol;
+      currencyId = value.currencyId;
     } else if (typeof value == 'number' && type == 'account') {
-      return this.userdata.findCurrency(this.userdata.findAccount(value).currencyId).symbol;
+      currencyId = this.userdata.findAccount(value).currencyId;
     } else if (typeof value == 'number' && type == 'security') {
-      return this.userdata.findCurrency(this.userdata.findSecurity(value).currencyId).symbol;
+      currencyId = this.userdata.findSecurity(value).currencyId;
     } else if (typeof value == 'string') {
-      return this.userdata.findCurrency(this.userdata.settings().currencyId).symbol;
+      currencyId = this.userdata.settings().currencyId;
     } else {
       throw Error(`unable to transform value=${value}, type=${type}`);
     }
+    const currency = this.userdata.findCurrency(currencyId);
+    return currency ? currency.symbol : '';
   }
 }

@@ -96,6 +96,7 @@
              class="clr-input"
              pattern="\d*"
              min="1"
+             max="{{maxAmount()}}"
              [(ngModel)]="securityTransaction.amount"/>
     </div>
     <div class="clr-form-control clr-row">
