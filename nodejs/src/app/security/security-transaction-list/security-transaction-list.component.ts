@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Security, SecurityTransaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 import { SecurityUtils } from '../security-utils';
+import Type = SecurityTransaction.Type;
 
 @Component({
   templateUrl: './security-transaction-list.component.html'
@@ -45,6 +46,14 @@ export class SecurityTransactionListComponent {
       }
     });
     return name;
+  }
+
+  amount(securityTransaction: SecurityTransaction): string {
+    if (securityTransaction.type == Type.BUY || securityTransaction.type == Type.SELL) {
+      return String(securityTransaction.amount);
+    } else {
+      return '';
+    }
   }
 
   income(securityTransaction: SecurityTransaction): number {

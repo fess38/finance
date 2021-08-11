@@ -12,6 +12,7 @@
           </select>
         </th>
         <th class="left">{{'security_transaction.type' | translate}}</th>
+        <th class="left">{{'security_transaction.amount' | translate}}</th>
         <th class="left">
           <span>{{'common.income' | translate}} </span>
           <span>({{'' | currencySymbol}})</span>
@@ -28,6 +29,7 @@
           <span>({{transaction.securityId | currencySymbol:'security'}})</span>
         </td>
         <td class="left">{{typeName(transaction) | translate}}</td>
+        <td class="left">{{amount(transaction) | number:'':locale}}</td>
         <td class="left">{{income(transaction) | number:'1.0-0':locale}}</td>
         <td class="left">{{expense(transaction) | number:'1.0-0':locale}}</td>
       </tr>
