@@ -7,7 +7,8 @@ import { SecurityUtils } from '../security-utils';
 import Type = SecurityTransaction.Type;
 
 @Component({
-  templateUrl: './security-report.component.html'
+  templateUrl: 'security-report.component.html',
+  styleUrls: ['security-report.component.css']
 })
 export class SecurityReportComponent implements OnInit, OnDestroy {
   constructor(private userdata: UserDataService) {}
@@ -16,7 +17,16 @@ export class SecurityReportComponent implements OnInit, OnDestroy {
   securityReports: SecurityReport[] = [];
 
   ngOnInit() {
-    this.subscription = this.userdata.subscribeOnInit(() => this.securityReports = this.prepareSecurityReports());
+    this.subscription = this.userdata.subscribeOnInit(() => {
+      this.securityReports = this.prepareSecurityReports();
+      this.securityReports.unshift(
+        this.prepareFilteredSecurityReport('security_transaction.sold', x => !!x.sellDate)
+      );
+      this.prepareCurrencySecurityReports().forEach(x => this.securityReports.unshift(x));
+      this.securityReports.unshift(
+        this.prepareFilteredSecurityReport('security_transaction.current', x => !x.sellDate)
+      );
+    });
   }
 
   ngOnDestroy(): void {
@@ -44,15 +54,9 @@ export class SecurityReportComponent implements OnInit, OnDestroy {
       } else {
         securityReport.days = DateUtils.dayDiff(securityReport.sellDate, securityReport.buyDate);
       }
-      securityReport.profit = securityReport.income - securityReport.expense;
-      securityReport.annualProfit = 365 * securityReport.profit / securityReport.expense;
-      if (securityReport.days > 0) {
-        securityReport.annualProfit /= securityReport.days;
-      }
+      this.calculateProfit(securityReport);
     }
-    securityReports.sort((a, b) => a.buyDate < b.buyDate ? 1 : -1);
-
-    return securityReports;
+    return securityReports.sort((a, b) => a.buyDate < b.buyDate ? 1 : -1);
   }
 
   private processBuyTransactions(securityReports: SecurityReport[], securityTransactions: SecurityTransaction[]): void {
@@ -61,6 +65,7 @@ export class SecurityReportComponent implements OnInit, OnDestroy {
         continue;
       }
       securityReports.push(new SecurityReport({
+        name: this.userdata.findSecurity(securityTransaction.securityId).name,
         securityId: securityTransaction.securityId,
         buyDate: securityTransaction.date,
         amount: securityTransaction.amount,
@@ -147,7 +152,49 @@ export class SecurityReportComponent implements OnInit, OnDestroy {
     });
   }
 
-  securityName(securityId: number): string {
-    return this.userdata.findSecurity(securityId).name;
+  private prepareFilteredSecurityReport(name: string, predicate: (x: SecurityReport) => boolean): SecurityReport {
+    let result = new SecurityReport({ name: name });
+    let sum = 0;
+    for (let securityReport of this.securityReports) {
+      if (securityReport.securityId && predicate(securityReport)) {
+        result.days += securityReport.expense;
+        result.amount += securityReport.amount;
+        result.income += securityReport.income;
+        result.expense += securityReport.expense;
+        result.profit += securityReport.profit;
+        sum += securityReport.expense * securityReport.days;
+      }
+    }
+    result.days = Math.round(sum / result.expense);
+    this.calculateProfit(result);
+    return result;
+  }
+
+  private prepareCurrencySecurityReports(): SecurityReport[] {
+    let currencySecurityReports: SecurityReport[] = [];
+
+    let currencyIds = new Set<number>();
+    for (const securityReport of this.securityReports) {
+      if (securityReport.buyDate && !securityReport.sellDate) {
+        currencyIds.add(this.userdata.findSecurity(securityReport.securityId).currencyId);
+      }
+    }
+
+    for (const currencyId of currencyIds) {
+      currencySecurityReports.push(this.prepareFilteredSecurityReport(
+        this.userdata.findCurrency(currencyId).symbol,
+        x => x.buyDate && !x.sellDate && this.userdata.findSecurity(x.securityId).currencyId == currencyId
+      ));
+    }
+
+    return currencySecurityReports.sort((a, b) => a.expense < b.expense ? -1 : 1);
+  }
+
+  private calculateProfit(securityReport: SecurityReport): void {
+    securityReport.profit = securityReport.income - securityReport.expense;
+    securityReport.annualProfit = 365 * securityReport.profit / securityReport.expense;
+    if (securityReport.days > 0) {
+      securityReport.annualProfit /= securityReport.days;
+    }
   }
 }

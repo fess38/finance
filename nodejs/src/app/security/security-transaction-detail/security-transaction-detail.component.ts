@@ -8,7 +8,7 @@ import { SecurityUtils } from '../security-utils';
 import Type = SecurityTransaction.Type;
 
 @Component({
-  templateUrl: './security-transaction-detail.component.html'
+  templateUrl: 'security-transaction-detail.component.html'
 })
 export class SecurityTransactionDetailComponent implements OnInit, OnDestroy {
   constructor(private userdata: UserDataService,

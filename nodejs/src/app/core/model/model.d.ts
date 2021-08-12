@@ -1232,11 +1232,14 @@ export namespace SecurityTransaction {
 /** Properties of a SecurityReport. */
 export interface ISecurityReport {
 
+    /** SecurityReport name */
+    name?: (string|null);
+
     /** SecurityReport securityId */
-    securityId: number;
+    securityId?: (number|null);
 
     /** SecurityReport buyDate */
-    buyDate: string;
+    buyDate?: (string|null);
 
     /** SecurityReport sellDate */
     sellDate?: (string|null);
@@ -1268,6 +1271,9 @@ export class SecurityReport implements ISecurityReport {
      * @param [properties] Properties to set
      */
     constructor(properties?: ISecurityReport);
+
+    /** SecurityReport name. */
+    public name: string;
 
     /** SecurityReport securityId. */
     public securityId: number;

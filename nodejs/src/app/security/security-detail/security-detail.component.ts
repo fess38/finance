@@ -6,7 +6,7 @@ import { UserDataService } from '../../core/user-data/user-data.service';
 import { SecurityUtils } from '../security-utils';
 
 @Component({
-  templateUrl: './security-detail.component.html'
+  templateUrl: 'security-detail.component.html'
 })
 export class SecurityDetailComponent implements OnInit, OnDestroy {
   constructor(private userdata: UserDataService,

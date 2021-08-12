@@ -3738,8 +3738,9 @@ export const SecurityReport = $root.SecurityReport = (() => {
      * Properties of a SecurityReport.
      * @exports ISecurityReport
      * @interface ISecurityReport
-     * @property {number} securityId SecurityReport securityId
-     * @property {string} buyDate SecurityReport buyDate
+     * @property {string|null} [name] SecurityReport name
+     * @property {number|null} [securityId] SecurityReport securityId
+     * @property {string|null} [buyDate] SecurityReport buyDate
      * @property {string|null} [sellDate] SecurityReport sellDate
      * @property {number|null} [days] SecurityReport days
      * @property {number|null} [amount] SecurityReport amount
@@ -3763,6 +3764,14 @@ export const SecurityReport = $root.SecurityReport = (() => {
                 if (properties[keys[i]] != null)
                     this[keys[i]] = properties[keys[i]];
     }
+
+    /**
+     * SecurityReport name.
+     * @member {string} name
+     * @memberof SecurityReport
+     * @instance
+     */
+    SecurityReport.prototype.name = "";
 
     /**
      * SecurityReport securityId.
@@ -3860,22 +3869,26 @@ export const SecurityReport = $root.SecurityReport = (() => {
     SecurityReport.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        writer.uint32(/* id 1, wireType 0 =*/8).int64(message.securityId);
-        writer.uint32(/* id 2, wireType 2 =*/18).string(message.buyDate);
+        if (message.name != null && Object.hasOwnProperty.call(message, "name"))
+            writer.uint32(/* id 1, wireType 2 =*/10).string(message.name);
+        if (message.securityId != null && Object.hasOwnProperty.call(message, "securityId"))
+            writer.uint32(/* id 2, wireType 0 =*/16).int64(message.securityId);
+        if (message.buyDate != null && Object.hasOwnProperty.call(message, "buyDate"))
+            writer.uint32(/* id 3, wireType 2 =*/26).string(message.buyDate);
         if (message.sellDate != null && Object.hasOwnProperty.call(message, "sellDate"))
-            writer.uint32(/* id 3, wireType 2 =*/26).string(message.sellDate);
+            writer.uint32(/* id 4, wireType 2 =*/34).string(message.sellDate);
         if (message.days != null && Object.hasOwnProperty.call(message, "days"))
-            writer.uint32(/* id 4, wireType 0 =*/32).int64(message.days);
+            writer.uint32(/* id 5, wireType 0 =*/40).int64(message.days);
         if (message.amount != null && Object.hasOwnProperty.call(message, "amount"))
-            writer.uint32(/* id 5, wireType 0 =*/40).int64(message.amount);
+            writer.uint32(/* id 6, wireType 0 =*/48).int64(message.amount);
         if (message.income != null && Object.hasOwnProperty.call(message, "income"))
-            writer.uint32(/* id 6, wireType 1 =*/49).double(message.income);
+            writer.uint32(/* id 7, wireType 1 =*/57).double(message.income);
         if (message.expense != null && Object.hasOwnProperty.call(message, "expense"))
-            writer.uint32(/* id 7, wireType 1 =*/57).double(message.expense);
+            writer.uint32(/* id 8, wireType 1 =*/65).double(message.expense);
         if (message.profit != null && Object.hasOwnProperty.call(message, "profit"))
-            writer.uint32(/* id 8, wireType 1 =*/65).double(message.profit);
+            writer.uint32(/* id 9, wireType 1 =*/73).double(message.profit);
         if (message.annualProfit != null && Object.hasOwnProperty.call(message, "annualProfit"))
-            writer.uint32(/* id 9, wireType 1 =*/73).double(message.annualProfit);
+            writer.uint32(/* id 10, wireType 1 =*/81).double(message.annualProfit);
         return writer;
     };
 
@@ -3898,30 +3911,33 @@ export const SecurityReport = $root.SecurityReport = (() => {
             let tag = reader.uint32();
             switch (tag >>> 3) {
             case 1:
-                message.securityId = reader.int64();
+                message.name = reader.string();
                 break;
             case 2:
-                message.buyDate = reader.string();
+                message.securityId = reader.int64();
                 break;
             case 3:
-                message.sellDate = reader.string();
+                message.buyDate = reader.string();
                 break;
             case 4:
-                message.days = reader.int64();
+                message.sellDate = reader.string();
                 break;
             case 5:
-                message.amount = reader.int64();
+                message.days = reader.int64();
                 break;
             case 6:
-                message.income = reader.double();
+                message.amount = reader.int64();
                 break;
             case 7:
-                message.expense = reader.double();
+                message.income = reader.double();
                 break;
             case 8:
-                message.profit = reader.double();
+                message.expense = reader.double();
                 break;
             case 9:
+                message.profit = reader.double();
+                break;
+            case 10:
                 message.annualProfit = reader.double();
                 break;
             default:
@@ -3929,10 +3945,6 @@ export const SecurityReport = $root.SecurityReport = (() => {
                 break;
             }
         }
-        if (!message.hasOwnProperty("securityId"))
-            throw $util.ProtocolError("missing required 'securityId'", { instance: message });
-        if (!message.hasOwnProperty("buyDate"))
-            throw $util.ProtocolError("missing required 'buyDate'", { instance: message });
         return message;
     };
 
@@ -3948,6 +3960,8 @@ export const SecurityReport = $root.SecurityReport = (() => {
         if (object instanceof $root.SecurityReport)
             return object;
         let message = new $root.SecurityReport();
+        if (object.name != null)
+            message.name = String(object.name);
         if (object.securityId != null)
             if ($util.Long)
                 (message.securityId = $util.Long.fromValue(object.securityId)).unsigned = false;
@@ -4004,6 +4018,7 @@ export const SecurityReport = $root.SecurityReport = (() => {
             options = {};
         let object = {};
         if (options.defaults) {
+            object.name = "";
             if ($util.Long) {
                 let long = new $util.Long(0, 0, false);
                 object.securityId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
@@ -4026,6 +4041,8 @@ export const SecurityReport = $root.SecurityReport = (() => {
             object.profit = 0;
             object.annualProfit = 0;
         }
+        if (message.name != null && message.hasOwnProperty("name"))
+            object.name = message.name;
         if (message.securityId != null && message.hasOwnProperty("securityId"))
             if (typeof message.securityId === "number")
                 object.securityId = options.longs === String ? String(message.securityId) : message.securityId;

@@ -137,15 +137,16 @@ message SecurityTransaction {
 }
 
 message SecurityReport {
-    required int64 security_id = 1;
-    required string buy_date = 2;
-    optional string sell_date = 3;
-    optional int64 days = 4;
-    optional int64 amount = 5;
-    optional double income = 6;
-    optional double expense = 7;
-    optional double profit = 8;
-    optional double annual_profit = 9;
+    optional string name = 1;
+    optional int64 security_id = 2;
+    optional string buy_date = 3;
+    optional string sell_date = 4;
+    optional int64 days = 5;
+    optional int64 amount = 6;
+    optional double income = 7;
+    optional double expense = 8;
+    optional double profit = 9;
+    optional double annual_profit = 10;
 }
 
 // new entity

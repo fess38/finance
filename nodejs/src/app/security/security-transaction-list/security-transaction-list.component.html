@@ -23,7 +23,7 @@
         </th>
       </tr>
       <tr *ngFor="let transaction of transactions()" routerLink="/security_transaction/{{transaction.id}}">
-        <td class="left">{{transaction.date | date:'dd MMM yyyy':'':locale}}</td>
+        <td class="left">{{transaction.date | date:'dd MMM yy':'':locale}}</td>
         <td class="left">
           <span>{{securityName(transaction)}} </span>
           <span>({{transaction.securityId | currencySymbol:'security'}})</span>

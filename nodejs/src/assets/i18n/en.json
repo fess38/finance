@@ -89,11 +89,13 @@
     "amount": "Amount",
     "buy": "But",
     "coupon": "Coupon",
+    "current": "Current",
     "dividends": "Dividends",
     "edit": "Edit transaction",
     "purchase_fee": "Purchase fee",
     "sell": "Sell",
     "service_fee": "Service fee",
+    "sold": "Sold",
     "sum": "Amount",
     "tax": "Налог",
     "type": "Type"

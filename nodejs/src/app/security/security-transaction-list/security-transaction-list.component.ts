@@ -5,7 +5,7 @@ import { SecurityUtils } from '../security-utils';
 import Type = SecurityTransaction.Type;
 
 @Component({
-  templateUrl: './security-transaction-list.component.html'
+  templateUrl: 'security-transaction-list.component.html'
 })
 export class SecurityTransactionListComponent {
   constructor(private userdata: UserDataService) {}

@@ -21,10 +21,19 @@
         </th>
         <th class="left">{{'security_report.annual_profit' | translate}}</th>
       </tr>
-      <tr *ngFor="let securityReport of securityReports">
-        <td class="left">{{securityName(securityReport.securityId)}}</td>
-        <td class="left">{{securityReport.buyDate | date:'dd MMM yyyy':'':locale}}</td>
-        <td class="left">{{securityReport.sellDate | date:'dd MMM yyyy':'':locale}}</td>
+      <tr *ngFor="let securityReport of securityReports"
+          [ngClass]="{
+              'sold':securityReport.name.endsWith('sold'),
+              'total':securityReport.buyDate.length == 0
+          }">
+        <td class="left">
+          <span>{{securityReport.name | translate}} </span>
+          <span *ngIf="securityReport.securityId > 0">
+            ({{securityReport.securityId | currencySymbol:'security'}})
+          </span>
+        </td>
+        <td class="left">{{securityReport.buyDate | date:'dd MMM yy':'':locale}}</td>
+        <td class="left">{{securityReport.sellDate | date:'dd MMM yy':'':locale}}</td>
         <td class="left">{{securityReport.days | number:'':locale}}</td>
         <td class="left">{{securityReport.amount | number:'':locale}}</td>
         <td class="left">{{securityReport.income | number:'1.0-0':locale}}</td>
