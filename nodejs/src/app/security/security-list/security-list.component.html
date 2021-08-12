@@ -7,10 +7,14 @@
           <cds-icon shape="plus-circle"></cds-icon>
         </th>
         <th class="left">{{'common.price' | translate}}</th>
+        <th class="left">{{'security.amount' | translate}}</th>
+        <th class="left">{{'security.cost' | translate}}</th>
       </tr>
       <tr *ngFor="let security of securities()" routerLink="/security/{{security.id}}">
         <td class="left">{{security.name}}</td>
         <td class="left">{{security.price | encodeMoney | number:'':locale}}{{security | currencySymbol}}</td>
+        <td class="left">{{security.amount}}</td>
+        <td class="left">{{cost(security)}}{{'' | currencySymbol}}</td>
       </tr>
     </table>
   </div>

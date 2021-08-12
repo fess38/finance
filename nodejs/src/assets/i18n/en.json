@@ -74,7 +74,8 @@
   "security": {
     "add": "Add security paper",
     "amount": "Transactions",
-    "edit": "Edit security paper"
+    "edit": "Edit security paper",
+    "cost": "Cost"
   },
   "security_report": {
     "amount": "Amount",

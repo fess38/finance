@@ -1015,6 +1015,9 @@ export interface ISecurity {
 
     /** Security exchangeRate */
     exchangeRate: IMoney;
+
+    /** Security amount */
+    amount?: (number|null);
 }
 
 /** Represents a Security. */
@@ -1049,6 +1052,9 @@ export class Security implements ISecurity {
 
     /** Security exchangeRate. */
     public exchangeRate: IMoney;
+
+    /** Security amount. */
+    public amount: number;
 
     /**
      * Creates a new Security instance using the specified properties.

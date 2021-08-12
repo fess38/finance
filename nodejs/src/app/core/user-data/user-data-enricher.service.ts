@@ -1,5 +1,6 @@
 import { Long } from 'protobufjs';
 import { Account, Category, DataStorage, FamilyMember, Security, SecurityTransaction, SubCategory, Transaction, TransactionTemplate } from '../model/model';
+import Type = SecurityTransaction.Type;
 
 export class UserDataEnricherService {
   enrich(dataStorage: DataStorage): void {
@@ -65,13 +66,23 @@ export class UserDataEnricherService {
   }
 
   private enrichSecurity(dataStorage: DataStorage): void {
-    const counter = new Map<number, number>();
+    const securityTransactionCounter = new Map<number, number>();
+    const securityAmountCounter = new Map<number, number>();
     dataStorage.securityTransactions.filter(x => !x.isDeleted).forEach(securityTransaction => {
       const securityId = securityTransaction.securityId;
-      counter.set(securityId, (counter.get(securityId) || 0) + 1);
+      securityTransactionCounter.set(securityId, (securityTransactionCounter.get(securityId) || 0) + 1);
+
+      let amount = 0;
+      if (securityTransaction.type == Type.BUY) {
+        amount += securityTransaction.amount;
+      } else if (securityTransaction.type == Type.SELL) {
+        amount -= securityTransaction.amount;
+      }
+      securityAmountCounter.set(securityId, (securityAmountCounter.get(securityId) || 0) + amount);
     });
     dataStorage.securities.forEach(security => {
-      security.transactionAmount = counter.get(security.id) || 0;
+      security.transactionAmount = securityTransactionCounter.get(security.id) || 0;
+      security.amount = securityAmountCounter.get(security.id) || 0;
     });
   }
 

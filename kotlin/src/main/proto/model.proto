@@ -113,6 +113,7 @@ message Security {
     required int64 currency_id = 6;
     required Money price = 7;
     required Money exchange_rate = 8;
+    optional int64 amount = 9 [default = 0];
 }
 
 message SecurityTransaction {

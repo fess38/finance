@@ -81,6 +81,7 @@ describe('UserDataEnricherService', () => {
         securityId: 1,
         type: Type.BUY,
         price: new Money({ units: 1 }),
+        amount: 7,
         exchangeRate: new Money({ units: 1 }),
         purchaseFee: new Money({ units: 0 }),
         serviceFee: new Money({ units: 0 })
@@ -91,6 +92,7 @@ describe('UserDataEnricherService', () => {
         type: Type.BUY,
         price: new Money({ units: 1 }),
         exchangeRate: new Money({ units: 1 }),
+        amount: 5,
         purchaseFee: new Money({ units: 0 }),
         serviceFee: new Money({ units: 0 })
       }),
@@ -108,5 +110,6 @@ describe('UserDataEnricherService', () => {
     enricher.enrich(dataStorage);
 
     expect(2).toEqual(<number>dataStorage.securities[0].transactionAmount);
+    expect(12).toEqual(<number>dataStorage.securities[0].amount);
   });
 });

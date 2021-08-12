@@ -3005,6 +3005,7 @@ export const Security = $root.Security = (() => {
      * @property {number} currencyId Security currencyId
      * @property {IMoney} price Security price
      * @property {IMoney} exchangeRate Security exchangeRate
+     * @property {number|null} [amount] Security amount
      */
 
     /**
@@ -3087,6 +3088,14 @@ export const Security = $root.Security = (() => {
     Security.prototype.exchangeRate = null;
 
     /**
+     * Security amount.
+     * @member {number} amount
+     * @memberof Security
+     * @instance
+     */
+    Security.prototype.amount = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
      * Creates a new Security instance using the specified properties.
      * @function create
      * @memberof Security
@@ -3122,6 +3131,8 @@ export const Security = $root.Security = (() => {
         writer.uint32(/* id 6, wireType 0 =*/48).int64(message.currencyId);
         $root.Money.encode(message.price, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
         $root.Money.encode(message.exchangeRate, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
+        if (message.amount != null && Object.hasOwnProperty.call(message, "amount"))
+            writer.uint32(/* id 9, wireType 0 =*/72).int64(message.amount);
         return writer;
     };
 
@@ -3166,6 +3177,9 @@ export const Security = $root.Security = (() => {
                 break;
             case 8:
                 message.exchangeRate = $root.Money.decode(reader, reader.uint32());
+                break;
+            case 9:
+                message.amount = reader.int64();
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -3238,6 +3252,15 @@ export const Security = $root.Security = (() => {
                 throw TypeError(".Security.exchangeRate: object expected");
             message.exchangeRate = $root.Money.fromObject(object.exchangeRate);
         }
+        if (object.amount != null)
+            if ($util.Long)
+                (message.amount = $util.Long.fromValue(object.amount)).unsigned = false;
+            else if (typeof object.amount === "string")
+                message.amount = parseInt(object.amount, 10);
+            else if (typeof object.amount === "number")
+                message.amount = object.amount;
+            else if (typeof object.amount === "object")
+                message.amount = new $util.LongBits(object.amount.low >>> 0, object.amount.high >>> 0).toNumber();
         return message;
     };
 
@@ -3275,6 +3298,11 @@ export const Security = $root.Security = (() => {
                 object.currencyId = options.longs === String ? "0" : 0;
             object.price = null;
             object.exchangeRate = null;
+            if ($util.Long) {
+                let long = new $util.Long(0, 0, false);
+                object.amount = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.amount = options.longs === String ? "0" : 0;
         }
         if (message.id != null && message.hasOwnProperty("id"))
             if (typeof message.id === "number")
@@ -3301,6 +3329,11 @@ export const Security = $root.Security = (() => {
             object.price = $root.Money.toObject(message.price, options);
         if (message.exchangeRate != null && message.hasOwnProperty("exchangeRate"))
             object.exchangeRate = $root.Money.toObject(message.exchangeRate, options);
+        if (message.amount != null && message.hasOwnProperty("amount"))
+            if (typeof message.amount === "number")
+                object.amount = options.longs === String ? String(message.amount) : message.amount;
+            else
+                object.amount = options.longs === String ? $util.Long.prototype.toString.call(message.amount) : options.longs === Number ? new $util.LongBits(message.amount.low >>> 0, message.amount.high >>> 0).toNumber() : message.amount;
         return object;
     };
 
