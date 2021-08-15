@@ -74,7 +74,12 @@ export class SecurityDetailComponent implements OnInit, OnDestroy {
       return;
     }
     for (let security of this.userdata.securities()) {
-      if (updatedSecurity.currencyId == security.currencyId && updatedSecurity.id != security.id) {
+      if (updatedSecurity.currencyId == security.currencyId && updatedSecurity.id != security.id
+        && (
+          updatedSecurity.exchangeRate.units != security.exchangeRate.units
+          || updatedSecurity.exchangeRate.micros != security.exchangeRate.micros
+        )
+      ) {
         security.exchangeRate = updatedSecurity.exchangeRate;
         await this.userdata.updateSecurity(security);
       }
