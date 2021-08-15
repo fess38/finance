@@ -126,7 +126,6 @@ message SecurityTransaction {
     required Money exchange_rate = 7;
     optional int64 amount = 8 [default = 1];
     required Money purchase_fee = 9;
-    required Money service_fee = 10;
 
     enum Type {
         UNDEFINED = 0;

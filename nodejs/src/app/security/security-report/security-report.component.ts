@@ -114,7 +114,7 @@ export class SecurityReportComponent implements OnInit, OnDestroy {
         );
         securityReport.expense += (
           SecurityUtils.moneyToNumber(securityTransaction.purchaseFee) * exchangeRate
-          + SecurityUtils.moneyToNumber(securityTransaction.serviceFee) * exchangeRate
+          * (securityReport.amount / securityTransaction.amount)
         );
       }
     }
@@ -132,10 +132,7 @@ export class SecurityReportComponent implements OnInit, OnDestroy {
       const income = (
         SecurityUtils.moneyToNumber(securityTransaction.price) * exchangeRate * securityTransaction.amount
       );
-      const expense = (
-        SecurityUtils.moneyToNumber(securityTransaction.purchaseFee) * exchangeRate
-        + SecurityUtils.moneyToNumber(securityTransaction.serviceFee) * exchangeRate
-      );
+      const expense = SecurityUtils.moneyToNumber(securityTransaction.purchaseFee) * exchangeRate;
       const amount = filteredReports.map(x => x.amount).reduce((a, b) => a + b, 0);
       for (let report of filteredReports) {
         report.income += income * report.amount / amount;
@@ -145,11 +142,28 @@ export class SecurityReportComponent implements OnInit, OnDestroy {
   }
 
   private filterReports(securityReports: SecurityReport[], securityTransaction: SecurityTransaction): SecurityReport[] {
-    return securityReports.filter(x => {
+    let filteredReports = securityReports.filter(x => {
       return x.buyDate <= securityTransaction.date
         && x.securityId == securityTransaction.securityId
-        && (!x.sellDate || x.sellDate > securityTransaction.date);
+        && (!x.sellDate || x.sellDate >= securityTransaction.date);
     });
+
+    // for transactions after last sell
+    if (filteredReports.length == 0 && securityReports.length > 0) {
+      let maxBuyDate = '';
+      securityReports
+        .filter(x => x.securityId == securityTransaction.securityId)
+        .forEach(x => {
+          if (x.buyDate > maxBuyDate) {
+            maxBuyDate = x.buyDate;
+          }
+        });
+      filteredReports = securityReports.filter(x => {
+        return x.securityId == securityTransaction.securityId && x.buyDate == maxBuyDate;
+      });
+    }
+
+    return filteredReports;
   }
 
   private prepareFilteredSecurityReport(name: string, predicate: (x: SecurityReport) => boolean): SecurityReport {
@@ -187,7 +201,7 @@ export class SecurityReportComponent implements OnInit, OnDestroy {
       ));
     }
 
-    return currencySecurityReports.sort((a, b) => a.expense < b.expense ? -1 : 1);
+    return currencySecurityReports.sort((a, b) => a.profit < b.profit ? -1 : 1);
   }
 
   private calculateProfit(securityReport: SecurityReport): void {

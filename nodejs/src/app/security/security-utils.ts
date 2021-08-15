@@ -44,8 +44,7 @@ export class SecurityUtils {
 
   static expense(securityTransaction: SecurityTransaction): number {
     const exchangeRate = this.moneyToNumber(securityTransaction.exchangeRate);
-    let result = this.moneyToNumber(securityTransaction.purchaseFee) * exchangeRate
-      + this.moneyToNumber(securityTransaction.serviceFee) * exchangeRate;
+    let result = this.moneyToNumber(securityTransaction.purchaseFee) * exchangeRate;
     if (securityTransaction.type == Type.BUY) {
       result += this.moneyToNumber(securityTransaction.price) * exchangeRate * securityTransaction.amount;
     }

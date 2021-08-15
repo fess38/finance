@@ -36,10 +36,6 @@ class SecurityTransactionValidator(private val messageService: MessageService) :
       errors.add("invalid purchase fee [${value.purchaseFee.units} ${value.purchaseFee.micros}]")
     }
 
-    if (value.serviceFee.units < 0 || value.serviceFee.micros < 0) {
-      errors.add("invalid service fee [${value.serviceFee.units} ${value.serviceFee.micros}]")
-    }
-
     return ValidatorResponse(errors)
   }
 }

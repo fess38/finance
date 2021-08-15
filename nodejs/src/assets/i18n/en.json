@@ -75,7 +75,9 @@
     "add": "Add security paper",
     "amount": "Transactions",
     "edit": "Edit security paper",
-    "cost": "Cost"
+    "cost": "Cost",
+    "transaction_amount": "Transaction amount",
+    "share": "Share"
   },
   "security_report": {
     "amount": "Amount",
@@ -95,7 +97,6 @@
     "edit": "Edit transaction",
     "purchase_fee": "Purchase fee",
     "sell": "Sell",
-    "service_fee": "Service fee",
     "sold": "Sold",
     "sum": "Amount",
     "tax": "Налог",

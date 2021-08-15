@@ -114,21 +114,6 @@
       </div>
     </div>
     <div class="clr-form-control clr-row">
-      <label>{{'security_transaction.service_fee' | translate}}</label>
-      <div class="clr-control-container">
-        <div class="clr-input-wrapper">
-          <input type="number"
-                 name="serviceFee"
-                 class="clr-input"
-                 pattern="\d+(\.?\d+)?"
-                 min="0"
-                 placeholder="{{securityTransaction.securityId | currencySymbol:'security'}}"
-                 [ngModel]="securityTransaction.serviceFee | encodeMoney"
-                 (ngModelChange)="securityTransaction.serviceFee = valueToMoney($event)"/>
-        </div>
-      </div>
-    </div>
-    <div class="clr-form-control clr-row">
       <button class="btn btn-primary btn-sm btn-block"
               (click)="update(securityTransaction)"
               [disabled]="!isValidForm() || ('' | isReadOnly)">

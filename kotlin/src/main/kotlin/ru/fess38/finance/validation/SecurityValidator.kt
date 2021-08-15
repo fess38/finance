@@ -12,7 +12,7 @@ class SecurityValidator(private val messageService: MessageService) : MessageVal
       errors.add("unknown currency [${value.currencyId}]")
     }
 
-    if (value.price.units <= 0 || value.price.micros < 0) {
+    if (!(value.price.units > 0 || value.price.micros > 0)) {
       errors.add("invalid price [${value.price.units} ${value.price.micros}]")
     }
 

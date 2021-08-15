@@ -16,7 +16,7 @@ describe('SecurityRepoprtComponent', () => {
     expect(expected.annualProfit).toBeCloseTo(actual.annualProfit, 2);
   };
 
-  it('should prepare security reports', () => {
+  it('should prepare security reports 1', () => {
     const userdata = new UserDataService(null, null, null);
     (userdata as any).ds.securities = [
       new Security({
@@ -36,8 +36,7 @@ describe('SecurityRepoprtComponent', () => {
         price: new Money({ units: 5 }),
         exchangeRate: new Money({ units: 50 }),
         amount: 10,
-        purchaseFee: new Money({ units: 3 }),
-        serviceFee: new Money({ units: 4 })
+        purchaseFee: new Money({ units: 7 })
       }),
       new SecurityTransaction({
         id: 1000,
@@ -47,8 +46,7 @@ describe('SecurityRepoprtComponent', () => {
         price: new Money({ units: 7 }),
         exchangeRate: new Money({ units: 60 }),
         amount: 10,
-        purchaseFee: new Money({ units: 1 }),
-        serviceFee: new Money({ units: 2 })
+        purchaseFee: new Money({ units: 3 })
       }),
       new SecurityTransaction({
         id: 1000,
@@ -58,8 +56,7 @@ describe('SecurityRepoprtComponent', () => {
         price: new Money({ units: 12 }),
         exchangeRate: new Money({ units: 55 }),
         amount: 1,
-        purchaseFee: new Money({ units: 0 }),
-        serviceFee: new Money({ units: 1 })
+        purchaseFee: new Money({ units: 1 })
       })
     ];
     let component = new SecurityReportComponent(userdata);
@@ -74,6 +71,138 @@ describe('SecurityRepoprtComponent', () => {
       profit: 1775,
       annualProfit: 0.287
     });
+    let actual = (component as any).prepareSecurityReports()[0];
+    checkSecurityReport(expected, actual);
+  });
+
+  it('should prepare security reports 2', () => {
+    const userdata = new UserDataService(null, null, null);
+    (userdata as any).ds.securities = [
+      new Security({
+        id: 100,
+        name: 'A',
+        currencyId: 2,
+        price: new Money({ units: 10 }),
+        exchangeRate: new Money({ units: 25 })
+      })
+    ];
+    (userdata as any).ds.securityTransactions = [
+      new SecurityTransaction({
+        id: 1000,
+        date: '2021-05-01',
+        securityId: 100,
+        type: Type.BUY,
+        price: new Money({ units: 5 }),
+        exchangeRate: new Money({ units: 1 }),
+        amount: 5,
+        purchaseFee: new Money({ units: 0 })
+      }),
+      new SecurityTransaction({
+        id: 1001,
+        date: '2022-05-01',
+        securityId: 100,
+        type: Type.BUY,
+        price: new Money({ units: 5 }),
+        exchangeRate: new Money({ units: 1 }),
+        amount: 5,
+        purchaseFee: new Money({ units: 0 })
+      }),
+      new SecurityTransaction({
+        id: 1002,
+        date: '2023-05-01',
+        securityId: 100,
+        type: Type.SELL,
+        price: new Money({ units: 10 }),
+        exchangeRate: new Money({ units: 1 }),
+        amount: 10,
+        purchaseFee: new Money({ units: 10 })
+      })
+    ];
+    let component = new SecurityReportComponent(userdata);
+    let expected = [
+      new SecurityReport({
+        securityId: 100,
+        buyDate: '2022-05-01',
+        sellDate: '2023-05-01',
+        days: 365,
+        amount: 5,
+        income: 50,
+        expense: 30,
+        profit: 20,
+        annualProfit: 0.666
+      }),
+      new SecurityReport({
+        securityId: 100,
+        buyDate: '2021-05-01',
+        sellDate: '2023-05-01',
+        days: 730,
+        amount: 5,
+        income: 50,
+        expense: 30,
+        profit: 20,
+        annualProfit: 0.333
+      })
+    ];
+    let actual = (component as any).prepareSecurityReports();
+    checkSecurityReport(expected[0], actual[0]);
+    checkSecurityReport(expected[1], actual[1]);
+  });
+
+  it('should prepare security reports 3', () => {
+    const userdata = new UserDataService(null, null, null);
+    (userdata as any).ds.securities = [
+      new Security({
+        id: 100,
+        name: 'A',
+        currencyId: 2,
+        price: new Money({ units: 10 }),
+        exchangeRate: new Money({ units: 1 })
+      })
+    ];
+    (userdata as any).ds.securityTransactions = [
+      new SecurityTransaction({
+        id: 1000,
+        date: '2021-05-01',
+        securityId: 100,
+        type: Type.BUY,
+        price: new Money({ units: 5 }),
+        exchangeRate: new Money({ units: 1 }),
+        amount: 5,
+        purchaseFee: new Money({ units: 0 })
+      }),
+      new SecurityTransaction({
+        id: 1001,
+        date: '2022-05-01',
+        securityId: 100,
+        type: Type.SELL,
+        price: new Money({ units: 4 }),
+        exchangeRate: new Money({ units: 1 }),
+        amount: 5,
+        purchaseFee: new Money({ units: 0 })
+      }),
+      new SecurityTransaction({
+        id: 1002,
+        date: '2023-05-01',
+        securityId: 100,
+        type: Type.COUPON,
+        price: new Money({ units: 5 }),
+        exchangeRate: new Money({ units: 1 }),
+        amount: 1,
+        purchaseFee: new Money({ units: 0 })
+      })
+    ];
+    let component = new SecurityReportComponent(userdata);
+    let expected = new SecurityReport({
+        securityId: 100,
+        buyDate: '2021-05-01',
+        sellDate: '2022-05-01',
+        days: 365,
+        amount: 5,
+        income: 25,
+        expense: 25,
+        profit: 0,
+        annualProfit: 0
+      });
     let actual = (component as any).prepareSecurityReports()[0];
     checkSecurityReport(expected, actual);
   });
@@ -98,8 +227,7 @@ describe('SecurityRepoprtComponent', () => {
         price: new Money({ units: 5 }),
         exchangeRate: new Money({ units: 50 }),
         amount: 10,
-        purchaseFee: new Money({ units: 3 }),
-        serviceFee: new Money({ units: 4 })
+        purchaseFee: new Money({ units: 7 })
       }),
       new SecurityTransaction({
         id: 1000,
@@ -109,8 +237,7 @@ describe('SecurityRepoprtComponent', () => {
         price: new Money({ units: 7 }),
         exchangeRate: new Money({ units: 60 }),
         amount: 5,
-        purchaseFee: new Money({ units: 1 }),
-        serviceFee: new Money({ units: 2 })
+        purchaseFee: new Money({ units: 3 })
       }),
       new SecurityTransaction({
         id: 1000,
@@ -120,8 +247,7 @@ describe('SecurityRepoprtComponent', () => {
         price: new Money({ units: 12 }),
         exchangeRate: new Money({ units: 55 }),
         amount: 1,
-        purchaseFee: new Money({ units: 0 }),
-        serviceFee: new Money({ units: 1 })
+        purchaseFee: new Money({ units: 1 })
       })
     ];
     let component = new SecurityReportComponent(userdata);

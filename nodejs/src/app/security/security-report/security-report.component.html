@@ -23,7 +23,7 @@
       </tr>
       <tr *ngFor="let securityReport of securityReports"
           [ngClass]="{
-              'sold':securityReport.name.endsWith('sold'),
+              'sold':securityReport.name.endsWith('sold') || securityReport.sellDate.length > 0,
               'total':securityReport.buyDate.length == 0
           }">
         <td class="left">

@@ -1132,9 +1132,6 @@ export interface ISecurityTransaction {
 
     /** SecurityTransaction purchaseFee */
     purchaseFee: IMoney;
-
-    /** SecurityTransaction serviceFee */
-    serviceFee: IMoney;
 }
 
 /** Represents a SecurityTransaction. */
@@ -1172,9 +1169,6 @@ export class SecurityTransaction implements ISecurityTransaction {
 
     /** SecurityTransaction purchaseFee. */
     public purchaseFee: IMoney;
-
-    /** SecurityTransaction serviceFee. */
-    public serviceFee: IMoney;
 
     /**
      * Creates a new SecurityTransaction instance using the specified properties.

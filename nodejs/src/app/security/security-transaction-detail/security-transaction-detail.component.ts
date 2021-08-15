@@ -36,7 +36,6 @@ export class SecurityTransactionDetailComponent implements OnInit, OnDestroy {
       this.securityTransaction.date = DateUtils.formatDate();
       this.securityTransaction.exchangeRate = new Money({ units: 1 });
       this.securityTransaction.purchaseFee = new Money({ units: 0 });
-      this.securityTransaction.serviceFee = new Money({ units: 0 });
     }
   }
 
@@ -47,7 +46,9 @@ export class SecurityTransactionDetailComponent implements OnInit, OnDestroy {
   }
 
   securities(): Security[] {
-    return this.userdata.securities().filter(x => x.isVisible);
+    return this.userdata.securities()
+      .filter(x => x.isVisible)
+      .sort((a, b) => a.name < b.name ? -1 : 1);
   }
 
   typesWithLabels(): any[] {
@@ -74,20 +75,6 @@ export class SecurityTransactionDetailComponent implements OnInit, OnDestroy {
     return this.securityTransaction.type == Type.BUY || this.securityTransaction.type == Type.SELL;
   }
 
-  maxAmount(): number {
-    const securityAmount = (type) => {
-      return this.userdata.securityTransactions()
-        .filter(x => x.securityId == this.securityTransaction.securityId && x.type == type)
-        .map(x => x.amount)
-        .reduce((a, b) => a + b, 0);
-    }
-    if (!this.securityTransaction.securityId) {
-      return Number.MAX_VALUE;
-    } else {
-      return securityAmount(Type.BUY) - securityAmount(Type.SELL);
-    }
-  }
-
   isValidForm(): boolean {
     return this.securityTransaction.date.length > 0
       && this.securityTransaction.securityId > 0
@@ -98,10 +85,7 @@ export class SecurityTransactionDetailComponent implements OnInit, OnDestroy {
       && (this.securityTransaction.exchangeRate.units > 0 || this.securityTransaction.exchangeRate.micros > 0)
       && this.securityTransaction.amount > 0
       && this.securityTransaction.purchaseFee
-      && (this.securityTransaction.purchaseFee.units >= 0 || this.securityTransaction.purchaseFee.micros >= 0)
-      && this.securityTransaction.serviceFee
-      && (this.securityTransaction.serviceFee.units >= 0 || this.securityTransaction.serviceFee.micros >= 0)
-      && (this.securityTransaction.type != Type.SELL || this.securityTransaction.amount <= this.maxAmount());
+      && (this.securityTransaction.purchaseFee.units >= 0 || this.securityTransaction.purchaseFee.micros >= 0);
   }
 
   update(securityTransaction: SecurityTransaction): void {

@@ -94,8 +94,7 @@ export class SecurityDetailComponent implements OnInit, OnDestroy {
     return this.security.name.length > 0
       && this.security.currencyId != 0
       && this.security.price
-      && this.security.price.units > 0
-      && this.security.price.micros >= 0
+      && (this.security.price.units > 0 || this.security.price.micros > 0)
       && this.security.exchangeRate
       && (this.security.exchangeRate.units > 0 || this.security.exchangeRate.micros > 0);
   }
