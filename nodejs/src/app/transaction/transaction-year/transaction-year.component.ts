@@ -69,7 +69,7 @@ export class TransactionYearComponent implements OnInit, OnDestroy {
     const types: Transaction.Type[] = [Transaction.Type.INCOME, Transaction.Type.EXPENSE];
     this.allTransactions = this.userdata.transactions()
       .filter(x => types.includes(Utils.type(x)))
-      .filter(x => !this.userdata.settings().noOffBudget || !x.offBudget)
+      .filter(x => !this.userdata.settings().noOffBudget || !x.offBudget);
     this.transactions = this.allTransactions
       .filter(x => {
         const accountId: number = Math.max(Number(x.accountIdFrom), Number(x.accountIdTo));
@@ -137,7 +137,7 @@ export class TransactionYearComponent implements OnInit, OnDestroy {
 
   findYearCategorySummary(year: Year, category: Category): Summary[] {
     const result: Summary[] = [];
-    const key: string = `${year.value},${category.id}`;
+    const key = `${year.value},${category.id}`;
     const summary: Summary = this.yearCategorySummaries.get(key);
     if (summary) {
       result.push(summary);
@@ -147,7 +147,7 @@ export class TransactionYearComponent implements OnInit, OnDestroy {
 
   findYearSubCategorySummary(year: Year, subCategory: SubCategory): Summary[] {
     const result: Summary[] = [];
-    const key: string = `${year.value},${subCategory.id}`;
+    const key = `${year.value},${subCategory.id}`;
     const summary: Summary = this.yearSubCategorySummaries.get(key);
     if (summary) {
       result.push(summary);

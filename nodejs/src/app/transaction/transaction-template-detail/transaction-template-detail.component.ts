@@ -29,8 +29,8 @@ export class TransactionTemplateDetailComponent implements OnInit, OnDestroy {
     showButtons: false,
     parentObservable: new Subject<any>()
   };
-  daysOfWeek: string = '';
-  daysOfMonth: string = '';
+  daysOfWeek = '';
+  daysOfMonth = '';
 
   ngOnInit(): void {
     this.transactionTemplate.transaction = new Transaction();
@@ -150,7 +150,7 @@ export class TransactionTemplateDetailComponent implements OnInit, OnDestroy {
 
 class TransactionFrequency {
   transaction: Transaction = new Transaction();
-  frequency: number = 0;
+  frequency = 0;
 
   updateFrequency(transactions: Transaction[]): void {
     const yearAgo: string = DateUtils.formatDate(DateUtils.addDays(new Date(), -365));

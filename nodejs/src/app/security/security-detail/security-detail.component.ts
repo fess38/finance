@@ -73,7 +73,7 @@ export class SecurityDetailComponent implements OnInit, OnDestroy {
     if (updatedSecurity.currencyId == this.userdata.settings().currencyId) {
       return;
     }
-    for (let security of this.userdata.securities()) {
+    for (const security of this.userdata.securities()) {
       if (updatedSecurity.currencyId == security.currencyId && updatedSecurity.id != security.id
         && (
           updatedSecurity.exchangeRate.units != security.exchangeRate.units

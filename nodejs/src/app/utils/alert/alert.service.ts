@@ -8,7 +8,7 @@ export class AlertService {
   constructor(private translate: TranslateService) {}
 
   private subject = new Subject<Alert>();
-  private defaultTimeout: number = 5000;
+  private defaultTimeout = 5000;
 
   getAlert(): Observable<any> {
     return this.subject.asObservable();

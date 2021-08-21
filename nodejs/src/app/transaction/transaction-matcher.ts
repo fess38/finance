@@ -2,7 +2,7 @@ import { Transaction } from '../core/model/model';
 
 export class TransactionMatcher {
   static match(template: Transaction, transaction: Transaction): boolean {
-    let result: boolean = true;
+    let result = true;
     if (template.accountIdFrom != transaction.accountIdFrom) {
       result = false;
     } else if (template.accountIdTo != transaction.accountIdTo) {

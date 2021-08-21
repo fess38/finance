@@ -36,13 +36,13 @@ export class SecurityReportComponent implements OnInit, OnDestroy {
   }
 
   private prepareSecurityReports(): SecurityReport[] {
-    let securityReports: SecurityReport[] = [];
+    const securityReports: SecurityReport[] = [];
     const securityTransactions = this.userdata.securityTransactions();
     this.processBuyTransactions(securityReports, securityTransactions);
     this.processSellTransactions(securityReports, securityTransactions);
     this.processCouponDividendTransactions(securityReports, securityTransactions);
 
-    for (let securityReport of securityReports) {
+    for (const securityReport of securityReports) {
       if (!securityReport.sellDate) {
         const security = this.userdata.findSecurity(securityReport.securityId);
         securityReport.income += (
@@ -77,14 +77,14 @@ export class SecurityReportComponent implements OnInit, OnDestroy {
 
   private processSellTransactions(securityReports: SecurityReport[],
                                   securityTransactions: SecurityTransaction[]): void {
-    let newSecurityReports: SecurityReport[] = [];
+    const newSecurityReports: SecurityReport[] = [];
     securityReports.sort((a, b) => a.buyDate < b.buyDate ? -1 : 1);
     for (const securityTransaction of securityTransactions) {
       if (securityTransaction.type != Type.SELL) {
         continue;
       }
       let sellAmount = securityTransaction.amount;
-      for (let securityReport of this.filterReports(securityReports, securityTransaction)) {
+      for (const securityReport of this.filterReports(securityReports, securityTransaction)) {
         if (sellAmount == 0) {
           continue;
         }
@@ -93,7 +93,7 @@ export class SecurityReportComponent implements OnInit, OnDestroy {
         if (securityReport.amount > sellAmount) {
           const totalAmount = securityReport.amount;
 
-          let newReport = new SecurityReport(securityReport);
+          const newReport = new SecurityReport(securityReport);
           newReport.amount -= sellAmount;
           newReport.expense *= (newReport.amount / totalAmount);
           newSecurityReports.push(newReport);
@@ -134,7 +134,7 @@ export class SecurityReportComponent implements OnInit, OnDestroy {
       );
       const expense = SecurityUtils.moneyToNumber(securityTransaction.purchaseFee) * exchangeRate;
       const amount = filteredReports.map(x => x.amount).reduce((a, b) => a + b, 0);
-      for (let report of filteredReports) {
+      for (const report of filteredReports) {
         report.income += income * report.amount / amount;
         report.expense += expense * report.amount / amount;
       }
@@ -167,9 +167,9 @@ export class SecurityReportComponent implements OnInit, OnDestroy {
   }
 
   private prepareFilteredSecurityReport(name: string, predicate: (x: SecurityReport) => boolean): SecurityReport {
-    let result = new SecurityReport({ name: name });
+    const result = new SecurityReport({ name: name });
     let sum = 0;
-    for (let securityReport of this.securityReports) {
+    for (const securityReport of this.securityReports) {
       if (securityReport.securityId && predicate(securityReport)) {
         result.days += securityReport.expense;
         result.amount += securityReport.amount;
@@ -185,9 +185,9 @@ export class SecurityReportComponent implements OnInit, OnDestroy {
   }
 
   private prepareCurrencySecurityReports(): SecurityReport[] {
-    let currencySecurityReports: SecurityReport[] = [];
+    const currencySecurityReports: SecurityReport[] = [];
 
-    let currencyIds = new Set<number>();
+    const currencyIds = new Set<number>();
     for (const securityReport of this.securityReports) {
       if (securityReport.buyDate && !securityReport.sellDate) {
         currencyIds.add(this.userdata.findSecurity(securityReport.securityId).currencyId);

@@ -5,7 +5,7 @@ import { SecurityReportComponent } from './security-report.component';
 import Type = SecurityTransaction.Type;
 
 describe('SecurityRepoprtComponent', () => {
-  let checkSecurityReport = (expected, actual) => {
+  const checkSecurityReport = (expected, actual) => {
     expect(expected.buyDate).toEqual(actual.buyDate);
     expect(expected.sellDate).toEqual(actual.sellDate);
     expect(expected.days).toEqual(actual.days);
@@ -59,8 +59,8 @@ describe('SecurityRepoprtComponent', () => {
         purchaseFee: new Money({ units: 1 })
       })
     ];
-    let component = new SecurityReportComponent(userdata);
-    let expected = new SecurityReport({
+    const component = new SecurityReportComponent(userdata);
+    const expected = new SecurityReport({
       securityId: 100,
       buyDate: '2021-05-01',
       sellDate: '2023-05-01',
@@ -71,7 +71,7 @@ describe('SecurityRepoprtComponent', () => {
       profit: 1775,
       annualProfit: 0.287
     });
-    let actual = (component as any).prepareSecurityReports()[0];
+    const actual = (component as any).prepareSecurityReports()[0];
     checkSecurityReport(expected, actual);
   });
 
@@ -118,8 +118,8 @@ describe('SecurityRepoprtComponent', () => {
         purchaseFee: new Money({ units: 10 })
       })
     ];
-    let component = new SecurityReportComponent(userdata);
-    let expected = [
+    const component = new SecurityReportComponent(userdata);
+    const expected = [
       new SecurityReport({
         securityId: 100,
         buyDate: '2022-05-01',
@@ -143,7 +143,7 @@ describe('SecurityRepoprtComponent', () => {
         annualProfit: 0.333
       })
     ];
-    let actual = (component as any).prepareSecurityReports();
+    const actual = (component as any).prepareSecurityReports();
     checkSecurityReport(expected[0], actual[0]);
     checkSecurityReport(expected[1], actual[1]);
   });
@@ -191,8 +191,8 @@ describe('SecurityRepoprtComponent', () => {
         purchaseFee: new Money({ units: 0 })
       })
     ];
-    let component = new SecurityReportComponent(userdata);
-    let expected = new SecurityReport({
+    const component = new SecurityReportComponent(userdata);
+    const expected = new SecurityReport({
         securityId: 100,
         buyDate: '2021-05-01',
         sellDate: '2022-05-01',
@@ -203,7 +203,7 @@ describe('SecurityRepoprtComponent', () => {
         profit: 0,
         annualProfit: 0
       });
-    let actual = (component as any).prepareSecurityReports()[0];
+    const actual = (component as any).prepareSecurityReports()[0];
     checkSecurityReport(expected, actual);
   });
 
@@ -250,8 +250,8 @@ describe('SecurityRepoprtComponent', () => {
         purchaseFee: new Money({ units: 1 })
       })
     ];
-    let component = new SecurityReportComponent(userdata);
-    let expected = [
+    const component = new SecurityReportComponent(userdata);
+    const expected = [
       new SecurityReport({
         securityId: 100,
         buyDate: '2021-05-01',
@@ -274,7 +274,7 @@ describe('SecurityRepoprtComponent', () => {
         annualProfit: 3.75
       })
     ];
-    let actual = (component as any).prepareSecurityReports();
+    const actual = (component as any).prepareSecurityReports();
     checkSecurityReport(expected[0], actual[0]);
     checkSecurityReport(expected[1], actual[1]);
   });

@@ -1,14 +1,14 @@
-var express = require('express');
-var compression = require('compression');
-var httpProxy = require('http-proxy');
-var bodyParser = require('body-parser');
+let express = require('express');
+let compression = require('compression');
+let httpProxy = require('http-proxy');
+let bodyParser = require('body-parser');
 
 httpProxy.prototype.onError = function(err) {
   console.error(err);
 };
-var apiProxy = httpProxy.createProxyServer({ changeOrigin: true });
+let apiProxy = httpProxy.createProxyServer({ changeOrigin: true });
 
-var server = express();
+let server = express();
 server.set('port', process.env.PORT || 4200);
 server.use(compression());
 server.use(express.static(__dirname + '/dist'));

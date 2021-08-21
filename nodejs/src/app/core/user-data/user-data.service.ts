@@ -20,7 +20,7 @@ export class UserDataService {
   private enricher = new UserDataEnricherService();
   private isInit = new AsyncSubject<boolean>();
   private ds = new DataStorage();
-  private isReadOnly_: boolean = true;
+  private isReadOnly_ = true;
 
   subscribeOnInit(callback): Subscription {
     return this.isInit.subscribe(() => callback());

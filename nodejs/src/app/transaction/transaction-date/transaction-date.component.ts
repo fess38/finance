@@ -149,7 +149,7 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
 
   findDateCategorySummary(date: Date_, category: Category): Summary[] {
     const result: Summary[] = [];
-    const key: string = `${DateUtils.formatDate_(date)},${category.id}`;
+    const key = `${DateUtils.formatDate_(date)},${category.id}`;
     const summary: Summary = this.dateCategorySummaries.get(key);
     if (summary) {
       result.push(summary);
@@ -159,7 +159,7 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
 
   findDateSubCategorySummary(date: Date_, subCategory: SubCategory): Summary[] {
     const result: Summary[] = [];
-    const key: string = `${DateUtils.formatDate_(date)},${subCategory.id}`;
+    const key = `${DateUtils.formatDate_(date)},${subCategory.id}`;
     const summary: Summary = this.dateSubCategorySummaries.get(key);
     if (summary) {
       result.push(summary);

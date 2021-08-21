@@ -2,7 +2,7 @@ import { Transaction, TransactionTemplate } from '../core/model/model';
 import { TransactionTemplateResolver } from './transaction-template-resolver';
 
 describe('TransactionTemplateResolver', () => {
-  let resolver = new TransactionTemplateResolver();
+  const resolver = new TransactionTemplateResolver();
 
   const createTransaction = (id: number, created: string, accountIdFrom: number,
                              accountIdTo: number, amountFrom: number, amountTo: number,
