@@ -5612,4 +5612,18 @@ export const EntityType = $root.EntityType = (() => {
     return values;
 })();
 
+/**
+ * AppMode enum.
+ * @exports AppMode
+ * @enum {number}
+ * @property {number} FINANCE=0 FINANCE value
+ * @property {number} NOTES=1 NOTES value
+ */
+export const AppMode = $root.AppMode = (() => {
+    const valuesById = {}, values = Object.create(valuesById);
+    values[valuesById[0] = "FINANCE"] = 0;
+    values[valuesById[1] = "NOTES"] = 1;
+    return values;
+})();
+
 export { $root as default };

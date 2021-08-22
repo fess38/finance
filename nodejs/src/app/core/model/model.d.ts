@@ -1978,3 +1978,9 @@ export enum EntityType {
     SECURITY = 10,
     SECURITY_TRANSACTION = 11
 }
+
+/** AppMode enum. */
+export enum AppMode {
+    FINANCE = 0,
+    NOTES = 1
+}

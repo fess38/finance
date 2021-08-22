@@ -70,7 +70,7 @@ export class UserDataService {
     if (this.translate) {
       this.translate.setDefaultLang('ru');
       this.translate.use(this.locale());
-      this.translate.get('main_menu.title').subscribe(x => this.titleService.setTitle(x));
+      this.translate.get('main_page.title').subscribe(x => this.titleService.setTitle(x));
     }
   }
 

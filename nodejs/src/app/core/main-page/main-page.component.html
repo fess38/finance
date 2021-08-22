@@ -1,1 +1,35 @@
-<label></label>
+<clr-main-container class="main-container">
+  <clr-header>
+    <div class="header-nav" [clr-nav-level]="1">
+      <a routerLink="/"
+           class="nav-link nav-text"
+           (click)="setFinance()"
+           [ngClass]="{'active':isFinance()}">
+        <span>{{'main_page.finance' | translate}}</span>
+      </a>
+      <a routerLink="/"
+           class="nav-link nav-text"
+           (click)="setNotes()"
+           [ngClass]="{'active':isNotes()}">
+        <span>{{'main_page.notes' | translate}}</span>
+      </a>
+    </div>
+    <div class="header-actions">
+      <clr-dropdown>
+        <button class="nav-icon" clrDropdownTrigger>
+          <cds-icon shape="cog" [attr.badge]="isOnline ? 'success' : 'danger'"></cds-icon>
+        </button>
+        <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+          <a routerLink="/settings" clrDropdownItem>{{'main_page.settings' | translate}}</a>
+          <span (click)="signout()" clrDropdownItem>{{'main_page.exit' | translate}}</span>
+        </clr-dropdown-menu>
+      </clr-dropdown>
+    </div>
+  </clr-header>
+  <div class="content-container">
+    <finance-sidenav *ngIf="isFinance()"></finance-sidenav>
+    <div class="content-area">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</clr-main-container>

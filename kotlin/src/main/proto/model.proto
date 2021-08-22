@@ -221,3 +221,8 @@ enum EntityType {
     SECURITY_TRANSACTION = 11;
     // new entity
 }
+
+enum AppMode {
+    FINANCE = 0;
+    NOTES = 1;
+}
