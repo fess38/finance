@@ -8,8 +8,8 @@ import { TransactionCriteriaService as Criteria } from '../transaction-criteria.
 import { TransactionUtils } from '../transaction-utils';
 
 @Component({
-  templateUrl: 'transaction-detail.component.html',
-  selector: 'tranaction-detail'
+  selector: 'app-transaction-detail',
+  templateUrl: 'transaction-detail.component.html'
 })
 export class TransactionDetailComponent implements OnInit, OnDestroy {
   constructor(private userdata: UserDataService,

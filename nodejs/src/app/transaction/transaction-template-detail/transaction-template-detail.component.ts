@@ -77,13 +77,7 @@ export class TransactionTemplateDetailComponent implements OnInit, OnDestroy {
   update(transactionTemplate: TransactionTemplate): void {
     if (transactionTemplate.id == 0) {
       this.userdata.saveTransactionTemplate(transactionTemplate)
-        .then(() => {
-          this.transactionTemplate.name = '';
-          this.transactionTemplate.interval = 0;
-          this.transactionTemplate.daysOfWeek = [];
-          this.transactionTemplate.daysOfMonth = [];
-          this.router.navigate(['/transaction_template']);
-        })
+        .then(() => this.router.navigate(['/transaction_template/' + this.transactionTemplate.id]))
         .catch(error => {
           console.error(error.message);
           this.router.navigate(['/error']);

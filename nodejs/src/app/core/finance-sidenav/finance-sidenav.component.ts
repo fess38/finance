@@ -4,7 +4,7 @@ import { TransactionCriteriaService } from '../../transaction/transaction-criter
 import { Transaction } from '../model/model';
 
 @Component({
-  selector: 'finance-sidenav',
+  selector: 'app-finance-sidenav',
   templateUrl: 'finance-sidenav.component.html'
 })
 export class FinanceSidenavComponent {

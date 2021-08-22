@@ -5,7 +5,7 @@ import { AppMode } from '../model/model';
 import { UserDataService } from '../user-data/user-data.service';
 
 @Component({
-  selector: 'main-page',
+  selector: 'app-main-page',
   templateUrl: 'main-page.component.html'
 })
 export class MainPageComponent implements OnInit, OnDestroy {
