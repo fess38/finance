@@ -7,3 +7,27 @@
 td, th {
   white-space: nowrap;
 }
+
+/* for clrVerticalNavLink */
+a span .nav-text {
+  font-weight: normal;
+  margin-left: 10px;
+}
+
+/* for separate nav and content scrolling */
+.content-container {
+  height: 98%;
+}
+
+.app-sidenav {
+  background-color: #F2F2F2;
+  float: left;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.content-area {
+  float: left;
+  height: 100%;
+  overflow-y: auto;
+}

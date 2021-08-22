@@ -5,7 +5,8 @@ import { Transaction } from '../model/model';
 
 @Component({
   selector: 'app-finance-sidenav',
-  templateUrl: 'finance-sidenav.component.html'
+  templateUrl: 'finance-sidenav.component.html',
+  styleUrls: ['finance-sidenav.component.css']
 })
 export class FinanceSidenavComponent {
   constructor(private criteria: TransactionCriteriaService, private router: Router) {}
