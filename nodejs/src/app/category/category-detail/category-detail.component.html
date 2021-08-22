@@ -5,11 +5,11 @@
         <button type="button" class="btn btn-icon btn-link" routerLink="/category">
           <cds-icon shape="undo"></cds-icon>
         </button>
-        <span [hidden]="!isNewCategory()">
-          {{'category_detail.add' | translate}}
+        <span [hidden]="!(category | isNewEntity)">
+          {{'category.add' | translate}}
         </span>
-        <span [hidden]="isNewCategory()">
-          {{'category_detail.edit' | translate}}
+        <span [hidden]="category | isNewEntity">
+          {{'category.edit' | translate}}
         </span>
       </label>
     </div>
@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="clr-form-control clr-row">
-      <label>{{'category_detail.type' | translate}}</label>
+      <label>{{'category.type' | translate}}</label>
       <div class="clr-control-container clr-control-inline">
         <div class="clr-checkbox-wrapper">
           <input type="checkbox"
@@ -30,7 +30,7 @@
                  name="incomeCheckbox"
                  class="clr-checkbox"
                  [(ngModel)]="category.isIncome"
-                 [disabled]="!isNewCategory()"/>
+                 [disabled]="!(category | isNewEntity)"/>
           <label for="category-income">{{'common.income' | translate}}</label>
         </div>
         <span>&nbsp;&nbsp;</span>
@@ -40,12 +40,12 @@
                  name="expenseCheckbox"
                  class="clr-checkbox"
                  [(ngModel)]="category.isExpense"
-                 [disabled]="!isNewCategory()"/>
+                 [disabled]="!(category | isNewEntity)"/>
           <label for="category-expense">{{'common.expense' | translate}}</label>
         </div>
       </div>
     </div>
-    <div class="clr-form-control clr-row" [hidden]="isNewCategory()">
+    <div class="clr-form-control clr-row" [hidden]="category | isNewEntity">
       <div class="clr-control-container">
         <div class="clr-checkbox-wrapper">
           <input type="checkbox"
@@ -60,7 +60,7 @@
       </div>
     </div>
     <div class="clr-form-control clr-row"
-         [hidden]="isNewCategory()"
+         [hidden]="category | isNewEntity"
          (click)="viewTransactions(category)">
       <label>
         {{'common.amount' | translate}}: {{category.transactionAmount}}
@@ -69,13 +69,13 @@
     <div class="clr-form-control clr-row">
       <button class="btn btn-primary btn-sm btn-block"
               (click)="update(category)"
-              [disabled]="!isValidForm() || isReadOnly()">
+              [disabled]="!isValidForm() || ('' | isReadOnly)">
         {{'common.save' | translate}}
       </button>
       <button class="btn btn-danger btn-sm btn-block"
               (click)="delete(category)"
-              [hidden]="isNewCategory()"
-              [disabled]="hasLinkedEntities() || isReadOnly()">
+              [hidden]="category | isNewEntity"
+              [disabled]="hasLinkedEntities() || ('' | isReadOnly)">
         {{'common.delete' | translate}}
       </button>
     </div>

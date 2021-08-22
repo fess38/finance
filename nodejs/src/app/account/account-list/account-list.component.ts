@@ -11,12 +11,4 @@ export class AccountListComponent {
   accounts(): Account[] {
     return this.userdata.accounts().sort((a, b) => a.name < b.name ? -1 : 1);
   }
-
-  locale(): string {
-    return this.userdata.locale();
-  }
-
-  currencySymbol(account: Account): String {
-    return this.userdata.findCurrency(account.currencyId).symbol;
-  }
 }

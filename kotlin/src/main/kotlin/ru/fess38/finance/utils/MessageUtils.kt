@@ -22,6 +22,8 @@ val Message.type: EntityType
     is FamilyMember -> FAMILY_MEMBER
     is Transaction -> TRANSACTION
     is TransactionTemplate -> TRANSACTION_TEMPLATE
+    is Security -> SECURITY
+    is SecurityTransaction -> SECURITY_TRANSACTION
     // new entity
     else -> throw IllegalArgumentException("Unknown entity: $this")
   }
@@ -35,8 +37,8 @@ val Message.isDeleted: Boolean
     is FamilyMember -> this.isDeleted
     is Transaction -> this.isDeleted
     is TransactionTemplate -> this.isDeleted
+    is Security -> this.isDeleted
+    is SecurityTransaction -> this.isDeleted
     // new entity
     else -> throw IllegalArgumentException("Unknown entity: $this")
   }
-
-fun createTextHolder(value: String = "") = TextHolder.newBuilder().setValue(value).build()!!

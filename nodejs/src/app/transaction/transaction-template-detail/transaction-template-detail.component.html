@@ -5,11 +5,11 @@
         <button type="button" class="btn btn-icon btn-link" (click)="viewTransactionTemplates()">
           <cds-icon shape="undo"></cds-icon>
         </button>
-        <span [hidden]="!isNewTransactionTemplate()">
-          {{'transaction_template_detail.add' | translate}}
+        <span [hidden]="!(transactionTemplate | isNewEntity)">
+          {{'transaction_template.add' | translate}}
         </span>
-        <span [hidden]="isNewTransactionTemplate()">
-          {{'transaction_template_detail.edit' | translate}}
+        <span [hidden]="transactionTemplate | isNewEntity">
+          {{'transaction_template.edit' | translate}}
         </span>
       </label>
     </div>
@@ -23,9 +23,9 @@
     </div>
     <div class="clr-form-control clr-row">
       <label>
-        <span>{{'transaction_template_detail.interval' | translate}} </span>
+        <span>{{'transaction_template.interval' | translate}} </span>
         <span [hidden]="this.transactionFrequency.frequency == 0">
-          ({{'transaction_template_detail.average' | translate}} {{this.transactionFrequency.frequency}})
+          ({{'transaction_template.average' | translate}} {{this.transactionFrequency.frequency}})
         </span>
       </label>
       <div class="clr-control-container">
@@ -40,7 +40,7 @@
       </div>
     </div>
     <div class="clr-form-control clr-row">
-      <label>{{'transaction_template_detail.days_of_week' | translate}}</label>
+      <label>{{'transaction_template.days_of_week' | translate}}</label>
       <div class="clr-control-container">
         <div class="clr-input-wrapper">
           <input type="text"
@@ -54,7 +54,7 @@
       </div>
     </div>
     <div class="clr-form-control clr-row">
-      <label>{{'transaction_template_detail.days_of_month' | translate}}</label>
+      <label>{{'transaction_template.days_of_month' | translate}}</label>
       <div class="clr-control-container">
         <div class="clr-input-wrapper">
           <input type="text"
@@ -76,13 +76,13 @@
     <div class="clr-form-control clr-row">
       <button class="btn btn-primary btn-sm btn-block"
               (click)="update(transactionTemplate)"
-              [disabled]="!isValidForm() || isReadOnly()">
+              [disabled]="!isValidForm() || ('' | isReadOnly)">
         {{'common.save' | translate}}
       </button>
       <button class="btn btn-danger btn-sm btn-block"
               (click)="delete(transactionTemplate)"
-              [hidden]="isNewTransactionTemplate()"
-              [disabled]="!isValidForm() || isReadOnly()">
+              [hidden]="transactionTemplate | isNewEntity"
+              [disabled]="!isValidForm() || ('' | isReadOnly)">
         {{'common.delete' | translate}}
       </button>
     </div>

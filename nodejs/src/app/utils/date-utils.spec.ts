@@ -31,4 +31,9 @@ describe('DateUtils', () => {
     const expected = 31;
     expect(expected).toEqual(DateUtils.dates(2020, 3).length);
   });
+
+  it('should return 2021-03-05', () => {
+    const expected = '2021-03-09';
+    expect(expected).toEqual(DateUtils.formatDate(DateUtils.addDays(DateUtils.parseDate('2021-02-01'), 36)));
+  });
 });

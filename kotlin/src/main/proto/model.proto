@@ -8,9 +8,9 @@ message IdHolder {
     optional int64 to = 2;
 }
 
-message Dump {
+message DataStorage {
     optional IdHolder id_holder = 9;
-    required Settings settings = 7;
+    optional Settings settings = 7;
     repeated Currency currencies = 1;
     repeated Account accounts = 2;
     repeated Category categories = 3;
@@ -18,6 +18,8 @@ message Dump {
     repeated FamilyMember family_members = 5;
     repeated Transaction transactions = 6;
     repeated TransactionTemplate transactionTemplates = 8;
+    repeated Security securities = 10;
+    repeated SecurityTransaction security_transactions = 11;
     // new entity
 }
 
@@ -102,6 +104,51 @@ message TransactionTemplate {
     repeated int32 days_of_month = 7;
 }
 
+message Security {
+    optional int64 id = 1 [default = 0];
+    optional bool is_deleted = 2 [default = false];
+    optional bool is_visible = 3 [default = true];
+    optional int64 transaction_amount = 4 [default = 0];
+    required string name = 5;
+    required int64 currency_id = 6;
+    required Money price = 7;
+    required Money exchange_rate = 8;
+    optional int64 amount = 9 [default = 0];
+}
+
+message SecurityTransaction {
+    optional int64 id = 1 [default = 0];
+    optional bool is_deleted = 2 [default = false];
+    required string date = 3;
+    required int64 security_id = 4;
+    required Type type = 5;
+    required Money price = 6;
+    required Money exchange_rate = 7;
+    optional int64 amount = 8 [default = 1];
+    required Money purchase_fee = 9;
+
+    enum Type {
+        UNDEFINED = 0;
+        BUY = 1;
+        SELL = 2;
+        DIVIDENDS = 3;
+        COUPON = 4;
+    }
+}
+
+message SecurityReport {
+    optional string name = 1;
+    optional int64 security_id = 2;
+    optional string buy_date = 3;
+    optional string sell_date = 4;
+    optional int64 days = 5;
+    optional int64 amount = 6;
+    optional double income = 7;
+    optional double expense = 8;
+    optional double profit = 9;
+    optional double annual_profit = 10;
+}
+
 // new entity
 
 message Settings {
@@ -154,8 +201,9 @@ message Summary {
     optional bool use_in_share = 3 [default = true];
 }
 
-message TextHolder {
-    optional string value = 1;
+message Money {
+    required int64 units = 1;
+    optional int32 micros = 2 [default = 0];
 }
 
 enum EntityType {
@@ -169,5 +217,7 @@ enum EntityType {
     TRANSACTION = 6;
     TRANSACTION_ARCHIVE = 8;
     TRANSACTION_TEMPLATE = 9;
+    SECURITY = 10;
+    SECURITY_TRANSACTION = 11;
     // new entity
 }

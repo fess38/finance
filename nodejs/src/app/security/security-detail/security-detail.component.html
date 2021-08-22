@@ -1,0 +1,102 @@
+<div class="clr-row clr-col-12 clr-col-lg-6">
+  <form class="clr-form">
+    <div class="clr-form-control clr-row">
+      <label>
+        <button type="button" class="btn btn-icon btn-link" routerLink="/security">
+          <cds-icon shape="undo"></cds-icon>
+        </button>
+        <span [hidden]="!(security | isNewEntity)">
+          {{'security.add' | translate}}
+        </span>
+        <span [hidden]="security | isNewEntity">
+          {{'security.edit' | translate}}
+        </span>
+      </label>
+    </div>
+    <div class="clr-form-control clr-row">
+      <label>{{'common.name' | translate}}</label>
+      <div class="clr-control-container">
+        <div class="clr-input-wrapper">
+          <input type="text" name="name" class="clr-input" [(ngModel)]="security.name"/>
+        </div>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row">
+      <label>{{'common.currency' | translate}}</label>
+      <div class="clr-control-container">
+        <div class="clr-select-wrapper">
+          <select name="currencyId"
+                  class="clr-select"
+                  required
+                  [(ngModel)]="security.currencyId"
+                  [disabled]="!(security | isNewEntity)">
+            <option disabled>{{'common.currency' | translate}}</option>
+            <option *ngFor="let currency of currencies()" [ngValue]="currency.id">
+              {{currency | currencyName}} ({{currency.symbol}})
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row">
+      <label>{{'common.price' | translate}}</label>
+      <div class="clr-control-container">
+        <div class="clr-input-wrapper">
+          <input type="number"
+                 name="price"
+                 class="clr-input"
+                 pattern="\d+(\.?\d+)?"
+                 min="0"
+                 [ngModel]="security.price | encodeMoney"
+                 (ngModelChange)="security.price=valueToMoney($event)"/>
+        </div>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row" *ngIf="isDifferentCurrency()">
+      <label>{{'common.exchange_rate' | translate}}</label>
+      <div class="clr-control-container">
+        <div class="clr-input-wrapper">
+          <input type="number"
+                 name="exchangeRate"
+                 class="clr-input"
+                 pattern="\d+(\.?\d+)?"
+                 min="0"
+                 [ngModel]="security.exchangeRate | encodeMoney"
+                 (ngModelChange)="security.exchangeRate=valueToMoney($event)"/>
+        </div>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row" [hidden]="security | isNewEntity">
+      <div class="clr-control-container">
+        <div class="clr-checkbox-wrapper">
+          <input type="checkbox"
+                 id="security-is-visible"
+                 name="isVisible"
+                 class="clr-checkbox"
+                 [(ngModel)]="security.isVisible"/>
+          <label for="security-is-visible">
+            {{'common.use_in_transactions' | translate}}
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row" [hidden]="security | isNewEntity">
+      <label>
+        {{'security.transaction_amount' | translate}}: {{security.transactionAmount}}
+      </label>
+    </div>
+    <div class="clr-form-control clr-row">
+      <button class="btn btn-primary btn-sm btn-block"
+              (click)="update(security)"
+              [disabled]="!isValidForm() || ('' | isReadOnly)">
+        {{'common.save' | translate}}
+      </button>
+      <button class="btn btn-danger btn-sm btn-block"
+              (click)="delete(security)"
+              [hidden]="security | isNewEntity"
+              [disabled]="hasTransations() || ('' | isReadOnly)">
+        {{'common.delete' | translate}}
+      </button>
+    </div>
+  </form>
+</div>

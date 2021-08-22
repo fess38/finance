@@ -15,7 +15,7 @@ interface MessageService {
 
   fun delete()
 
-  fun dump(modifiedAfter: Long): Dump
+  fun dataStorage(modifiedAfter: Long): DataStorage
 
   fun isExist(id: Long, type: EntityType): Boolean
 

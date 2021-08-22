@@ -9,7 +9,7 @@
           <cds-icon shape="cog" [attr.badge]="isOnline ? 'success' : 'danger'" ></cds-icon>
         </button>
         <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-          <a routerLink="/settings" clrDropdownItem>{{'common.settings' | translate}}</a>
+          <a routerLink="/settings" clrDropdownItem>{{'main_menu.settings' | translate}}</a>
           <span (click)="signout()" clrDropdownItem>{{'main_menu.exit' | translate}}</span>
         </clr-dropdown-menu>
       </clr-dropdown>
@@ -21,9 +21,21 @@
     </div>
     <nav class="sidenav" [clr-nav-level]="1">
       <section class="sidenav-content">
-        <a class="nav-link" routerLink="/transaction/new">
-          {{'main_menu.add_transaction' | translate}}
-        </a>
+        <section class="nav-group">
+          <label>{{'main_menu.add_transaction' | translate}}</label>
+          <ul class="nav-list">
+            <li>
+              <a class="nav-link" routerLink="/transaction/new">
+                {{'main_menu.add_transaction_with_account' | translate}}
+              </a>
+            </li>
+            <li>
+              <a class="nav-link" routerLink="/security_transaction/new">
+                {{'main_menu.add_transaction_with_security' | translate}}
+              </a>
+            </li>
+          </ul>
+        </section>
         <section class="nav-group">
           <label>{{'main_menu.transaction' | translate}}</label>
           <ul class="nav-list">
@@ -57,6 +69,11 @@
                 {{'main_menu.search' | translate}}
               </a>
             </li>
+            <li>
+              <a class="nav-link" routerLink="/security_transaction">
+                {{'main_menu.investment' | translate}}
+              </a>
+            </li>
           </ul>
         </section>
         <section class="nav-group">
@@ -75,6 +92,11 @@
             <li>
               <a class="nav-link" routerLink="/report/year">
                 {{'main_menu.year_report' | translate}}
+              </a>
+            </li>
+            <li>
+              <a class="nav-link" routerLink="/report/security">
+                {{'main_menu.security_report' | translate}}
               </a>
             </li>
           </ul>
@@ -100,6 +122,11 @@
             <li>
               <a class="nav-link" routerLink="/family_member">
                 {{'main_menu.family_member' | translate}}
+              </a>
+            </li>
+            <li>
+              <a class="nav-link" routerLink="/security">
+                {{'main_menu.security' | translate}}
               </a>
             </li>
           </ul>

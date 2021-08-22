@@ -93,7 +93,7 @@ export class TransactionYearComponent implements OnInit, OnDestroy {
       const category = this.userdata.findCategory(+key.split(',')[1]);
       const amount: number = value
         .map(x => Math.max(Number(x.amountFrom), Number(x.amountTo)))
-        .reduce((x1, x2) => x1 + x2, 0);
+        .reduce((a, b) => a + b, 0);
       const sum: number = category.isIncome ? this.income : this.expense;
       this.yearCategorySummaries.set(key, new Summary({ amount: amount, share: amount / sum }));
     });
@@ -113,7 +113,7 @@ export class TransactionYearComponent implements OnInit, OnDestroy {
       const category = this.userdata.findCategory(subCategory.categoryId);
       const amount: number = value
         .map(x => Math.max(Number(x.amountFrom), Number(x.amountTo)))
-        .reduce((x1, x2) => x1 + x2, 0);
+        .reduce((a, b) => a + b, 0);
       const sum: number = category.isIncome ? this.income : this.expense;
       this.yearSubCategorySummaries.set(key, new Summary({ amount: amount, share: amount / sum }));
     });
@@ -129,14 +129,10 @@ export class TransactionYearComponent implements OnInit, OnDestroy {
     group.forEach((value, key) => {
       const amount: number = value
         .map(x => Math.abs(Number(x.amountFrom)) + Math.abs(Number(x.amountTo)))
-        .reduce((x1, x2) => x1 + x2, 0);
+        .reduce((a, b) => a + b, 0);
       result.set(+key, new Summary({ amount: amount, share: amount / sum }));
     });
     return result;
-  }
-
-  locale(): string {
-    return this.userdata.locale();
   }
 
   findYearCategorySummary(year: Year, category: Category): Summary[] {

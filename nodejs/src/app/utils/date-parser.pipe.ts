@@ -2,10 +2,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { DateUtils } from './date-utils';
 
 @Pipe({
-  name: 'createdFormat'
+  name: 'parseDate'
 })
-export class CreatedFormatPipe implements PipeTransform {
-  transform(created: string, args?: any): any {
+export class DateParserPipe implements PipeTransform {
+  transform(created: string): any {
     return DateUtils.parseDate(created);
   }
 }

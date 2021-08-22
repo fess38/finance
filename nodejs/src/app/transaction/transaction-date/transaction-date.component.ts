@@ -94,7 +94,7 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
       const category = this.userdata.findCategory(+key.split(',')[1]);
       const amount: number = value
         .map(x => Math.max(Number(x.amountFrom), Number(x.amountTo)))
-        .reduce((x1, x2) => x1 + x2, 0);
+        .reduce((a, b) => a + b, 0);
       const sum: number = category.isIncome ? this.income : this.expense;
       this.dateCategorySummaries.set(key, new Summary({ amount: amount, share: amount / sum }));
     });
@@ -114,7 +114,7 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
         const category = this.userdata.findCategory(subCategory.categoryId);
         const amount: number = value
           .map(x => Math.max(Number(x.amountFrom), Number(x.amountTo)))
-          .reduce((x1, x2) => x1 + x2, 0);
+          .reduce((a, b) => a + b, 0);
         const sum: number = category.isIncome ? this.income : this.expense;
         this.dateSubCategorySummaries.set(key, new Summary({ amount: amount, share: amount / sum }));
       });
@@ -127,7 +127,7 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
     group.forEach((value, key: string) => {
       const amount: number = value
         .map(x => Math.abs(Number(x.amountFrom)) + Math.abs(Number(x.amountTo)))
-        .reduce((x1, x2) => x1 + x2, 0);
+        .reduce((a, b) => a + b, 0);
       result.set(key, new Summary({ amount: amount, share: amount / sum }));
     });
     return result;
@@ -145,10 +145,6 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
 
   month(): Month {
     return new Month({ year: this.criteria.year, month: this.criteria.month });
-  }
-
-  locale(): string {
-    return this.userdata.locale();
   }
 
   findDateCategorySummary(date: Date_, category: Category): Summary[] {

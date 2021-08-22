@@ -6,7 +6,7 @@ export class TransactionUtils {
   static typesWithLabels = [
     { type: Type.INCOME, label: 'common.income' },
     { type: Type.EXPENSE, label: 'common.expense' },
-    { type: Type.TRANSFER, label: 'transaction_detail.transfer' }
+    { type: Type.TRANSFER, label: 'transaction.transfer' }
   ];
 
   static type(transaction: Transaction): Type {
@@ -48,13 +48,13 @@ export class TransactionUtils {
   }
 
   static income(transactions: Transaction[]): number {
-    return transactions.map(x => Number(x.amountTo)).reduce((x1, x2) => x1 + x2, 0);
+    return transactions.map(x => Number(x.amountTo)).reduce((a, b) => a + b, 0);
   }
 
   static expense(transactions: Transaction[]): number {
     return transactions
       .map(x => Number(x.amountFrom))
-      .reduce((x1, x2) => x1 + x2, 0);
+      .reduce((a, b) => a + b, 0);
   }
 
   static incomeTransactions(transactions: Transaction[]): Transaction[] {
@@ -73,7 +73,7 @@ export class TransactionUtils {
     group.forEach((value, key) => {
       const amount: number = value
         .map(x => Math.abs(Number(x.amountFrom)) + Math.abs(Number(x.amountTo)))
-        .reduce((x1, x2) => x1 + x2, 0);
+        .reduce((a, b) => a + b, 0);
       const sum = this.type(value[0]) == Type.INCOME ? income : expense;
       result.set(+key, new Summary({ amount: amount, share: amount / sum }));
     });
@@ -90,7 +90,7 @@ export class TransactionUtils {
     group.forEach((value, key) => {
       const amount: number = value
         .map(x => Math.abs(Number(x.amountFrom)) + Math.abs(Number(x.amountTo)))
-        .reduce((x1, x2) => x1 + x2, 0);
+        .reduce((a, b) => a + b, 0);
       const sum = this.type(value[0]) == Type.INCOME ? income : expense;
       result.set(+key, new Summary({ amount: amount, share: amount / sum }));
     });

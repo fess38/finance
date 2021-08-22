@@ -4,8 +4,8 @@ import { interval, Subject, Subscription } from 'rxjs';
 import { Transaction, TransactionTemplate } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 import { DateUtils } from '../../utils/date-utils';
-import { TransactionMatcher } from '../../utils/transaction-matcher';
 import { TransactionDetailContext } from '../transaction-detail/transaction-detail.component';
+import { TransactionMatcher } from '../transaction-matcher';
 
 @Component({
   templateUrl: 'transaction-template-detail.component.html'
@@ -74,10 +74,6 @@ export class TransactionTemplateDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  isReadOnly(): boolean {
-    return this.userdata.isReadOnly();
-  }
-
   update(transactionTemplate: TransactionTemplate): void {
     if (transactionTemplate.id == 0) {
       this.userdata.saveTransactionTemplate(transactionTemplate)
@@ -114,10 +110,6 @@ export class TransactionTemplateDetailComponent implements OnInit, OnDestroy {
 
   transaction(): Transaction {
     return this.transactionTemplate.transaction as Transaction;
-  }
-
-  isNewTransactionTemplate(): boolean {
-    return this.transactionTemplate.id == 0;
   }
 
   isValidForm(): boolean {

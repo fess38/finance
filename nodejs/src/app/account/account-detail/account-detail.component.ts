@@ -1,22 +1,21 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Account, Currency, Settings, Transaction } from '../../core/model/model';
+import { Account, Currency, Transaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 import { DateUtils } from '../../utils/date-utils';
-import Language = Settings.Language;
 
 @Component({
   templateUrl: 'account-detail.component.html'
 })
 export class AccountDetailComponent implements OnInit, OnDestroy {
-  private subscription: Subscription;
-  account = new Account();
-  updatedBalance: number = undefined;
-
   constructor(private userdata: UserDataService,
               private route: ActivatedRoute,
               private router: Router) {}
+
+  private subscription: Subscription;
+  account = new Account();
+  updatedBalance: number = undefined;
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -39,16 +38,8 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  isReadOnly(): boolean {
-    return this.userdata.isReadOnly();
-  }
-
   currencies(): Currency[] {
     return this.userdata.currencies();
-  }
-
-  language(): string {
-    return Language[this.userdata.settings().language];
   }
 
   update(account: Account): void {
@@ -97,10 +88,6 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   delete(account: Account): void {
     account.isDeleted = true;
     this.update(account);
-  }
-
-  isNewAccount(): boolean {
-    return this.account.id == 0;
   }
 
   hasTransations(): boolean {

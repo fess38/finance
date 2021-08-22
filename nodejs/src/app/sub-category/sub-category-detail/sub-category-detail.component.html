@@ -5,11 +5,11 @@
         <button type="button" class="btn btn-icon btn-link" routerLink="/sub_category">
           <cds-icon shape="undo"></cds-icon>
         </button>
-        <span [hidden]="!isNewSubCategory()">
-          {{'sub_category_detail.add' | translate}}
+        <span [hidden]="!(subCategory | isNewEntity)">
+          {{'sub_category.add' | translate}}
         </span>
-        <span [hidden]="isNewSubCategory()">
-          {{'sub_category_detail.edit' | translate}}
+        <span [hidden]="subCategory | isNewEntity">
+          {{'sub_category.edit' | translate}}
         </span>
       </label>
     </div>
@@ -28,16 +28,16 @@
           <select name="category"
                   class="clr-select"
                   [(ngModel)]="subCategory.categoryId"
-                  [disabled]="!isNewSubCategory()">
+                  [disabled]="!(subCategory | isNewEntity)">
             <option disabled>{{'common.category' | translate}}</option>
-            <option selected *ngFor="let category of categories()" [ngValue]="category.id">
+            <option *ngFor="let category of categories()" [ngValue]="category.id">
               {{category.name}}
             </option>
           </select>
         </div>
       </div>
     </div>
-    <div class="clr-form-control clr-row" [hidden]="isNewSubCategory()">
+    <div class="clr-form-control clr-row" [hidden]="subCategory | isNewEntity">
       <div class="clr-control-container">
         <div class="clr-checkbox-wrapper">
           <input type="checkbox"
@@ -52,7 +52,7 @@
       </div>
     </div>
     <div class="clr-form-control clr-row"
-         [hidden]="isNewSubCategory()"
+         [hidden]="subCategory | isNewEntity"
          (click)="viewTransactions(subCategory)">
       <label>
         {{'common.amount' | translate}}: {{subCategory.transactionAmount}}
@@ -61,13 +61,13 @@
     <div class="clr-form-control clr-row">
       <button class="btn btn-primary btn-sm btn-block"
               (click)="update(subCategory)"
-              [disabled]="!isValidForm() || isReadOnly()">
+              [disabled]="!isValidForm() || ('' | isReadOnly)">
         {{'common.save' | translate}}
       </button>
       <button class="btn btn-danger btn-sm btn-block"
               (click)="delete(subCategory)"
-              [hidden]="isNewSubCategory()"
-              [disabled]="hasTransations() || isReadOnly()">
+              [hidden]="subCategory | isNewEntity"
+              [disabled]="hasTransations() || ('' | isReadOnly)">
         {{'common.delete' | translate}}
       </button>
     </div>

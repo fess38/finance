@@ -1,0 +1,23 @@
+<div class="clr-row" *ngIf="('' | locale) as locale">
+  <div class="clr-col-12 clr-col-sm-8 clr-col-md-6">
+    <table class="table table-noborder table-compact">
+      <tr>
+        <th class="left" routerLink="/security/new">
+          <span>{{'common.security' | translate}} </span>
+          <cds-icon shape="plus-circle"></cds-icon>
+        </th>
+        <th class="left">{{'common.price' | translate}}</th>
+        <th class="left">{{'security.amount' | translate}}</th>
+        <th class="left">{{'security.cost' | translate}}</th>
+        <th class="left">{{'security.share' | translate}}</th>
+      </tr>
+      <tr *ngFor="let security of securities()" routerLink="/security/{{security.id}}">
+        <td class="left">{{security.name}}</td>
+        <td class="left">{{security.price | encodeMoney | number:'':locale}}{{security | currencySymbol}}</td>
+        <td class="left">{{security.amount}}</td>
+        <td class="left">{{cost(security) | number:'1.0-0':locale}}{{'' | currencySymbol}}</td>
+        <td class="left">{{share(security) | percent:'1.0-1':locale}}</td>
+      </tr>
+    </table>
+  </div>
+</div>

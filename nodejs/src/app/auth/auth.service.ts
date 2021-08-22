@@ -2,6 +2,7 @@
 /// <reference path="../../../node_modules/@types/gapi.auth2/index.d.ts" />
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { clear } from 'idb-keyval';
 import { CookieService } from 'ngx-cookie';
 import { of, range, Subscription } from 'rxjs';
 import { concatMap, delay, filter, takeWhile } from 'rxjs/operators';
@@ -117,6 +118,7 @@ export class AuthService {
           this.cookie.remove('token');
           this.router.navigate(['login']);
         })
+        .then(() => clear())
         .catch(error => {
           console.error(error.message);
           this.router.navigate(['/error']);

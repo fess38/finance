@@ -6,7 +6,7 @@ import { DateUtils } from './date-utils';
   name: 'monthFormat'
 })
 export class MonthFormatPipe implements PipeTransform {
-  transform(value: Month, args?: any): any {
+  transform(value: Month): string {
     return DateUtils.formatMonth(value);
   }
 }

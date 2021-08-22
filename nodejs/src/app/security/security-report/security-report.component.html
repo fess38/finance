@@ -1,0 +1,46 @@
+<div class="clr-row" *ngIf="('' | locale) as locale">
+  <div class="clr-col-12 clr-col-sm-8 clr-col-md-6">
+    <table class="table table-noborder table-compact">
+      <tr>
+        <th class="left">{{'common.security' | translate}}</th>
+        <th class="left">{{'security_report.buy_date' | translate}}</th>
+        <th class="left">{{'security_report.sell_date' | translate}}</th>
+        <th class="left">{{'security_report.days' | translate}}</th>
+        <th class="left">{{'security.amount' | translate}}</th>
+        <th class="left">
+          <span>{{'common.income' | translate}} </span>
+          <span>({{'' | currencySymbol}})</span>
+        </th>
+        <th class="left">
+          <span>{{'common.expense' | translate}} </span>
+          <span>({{'' | currencySymbol}})</span>
+        </th>
+        <th class="left">
+          <span>{{'security_report.profit' | translate}} </span>
+          <span>({{'' | currencySymbol}})</span>
+        </th>
+        <th class="left">{{'security_report.annual_profit' | translate}}</th>
+      </tr>
+      <tr *ngFor="let securityReport of securityReports"
+          [ngClass]="{
+              'sold':securityReport.name.endsWith('sold') || securityReport.sellDate.length > 0,
+              'total':securityReport.buyDate.length == 0
+          }">
+        <td class="left">
+          <span>{{securityReport.name | translate}} </span>
+          <span *ngIf="securityReport.securityId > 0">
+            ({{securityReport.securityId | currencySymbol:'security'}})
+          </span>
+        </td>
+        <td class="left">{{securityReport.buyDate | date:'dd MMM yy':'':locale}}</td>
+        <td class="left">{{securityReport.sellDate | date:'dd MMM yy':'':locale}}</td>
+        <td class="left">{{securityReport.days | number:'':locale}}</td>
+        <td class="left">{{securityReport.amount | number:'':locale}}</td>
+        <td class="left">{{securityReport.income | number:'1.0-0':locale}}</td>
+        <td class="left">{{securityReport.expense | number:'1.0-0':locale}}</td>
+        <td class="left">{{securityReport.profit | number:'1.0-0':locale}}</td>
+        <td class="left">{{securityReport.annualProfit | percent:'1.0-1':locale}}</td>
+      </tr>
+    </table>
+  </div>
+</div>

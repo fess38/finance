@@ -1,123 +1,152 @@
 {
-  "common": {
-    "access_link": "Ссылка для входа",
-    "settings": "Настройки",
-    "name": "Название",
-    "use_in_transactions": "Использовать в транзакциях",
-    "amount": "Транзакций/шаблонов",
-    "save": "Сохранить",
-    "delete": "Удалить",
-    "income": "Доход",
-    "expense": "Расход",
-    "date": "Дата",
-    "title": "Финансы",
-    "category": "Категория",
-    "sub_category": "Подкатегория",
-    "no_off_budget": "Без внебюджетных"
-  },
-  "account_detail": {
-    "add": "Добавление счета",
-    "edit": "Редактирование счета",
-    "updated_balance": "Обновленный баланс",
-    "currency": "Валюта"
-  },
-  "account_list": {
+  "account": {
     "account_title": "Счет",
-    "balance_title": "Баланс"
+    "add": "Добавление счета",
+    "balance_title": "Баланс",
+    "edit": "Редактирование счета",
+    "updated_balance": "Обновленный баланс"
   },
-  "category_detail": {
+  "category": {
     "add": "Добавление категории",
     "edit": "Редактирование категории",
     "type": "Тип категории"
   },
-  "family_member_detail": {
-    "add": "Добавление члена семьи",
-    "edit": "Редактирование члена семьи"
+  "common": {
+    "access_link": "Ссылка для входа",
+    "amount": "Транзакций/шаблонов",
+    "category": "Категория",
+    "currency": "Валюта",
+    "date": "Дата",
+    "delete": "Удалить",
+    "exchange_rate": "Обменный курс",
+    "expense": "Расход",
+    "income": "Доход",
+    "name": "Название",
+    "price": "Цена",
+    "save": "Сохранить",
+    "security": "Ценная бумага",
+    "sub_category": "Подкатегория",
+    "use_in_transactions": "Использовать в транзакциях"
   },
-  "family_member_list": {
-    "family_member": "Член семьи"
+  "error": {
+    "message": "Что-то пошло не так",
+    "popup_blocked": "Не удается открыть всплывающее окно"
+  },
+  "family_member": {
+    "add": "Добавление члена семьи",
+    "edit": "Редактирование члена семьи",
+    "name": "Член семьи"
   },
   "login": {
     "google": "Войти через Google"
   },
   "main_menu": {
-    "title": "Финансы",
-    "exit": "Выйти",
-    "add_transaction": "Добавить транзакцию",
-    "transaction": "Транзакции",
-    "all_transactions": "Все транзакции",
-    "incomes": "Доходы",
-    "expences": "Расходы",
-    "transfers": "Переводы",
-    "templates": "Шаблоны",
-    "future": "Запланированные",
-    "search": "Поиск",
-    "reports": "Отчеты",
-    "date_report": "По дням ",
-    "month_report": "По месяцам",
-    "year_report": "По годам",
-    "other": "Остальное",
     "account": "Счета",
+    "add_transaction": "Добавить транзакцию",
+    "add_transaction_with_account": "Со счетом",
+    "add_transaction_with_security": "С ценной бумагой",
+    "all_transactions": "Все транзакции",
     "category": "Категории",
+    "date_report": "По дням ",
+    "exit": "Выйти",
+    "expences": "Расходы",
+    "family_member": "Члены семьи",
+    "future": "Запланированные",
+    "incomes": "Доходы",
+    "investment": "Инвестиции",
+    "month_report": "По месяцам",
+    "other": "Остальное",
+    "reports": "Отчеты",
+    "search": "Поиск",
+    "security": "Ценные бумаги",
+    "security_report": "По ценным бумагам",
+    "settings": "Настройки",
     "sub_category": "Подкатегории",
-    "family_member": "Члены семьи"
-  },
-  "settings": {
-    "data_export": "Выгрузка данных",
-    "data_import": "Загрузка данных",
-    "data_delete": "Удаление данных",
-    "language": "Язык",
-    "currency": "Валюта",
-    "no_off_budget": "Скрывать транзакции вне бюджета"
-  },
-  "sub_category_detail": {
-    "add": "Добавление подкатегории",
-    "edit": "Редактирование подкатегории"
-  },
-  "transaction_detail": {
-    "add": "Добавление транзакции",
-    "edit": "Редактирование транзакции",
-    "action": "Операция",
-    "transfer": "Перевод",
-    "account": "Счет",
-    "account_from": "Счет списания",
-    "account_to": "Счет получения",
-    "amount_from": "Сумма списания",
-    "amount_to": "Сумма получения",
-    "family_member": "Член семьи",
-    "comment": "Комментарий",
-    "off_budget": "Вне бюджета"
-  },
-  "transaction_list": {
-    "title": "Поиск транзакций",
-    "all_actions": "Все операция",
-    "all_accounts": "Все счета",
-    "all_categories": "Все категории",
-    "all_sub_categories": "Все подкатегории",
-    "all_family_members": "Все члены семьи",
-    "amount": "Сумма"
-  },
-  "transaction_template_detail": {
-    "add": "Добавление шаблона",
-    "edit": "Редактирование шаблона",
-    "interval": "Регулярность",
-    "average": "в среднем",
-    "days_of_week": "Дни недели",
-    "days_of_month": "Дни месяца"
-  },
-  "transaction_template_list": {
-    "transaction_template": "Шаблон транзакции"
-  },
-  "transaction_future": {
-    "name": "Название шаблона",
-    "future": "Запланированные транзакции",
-    "skip": "Пропустить"
+    "templates": "Шаблоны",
+    "title": "Финансы",
+    "transaction": "Транзакции",
+    "transfers": "Переводы",
+    "year_report": "По годам"
   },
   "report": {
     "summary": "Итого"
   },
-  "error": {
-    "message": "Что-то пошло не так",
-    "popup_blocked": "Не удается открыть всплывающее окно"
+  "security": {
+    "add": "Добавление ценной бумаги",
+    "amount": "Кол-во",
+    "edit": "Редактирование ценной бумаги",
+    "cost": "Стоимость",
+    "transaction_amount": "Транзакций",
+    "share": "Доля"
+  },
+  "security_report": {
+    "annual_profit": "Процентов годовых",
+    "buy_date": "Дата покупки",
+    "days": "Дней",
+    "profit": "Прибыль",
+    "sell_date": "Дата продажи"
+  },
+  "security_transaction": {
+    "add": "Добавление транзакции",
+    "amount": "Количество",
+    "buy": "Покупка",
+    "coupon": "Купон",
+    "current": "Текущие",
+    "dividends": "Дивиденды",
+    "edit": "Редактирование транзакции",
+    "purchase_fee": "Комиссия",
+    "sell": "Продажа",
+    "sold": "Проданные",
+    "sum": "Сумма",
+    "tax": "Налог",
+    "type": "Тип"
+  },
+  "settings": {
+    "currency": "Валюта",
+    "data_delete": "Удаление данных",
+    "data_export": "Выгрузка данных",
+    "data_import": "Загрузка данных",
+    "language": "Язык",
+    "no_off_budget": "Скрывать транзакции вне бюджета"
+  },
+  "sub_category": {
+    "add": "Добавление подкатегории",
+    "edit": "Редактирование подкатегории"
+  },
+  "transaction": {
+    "account": "Счет",
+    "account_from": "Счет списания",
+    "account_to": "Счет получения",
+    "action": "Операция",
+    "add": "Добавление транзакции",
+    "all_accounts": "Все счета",
+    "all_actions": "Все операция",
+    "all_categories": "Все категории",
+    "all_family_members": "Все члены семьи",
+    "all_sub_categories": "Все подкатегории",
+    "amount": "Сумма",
+    "amount_from": "Сумма списания",
+    "amount_to": "Сумма получения",
+    "comment": "Комментарий",
+    "edit": "Редактирование транзакции",
+    "family_member": "Член семьи",
+    "no_off_budget": "Без внебюджетных",
+    "off_budget": "Вне бюджета",
+    "title": "Поиск транзакций",
+    "transfer": "Перевод"
+  },
+  "transaction_future": {
+    "future": "Запланированные транзакции",
+    "name": "Название шаблона",
+    "skip": "Пропустить"
+  },
+  "transaction_template": {
+    "add": "Добавление шаблона",
+    "average": "в среднем",
+    "days_of_month": "Дни месяца",
+    "days_of_week": "Дни недели",
+    "edit": "Редактирование шаблона",
+    "interval": "Регулярность",
+    "name": "Шаблон транзакции"
   }
 }

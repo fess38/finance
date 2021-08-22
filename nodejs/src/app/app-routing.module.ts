@@ -12,6 +12,11 @@ import { MainPageComponent } from './core/main-page/main-page.component';
 import { SettingsComponent } from './core/settings/settings.component';
 import { FamilyMemberDetailComponent } from './family-member/family-member-detail/family-member-detail.component';
 import { FamilyMemberListComponent } from './family-member/family-member-list/family-member-list.component';
+import { SecurityDetailComponent } from './security/security-detail/security-detail.component';
+import { SecurityListComponent } from './security/security-list/security-list.component';
+import { SecurityReportComponent } from './security/security-report/security-report.component';
+import { SecurityTransactionDetailComponent } from './security/security-transaction-detail/security-transaction-detail.component';
+import { SecurityTransactionListComponent } from './security/security-transaction-list/security-transaction-list.component';
 import { SubCategoryDetailComponent } from './sub-category/sub-category-detail/sub-category-detail.component';
 import { SubCategoryListComponent } from './sub-category/sub-category-list/sub-category-list.component';
 import { TransactionDateComponent } from './transaction/transaction-date/transaction-date.component';
@@ -112,6 +117,26 @@ const appRoutes: Routes = [
     canActivate: [AuthGuardService]
   },
   {
+    path: 'security',
+    component: SecurityListComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'security/:id',
+    component: SecurityDetailComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'security_transaction',
+    component: SecurityTransactionListComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'security_transaction/:id',
+    component: SecurityTransactionDetailComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
     path: 'report/date',
     component: TransactionDateComponent,
     canActivate: [AuthGuardService]
@@ -124,6 +149,11 @@ const appRoutes: Routes = [
   {
     path: 'report/year',
     component: TransactionYearComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'report/security',
+    component: SecurityReportComponent,
     canActivate: [AuthGuardService]
   },
   {

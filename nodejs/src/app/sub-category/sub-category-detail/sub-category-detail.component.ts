@@ -36,10 +36,6 @@ export class SubCategoryDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  isReadOnly(): boolean {
-    return this.userdata.isReadOnly();
-  }
-
   categories() {
     return this.userdata.categories()
       .filter(x => x.isVisible)
@@ -74,10 +70,6 @@ export class SubCategoryDetailComponent implements OnInit, OnDestroy {
   delete(subCategory: SubCategory) {
     subCategory.isDeleted = true;
     this.update(subCategory);
-  }
-
-  isNewSubCategory() {
-    return this.subCategory.id == 0;
   }
 
   hasTransations() {

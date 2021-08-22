@@ -1,16 +1,16 @@
-<div class="clr-row">
+<div class="clr-row" *ngIf="('' | locale) as locale">
   <div class="clr-col-12 clr-col-sm-9 clr-col-md-6">
     <table class="table table-noborder table-compact">
       <tr>
         <th class="left" routerLink="/account/new">
-          <span>{{'account_list.account_title' | translate}} </span>
+          <span>{{'account.account_title' | translate}} </span>
           <cds-icon shape="plus-circle"></cds-icon>
         </th>
-        <th class="left">{{'account_list.balance_title' | translate}}</th>
+        <th class="left">{{'account.balance_title' | translate}}</th>
       </tr>
       <tr *ngFor="let account of accounts()" routerLink="/account/{{account.id}}">
         <td class="left">{{account.name}}</td>
-        <td class="left">{{account.balance | number:'':locale()}}{{currencySymbol(account)}}</td>
+        <td class="left">{{account.balance | number:'':locale}}{{account | currencySymbol}}</td>
       </tr>
     </table>
   </div>

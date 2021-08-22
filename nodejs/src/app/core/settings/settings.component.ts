@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Currency, Dump, Settings } from '../model/model';
+import { Currency, DataStorage, Settings } from '../model/model';
 import { UserDataService } from '../user-data/user-data.service';
 import Language = Settings.Language;
 
@@ -24,7 +24,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscription = this.userdata.subscribeOnInit(() => {
       this.settings = this.userdata.settings();
-      const blob = new Blob([JSON.stringify(this.userdata.jsonDump())], { type: 'application/json' });
+      const blob = new Blob([JSON.stringify(this.userdata.dataStorageJson())], { type: 'application/json' });
       this.exportDataUrl = this.sanitizer.bypassSecurityTrustUrl(window.URL.createObjectURL(blob));
     });
   }
@@ -35,16 +35,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
   }
 
-  isReadOnly(): boolean {
-    return this.userdata.isReadOnly();
-  }
-
   currencies(): Currency[] {
     return this.userdata.currencies();
-  }
-
-  language(): string {
-    return Language[this.userdata.settings().language];
   }
 
   updateSettings() {
@@ -58,7 +50,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     file.text()
       .then(data => {
         this.isDataImport = true;
-        this.userdata.saveDump(Dump.fromObject(JSON.parse(data))).then(() => this.isDataImport = false)
+        this.userdata.saveDataStorage(DataStorage.fromObject(JSON.parse(data))).then(() => this.isDataImport = false)
       })
       .catch(error => {
         this.isDataImport = false;
@@ -68,7 +60,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   deleteData() {
-    this.userdata.deleteDump().catch(error => {
+    this.userdata.deleteDataStorage().catch(error => {
       console.error(error.message);
       this.router.navigate(['/error']);
     });

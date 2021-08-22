@@ -91,10 +91,6 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  isReadOnly(): boolean {
-    return this.userdata.isReadOnly();
-  }
-
   typesWithLabels(): any[] {
     return TransactionUtils.typesWithLabels;
   }
@@ -183,14 +179,6 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
     return this.userdata.familyMembers()
       .filter(x => x.isVisible)
       .sort((a, b) => a.name < b.name ? -1 : 1);
-  }
-
-  currencySymbol(account: Account): string {
-    return this.userdata.currencies().filter(x => x.id == account.currencyId)[0].symbol;
-  }
-
-  isNewTransaction(): boolean {
-    return this.transaction.id == 0;
   }
 
   isIncome(): boolean {

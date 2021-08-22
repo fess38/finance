@@ -1,6 +1,6 @@
 import { Transaction, TransactionTemplate } from '../core/model/model';
 import { DateUtils } from '../utils/date-utils';
-import { TransactionMatcher } from '../utils/transaction-matcher';
+import { TransactionMatcher } from './transaction-matcher';
 
 export class TransactionTemplateResolver {
   resolve(transactionTemplates: TransactionTemplate[], transactions: Transaction[])

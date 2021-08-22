@@ -54,13 +54,6 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     return this.userdata.accounts().sort((a, b) => a.name < b.name ? -1 : 1);
   }
 
-  currencySymbol(account: Account | number): string {
-    if (typeof account == 'number') {
-      account = this.userdata.findAccount(account);
-    }
-    return this.userdata.findCurrency(account.currencyId).symbol;
-  }
-
   categories(): Category[] {
     return this.userdata.categories()
       .filter(x => (
@@ -112,10 +105,6 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     this.router.navigate(['/transaction'], { queryParams: this.criteria.toQueryParams() });
   }
 
-  locale(): string {
-    return this.userdata.locale();
-  }
-
   private switchMonth(next: boolean) {
     const criteriaMonth = new Month({ year: this.criteria.year, month: this.criteria.month });
     const monthsToSwitch = this.userdata.transactions()
@@ -149,7 +138,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   }
 
   formatCategory(transaction: Transaction): string {
-    let result = 'transaction_detail.transfer';
+    let result = 'transaction.transfer';
     const category: Category = this.userdata.findCategory(transaction.categoryId);
     const subCategory: SubCategory = this.userdata.findSubCategory(transaction.subCategoryId);
     if (subCategory) {

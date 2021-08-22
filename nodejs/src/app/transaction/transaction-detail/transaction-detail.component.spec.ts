@@ -71,11 +71,6 @@ describe('TransactionDetailComponent', () => {
     expect(0).toEqual(component.transaction.subCategoryId);
   });
 
-  it('#isNewTransaction should return false', () => {
-    component.transaction.id = 123;
-    expect(false).toEqual(component.isNewTransaction());
-  });
-
   it('#isIncome should return true', () => {
     component.type = Transaction.Type.INCOME;
     expect(true).toEqual(component.isIncome());

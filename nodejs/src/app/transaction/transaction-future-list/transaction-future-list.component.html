@@ -1,4 +1,4 @@
-<div class="clr-row">
+<div class="clr-row" *ngIf="('' | locale) as locale">
   <div class="clr-col-12 clr-col-sm-9 clr-col-md-6" [hidden]="isShowForm">
     <table class="table table-noborder table-compact">
       <tr>
@@ -12,7 +12,7 @@
       <tr *ngFor="let namedTransaction of namedTransactions"
           (click)="onTransactionClick(namedTransaction.transaction)">
         <td class="left">{{namedTransaction.name}}</td>
-        <td class="left">{{namedTransaction.transaction.created | date:'dd MMMM':'':locale()}}</td>
+        <td class="left">{{namedTransaction.transaction.created | date:'dd MMMM':'':locale}}</td>
       </tr>
     </table>
   </div>
@@ -36,12 +36,12 @@
     <div class="clr-form-control clr-row">
       <button class="btn btn-primary btn-sm btn-block"
               (click)="save(activeTransaction)"
-              [disabled]="!isValidForm || isReadOnly()">
+              [disabled]="!isValidForm || ('' | isReadOnly)">
         {{'common.save' | translate}}
       </button>
       <button class="btn btn-danger btn-sm btn-block"
               (click)="delete(activeTransaction)"
-              [disabled]="!isValidForm || isReadOnly()">
+              [disabled]="!isValidForm || ('' | isReadOnly)">
         {{'transaction_future.skip' | translate}}
       </button>
     </div>

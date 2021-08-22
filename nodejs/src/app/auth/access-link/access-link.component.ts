@@ -7,12 +7,12 @@ import { AuthService } from '../auth.service';
   templateUrl: 'access-link.component.html'
 })
 export class AccessLinkComponent implements OnInit, OnDestroy {
-  private subscription: Subscription;
-  link: String = '';
-
   constructor(private auth: AuthService,
               private route: ActivatedRoute,
               private router: Router) {}
+
+  private subscription: Subscription;
+  link: String = '';
 
   ngOnInit() {
     const token = this.route.snapshot.paramMap.get('token') || '';

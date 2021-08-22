@@ -1,0 +1,38 @@
+<div class="clr-row" *ngIf="('' | locale) as locale">
+  <div class="clr-col-12 clr-col-sm-8 clr-col-md-6">
+    <table class="table table-noborder table-compact">
+      <tr>
+        <th class="left">{{'common.date' | translate}}</th>
+        <th class="left">
+          <select clrSelect name="security" [(ngModel)]="filterSecurityId">
+            <option [ngValue]="undefined" selected>{{'common.security' | translate}}</option>
+            <option *ngFor="let security of securities()" [ngValue]="security.id">
+              <span>{{security.name}}</span>
+            </option>
+          </select>
+        </th>
+        <th class="left">{{'security_transaction.type' | translate}}</th>
+        <th class="left">{{'security_transaction.amount' | translate}}</th>
+        <th class="left">
+          <span>{{'common.income' | translate}} </span>
+          <span>({{'' | currencySymbol}})</span>
+        </th>
+        <th class="left">
+          <span>{{'common.expense' | translate}} </span>
+          <span>({{'' | currencySymbol}})</span>
+        </th>
+      </tr>
+      <tr *ngFor="let transaction of transactions()" routerLink="/security_transaction/{{transaction.id}}">
+        <td class="left">{{transaction.date | date:'dd MMM yy':'':locale}}</td>
+        <td class="left">
+          <span>{{securityName(transaction)}} </span>
+          <span>({{transaction.securityId | currencySymbol:'security'}})</span>
+        </td>
+        <td class="left">{{typeName(transaction) | translate}}</td>
+        <td class="left">{{amount(transaction) | number:'':locale}}</td>
+        <td class="left">{{income(transaction) | number:'1.0-0':locale}}</td>
+        <td class="left">{{expense(transaction) | number:'1.0-0':locale}}</td>
+      </tr>
+    </table>
+  </div>
+</div>

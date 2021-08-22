@@ -60,7 +60,7 @@ describe('TransactionCriteriaService', () => {
   });
 
   it('TransactionCriteriaService comment 1', () => {
-    const params: Params = { comment: "Foo" };
+    const params: Params = { comment: 'Foo' };
     criteria.update(params);
     const transaction = new Transaction({
       id: 0,
@@ -71,13 +71,13 @@ describe('TransactionCriteriaService', () => {
       amountFrom: 10,
       amountTo: -1,
       familyMemberId: 234,
-      comment: "bar foo bar"
+      comment: 'bar foo bar'
     });
     expect(criteria.isFit(transaction)).toBe(true);
   });
 
   it('TransactionCriteriaService comment 2', () => {
-    const params: Params = { comment: "fooz" };
+    const params: Params = { comment: 'fooz' };
     criteria.update(params);
     const transaction = new Transaction({
       id: 0,
@@ -88,13 +88,13 @@ describe('TransactionCriteriaService', () => {
       amountFrom: 10,
       amountTo: -1,
       familyMemberId: 234,
-      comment: "bar foo bar"
+      comment: 'bar foo bar'
     });
     expect(criteria.isFit(transaction)).toBe(false);
   });
 
   it('TransactionCriteriaService comment 3', () => {
-    const params: Params = { comment: "foo" };
+    const params: Params = { comment: 'foo' };
     criteria.update(params);
     const transaction = new Transaction({
       id: 0,

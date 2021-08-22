@@ -1,19 +1,19 @@
 <div class="clr-row clr-col-12 clr-col-lg-6">
   <form class="clr-form">
     <div class="clr-form-control clr-row">
-      <label>{{'common.settings' | translate}}</label>
+      <label>{{'main_menu.settings' | translate}}</label>
     </div>
     <div class="clr-form-control clr-row">
       <label>
         <a routerLink="/access_link/create_link">{{'common.access_link' | translate}}</a>
       </label>
     </div>
-    <div class="clr-form-control clr-row" [hidden]="this.isReadOnly()">
+    <div class="clr-form-control clr-row" [hidden]="('' | isReadOnly)">
       <label>
         <a [href]="exportDataUrl" download="export.json">{{'settings.data_export' | translate}}</a>
       </label>
     </div>
-    <div class="clr-form-control clr-row" [hidden]="this.isReadOnly()">
+    <div class="clr-form-control clr-row" [hidden]="('' | isReadOnly)">
       <div class="clr-file-wrapper">
         <input type="file"
                id="data-import"
@@ -26,7 +26,7 @@
         <progress></progress>
       </div>
     </div>
-    <div class="clr-form-control clr-row" [hidden]="this.isReadOnly()">
+    <div class="clr-form-control clr-row" [hidden]="('' | isReadOnly)">
       <label>
         <a [href]="exportDataUrl" download="export.json" (click)="deleteData()">
           {{'settings.data_delete' | translate}}
@@ -46,13 +46,12 @@
       </div>
     </div>
     <div class="clr-form-control clr-row">
-      <label>{{'settings.currency' | translate}}</label>
+      <label>{{'common.currency' | translate}}</label>
       <div class="clr-control-container">
         <div class="clr-select-wrapper">
           <select class="clr-select" name="currency" required [(ngModel)]="settings.currencyId">
             <option selected *ngFor="let currency of currencies()" [ngValue]="currency.id">
-              <span *ngIf="language() == 'RU'">{{currency.nameRu}} ({{currency.symbol}})</span>
-              <span *ngIf="language() == 'EN'">{{currency.nameEn}} ({{currency.symbol}})</span>
+              {{currency | currencyName}} ({{currency.symbol}})
             </option>
           </select>
         </div>
@@ -73,7 +72,7 @@
     <div class="clr-form-control clr-row">
       <button class="btn btn-primary btn-sm btn-block"
               (click)="updateSettings()"
-              [disabled]="this.isReadOnly()">
+              [disabled]="('' | isReadOnly)">
         {{'common.save' | translate}}
       </button>
     </div>

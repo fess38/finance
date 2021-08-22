@@ -36,10 +36,6 @@ export class FamilyMemberDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  isReadOnly(): boolean {
-    return this.userdata.isReadOnly();
-  }
-
   update(familyMember: FamilyMember) {
     if (familyMember.id == 0) {
       this.userdata.saveFamilyMember(familyMember)
@@ -62,10 +58,6 @@ export class FamilyMemberDetailComponent implements OnInit, OnDestroy {
   delete(familyMember: FamilyMember) {
     familyMember.isDeleted = true;
     this.update(familyMember);
-  }
-
-  isNewFamilyMember() {
-    return this.familyMember.id == 0;
   }
 
   hasTransations() {
