@@ -3,14 +3,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Notepad } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
-import { NotepadStateService } from '../notepad-state.service';
 
 @Component({
-  templateUrl: './notepad-detail.component.html'
+  templateUrl: 'notepad-detail.component.html'
 })
 export class NotepadDetailComponent implements OnInit, OnDestroy {
   constructor(private userdata: UserDataService,
-              private notepadState: NotepadStateService,
               private route: ActivatedRoute,
               private router: Router) {}
 
@@ -23,12 +21,12 @@ export class NotepadDetailComponent implements OnInit, OnDestroy {
     const id = this.route.snapshot.paramMap.get('id');
     if (id != 'new') {
       const callback = () => {
-        const navigatedNotepad = this.userdata.notepads().filter(x => x.id == +id)[0];
+        const navigatedNotepad = this.userdata.findNotepad(+id);
         if (navigatedNotepad == null) {
           this.router.navigate(['/']);
         } else {
           this.notepad = navigatedNotepad;
-          this.notepadState.set(this.notepad);
+          this.userdata.currentNotepadId = this.notepad.id;
         }
       };
       this.subscription = this.userdata.subscribeOnInit(callback);
@@ -39,6 +37,14 @@ export class NotepadDetailComponent implements OnInit, OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+  }
+
+  hasNotes() {
+    return this.notepad.noteAmount > 0;
+  }
+
+  isValidForm() {
+    return this.notepad.name.length > 0;
   }
 
   update(notepad: Notepad) {
@@ -66,14 +72,6 @@ export class NotepadDetailComponent implements OnInit, OnDestroy {
     notepad.isDeleted = true;
     notepad.updated = new Date().getTime();
     this.update(notepad);
-    this.notepadState.clear();
-  }
-
-  hasNotes() {
-    return this.notepad.noteAmount > 0;
-  }
-
-  isValidForm() {
-    return this.notepad.name.length > 0;
+    this.userdata.currentNotepadId = 0;
   }
 }

@@ -24,7 +24,7 @@ export class SecurityTransactionDetailComponent implements OnInit, OnDestroy {
     const id = this.route.snapshot.paramMap.get('id');
     if (id != 'new') {
       const callback = () => {
-        const navigatedSecurityTransaction = this.userdata.securityTransactions().filter(x => x.id == +id)[0];
+        const navigatedSecurityTransaction = this.userdata.findSecurityTransaction(+id);
         if (navigatedSecurityTransaction == null) {
           this.router.navigate(['/security_transaction']);
         } else {

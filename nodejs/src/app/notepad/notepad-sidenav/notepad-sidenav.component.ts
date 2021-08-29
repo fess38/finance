@@ -2,15 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Note, Notepad } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
-import { NotepadStateService } from '../notepad-state.service';
 
 @Component({
   selector: 'app-notepad-sidenav',
   templateUrl: 'notepad-sidenav.component.html'
 })
 export class NotepadSidenavComponent implements OnInit {
-  constructor(private userdata: UserDataService,
-              private notepadState: NotepadStateService) {}
+  constructor(private userdata: UserDataService) {}
 
   private subscription: Subscription;
 
@@ -22,19 +20,18 @@ export class NotepadSidenavComponent implements OnInit {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
-    this.notepadState.clear();
+  }
+
+  updateCurrentNotepadId(notepad: Notepad) {
+    this.userdata.currentNotepadId = notepad.id;
   }
 
   clearState() {
-    this.notepadState.clear();
-  }
-
-  updateState(notepad: Notepad) {
-    this.notepadState.set(notepad);
+    this.userdata.currentNotepadId = 0;
   }
 
   showNotepads(): boolean {
-    return this.notepadState.getNotepadId() == 0;
+    return this.userdata.currentNotepadId == 0;
   }
 
   showNotes(): boolean {
@@ -42,7 +39,7 @@ export class NotepadSidenavComponent implements OnInit {
   }
 
   notepadName(): string {
-    return this.userdata.findNotepad(this.notepadState.getNotepadId()).name;
+    return this.userdata.findNotepad(this.userdata.currentNotepadId).name;
   }
 
   notepads(): Notepad[] {
@@ -51,7 +48,7 @@ export class NotepadSidenavComponent implements OnInit {
 
   notes(): Note[] {
     return this.userdata.notes()
-      .filter(x => x.notepadId == this.notepadState.getNotepadId())
+      .filter(x => x.notepadId == this.userdata.currentNotepadId)
       .sort((a, b) => (a.updated > b.updated ? -1 : 1));
   }
 }

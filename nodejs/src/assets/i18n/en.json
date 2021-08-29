@@ -73,8 +73,10 @@
     "title": "Finance"
   },
   "note": {
-    "add": "Add note",
-    "edit": "Edit note"
+    "edit": "Edit note",
+    "new": "New note",
+    "notepad": "Notepad",
+    "view": "View note"
   },
   "notepad": {
     "add": "Add notepad",
@@ -82,6 +84,8 @@
     "edit": "Edit notepad"
   },
   "notepad_sidenav": {
+    "add_note": "Add note",
+    "add_notepad": "Add notepad",
     "notepads": "Notepads",
     "notes": "Notes"
   },
@@ -97,7 +101,6 @@
     "share": "Share"
   },
   "security_report": {
-    "amount": "Amount",
     "annual_profit": "Annual interest",
     "buy_date": "Buy date",
     "days": "Days",

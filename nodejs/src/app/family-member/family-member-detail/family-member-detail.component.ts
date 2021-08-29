@@ -19,7 +19,7 @@ export class FamilyMemberDetailComponent implements OnInit, OnDestroy {
     const id = this.route.snapshot.paramMap.get('id');
     if (id != 'new') {
       const callback = () => {
-        const navigatedFamilyMember = this.userdata.familyMembers().filter(x => x.id == +id)[0];
+        const navigatedFamilyMember = this.userdata.findFamilyMember(+id);
         if (navigatedFamilyMember == null) {
           this.router.navigate(['/family_member']);
         } else {

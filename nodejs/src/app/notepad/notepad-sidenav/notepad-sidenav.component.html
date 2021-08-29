@@ -9,26 +9,34 @@
       {{notepadName()}}
     </span>
     <span>&nbsp;</span>
-    <a *ngIf="showNotepads()" routerLink="/notepad/new">
-      <cds-icon shape="plus-circle"></cds-icon>
-    </a>
-    <a *ngIf="showNotes()" routerLink="/note/new">
-      <cds-icon shape="plus-circle"></cds-icon>
+    <a [routerLink]="[showNotepads() ? '/notepad' : '/note', 'new']">
+      <clr-tooltip>
+        <cds-icon clrTooltipTrigger shape="plus-circle"></cds-icon>
+        <clr-tooltip-content clrPosition="bottom-right" clrSize="md" *clrIfOpen>
+          <span *ngIf="showNotepads()">
+            {{'notepad_sidenav.add_notepad' | translate}}
+          </span>
+          <span *ngIf="showNotes()">
+            {{'notepad_sidenav.add_note' | translate}}
+          </span>
+        </clr-tooltip-content>
+      </clr-tooltip>
     </a>
   </div>
   <clr-vertical-nav-group-children *ngIf="showNotepads()">
     <a *ngFor="let notepad of notepads()"
        clrVerticalNavLink
        routerLink="/notepad/{{notepad.id}}"
-       (click)="updateState(notepad)">
+       (click)="updateCurrentNotepadId(notepad)">
       {{notepad.name}}
     </a>
   </clr-vertical-nav-group-children>
   <clr-vertical-nav-group-children *ngIf="showNotes()">
     <a *ngFor="let note of notes()"
        clrVerticalNavLink
-       routerLink="/note/{{note.id}}">
-      {{note.name}}
+       routerLink="/note/{{note.id}}"
+       routerLinkActive="active">
+      <span>{{note.name}}</span>
     </a>
   </clr-vertical-nav-group-children>
 </clr-vertical-nav>

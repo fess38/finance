@@ -2,34 +2,72 @@
   <form class="clr-form no-top">
     <div class="clr-form-control clr-row no-top">
       <label>
-        <span [hidden]="!(note | isNewEntity)">
-          {{'note.add' | translate}}
-        </span>
-        <span [hidden]="note | isNewEntity">
-          {{'note.edit' | translate}}
+        <clr-tooltip>
+          <cds-icon clrTooltipTrigger shape="pencil"
+                    [attr.solid]="!viewMode"
+                    (click)="viewMode=!viewMode">
+          </cds-icon>
+          <clr-tooltip-content clrPosition="bottom-right" clrSize="md" *clrIfOpen>
+            <span>{{'note.edit' | translate}}</span>
+          </clr-tooltip-content>
+        </clr-tooltip>
+        <span>&nbsp;</span>
+        <span>
+          {{(viewMode ? 'note.view' : 'note.edit') | translate}}
         </span>
       </label>
     </div>
-    <div class="clr-form-control clr-row">
-      <label>{{'common.name' | translate}}</label>
-      <div class="clr-control-container">
-        <div class="clr-input-wrapper">
-          <input type="text" name="name" class="clr-input" [(ngModel)]="note.name"/>
+    <div class="clr-form-control clr-row no-top" *ngIf="viewMode">
+      <markdown [data]="nameForView()"></markdown>
+      <markdown [data]="note.text"></markdown>
+    </div>
+    <div *ngIf="!viewMode">
+      <div class="clr-form-control clr-row">
+        <label>{{'common.name' | translate}}</label>
+        <div class="clr-control-container">
+          <div class="clr-input-wrapper">
+            <input type="text" name="name" class="clr-input" [(ngModel)]="note.name"/>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="clr-form-control clr-row">
-      <button class="btn btn-primary btn-sm btn-block"
-              (click)="update(note)"
-              [disabled]="!isValidForm() || ('' | isReadOnly)">
-        {{'common.save' | translate}}
-      </button>
-      <button class="btn btn-danger btn-sm btn-block"
-              (click)="delete(note)"
-              [hidden]="note | isNewEntity"
-              [disabled]="'' | isReadOnly">
-        {{'common.delete' | translate}}
-      </button>
+      <div class="clr-form-control clr-row">
+        <label>{{'note.notepad' | translate}}</label>
+        <div class="clr-control-container">
+          <div class="clr-select-wrapper">
+            <select name="notepadId"
+                    class="clr-select"
+                    [(ngModel)]="note.notepadId">
+              <option disabled>{{'note.notepad' | translate}}</option>
+              <option *ngFor="let notepad of notepads()" [ngValue]="notepad.id">
+                <span>{{notepad.name}}</span>
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="clr-form-control clr-row">
+      <textarea clrTextarea
+                id="note-text"
+                [rows]="rows()"
+                [cols]="120"
+                [(ngModel)]="note.text">
+      </textarea>
+      </div>
+      <div class="clr-form-control clr-row">
+        <div class="clr-control-container">
+          <button class="btn btn-primary btn-sm btn-block"
+                  (click)="update(note)"
+                  [disabled]="!isValidForm() || ('' | isReadOnly)">
+            {{'common.save' | translate}}
+          </button>
+          <button class="btn btn-danger btn-sm btn-block"
+                  (click)="delete(note)"
+                  [hidden]="note | isNewEntity"
+                  [disabled]="'' | isReadOnly">
+            {{'common.delete' | translate}}
+          </button>
+        </div>
+      </div>
     </div>
   </form>
 </div>

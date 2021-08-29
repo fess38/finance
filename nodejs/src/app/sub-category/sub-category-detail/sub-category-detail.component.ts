@@ -19,7 +19,7 @@ export class SubCategoryDetailComponent implements OnInit, OnDestroy {
     const id = this.route.snapshot.paramMap.get('id');
     if (id != 'new') {
       const callback = () => {
-        const navigatedSubCategory = this.userdata.subCategories().filter(x => x.id == +id)[0];
+        const navigatedSubCategory = this.userdata.findSubCategory(+id);
         if (navigatedSubCategory == null) {
           this.router.navigate(['/sub_category']);
         } else {

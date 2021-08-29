@@ -21,6 +21,7 @@ export class UserDataService {
   private isInit = new AsyncSubject<boolean>();
   private ds = new DataStorage();
   private isReadOnly_ = true;
+  currentNotepadId = 0;
 
   subscribeOnInit(callback): Subscription {
     return this.isInit.subscribe(() => callback());

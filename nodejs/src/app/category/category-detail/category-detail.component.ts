@@ -19,7 +19,7 @@ export class CategoryDetailComponent implements OnInit, OnDestroy {
     const id = this.route.snapshot.paramMap.get('id');
     if (id != 'new') {
       const callback = () => {
-        const navigatedCategory = this.userdata.categories().filter(x => x.id == +id)[0];
+        const navigatedCategory = this.userdata.findCategory(+id);
         if (navigatedCategory == null) {
           this.router.navigate(['/category']);
         } else {

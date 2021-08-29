@@ -21,7 +21,7 @@ export class SecurityDetailComponent implements OnInit, OnDestroy {
     const id = this.route.snapshot.paramMap.get('id');
     if (id != 'new') {
       const callback = () => {
-        const navigatedSecurity = this.userdata.securities().filter(x => x.id == +id)[0];
+        const navigatedSecurity = this.userdata.findSecurity(+id);
         if (navigatedSecurity == null) {
           this.router.navigate(['/security']);
         } else {
