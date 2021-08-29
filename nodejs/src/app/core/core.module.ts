@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { AuthModule } from '../auth/auth.module';
+import { NotepadModule } from '../notepad/notepad.module';
 import { TransactionCriteriaService } from '../transaction/transaction-criteria.service';
 import { BlankPageComponent } from './blank-page/blank-page.component';
 import { ErrorPageComponent } from './error-page/error-page.component';
@@ -15,7 +16,7 @@ import { UserDataService } from './user-data/user-data.service';
     FinanceSidenavComponent
   ],
   imports: [
-    AuthModule, SharedModule
+    AuthModule, NotepadModule, SharedModule
   ],
   providers: [
     TransactionCriteriaService, UserDataService

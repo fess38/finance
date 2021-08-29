@@ -112,6 +112,18 @@ class Controller {
           httpStatus = it
         }
       }
+      if (httpStatus == HttpStatus.OK) {
+        saveMessages(value.notepadsList).also {
+          savedMessages.addAll(value.notepadsList)
+          httpStatus = it
+        }
+      }
+      if (httpStatus == HttpStatus.OK) {
+        saveMessages(value.notesList).also {
+          savedMessages.addAll(value.notesList)
+          httpStatus = it
+        }
+      }
 
       // new entity
     } catch (e: Exception) {
@@ -198,6 +210,12 @@ class Controller {
   @PostMapping("security_transaction/save")
   fun save(@RequestBody value: SecurityTransaction) = saveMessage(value)
 
+  @PostMapping("notepad/save")
+  fun save(@RequestBody value: Notepad) = saveMessage(value)
+
+  @PostMapping("note/save")
+  fun save(@RequestBody value: Note) = saveMessage(value)
+
   // new entity
 
   private fun updateMessage(message: Message): ResponseEntity<Any> {
@@ -246,6 +264,12 @@ class Controller {
 
   @PostMapping("security_transaction/update")
   fun update(@RequestBody value: SecurityTransaction) = updateMessage(value)
+
+  @PostMapping("notepad/update")
+  fun update(@RequestBody value: Notepad) = updateMessage(value)
+
+  @PostMapping("note/update")
+  fun update(@RequestBody value: Note) = updateMessage(value)
 
   // new entity
 

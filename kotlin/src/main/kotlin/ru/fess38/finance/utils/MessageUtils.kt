@@ -24,6 +24,8 @@ val Message.type: EntityType
     is TransactionTemplate -> TRANSACTION_TEMPLATE
     is Security -> SECURITY
     is SecurityTransaction -> SECURITY_TRANSACTION
+    is Notepad -> NOTEPAD
+    is Note -> NOTE
     // new entity
     else -> throw IllegalArgumentException("Unknown entity: $this")
   }
@@ -39,6 +41,8 @@ val Message.isDeleted: Boolean
     is TransactionTemplate -> this.isDeleted
     is Security -> this.isDeleted
     is SecurityTransaction -> this.isDeleted
+    is Notepad -> this.isDeleted
+    is Note -> this.isDeleted
     // new entity
     else -> throw IllegalArgumentException("Unknown entity: $this")
   }

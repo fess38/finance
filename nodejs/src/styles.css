@@ -8,18 +8,12 @@ td, th {
   white-space: nowrap;
 }
 
-/* for clrVerticalNavLink */
-a span .nav-text {
-  font-weight: normal;
-  margin-left: 10px;
-}
-
 /* for separate nav and content scrolling */
 .content-container {
   height: 98%;
 }
 
-.app-sidenav {
+.content-sidenav {
   background-color: #F2F2F2;
   float: left;
   height: 100%;
@@ -30,4 +24,34 @@ a span .nav-text {
   float: left;
   height: 100%;
   overflow-y: auto;
+}
+
+/* sidenav */
+.content-sidenav .clr-vertical-nav {
+  background-color: transparent;
+}
+
+.content-sidenav .clr-vertical-nav .nav-group-text {
+  font-weight: 600;
+  height: 1.3rem;
+}
+
+.content-sidenav .clr-vertical-nav .nav-text {
+  font-weight: normal;
+  margin-left: 10px;
+}
+
+.content-sidenav .clr-vertical-nav .nav-group-text, .clr-vertical-nav .content-sidenav .nav-text {
+  overflow: visible;
+  flex-grow: 0;
+}
+
+.content-sidenav .clr-vertical-nav .nav-link {
+  height: 1.3rem;
+}
+
+/* form top */
+div .no-top, form .no-top {
+  margin-top: 0;
+  padding-top: 0;
 }

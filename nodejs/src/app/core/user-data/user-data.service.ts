@@ -5,7 +5,7 @@ import { del, get, set } from 'idb-keyval';
 import { Long } from 'protobufjs';
 import { AsyncSubject, Subscription } from 'rxjs';
 import { HttpService } from '../../utils/http.service';
-import { Account, Category, Currency, DataStorage, FamilyMember, IdHolder, Security, SecurityTransaction, Settings, SubCategory, Transaction, TransactionTemplate } from '../model/model';
+import { Account, Category, Currency, DataStorage, FamilyMember, IdHolder, Note, Notepad, Security, SecurityTransaction, Settings, SubCategory, Transaction, TransactionTemplate } from '../model/model';
 import { UserDataEnricherService } from './user-data-enricher.service';
 import Language = Settings.Language;
 
@@ -130,6 +130,14 @@ export class UserDataService {
     return this.ds.securityTransactions.filter(x => !x.isDeleted) as SecurityTransaction[];
   }
 
+  notepads(): Notepad[] {
+    return this.ds.notepads.filter(x => !x.isDeleted) as Notepad[];
+  }
+
+  notes(): Note[] {
+    return this.ds.notes.filter(x => !x.isDeleted) as Note[];
+  }
+
   // new entity
 
   findCurrency(id: number | Long): Currency {
@@ -168,6 +176,14 @@ export class UserDataService {
     return this.securityTransactions().filter(x => x.id == id)[0];
   }
 
+  findNotepad(id: number | Long): Notepad {
+    return this.notepads().filter(x => x.id == id)[0];
+  }
+
+  findNote(id: number | Long): Note {
+    return this.notes().filter(x => x.id == id)[0];
+  }
+
   // new entity
 
   private isObsoleteIdHolder(): boolean {
@@ -203,7 +219,8 @@ export class UserDataService {
 
     const idsAmount = ds.accounts.length + ds.categories.length + ds.subCategories.length
       + ds.familyMembers.length + ds.transactions.length + ds.transactionTemplates.length
-      + ds.securities.length + ds.securityTransactions.length;
+      + ds.securities.length + ds.securityTransactions.length + ds.notepads.length
+      + ds.notes.length;
     // new entity
     await this.nextIds(idsAmount);
 
@@ -300,6 +317,20 @@ export class UserDataService {
       securityTransaction.id = nextIdSync();
     });
 
+    ds.notepads.forEach(notepad => {
+      const oldId = notepad.id;
+      notepad.id = nextIdSync();
+      ds.notes.forEach(note => {
+        if (note.notepadId == oldId) {
+          note.notepadId = notepad.id;
+        }
+      });
+    });
+
+    ds.notes.forEach(note => {
+      note.id = nextIdSync();
+    });
+
     // new entity
 
     await this.http.post('/api/data/storage/save', DataStorage.encode(ds), 600000);
@@ -362,6 +393,22 @@ export class UserDataService {
     await this.nextId().then(id => securityTransaction.id = id);
     await this.http.post('/api/data/security_transaction/save', SecurityTransaction.encode(securityTransaction));
     this.ds.securityTransactions.push(securityTransaction);
+    this.enricher.enrich(this.ds);
+    this.updateCache();
+  }
+
+  async saveNotepad(notepad: Notepad): Promise<any> {
+    await this.nextId().then(id => notepad.id = id);
+    await this.http.post('/api/data/notepad/save', Notepad.encode(notepad));
+    this.ds.notepads.push(notepad);
+    this.enricher.enrich(this.ds);
+    this.updateCache();
+  }
+
+  async saveNote(note: Note): Promise<any> {
+    await this.nextId().then(id => note.id = id);
+    await this.http.post('/api/data/note/save', Note.encode(note));
+    this.ds.notes.push(note);
     this.enricher.enrich(this.ds);
     this.updateCache();
   }
@@ -431,6 +478,22 @@ export class UserDataService {
     await this.http.post('/api/data/security_transaction/update', SecurityTransaction.encode(securityTransaction));
     this.ds.securityTransactions = this.ds.securityTransactions.filter(x => x.id != securityTransaction.id);
     this.ds.securityTransactions.push(securityTransaction);
+    this.enricher.enrich(this.ds);
+    this.updateCache();
+  }
+
+  async updateNotepad(notepad: Notepad): Promise<any> {
+    await this.http.post('/api/data/notepad/update', Notepad.encode(notepad));
+    this.ds.notepads = this.ds.notepads.filter(x => x.id != notepad.id);
+    this.ds.notepads.push(notepad);
+    this.enricher.enrich(this.ds);
+    this.updateCache();
+  }
+
+  async updateNote(note: Note): Promise<any> {
+    await this.http.post('/api/data/note/update', Note.encode(note));
+    this.ds.notes = this.ds.notes.filter(x => x.id != note.id);
+    this.ds.notes.push(note);
     this.enricher.enrich(this.ds);
     this.updateCache();
   }

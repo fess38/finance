@@ -12,6 +12,8 @@ import { ErrorPageComponent } from './core/error-page/error-page.component';
 import { SettingsComponent } from './core/settings/settings.component';
 import { FamilyMemberDetailComponent } from './family-member/family-member-detail/family-member-detail.component';
 import { FamilyMemberListComponent } from './family-member/family-member-list/family-member-list.component';
+import { NoteDetailComponent } from './notepad/note-detail/note-detail.component';
+import { NotepadDetailComponent } from './notepad/notepad-detail/notepad-detail.component';
 import { SecurityDetailComponent } from './security/security-detail/security-detail.component';
 import { SecurityListComponent } from './security/security-list/security-list.component';
 import { SecurityReportComponent } from './security/security-report/security-report.component';
@@ -134,6 +136,16 @@ const appRoutes: Routes = [
   {
     path: 'security_transaction/:id',
     component: SecurityTransactionDetailComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'notepad/:id',
+    component: NotepadDetailComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'note/:id',
+    component: NoteDetailComponent,
     canActivate: [AuthGuardService]
   },
   {

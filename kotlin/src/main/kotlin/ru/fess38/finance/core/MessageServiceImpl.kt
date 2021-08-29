@@ -79,6 +79,8 @@ class MessageServiceImpl : MessageService {
     val transactionTemplates = messages.filter {it.type == TRANSACTION_TEMPLATE}.map {it as TransactionTemplate}
     val securities = messages.filter {it.type == SECURITY}.map {it as Security}
     val securityTransactions = messages.filter {it.type == SECURITY_TRANSACTION}.map {it as SecurityTransaction}
+    val notepads = messages.filter {it.type == NOTEPAD}.map {it as Notepad}
+    val notes = messages.filter {it.type == NOTE}.map {it as Note}
 
     // new entity
 
@@ -94,6 +96,8 @@ class MessageServiceImpl : MessageService {
       .addAllTransactionTemplates(transactionTemplates)
       .addAllSecurities(securities)
       .addAllSecurityTransactions(securityTransactions)
+      .addAllNotepads(notepads)
+      .addAllNotes(notes)
       .build()
   }
 

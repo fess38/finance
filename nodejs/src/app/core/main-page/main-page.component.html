@@ -2,15 +2,15 @@
   <clr-header>
     <div class="header-nav" [clr-nav-level]="1">
       <a routerLink="/"
-           class="nav-link nav-text"
-           (click)="setFinance()"
-           [ngClass]="{'active':isFinance()}">
+         class="nav-link nav-text"
+         (click)="setFinance()"
+         [ngClass]="{'active':isFinance()}">
         <span>{{'main_page.finance' | translate}}</span>
       </a>
       <a routerLink="/"
-           class="nav-link nav-text"
-           (click)="setNotes()"
-           [ngClass]="{'active':isNotes()}">
+         class="nav-link nav-text"
+         (click)="setNotes()"
+         [ngClass]="{'active':isNotes()}">
         <span>{{'main_page.notes' | translate}}</span>
       </a>
     </div>
@@ -27,7 +27,10 @@
     </div>
   </clr-header>
   <div class="content-container">
-    <app-finance-sidenav class="app-sidenav" *ngIf="isFinance()"></app-finance-sidenav>
+    <div>
+      <app-finance-sidenav class="content-sidenav" *ngIf="isFinance()"></app-finance-sidenav>
+      <app-notepad-sidenav class="content-sidenav" *ngIf="isNotes()"></app-notepad-sidenav>
+    </div>
     <div class="content-area">
       <router-outlet></router-outlet>
     </div>

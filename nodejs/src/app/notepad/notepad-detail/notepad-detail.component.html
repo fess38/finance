@@ -1,0 +1,38 @@
+<div class="clr-row clr-col-12 clr-col-lg-6">
+  <form class="clr-form no-top">
+    <div class="clr-form-control clr-row no-top">
+      <label>
+        <span [hidden]="!(notepad | isNewEntity)">
+          {{'notepad.add' | translate}}
+        </span>
+        <span [hidden]="notepad | isNewEntity">
+          {{'notepad.edit' | translate}}
+        </span>
+      </label>
+    </div>
+    <div class="clr-form-control clr-row">
+      <label>{{'common.name' | translate}}</label>
+      <div class="clr-control-container">
+        <div class="clr-input-wrapper">
+          <input type="text" name="name" class="clr-input" [(ngModel)]="notepad.name"/>
+        </div>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row" [hidden]="notepad | isNewEntity">
+      <label>{{'notepad.amount' | translate}}: {{notepad.noteAmount}}</label>
+    </div>
+    <div class="clr-form-control clr-row">
+      <button class="btn btn-primary btn-sm btn-block"
+              (click)="update(notepad)"
+              [disabled]="!isValidForm() || ('' | isReadOnly)">
+        {{'common.save' | translate}}
+      </button>
+      <button class="btn btn-danger btn-sm btn-block"
+              (click)="delete(notepad)"
+              [hidden]="notepad | isNewEntity"
+              [disabled]="hasNotes() || ('' | isReadOnly)">
+        {{'common.delete' | translate}}
+      </button>
+    </div>
+  </form>
+</div>

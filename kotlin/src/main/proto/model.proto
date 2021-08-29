@@ -20,6 +20,8 @@ message DataStorage {
     repeated TransactionTemplate transactionTemplates = 8;
     repeated Security securities = 10;
     repeated SecurityTransaction security_transactions = 11;
+    repeated Notepad notepads = 12;
+    repeated Note notes = 13;
     // new entity
 }
 
@@ -149,6 +151,25 @@ message SecurityReport {
     optional double annual_profit = 10;
 }
 
+message Notepad {
+    optional int64 id = 1 [default = 0];
+    optional bool is_deleted = 2 [default = false];
+    optional int64 note_amount = 3 [default = 0];
+    required int64 created = 4;
+    required int64 updated = 5;
+    required string name = 6;
+}
+
+message Note {
+    optional int64 id = 1 [default = 0];
+    optional bool is_deleted = 2 [default = false];
+    required int64 notepad_id = 3;
+    required int64 created = 4;
+    required int64 updated = 5;
+    required string name = 6;
+    optional string text = 7;
+}
+
 // new entity
 
 message Settings {
@@ -219,6 +240,8 @@ enum EntityType {
     TRANSACTION_TEMPLATE = 9;
     SECURITY = 10;
     SECURITY_TRANSACTION = 11;
+    NOTEPAD = 12;
+    NOTE = 13;
     // new entity
 }
 

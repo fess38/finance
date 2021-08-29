@@ -1,0 +1,34 @@
+<clr-vertical-nav [clr-nav-level]="2" [clrVerticalNavCollapsible]="false">
+  <div class="nav-group-text">
+    <a [ngStyle]="{'text-decoration': showNotepads() ? 'underline' : 'none'}"
+       (click)="clearState()">
+      {{'notepad_sidenav.notepads' | translate}}
+    </a>
+    <span *ngIf="showNotes()">&nbsp;/&nbsp;</span>
+    <span *ngIf="showNotes()" [ngStyle]="{'text-decoration': 'underline'}">
+      {{notepadName()}}
+    </span>
+    <span>&nbsp;</span>
+    <a *ngIf="showNotepads()" routerLink="/notepad/new">
+      <cds-icon shape="plus-circle"></cds-icon>
+    </a>
+    <a *ngIf="showNotes()" routerLink="/note/new">
+      <cds-icon shape="plus-circle"></cds-icon>
+    </a>
+  </div>
+  <clr-vertical-nav-group-children *ngIf="showNotepads()">
+    <a *ngFor="let notepad of notepads()"
+       clrVerticalNavLink
+       routerLink="/notepad/{{notepad.id}}"
+       (click)="updateState(notepad)">
+      {{notepad.name}}
+    </a>
+  </clr-vertical-nav-group-children>
+  <clr-vertical-nav-group-children *ngIf="showNotes()">
+    <a *ngFor="let note of notes()"
+       clrVerticalNavLink
+       routerLink="/note/{{note.id}}">
+      {{note.name}}
+    </a>
+  </clr-vertical-nav-group-children>
+</clr-vertical-nav>

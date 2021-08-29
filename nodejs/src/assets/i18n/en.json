@@ -72,6 +72,19 @@
     "settings": "Settings",
     "title": "Finance"
   },
+  "note": {
+    "add": "Add note",
+    "edit": "Edit note"
+  },
+  "notepad": {
+    "add": "Add notepad",
+    "amount": "Note amount",
+    "edit": "Edit notepad"
+  },
+  "notepad_sidenav": {
+    "notepads": "Notepads",
+    "notes": "Notes"
+  },
   "report": {
     "summary": "Summary"
   },
