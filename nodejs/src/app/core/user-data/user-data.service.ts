@@ -5,7 +5,7 @@ import { del, get, set } from 'idb-keyval';
 import { Long } from 'protobufjs';
 import { AsyncSubject, Subscription } from 'rxjs';
 import { HttpService } from '../../utils/http.service';
-import { Account, Category, Currency, DataStorage, FamilyMember, IdHolder, Note, Notepad, Security, SecurityTransaction, Settings, SubCategory, Transaction, TransactionTemplate } from '../model/model';
+import { Account, Category, Currency, DataStorage, FamilyMember, IdHolder, LocalSettings, Note, Notepad, Security, SecurityTransaction, Settings, SubCategory, Transaction, TransactionTemplate } from '../model/model';
 import { UserDataEnricherService } from './user-data-enricher.service';
 import Language = Settings.Language;
 
@@ -21,7 +21,7 @@ export class UserDataService {
   private isInit = new AsyncSubject<boolean>();
   private ds = new DataStorage();
   private isReadOnly_ = true;
-  currentNotepadId = 0;
+  localSettings = new LocalSettings();
 
   subscribeOnInit(callback): Subscription {
     return this.isInit.subscribe(() => callback());

@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Subscription } from 'rxjs';
-import { Note, Notepad } from '../../core/model/model';
+import { interval, Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
+import { AppMode, Note, Notepad } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 
 @Component({
@@ -16,6 +17,7 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
               private router: Router) {}
 
   private subscription: Subscription;
+  private autosaveSubscription: Subscription;
   private sourceNote = new Note();
   viewMode = true;
   note = new Note();
@@ -23,6 +25,7 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
+    this.userdata.localSettings.appMode = AppMode.NOTES;
     const id = this.route.snapshot.paramMap.get('id');
     if (id != 'new') {
       const callback = () => {
@@ -31,27 +34,34 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
           this.router.navigate(['/']);
         } else {
           this.note = navigatedNote;
-          this.userdata.currentNotepadId = this.note.notepadId;
+          this.userdata.localSettings.currentNotepadId = this.note.notepadId;
           this.updateSourceNote(this.note);
         }
       };
       this.subscription = this.userdata.subscribeOnInit(callback);
     } else {
-      if (!this.userdata.currentNotepadId) {
+      if (!this.userdata.localSettings.currentNotepadId) {
         this.router.navigate(['/']);
       }
       this.viewMode = false;
-      this.note.notepadId = this.userdata.currentNotepadId;
+      this.note.notepadId = this.userdata.localSettings.currentNotepadId;
       this.translate.get('note.new').subscribe(defaultName => {
         this.note.name = defaultName;
         this.updateSourceNote(this.note);
       });
     }
+
+    this.autosaveSubscription = interval(30000)
+      .pipe(filter(() => this.isValidForm()))
+      .subscribe(() => this.update(this.note));
   }
 
   ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();
+    }
+    if (this.autosaveSubscription) {
+      this.autosaveSubscription.unsubscribe();
     }
     if (this.isValidForm()) {
       this.update(this.note);

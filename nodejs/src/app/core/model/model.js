@@ -5026,6 +5026,189 @@ export const Settings = $root.Settings = (() => {
     return Settings;
 })();
 
+export const LocalSettings = $root.LocalSettings = (() => {
+
+    /**
+     * Properties of a LocalSettings.
+     * @exports ILocalSettings
+     * @interface ILocalSettings
+     * @property {AppMode|null} [appMode] LocalSettings appMode
+     * @property {number|null} [currentNotepadId] LocalSettings currentNotepadId
+     */
+
+    /**
+     * Constructs a new LocalSettings.
+     * @exports LocalSettings
+     * @classdesc Represents a LocalSettings.
+     * @implements ILocalSettings
+     * @constructor
+     * @param {ILocalSettings=} [properties] Properties to set
+     */
+    function LocalSettings(properties) {
+        if (properties)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * LocalSettings appMode.
+     * @member {AppMode} appMode
+     * @memberof LocalSettings
+     * @instance
+     */
+    LocalSettings.prototype.appMode = 0;
+
+    /**
+     * LocalSettings currentNotepadId.
+     * @member {number} currentNotepadId
+     * @memberof LocalSettings
+     * @instance
+     */
+    LocalSettings.prototype.currentNotepadId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
+     * Creates a new LocalSettings instance using the specified properties.
+     * @function create
+     * @memberof LocalSettings
+     * @static
+     * @param {ILocalSettings=} [properties] Properties to set
+     * @returns {LocalSettings} LocalSettings instance
+     */
+    LocalSettings.create = function create(properties) {
+        return new LocalSettings(properties);
+    };
+
+    /**
+     * Encodes the specified LocalSettings message. Does not implicitly {@link LocalSettings.verify|verify} messages.
+     * @function encode
+     * @memberof LocalSettings
+     * @static
+     * @param {ILocalSettings} message LocalSettings message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    LocalSettings.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.appMode != null && Object.hasOwnProperty.call(message, "appMode"))
+            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.appMode);
+        if (message.currentNotepadId != null && Object.hasOwnProperty.call(message, "currentNotepadId"))
+            writer.uint32(/* id 2, wireType 0 =*/16).int64(message.currentNotepadId);
+        return writer;
+    };
+
+    /**
+     * Decodes a LocalSettings message from the specified reader or buffer.
+     * @function decode
+     * @memberof LocalSettings
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {LocalSettings} LocalSettings
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    LocalSettings.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.LocalSettings();
+        while (reader.pos < end) {
+            let tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                message.appMode = reader.int32();
+                break;
+            case 2:
+                message.currentNotepadId = reader.int64();
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Creates a LocalSettings message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof LocalSettings
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {LocalSettings} LocalSettings
+     */
+    LocalSettings.fromObject = function fromObject(object) {
+        if (object instanceof $root.LocalSettings)
+            return object;
+        let message = new $root.LocalSettings();
+        switch (object.appMode) {
+        case "FINANCE":
+        case 0:
+            message.appMode = 0;
+            break;
+        case "NOTES":
+        case 1:
+            message.appMode = 1;
+            break;
+        }
+        if (object.currentNotepadId != null)
+            if ($util.Long)
+                (message.currentNotepadId = $util.Long.fromValue(object.currentNotepadId)).unsigned = false;
+            else if (typeof object.currentNotepadId === "string")
+                message.currentNotepadId = parseInt(object.currentNotepadId, 10);
+            else if (typeof object.currentNotepadId === "number")
+                message.currentNotepadId = object.currentNotepadId;
+            else if (typeof object.currentNotepadId === "object")
+                message.currentNotepadId = new $util.LongBits(object.currentNotepadId.low >>> 0, object.currentNotepadId.high >>> 0).toNumber();
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a LocalSettings message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof LocalSettings
+     * @static
+     * @param {LocalSettings} message LocalSettings
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    LocalSettings.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        let object = {};
+        if (options.defaults) {
+            object.appMode = options.enums === String ? "FINANCE" : 0;
+            if ($util.Long) {
+                let long = new $util.Long(0, 0, false);
+                object.currentNotepadId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.currentNotepadId = options.longs === String ? "0" : 0;
+        }
+        if (message.appMode != null && message.hasOwnProperty("appMode"))
+            object.appMode = options.enums === String ? $root.AppMode[message.appMode] : message.appMode;
+        if (message.currentNotepadId != null && message.hasOwnProperty("currentNotepadId"))
+            if (typeof message.currentNotepadId === "number")
+                object.currentNotepadId = options.longs === String ? String(message.currentNotepadId) : message.currentNotepadId;
+            else
+                object.currentNotepadId = options.longs === String ? $util.Long.prototype.toString.call(message.currentNotepadId) : options.longs === Number ? new $util.LongBits(message.currentNotepadId.low >>> 0, message.currentNotepadId.high >>> 0).toNumber() : message.currentNotepadId;
+        return object;
+    };
+
+    /**
+     * Converts this LocalSettings to JSON.
+     * @function toJSON
+     * @memberof LocalSettings
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    LocalSettings.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    return LocalSettings;
+})();
+
 export const AccessToken = $root.AccessToken = (() => {
 
     /**

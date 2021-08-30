@@ -12,7 +12,6 @@ export class MainPageComponent implements OnInit, OnDestroy {
   constructor(private auth: AuthService, private userdata: UserDataService) {}
 
   private subscription: Subscription;
-  private appMode = AppMode.FINANCE;
   isOnline = false;
 
   ngOnInit(): void {
@@ -35,19 +34,19 @@ export class MainPageComponent implements OnInit, OnDestroy {
   }
 
   isFinance(): boolean {
-    return this.appMode == AppMode.FINANCE;
+    return this.userdata.localSettings.appMode == AppMode.FINANCE;
   }
 
   setFinance() {
-    this.appMode = AppMode.FINANCE;
+    this.userdata.localSettings.appMode = AppMode.FINANCE;
   }
 
   isNotes(): boolean {
-    return this.appMode == AppMode.NOTES;
+    return this.userdata.localSettings.appMode == AppMode.NOTES;
   }
 
   setNotes() {
-    this.appMode = AppMode.NOTES;
+    this.userdata.localSettings.appMode = AppMode.NOTES;
   }
 
   signout(): void {

@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Notepad } from '../../core/model/model';
+import { AppMode, Notepad } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 
 @Component({
@@ -18,6 +18,7 @@ export class NotepadDetailComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
+    this.userdata.localSettings.appMode = AppMode.NOTES;
     const id = this.route.snapshot.paramMap.get('id');
     if (id != 'new') {
       const callback = () => {
@@ -26,7 +27,7 @@ export class NotepadDetailComponent implements OnInit, OnDestroy {
           this.router.navigate(['/']);
         } else {
           this.notepad = navigatedNotepad;
-          this.userdata.currentNotepadId = this.notepad.id;
+          this.userdata.localSettings.currentNotepadId = this.notepad.id;
         }
       };
       this.subscription = this.userdata.subscribeOnInit(callback);
@@ -72,6 +73,6 @@ export class NotepadDetailComponent implements OnInit, OnDestroy {
     notepad.isDeleted = true;
     notepad.updated = new Date().getTime();
     this.update(notepad);
-    this.userdata.currentNotepadId = 0;
+    this.userdata.localSettings.currentNotepadId = 0;
   }
 }

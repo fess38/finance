@@ -1652,6 +1652,78 @@ export namespace Settings {
     }
 }
 
+/** Properties of a LocalSettings. */
+export interface ILocalSettings {
+
+    /** LocalSettings appMode */
+    appMode?: (AppMode|null);
+
+    /** LocalSettings currentNotepadId */
+    currentNotepadId?: (number|null);
+}
+
+/** Represents a LocalSettings. */
+export class LocalSettings implements ILocalSettings {
+
+    /**
+     * Constructs a new LocalSettings.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: ILocalSettings);
+
+    /** LocalSettings appMode. */
+    public appMode: AppMode;
+
+    /** LocalSettings currentNotepadId. */
+    public currentNotepadId: number;
+
+    /**
+     * Creates a new LocalSettings instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns LocalSettings instance
+     */
+    public static create(properties?: ILocalSettings): LocalSettings;
+
+    /**
+     * Encodes the specified LocalSettings message. Does not implicitly {@link LocalSettings.verify|verify} messages.
+     * @param message LocalSettings message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: ILocalSettings, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a LocalSettings message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns LocalSettings
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): LocalSettings;
+
+    /**
+     * Creates a LocalSettings message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns LocalSettings
+     */
+    public static fromObject(object: { [k: string]: any }): LocalSettings;
+
+    /**
+     * Creates a plain object from a LocalSettings message. Also converts values to other types if specified.
+     * @param message LocalSettings
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: LocalSettings, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this LocalSettings to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
 /** Properties of an AccessToken. */
 export interface IAccessToken {
 

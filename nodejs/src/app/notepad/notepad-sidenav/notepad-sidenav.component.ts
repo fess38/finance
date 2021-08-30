@@ -5,7 +5,8 @@ import { UserDataService } from '../../core/user-data/user-data.service';
 
 @Component({
   selector: 'app-notepad-sidenav',
-  templateUrl: 'notepad-sidenav.component.html'
+  templateUrl: 'notepad-sidenav.component.html',
+  styleUrls: ['notepad-sidenav.component.css']
 })
 export class NotepadSidenavComponent implements OnInit {
   constructor(private userdata: UserDataService) {}
@@ -23,23 +24,23 @@ export class NotepadSidenavComponent implements OnInit {
   }
 
   updateCurrentNotepadId(notepad: Notepad) {
-    this.userdata.currentNotepadId = notepad.id;
+    this.userdata.localSettings.currentNotepadId = notepad.id;
   }
 
   clearState() {
-    this.userdata.currentNotepadId = 0;
+    this.userdata.localSettings.currentNotepadId = 0;
   }
 
   showNotepads(): boolean {
-    return this.userdata.currentNotepadId == 0;
+    return this.userdata.localSettings.currentNotepadId == 0;
   }
 
   showNotes(): boolean {
     return !this.showNotepads();
   }
 
-  notepadName(): string {
-    return this.userdata.findNotepad(this.userdata.currentNotepadId).name;
+  currentNotepad(): Notepad {
+    return this.userdata.findNotepad(this.userdata.localSettings.currentNotepadId);
   }
 
   notepads(): Notepad[] {
@@ -48,7 +49,7 @@ export class NotepadSidenavComponent implements OnInit {
 
   notes(): Note[] {
     return this.userdata.notes()
-      .filter(x => x.notepadId == this.userdata.currentNotepadId)
+      .filter(x => x.notepadId == this.userdata.localSettings.currentNotepadId)
       .sort((a, b) => (a.updated > b.updated ? -1 : 1));
   }
 }

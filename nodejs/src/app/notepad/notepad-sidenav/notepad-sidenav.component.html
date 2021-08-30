@@ -5,9 +5,9 @@
       {{'notepad_sidenav.notepads' | translate}}
     </a>
     <span *ngIf="showNotes()">&nbsp;/&nbsp;</span>
-    <span *ngIf="showNotes()" [ngStyle]="{'text-decoration': 'underline'}">
-      {{notepadName()}}
-    </span>
+    <a *ngIf="showNotes()" id="current-notepad" routerLink="/notepad/{{currentNotepad().id}}">
+      {{currentNotepad().name}}
+    </a>
     <span>&nbsp;</span>
     <a [routerLink]="[showNotepads() ? '/notepad' : '/note', 'new']">
       <clr-tooltip>
@@ -26,7 +26,6 @@
   <clr-vertical-nav-group-children *ngIf="showNotepads()">
     <a *ngFor="let notepad of notepads()"
        clrVerticalNavLink
-       routerLink="/notepad/{{notepad.id}}"
        (click)="updateCurrentNotepadId(notepad)">
       {{notepad.name}}
     </a>

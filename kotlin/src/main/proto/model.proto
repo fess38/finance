@@ -184,6 +184,11 @@ message Settings {
     }
 }
 
+message LocalSettings {
+    optional AppMode app_mode = 1 [default = FINANCE];
+    optional int64 current_notepad_id = 2 [default = 0];
+}
+
 message AccessToken {
     optional string value = 1;
     optional int64 expired = 2 [default = 0];
