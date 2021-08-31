@@ -25,7 +25,7 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
-    this.userdata.localSettings.appMode = AppMode.NOTES;
+    this.userdata.appMode = AppMode.NOTES;
     const id = this.route.snapshot.paramMap.get('id');
     if (id != 'new') {
       const callback = () => {

@@ -5,7 +5,10 @@ import { del, get, set } from 'idb-keyval';
 import { Long } from 'protobufjs';
 import { AsyncSubject, Subscription } from 'rxjs';
 import { HttpService } from '../../utils/http.service';
-import { Account, Category, Currency, DataStorage, FamilyMember, IdHolder, LocalSettings, Note, Notepad, Security, SecurityTransaction, Settings, SubCategory, Transaction, TransactionTemplate } from '../model/model';
+import {
+  Account, AppMode, Category, Currency, DataStorage, FamilyMember, IdHolder, LocalSettings, Note, Notepad, Security,
+  SecurityTransaction, Settings, SubCategory, Transaction, TransactionTemplate
+} from '../model/model';
 import { UserDataEnricherService } from './user-data-enricher.service';
 import Language = Settings.Language;
 
@@ -71,7 +74,7 @@ export class UserDataService {
     if (this.translate) {
       this.translate.setDefaultLang('ru');
       this.translate.use(this.locale());
-      this.translate.get('main_page.title').subscribe(x => this.titleService.setTitle(x));
+      this.setTitle();
     }
   }
 
@@ -85,6 +88,21 @@ export class UserDataService {
 
   locale(): string {
     return Language[this.settings().language].toLowerCase();
+  }
+
+  set appMode(appMode: AppMode) {
+    this.localSettings.appMode = appMode;
+    this.setTitle();
+  }
+
+  private setTitle() {
+    let key = ''
+    if (this.localSettings.appMode == AppMode.FINANCE) {
+      key = 'main_page.finance';
+    } else if (this.localSettings.appMode == AppMode.NOTES) {
+      key = 'main_page.notes';
+    }
+    this.translate.get(key).subscribe(x => this.titleService.setTitle(x));
   }
 
   settings(): Settings {
