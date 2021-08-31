@@ -52,7 +52,7 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
     }
 
     this.autosaveSubscription = interval(30000)
-      .pipe(filter(() => this.isValidForm()))
+      .pipe(filter(() => this.isValidForm() && this.note.id != 0))
       .subscribe(() => this.update(this.note));
   }
 
