@@ -2,4 +2,13 @@
   width: 100%;
   background-color: #FAFAFA;
   resize: none;
+  overflow-y: scroll;
+}
+
+.note-text-focused {
+  height: 70vh;
+}
+
+.note-text-not-focused {
+  height: 50vh;
 }
