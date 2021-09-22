@@ -1,3 +1,4 @@
+import { ClipboardModule } from '@angular/cdk/clipboard';
 import { NgModule } from '@angular/core';
 import { MarkdownModule } from 'ngx-markdown';
 import { SharedModule } from '../core/shared/shared.module';
@@ -13,6 +14,7 @@ import { NotepadSidenavComponent } from './notepad-sidenav/notepad-sidenav.compo
     NoteDetailComponent
   ],
   imports: [
+    ClipboardModule,
     MarkdownModule.forChild(),
     SharedModule
   ],

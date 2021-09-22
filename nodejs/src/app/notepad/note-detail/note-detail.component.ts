@@ -1,4 +1,5 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { interval, Subscription } from 'rxjs';
@@ -16,7 +17,7 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
               private translate: TranslateService,
               private route: ActivatedRoute,
               private router: Router,
-              private changeDetector: ChangeDetectorRef) {}
+              private clipboard: Clipboard) {}
 
   private subscription: Subscription;
   private autosaveSubscription: Subscription;
@@ -100,36 +101,42 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  onKeyUp(event: KeyboardEvent): void {
+  onKeyDown(event: KeyboardEvent): void {
     this.updateCursorPosition(event);
-    if (event.code == 'Enter') {
+
+    let isUpdated = true;
+    if (event.ctrlKey || event.metaKey) {
+      if (event.code == 'ArrowUp') {
+        this.noteWrapper.moveRowUp();
+      } else if (event.code == 'ArrowDown') {
+        this.noteWrapper.moveRowDown();
+      } else if (event.key == 'b' || event.key == 'и') {
+        this.noteWrapper.bold();
+      } else if (event.key == 'x' || event.key == 'ч') {
+        this.clipboard.copy(this.noteWrapper.cut());
+      } else {
+        isUpdated = false;
+      }
+    } else if (event.code == 'Enter') {
       this.noteWrapper.onEnter();
+    } else {
+      isUpdated = false;
+    }
+
+    if (isUpdated) {
       this.afterChange(event.target as HTMLTextAreaElement);
     }
   }
 
-  onKeyDown(event: KeyboardEvent): void {
-    this.updateCursorPosition(event);
-    if (event.ctrlKey) {
-      if (event.code == 'ArrowUp') {
-        this.noteWrapper.moveRowUp();
-        this.afterChange(event.target as HTMLTextAreaElement);
-      } else if (event.code == 'ArrowDown') {
-        this.noteWrapper.moveRowDown();
-        this.afterChange(event.target as HTMLTextAreaElement);
-      } else if (event.key == 'b') {
-        this.noteWrapper.bold();
-        this.afterChange(event.target as HTMLTextAreaElement);
-      }
-    }
-  }
-
   private afterChange(noteTextElement: HTMLTextAreaElement): void {
-    this.changeDetector.detectChanges();
+    const sourceScrollTop = noteTextElement.scrollTop;
     setTimeout(() => {
-      noteTextElement.selectionStart = this.noteWrapper.getSelectionStartIndex();
-      noteTextElement.selectionEnd = this.noteWrapper.getSelectionEndIndex();
-    }, 10);
+      noteTextElement.setSelectionRange(
+        this.noteWrapper.getSelectionStartIndex(),
+        this.noteWrapper.getSelectionEndIndex()
+      );
+      noteTextElement.scrollTop = sourceScrollTop;
+    });
   }
 
   isValidForm() {

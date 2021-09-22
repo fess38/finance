@@ -5,6 +5,7 @@ export class NoteWrapper {
   private selectionStartIndex = 0;
   private selectionEndIndex = 0;
   private cursorRowIndex = 0;
+  private cursorColumnIndex = 0;
   private rows: string[];
 
   prepareForMarkdown(): string {
@@ -44,6 +45,9 @@ export class NoteWrapper {
       if (i < this.selectionStartIndex) {
         if (isNewLine) {
           ++this.cursorRowIndex;
+          this.cursorColumnIndex = 0;
+        } else {
+          ++this.cursorColumnIndex;
         }
       }
     }
@@ -51,11 +55,11 @@ export class NoteWrapper {
   }
 
   onEnter(): void {
-    const previousRow = this.rows[this.cursorRowIndex - 1];
+    const currentRow = this.rows[this.cursorRowIndex];
     let insertedText = '';
     let deletePreviousRow = false;
 
-    const ulMatch = previousRow.match(/^( *[-*] )(.*)/);
+    const ulMatch = currentRow.match(/^( *[-*] )(.*)/);
     if (ulMatch) {
       if (ulMatch[2].length > 0) {
         insertedText = ulMatch[1];
@@ -64,7 +68,7 @@ export class NoteWrapper {
       }
     }
 
-    const olMatch = previousRow.match(/^( *)([0-9]+)(\. )(.*)/);
+    const olMatch = currentRow.match(/^( *)([0-9]+)(\. )(.*)/);
     if (olMatch) {
       if (olMatch[4].length > 0) {
         insertedText = olMatch[1] + String(+olMatch[2] + 1) + olMatch[3];
@@ -74,19 +78,22 @@ export class NoteWrapper {
     }
 
     if (insertedText) {
+      this.note.text = this.rows.slice(0, this.cursorRowIndex + 1)
+        .concat([insertedText])
+        .concat(this.rows.slice(this.cursorRowIndex + 1))
+        .join('\n');
+      this.selectionStartIndex += insertedText.length + 1;
+      this.selectionEndIndex = this.selectionStartIndex;
+    } else if (deletePreviousRow) {
       this.note.text = this.rows.slice(0, this.cursorRowIndex)
         .concat([insertedText])
         .concat(this.rows.slice(this.cursorRowIndex + 1))
         .join('\n');
-      this.selectionStartIndex += insertedText.length;
+      this.selectionStartIndex -= currentRow.length;
       this.selectionEndIndex = this.selectionStartIndex;
-    } else if (deletePreviousRow) {
-      this.note.text = this.rows.slice(0, this.cursorRowIndex - 1)
-        .concat([insertedText])
-        .concat(this.rows.slice(this.cursorRowIndex + 1))
-        .join('\n');
-      this.selectionStartIndex -= previousRow.length + 1;
-      this.selectionEndIndex = this.selectionStartIndex;
+    } else {
+      ++this.selectionStartIndex;
+      ++this.selectionEndIndex;
     }
   }
 
@@ -124,6 +131,19 @@ export class NoteWrapper {
       .join('\n');
     this.selectionStartIndex += (nextRow || '').length + 1;
     this.selectionEndIndex = this.selectionStartIndex;
+  }
+
+  cut(): string {
+    const previousRows = this.rows.slice(0, Math.max(0, this.cursorRowIndex));
+    const currentRow = this.rows[this.cursorRowIndex];
+    const nextRows = this.rows.slice(this.cursorRowIndex + 1);
+    this.note.text = previousRows
+      .concat([''])
+      .concat(nextRows)
+      .join('\n');
+    this.selectionStartIndex -= this.cursorColumnIndex;
+    this.selectionEndIndex = this.selectionStartIndex;
+    return currentRow;
   }
 
   bold(): void {
