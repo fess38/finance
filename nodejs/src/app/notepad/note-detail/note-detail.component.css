@@ -1,14 +1,10 @@
 #note-text {
-  width: 100%;
   background-color: #FAFAFA;
-  resize: none;
-  overflow-y: scroll;
-}
-
-.note-text-focused {
+  border-style: none;
+  border-color: Transparent;
   height: 70vh;
-}
-
-.note-text-not-focused {
-  height: 50vh;
+  overflow-y: scroll;
+  resize: none;
+  outline: none;
+  width: 100%;
 }

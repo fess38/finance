@@ -1,5 +1,5 @@
 import { Clipboard } from '@angular/cdk/clipboard';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { interval, Subscription } from 'rxjs';
@@ -23,8 +23,9 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
   private autosaveSubscription: Subscription;
   private noteWrapper = new NoteWrapper();
   private sourceNote = new Note();
+  @ViewChild('noteTextElement')
+  private noteTextElement: ElementRef;
   viewMode = true;
-  isFocused = false;
 
   set note(note: Note) {
     this.noteWrapper.note = note;
@@ -80,30 +81,27 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateSourceNote(note: Note) {
-    this.sourceNote.notepadId = note.notepadId;
-    this.sourceNote.name = note.name;
-    this.sourceNote.text = note.text;
-  }
-
-  textForMarkdown(): string {
-    return this.noteWrapper.prepareForMarkdown();
+  onViewModeChange(): void {
+    this.viewMode = !this.viewMode;
+    if (!this.viewMode) {
+      (this.noteTextElement.nativeElement as HTMLTextAreaElement).value = this.note.text;
+    }
   }
 
   notepads(): Notepad[] {
     return this.userdata.notepads().sort((a, b) => (a.name < b.name ? -1 : 1));
   }
 
-  updateCursorPosition(event: KeyboardEvent): void {
-    const noteTextElement = event.target as HTMLTextAreaElement;
-    if (noteTextElement.selectionStart || noteTextElement.selectionStart == 0) {
-      this.noteWrapper.setSelectionIndexes(noteTextElement.selectionStart, noteTextElement.selectionEnd);
-    }
+  textForMarkdown(): string {
+    return this.noteWrapper.prepareForMarkdown();
+  }
+
+  onClick(event: MouseEvent): void {
+    this.updateCursorPosition(event);
   }
 
   onKeyDown(event: KeyboardEvent): void {
     this.updateCursorPosition(event);
-
     let isUpdated = true;
     if (event.ctrlKey || event.metaKey) {
       if (event.code == 'ArrowUp') {
@@ -117,8 +115,6 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
       } else {
         isUpdated = false;
       }
-    } else if (event.code == 'Enter') {
-      this.noteWrapper.onEnter();
     } else {
       isUpdated = false;
     }
@@ -128,14 +124,35 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
     }
   }
 
+  onKeyUp(event: KeyboardEvent): void {
+    this.updateCursorPosition(event);
+    if (event.code == 'Enter') {
+      this.noteWrapper.onEnter();
+      this.afterChange(event.target as HTMLTextAreaElement);
+    }
+  }
+
+  private updateCursorPosition(event: KeyboardEvent | MouseEvent): void {
+    const noteTextElement = event.target as HTMLTextAreaElement;
+    this.noteWrapper.note.text = noteTextElement.value;
+    if (noteTextElement.selectionStart || noteTextElement.selectionStart == 0) {
+      this.noteWrapper.updateCursorPosition(
+        noteTextElement.selectionStart,
+        noteTextElement.selectionEnd,
+        noteTextElement.scrollHeight,
+        noteTextElement.scrollTop,
+        noteTextElement.scrollTop + noteTextElement.clientHeight
+      );
+    }
+  }
+
   private afterChange(noteTextElement: HTMLTextAreaElement): void {
-    const sourceScrollTop = noteTextElement.scrollTop;
     setTimeout(() => {
+      noteTextElement.value = this.note.text;
       noteTextElement.setSelectionRange(
         this.noteWrapper.getSelectionStartIndex(),
         this.noteWrapper.getSelectionEndIndex()
       );
-      noteTextElement.scrollTop = sourceScrollTop;
     });
   }
 
@@ -167,6 +184,12 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
           this.router.navigate(['/error']);
         });
     }
+  }
+
+  private updateSourceNote(note: Note) {
+    this.sourceNote.notepadId = note.notepadId;
+    this.sourceNote.name = note.name;
+    this.sourceNote.text = note.text;
   }
 
   delete(note: Note) {
