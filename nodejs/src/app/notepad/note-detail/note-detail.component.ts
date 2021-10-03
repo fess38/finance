@@ -115,6 +115,8 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
       } else {
         isUpdated = false;
       }
+    } else if (event.code == 'Enter') {
+        this.noteWrapper.enter();
     } else {
       isUpdated = false;
     }
@@ -124,34 +126,16 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  onKeyUp(event: KeyboardEvent): void {
-    this.updateCursorPosition(event);
-    if (event.code == 'Enter') {
-      this.noteWrapper.onEnter();
-      this.afterChange(event.target as HTMLTextAreaElement);
-    }
-  }
-
   private updateCursorPosition(event: KeyboardEvent | MouseEvent): void {
-    const noteTextElement = event.target as HTMLTextAreaElement;
-    this.noteWrapper.note.text = noteTextElement.value;
-    if (noteTextElement.selectionStart || noteTextElement.selectionStart == 0) {
-      this.noteWrapper.updateCursorPosition(
-        noteTextElement.selectionStart,
-        noteTextElement.selectionEnd,
-        noteTextElement.scrollHeight,
-        noteTextElement.scrollTop,
-        noteTextElement.scrollTop + noteTextElement.clientHeight
-      );
-    }
+    this.noteWrapper.update(event.target as HTMLTextAreaElement);
   }
 
   private afterChange(noteTextElement: HTMLTextAreaElement): void {
+    noteTextElement.value = this.note.text;
     setTimeout(() => {
-      noteTextElement.value = this.note.text;
       noteTextElement.setSelectionRange(
-        this.noteWrapper.getSelectionStartIndex(),
-        this.noteWrapper.getSelectionEndIndex()
+        this.noteWrapper.selectionStart,
+        this.noteWrapper.selectionEnd
       );
     });
   }

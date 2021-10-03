@@ -2,14 +2,14 @@ import { Note } from '../../core/model/model';
 
 export class NoteWrapper {
   note = new Note();
-  private selectionStartIndex = 0;
-  private selectionEndIndex = 0;
-  private heightPerRow = 0;
-  private clientTopPosition = 0;
-  private clientBottomPosition = 0;
-  private cursorRowIndex = 0;
-  private cursorColumnIndex = 0;
-  private rows: string[];
+  rows: string[];
+  selectionStart = 0;
+  selectionEnd = 0;
+  cursorRow = 0;
+  cursorColumn = 0;
+  rowHeight = 0;
+  topPosition = 0;
+  bottomPosition = 0;
 
   prepareForMarkdown(): string {
     return this.note.text;
@@ -25,49 +25,48 @@ export class NoteWrapper {
       || (this.note.notepadId != note.notepadId && this.note.text.length > 0));
   }
 
-  updateCursorPosition(startIndex: number,
-                      endIndex: number,
-                      height: number,
-                      clientTopPosition: number,
-                      clientBottomPosition: number) {
-    this.selectionStartIndex = startIndex;
-    this.selectionEndIndex = endIndex;
-    this.clientTopPosition = clientTopPosition;
-    this.clientBottomPosition = clientBottomPosition;
+  update(noteTextElement: HTMLTextAreaElement): void {
+    this.note.text = noteTextElement.value;
+    this.rows = this.note.text.split('\n');
+    this.selectionStart = noteTextElement.selectionStart;
+    this.selectionEnd = noteTextElement.selectionEnd;
+    this.rowHeight = noteTextElement.scrollHeight / this.rows.length;
+    this.topPosition = noteTextElement.scrollTop;
+    this.bottomPosition = this.topPosition + noteTextElement.clientHeight;
+    this.updateCursorPosition();
+  }
 
-    this.cursorRowIndex = 0;
-    this.cursorColumnIndex = 0;
-    for (let i = 0; i < this.note.text.length; ++i) {
+  private updateCursorPosition(): void {
+    this.cursorRow = 0;
+    this.cursorColumn = 0;
+    for (let i = 0; i < this.selectionStart; ++i) {
       const isNewLine = this.note.text[i] == '\n';
-      if (i < this.selectionStartIndex) {
-        if (isNewLine) {
-          ++this.cursorRowIndex;
-          this.cursorColumnIndex = 0;
-        } else {
-          ++this.cursorColumnIndex;
-        }
+      if (isNewLine) {
+        ++this.cursorRow;
+        this.cursorColumn = 0;
+      } else {
+        ++this.cursorColumn;
       }
     }
+  }
+
+  enter(): void {
+    // insert new line
+    this.note.text = this.note.text.slice(0, this.selectionStart)
+      .concat('\n')
+      .concat(this.note.text.slice(this.selectionStart));
     this.rows = this.note.text.split('\n');
-    this.heightPerRow = this.rows.length > 0 ? height / this.rows.length : height
-  }
+    ++this.selectionStart;
+    this.updateCursorPosition();
 
-  getSelectionStartIndex(): number {
-    return this.selectionStartIndex;
-  }
-
-  getSelectionEndIndex(): number {
-    return this.selectionEndIndex;
-  }
-
-  onEnter(): void {
-    const previousRow = this.rows[this.cursorRowIndex - 1];
+    const previousRow = this.rows[this.cursorRow - 1];
+    const currentRow = this.rows[this.cursorRow];
     let insertedText = '';
     let deletePreviousRow = false;
 
     const ulMatch = previousRow.match(/^( *[-*] )(.*)/);
     if (ulMatch) {
-      if (ulMatch[2].length > 0) {
+      if (ulMatch[2].length > 0 || currentRow.length > 0) {
         insertedText = ulMatch[1];
       } else {
         deletePreviousRow = true;
@@ -76,7 +75,7 @@ export class NoteWrapper {
 
     const olMatch = previousRow.match(/^( *)([0-9]+)(\. )(.*)/);
     if (olMatch) {
-      if (olMatch[4].length > 0) {
+      if (olMatch[4].length > 0 || currentRow.length > 0) {
         insertedText = olMatch[1] + String(+olMatch[2] + 1) + olMatch[3];
       } else {
         deletePreviousRow = true;
@@ -84,26 +83,26 @@ export class NoteWrapper {
     }
 
     if (insertedText) {
-      this.note.text = this.rows.slice(0, this.cursorRowIndex)
-        .concat([insertedText])
-        .concat(this.rows.slice(this.cursorRowIndex + 1))
+      this.note.text = this.rows.slice(0, this.cursorRow)
+        .concat([insertedText + currentRow])
+        .concat(this.rows.slice(this.cursorRow + 1))
         .join('\n');
-      this.selectionStartIndex += insertedText.length;
+      this.selectionStart += insertedText.length;
     } else if (deletePreviousRow) {
-      this.note.text = this.rows.slice(0, this.cursorRowIndex - 1)
+      this.note.text = this.rows.slice(0, this.cursorRow - 1)
         .concat([insertedText])
-        .concat(this.rows.slice(this.cursorRowIndex + 1))
+        .concat(this.rows.slice(this.cursorRow + 1))
         .join('\n');
-      this.selectionStartIndex -= previousRow.length + 1;
+      this.selectionStart -= previousRow.length + 1;
     }
-    this.selectionEndIndex = this.selectionStartIndex;
+    this.selectionEnd = this.selectionStart;
   }
 
   moveRowUp(): void {
-    const previousRows = this.rows.slice(0, Math.max(0, this.cursorRowIndex - 1));
-    const previousRow = this.rows[this.cursorRowIndex - 1];
-    const currentRow = this.rows[this.cursorRowIndex];
-    const nextRows = this.rows.slice(this.cursorRowIndex + 1);
+    const previousRows = this.rows.slice(0, Math.max(0, this.cursorRow - 1));
+    const previousRow = this.rows[this.cursorRow - 1];
+    const currentRow = this.rows[this.cursorRow];
+    const nextRows = this.rows.slice(this.cursorRow + 1);
 
     if (previousRow == null) {
       return;
@@ -113,15 +112,15 @@ export class NoteWrapper {
       .concat([currentRow, previousRow])
       .concat(nextRows)
       .join('\n');
-    this.selectionStartIndex -= (previousRow || '').length + 1;
-    this.selectionEndIndex = this.selectionStartIndex;
+    this.selectionStart -= (previousRow || '').length + 1;
+    this.selectionEnd = this.selectionStart;
   }
 
   moveRowDown(): void {
-    const previousRows = this.rows.slice(0, Math.max(0, this.cursorRowIndex));
-    const currentRow = this.rows[this.cursorRowIndex];
-    const nextRow = this.rows[this.cursorRowIndex + 1];
-    const nextRows = this.rows.slice(this.cursorRowIndex + 2);
+    const previousRows = this.rows.slice(0, Math.max(0, this.cursorRow));
+    const currentRow = this.rows[this.cursorRow];
+    const nextRow = this.rows[this.cursorRow + 1];
+    const nextRows = this.rows.slice(this.cursorRow + 2);
 
     if (nextRow == null) {
       return;
@@ -131,41 +130,45 @@ export class NoteWrapper {
       .concat([nextRow, currentRow])
       .concat(nextRows)
       .join('\n');
-    this.selectionStartIndex += (nextRow || '').length + 1;
-    this.selectionEndIndex = this.selectionStartIndex;
+    this.selectionStart += (nextRow || '').length + 1;
+    this.selectionEnd = this.selectionStart;
   }
 
   cut(): string {
-    const previousRows = this.rows.slice(0, Math.max(0, this.cursorRowIndex));
-    const currentRow = this.rows[this.cursorRowIndex];
-    const nextRows = this.rows.slice(this.cursorRowIndex + 1);
+    const previousRows = this.rows.slice(0, Math.max(0, this.cursorRow));
+    const currentRow = this.rows[this.cursorRow];
+    const nextRows = this.rows.slice(this.cursorRow + 1);
     this.note.text = previousRows
       .concat([''])
       .concat(nextRows)
       .join('\n');
-    this.selectionStartIndex -= this.cursorColumnIndex;
-    this.selectionEndIndex = this.selectionStartIndex;
+    this.selectionStart -= this.cursorColumn;
+    this.selectionEnd = this.selectionStart;
     return currentRow;
   }
 
   bold(): void {
-    let selection = this.note.text.slice(this.selectionStartIndex, this.selectionEndIndex);
+    let selection = this.note.text.slice(this.selectionStart, this.selectionEnd);
     const boldMatch = selection.match(/^\*\*(.*)\*\*$/);
     selection = boldMatch ? boldMatch[1] : '**' + selection + '**';
 
+    if (selection.match('\n')) {
+      return;
+    }
+
     this.note.text = [
-      this.note.text.slice(0, this.selectionStartIndex),
+      this.note.text.slice(0, this.selectionStart),
       selection,
-      this.note.text.slice(this.selectionEndIndex)
+      this.note.text.slice(this.selectionEnd)
     ].join('');
 
     if (selection == '****') {
-      this.selectionStartIndex += 2;
-      this.selectionEndIndex = this.selectionStartIndex;
+      this.selectionStart += 2;
+      this.selectionEnd = this.selectionStart;
     } else if (boldMatch) {
-      this.selectionEndIndex -= 4;
+      this.selectionEnd -= 4;
     } else {
-      this.selectionEndIndex += 4;
+      this.selectionEnd += 4;
     }
   }
 }
