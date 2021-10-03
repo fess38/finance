@@ -8,8 +8,13 @@ export class NoteWrapper {
   cursorRow = 0;
   cursorColumn = 0;
   rowHeight = 0;
-  topPosition = 0;
+  scrollTop = 0;
   bottomPosition = 0;
+
+  private set text(text: string) {
+    this.note.text = text;
+    this.rows = this.note.text.split('\n');
+  }
 
   prepareForMarkdown(): string {
     return this.note.text;
@@ -26,13 +31,12 @@ export class NoteWrapper {
   }
 
   update(noteTextElement: HTMLTextAreaElement): void {
-    this.note.text = noteTextElement.value;
-    this.rows = this.note.text.split('\n');
+    this.text = noteTextElement.value;
     this.selectionStart = noteTextElement.selectionStart;
     this.selectionEnd = noteTextElement.selectionEnd;
     this.rowHeight = noteTextElement.scrollHeight / this.rows.length;
-    this.topPosition = noteTextElement.scrollTop;
-    this.bottomPosition = this.topPosition + noteTextElement.clientHeight;
+    this.scrollTop = noteTextElement.scrollTop;
+    this.bottomPosition = this.scrollTop + noteTextElement.clientHeight;
     this.updateCursorPosition();
   }
 
@@ -50,12 +54,24 @@ export class NoteWrapper {
     }
   }
 
+  private scrollUp(): void {
+    if ((this.cursorRow - 1) * this.rowHeight < this.scrollTop) {
+      this.scrollTop -= this.rowHeight;
+    }
+  }
+
+  private scrollDown(): void {
+    this.updateCursorPosition();
+    if ((this.cursorRow + 1) * this.rowHeight > this.bottomPosition) {
+      this.scrollTop += this.rowHeight;
+    }
+  }
+
   enter(): void {
     // insert new line
-    this.note.text = this.note.text.slice(0, this.selectionStart)
+    this.text = this.note.text.slice(0, this.selectionStart)
       .concat('\n')
       .concat(this.note.text.slice(this.selectionStart));
-    this.rows = this.note.text.split('\n');
     ++this.selectionStart;
     this.updateCursorPosition();
 
@@ -83,19 +99,20 @@ export class NoteWrapper {
     }
 
     if (insertedText) {
-      this.note.text = this.rows.slice(0, this.cursorRow)
+      this.text = this.rows.slice(0, this.cursorRow)
         .concat([insertedText + currentRow])
         .concat(this.rows.slice(this.cursorRow + 1))
         .join('\n');
       this.selectionStart += insertedText.length;
     } else if (deletePreviousRow) {
-      this.note.text = this.rows.slice(0, this.cursorRow - 1)
+      this.text = this.rows.slice(0, this.cursorRow - 1)
         .concat([insertedText])
         .concat(this.rows.slice(this.cursorRow + 1))
         .join('\n');
       this.selectionStart -= previousRow.length + 1;
     }
     this.selectionEnd = this.selectionStart;
+    this.scrollDown();
   }
 
   moveRowUp(): void {
@@ -108,12 +125,13 @@ export class NoteWrapper {
       return;
     }
 
-    this.note.text = previousRows
+    this.text = previousRows
       .concat([currentRow, previousRow])
       .concat(nextRows)
       .join('\n');
     this.selectionStart -= (previousRow || '').length + 1;
     this.selectionEnd = this.selectionStart;
+    this.scrollUp();
   }
 
   moveRowDown(): void {
@@ -126,19 +144,20 @@ export class NoteWrapper {
       return;
     }
 
-    this.note.text = previousRows
+    this.text = previousRows
       .concat([nextRow, currentRow])
       .concat(nextRows)
       .join('\n');
     this.selectionStart += (nextRow || '').length + 1;
     this.selectionEnd = this.selectionStart;
+    this.scrollDown();
   }
 
   cut(): string {
     const previousRows = this.rows.slice(0, Math.max(0, this.cursorRow));
     const currentRow = this.rows[this.cursorRow];
     const nextRows = this.rows.slice(this.cursorRow + 1);
-    this.note.text = previousRows
+    this.text = previousRows
       .concat([''])
       .concat(nextRows)
       .join('\n');
@@ -156,7 +175,7 @@ export class NoteWrapper {
       return;
     }
 
-    this.note.text = [
+    this.text = [
       this.note.text.slice(0, this.selectionStart),
       selection,
       this.note.text.slice(this.selectionEnd)

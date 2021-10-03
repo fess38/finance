@@ -131,12 +131,13 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
   }
 
   private afterChange(noteTextElement: HTMLTextAreaElement): void {
-    noteTextElement.value = this.note.text;
     setTimeout(() => {
+      noteTextElement.value = this.note.text;
       noteTextElement.setSelectionRange(
         this.noteWrapper.selectionStart,
         this.noteWrapper.selectionEnd
       );
+      noteTextElement.scrollTop = this.noteWrapper.scrollTop;
     });
   }
 
