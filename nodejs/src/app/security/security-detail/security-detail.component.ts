@@ -21,7 +21,7 @@ export class SecurityDetailComponent implements OnInit, OnDestroy {
     const id = this.route.snapshot.paramMap.get('id');
     if (id != 'new') {
       const callback = () => {
-        const navigatedSecurity = this.userdata.securities().filter(x => x.id == +id)[0];
+        const navigatedSecurity = this.userdata.findSecurity(+id);
         if (navigatedSecurity == null) {
           this.router.navigate(['/security']);
         } else {
@@ -73,7 +73,7 @@ export class SecurityDetailComponent implements OnInit, OnDestroy {
     if (updatedSecurity.currencyId == this.userdata.settings().currencyId) {
       return;
     }
-    for (let security of this.userdata.securities()) {
+    for (const security of this.userdata.securities()) {
       if (updatedSecurity.currencyId == security.currencyId && updatedSecurity.id != security.id
         && (
           updatedSecurity.exchangeRate.units != security.exchangeRate.units

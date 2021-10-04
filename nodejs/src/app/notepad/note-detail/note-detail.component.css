@@ -1,0 +1,10 @@
+#note-text {
+  background-color: #FAFAFA;
+  border-style: none;
+  border-color: Transparent;
+  height: 70vh;
+  overflow-y: scroll;
+  resize: none;
+  outline: none;
+  width: 100%;
+}

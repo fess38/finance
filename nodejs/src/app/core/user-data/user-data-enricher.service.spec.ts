@@ -1,4 +1,4 @@
-import { Account, DataStorage, FamilyMember, Money, Security, SecurityTransaction, Transaction, TransactionTemplate } from '../model/model';
+import { Account, DataStorage, FamilyMember, Money, Note, Notepad, Security, SecurityTransaction, Transaction, TransactionTemplate } from '../model/model';
 import { UserDataEnricherService } from './user-data-enricher.service';
 import Type = SecurityTransaction.Type;
 
@@ -107,5 +107,43 @@ describe('UserDataEnricherService', () => {
 
     expect(2).toEqual(<number>dataStorage.securities[0].transactionAmount);
     expect(12).toEqual(<number>dataStorage.securities[0].amount);
+  });
+
+  it('#enrich notepad', () => {
+    const dataStorage = new DataStorage();
+    dataStorage.notepads = [new Notepad({
+      id: 1,
+      created: 0,
+      updated: 0,
+      name: 'foo'
+    })];
+    dataStorage.notes = [
+      new Note({
+        id: 2,
+        isDeleted: false,
+        notepadId: 1,
+        created: 0,
+        updated: 0,
+        name: ""
+      }),
+      new Note({
+        id: 3,
+        isDeleted: false,
+        notepadId: 2,
+        created: 0,
+        updated: 0,
+        name: ""
+      }),
+      new Note({
+        id: 4,
+        isDeleted: true,
+        notepadId: 1,
+        created: 0,
+        updated: 0,
+        name: ""
+      })
+    ];
+    enricher.enrich(dataStorage);
+    expect(1).toEqual(<number>dataStorage.notepads[0].noteAmount);
   });
 });

@@ -29,10 +29,10 @@
         </span>
       </label>
     </div>
-    <tranaction-detail [context]="transactionDetailContext"
+    <app-transaction-detail [context]="transactionDetailContext"
                        [transaction]="activeTransaction"
                        (notify)="onChildNotify($event)">
-    </tranaction-detail>
+    </app-transaction-detail>
     <div class="clr-form-control clr-row">
       <button class="btn btn-primary btn-sm btn-block"
               (click)="save(activeTransaction)"

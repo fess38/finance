@@ -1,0 +1,71 @@
+<clr-vertical-nav [clr-nav-level]="2" [clrVerticalNavCollapsible]="false">
+  <label class="nav-group-text">{{'finance_sidenav.add_transaction' | translate}}</label>
+  <clr-vertical-nav-group-children>
+    <a clrVerticalNavLink routerLink="/transaction/new">
+      {{'finance_sidenav.add_transaction_with_account' | translate}}
+    </a>
+    <a clrVerticalNavLink routerLink="/security_transaction/new">
+      {{'finance_sidenav.add_transaction_with_security' | translate}}
+    </a>
+  </clr-vertical-nav-group-children>
+  <div class="nav-divider"></div>
+  <span class="nav-group-text">{{'finance_sidenav.transaction' | translate}}</span>
+  <clr-vertical-nav-group-children>
+    <a clrVerticalNavLink (click)="incomes()">
+      {{'finance_sidenav.incomes' | translate}}
+    </a>
+    <a clrVerticalNavLink (click)="expences()">
+      {{'finance_sidenav.expences' | translate}}
+    </a>
+    <a clrVerticalNavLink (click)="transfers()">
+      {{'finance_sidenav.transfers' | translate}}
+    </a>
+    <a clrVerticalNavLink routerLink="/transaction_template">
+      {{'finance_sidenav.templates' | translate}}
+    </a>
+    <a clrVerticalNavLink routerLink="/transaction_future">
+      {{'finance_sidenav.future' | translate}}
+    </a>
+    <a clrVerticalNavLink (click)="search()">
+      {{'finance_sidenav.search' | translate}}
+    </a>
+    <a clrVerticalNavLink routerLink="/security_transaction">
+      {{'finance_sidenav.investment' | translate}}
+    </a>
+  </clr-vertical-nav-group-children>
+  <div class="nav-divider"></div>
+  <span class="nav-group-text">{{'finance_sidenav.reports' | translate}}</span>
+  <clr-vertical-nav-group-children>
+    <a clrVerticalNavLink routerLink="/report/date">
+      {{'finance_sidenav.date_report' | translate}}
+    </a>
+    <a clrVerticalNavLink routerLink="/report/month">
+      {{'finance_sidenav.month_report' | translate}}
+    </a>
+    <a clrVerticalNavLink routerLink="/report/year">
+      {{'finance_sidenav.year_report' | translate}}
+    </a>
+    <a clrVerticalNavLink routerLink="/report/security">
+      {{'finance_sidenav.security_report' | translate}}
+    </a>
+  </clr-vertical-nav-group-children>
+  <div class="nav-divider"></div>
+  <span class="nav-group-text">{{'finance_sidenav.other' | translate}}</span>
+  <clr-vertical-nav-group-children>
+    <a clrVerticalNavLink routerLink="/account">
+      {{'finance_sidenav.account' | translate}}
+    </a>
+    <a clrVerticalNavLink routerLink="/category">
+      {{'finance_sidenav.category' | translate}}
+    </a>
+    <a clrVerticalNavLink routerLink="/sub_category">
+      {{'finance_sidenav.sub_category' | translate}}
+    </a>
+    <a clrVerticalNavLink routerLink="/family_member">
+      {{'finance_sidenav.family_member' | translate}}
+    </a>
+    <a clrVerticalNavLink routerLink="/security">
+      {{'finance_sidenav.security' | translate}}
+    </a>
+  </clr-vertical-nav-group-children>
+</clr-vertical-nav>

@@ -50,7 +50,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     file.text()
       .then(data => {
         this.isDataImport = true;
-        this.userdata.saveDataStorage(DataStorage.fromObject(JSON.parse(data))).then(() => this.isDataImport = false)
+        this.userdata.saveDataStorage(DataStorage.fromObject(JSON.parse(data))).then(() => this.isDataImport = false);
       })
       .catch(error => {
         this.isDataImport = false;

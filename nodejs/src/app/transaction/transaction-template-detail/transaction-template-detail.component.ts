@@ -29,8 +29,8 @@ export class TransactionTemplateDetailComponent implements OnInit, OnDestroy {
     showButtons: false,
     parentObservable: new Subject<any>()
   };
-  daysOfWeek: string = '';
-  daysOfMonth: string = '';
+  daysOfWeek = '';
+  daysOfMonth = '';
 
   ngOnInit(): void {
     this.transactionTemplate.transaction = new Transaction();
@@ -77,13 +77,7 @@ export class TransactionTemplateDetailComponent implements OnInit, OnDestroy {
   update(transactionTemplate: TransactionTemplate): void {
     if (transactionTemplate.id == 0) {
       this.userdata.saveTransactionTemplate(transactionTemplate)
-        .then(() => {
-          this.transactionTemplate.name = '';
-          this.transactionTemplate.interval = 0;
-          this.transactionTemplate.daysOfWeek = [];
-          this.transactionTemplate.daysOfMonth = [];
-          this.router.navigate(['/transaction_template']);
-        })
+        .then(() => this.router.navigate(['/transaction_template/' + this.transactionTemplate.id]))
         .catch(error => {
           console.error(error.message);
           this.router.navigate(['/error']);
@@ -150,7 +144,7 @@ export class TransactionTemplateDetailComponent implements OnInit, OnDestroy {
 
 class TransactionFrequency {
   transaction: Transaction = new Transaction();
-  frequency: number = 0;
+  frequency = 0;
 
   updateFrequency(transactions: Transaction[]): void {
     const yearAgo: string = DateUtils.formatDate(DateUtils.addDays(new Date(), -365));

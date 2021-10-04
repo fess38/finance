@@ -21,7 +21,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     const id = this.route.snapshot.paramMap.get('id');
     if (id != 'new') {
       const callback = () => {
-        const navigatedAccount = this.userdata.accounts().filter(x => x.id == +id)[0];
+        const navigatedAccount = this.userdata.findAccount(+id);
         if (navigatedAccount == null) {
           this.router.navigate(['/account']);
         } else {

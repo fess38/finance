@@ -152,7 +152,7 @@ export class TransactionMonthComponent implements OnInit, OnDestroy {
 
   findMonthCategorySummary(month: Month, category: Category): Summary[] {
     const result: Summary[] = [];
-    const key: string = `${DateUtils.formatMonth(month)},${category.id}`;
+    const key = `${DateUtils.formatMonth(month)},${category.id}`;
     const summary: Summary = this.monthCategorySummaries.get(key);
     if (summary) {
       result.push(summary);
@@ -162,7 +162,7 @@ export class TransactionMonthComponent implements OnInit, OnDestroy {
 
   findMonthSubCategorySummary(month: Month, subCategory: SubCategory): Summary[] {
     const result: Summary[] = [];
-    const key: string = `${DateUtils.formatMonth(month)},${subCategory.id}`;
+    const key = `${DateUtils.formatMonth(month)},${subCategory.id}`;
     const summary: Summary = this.monthSubCategorySummaries.get(key);
     if (summary) {
       result.push(summary);

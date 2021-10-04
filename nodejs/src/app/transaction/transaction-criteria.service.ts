@@ -12,8 +12,8 @@ export class TransactionCriteriaService {
   categoryId: number;
   subCategoryId: number;
   familyMemberId: number;
-  comment: string = '';
-  source: string = '';
+  comment = '';
+  source = '';
   isSearch: number;
   noOffBudget: number;
 

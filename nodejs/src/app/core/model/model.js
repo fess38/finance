@@ -215,6 +215,8 @@ export const DataStorage = $root.DataStorage = (() => {
      * @property {Array.<ITransactionTemplate>|null} [transactionTemplates] DataStorage transactionTemplates
      * @property {Array.<ISecurity>|null} [securities] DataStorage securities
      * @property {Array.<ISecurityTransaction>|null} [securityTransactions] DataStorage securityTransactions
+     * @property {Array.<INotepad>|null} [notepads] DataStorage notepads
+     * @property {Array.<INote>|null} [notes] DataStorage notes
      */
 
     /**
@@ -235,6 +237,8 @@ export const DataStorage = $root.DataStorage = (() => {
         this.transactionTemplates = [];
         this.securities = [];
         this.securityTransactions = [];
+        this.notepads = [];
+        this.notes = [];
         if (properties)
             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
@@ -330,6 +334,22 @@ export const DataStorage = $root.DataStorage = (() => {
     DataStorage.prototype.securityTransactions = $util.emptyArray;
 
     /**
+     * DataStorage notepads.
+     * @member {Array.<INotepad>} notepads
+     * @memberof DataStorage
+     * @instance
+     */
+    DataStorage.prototype.notepads = $util.emptyArray;
+
+    /**
+     * DataStorage notes.
+     * @member {Array.<INote>} notes
+     * @memberof DataStorage
+     * @instance
+     */
+    DataStorage.prototype.notes = $util.emptyArray;
+
+    /**
      * Creates a new DataStorage instance using the specified properties.
      * @function create
      * @memberof DataStorage
@@ -384,6 +404,12 @@ export const DataStorage = $root.DataStorage = (() => {
         if (message.securityTransactions != null && message.securityTransactions.length)
             for (let i = 0; i < message.securityTransactions.length; ++i)
                 $root.SecurityTransaction.encode(message.securityTransactions[i], writer.uint32(/* id 11, wireType 2 =*/90).fork()).ldelim();
+        if (message.notepads != null && message.notepads.length)
+            for (let i = 0; i < message.notepads.length; ++i)
+                $root.Notepad.encode(message.notepads[i], writer.uint32(/* id 12, wireType 2 =*/98).fork()).ldelim();
+        if (message.notes != null && message.notes.length)
+            for (let i = 0; i < message.notes.length; ++i)
+                $root.Note.encode(message.notes[i], writer.uint32(/* id 13, wireType 2 =*/106).fork()).ldelim();
         return writer;
     };
 
@@ -455,6 +481,16 @@ export const DataStorage = $root.DataStorage = (() => {
                 if (!(message.securityTransactions && message.securityTransactions.length))
                     message.securityTransactions = [];
                 message.securityTransactions.push($root.SecurityTransaction.decode(reader, reader.uint32()));
+                break;
+            case 12:
+                if (!(message.notepads && message.notepads.length))
+                    message.notepads = [];
+                message.notepads.push($root.Notepad.decode(reader, reader.uint32()));
+                break;
+            case 13:
+                if (!(message.notes && message.notes.length))
+                    message.notes = [];
+                message.notes.push($root.Note.decode(reader, reader.uint32()));
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -576,6 +612,26 @@ export const DataStorage = $root.DataStorage = (() => {
                 message.securityTransactions[i] = $root.SecurityTransaction.fromObject(object.securityTransactions[i]);
             }
         }
+        if (object.notepads) {
+            if (!Array.isArray(object.notepads))
+                throw TypeError(".DataStorage.notepads: array expected");
+            message.notepads = [];
+            for (let i = 0; i < object.notepads.length; ++i) {
+                if (typeof object.notepads[i] !== "object")
+                    throw TypeError(".DataStorage.notepads: object expected");
+                message.notepads[i] = $root.Notepad.fromObject(object.notepads[i]);
+            }
+        }
+        if (object.notes) {
+            if (!Array.isArray(object.notes))
+                throw TypeError(".DataStorage.notes: array expected");
+            message.notes = [];
+            for (let i = 0; i < object.notes.length; ++i) {
+                if (typeof object.notes[i] !== "object")
+                    throw TypeError(".DataStorage.notes: object expected");
+                message.notes[i] = $root.Note.fromObject(object.notes[i]);
+            }
+        }
         return message;
     };
 
@@ -602,6 +658,8 @@ export const DataStorage = $root.DataStorage = (() => {
             object.transactionTemplates = [];
             object.securities = [];
             object.securityTransactions = [];
+            object.notepads = [];
+            object.notes = [];
         }
         if (options.defaults) {
             object.settings = null;
@@ -655,6 +713,16 @@ export const DataStorage = $root.DataStorage = (() => {
             object.securityTransactions = [];
             for (let j = 0; j < message.securityTransactions.length; ++j)
                 object.securityTransactions[j] = $root.SecurityTransaction.toObject(message.securityTransactions[j], options);
+        }
+        if (message.notepads && message.notepads.length) {
+            object.notepads = [];
+            for (let j = 0; j < message.notepads.length; ++j)
+                object.notepads[j] = $root.Notepad.toObject(message.notepads[j], options);
+        }
+        if (message.notes && message.notes.length) {
+            object.notes = [];
+            for (let j = 0; j < message.notes.length; ++j)
+                object.notes[j] = $root.Note.toObject(message.notes[j], options);
         }
         return object;
     };
@@ -4097,6 +4165,618 @@ export const SecurityReport = $root.SecurityReport = (() => {
     return SecurityReport;
 })();
 
+export const Notepad = $root.Notepad = (() => {
+
+    /**
+     * Properties of a Notepad.
+     * @exports INotepad
+     * @interface INotepad
+     * @property {number|null} [id] Notepad id
+     * @property {boolean|null} [isDeleted] Notepad isDeleted
+     * @property {number|null} [noteAmount] Notepad noteAmount
+     * @property {number} created Notepad created
+     * @property {number} updated Notepad updated
+     * @property {string} name Notepad name
+     */
+
+    /**
+     * Constructs a new Notepad.
+     * @exports Notepad
+     * @classdesc Represents a Notepad.
+     * @implements INotepad
+     * @constructor
+     * @param {INotepad=} [properties] Properties to set
+     */
+    function Notepad(properties) {
+        if (properties)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * Notepad id.
+     * @member {number} id
+     * @memberof Notepad
+     * @instance
+     */
+    Notepad.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
+     * Notepad isDeleted.
+     * @member {boolean} isDeleted
+     * @memberof Notepad
+     * @instance
+     */
+    Notepad.prototype.isDeleted = false;
+
+    /**
+     * Notepad noteAmount.
+     * @member {number} noteAmount
+     * @memberof Notepad
+     * @instance
+     */
+    Notepad.prototype.noteAmount = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
+     * Notepad created.
+     * @member {number} created
+     * @memberof Notepad
+     * @instance
+     */
+    Notepad.prototype.created = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
+     * Notepad updated.
+     * @member {number} updated
+     * @memberof Notepad
+     * @instance
+     */
+    Notepad.prototype.updated = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
+     * Notepad name.
+     * @member {string} name
+     * @memberof Notepad
+     * @instance
+     */
+    Notepad.prototype.name = "";
+
+    /**
+     * Creates a new Notepad instance using the specified properties.
+     * @function create
+     * @memberof Notepad
+     * @static
+     * @param {INotepad=} [properties] Properties to set
+     * @returns {Notepad} Notepad instance
+     */
+    Notepad.create = function create(properties) {
+        return new Notepad(properties);
+    };
+
+    /**
+     * Encodes the specified Notepad message. Does not implicitly {@link Notepad.verify|verify} messages.
+     * @function encode
+     * @memberof Notepad
+     * @static
+     * @param {INotepad} message Notepad message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    Notepad.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
+            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.id);
+        if (message.isDeleted != null && Object.hasOwnProperty.call(message, "isDeleted"))
+            writer.uint32(/* id 2, wireType 0 =*/16).bool(message.isDeleted);
+        if (message.noteAmount != null && Object.hasOwnProperty.call(message, "noteAmount"))
+            writer.uint32(/* id 3, wireType 0 =*/24).int64(message.noteAmount);
+        writer.uint32(/* id 4, wireType 0 =*/32).int64(message.created);
+        writer.uint32(/* id 5, wireType 0 =*/40).int64(message.updated);
+        writer.uint32(/* id 6, wireType 2 =*/50).string(message.name);
+        return writer;
+    };
+
+    /**
+     * Decodes a Notepad message from the specified reader or buffer.
+     * @function decode
+     * @memberof Notepad
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {Notepad} Notepad
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    Notepad.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Notepad();
+        while (reader.pos < end) {
+            let tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                message.id = reader.int64();
+                break;
+            case 2:
+                message.isDeleted = reader.bool();
+                break;
+            case 3:
+                message.noteAmount = reader.int64();
+                break;
+            case 4:
+                message.created = reader.int64();
+                break;
+            case 5:
+                message.updated = reader.int64();
+                break;
+            case 6:
+                message.name = reader.string();
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        if (!message.hasOwnProperty("created"))
+            throw $util.ProtocolError("missing required 'created'", { instance: message });
+        if (!message.hasOwnProperty("updated"))
+            throw $util.ProtocolError("missing required 'updated'", { instance: message });
+        if (!message.hasOwnProperty("name"))
+            throw $util.ProtocolError("missing required 'name'", { instance: message });
+        return message;
+    };
+
+    /**
+     * Creates a Notepad message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof Notepad
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {Notepad} Notepad
+     */
+    Notepad.fromObject = function fromObject(object) {
+        if (object instanceof $root.Notepad)
+            return object;
+        let message = new $root.Notepad();
+        if (object.id != null)
+            if ($util.Long)
+                (message.id = $util.Long.fromValue(object.id)).unsigned = false;
+            else if (typeof object.id === "string")
+                message.id = parseInt(object.id, 10);
+            else if (typeof object.id === "number")
+                message.id = object.id;
+            else if (typeof object.id === "object")
+                message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber();
+        if (object.isDeleted != null)
+            message.isDeleted = Boolean(object.isDeleted);
+        if (object.noteAmount != null)
+            if ($util.Long)
+                (message.noteAmount = $util.Long.fromValue(object.noteAmount)).unsigned = false;
+            else if (typeof object.noteAmount === "string")
+                message.noteAmount = parseInt(object.noteAmount, 10);
+            else if (typeof object.noteAmount === "number")
+                message.noteAmount = object.noteAmount;
+            else if (typeof object.noteAmount === "object")
+                message.noteAmount = new $util.LongBits(object.noteAmount.low >>> 0, object.noteAmount.high >>> 0).toNumber();
+        if (object.created != null)
+            if ($util.Long)
+                (message.created = $util.Long.fromValue(object.created)).unsigned = false;
+            else if (typeof object.created === "string")
+                message.created = parseInt(object.created, 10);
+            else if (typeof object.created === "number")
+                message.created = object.created;
+            else if (typeof object.created === "object")
+                message.created = new $util.LongBits(object.created.low >>> 0, object.created.high >>> 0).toNumber();
+        if (object.updated != null)
+            if ($util.Long)
+                (message.updated = $util.Long.fromValue(object.updated)).unsigned = false;
+            else if (typeof object.updated === "string")
+                message.updated = parseInt(object.updated, 10);
+            else if (typeof object.updated === "number")
+                message.updated = object.updated;
+            else if (typeof object.updated === "object")
+                message.updated = new $util.LongBits(object.updated.low >>> 0, object.updated.high >>> 0).toNumber();
+        if (object.name != null)
+            message.name = String(object.name);
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a Notepad message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof Notepad
+     * @static
+     * @param {Notepad} message Notepad
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    Notepad.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        let object = {};
+        if (options.defaults) {
+            if ($util.Long) {
+                let long = new $util.Long(0, 0, false);
+                object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.id = options.longs === String ? "0" : 0;
+            object.isDeleted = false;
+            if ($util.Long) {
+                let long = new $util.Long(0, 0, false);
+                object.noteAmount = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.noteAmount = options.longs === String ? "0" : 0;
+            if ($util.Long) {
+                let long = new $util.Long(0, 0, false);
+                object.created = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.created = options.longs === String ? "0" : 0;
+            if ($util.Long) {
+                let long = new $util.Long(0, 0, false);
+                object.updated = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.updated = options.longs === String ? "0" : 0;
+            object.name = "";
+        }
+        if (message.id != null && message.hasOwnProperty("id"))
+            if (typeof message.id === "number")
+                object.id = options.longs === String ? String(message.id) : message.id;
+            else
+                object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber() : message.id;
+        if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
+            object.isDeleted = message.isDeleted;
+        if (message.noteAmount != null && message.hasOwnProperty("noteAmount"))
+            if (typeof message.noteAmount === "number")
+                object.noteAmount = options.longs === String ? String(message.noteAmount) : message.noteAmount;
+            else
+                object.noteAmount = options.longs === String ? $util.Long.prototype.toString.call(message.noteAmount) : options.longs === Number ? new $util.LongBits(message.noteAmount.low >>> 0, message.noteAmount.high >>> 0).toNumber() : message.noteAmount;
+        if (message.created != null && message.hasOwnProperty("created"))
+            if (typeof message.created === "number")
+                object.created = options.longs === String ? String(message.created) : message.created;
+            else
+                object.created = options.longs === String ? $util.Long.prototype.toString.call(message.created) : options.longs === Number ? new $util.LongBits(message.created.low >>> 0, message.created.high >>> 0).toNumber() : message.created;
+        if (message.updated != null && message.hasOwnProperty("updated"))
+            if (typeof message.updated === "number")
+                object.updated = options.longs === String ? String(message.updated) : message.updated;
+            else
+                object.updated = options.longs === String ? $util.Long.prototype.toString.call(message.updated) : options.longs === Number ? new $util.LongBits(message.updated.low >>> 0, message.updated.high >>> 0).toNumber() : message.updated;
+        if (message.name != null && message.hasOwnProperty("name"))
+            object.name = message.name;
+        return object;
+    };
+
+    /**
+     * Converts this Notepad to JSON.
+     * @function toJSON
+     * @memberof Notepad
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    Notepad.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    return Notepad;
+})();
+
+export const Note = $root.Note = (() => {
+
+    /**
+     * Properties of a Note.
+     * @exports INote
+     * @interface INote
+     * @property {number|null} [id] Note id
+     * @property {boolean|null} [isDeleted] Note isDeleted
+     * @property {number} notepadId Note notepadId
+     * @property {number} created Note created
+     * @property {number} updated Note updated
+     * @property {string} name Note name
+     * @property {string|null} [text] Note text
+     */
+
+    /**
+     * Constructs a new Note.
+     * @exports Note
+     * @classdesc Represents a Note.
+     * @implements INote
+     * @constructor
+     * @param {INote=} [properties] Properties to set
+     */
+    function Note(properties) {
+        if (properties)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * Note id.
+     * @member {number} id
+     * @memberof Note
+     * @instance
+     */
+    Note.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
+     * Note isDeleted.
+     * @member {boolean} isDeleted
+     * @memberof Note
+     * @instance
+     */
+    Note.prototype.isDeleted = false;
+
+    /**
+     * Note notepadId.
+     * @member {number} notepadId
+     * @memberof Note
+     * @instance
+     */
+    Note.prototype.notepadId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
+     * Note created.
+     * @member {number} created
+     * @memberof Note
+     * @instance
+     */
+    Note.prototype.created = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
+     * Note updated.
+     * @member {number} updated
+     * @memberof Note
+     * @instance
+     */
+    Note.prototype.updated = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
+     * Note name.
+     * @member {string} name
+     * @memberof Note
+     * @instance
+     */
+    Note.prototype.name = "";
+
+    /**
+     * Note text.
+     * @member {string} text
+     * @memberof Note
+     * @instance
+     */
+    Note.prototype.text = "";
+
+    /**
+     * Creates a new Note instance using the specified properties.
+     * @function create
+     * @memberof Note
+     * @static
+     * @param {INote=} [properties] Properties to set
+     * @returns {Note} Note instance
+     */
+    Note.create = function create(properties) {
+        return new Note(properties);
+    };
+
+    /**
+     * Encodes the specified Note message. Does not implicitly {@link Note.verify|verify} messages.
+     * @function encode
+     * @memberof Note
+     * @static
+     * @param {INote} message Note message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    Note.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
+            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.id);
+        if (message.isDeleted != null && Object.hasOwnProperty.call(message, "isDeleted"))
+            writer.uint32(/* id 2, wireType 0 =*/16).bool(message.isDeleted);
+        writer.uint32(/* id 3, wireType 0 =*/24).int64(message.notepadId);
+        writer.uint32(/* id 4, wireType 0 =*/32).int64(message.created);
+        writer.uint32(/* id 5, wireType 0 =*/40).int64(message.updated);
+        writer.uint32(/* id 6, wireType 2 =*/50).string(message.name);
+        if (message.text != null && Object.hasOwnProperty.call(message, "text"))
+            writer.uint32(/* id 7, wireType 2 =*/58).string(message.text);
+        return writer;
+    };
+
+    /**
+     * Decodes a Note message from the specified reader or buffer.
+     * @function decode
+     * @memberof Note
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {Note} Note
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    Note.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Note();
+        while (reader.pos < end) {
+            let tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                message.id = reader.int64();
+                break;
+            case 2:
+                message.isDeleted = reader.bool();
+                break;
+            case 3:
+                message.notepadId = reader.int64();
+                break;
+            case 4:
+                message.created = reader.int64();
+                break;
+            case 5:
+                message.updated = reader.int64();
+                break;
+            case 6:
+                message.name = reader.string();
+                break;
+            case 7:
+                message.text = reader.string();
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        if (!message.hasOwnProperty("notepadId"))
+            throw $util.ProtocolError("missing required 'notepadId'", { instance: message });
+        if (!message.hasOwnProperty("created"))
+            throw $util.ProtocolError("missing required 'created'", { instance: message });
+        if (!message.hasOwnProperty("updated"))
+            throw $util.ProtocolError("missing required 'updated'", { instance: message });
+        if (!message.hasOwnProperty("name"))
+            throw $util.ProtocolError("missing required 'name'", { instance: message });
+        return message;
+    };
+
+    /**
+     * Creates a Note message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof Note
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {Note} Note
+     */
+    Note.fromObject = function fromObject(object) {
+        if (object instanceof $root.Note)
+            return object;
+        let message = new $root.Note();
+        if (object.id != null)
+            if ($util.Long)
+                (message.id = $util.Long.fromValue(object.id)).unsigned = false;
+            else if (typeof object.id === "string")
+                message.id = parseInt(object.id, 10);
+            else if (typeof object.id === "number")
+                message.id = object.id;
+            else if (typeof object.id === "object")
+                message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber();
+        if (object.isDeleted != null)
+            message.isDeleted = Boolean(object.isDeleted);
+        if (object.notepadId != null)
+            if ($util.Long)
+                (message.notepadId = $util.Long.fromValue(object.notepadId)).unsigned = false;
+            else if (typeof object.notepadId === "string")
+                message.notepadId = parseInt(object.notepadId, 10);
+            else if (typeof object.notepadId === "number")
+                message.notepadId = object.notepadId;
+            else if (typeof object.notepadId === "object")
+                message.notepadId = new $util.LongBits(object.notepadId.low >>> 0, object.notepadId.high >>> 0).toNumber();
+        if (object.created != null)
+            if ($util.Long)
+                (message.created = $util.Long.fromValue(object.created)).unsigned = false;
+            else if (typeof object.created === "string")
+                message.created = parseInt(object.created, 10);
+            else if (typeof object.created === "number")
+                message.created = object.created;
+            else if (typeof object.created === "object")
+                message.created = new $util.LongBits(object.created.low >>> 0, object.created.high >>> 0).toNumber();
+        if (object.updated != null)
+            if ($util.Long)
+                (message.updated = $util.Long.fromValue(object.updated)).unsigned = false;
+            else if (typeof object.updated === "string")
+                message.updated = parseInt(object.updated, 10);
+            else if (typeof object.updated === "number")
+                message.updated = object.updated;
+            else if (typeof object.updated === "object")
+                message.updated = new $util.LongBits(object.updated.low >>> 0, object.updated.high >>> 0).toNumber();
+        if (object.name != null)
+            message.name = String(object.name);
+        if (object.text != null)
+            message.text = String(object.text);
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a Note message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof Note
+     * @static
+     * @param {Note} message Note
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    Note.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        let object = {};
+        if (options.defaults) {
+            if ($util.Long) {
+                let long = new $util.Long(0, 0, false);
+                object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.id = options.longs === String ? "0" : 0;
+            object.isDeleted = false;
+            if ($util.Long) {
+                let long = new $util.Long(0, 0, false);
+                object.notepadId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.notepadId = options.longs === String ? "0" : 0;
+            if ($util.Long) {
+                let long = new $util.Long(0, 0, false);
+                object.created = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.created = options.longs === String ? "0" : 0;
+            if ($util.Long) {
+                let long = new $util.Long(0, 0, false);
+                object.updated = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.updated = options.longs === String ? "0" : 0;
+            object.name = "";
+            object.text = "";
+        }
+        if (message.id != null && message.hasOwnProperty("id"))
+            if (typeof message.id === "number")
+                object.id = options.longs === String ? String(message.id) : message.id;
+            else
+                object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber() : message.id;
+        if (message.isDeleted != null && message.hasOwnProperty("isDeleted"))
+            object.isDeleted = message.isDeleted;
+        if (message.notepadId != null && message.hasOwnProperty("notepadId"))
+            if (typeof message.notepadId === "number")
+                object.notepadId = options.longs === String ? String(message.notepadId) : message.notepadId;
+            else
+                object.notepadId = options.longs === String ? $util.Long.prototype.toString.call(message.notepadId) : options.longs === Number ? new $util.LongBits(message.notepadId.low >>> 0, message.notepadId.high >>> 0).toNumber() : message.notepadId;
+        if (message.created != null && message.hasOwnProperty("created"))
+            if (typeof message.created === "number")
+                object.created = options.longs === String ? String(message.created) : message.created;
+            else
+                object.created = options.longs === String ? $util.Long.prototype.toString.call(message.created) : options.longs === Number ? new $util.LongBits(message.created.low >>> 0, message.created.high >>> 0).toNumber() : message.created;
+        if (message.updated != null && message.hasOwnProperty("updated"))
+            if (typeof message.updated === "number")
+                object.updated = options.longs === String ? String(message.updated) : message.updated;
+            else
+                object.updated = options.longs === String ? $util.Long.prototype.toString.call(message.updated) : options.longs === Number ? new $util.LongBits(message.updated.low >>> 0, message.updated.high >>> 0).toNumber() : message.updated;
+        if (message.name != null && message.hasOwnProperty("name"))
+            object.name = message.name;
+        if (message.text != null && message.hasOwnProperty("text"))
+            object.text = message.text;
+        return object;
+    };
+
+    /**
+     * Converts this Note to JSON.
+     * @function toJSON
+     * @memberof Note
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    Note.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    return Note;
+})();
+
 export const Settings = $root.Settings = (() => {
 
     /**
@@ -4344,6 +5024,189 @@ export const Settings = $root.Settings = (() => {
     })();
 
     return Settings;
+})();
+
+export const LocalSettings = $root.LocalSettings = (() => {
+
+    /**
+     * Properties of a LocalSettings.
+     * @exports ILocalSettings
+     * @interface ILocalSettings
+     * @property {AppMode|null} [appMode] LocalSettings appMode
+     * @property {number|null} [currentNotepadId] LocalSettings currentNotepadId
+     */
+
+    /**
+     * Constructs a new LocalSettings.
+     * @exports LocalSettings
+     * @classdesc Represents a LocalSettings.
+     * @implements ILocalSettings
+     * @constructor
+     * @param {ILocalSettings=} [properties] Properties to set
+     */
+    function LocalSettings(properties) {
+        if (properties)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * LocalSettings appMode.
+     * @member {AppMode} appMode
+     * @memberof LocalSettings
+     * @instance
+     */
+    LocalSettings.prototype.appMode = 0;
+
+    /**
+     * LocalSettings currentNotepadId.
+     * @member {number} currentNotepadId
+     * @memberof LocalSettings
+     * @instance
+     */
+    LocalSettings.prototype.currentNotepadId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
+     * Creates a new LocalSettings instance using the specified properties.
+     * @function create
+     * @memberof LocalSettings
+     * @static
+     * @param {ILocalSettings=} [properties] Properties to set
+     * @returns {LocalSettings} LocalSettings instance
+     */
+    LocalSettings.create = function create(properties) {
+        return new LocalSettings(properties);
+    };
+
+    /**
+     * Encodes the specified LocalSettings message. Does not implicitly {@link LocalSettings.verify|verify} messages.
+     * @function encode
+     * @memberof LocalSettings
+     * @static
+     * @param {ILocalSettings} message LocalSettings message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    LocalSettings.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.appMode != null && Object.hasOwnProperty.call(message, "appMode"))
+            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.appMode);
+        if (message.currentNotepadId != null && Object.hasOwnProperty.call(message, "currentNotepadId"))
+            writer.uint32(/* id 2, wireType 0 =*/16).int64(message.currentNotepadId);
+        return writer;
+    };
+
+    /**
+     * Decodes a LocalSettings message from the specified reader or buffer.
+     * @function decode
+     * @memberof LocalSettings
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {LocalSettings} LocalSettings
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    LocalSettings.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.LocalSettings();
+        while (reader.pos < end) {
+            let tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                message.appMode = reader.int32();
+                break;
+            case 2:
+                message.currentNotepadId = reader.int64();
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Creates a LocalSettings message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof LocalSettings
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {LocalSettings} LocalSettings
+     */
+    LocalSettings.fromObject = function fromObject(object) {
+        if (object instanceof $root.LocalSettings)
+            return object;
+        let message = new $root.LocalSettings();
+        switch (object.appMode) {
+        case "FINANCE":
+        case 0:
+            message.appMode = 0;
+            break;
+        case "NOTES":
+        case 1:
+            message.appMode = 1;
+            break;
+        }
+        if (object.currentNotepadId != null)
+            if ($util.Long)
+                (message.currentNotepadId = $util.Long.fromValue(object.currentNotepadId)).unsigned = false;
+            else if (typeof object.currentNotepadId === "string")
+                message.currentNotepadId = parseInt(object.currentNotepadId, 10);
+            else if (typeof object.currentNotepadId === "number")
+                message.currentNotepadId = object.currentNotepadId;
+            else if (typeof object.currentNotepadId === "object")
+                message.currentNotepadId = new $util.LongBits(object.currentNotepadId.low >>> 0, object.currentNotepadId.high >>> 0).toNumber();
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a LocalSettings message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof LocalSettings
+     * @static
+     * @param {LocalSettings} message LocalSettings
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    LocalSettings.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        let object = {};
+        if (options.defaults) {
+            object.appMode = options.enums === String ? "FINANCE" : 0;
+            if ($util.Long) {
+                let long = new $util.Long(0, 0, false);
+                object.currentNotepadId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.currentNotepadId = options.longs === String ? "0" : 0;
+        }
+        if (message.appMode != null && message.hasOwnProperty("appMode"))
+            object.appMode = options.enums === String ? $root.AppMode[message.appMode] : message.appMode;
+        if (message.currentNotepadId != null && message.hasOwnProperty("currentNotepadId"))
+            if (typeof message.currentNotepadId === "number")
+                object.currentNotepadId = options.longs === String ? String(message.currentNotepadId) : message.currentNotepadId;
+            else
+                object.currentNotepadId = options.longs === String ? $util.Long.prototype.toString.call(message.currentNotepadId) : options.longs === Number ? new $util.LongBits(message.currentNotepadId.low >>> 0, message.currentNotepadId.high >>> 0).toNumber() : message.currentNotepadId;
+        return object;
+    };
+
+    /**
+     * Converts this LocalSettings to JSON.
+     * @function toJSON
+     * @memberof LocalSettings
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    LocalSettings.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    return LocalSettings;
 })();
 
 export const AccessToken = $root.AccessToken = (() => {
@@ -5594,6 +6457,8 @@ export const Money = $root.Money = (() => {
  * @property {number} TRANSACTION_TEMPLATE=9 TRANSACTION_TEMPLATE value
  * @property {number} SECURITY=10 SECURITY value
  * @property {number} SECURITY_TRANSACTION=11 SECURITY_TRANSACTION value
+ * @property {number} NOTEPAD=12 NOTEPAD value
+ * @property {number} NOTE=13 NOTE value
  */
 export const EntityType = $root.EntityType = (() => {
     const valuesById = {}, values = Object.create(valuesById);
@@ -5609,6 +6474,22 @@ export const EntityType = $root.EntityType = (() => {
     values[valuesById[9] = "TRANSACTION_TEMPLATE"] = 9;
     values[valuesById[10] = "SECURITY"] = 10;
     values[valuesById[11] = "SECURITY_TRANSACTION"] = 11;
+    values[valuesById[12] = "NOTEPAD"] = 12;
+    values[valuesById[13] = "NOTE"] = 13;
+    return values;
+})();
+
+/**
+ * AppMode enum.
+ * @exports AppMode
+ * @enum {number}
+ * @property {number} FINANCE=0 FINANCE value
+ * @property {number} NOTES=1 NOTES value
+ */
+export const AppMode = $root.AppMode = (() => {
+    const valuesById = {}, values = Object.create(valuesById);
+    values[valuesById[0] = "FINANCE"] = 0;
+    values[valuesById[1] = "NOTES"] = 1;
     return values;
 })();
 

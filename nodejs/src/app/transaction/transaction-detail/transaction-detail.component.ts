@@ -8,8 +8,8 @@ import { TransactionCriteriaService as Criteria } from '../transaction-criteria.
 import { TransactionUtils } from '../transaction-utils';
 
 @Component({
-  templateUrl: 'transaction-detail.component.html',
-  selector: 'tranaction-detail'
+  selector: 'app-transaction-detail',
+  templateUrl: 'transaction-detail.component.html'
 })
 export class TransactionDetailComponent implements OnInit, OnDestroy {
   constructor(private userdata: UserDataService,
@@ -18,7 +18,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
               private router: Router) {}
 
   private subscription: Subscription;
-  private maxTransactionsAccountId: number = 0;
+  private maxTransactionsAccountId = 0;
   private parentNotifyCallerSubscription: Subscription;
 
   @Input() transaction = new Transaction();
@@ -256,11 +256,11 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
 }
 
 export class TransactionDetailContext {
-  forEmbed: boolean = false;
-  showHeader: boolean = true;
-  showDate: boolean = true;
-  showComment: boolean = true;
-  showOffBudget: boolean = true;
-  showButtons: boolean = true;
+  forEmbed = false;
+  showHeader = true;
+  showDate = true;
+  showComment = true;
+  showOffBudget = true;
+  showButtons = true;
   parentObservable: Subject<any>;
 }

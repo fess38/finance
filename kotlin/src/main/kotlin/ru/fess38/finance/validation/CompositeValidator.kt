@@ -16,6 +16,8 @@ class CompositeValidator(private val messageService: MessageService) : MessageVa
   private val transactionTemplateValidator = TransactionTemplateValidator()
   private val securityValidator = SecurityValidator(messageService)
   private val securityTransactionValidator = SecurityTransactionValidator(messageService)
+  private val notepadValidator = NotepadValidator()
+  private val noteValidator = NoteValidator(messageService)
 
   override fun validate(value: Message, isCreate: Boolean): ValidatorResponse {
     val validatorResponse: ValidatorResponse
@@ -42,6 +44,8 @@ class CompositeValidator(private val messageService: MessageService) : MessageVa
         }
         is Security -> securityValidator.validate(value, isCreate)
         is SecurityTransaction -> securityTransactionValidator.validate(value, isCreate)
+        is Notepad -> notepadValidator.validate(value, isCreate)
+        is Note -> noteValidator.validate(value, isCreate)
         // new entity
         else -> throw IllegalArgumentException("Unknown entity $value")
       }

@@ -37,10 +37,7 @@
     "edit": "Редактирование члена семьи",
     "name": "Член семьи"
   },
-  "login": {
-    "google": "Войти через Google"
-  },
-  "main_menu": {
+  "finance_sidenav": {
     "account": "Счета",
     "add_transaction": "Добавить транзакцию",
     "add_transaction_with_account": "Со счетом",
@@ -48,7 +45,6 @@
     "all_transactions": "Все транзакции",
     "category": "Категории",
     "date_report": "По дням ",
-    "exit": "Выйти",
     "expences": "Расходы",
     "family_member": "Члены семьи",
     "future": "Запланированные",
@@ -60,13 +56,38 @@
     "search": "Поиск",
     "security": "Ценные бумаги",
     "security_report": "По ценным бумагам",
-    "settings": "Настройки",
     "sub_category": "Подкатегории",
     "templates": "Шаблоны",
-    "title": "Финансы",
     "transaction": "Транзакции",
     "transfers": "Переводы",
     "year_report": "По годам"
+  },
+  "login": {
+    "google": "Войти через Google"
+  },
+  "main_page": {
+    "exit": "Выйти",
+    "finance": "Финансы",
+    "notes": "Заметки",
+    "settings": "Настройки"
+  },
+  "note": {
+    "edit": "Редактирование заметки",
+    "new": "Новая заметка",
+    "notepad": "Блокнот",
+    "text": "Текст заметки",
+    "view": "Просмотр заметки"
+  },
+  "notepad": {
+    "add": "Добавление блокнота",
+    "amount": "Заметок",
+    "edit": "Редактирование блокнота"
+  },
+  "notepad_sidenav": {
+    "add_note": "Добавить заметку",
+    "add_notepad": "Добавить блокнот",
+    "notepads": "Блокноты",
+    "notes": "Заметки"
   },
   "report": {
     "summary": "Итого"

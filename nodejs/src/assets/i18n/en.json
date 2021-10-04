@@ -37,10 +37,7 @@
     "edit": "Edit family member",
     "name": "Family member"
   },
-  "login": {
-    "google": "Log in by Google"
-  },
-  "main_menu": {
+  "finance_sidenav": {
     "account": "Accounts",
     "add_transaction": "Add transaction",
     "add_transaction_with_account": "With account",
@@ -48,7 +45,6 @@
     "all_transactions": "All transactions",
     "category": "Categories",
     "date_report": "By days",
-    "exit": "Sign out",
     "expences": "Expences",
     "family_member": "Family members",
     "future": "Planned",
@@ -60,13 +56,38 @@
     "search": "Search",
     "security": "Security papers",
     "security_report": "By securities",
-    "settings": "Settings",
     "sub_category": "Subcategories",
     "templates": "Templates",
-    "title": "Finance",
     "transaction": "Transactions",
     "transfers": "Transfers",
     "year_report": "By years"
+  },
+  "login": {
+    "google": "Log in by Google"
+  },
+  "main_page": {
+    "exit": "Sign out",
+    "finance": "Finance",
+    "notes": "Notes",
+    "settings": "Settings"
+  },
+  "note": {
+    "edit": "Edit note",
+    "new": "New note",
+    "notepad": "Notepad",
+    "text": "Note text",
+    "view": "View note"
+  },
+  "notepad": {
+    "add": "Add notepad",
+    "amount": "Note amount",
+    "edit": "Edit notepad"
+  },
+  "notepad_sidenav": {
+    "add_note": "Add note",
+    "add_notepad": "Add notepad",
+    "notepads": "Notepads",
+    "notes": "Notes"
   },
   "report": {
     "summary": "Summary"
@@ -80,7 +101,6 @@
     "share": "Share"
   },
   "security_report": {
-    "amount": "Amount",
     "annual_profit": "Annual interest",
     "buy_date": "Buy date",
     "days": "Days",

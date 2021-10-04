@@ -1,5 +1,5 @@
 import { Long } from 'protobufjs';
-import { Account, Category, DataStorage, FamilyMember, Security, SecurityTransaction, SubCategory, Transaction, TransactionTemplate } from '../model/model';
+import { Account, Category, DataStorage, FamilyMember, Note, Notepad, Security, SecurityTransaction, SubCategory, Transaction, TransactionTemplate } from '../model/model';
 import Type = SecurityTransaction.Type;
 
 export class UserDataEnricherService {
@@ -22,6 +22,9 @@ export class UserDataEnricherService {
 
     dataStorage.securities.forEach(x => x.transactionAmount = 0);
     this.enrichSecurity(dataStorage);
+
+    dataStorage.notepads.forEach(x => x.noteAmount = 0);
+    this.enrichNotepad(dataStorage);
 
     // new entity
   }
@@ -86,6 +89,17 @@ export class UserDataEnricherService {
     });
   }
 
+  private enrichNotepad(dataStorage: DataStorage): void {
+    const noteCounter = new Map<number, number>();
+    dataStorage.notes.filter(x => !x.isDeleted).forEach(note => {
+      const notepadId = note.notepadId;
+      noteCounter.set(notepadId, (noteCounter.get(notepadId) || 0) + 1);
+    });
+    dataStorage.notepads.forEach(notepad => {
+      notepad.noteAmount = noteCounter.get(notepad.id) || 0;
+    });
+  }
+
   merge(source: DataStorage, update: DataStorage): DataStorage {
     const result: DataStorage = DataStorage.fromObject(update);
 
@@ -98,6 +112,8 @@ export class UserDataEnricherService {
     update.transactionTemplates.forEach(x => idsToUpdate.push(x.id));
     update.securities.forEach(x => idsToUpdate.push(x.id));
     update.securityTransactions.forEach(x => idsToUpdate.push(x.id));
+    update.notepads.forEach(x => idsToUpdate.push(x.id));
+    update.notes.forEach(x => idsToUpdate.push(x.id));
 
     result.settings = update.settings || source.settings;
     result.idHolder = update.idHolder || source.idHolder;
@@ -133,6 +149,14 @@ export class UserDataEnricherService {
     source.securityTransactions
       .filter(x => !idsToUpdate.includes(x.id))
       .forEach(x => result.securityTransactions.push(x as SecurityTransaction));
+
+    source.notepads
+      .filter(x => !idsToUpdate.includes(x.id))
+      .forEach(x => result.notepads.push(x as Notepad));
+
+    source.notes
+      .filter(x => !idsToUpdate.includes(x.id))
+      .forEach(x => result.notes.push(x as Note));
 
     // new Entity
 

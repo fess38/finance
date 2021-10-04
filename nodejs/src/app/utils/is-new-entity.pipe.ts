@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Account, Category, FamilyMember, Security, SecurityTransaction, SubCategory, Transaction, TransactionTemplate } from '../core/model/model';
+import { Account, Category, FamilyMember, Note, Notepad, Security, SecurityTransaction, SubCategory, Transaction, TransactionTemplate } from '../core/model/model';
 
 @Pipe({
   name: 'isNewEntity',
@@ -8,7 +8,7 @@ import { Account, Category, FamilyMember, Security, SecurityTransaction, SubCate
 export class IsNewEntityPipe implements PipeTransform {
   // new entity
   transform(value: Account | Category | SubCategory | FamilyMember | Transaction | TransactionTemplate
-    | Security | SecurityTransaction): boolean {
+    | Security | SecurityTransaction | Notepad | Note): boolean {
     return value.id == 0;
   }
 }

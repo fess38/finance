@@ -1,0 +1,65 @@
+<div class="clr-row clr-col-12 clr-col-lg-6">
+  <form class="clr-form no-top">
+    <div class="clr-form-control clr-row no-top" (click)="onViewModeChange()">
+      <label>
+        <cds-icon shape="pencil" [attr.solid]="!viewMode"></cds-icon>
+        <span>&nbsp;{{(viewMode ? 'note.view' : 'note.edit') | translate}}</span>
+      </label>
+    </div>
+    <div *ngIf="viewMode">
+      <div class="clr-form-control clr-row">
+        <label>{{'common.name' | translate}}</label>
+        <div class="clr-control-container">
+          <div class="clr-input-wrapper">
+            <input type="text" name="name" class="clr-input" [(ngModel)]="note.name"/>
+          </div>
+        </div>
+      </div>
+      <div class="clr-form-control clr-row">
+        <label>{{'note.notepad' | translate}}</label>
+        <div class="clr-control-container">
+          <div class="clr-select-wrapper">
+            <select name="notepadId"
+                    class="clr-select"
+                    [(ngModel)]="note.notepadId">
+              <option disabled>{{'note.notepad' | translate}}</option>
+              <option *ngFor="let notepad of notepads()" [ngValue]="notepad.id">
+                <span>{{notepad.name}}</span>
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="clr-form-control clr-row">
+        <label>{{'note.text' | translate}}</label>
+        <markdown [data]="textForMarkdown()"></markdown>
+      </div>
+    </div>
+    <div [hidden]="viewMode">
+      <div class="clr-form-control clr-row no-top">
+        <textarea clrTextarea
+                  id="note-text"
+                  #noteTextElement
+                  [cols]="120"
+                  (click)="onClick($event)"
+                  (keydown)="onKeyDown($event)">
+        </textarea>
+      </div>
+    </div>
+    <div class="clr-form-control clr-row">
+      <div class="clr-control-container">
+        <button class="btn btn-primary btn-sm btn-block"
+                (click)="update(note)"
+                [disabled]="!isValidForm() || ('' | isReadOnly)">
+          {{'common.save' | translate}}
+        </button>
+        <button class="btn btn-danger btn-sm btn-block"
+                (click)="delete(note)"
+                [hidden]="note | isNewEntity"
+                [disabled]="'' | isReadOnly">
+          {{'common.delete' | translate}}
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

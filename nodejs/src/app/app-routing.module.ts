@@ -7,11 +7,13 @@ import { AuthGuardService } from './auth/auth-guard.service';
 import { LoginComponent } from './auth/login/login.component';
 import { CategoryDetailComponent } from './category/category-detail/category-detail.component';
 import { CategoryListComponent } from './category/category-list/category-list.component';
+import { BlankPageComponent } from './core/blank-page/blank-page.component';
 import { ErrorPageComponent } from './core/error-page/error-page.component';
-import { MainPageComponent } from './core/main-page/main-page.component';
 import { SettingsComponent } from './core/settings/settings.component';
 import { FamilyMemberDetailComponent } from './family-member/family-member-detail/family-member-detail.component';
 import { FamilyMemberListComponent } from './family-member/family-member-list/family-member-list.component';
+import { NoteDetailComponent } from './notepad/note-detail/note-detail.component';
+import { NotepadDetailComponent } from './notepad/notepad-detail/notepad-detail.component';
 import { SecurityDetailComponent } from './security/security-detail/security-detail.component';
 import { SecurityListComponent } from './security/security-list/security-list.component';
 import { SecurityReportComponent } from './security/security-report/security-report.component';
@@ -31,7 +33,7 @@ import { TransactionYearComponent } from './transaction/transaction-year/transac
 const appRoutes: Routes = [
   {
     path: '',
-    component: MainPageComponent,
+    component: BlankPageComponent,
     canActivate: [AuthGuardService]
   },
   {
@@ -40,7 +42,7 @@ const appRoutes: Routes = [
   },
   {
     path: 'error',
-    component: ErrorPageComponent,
+    component: ErrorPageComponent
   },
   {
     path: 'access_link/:token',
@@ -134,6 +136,16 @@ const appRoutes: Routes = [
   {
     path: 'security_transaction/:id',
     component: SecurityTransactionDetailComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'notepad/:id',
+    component: NotepadDetailComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'note/:id',
+    component: NoteDetailComponent,
     canActivate: [AuthGuardService]
   },
   {

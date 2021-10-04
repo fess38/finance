@@ -107,6 +107,12 @@ export interface IDataStorage {
 
     /** DataStorage securityTransactions */
     securityTransactions?: (ISecurityTransaction[]|null);
+
+    /** DataStorage notepads */
+    notepads?: (INotepad[]|null);
+
+    /** DataStorage notes */
+    notes?: (INote[]|null);
 }
 
 /** Represents a DataStorage. */
@@ -150,6 +156,12 @@ export class DataStorage implements IDataStorage {
 
     /** DataStorage securityTransactions. */
     public securityTransactions: ISecurityTransaction[];
+
+    /** DataStorage notepads. */
+    public notepads: INotepad[];
+
+    /** DataStorage notes. */
+    public notes: INote[];
 
     /**
      * Creates a new DataStorage instance using the specified properties.
@@ -1349,6 +1361,204 @@ export class SecurityReport implements ISecurityReport {
     public toJSON(): { [k: string]: any };
 }
 
+/** Properties of a Notepad. */
+export interface INotepad {
+
+    /** Notepad id */
+    id?: (number|null);
+
+    /** Notepad isDeleted */
+    isDeleted?: (boolean|null);
+
+    /** Notepad noteAmount */
+    noteAmount?: (number|null);
+
+    /** Notepad created */
+    created: number;
+
+    /** Notepad updated */
+    updated: number;
+
+    /** Notepad name */
+    name: string;
+}
+
+/** Represents a Notepad. */
+export class Notepad implements INotepad {
+
+    /**
+     * Constructs a new Notepad.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: INotepad);
+
+    /** Notepad id. */
+    public id: number;
+
+    /** Notepad isDeleted. */
+    public isDeleted: boolean;
+
+    /** Notepad noteAmount. */
+    public noteAmount: number;
+
+    /** Notepad created. */
+    public created: number;
+
+    /** Notepad updated. */
+    public updated: number;
+
+    /** Notepad name. */
+    public name: string;
+
+    /**
+     * Creates a new Notepad instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns Notepad instance
+     */
+    public static create(properties?: INotepad): Notepad;
+
+    /**
+     * Encodes the specified Notepad message. Does not implicitly {@link Notepad.verify|verify} messages.
+     * @param message Notepad message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: INotepad, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a Notepad message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns Notepad
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Notepad;
+
+    /**
+     * Creates a Notepad message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns Notepad
+     */
+    public static fromObject(object: { [k: string]: any }): Notepad;
+
+    /**
+     * Creates a plain object from a Notepad message. Also converts values to other types if specified.
+     * @param message Notepad
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: Notepad, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this Notepad to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a Note. */
+export interface INote {
+
+    /** Note id */
+    id?: (number|null);
+
+    /** Note isDeleted */
+    isDeleted?: (boolean|null);
+
+    /** Note notepadId */
+    notepadId: number;
+
+    /** Note created */
+    created: number;
+
+    /** Note updated */
+    updated: number;
+
+    /** Note name */
+    name: string;
+
+    /** Note text */
+    text?: (string|null);
+}
+
+/** Represents a Note. */
+export class Note implements INote {
+
+    /**
+     * Constructs a new Note.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: INote);
+
+    /** Note id. */
+    public id: number;
+
+    /** Note isDeleted. */
+    public isDeleted: boolean;
+
+    /** Note notepadId. */
+    public notepadId: number;
+
+    /** Note created. */
+    public created: number;
+
+    /** Note updated. */
+    public updated: number;
+
+    /** Note name. */
+    public name: string;
+
+    /** Note text. */
+    public text: string;
+
+    /**
+     * Creates a new Note instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns Note instance
+     */
+    public static create(properties?: INote): Note;
+
+    /**
+     * Encodes the specified Note message. Does not implicitly {@link Note.verify|verify} messages.
+     * @param message Note message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: INote, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a Note message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns Note
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Note;
+
+    /**
+     * Creates a Note message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns Note
+     */
+    public static fromObject(object: { [k: string]: any }): Note;
+
+    /**
+     * Creates a plain object from a Note message. Also converts values to other types if specified.
+     * @param message Note
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: Note, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this Note to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
 /** Properties of a Settings. */
 export interface ISettings {
 
@@ -1440,6 +1650,78 @@ export namespace Settings {
         RU = 0,
         EN = 1
     }
+}
+
+/** Properties of a LocalSettings. */
+export interface ILocalSettings {
+
+    /** LocalSettings appMode */
+    appMode?: (AppMode|null);
+
+    /** LocalSettings currentNotepadId */
+    currentNotepadId?: (number|null);
+}
+
+/** Represents a LocalSettings. */
+export class LocalSettings implements ILocalSettings {
+
+    /**
+     * Constructs a new LocalSettings.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: ILocalSettings);
+
+    /** LocalSettings appMode. */
+    public appMode: AppMode;
+
+    /** LocalSettings currentNotepadId. */
+    public currentNotepadId: number;
+
+    /**
+     * Creates a new LocalSettings instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns LocalSettings instance
+     */
+    public static create(properties?: ILocalSettings): LocalSettings;
+
+    /**
+     * Encodes the specified LocalSettings message. Does not implicitly {@link LocalSettings.verify|verify} messages.
+     * @param message LocalSettings message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: ILocalSettings, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a LocalSettings message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns LocalSettings
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): LocalSettings;
+
+    /**
+     * Creates a LocalSettings message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns LocalSettings
+     */
+    public static fromObject(object: { [k: string]: any }): LocalSettings;
+
+    /**
+     * Creates a plain object from a LocalSettings message. Also converts values to other types if specified.
+     * @param message LocalSettings
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: LocalSettings, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this LocalSettings to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
 }
 
 /** Properties of an AccessToken. */
@@ -1976,5 +2258,13 @@ export enum EntityType {
     TRANSACTION_ARCHIVE = 8,
     TRANSACTION_TEMPLATE = 9,
     SECURITY = 10,
-    SECURITY_TRANSACTION = 11
+    SECURITY_TRANSACTION = 11,
+    NOTEPAD = 12,
+    NOTE = 13
+}
+
+/** AppMode enum. */
+export enum AppMode {
+    FINANCE = 0,
+    NOTES = 1
 }

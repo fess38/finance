@@ -98,5 +98,5 @@ export class DateUtils {
     } else {
       return a.year < b.year ? -1 : 1;
     }
-  };
+  }
 }
