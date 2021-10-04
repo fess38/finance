@@ -1,5 +1,14 @@
-#current-notepad {
-  text-decoration: underline;
+.notepad-link {
   color: #666666;
-  cursor: text;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.notepad-sidenav-item {
+  display: flex;
+  height: 1.3rem;
+  line-height: 1.8rem;
+  outline-offset: -.25rem;
+  padding: 0 .6rem 0 1.2rem;
+  text-decoration: none;
 }

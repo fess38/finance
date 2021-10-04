@@ -1,11 +1,13 @@
 <clr-vertical-nav [clr-nav-level]="2" [clrVerticalNavCollapsible]="false">
   <div class="nav-group-text">
-    <a [ngStyle]="{'text-decoration': showNotepads() ? 'underline' : 'none'}"
+    <a class="notepad-link" [ngStyle]="{'text-decoration': showNotepads() ? 'underline' : 'none'}"
        (click)="clearState()">
       {{'notepad_sidenav.notepads' | translate}}
     </a>
     <span *ngIf="showNotes()">&nbsp;/&nbsp;</span>
-    <a *ngIf="showNotes()" id="current-notepad" routerLink="/notepad/{{currentNotepad().id}}">
+    <a *ngIf="showNotes()"
+       class="notepad-link"
+       routerLink="/notepad/{{currentNotepad().id}}">
       {{currentNotepad().name}}
     </a>
     <span>&nbsp;</span>
@@ -25,17 +27,20 @@
   </div>
   <clr-vertical-nav-group-children *ngIf="showNotepads()">
     <a *ngFor="let notepad of notepads()"
-       clrVerticalNavLink
+       class="notepad-link notepad-sidenav-item"
        (click)="updateCurrentNotepadId(notepad)">
-      {{notepad.name}}
+      <span class="nav-text">
+        {{notepad.name}}
+      </span>
     </a>
   </clr-vertical-nav-group-children>
   <clr-vertical-nav-group-children *ngIf="showNotes()">
     <a *ngFor="let note of notes()"
        clrVerticalNavLink
-       routerLink="/note/{{note.id}}"
-       routerLinkActive="active">
-      <span>{{note.name}}</span>
+       routerLink="/note/{{note.id}}">
+      <span>
+        {{note.name}}
+      </span>
     </a>
   </clr-vertical-nav-group-children>
 </clr-vertical-nav>
