@@ -32,7 +32,7 @@
       </div>
       <div class="clr-form-control clr-row">
         <label>{{'note.text' | translate}}</label>
-        <markdown [data]="textForMarkdown()"></markdown>
+        <div [innerHTML]="textForMarkdown()"></div>
       </div>
     </div>
     <div [hidden]="viewMode">
@@ -42,7 +42,8 @@
                   #noteTextElement
                   [cols]="120"
                   (click)="onClick($event)"
-                  (keydown)="onKeyDown($event)">
+                  (keydown)="onKeyDown($event)"
+                  (keyup)="onKeyUp($event)">
         </textarea>
       </div>
     </div>

@@ -2,6 +2,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { MarkdownService } from 'ngx-markdown';
 import { interval, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { AppMode, Note, Notepad } from '../../core/model/model';
@@ -14,6 +15,7 @@ import { NoteWrapper } from './note-wrapper';
 })
 export class NoteDetailComponent implements OnInit, OnDestroy {
   constructor(private userdata: UserDataService,
+              private markdownService: MarkdownService,
               private translate: TranslateService,
               private route: ActivatedRoute,
               private router: Router,
@@ -92,7 +94,10 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
   }
 
   textForMarkdown(): string {
-    return this.noteWrapper.prepareForMarkdown();
+    return this.markdownService.compile(this.noteWrapper.prepareForMarkdown())
+      .replace('<ul>', '<ul class="list">')
+      .replace('<ul>', '<ul class="list">')
+      .replace('<table>', '<table class="table table-compact">');
   }
 
   onClick(event: MouseEvent): void {
@@ -115,7 +120,7 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
         isUpdated = false;
       }
     } else if (event.code == 'Enter') {
-        this.noteWrapper.enter();
+      this.noteWrapper.enter();
     } else {
       isUpdated = false;
     }
@@ -123,6 +128,10 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
     if (isUpdated) {
       this.afterChange(event.target as HTMLTextAreaElement);
     }
+  }
+
+  onKeyUp(event: KeyboardEvent): void {
+    this.noteWrapper.update(event.target as HTMLTextAreaElement);
   }
 
   private updateCursorPosition(event: KeyboardEvent | MouseEvent): void {
