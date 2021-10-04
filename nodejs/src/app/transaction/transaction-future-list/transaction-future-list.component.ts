@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { interval, Subject, Subscription } from 'rxjs';
-import { Transaction } from '../../core/model/model';
+import { AppMode, Transaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 import { TransactionDetailContext } from '../transaction-detail/transaction-detail.component';
 import { NamedTransaction, TransactionTemplateResolver } from '../transaction-template-resolver';
@@ -31,6 +31,7 @@ export class TransactionFutureListComponent implements OnInit, OnDestroy {
   activeTransaction = new Transaction();
 
   ngOnInit(): void {
+    this.userdata.localSettings.appMode = AppMode.FINANCE;
     this.subscription = this.userdata.subscribeOnInit(() => this.onInitCallback());
     this.childPingerSubscription = interval(500).subscribe(() => {
       this.transactionDetailContext.parentObservable.next(0);

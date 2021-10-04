@@ -69,7 +69,8 @@
     "exit": "Sign out",
     "finance": "Finance",
     "notes": "Notes",
-    "settings": "Settings"
+    "settings": "Settings",
+    "title": "Notes | Finance"
   },
   "note": {
     "edit": "Edit note",

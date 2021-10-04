@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { Security, SecurityTransaction } from '../../core/model/model';
+import { Component, OnInit } from '@angular/core';
+import { AppMode, Security, SecurityTransaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 import { SecurityUtils } from '../security-utils';
 import Type = SecurityTransaction.Type;
@@ -7,10 +7,14 @@ import Type = SecurityTransaction.Type;
 @Component({
   templateUrl: 'security-transaction-list.component.html'
 })
-export class SecurityTransactionListComponent {
+export class SecurityTransactionListComponent implements OnInit {
   constructor(private userdata: UserDataService) {}
 
   filterSecurityId: number;
+
+  ngOnInit(): void {
+    this.userdata.localSettings.appMode = AppMode.FINANCE;
+  }
 
   securities(): Security[] {
     return this.userdata.securities()

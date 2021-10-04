@@ -5057,7 +5057,7 @@ export const LocalSettings = $root.LocalSettings = (() => {
      * @memberof LocalSettings
      * @instance
      */
-    LocalSettings.prototype.appMode = 0;
+    LocalSettings.prototype.appMode = 1;
 
     /**
      * LocalSettings currentNotepadId.
@@ -5178,7 +5178,7 @@ export const LocalSettings = $root.LocalSettings = (() => {
             options = {};
         let object = {};
         if (options.defaults) {
-            object.appMode = options.enums === String ? "FINANCE" : 0;
+            object.appMode = options.enums === String ? "NOTES" : 1;
             if ($util.Long) {
                 let long = new $util.Long(0, 0, false);
                 object.currentNotepadId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;

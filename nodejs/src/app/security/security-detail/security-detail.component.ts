@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Currency, Money, Security } from '../../core/model/model';
+import { AppMode, Currency, Money, Security } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 import { SecurityUtils } from '../security-utils';
 
@@ -18,6 +18,7 @@ export class SecurityDetailComponent implements OnInit, OnDestroy {
   valueToMoney = (value) => SecurityUtils.valueToMoney(value);
 
   ngOnInit(): void {
+    this.userdata.localSettings.appMode = AppMode.FINANCE;
     const id = this.route.snapshot.paramMap.get('id');
     if (id != 'new') {
       const callback = () => {

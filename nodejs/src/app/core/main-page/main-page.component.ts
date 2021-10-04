@@ -38,7 +38,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
   }
 
   setFinance() {
-    this.userdata.appMode = AppMode.FINANCE;
+    this.userdata.localSettings.appMode = AppMode.FINANCE;
   }
 
   isNotes(): boolean {
@@ -46,7 +46,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
   }
 
   setNotes() {
-    this.userdata.appMode = AppMode.NOTES;
+    this.userdata.localSettings.appMode = AppMode.NOTES;
   }
 
   signout(): void {

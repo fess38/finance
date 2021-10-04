@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Account, Category, FamilyMember, Month, SubCategory, Transaction } from '../../core/model/model';
+import { Account, AppMode, Category, FamilyMember, Month, SubCategory, Transaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 import { DateUtils } from '../../utils/date-utils';
 import { TransactionCriteriaService as Criteria } from '../transaction-criteria.service';
@@ -22,6 +22,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   transactions: Transaction[];
 
   ngOnInit(): void {
+    this.userdata.localSettings.appMode = AppMode.FINANCE;
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.criteria.update(this.route.snapshot.queryParams);
     this.month = new Month({ year: this.criteria.year, month: this.criteria.month });

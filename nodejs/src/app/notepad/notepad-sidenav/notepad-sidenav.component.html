@@ -37,7 +37,8 @@
   <clr-vertical-nav-group-children *ngIf="showNotes()">
     <a *ngFor="let note of notes()"
        clrVerticalNavLink
-       routerLink="/note/{{note.id}}">
+       routerLink="/note/{{note.id}}"
+       routerLinkActive="active">
       <span>
         {{note.name}}
       </span>

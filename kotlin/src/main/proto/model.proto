@@ -185,7 +185,7 @@ message Settings {
 }
 
 message LocalSettings {
-    optional AppMode app_mode = 1 [default = FINANCE];
+    optional AppMode app_mode = 1 [default = NOTES];
     optional int64 current_notepad_id = 2 [default = 0];
 }
 

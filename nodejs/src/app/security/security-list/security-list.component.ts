@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Security } from '../../core/model/model';
+import { AppMode, Security } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 import { SecurityUtils } from '../security-utils';
 
@@ -14,6 +14,7 @@ export class SecurityListComponent implements OnInit, OnDestroy {
   private totalCost = 0;
 
   ngOnInit(): void {
+    this.userdata.localSettings.appMode = AppMode.FINANCE;
     this.subscription = this.userdata.subscribeOnInit(() => {
       this.userdata.securities().forEach(security => {
         this.totalCost += this.cost(security);

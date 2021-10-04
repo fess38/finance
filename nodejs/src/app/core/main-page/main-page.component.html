@@ -3,15 +3,15 @@
     <div class="header-nav" [clr-nav-level]="1">
       <a routerLink="/"
          class="nav-link nav-text"
-         (click)="setFinance()"
-         [ngClass]="{'active':isFinance()}">
-        <span>{{'main_page.finance' | translate}}</span>
-      </a>
-      <a routerLink="/"
-         class="nav-link nav-text"
          (click)="setNotes()"
          [ngClass]="{'active':isNotes()}">
         <span>{{'main_page.notes' | translate}}</span>
+      </a>
+      <a routerLink="/"
+         class="nav-link nav-text"
+         (click)="setFinance()"
+         [ngClass]="{'active':isFinance()}">
+        <span>{{'main_page.finance' | translate}}</span>
       </a>
     </div>
     <div class="header-actions">

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
-import { Account, Category, FamilyMember, SubCategory, Transaction } from '../../core/model/model';
+import { Account, AppMode, Category, FamilyMember, SubCategory, Transaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 import { DateUtils } from '../../utils/date-utils';
 import { TransactionCriteriaService as Criteria } from '../transaction-criteria.service';
@@ -27,6 +27,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   type: Transaction.Type = Transaction.Type.EXPENSE;
 
   ngOnInit(): void {
+    this.userdata.localSettings.appMode = AppMode.FINANCE;
     if (this.context.forEmbed && this.context.parentObservable) {
       if (this.transaction.created.length == 0) {
         this.transaction.created = DateUtils.formatDate();

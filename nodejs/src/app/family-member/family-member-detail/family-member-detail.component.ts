@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { FamilyMember } from '../../core/model/model';
+import { AppMode, FamilyMember } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 
 @Component({
@@ -16,6 +16,7 @@ export class FamilyMemberDetailComponent implements OnInit, OnDestroy {
   familyMember = new FamilyMember();
 
   ngOnInit() {
+    this.userdata.localSettings.appMode = AppMode.FINANCE;
     const id = this.route.snapshot.paramMap.get('id');
     if (id != 'new') {
       const callback = () => {

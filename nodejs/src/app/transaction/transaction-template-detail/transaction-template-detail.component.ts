@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { interval, Subject, Subscription } from 'rxjs';
-import { Transaction, TransactionTemplate } from '../../core/model/model';
+import { AppMode, Transaction, TransactionTemplate } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 import { DateUtils } from '../../utils/date-utils';
 import { TransactionDetailContext } from '../transaction-detail/transaction-detail.component';
@@ -33,6 +33,7 @@ export class TransactionTemplateDetailComponent implements OnInit, OnDestroy {
   daysOfMonth = '';
 
   ngOnInit(): void {
+    this.userdata.localSettings.appMode = AppMode.FINANCE;
     this.transactionTemplate.transaction = new Transaction();
     this.childPingerSubscription = interval(500).subscribe(() => {
       this.transactionDetailContext.parentObservable.next(0);

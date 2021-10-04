@@ -1,12 +1,16 @@
-import { Component } from '@angular/core';
-import { TransactionTemplate } from '../../core/model/model';
+import { Component, OnInit } from '@angular/core';
+import { AppMode, TransactionTemplate } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 
 @Component({
   templateUrl: 'transaction-template-list.component.html'
 })
-export class TransactionTemplateListComponent {
+export class TransactionTemplateListComponent implements OnInit {
   constructor(private userdata: UserDataService) {}
+
+  ngOnInit(): void {
+    this.userdata.localSettings.appMode = AppMode.FINANCE;
+  }
 
   transactionTemplates(): TransactionTemplate[] {
     return this.userdata.transactionTemplates().sort((a, b) => {

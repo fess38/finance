@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Category, Currency, SubCategory, Summary, Transaction, Year } from '../../core/model/model';
+import { AppMode, Category, Currency, SubCategory, Summary, Transaction, Year } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 import { DateUtils } from '../../utils/date-utils';
 import { TransactionUtils as Utils } from '../transaction-utils';
@@ -38,6 +38,7 @@ export class TransactionYearComponent implements OnInit, OnDestroy {
   expense: number;
 
   ngOnInit() {
+    this.userdata.localSettings.appMode = AppMode.FINANCE;
     this.subscription = this.userdata.subscribeOnInit(() => this.onInitCallback());
   }
 
