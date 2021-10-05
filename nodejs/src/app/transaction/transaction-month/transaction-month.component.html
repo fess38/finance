@@ -28,7 +28,7 @@
 
 <div class="clr-row">
   <div id="left-column" class="clr-col-3 clr-col-md-2">
-    <table class="table table-compact">
+    <table class="table table-compact no-top">
       <thead>
       <tr>
         <th>{{'common.category' | translate}}</th>
@@ -70,7 +70,7 @@
   </div>
 
   <div id="center-column" class="clr-col-7 clr-col-md-8" *ngIf="('' | locale) as locale">
-    <table class="table table-compact">
+    <table class="table table-compact no-top">
       <thead>
       <tr>
         <th *ngFor="let month of months">
@@ -138,7 +138,7 @@
   </div>
 
   <div id="right-column" class="clr-col-2 clr-col-md-2" *ngIf="('' | locale) as locale">
-    <table class="table table-compact">
+    <table class="table table-compact no-top">
       <thead>
       <tr>
         <th colspan="2">{{'report.summary' | translate}}</th>
