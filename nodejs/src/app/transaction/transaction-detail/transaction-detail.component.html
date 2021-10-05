@@ -1,6 +1,6 @@
 <div [className]="context.forEmbed ? '' : 'clr-row clr-col-12 clr-col-lg-6'">
   <form [className]="context.forEmbed ? '' : 'clr-form'">
-    <div class="clr-form-control clr-row" [hidden]="!context.showHeader">
+    <div class="clr-form-control clr-row no-top" [hidden]="!context.showHeader">
       <label>
         <button type="button" class="btn btn-icon btn-link" (click)="viewTransactions()">
           <cds-icon shape="undo"></cds-icon>
@@ -13,7 +13,7 @@
         </span>
       </label>
     </div>
-    <div class="clr-form-control clr-row" [hidden]="!context.showDate">
+    <div class="clr-form-control clr-row no-top" [hidden]="!context.showDate">
       <label>{{'common.date' | translate}}</label>
       <div class="clr-control-container">
         <div class="clr-input-wrapper">
