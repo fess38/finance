@@ -3,14 +3,14 @@ import { SecurityUtils } from './security-utils';
 
 describe('ValueToMoney', () => {
   it('test1', () => {
-    expect(new Money({ units: 1 })).toEqual(SecurityUtils.valueToMoney('1'));
+    expect(SecurityUtils.valueToMoney('1')).toEqual(new Money({ units: 1 }));
   });
 
   it('test2', () => {
-    expect(new Money({ units: 1, micros: 12300 })).toEqual(SecurityUtils.valueToMoney('1.0123'));
+    expect(SecurityUtils.valueToMoney('1.0123')).toEqual(new Money({ units: 1, micros: 12300 }));
   });
 
   it('test3', () => {
-    expect(new Money({ units: 0 })).toEqual(SecurityUtils.valueToMoney(''));
+    expect(SecurityUtils.valueToMoney('')).toEqual(new Money({ units: 0 }));
   });
 });

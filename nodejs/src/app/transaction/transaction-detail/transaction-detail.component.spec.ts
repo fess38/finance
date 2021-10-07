@@ -30,7 +30,7 @@ describe('TransactionDetailComponent', () => {
     expected.amountTo = null;
     expected.categoryId = 0;
 
-    expect(expected).toEqual(component.transaction);
+    expect(component.transaction).toEqual(expected);
   });
 
   it('#onChangeTransactionType to expense', () => {
@@ -46,7 +46,7 @@ describe('TransactionDetailComponent', () => {
     expected.amountTo = null;
     expected.categoryId = 0;
 
-    expect(expected).toEqual(component.transaction);
+    expect(component.transaction).toEqual(expected);
   });
 
   it('#onChangeTransactionType to transfer', () => {
@@ -62,56 +62,56 @@ describe('TransactionDetailComponent', () => {
     expected.amountTo = null;
     expected.categoryId = -1;
 
-    expect(expected).toEqual(component.transaction);
+    expect(component.transaction).toEqual(expected);
   });
 
   it('#onChangeCategory should set subCategoryId to 0', () => {
     component.transaction.subCategoryId = 123;
     component.onChangeCategory();
-    expect(0).toEqual(component.transaction.subCategoryId);
+    expect(component.transaction.subCategoryId).toEqual(0);
   });
 
   it('#isIncome should return true', () => {
     component.type = Transaction.Type.INCOME;
-    expect(true).toEqual(component.isIncome());
+    expect(component.isIncome()).toEqual(true);
   });
 
   it('#isIncome should return false', () => {
     component.type = Transaction.Type.TRANSFER;
-    expect(false).toEqual(component.isIncome());
+    expect(component.isIncome()).toEqual(false);
   });
 
   it('#isExpense should return true', () => {
     component.type = Transaction.Type.EXPENSE;
-    expect(true).toEqual(component.isExpense());
+    expect(component.isExpense()).toEqual(true);
   });
 
   it('#isExpense should return false', () => {
     component.type = Transaction.Type.TRANSFER;
-    expect(false).toEqual(component.isExpense());
+    expect(component.isExpense()).toEqual(false);
   });
 
   it('#isTransfer should return true', () => {
     component.type = Transaction.Type.TRANSFER;
-    expect(true).toEqual(component.isTransfer());
+    expect(component.isTransfer()).toEqual(true);
   });
 
   it('#isTransfer should return false', () => {
     component.type = Transaction.Type.INCOME;
-    expect(false).toEqual(component.isTransfer());
+    expect(component.isTransfer()).toEqual(false);
   });
 
   it('#isValidForm with CREATED', () => {
     component.transaction = new Transaction(transactionTemplate);
     component.transaction.created = '';
     component.transaction.accountIdTo = -1;
-    expect(['CREATED']).toEqual(component.isValidFormWithErrors());
+    expect(component.isValidFormWithErrors()).toEqual(['CREATED']);
   });
 
   it('#isValidForm with INCOME_ACCOUNT_ID_FROM', () => {
     component.type = Transaction.Type.INCOME;
     component.transaction = new Transaction(transactionTemplate);
-    expect(['INCOME_ACCOUNT_ID_FROM']).toEqual(component.isValidFormWithErrors());
+    expect(component.isValidFormWithErrors()).toEqual(['INCOME_ACCOUNT_ID_FROM']);
   });
 
   it('#isValidForm with INCOME_ACCOUNT_ID_TO', () => {
@@ -119,7 +119,7 @@ describe('TransactionDetailComponent', () => {
     component.transaction = new Transaction(transactionTemplate);
     component.transaction.accountIdFrom = -1;
     component.transaction.accountIdTo = 0;
-    expect(['INCOME_ACCOUNT_ID_TO']).toEqual(component.isValidFormWithErrors());
+    expect(component.isValidFormWithErrors()).toEqual(['INCOME_ACCOUNT_ID_TO']);
   });
 
   it('#isValidForm with INCOME_AMOUNT_TO', () => {
@@ -127,7 +127,7 @@ describe('TransactionDetailComponent', () => {
     component.transaction = new Transaction(transactionTemplate);
     component.transaction.accountIdFrom = -1;
     component.transaction.amountTo = 0;
-    expect(['INCOME_AMOUNT_TO']).toEqual(component.isValidFormWithErrors());
+    expect(component.isValidFormWithErrors()).toEqual(['INCOME_AMOUNT_TO']);
   });
 
   it('#isValidForm with INCOME_CATEGORY_ID', () => {
@@ -135,7 +135,7 @@ describe('TransactionDetailComponent', () => {
     component.transaction = new Transaction(transactionTemplate);
     component.transaction.accountIdFrom = -1;
     component.transaction.categoryId = 0;
-    expect(['INCOME_CATEGORY_ID']).toEqual(component.isValidFormWithErrors());
+    expect(component.isValidFormWithErrors()).toEqual(['INCOME_CATEGORY_ID']);
   });
 
   it('#isValidForm with EXPENSE_ACCOUNT_ID_FROM', () => {
@@ -143,13 +143,13 @@ describe('TransactionDetailComponent', () => {
     component.transaction = new Transaction(transactionTemplate);
     component.transaction.accountIdFrom = 0;
     component.transaction.accountIdTo = -1;
-    expect(['EXPENSE_ACCOUNT_ID_FROM']).toEqual(component.isValidFormWithErrors());
+    expect(component.isValidFormWithErrors()).toEqual(['EXPENSE_ACCOUNT_ID_FROM']);
   });
 
   it('#isValidForm with EXPENSE_ACCOUNT_ID_TO', () => {
     component.type = Transaction.Type.EXPENSE;
     component.transaction = new Transaction(transactionTemplate);
-    expect(['EXPENSE_ACCOUNT_ID_TO']).toEqual(component.isValidFormWithErrors());
+    expect(component.isValidFormWithErrors()).toEqual(['EXPENSE_ACCOUNT_ID_TO']);
   });
 
   it('#isValidForm with EXPENSE_AMOUNT_FROM', () => {
@@ -157,7 +157,7 @@ describe('TransactionDetailComponent', () => {
     component.transaction = new Transaction(transactionTemplate);
     component.transaction.accountIdTo = -1;
     component.transaction.amountFrom = 0;
-    expect(['EXPENSE_AMOUNT_FROM']).toEqual(component.isValidFormWithErrors());
+    expect(component.isValidFormWithErrors()).toEqual(['EXPENSE_AMOUNT_FROM']);
   });
 
   it('#isValidForm with EXPENSE_CATEGORY_ID', () => {
@@ -165,7 +165,7 @@ describe('TransactionDetailComponent', () => {
     component.transaction = new Transaction(transactionTemplate);
     component.transaction.accountIdTo = -1;
     component.transaction.categoryId = -1;
-    expect(['EXPENSE_CATEGORY_ID']).toEqual(component.isValidFormWithErrors());
+    expect(component.isValidFormWithErrors()).toEqual(['EXPENSE_CATEGORY_ID']);
   });
 
   it('#isValidForm with TRANSFER_ACCOUNT_ID_FROM', () => {
@@ -173,7 +173,7 @@ describe('TransactionDetailComponent', () => {
     component.transaction = new Transaction(transactionTemplate);
     component.transaction.accountIdFrom = -1;
     component.transaction.categoryId = -1;
-    expect(['TRANSFER_ACCOUNT_ID_FROM']).toEqual(component.isValidFormWithErrors());
+    expect(component.isValidFormWithErrors()).toEqual(['TRANSFER_ACCOUNT_ID_FROM']);
   });
 
   it('#isValidForm with TRANSFER_ACCOUNT_ID_TO', () => {
@@ -181,7 +181,7 @@ describe('TransactionDetailComponent', () => {
     component.transaction = new Transaction(transactionTemplate);
     component.transaction.accountIdTo = -1;
     component.transaction.categoryId = -1;
-    expect(['TRANSFER_ACCOUNT_ID_TO']).toEqual(component.isValidFormWithErrors());
+    expect(component.isValidFormWithErrors()).toEqual(['TRANSFER_ACCOUNT_ID_TO']);
   });
 
   it('#isValidForm with TRANSFER_AMOUNT_FROM', () => {
@@ -189,7 +189,7 @@ describe('TransactionDetailComponent', () => {
     component.transaction = new Transaction(transactionTemplate);
     component.transaction.amountFrom = -1;
     component.transaction.categoryId = -1;
-    expect(['TRANSFER_AMOUNT_FROM']).toEqual(component.isValidFormWithErrors());
+    expect(component.isValidFormWithErrors()).toEqual(['TRANSFER_AMOUNT_FROM']);
   });
 
   it('#isValidForm with TRANSFER_AMOUNT_TO', () => {
@@ -197,19 +197,19 @@ describe('TransactionDetailComponent', () => {
     component.transaction = new Transaction(transactionTemplate);
     component.transaction.amountTo = -1;
     component.transaction.categoryId = -1;
-    expect(['TRANSFER_AMOUNT_TO']).toEqual(component.isValidFormWithErrors());
+    expect(component.isValidFormWithErrors()).toEqual(['TRANSFER_AMOUNT_TO']);
   });
 
   it('#isValidForm with CATEGORY_ID', () => {
     component.type = Transaction.Type.TRANSFER;
     component.transaction = new Transaction(transactionTemplate);
-    expect(['CATEGORY_ID']).toEqual(component.isValidFormWithErrors());
+    expect(component.isValidFormWithErrors()).toEqual(['CATEGORY_ID']);
   });
 
   it('#isValidForm valid', () => {
     component.transaction = new Transaction(transactionTemplate);
     component.transaction.accountIdTo = -1;
-    expect([]).toEqual(component.isValidFormWithErrors());
+    expect(component.isValidFormWithErrors()).toEqual([]);
   });
 });
 

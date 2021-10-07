@@ -4,21 +4,21 @@ import { MoneyEncoderPipe } from './money-encoder.pipe';
 describe('MoneyEncoderPipe', () => {
   it('test1', () => {
     const pipe = new MoneyEncoderPipe();
-    expect('12.34').toEqual(pipe.transform(new Money({ units: 12, micros: 340000 })));
+    expect(pipe.transform(new Money({ units: 12, micros: 340000 }))).toEqual('12.34');
   });
 
   it('test2', () => {
     const pipe = new MoneyEncoderPipe();
-    expect('12').toEqual(pipe.transform(new Money({ units: 12, micros: 0 })));
+    expect(pipe.transform(new Money({ units: 12, micros: 0 }))).toEqual('12');
   });
 
   it('test3', () => {
     const pipe = new MoneyEncoderPipe();
-    expect('12.00456').toEqual(pipe.transform(new Money({ units: 12, micros: 4560 })));
+    expect(pipe.transform(new Money({ units: 12, micros: 4560 }))).toEqual('12.00456');
   });
 
   it('test4', () => {
     const pipe = new MoneyEncoderPipe();
-    expect('').toEqual(pipe.transform(null));
+    expect(pipe.transform(null)).toEqual('');
   });
 });

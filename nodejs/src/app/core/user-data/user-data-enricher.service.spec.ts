@@ -1,4 +1,7 @@
-import { Account, DataStorage, FamilyMember, Money, Note, Notepad, Security, SecurityTransaction, Transaction, TransactionTemplate } from '../model/model';
+import {
+  Account, DataStorage, FamilyMember, Money, Note, Notepad, Security, SecurityTransaction, Transaction,
+  TransactionTemplate
+} from '../model/model';
 import { UserDataEnricherService } from './user-data-enricher.service';
 import Type = SecurityTransaction.Type;
 
@@ -34,7 +37,7 @@ describe('UserDataEnricherService', () => {
     dataStorage.transactionTemplates[1].transaction.familyMemberId = 110;
 
     enricher.enrich(dataStorage);
-    expect(3).toEqual(<number>dataStorage.familyMembers[0].transactionAmount);
+    expect(<number>dataStorage.familyMembers[0].transactionAmount).toEqual(3);
   });
 
   it('#enrich account balance', () => {
@@ -51,10 +54,10 @@ describe('UserDataEnricherService', () => {
     dataStorage.accounts[1].id = 11;
     enricher.enrich(dataStorage);
 
-    expect(-500).toEqual(<number>dataStorage.accounts[0].balance);
-    expect(7).toEqual(<number>dataStorage.accounts[0].transactionAmount);
-    expect(505).toEqual(<number>dataStorage.accounts[1].balance);
-    expect(7).toEqual(<number>dataStorage.accounts[1].transactionAmount);
+    expect(<number>dataStorage.accounts[0].balance).toEqual(-500);
+    expect(<number>dataStorage.accounts[0].transactionAmount).toEqual(7);
+    expect(<number>dataStorage.accounts[1].balance).toEqual(505);
+    expect(<number>dataStorage.accounts[1].transactionAmount).toEqual(7);
   });
 
   it('#enrich security', () => {
@@ -105,8 +108,8 @@ describe('UserDataEnricherService', () => {
     ];
     enricher.enrich(dataStorage);
 
-    expect(2).toEqual(<number>dataStorage.securities[0].transactionAmount);
-    expect(12).toEqual(<number>dataStorage.securities[0].amount);
+    expect(<number>dataStorage.securities[0].transactionAmount).toEqual(2);
+    expect(<number>dataStorage.securities[0].amount).toEqual(12);
   });
 
   it('#enrich notepad', () => {
@@ -144,6 +147,6 @@ describe('UserDataEnricherService', () => {
       })
     ];
     enricher.enrich(dataStorage);
-    expect(1).toEqual(<number>dataStorage.notepads[0].noteAmount);
+    expect(<number>dataStorage.notepads[0].noteAmount).toEqual(1);
   });
 });
