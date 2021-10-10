@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AppMode, Currency, Money, Security } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
+import { AlertService } from '../../utils/alert/alert.service';
 import { SecurityUtils } from '../security-utils';
 
 @Component({
@@ -10,6 +11,7 @@ import { SecurityUtils } from '../security-utils';
 })
 export class SecurityDetailComponent implements OnInit, OnDestroy {
   constructor(private userdata: UserDataService,
+              private alertService: AlertService,
               private route: ActivatedRoute,
               private router: Router) {}
 
@@ -55,17 +57,17 @@ export class SecurityDetailComponent implements OnInit, OnDestroy {
         .then(() => this.userdata.saveSecurity(security))
         .then(() => this.router.navigate(['/security/' + security.id]))
         .catch(error => {
+          this.alertService.error('error.save');
           console.error(error.message);
-          this.router.navigate(['/error']);
         });
     } else {
       this.updateSecuritiesExchangeRate(security)
         .then(() => this.userdata.updateSecurity(security))
         .then(() => this.router.navigate(['/security']))
         .catch(error => {
+          this.alertService.error(security.isDeleted ? 'error.delete' : 'error.update');
           security.isDeleted = false;
           console.error(error.message);
-          this.router.navigate(['/error']);
         });
     }
   }

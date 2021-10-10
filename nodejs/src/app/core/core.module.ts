@@ -3,7 +3,6 @@ import { AuthModule } from '../auth/auth.module';
 import { NotepadModule } from '../notepad/notepad.module';
 import { TransactionCriteriaService } from '../transaction/transaction-criteria.service';
 import { BlankPageComponent } from './blank-page/blank-page.component';
-import { ErrorPageComponent } from './error-page/error-page.component';
 import { FinanceSidenavComponent } from './finance-sidenav/finance-sidenav.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { SettingsComponent } from './settings/settings.component';
@@ -12,8 +11,7 @@ import { UserDataService } from './user-data/user-data.service';
 
 @NgModule({
   declarations: [
-    BlankPageComponent, ErrorPageComponent, MainPageComponent, SettingsComponent,
-    FinanceSidenavComponent
+    BlankPageComponent, MainPageComponent, SettingsComponent, FinanceSidenavComponent
   ],
   imports: [
     AuthModule, NotepadModule, SharedModule

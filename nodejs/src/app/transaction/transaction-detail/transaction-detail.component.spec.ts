@@ -6,7 +6,7 @@ describe('TransactionDetailComponent', () => {
   let transactionTemplate;
 
   beforeEach(() => {
-    component = new TransactionDetailComponent(null, null, null, null);
+    component = new TransactionDetailComponent(null, null, null, null, null);
     transactionTemplate = new Transaction({
       created: '2019-01-01',
       accountIdFrom: 10,

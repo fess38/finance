@@ -7,6 +7,7 @@ import { interval, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { AppMode, Note, Notepad } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
+import { AlertService } from '../../utils/alert/alert.service';
 import { NoteWrapper } from './note-wrapper';
 
 @Component({
@@ -15,6 +16,7 @@ import { NoteWrapper } from './note-wrapper';
 })
 export class NoteDetailComponent implements OnInit, OnDestroy {
   constructor(private userdata: UserDataService,
+              private alertService: AlertService,
               private markdownService: MarkdownService,
               private translate: TranslateService,
               private route: ActivatedRoute,
@@ -165,16 +167,16 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
           this.router.navigate(['/note/' + note.id]);
         })
         .catch(error => {
+          this.alertService.error('error.save');
           console.error(error.message);
-          this.router.navigate(['/error']);
         });
     } else {
       this.userdata.updateNote(note)
         .then(() => this.updateSourceNote(note))
         .catch(error => {
+          this.alertService.error(note.isDeleted ? 'error.delete' : 'error.update');
           note.isDeleted = false;
           console.error(error.message);
-          this.router.navigate(['/error']);
         });
     }
   }

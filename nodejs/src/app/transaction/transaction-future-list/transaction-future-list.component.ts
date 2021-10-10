@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { interval, Subject, Subscription } from 'rxjs';
 import { AppMode, Transaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
+import { AlertService } from '../../utils/alert/alert.service';
 import { TransactionDetailContext } from '../transaction-detail/transaction-detail.component';
 import { NamedTransaction, TransactionTemplateResolver } from '../transaction-template-resolver';
 
@@ -11,7 +11,7 @@ import { NamedTransaction, TransactionTemplateResolver } from '../transaction-te
 })
 export class TransactionFutureListComponent implements OnInit, OnDestroy {
   constructor(private userdata: UserDataService,
-              private router: Router) {}
+              private alertService: AlertService) {}
 
   private subscription: Subscription;
   private childPingerSubscription: Subscription;
@@ -68,8 +68,8 @@ export class TransactionFutureListComponent implements OnInit, OnDestroy {
         this.updateNamedTransactions();
       })
       .catch(error => {
+        this.alertService.error(transaction.isDeleted ? 'error.delete' : 'error.save');
         console.error(error.message);
-        this.router.navigate(['/error']);
       });
   }
 

@@ -3,12 +3,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AppMode, FamilyMember } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
+import { AlertService } from '../../utils/alert/alert.service';
 
 @Component({
   templateUrl: 'family-member-detail.component.html'
 })
 export class FamilyMemberDetailComponent implements OnInit, OnDestroy {
   constructor(private userdata: UserDataService,
+              private alertService: AlertService,
               private route: ActivatedRoute,
               private router: Router) {}
 
@@ -42,16 +44,16 @@ export class FamilyMemberDetailComponent implements OnInit, OnDestroy {
       this.userdata.saveFamilyMember(familyMember)
         .then(() => this.router.navigate(['/family_member/' + familyMember.id]))
         .catch(error => {
+          this.alertService.error('error.save');
           console.error(error.message);
-          this.router.navigate(['/error']);
         });
     } else {
       this.userdata.updateFamilyMember(familyMember)
         .then(() => this.router.navigate(['/family_member']))
         .catch(error => {
+          this.alertService.error(familyMember.isDeleted ? 'error.delete' : 'error.update');
           familyMember.isDeleted = false;
           console.error(error.message);
-          this.router.navigate(['/error']);
         });
     }
   }

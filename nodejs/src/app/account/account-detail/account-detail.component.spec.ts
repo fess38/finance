@@ -7,7 +7,7 @@ describe('AccountDetailComponent', () => {
   let accountTemplate;
 
   beforeEach(() => {
-    component = new AccountDetailComponent(null, null, null);
+    component = new AccountDetailComponent(null, null, null, null);
     accountTemplate = new Account({
       id: 101,
       name: 'foo',

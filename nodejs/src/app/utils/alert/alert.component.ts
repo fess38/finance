@@ -3,7 +3,7 @@ import { Alert, AlertType } from './alert';
 import { AlertService } from './alert.service';
 
 @Component({
-  selector: 'app-alert',
+  selector: 'alert',
   templateUrl: 'alert.component.html'
 })
 export class AlertComponent implements OnInit {

@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { AlertService } from '../../utils/alert/alert.service';
 import { Currency, DataStorage, Settings } from '../model/model';
 import { UserDataService } from '../user-data/user-data.service';
 import Language = Settings.Language;
@@ -10,10 +11,10 @@ import Language = Settings.Language;
   templateUrl: 'settings.component.html'
 })
 export class SettingsComponent implements OnInit, OnDestroy {
-  constructor(
-    private userdata: UserDataService,
-    private router: Router,
-    private sanitizer: DomSanitizer) {}
+  constructor(private userdata: UserDataService,
+              private alertService: AlertService,
+              private router: Router,
+              private sanitizer: DomSanitizer) {}
 
   private subscription: Subscription;
   settings = new Settings();
@@ -41,8 +42,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   updateSettings() {
     this.userdata.updateSettings(this.settings).catch(error => {
+      this.alertService.error('error.update');
       console.error(error.message);
-      this.router.navigate(['/error']);
     });
   }
 
@@ -53,16 +54,16 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.userdata.saveDataStorage(DataStorage.fromObject(JSON.parse(data))).then(() => this.isDataImport = false);
       })
       .catch(error => {
+        this.alertService.error('error.update');
         this.isDataImport = false;
         console.error(error.message);
-        this.router.navigate(['/error']);
       });
   }
 
   deleteData() {
     this.userdata.deleteDataStorage().catch(error => {
+      this.alertService.error('error.delete');
       console.error(error.message);
-      this.router.navigate(['/error']);
     });
   }
 }

@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AppMode, Money, Security, SecurityTransaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
+import { AlertService } from '../../utils/alert/alert.service';
 import { DateUtils } from '../../utils/date-utils';
 import { SecurityUtils } from '../security-utils';
 import Type = SecurityTransaction.Type;
@@ -12,6 +13,7 @@ import Type = SecurityTransaction.Type;
 })
 export class SecurityTransactionDetailComponent implements OnInit, OnDestroy {
   constructor(private userdata: UserDataService,
+              private alertService: AlertService,
               private route: ActivatedRoute,
               private router: Router) {}
 
@@ -98,16 +100,16 @@ export class SecurityTransactionDetailComponent implements OnInit, OnDestroy {
       this.userdata.saveSecurityTransaction(securityTransaction)
         .then(() => this.router.navigate(['/security_transaction/' + securityTransaction.id]))
         .catch(error => {
+          this.alertService.error('error.save');
           console.error(error.message);
-          this.router.navigate(['/error']);
         });
     } else {
       this.userdata.updateSecurityTransaction(securityTransaction)
         .then(() => this.router.navigate(['/security_transaction']))
         .catch(error => {
+          this.alertService.error(securityTransaction.isDeleted ? 'error.delete' : 'error.update');
           securityTransaction.isDeleted = false;
           console.error(error.message);
-          this.router.navigate(['/error']);
         });
     }
   }

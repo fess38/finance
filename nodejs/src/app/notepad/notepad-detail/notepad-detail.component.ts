@@ -3,12 +3,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AppMode, Notepad } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
+import { AlertService } from '../../utils/alert/alert.service';
 
 @Component({
   templateUrl: 'notepad-detail.component.html'
 })
 export class NotepadDetailComponent implements OnInit, OnDestroy {
   constructor(private userdata: UserDataService,
+              private alertService: AlertService,
               private route: ActivatedRoute,
               private router: Router) {}
 
@@ -54,16 +56,16 @@ export class NotepadDetailComponent implements OnInit, OnDestroy {
       this.userdata.saveNotepad(notepad)
         .then(() => this.router.navigate(['/notepad/' + notepad.id]))
         .catch(error => {
+          this.alertService.error('error.save');
           console.error(error.message);
-          this.router.navigate(['/error']);
         });
     } else {
       this.userdata.updateNotepad(notepad)
         .then(() => this.router.navigate(['/']))
         .catch(error => {
+          this.alertService.error(notepad.isDeleted ? 'error.delete' : 'error.update');
           notepad.isDeleted = false;
           console.error(error.message);
-          this.router.navigate(['/error']);
         });
     }
   }

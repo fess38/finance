@@ -3,12 +3,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AppMode, Category } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
+import { AlertService } from '../../utils/alert/alert.service';
 
 @Component({
   templateUrl: 'category-detail.component.html'
 })
 export class CategoryDetailComponent implements OnInit, OnDestroy {
   constructor(private userdata: UserDataService,
+              private alertService: AlertService,
               private route: ActivatedRoute,
               private router: Router) {}
 
@@ -42,16 +44,16 @@ export class CategoryDetailComponent implements OnInit, OnDestroy {
       this.userdata.saveCategory(category)
         .then(() => this.router.navigate(['/category/' + category.id]))
         .catch(error => {
+          this.alertService.error('error.save');
           console.error(error.message);
-          this.router.navigate(['/error']);
         });
     } else {
       this.userdata.updateCategory(category)
         .then(() => this.router.navigate(['/category']))
         .catch(error => {
+          this.alertService.error(category.isDeleted ? 'error.delete' : 'error.update');
           category.isDeleted = false;
           console.error(error.message);
-          this.router.navigate(['/error']);
         });
     }
   }

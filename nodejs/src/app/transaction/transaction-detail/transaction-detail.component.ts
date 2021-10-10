@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
 import { Account, AppMode, Category, FamilyMember, SubCategory, Transaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
+import { AlertService } from '../../utils/alert/alert.service';
 import { DateUtils } from '../../utils/date-utils';
 import { TransactionCriteriaService as Criteria } from '../transaction-criteria.service';
 import { TransactionUtils } from '../transaction-utils';
@@ -13,6 +14,7 @@ import { TransactionUtils } from '../transaction-utils';
 })
 export class TransactionDetailComponent implements OnInit, OnDestroy {
   constructor(private userdata: UserDataService,
+              private alertService: AlertService,
               private criteria: Criteria,
               private route: ActivatedRoute,
               private router: Router) {}
@@ -111,16 +113,16 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
           this.transaction.familyMemberId = 0;
         })
         .catch(error => {
+          this.alertService.error('error.save');
           console.error(error.message);
-          this.router.navigate(['/error']);
         });
     } else {
       this.userdata.updateTransaction(transaction)
         .then(() => this.router.navigate(['/transaction']))
         .catch(error => {
+          this.alertService.error(transaction.isDeleted ? 'error.delete' : 'error.update');
           transaction.isDeleted = false;
           console.error(error.message);
-          this.router.navigate(['/error']);
         });
     }
   }

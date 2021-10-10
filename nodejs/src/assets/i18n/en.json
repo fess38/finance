@@ -32,8 +32,11 @@
     "yes": "Yes"
   },
   "error": {
+    "delete": "Delete error",
     "message": "Something goes wrong",
-    "popup_blocked": "Pop up blocked by browser"
+    "popup_blocked": "Pop up blocked by browser",
+    "save": "Save error",
+    "update": "Update error"
   },
   "family_member": {
     "add": "Add family member",
