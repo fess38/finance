@@ -30,6 +30,7 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
   @ViewChild('noteTextElement')
   private noteTextElement: ElementRef;
   viewMode = true;
+  editMetaMode = false;
 
   set note(note: Note) {
     this.noteWrapper.note = note;
@@ -88,6 +89,22 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
     if (!this.viewMode) {
       (this.noteTextElement.nativeElement as HTMLTextAreaElement).value = this.note.text;
     }
+  }
+
+  onEditMetaModeChange(): void {
+    this.editMetaMode = !this.editMetaMode;
+  }
+
+  isEmptyNote(): boolean {
+    return this.note.text.length == 0;
+  }
+
+  isViewMode(): boolean {
+    return this.viewMode;
+  }
+
+  isEditMetaMode(): boolean {
+    return this.editMetaMode || this.isEmptyNote();
   }
 
   notepads(): Notepad[] {

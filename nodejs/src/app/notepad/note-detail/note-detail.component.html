@@ -1,13 +1,33 @@
 <div class="clr-row clr-col-12 clr-col-lg-6">
   <form class="clr-form">
-    <div class="clr-form-control clr-row no-top" (click)="onViewModeChange()">
+    <div class="clr-form-control clr-row no-top">
       <label>
-        <cds-icon shape="pencil" [attr.solid]="!viewMode"></cds-icon>
-        <span>&nbsp;{{(viewMode ? 'note.view' : 'note.edit') | translate}}</span>
+        <clr-tooltip (click)="onViewModeChange()">
+          <cds-icon clrTooltipTrigger shape="pencil"></cds-icon>
+          <clr-tooltip-content clrPosition="bottom-right"
+                               clrSize="md"
+                               *clrIfOpen
+                               [hidden]="!isViewMode()">
+            <span>{{'note.edit_text' | translate}}</span>
+          </clr-tooltip-content>
+        </clr-tooltip>
+        <span>
+          &nbsp;{{(isViewMode() ? 'note.view' : 'note.edit') | translate}}&nbsp;
+        </span>
+        <clr-tooltip (click)="onEditMetaModeChange()"
+                     [hidden]="!isViewMode() || isEmptyNote()">
+          <cds-icon clrTooltipTrigger shape="info-circle"></cds-icon>
+          <clr-tooltip-content clrPosition="bottom-right"
+                               clrSize="md"
+                               *clrIfOpen
+                               [hidden]="isEditMetaMode()">
+            <span>{{'note.edit_meta' | translate}}</span>
+          </clr-tooltip-content>
+        </clr-tooltip>
       </label>
     </div>
-    <div *ngIf="viewMode">
-      <div class="clr-form-control clr-row">
+    <div *ngIf="isViewMode()">
+      <div class="clr-form-control clr-row" [hidden]="!isEditMetaMode()">
         <label>{{'common.name' | translate}}</label>
         <div class="clr-control-container">
           <div class="clr-input-wrapper">
@@ -15,7 +35,7 @@
           </div>
         </div>
       </div>
-      <div class="clr-form-control clr-row">
+      <div class="clr-form-control clr-row" [hidden]="!isEditMetaMode()">
         <label>{{'note.notepad' | translate}}</label>
         <div class="clr-control-container">
           <div class="clr-select-wrapper">
@@ -30,12 +50,11 @@
           </div>
         </div>
       </div>
-      <div class="clr-form-control clr-row">
-        <label>{{'note.text' | translate}}</label>
+      <div class="clr-form-control clr-row" [class.no-top]="!isEditMetaMode()">
         <div [innerHTML]="textForMarkdown()"></div>
       </div>
     </div>
-    <div [hidden]="viewMode">
+    <div [hidden]="isViewMode()">
       <div class="clr-form-control clr-row no-top">
         <textarea clrTextarea
                   id="note-text"
@@ -47,7 +66,8 @@
         </textarea>
       </div>
     </div>
-    <action-buttons [disabledSaveButton]="!isValidForm() || ('' | isReadOnly)"
+    <action-buttons [hiddenSaveButton]="isViewMode() && !isEditMetaMode()"
+                    [disabledSaveButton]="!isValidForm() || ('' | isReadOnly)"
                     (saveNotifier)="update(note)"
                     [hiddenDeleteButton]="note | isNewEntity"
                     [disabledDeleteButton]="'' | isReadOnly"

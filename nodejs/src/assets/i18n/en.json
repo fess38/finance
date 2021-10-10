@@ -80,6 +80,8 @@
   },
   "note": {
     "edit": "Edit note",
+    "edit_meta": "Edit attributes",
+    "edit_text": "Edit text",
     "new": "New note",
     "notepad": "Notepad",
     "text": "Note text",
