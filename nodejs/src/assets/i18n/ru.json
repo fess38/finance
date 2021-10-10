@@ -18,15 +18,18 @@
     "currency": "Валюта",
     "date": "Дата",
     "delete": "Удалить",
+    "delete_confirm": "Удалить?",
     "exchange_rate": "Обменный курс",
     "expense": "Расход",
     "income": "Доход",
     "name": "Название",
+    "no": "Нет",
     "price": "Цена",
     "save": "Сохранить",
     "security": "Ценная бумага",
     "sub_category": "Подкатегория",
-    "use_in_transactions": "Использовать в транзакциях"
+    "use_in_transactions": "Использовать в транзакциях",
+    "yes": "Да"
   },
   "error": {
     "message": "Что-то пошло не так",

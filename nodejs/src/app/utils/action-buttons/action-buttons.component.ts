@@ -13,4 +13,5 @@ export class ActionButtonsComponent {
   @Input() disabledDeleteButton = false;
   @Output() saveNotifier = new EventEmitter<void>();
   @Output() deleteNotifier = new EventEmitter<void>();
+  isModalOpen = false;
 }

@@ -7,10 +7,24 @@
       {{'common.save' | translate}}
     </button>
     <button class="btn btn-danger btn-sm btn-block"
-            (click)="deleteNotifier.emit()"
+            (click)="isModalOpen=true"
             [hidden]="hiddenDeleteButton"
             [disabled]="disabledDeleteButton">
       {{'common.delete' | translate}}
     </button>
   </div>
 </div>
+<clr-modal [(clrModalOpen)]="isModalOpen"
+           [clrModalStaticBackdrop]="false">
+  <h3 class="modal-title">{{'common.delete_confirm' | translate}}</h3>
+  <div class="modal-footer">
+    <button class="btn btn-outline btn-sm btn-block"
+            (click)="isModalOpen = false">
+      {{'common.no' | translate}}
+    </button>
+    <button class="btn btn-danger btn-sm btn-block"
+            (click)="isModalOpen = false; deleteNotifier.emit()">
+      {{'common.yes' | translate}}
+    </button>
+  </div>
+</clr-modal>

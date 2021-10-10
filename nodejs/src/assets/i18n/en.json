@@ -18,15 +18,18 @@
     "currency": "Currency",
     "date": "Date",
     "delete": "Delete",
+    "delete_confirm": "Delete?",
     "exchange_rate": "Exchange rate",
     "expense": "Expense",
     "income": "Income",
     "name": "Name",
+    "no": "No",
     "price": "Price",
     "save": "Save",
     "security": "Security paper",
     "sub_category": "Subcategory",
-    "use_in_transactions": "Use in transactions"
+    "use_in_transactions": "Use in transactions",
+    "yes": "Yes"
   },
   "error": {
     "message": "Something goes wrong",
