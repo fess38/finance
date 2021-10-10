@@ -59,7 +59,6 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
       if (!this.userdata.localSettings.currentNotepadId) {
         this.router.navigate(['/']);
       }
-      this.viewMode = false;
       this.note.notepadId = this.userdata.localSettings.currentNotepadId;
       this.translate.get('note.new').subscribe(defaultName => {
         this.note.name = defaultName;
@@ -172,7 +171,12 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
         });
     } else {
       this.userdata.updateNote(note)
-        .then(() => this.updateSourceNote(note))
+        .then(() => {
+          this.updateSourceNote(note);
+          if (note.isDeleted) {
+            this.router.navigate(['/']);
+          }
+        })
         .catch(error => {
           this.alertService.error(note.isDeleted ? 'error.delete' : 'error.update');
           note.isDeleted = false;
