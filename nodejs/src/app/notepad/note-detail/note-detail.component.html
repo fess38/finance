@@ -26,8 +26,8 @@
         </clr-tooltip>
       </label>
     </div>
-    <div *ngIf="isViewMode()">
-      <div class="clr-form-control clr-row" [hidden]="!isEditMetaMode()">
+    <div *ngIf="isViewMode()" [hidden]="!isEditMetaMode()">
+      <div class="clr-form-control clr-row">
         <label>{{'common.name' | translate}}</label>
         <div class="clr-control-container">
           <div class="clr-input-wrapper">
@@ -35,7 +35,7 @@
           </div>
         </div>
       </div>
-      <div class="clr-form-control clr-row" [hidden]="!isEditMetaMode()">
+      <div class="clr-form-control clr-row">
         <label>{{'note.notepad' | translate}}</label>
         <div class="clr-control-container">
           <div class="clr-select-wrapper">
@@ -50,9 +50,25 @@
           </div>
         </div>
       </div>
-      <div class="clr-form-control clr-row" [class.no-top]="!isEditMetaMode()">
-        <div [innerHTML]="textForMarkdown()"></div>
+      <div class="clr-form-control clr-row">
+        <div class="clr-control-container">
+          <div class="clr-checkbox-wrapper">
+            <input type="checkbox"
+                   id="note-is-pinned"
+                   name="offBudget"
+                   class="clr-checkbox"
+                   [(ngModel)]="note.isPinned"/>
+            <label for="note-is-pinned">
+              {{'note.pin' | translate}}
+            </label>
+          </div>
+        </div>
       </div>
+    </div>
+    <div class="clr-form-control clr-row no-top"
+         *ngIf="isViewMode()"
+         [hidden]="isEditMetaMode()"
+         [innerHTML]="textForMarkdown()">
     </div>
     <div [hidden]="isViewMode()">
       <div class="clr-form-control clr-row no-top">

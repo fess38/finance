@@ -1480,6 +1480,9 @@ export interface INote {
 
     /** Note text */
     text?: (string|null);
+
+    /** Note isPinned */
+    isPinned?: (boolean|null);
 }
 
 /** Represents a Note. */
@@ -1511,6 +1514,9 @@ export class Note implements INote {
 
     /** Note text. */
     public text: string;
+
+    /** Note isPinned. */
+    public isPinned: boolean;
 
     /**
      * Creates a new Note instance using the specified properties.

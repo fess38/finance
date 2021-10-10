@@ -34,14 +34,25 @@
       </span>
     </a>
   </clr-vertical-nav-group-children>
-  <clr-vertical-nav-group-children *ngIf="showNotes()">
-    <a *ngFor="let note of notes()"
-       clrVerticalNavLink
-       routerLink="/note/{{note.id}}"
-       routerLinkActive="active">
-      <span>
-        {{note.name}}
-      </span>
-    </a>
-  </clr-vertical-nav-group-children>
+  <div *ngIf="showNotes()">
+    <div *ngIf="pinnedNotes().length > 0">
+      <clr-vertical-nav-group-children>
+        <a *ngFor="let note of pinnedNotes()"
+           clrVerticalNavLink
+           routerLink="/note/{{note.id}}"
+           routerLinkActive="active">
+          <span>{{note.name}}</span>
+        </a>
+      </clr-vertical-nav-group-children>
+      <div class="nav-divider"></div>
+    </div>
+    <clr-vertical-nav-group-children>
+      <a *ngFor="let note of otherNotes()"
+         clrVerticalNavLink
+         routerLink="/note/{{note.id}}"
+         routerLinkActive="active">
+        <span>{{note.name}}</span>
+      </a>
+    </clr-vertical-nav-group-children>
+  </div>
 </clr-vertical-nav>

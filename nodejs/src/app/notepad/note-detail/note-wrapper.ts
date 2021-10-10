@@ -27,7 +27,9 @@ export class NoteWrapper {
   isEquals(note: Note): boolean {
     return !(this.note.name != note.name
       || this.note.text != note.text
-      || (this.note.notepadId != note.notepadId && this.note.text.length > 0));
+      || (this.note.notepadId != note.notepadId && this.note.text.length > 0)
+      || (this.note.isPinned != note.isPinned)
+    );
   }
 
   update(noteTextElement: HTMLTextAreaElement): void {

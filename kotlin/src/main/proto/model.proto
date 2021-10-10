@@ -168,6 +168,7 @@ message Note {
     required int64 updated = 5;
     required string name = 6;
     optional string text = 7;
+    optional bool is_pinned = 8 [default = false];
 }
 
 // new entity

@@ -4474,6 +4474,7 @@ export const Note = $root.Note = (() => {
      * @property {number} updated Note updated
      * @property {string} name Note name
      * @property {string|null} [text] Note text
+     * @property {boolean|null} [isPinned] Note isPinned
      */
 
     /**
@@ -4548,6 +4549,14 @@ export const Note = $root.Note = (() => {
     Note.prototype.text = "";
 
     /**
+     * Note isPinned.
+     * @member {boolean} isPinned
+     * @memberof Note
+     * @instance
+     */
+    Note.prototype.isPinned = false;
+
+    /**
      * Creates a new Note instance using the specified properties.
      * @function create
      * @memberof Note
@@ -4581,6 +4590,8 @@ export const Note = $root.Note = (() => {
         writer.uint32(/* id 6, wireType 2 =*/50).string(message.name);
         if (message.text != null && Object.hasOwnProperty.call(message, "text"))
             writer.uint32(/* id 7, wireType 2 =*/58).string(message.text);
+        if (message.isPinned != null && Object.hasOwnProperty.call(message, "isPinned"))
+            writer.uint32(/* id 8, wireType 0 =*/64).bool(message.isPinned);
         return writer;
     };
 
@@ -4622,6 +4633,9 @@ export const Note = $root.Note = (() => {
                 break;
             case 7:
                 message.text = reader.string();
+                break;
+            case 8:
+                message.isPinned = reader.bool();
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -4693,6 +4707,8 @@ export const Note = $root.Note = (() => {
             message.name = String(object.name);
         if (object.text != null)
             message.text = String(object.text);
+        if (object.isPinned != null)
+            message.isPinned = Boolean(object.isPinned);
         return message;
     };
 
@@ -4733,6 +4749,7 @@ export const Note = $root.Note = (() => {
                 object.updated = options.longs === String ? "0" : 0;
             object.name = "";
             object.text = "";
+            object.isPinned = false;
         }
         if (message.id != null && message.hasOwnProperty("id"))
             if (typeof message.id === "number")
@@ -4760,6 +4777,8 @@ export const Note = $root.Note = (() => {
             object.name = message.name;
         if (message.text != null && message.hasOwnProperty("text"))
             object.text = message.text;
+        if (message.isPinned != null && message.hasOwnProperty("isPinned"))
+            object.isPinned = message.isPinned;
         return object;
     };
 

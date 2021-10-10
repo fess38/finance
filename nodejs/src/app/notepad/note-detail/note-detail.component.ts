@@ -206,6 +206,7 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
     this.sourceNote.notepadId = note.notepadId;
     this.sourceNote.name = note.name;
     this.sourceNote.text = note.text;
+    this.sourceNote.isPinned = note.isPinned;
   }
 
   delete(note: Note) {

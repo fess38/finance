@@ -47,9 +47,15 @@ export class NotepadSidenavComponent implements OnInit {
     return this.userdata.notepads().sort((a, b) => (a.name < b.name ? -1 : 1));
   }
 
-  notes(): Note[] {
+  pinnedNotes(): Note[] {
     return this.userdata.notes()
-      .filter(x => x.notepadId == this.userdata.localSettings.currentNotepadId)
+      .filter(x => x.notepadId == this.userdata.localSettings.currentNotepadId && x.isPinned)
+      .sort((a, b) => (a.name < b.name ? -1 : 1));
+  }
+
+  otherNotes(): Note[] {
+    return this.userdata.notes()
+      .filter(x => x.notepadId == this.userdata.localSettings.currentNotepadId && !x.isPinned)
       .sort((a, b) => (a.updated > b.updated ? -1 : 1));
   }
 }
