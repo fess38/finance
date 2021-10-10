@@ -33,17 +33,10 @@
                        [transaction]="activeTransaction"
                        (notify)="onChildNotify($event)">
     </app-transaction-detail>
-    <div class="clr-form-control clr-row">
-      <button class="btn btn-primary btn-sm btn-block"
-              (click)="save(activeTransaction)"
-              [disabled]="!isValidForm || ('' | isReadOnly)">
-        {{'common.save' | translate}}
-      </button>
-      <button class="btn btn-danger btn-sm btn-block"
-              (click)="delete(activeTransaction)"
-              [disabled]="!isValidForm || ('' | isReadOnly)">
-        {{'transaction_future.skip' | translate}}
-      </button>
-    </div>
+    <action-buttons [disabledSaveButton]="!isValidForm || ('' | isReadOnly)"
+                    (saveNotifier)="save(activeTransaction)"
+                    [disabledDeleteButton]="!isValidForm || ('' | isReadOnly)"
+                    (deleteNotifier)="delete(activeTransaction)">
+    </action-buttons>
   </form>
 </div>

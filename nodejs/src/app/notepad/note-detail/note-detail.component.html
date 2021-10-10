@@ -47,20 +47,11 @@
         </textarea>
       </div>
     </div>
-    <div class="clr-form-control clr-row">
-      <div class="clr-control-container">
-        <button class="btn btn-primary btn-sm btn-block"
-                (click)="update(note)"
-                [disabled]="!isValidForm() || ('' | isReadOnly)">
-          {{'common.save' | translate}}
-        </button>
-        <button class="btn btn-danger btn-sm btn-block"
-                (click)="delete(note)"
-                [hidden]="note | isNewEntity"
-                [disabled]="'' | isReadOnly">
-          {{'common.delete' | translate}}
-        </button>
-      </div>
-    </div>
+    <action-buttons [disabledSaveButton]="!isValidForm() || ('' | isReadOnly)"
+                    (saveNotifier)="update(note)"
+                    [hiddenDeleteButton]="note | isNewEntity"
+                    [disabledDeleteButton]="'' | isReadOnly"
+                    (deleteNotifier)="delete(note)">
+    </action-buttons>
   </form>
 </div>

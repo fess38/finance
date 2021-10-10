@@ -58,18 +58,11 @@
         {{'common.amount' | translate}}: {{subCategory.transactionAmount}}
       </label>
     </div>
-    <div class="clr-form-control clr-row">
-      <button class="btn btn-primary btn-sm btn-block"
-              (click)="update(subCategory)"
-              [disabled]="!isValidForm() || ('' | isReadOnly)">
-        {{'common.save' | translate}}
-      </button>
-      <button class="btn btn-danger btn-sm btn-block"
-              (click)="delete(subCategory)"
-              [hidden]="subCategory | isNewEntity"
-              [disabled]="hasTransations() || ('' | isReadOnly)">
-        {{'common.delete' | translate}}
-      </button>
-    </div>
+    <action-buttons [disabledSaveButton]="!isValidForm() || ('' | isReadOnly)"
+                    (saveNotifier)="update(subCategory)"
+                    [hiddenDeleteButton]="subCategory | isNewEntity"
+                    [disabledDeleteButton]="hasTransations() || ('' | isReadOnly)"
+                    (deleteNotifier)="delete(subCategory)">
+    </action-buttons>
   </form>
 </div>

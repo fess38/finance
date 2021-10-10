@@ -42,18 +42,11 @@
         {{'common.amount' | translate}}: {{familyMember.transactionAmount}}
       </label>
     </div>
-    <div class="clr-form-control clr-row">
-      <button class="btn btn-primary btn-sm btn-block"
-              (click)="update(familyMember)"
-              [disabled]="!isValidForm() || ('' | isReadOnly)">
-        {{'common.save' | translate}}
-      </button>
-      <button class="btn btn-danger btn-sm btn-block"
-              (click)="delete(familyMember)"
-              [hidden]="familyMember | isNewEntity"
-              [disabled]="hasTransations() || ('' | isReadOnly)">
-        {{'common.delete' | translate}}
-      </button>
-    </div>
+    <action-buttons [disabledSaveButton]="!isValidForm() || ('' | isReadOnly)"
+                    (saveNotifier)="update(familyMember)"
+                    [hiddenDeleteButton]="familyMember | isNewEntity"
+                    [disabledDeleteButton]="hasTransations() || ('' | isReadOnly)"
+                    (deleteNotifier)="delete(familyMember)">
+    </action-buttons>
   </form>
 </div>

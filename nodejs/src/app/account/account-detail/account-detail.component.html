@@ -79,18 +79,11 @@
         {{'common.amount' | translate}}: {{account.transactionAmount}}
       </label>
     </div>
-    <div class="clr-form-control clr-row">
-      <button class="btn btn-primary btn-sm btn-block"
-              (click)="update(account)"
-              [disabled]="!isValidForm() || ('' | isReadOnly)">
-        {{'common.save' | translate}}
-      </button>
-      <button class="btn btn-danger btn-sm btn-block"
-              (click)="delete(account)"
-              [hidden]="account | isNewEntity"
-              [disabled]="hasTransations() || ('' | isReadOnly)">
-        {{'common.delete' | translate}}
-      </button>
-    </div>
+    <action-buttons [disabledSaveButton]="!isValidForm() || ('' | isReadOnly)"
+                    (saveNotifier)="update(account)"
+                    [hiddenDeleteButton]="account | isNewEntity"
+                    [disabledDeleteButton]="hasTransations() || ('' | isReadOnly)"
+                    (deleteNotifier)="delete(account)">
+    </action-buttons>
   </form>
 </div>

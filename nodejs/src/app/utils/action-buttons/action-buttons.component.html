@@ -1,0 +1,16 @@
+<div class="clr-form-control clr-row">
+  <div class="clr-control-container">
+    <button class="btn btn-primary btn-sm btn-block"
+            (click)="saveNotifier.emit()"
+            [hidden]="hiddenSaveButton"
+            [disabled]="disabledSaveButton">
+      {{'common.save' | translate}}
+    </button>
+    <button class="btn btn-danger btn-sm btn-block"
+            (click)="deleteNotifier.emit()"
+            [hidden]="hiddenDeleteButton"
+            [disabled]="disabledDeleteButton">
+      {{'common.delete' | translate}}
+    </button>
+  </div>
+</div>

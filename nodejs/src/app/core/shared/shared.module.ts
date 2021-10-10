@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ClarityModule } from '@clr/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppRoutingModule } from '../../app-routing.module';
+import { ActionButtonsModule } from '../../utils/action-buttons/action-buttons.module';
 import { AlertModule } from '../../utils/alert/alert.module';
 import { CurrencyNamePipe } from '../../utils/currency-name.pipe';
 import { CurrencySymbolPipe } from '../../utils/currency-symbol.pipe';
@@ -15,10 +16,10 @@ import { MoneyEncoderPipe } from '../../utils/money-encoder.pipe';
 
 @NgModule({
   imports: [
-    AlertModule, AppRoutingModule, BrowserModule, ClarityModule, FormsModule, TranslateModule
+    ActionButtonsModule, AlertModule, AppRoutingModule, BrowserModule, ClarityModule, FormsModule, TranslateModule
   ],
   exports: [
-    AlertModule, AppRoutingModule, BrowserModule, ClarityModule, FormsModule,
+    ActionButtonsModule, AlertModule, AppRoutingModule, BrowserModule, ClarityModule, FormsModule,
     MoneyEncoderPipe, TranslateModule,
     CurrencyNamePipe, CurrencySymbolPipe, DateParserPipe, IsNewEntityPipe, IsReadOnlyPipe,
     LocalePipe, MoneyEncoderPipe

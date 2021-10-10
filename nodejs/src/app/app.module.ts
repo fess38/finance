@@ -5,7 +5,9 @@ import localeRu from '@angular/common/locales/ru';
 import { NgModule } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { ClarityIcons, cogIcon, fastForwardIcon, infoCircleIcon, pencilIcon, plusCircleIcon, rewindIcon, undoIcon } from '@cds/core/icon';
+import {
+  ClarityIcons, cogIcon, fastForwardIcon, infoCircleIcon, pencilIcon, plusCircleIcon, rewindIcon, undoIcon
+} from '@cds/core/icon';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { MarkdownModule, MarkedOptions, MarkedRenderer } from 'ngx-markdown';

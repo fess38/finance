@@ -113,18 +113,11 @@
         </div>
       </div>
     </div>
-    <div class="clr-form-control clr-row">
-      <button class="btn btn-primary btn-sm btn-block"
-              (click)="update(securityTransaction)"
-              [disabled]="!isValidForm() || ('' | isReadOnly)">
-        {{'common.save' | translate}}
-      </button>
-      <button class="btn btn-danger btn-sm btn-block"
-              (click)="delete(securityTransaction)"
-              [hidden]="securityTransaction | isNewEntity"
-              [disabled]="('' | isReadOnly)">
-        {{'common.delete' | translate}}
-      </button>
-    </div>
+    <action-buttons [disabledSaveButton]="!isValidForm() || ('' | isReadOnly)"
+                    (saveNotifier)="update(securityTransaction)"
+                    [hiddenDeleteButton]="securityTransaction | isNewEntity"
+                    [disabledDeleteButton]="'' | isReadOnly"
+                    (deleteNotifier)="delete(securityTransaction)">
+    </action-buttons>
   </form>
 </div>
