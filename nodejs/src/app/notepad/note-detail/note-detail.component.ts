@@ -27,8 +27,8 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
   private autosaveSubscription: Subscription;
   private noteWrapper = new NoteWrapper();
   private sourceNote = new Note();
-  @ViewChild('noteTextElement')
-  private noteTextElement: ElementRef;
+  @ViewChild('noteTextElementRef')
+  private noteTextElementRef: ElementRef;
   viewMode = true;
   editMetaMode = false;
 
@@ -38,6 +38,10 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
 
   get note(): Note {
     return this.noteWrapper.note;
+  }
+
+  private noteTextElement(): HTMLTextAreaElement {
+    return this.noteTextElementRef.nativeElement as HTMLTextAreaElement;
   }
 
   ngOnInit() {
@@ -87,7 +91,7 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
   onViewModeChange(): void {
     this.viewMode = !this.viewMode;
     if (!this.viewMode) {
-      (this.noteTextElement.nativeElement as HTMLTextAreaElement).value = this.note.text;
+      (this.noteTextElement()).value = this.note.text;
     }
   }
 
@@ -118,12 +122,12 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
       .replace('<table>', '<table class="table table-compact">');
   }
 
-  onClick(event: MouseEvent): void {
-    this.updateCursorPosition(event);
+  onClick(): void {
+    this.noteWrapper.update(this.noteTextElement());
   }
 
   onKeyDown(event: KeyboardEvent): void {
-    this.updateCursorPosition(event);
+    this.noteWrapper.update(this.noteTextElement());
     let isUpdated = true;
     if (event.ctrlKey || event.metaKey) {
       if (event.code == 'ArrowUp') {
@@ -144,26 +148,48 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
     }
 
     if (isUpdated) {
-      this.afterChange(event.target as HTMLTextAreaElement);
+      this.afterChange();
     }
   }
 
-  onKeyUp(event: KeyboardEvent): void {
-    this.noteWrapper.update(event.target as HTMLTextAreaElement);
+  onKeyUp(): void {
+    this.noteWrapper.update(this.noteTextElement());
   }
 
-  private updateCursorPosition(event: KeyboardEvent | MouseEvent): void {
-    this.noteWrapper.update(event.target as HTMLTextAreaElement);
+  onPaste(event: ClipboardEvent) {
+    const items = event.clipboardData.items;
+    for (let i = 0; i < items.length; ++i) {
+      if (!items[i].type.startsWith('image')) {
+        continue;
+      }
+
+      event.preventDefault();
+      const reader = new FileReader();
+      reader.onload = (event: any) => {
+        this.userdata.saveImage(event.target.result)
+          .then(imageUrl => {
+            this.noteWrapper.update(this.noteTextElement());
+            this.noteWrapper.addImageUrl(imageUrl);
+            this.afterChange();
+          })
+          .catch(error => {
+            this.alertService.error('error.save_image');
+            console.error(error.message);
+          });
+      };
+      reader.readAsDataURL(items[i].getAsFile());
+      break;
+    }
   }
 
-  private afterChange(noteTextElement: HTMLTextAreaElement): void {
+  private afterChange(): void {
     setTimeout(() => {
-      noteTextElement.value = this.note.text;
-      noteTextElement.setSelectionRange(
+      this.noteTextElement().value = this.note.text;
+      this.noteTextElement().setSelectionRange(
         this.noteWrapper.selectionStart,
         this.noteWrapper.selectionEnd
       );
-      noteTextElement.scrollTop = this.noteWrapper.scrollTop;
+      this.noteTextElement().scrollTop = this.noteWrapper.scrollTop;
     });
   }
 

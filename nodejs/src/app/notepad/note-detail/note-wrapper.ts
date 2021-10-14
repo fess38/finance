@@ -192,4 +192,15 @@ export class NoteWrapper {
       this.selectionEnd += 4;
     }
   }
+
+  addImageUrl(imageUrl: string): void {
+    const insertedText = `<img src="${imageUrl}" alt="image" width="100%"/>`;
+    this.text = [
+      this.note.text.slice(0, this.selectionStart),
+      insertedText,
+      this.note.text.slice(this.selectionStart)
+    ].join('');
+    this.selectionStart += insertedText.length;
+    this.selectionEnd = this.selectionStart;
+  }
 }

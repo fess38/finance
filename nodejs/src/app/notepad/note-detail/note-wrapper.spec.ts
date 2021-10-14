@@ -260,4 +260,22 @@ describe('NoteWrapper', () => {
     expect(noteWrapper.note.text).toBe('');
     expect(noteWrapper.selectionStart).toBe(0);
   });
+
+  it('addImageUrl1', () => {
+    noteTextElement.value = '';
+    noteTextElement.selectionStart = 0;
+    noteWrapper.update(noteTextElement);
+    noteWrapper.addImageUrl("http://image");
+    expect(noteWrapper.note.text).toBe('<img src="http://image" alt="image" width="100%"/>');
+    expect(noteWrapper.selectionStart).toBe(50);
+  });
+
+  it('addImageUrl2', () => {
+    noteTextElement.value = 'foo\n\nbar';
+    noteTextElement.selectionStart = 4;
+    noteWrapper.update(noteTextElement);
+    noteWrapper.addImageUrl("http://image");
+    expect(noteWrapper.note.text).toBe('foo\n<img src="http://image" alt="image" width="100%"/>\nbar');
+    expect(noteWrapper.selectionStart).toBe(54);
+  });
 });

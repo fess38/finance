@@ -74,11 +74,12 @@
       <div class="clr-form-control clr-row no-top">
         <textarea clrTextarea
                   id="note-text"
-                  #noteTextElement
+                  #noteTextElementRef
                   [cols]="120"
-                  (click)="onClick($event)"
+                  (click)="onClick()"
                   (keydown)="onKeyDown($event)"
-                  (keyup)="onKeyUp($event)">
+                  (keyup)="onKeyUp()"
+                  (paste)="onPaste($event)">
         </textarea>
       </div>
     </div>

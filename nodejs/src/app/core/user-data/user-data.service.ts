@@ -9,7 +9,9 @@ import {
   Account, Category, Currency, DataStorage, FamilyMember, IdHolder, LocalSettings, Note, Notepad, Security,
   SecurityTransaction, Settings, SubCategory, Transaction, TransactionTemplate
 } from '../model/model';
+import { google } from '../model/wrappers';
 import { UserDataEnricherService } from './user-data-enricher.service';
+import StringValue = google.protobuf.StringValue;
 import Language = Settings.Language;
 
 @Injectable()
@@ -415,6 +417,12 @@ export class UserDataService {
     this.ds.notes.push(note);
     this.enricher.enrich(this.ds);
     this.updateCache();
+  }
+
+  saveImage(image: string): Promise<string> {
+    const value = StringValue.fromObject({ value: image });
+    return this.http.post('/api/data/image/save', StringValue.encode(value))
+      .then(data => StringValue.decode(data).value);
   }
 
   // new entity
