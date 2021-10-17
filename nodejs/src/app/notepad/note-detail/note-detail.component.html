@@ -65,10 +65,8 @@
         </div>
       </div>
     </div>
-    <div class="clr-form-control clr-row no-top"
-         *ngIf="isViewMode()"
-         [hidden]="isEditMetaMode()"
-         [innerHTML]="textForMarkdown()">
+    <div class="clr-form-control clr-row no-top" *ngIf="isViewMode()" [hidden]="isEditMetaMode()">
+      <markdown [data]="textForMarkdown()"></markdown>
     </div>
     <div [hidden]="isViewMode()">
       <div class="clr-form-control clr-row no-top">

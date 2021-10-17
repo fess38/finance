@@ -16,10 +16,6 @@ export class NoteWrapper {
     this.rows = this.note.text.split('\n');
   }
 
-  prepareForMarkdown(): string {
-    return this.note.text;
-  }
-
   hasName(): boolean {
     return this.note.name.length > 0;
   }

@@ -116,10 +116,7 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
   }
 
   textForMarkdown(): string {
-    return this.markdownService.compile(this.noteWrapper.prepareForMarkdown())
-      .replace('<ul>', '<ul class="list">')
-      .replace('<ul>', '<ul class="list">')
-      .replace('<table>', '<table class="table table-compact">');
+    return this.markdownService.compile(this.noteWrapper.note.text);
   }
 
   onClick(): void {
