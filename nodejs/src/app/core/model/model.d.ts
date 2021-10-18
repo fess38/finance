@@ -1885,6 +1885,84 @@ export namespace RefreshToken {
     }
 }
 
+/** Properties of a File. */
+export interface IFile {
+
+    /** File contentType */
+    contentType?: (string|null);
+
+    /** File extension */
+    extension?: (string|null);
+
+    /** File data */
+    data?: (string|null);
+}
+
+/** Represents a File. */
+export class File implements IFile {
+
+    /**
+     * Constructs a new File.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IFile);
+
+    /** File contentType. */
+    public contentType: string;
+
+    /** File extension. */
+    public extension: string;
+
+    /** File data. */
+    public data: string;
+
+    /**
+     * Creates a new File instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns File instance
+     */
+    public static create(properties?: IFile): File;
+
+    /**
+     * Encodes the specified File message. Does not implicitly {@link File.verify|verify} messages.
+     * @param message File message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IFile, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a File message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns File
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): File;
+
+    /**
+     * Creates a File message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns File
+     */
+    public static fromObject(object: { [k: string]: any }): File;
+
+    /**
+     * Creates a plain object from a File message. Also converts values to other types if specified.
+     * @param message File
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: File, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this File to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
 /** Properties of a Date_. */
 export interface IDate_ {
 

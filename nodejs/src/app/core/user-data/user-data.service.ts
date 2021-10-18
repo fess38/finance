@@ -6,7 +6,7 @@ import { Long } from 'protobufjs';
 import { AsyncSubject, Subscription } from 'rxjs';
 import { HttpService } from '../../utils/http.service';
 import {
-  Account, Category, Currency, DataStorage, FamilyMember, IdHolder, LocalSettings, Note, Notepad, Security,
+  Account, Category, Currency, DataStorage, FamilyMember, File, IdHolder, LocalSettings, Note, Notepad, Security,
   SecurityTransaction, Settings, SubCategory, Transaction, TransactionTemplate
 } from '../model/model';
 import { google } from '../model/wrappers';
@@ -419,9 +419,8 @@ export class UserDataService {
     this.updateCache();
   }
 
-  saveImage(image: string): Promise<string> {
-    const value = StringValue.fromObject({ value: image });
-    return this.http.post('/api/data/image/save', StringValue.encode(value))
+  saveFile(file: File): Promise<string> {
+    return this.http.post('/api/data/file/save', File.encode(file))
       .then(data => StringValue.decode(data).value);
   }
 

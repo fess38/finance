@@ -5600,6 +5600,186 @@ export const RefreshToken = $root.RefreshToken = (() => {
     return RefreshToken;
 })();
 
+export const File = $root.File = (() => {
+
+    /**
+     * Properties of a File.
+     * @exports IFile
+     * @interface IFile
+     * @property {string|null} [contentType] File contentType
+     * @property {string|null} [extension] File extension
+     * @property {string|null} [data] File data
+     */
+
+    /**
+     * Constructs a new File.
+     * @exports File
+     * @classdesc Represents a File.
+     * @implements IFile
+     * @constructor
+     * @param {IFile=} [properties] Properties to set
+     */
+    function File(properties) {
+        if (properties)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * File contentType.
+     * @member {string} contentType
+     * @memberof File
+     * @instance
+     */
+    File.prototype.contentType = "";
+
+    /**
+     * File extension.
+     * @member {string} extension
+     * @memberof File
+     * @instance
+     */
+    File.prototype.extension = "";
+
+    /**
+     * File data.
+     * @member {string} data
+     * @memberof File
+     * @instance
+     */
+    File.prototype.data = "";
+
+    /**
+     * Creates a new File instance using the specified properties.
+     * @function create
+     * @memberof File
+     * @static
+     * @param {IFile=} [properties] Properties to set
+     * @returns {File} File instance
+     */
+    File.create = function create(properties) {
+        return new File(properties);
+    };
+
+    /**
+     * Encodes the specified File message. Does not implicitly {@link File.verify|verify} messages.
+     * @function encode
+     * @memberof File
+     * @static
+     * @param {IFile} message File message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    File.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.contentType != null && Object.hasOwnProperty.call(message, "contentType"))
+            writer.uint32(/* id 1, wireType 2 =*/10).string(message.contentType);
+        if (message.extension != null && Object.hasOwnProperty.call(message, "extension"))
+            writer.uint32(/* id 2, wireType 2 =*/18).string(message.extension);
+        if (message.data != null && Object.hasOwnProperty.call(message, "data"))
+            writer.uint32(/* id 3, wireType 2 =*/26).string(message.data);
+        return writer;
+    };
+
+    /**
+     * Decodes a File message from the specified reader or buffer.
+     * @function decode
+     * @memberof File
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {File} File
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    File.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.File();
+        while (reader.pos < end) {
+            let tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                message.contentType = reader.string();
+                break;
+            case 2:
+                message.extension = reader.string();
+                break;
+            case 3:
+                message.data = reader.string();
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Creates a File message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof File
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {File} File
+     */
+    File.fromObject = function fromObject(object) {
+        if (object instanceof $root.File)
+            return object;
+        let message = new $root.File();
+        if (object.contentType != null)
+            message.contentType = String(object.contentType);
+        if (object.extension != null)
+            message.extension = String(object.extension);
+        if (object.data != null)
+            message.data = String(object.data);
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a File message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof File
+     * @static
+     * @param {File} message File
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    File.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        let object = {};
+        if (options.defaults) {
+            object.contentType = "";
+            object.extension = "";
+            object.data = "";
+        }
+        if (message.contentType != null && message.hasOwnProperty("contentType"))
+            object.contentType = message.contentType;
+        if (message.extension != null && message.hasOwnProperty("extension"))
+            object.extension = message.extension;
+        if (message.data != null && message.hasOwnProperty("data"))
+            object.data = message.data;
+        return object;
+    };
+
+    /**
+     * Converts this File to JSON.
+     * @function toJSON
+     * @memberof File
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    File.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    return File;
+})();
+
 export const Date_ = $root.Date_ = (() => {
 
     /**

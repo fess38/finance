@@ -16,6 +16,10 @@ export class NoteWrapper {
     this.rows = this.note.text.split('\n');
   }
 
+  prepareForMarkdown(): string {
+    return this.expendCollapsable(this.note.text);
+  }
+
   hasName(): boolean {
     return this.note.name.length > 0;
   }
@@ -36,33 +40,6 @@ export class NoteWrapper {
     this.scrollTop = noteTextElement.scrollTop;
     this.bottomPosition = this.scrollTop + noteTextElement.clientHeight;
     this.updateCursorPosition();
-  }
-
-  private updateCursorPosition(): void {
-    this.cursorRow = 0;
-    this.cursorColumn = 0;
-    for (let i = 0; i < this.selectionStart; ++i) {
-      const isNewLine = this.note.text[i] == '\n';
-      if (isNewLine) {
-        ++this.cursorRow;
-        this.cursorColumn = 0;
-      } else {
-        ++this.cursorColumn;
-      }
-    }
-  }
-
-  private scrollUp(): void {
-    if ((this.cursorRow - 1) * this.rowHeight < this.scrollTop) {
-      this.scrollTop -= this.rowHeight;
-    }
-  }
-
-  private scrollDown(): void {
-    this.updateCursorPosition();
-    if ((this.cursorRow + 1) * this.rowHeight > this.bottomPosition) {
-      this.scrollTop += this.rowHeight;
-    }
   }
 
   enter(): void {
@@ -165,12 +142,82 @@ export class NoteWrapper {
   }
 
   bold(): void {
-    let selection = this.note.text.slice(this.selectionStart, this.selectionEnd);
-    const boldMatch = selection.match(/^\*\*(.*)\*\*$/);
-    selection = boldMatch ? boldMatch[1] : '**' + selection + '**';
+    this.wrapSelection('**', '**');
+  }
 
-    if (selection.match('\n')) {
-      return;
+  collasableSection(): void {
+    this.wrapSelection('<{', '}>');
+  }
+
+  expendCollapsable(noteText: string): string {
+    let text = noteText;
+    let i = 0;
+    let j = 0;
+
+    while (true) {
+      i = text.indexOf('<{');
+      j = text.indexOf('}>');
+      if (i == -1 || j == -1 || j < i) {
+        break;
+      }
+      text = [
+        text.slice(0, i),
+        '\n<details><summary>',
+        text.slice(i + 2, text.indexOf('\n', i)),
+        '</summary>',
+        text.slice(text.indexOf('\n', i), j),
+        '\n</details>\n',
+        text.slice(j + 2)
+      ].join('');
+    }
+
+    return text;
+  }
+
+  imageUrl(imageUrl: string): void {
+    this.insertText(`<img src="${imageUrl}" alt="image" width="100%"/>`)
+  }
+
+  fileUrl(fileUrl: string): void {
+    this.insertText(`[](${fileUrl})`);
+  }
+
+  private updateCursorPosition(): void {
+    this.cursorRow = 0;
+    this.cursorColumn = 0;
+    for (let i = 0; i < this.selectionStart; ++i) {
+      const isNewLine = this.note.text[i] == '\n';
+      if (isNewLine) {
+        ++this.cursorRow;
+        this.cursorColumn = 0;
+      } else {
+        ++this.cursorColumn;
+      }
+    }
+  }
+
+  private scrollUp(): void {
+    if ((this.cursorRow - 1) * this.rowHeight < this.scrollTop) {
+      this.scrollTop -= this.rowHeight;
+    }
+  }
+
+  private scrollDown(): void {
+    this.updateCursorPosition();
+    if ((this.cursorRow + 1) * this.rowHeight > this.bottomPosition) {
+      this.scrollTop += this.rowHeight;
+    }
+  }
+
+  private wrapSelection(before: string, after: string): void {
+    let selection = this.note.text.slice(this.selectionStart, this.selectionEnd);
+    const i = selection.indexOf(before);
+    const j = selection.indexOf(after, i + before.length);
+    const isWrapped = i != -1 && j != -1;
+    if (isWrapped) {
+      selection = selection.slice(i + before.length, j);
+    } else {
+      selection = before + selection + after;
     }
 
     this.text = [
@@ -179,18 +226,17 @@ export class NoteWrapper {
       this.note.text.slice(this.selectionEnd)
     ].join('');
 
-    if (selection == '****') {
-      this.selectionStart += 2;
+    if (selection == (before + after)) {
+      this.selectionStart += before.length;
       this.selectionEnd = this.selectionStart;
-    } else if (boldMatch) {
-      this.selectionEnd -= 4;
+    } else if (isWrapped) {
+      this.selectionEnd -= (before.length + after.length);
     } else {
-      this.selectionEnd += 4;
+      this.selectionEnd += (before.length + after.length);
     }
   }
 
-  addImageUrl(imageUrl: string): void {
-    const insertedText = `<img src="${imageUrl}" alt="image" width="100%"/>`;
+  private insertText(insertedText: string): void {
     this.text = [
       this.note.text.slice(0, this.selectionStart),
       insertedText,

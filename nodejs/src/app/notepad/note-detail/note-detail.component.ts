@@ -5,7 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { MarkdownService } from 'ngx-markdown';
 import { interval, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { AppMode, Note, Notepad } from '../../core/model/model';
+import { AppMode, File, Note, Notepad } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 import { AlertService } from '../../utils/alert/alert.service';
 import { NoteWrapper } from './note-wrapper';
@@ -23,6 +23,12 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
               private router: Router,
               private clipboard: Clipboard) {}
 
+  readonly allowedMimeTypes = new Map<string, string>([
+    ['image/jpeg', 'jpg'],
+    ['image/png', 'png'],
+    ['application/pdf', 'pdf'],
+    ['application/zip', 'zip']
+  ]);
   private subscription: Subscription;
   private autosaveSubscription: Subscription;
   private noteWrapper = new NoteWrapper();
@@ -116,7 +122,7 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
   }
 
   textForMarkdown(): string {
-    return this.markdownService.compile(this.noteWrapper.note.text);
+    return this.markdownService.compile(this.noteWrapper.prepareForMarkdown());
   }
 
   onClick(): void {
@@ -135,6 +141,8 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
         this.noteWrapper.bold();
       } else if (event.key == 'x' || event.key == 'ч') {
         this.clipboard.copy(this.noteWrapper.cut());
+      } else if (event.key == 'k' || event.key == 'л') {
+        this.noteWrapper.collasableSection();
       } else {
         isUpdated = false;
       }
@@ -156,22 +164,31 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
   onPaste(event: ClipboardEvent) {
     const items = event.clipboardData.items;
     for (let i = 0; i < items.length; ++i) {
-      if (!items[i].type.startsWith('image')) {
+      let file = new File();
+      file.contentType = items[i].type;
+      file.extension = this.allowedMimeTypes.get(file.contentType) || '';
+      if (file.extension.length == 0 || event.clipboardData.getData('text').length > 0) {
         continue;
       }
 
       event.preventDefault();
       const reader = new FileReader();
       reader.onload = (event: any) => {
-        this.userdata.saveImage(event.target.result)
-          .then(imageUrl => {
+        file.data = event.target.result;
+        this.userdata.saveFile(file)
+          .then(fileUrl => {
             this.noteWrapper.update(this.noteTextElement());
-            this.noteWrapper.addImageUrl(imageUrl);
+            if (file.contentType.startsWith("image/")) {
+              this.noteWrapper.imageUrl(fileUrl);
+            } else {
+              this.noteWrapper.fileUrl(fileUrl);
+            }
             this.afterChange();
           })
           .catch(error => {
-            this.alertService.error('error.save_image');
+            this.alertService.error('error.save_file');
             console.error(error.message);
+            console.error(`content type: ${file.contentType}`);
           });
       };
       reader.readAsDataURL(items[i].getAsFile());

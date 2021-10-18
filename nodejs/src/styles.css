@@ -8,6 +8,14 @@ td, th {
   white-space: nowrap;
 }
 
+summary::before {
+  content: "► ";
+}
+
+details[open] summary:before {
+  content: "▼ ";
+}
+
 /* for separate nav and content scrolling */
 .content-container {
   height: 98%;

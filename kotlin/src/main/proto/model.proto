@@ -207,6 +207,12 @@ message RefreshToken {
     }
 }
 
+message File {
+    optional string content_type = 1;
+    optional string extension = 2;
+    optional string data = 3;
+}
+
 message Date_ {
     required int32 year = 1;
     required int32 month = 2;

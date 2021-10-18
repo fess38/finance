@@ -36,7 +36,7 @@
     "message": "Something goes wrong",
     "popup_blocked": "Pop up blocked by browser",
     "save": "Save error",
-    "save_image": "Save image error",
+    "save_file": "Save file error",
     "update": "Update error"
   },
   "family_member": {

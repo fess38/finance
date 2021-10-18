@@ -8,8 +8,8 @@ import mu.KotlinLogging
 import org.apache.commons.codec.binary.Base64
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import ru.fess38.finance.core.Model.File
 import java.io.ByteArrayInputStream
-import java.io.InputStream
 import java.util.*
 
 @Service
@@ -22,17 +22,20 @@ class S3ServiceImpl : S3Service {
   @Autowired
   lateinit var s3Client: AmazonS3
 
-  override fun save(image: StringValue): StringValue {
+  override fun save(file: File): StringValue {
     val bucket = config.getString("s3.bucket")
-    val key = UUID.randomUUID().toString()
-    val bytes = Base64.decodeBase64(image.value.substring(image.value.indexOf(",") + 1).toByteArray())
+    var key = UUID.randomUUID().toString()
+    if (file.extension.isNotEmpty()) {
+      key += ".${file.extension}"
+    }
+    val bytes = Base64.decodeBase64(file.data.substring(file.data.indexOf(",") + 1).toByteArray())
     val metadata = ObjectMetadata()
     metadata.contentLength = bytes.size.toLong()
-    metadata.contentType = "image/jpeg"
+    metadata.contentType = file.contentType
     ByteArrayInputStream(bytes).use {
       s3Client.putObject(bucket, key, it, metadata)
       val url = "https://${config.getString("s3.endpoint")}/${bucket}/${key}"
-      log.info {"Save [image] to ${url}"}
+      log.info {"Save [${file.contentType}] to $url"}
       return StringValue.newBuilder().setValue(url).build()
     }
   }
