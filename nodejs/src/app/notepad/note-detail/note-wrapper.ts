@@ -29,6 +29,7 @@ export class NoteWrapper {
       || this.note.text != note.text
       || (this.note.notepadId != note.notepadId && this.note.text.length > 0)
       || (this.note.isPinned != note.isPinned)
+      || (this.note.isArchived != note.isArchived)
     );
   }
 

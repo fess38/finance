@@ -169,6 +169,7 @@ message Note {
     required string name = 6;
     optional string text = 7;
     optional bool is_pinned = 8 [default = false];
+    optional bool is_archived = 9 [default = false];
 }
 
 // new entity

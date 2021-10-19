@@ -80,6 +80,7 @@
     "title": "Notes | Finance"
   },
   "note": {
+    "archive": "Archive",
     "edit": "Edit note",
     "edit_meta": "Edit attributes",
     "edit_text": "Edit text",
@@ -95,6 +96,7 @@
     "edit": "Edit notepad"
   },
   "notepad_sidenav": {
+    "archived_notes": "Archive",
     "add_note": "Add note",
     "add_notepad": "Add notepad",
     "notepads": "Notepads",

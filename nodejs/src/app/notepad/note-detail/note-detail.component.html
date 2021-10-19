@@ -55,11 +55,21 @@
           <div class="clr-checkbox-wrapper">
             <input type="checkbox"
                    id="note-is-pinned"
-                   name="offBudget"
+                   name="noteIsPinned"
                    class="clr-checkbox"
                    [(ngModel)]="note.isPinned"/>
             <label for="note-is-pinned">
               {{'note.pin' | translate}}
+            </label>
+          </div>
+          <div class="clr-checkbox-wrapper">
+            <input type="checkbox"
+                   id="note-is-archived"
+                   name="noteIsArchived"
+                   class="clr-checkbox"
+                   [(ngModel)]="note.isArchived"/>
+            <label for="note-is-archived">
+              {{'note.archive' | translate}}
             </label>
           </div>
         </div>

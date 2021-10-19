@@ -50,7 +50,7 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
     return this.noteTextElementRef.nativeElement as HTMLTextAreaElement;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.userdata.localSettings.appMode = AppMode.NOTES;
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     const id = this.route.snapshot.paramMap.get('id');
@@ -161,7 +161,7 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
     this.noteWrapper.update(this.noteTextElement());
   }
 
-  onPaste(event: ClipboardEvent) {
+  onPaste(event: ClipboardEvent): void {
     const items = event.clipboardData.items;
     for (let i = 0; i < items.length; ++i) {
       let file = new File();
@@ -178,7 +178,7 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
         this.userdata.saveFile(file)
           .then(fileUrl => {
             this.noteWrapper.update(this.noteTextElement());
-            if (file.contentType.startsWith("image/")) {
+            if (file.contentType.startsWith('image/')) {
               this.noteWrapper.imageUrl(fileUrl);
             } else {
               this.noteWrapper.fileUrl(fileUrl);
@@ -207,13 +207,14 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  isValidForm() {
+  isValidForm(): boolean {
     return this.noteWrapper.hasName()
       && this.userdata.findNotepad(this.note.notepadId)
-      && !this.noteWrapper.isEquals(this.sourceNote);
+      && !this.noteWrapper.isEquals(this.sourceNote)
+      && !(this.note.isPinned && this.note.isArchived);
   }
 
-  update(note: Note) {
+  update(note: Note): void {
     note.updated = new Date().getTime();
     if (note.id == 0) {
       note.created = new Date().getTime();
@@ -242,14 +243,15 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  private updateSourceNote(note: Note) {
+  private updateSourceNote(note: Note): void {
     this.sourceNote.notepadId = note.notepadId;
     this.sourceNote.name = note.name;
     this.sourceNote.text = note.text;
     this.sourceNote.isPinned = note.isPinned;
+    this.sourceNote.isArchived = note.isArchived;
   }
 
-  delete(note: Note) {
+  delete(note: Note): void {
     note.isDeleted = true;
     note.updated = new Date().getTime();
     this.update(note);

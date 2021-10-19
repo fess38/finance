@@ -35,7 +35,7 @@
     </a>
   </clr-vertical-nav-group-children>
   <div *ngIf="showNotes()">
-    <div *ngIf="pinnedNotes().length > 0">
+    <div *ngIf="pinnedNotes()">
       <clr-vertical-nav-group-children>
         <a *ngFor="let note of pinnedNotes()"
            clrVerticalNavLink
@@ -48,6 +48,18 @@
     </div>
     <clr-vertical-nav-group-children>
       <a *ngFor="let note of otherNotes()"
+         clrVerticalNavLink
+         routerLink="/note/{{note.id}}"
+         routerLinkActive="active">
+        <span>{{note.name}}</span>
+      </a>
+    </clr-vertical-nav-group-children>
+  </div>
+  <div *ngIf="archivedNotes().length > 0">
+    <div class="nav-divider"></div>
+    <span class="nav-group-text">{{'notepad_sidenav.archived_notes' | translate}}</span>
+    <clr-vertical-nav-group-children>
+      <a *ngFor="let note of archivedNotes()"
          clrVerticalNavLink
          routerLink="/note/{{note.id}}"
          routerLinkActive="active">
