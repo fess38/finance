@@ -27,7 +27,12 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
     ['image/jpeg', 'jpg'],
     ['image/png', 'png'],
     ['application/pdf', 'pdf'],
-    ['application/zip', 'zip']
+    ['application/zip', 'zip'],
+    ['application/gzip', 'gz'],
+    ['application/msword', 'doc'],
+    ['application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'docx'],
+    ['application/vnd.ms-excel', 'xls'],
+    ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'xlsx'],
   ]);
   private subscription: Subscription;
   private autosaveSubscription: Subscription;
