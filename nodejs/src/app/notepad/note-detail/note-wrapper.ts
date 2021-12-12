@@ -177,9 +177,9 @@ export class NoteWrapper {
         text.slice(0, i),
         '\n<details><summary>',
         summaryText,
-        '</summary>',
+        '</summary><div class="details-margin">',
         detailsText,
-        '\n</details>\n',
+        '</div></details>\n',
         text.slice(j + 2)
       ].join('');
     }

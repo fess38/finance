@@ -16,6 +16,10 @@ details[open] summary:before {
   content: "▼ ";
 }
 
+div.details-margin {
+  margin-left: 30px;
+}
+
 /* for separate nav and content scrolling */
 .content-container {
   height: 98%;

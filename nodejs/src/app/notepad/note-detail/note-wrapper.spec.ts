@@ -304,7 +304,7 @@ describe('NoteWrapper', () => {
   it('addCollapsable1', () => {
     noteTextElement.value = '<{foo\nbar\n}>';
     noteWrapper.update(noteTextElement);
-    const expected = '\n<details><summary>foo</summary>\nbar\n\n</details>\n';
+    const expected = '\n<details><summary>foo</summary><div class="details-margin">\nbar\n</div></details>\n';
     const actual = noteWrapper.expendCollapsable(noteWrapper.note.text, null);
     expect(expected).toBe(actual);
   });
@@ -312,7 +312,7 @@ describe('NoteWrapper', () => {
   it('addCollapsable2', () => {
     noteTextElement.value = '123<{foo\nbar\n}>456';
     noteWrapper.update(noteTextElement);
-    const expected = '123\n<details><summary>foo</summary>\nbar\n\n</details>\n456';
+    const expected = '123\n<details><summary>foo</summary><div class="details-margin">\nbar\n</div></details>\n456';
     const actual = noteWrapper.expendCollapsable(noteWrapper.note.text, null);
     expect(expected).toBe(actual);
   });
@@ -320,7 +320,8 @@ describe('NoteWrapper', () => {
   it('addCollapsable3', () => {
     noteTextElement.value = '123<{foo\nbar\n}>456<{as\ndf}>';
     noteWrapper.update(noteTextElement);
-    const expected = '123\n<details><summary>foo</summary>\nbar\n\n</details>\n456\n<details><summary>as</summary>\ndf\n</details>\n';
+    const expected = '123\n<details><summary>foo</summary><div class="details-margin">\nbar\n</div></details>' +
+      '\n456\n<details><summary>as</summary><div class="details-margin">\ndf</div></details>\n';
     const actual = noteWrapper.expendCollapsable(noteWrapper.note.text, null);
     expect(expected).toBe(actual);
   });
