@@ -4476,6 +4476,7 @@ export const Note = $root.Note = (() => {
      * @property {string|null} [text] Note text
      * @property {boolean|null} [isPinned] Note isPinned
      * @property {boolean|null} [isArchived] Note isArchived
+     * @property {string|null} [section] Note section
      */
 
     /**
@@ -4566,6 +4567,14 @@ export const Note = $root.Note = (() => {
     Note.prototype.isArchived = false;
 
     /**
+     * Note section.
+     * @member {string} section
+     * @memberof Note
+     * @instance
+     */
+    Note.prototype.section = "";
+
+    /**
      * Creates a new Note instance using the specified properties.
      * @function create
      * @memberof Note
@@ -4603,6 +4612,8 @@ export const Note = $root.Note = (() => {
             writer.uint32(/* id 8, wireType 0 =*/64).bool(message.isPinned);
         if (message.isArchived != null && Object.hasOwnProperty.call(message, "isArchived"))
             writer.uint32(/* id 9, wireType 0 =*/72).bool(message.isArchived);
+        if (message.section != null && Object.hasOwnProperty.call(message, "section"))
+            writer.uint32(/* id 10, wireType 2 =*/82).string(message.section);
         return writer;
     };
 
@@ -4650,6 +4661,9 @@ export const Note = $root.Note = (() => {
                 break;
             case 9:
                 message.isArchived = reader.bool();
+                break;
+            case 10:
+                message.section = reader.string();
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -4725,6 +4739,8 @@ export const Note = $root.Note = (() => {
             message.isPinned = Boolean(object.isPinned);
         if (object.isArchived != null)
             message.isArchived = Boolean(object.isArchived);
+        if (object.section != null)
+            message.section = String(object.section);
         return message;
     };
 
@@ -4767,6 +4783,7 @@ export const Note = $root.Note = (() => {
             object.text = "";
             object.isPinned = false;
             object.isArchived = false;
+            object.section = "";
         }
         if (message.id != null && message.hasOwnProperty("id"))
             if (typeof message.id === "number")
@@ -4798,6 +4815,8 @@ export const Note = $root.Note = (() => {
             object.isPinned = message.isPinned;
         if (message.isArchived != null && message.hasOwnProperty("isArchived"))
             object.isArchived = message.isArchived;
+        if (message.section != null && message.hasOwnProperty("section"))
+            object.section = message.section;
         return object;
     };
 

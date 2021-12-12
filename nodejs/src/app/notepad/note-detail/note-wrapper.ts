@@ -30,6 +30,7 @@ export class NoteWrapper {
       || (this.note.notepadId != note.notepadId && this.note.text.length > 0)
       || (this.note.isPinned != note.isPinned)
       || (this.note.isArchived != note.isArchived)
+      || (this.note.section != note.section)
     );
   }
 
@@ -56,7 +57,7 @@ export class NoteWrapper {
     let insertedText = '';
     let deletePreviousRow = false;
 
-    const ulMatch = previousRow.match(/^( *[-*] )(.*)/);
+    const ulMatch = RegExp(/^( *[-*] )(.*)/).exec(previousRow);
     if (ulMatch) {
       if (ulMatch[2].length > 0 || currentRow.length > 0) {
         insertedText = ulMatch[1];
@@ -65,7 +66,7 @@ export class NoteWrapper {
       }
     }
 
-    const olMatch = previousRow.match(/^( *)([0-9]+)(\. )(.*)/);
+    const olMatch = RegExp(/^( *)([0-9]+)(\. )(.*)/).exec(previousRow);
     if (olMatch) {
       if (olMatch[4].length > 0 || currentRow.length > 0) {
         insertedText = olMatch[1] + String(+olMatch[2] + 1) + olMatch[3];
@@ -155,11 +156,13 @@ export class NoteWrapper {
     let i = 0;
     let j = 0;
 
-    while (true) {
+    let condition = true;
+    while (condition) {
       i = text.indexOf('<{');
       j = text.indexOf('}>');
       if (i == -1 || j == -1 || j < i) {
-        break;
+        condition = false;
+        continue;
       }
       text = [
         text.slice(0, i),

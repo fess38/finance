@@ -170,6 +170,7 @@ message Note {
     optional string text = 7;
     optional bool is_pinned = 8 [default = false];
     optional bool is_archived = 9 [default = false];
+    optional string section = 10;
 }
 
 // new entity

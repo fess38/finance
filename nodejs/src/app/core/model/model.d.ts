@@ -1486,6 +1486,9 @@ export interface INote {
 
     /** Note isArchived */
     isArchived?: (boolean|null);
+
+    /** Note section */
+    section?: (string|null);
 }
 
 /** Represents a Note. */
@@ -1523,6 +1526,9 @@ export class Note implements INote {
 
     /** Note isArchived. */
     public isArchived: boolean;
+
+    /** Note section. */
+    public section: string;
 
     /**
      * Creates a new Note instance using the specified properties.

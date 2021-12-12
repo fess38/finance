@@ -71,7 +71,7 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
         this.router.navigate(['/']);
       }
       this.note.notepadId = this.userdata.localSettings.currentNotepadId;
-      this.translate.get('note.new').subscribe(defaultName => {
+      this.translate.get('note.new').subscribe((defaultName: string) => {
         this.note.name = defaultName;
         this.updateSourceNote(this.note);
       });
@@ -164,7 +164,7 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
   onPaste(event: ClipboardEvent): void {
     const items = event.clipboardData.items;
     for (let i = 0; i < items.length; ++i) {
-      let file = new File();
+      const file = new File();
       file.contentType = items[i].type;
       file.extension = this.allowedMimeTypes.get(file.contentType) || '';
       if (file.extension.length == 0 || event.clipboardData.getData('text').length > 0) {
@@ -173,8 +173,8 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
 
       event.preventDefault();
       const reader = new FileReader();
-      reader.onload = (event: any) => {
-        file.data = event.target.result;
+      reader.onload = (event: ProgressEvent<FileReader>) => {
+        file.data = event.target.result.toString();
         this.userdata.saveFile(file)
           .then(fileUrl => {
             this.noteWrapper.update(this.noteTextElement());
@@ -185,7 +185,7 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
             }
             this.afterChange();
           })
-          .catch(error => {
+          .catch((error: Error) => {
             this.alertService.error('error.save_file');
             console.error(error.message);
             console.error(`content type: ${file.contentType}`);
@@ -221,9 +221,9 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
       this.userdata.saveNote(note)
         .then(() => {
           this.updateSourceNote(note);
-          this.router.navigate(['/note/' + note.id]);
+          this.router.navigate([`/note/${note.id}`]);
         })
-        .catch(error => {
+        .catch((error: Error) => {
           this.alertService.error('error.save');
           console.error(error.message);
         });
@@ -235,7 +235,7 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
             this.router.navigate(['/']);
           }
         })
-        .catch(error => {
+        .catch((error: Error) => {
           this.alertService.error(note.isDeleted ? 'error.delete' : 'error.update');
           note.isDeleted = false;
           console.error(error.message);
@@ -249,6 +249,7 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
     this.sourceNote.text = note.text;
     this.sourceNote.isPinned = note.isPinned;
     this.sourceNote.isArchived = note.isArchived;
+    this.sourceNote.section = note.section;
   }
 
   delete(note: Note): void {

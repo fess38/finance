@@ -87,6 +87,7 @@
     "new": "New note",
     "notepad": "Notepad",
     "pin": "Pin",
+    "section": "Section",
     "text": "Note text",
     "view": "View note"
   },
@@ -99,6 +100,7 @@
     "archived_notes": "Archive",
     "add_note": "Add note",
     "add_notepad": "Add notepad",
+    "bookmark_notes": "Bookmarks",
     "notepads": "Notepads",
     "notes": "Notes"
   },
