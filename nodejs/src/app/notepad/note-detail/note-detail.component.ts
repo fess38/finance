@@ -139,7 +139,7 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
         this.noteWrapper.moveRowDown();
       } else if (event.key == 'b' || event.key == 'и') {
         this.noteWrapper.bold();
-      } else if (event.key == 'x' || event.key == 'ч') {
+      } else if (event.shiftKey && (event.key == 'x' || event.key == 'ч')) {
         this.clipboard.copy(this.noteWrapper.cut());
       } else if (event.key == 'k' || event.key == 'л') {
         this.noteWrapper.collasableSection();
