@@ -122,7 +122,7 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
   }
 
   textForMarkdown(): string {
-    return this.markdownService.compile(this.noteWrapper.prepareForMarkdown());
+    return this.markdownService.compile(this.noteWrapper.prepareForMarkdown(this.markdownService));
   }
 
   onClick(): void {

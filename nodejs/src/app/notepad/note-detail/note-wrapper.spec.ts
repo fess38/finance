@@ -6,7 +6,7 @@ describe('NoteWrapper', () => {
 
   beforeEach(() => {
     noteWrapper = new NoteWrapper();
-    noteTextElement = document.createElement('textarea') as HTMLTextAreaElement;
+    noteTextElement = document.createElement('textarea');
   });
 
   it('updateCursorPosition1', () => {
@@ -305,7 +305,7 @@ describe('NoteWrapper', () => {
     noteTextElement.value = '<{foo\nbar\n}>';
     noteWrapper.update(noteTextElement);
     const expected = '\n<details><summary>foo</summary>\nbar\n\n</details>\n';
-    const actual = noteWrapper.expendCollapsable(noteWrapper.note.text);
+    const actual = noteWrapper.expendCollapsable(noteWrapper.note.text, null);
     expect(expected).toBe(actual);
   });
 
@@ -313,7 +313,7 @@ describe('NoteWrapper', () => {
     noteTextElement.value = '123<{foo\nbar\n}>456';
     noteWrapper.update(noteTextElement);
     const expected = '123\n<details><summary>foo</summary>\nbar\n\n</details>\n456';
-    const actual = noteWrapper.expendCollapsable(noteWrapper.note.text);
+    const actual = noteWrapper.expendCollapsable(noteWrapper.note.text, null);
     expect(expected).toBe(actual);
   });
 
@@ -321,7 +321,7 @@ describe('NoteWrapper', () => {
     noteTextElement.value = '123<{foo\nbar\n}>456<{as\ndf}>';
     noteWrapper.update(noteTextElement);
     const expected = '123\n<details><summary>foo</summary>\nbar\n\n</details>\n456\n<details><summary>as</summary>\ndf\n</details>\n';
-    const actual = noteWrapper.expendCollapsable(noteWrapper.note.text);
+    const actual = noteWrapper.expendCollapsable(noteWrapper.note.text, null);
     expect(expected).toBe(actual);
   });
 });

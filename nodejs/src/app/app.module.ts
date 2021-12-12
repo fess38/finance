@@ -25,7 +25,7 @@ import { TransactionModule } from './transaction/transaction.module';
 
 ClarityIcons.addIcons(cogIcon, fastForwardIcon, infoCircleIcon, pencilIcon, plusCircleIcon, rewindIcon, undoIcon);
 
-export function HttpLoaderFactory(http: HttpClient) {
+export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
@@ -35,9 +35,9 @@ registerLocaleData(localeEn, 'en');
 export function markedOptionsFactory(): MarkedOptions {
   const renderer = new MarkedRenderer();
 
-  const listRendered = renderer.list;
+  const listRenderer = renderer.list;
   renderer.list = (body: string, ordered: boolean, start: number) => {
-    return listRendered.call(renderer, body, ordered, start)
+    return listRenderer.call(renderer, body, ordered, start)
       .replace('<ol>', '<ol class="list">')
       .replace('<ul>', '<ul class="list">');
   };

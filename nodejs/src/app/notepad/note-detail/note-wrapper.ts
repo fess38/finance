@@ -1,3 +1,4 @@
+import { MarkdownService } from 'ngx-markdown';
 import { Note } from '../../core/model/model';
 
 export class NoteWrapper {
@@ -16,8 +17,8 @@ export class NoteWrapper {
     this.rows = this.note.text.split('\n');
   }
 
-  prepareForMarkdown(): string {
-    return this.expendCollapsable(this.note.text);
+  prepareForMarkdown(markdownService: MarkdownService): string {
+    return this.expendCollapsable(this.note.text, markdownService);
   }
 
   hasName(): boolean {
@@ -57,7 +58,7 @@ export class NoteWrapper {
     let insertedText = '';
     let deletePreviousRow = false;
 
-    const ulMatch = RegExp(/^( *[-*] )(.*)/).exec(previousRow);
+    const ulMatch = new RegExp(/^( *[-*] )(.*)/).exec(previousRow);
     if (ulMatch) {
       if (ulMatch[2].length > 0 || currentRow.length > 0) {
         insertedText = ulMatch[1];
@@ -66,7 +67,7 @@ export class NoteWrapper {
       }
     }
 
-    const olMatch = RegExp(/^( *)([0-9]+)(\. )(.*)/).exec(previousRow);
+    const olMatch = new RegExp(/^( *)([0-9]+)(\. )(.*)/).exec(previousRow);
     if (olMatch) {
       if (olMatch[4].length > 0 || currentRow.length > 0) {
         insertedText = olMatch[1] + String(+olMatch[2] + 1) + olMatch[3];
@@ -151,7 +152,7 @@ export class NoteWrapper {
     this.wrapSelection('<{', '}>');
   }
 
-  expendCollapsable(noteText: string): string {
+  expendCollapsable(noteText: string, markdownService: MarkdownService): string {
     let text = noteText;
     let i = 0;
     let j = 0;
@@ -164,12 +165,20 @@ export class NoteWrapper {
         condition = false;
         continue;
       }
+      let summaryText = text.slice(i + 2, text.indexOf('\n', i));
+      if (markdownService) {
+        summaryText = markdownService.compile(summaryText).replace(new RegExp(/<\/?p>/g), '');
+      }
+      let detailsText = text.slice(text.indexOf('\n', i), j);
+      if (markdownService) {
+        detailsText = markdownService.compile(detailsText);
+      }
       text = [
         text.slice(0, i),
         '\n<details><summary>',
-        text.slice(i + 2, text.indexOf('\n', i)),
+        summaryText,
         '</summary>',
-        text.slice(text.indexOf('\n', i), j),
+        detailsText,
         '\n</details>\n',
         text.slice(j + 2)
       ].join('');
@@ -179,7 +188,7 @@ export class NoteWrapper {
   }
 
   imageUrl(imageUrl: string): void {
-    this.insertText(`<img src="${imageUrl}" alt="image" width="100%"/>`)
+    this.insertText(`<img src="${imageUrl}" alt="image" width="100%"/>`);
   }
 
   fileUrl(fileUrl: string): void {
