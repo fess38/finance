@@ -48,6 +48,13 @@
       "name_en": "Yen",
       "symbol": "¥",
       "code": "JPY"
+    },
+    {
+      "id": 8,
+      "name_ru": "Лари",
+      "name_en": "Lari",
+      "symbol": "₾",
+      "code": "GEL"
     }
   ]
 }
