@@ -55,6 +55,13 @@
       "name_en": "Lari",
       "symbol": "₾",
       "code": "GEL"
+    },
+    {
+      "id": 9,
+      "name_ru": "Шекель",
+      "name_en": "Shekel",
+      "symbol": "₪",
+      "code": "ILS"
     }
   ]
 }
