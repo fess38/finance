@@ -54,7 +54,7 @@ export class UserDataService {
     get('ts')
       .then(ts => {
         const modifiedAfter = (ts as number - 3600 * 1000) || 0;
-        return this.http.get(`/api/data/storage/get?ts=${modifiedAfter}`, 30000);
+        return this.http.get(`/api/data/storage/get?ts=${modifiedAfter}`, 600000);
       })
       .then(data => {
         const newDataStorage = DataStorage.decode(data);
@@ -211,7 +211,7 @@ export class UserDataService {
 
   private async nextIds(idsAmount?: number): Promise<void> {
     const url = '/api/data/next_id' + (idsAmount ? `?amount=${idsAmount}` : '');
-    await this.http.get(url, 30000).then(data => {
+    await this.http.get(url, 60000).then(data => {
       const newIdHolder = IdHolder.decode(data);
       if (this.isObsoleteIdHolder()) {
         this.ds.idHolder = newIdHolder;
