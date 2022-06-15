@@ -1,6 +1,6 @@
 <div class="clr-row clr-col-12 clr-col-lg-6">
   <form class="clr-form">
-    <div class="clr-form-control clr-row">
+    <div class="clr-form-control clr-row no-top">
       <label>
         <button type="button" class="btn btn-icon btn-link" routerLink="/sub_category">
           <cds-icon shape="undo"></cds-icon>
@@ -13,7 +13,7 @@
         </span>
       </label>
     </div>
-    <div class="clr-form-control clr-row">
+    <div class="clr-form-control clr-row no-top">
       <label>{{'common.name' | translate}}</label>
       <div class="clr-control-container">
         <div class="clr-input-wrapper">
@@ -58,18 +58,11 @@
         {{'common.amount' | translate}}: {{subCategory.transactionAmount}}
       </label>
     </div>
-    <div class="clr-form-control clr-row">
-      <button class="btn btn-primary btn-sm btn-block"
-              (click)="update(subCategory)"
-              [disabled]="!isValidForm() || ('' | isReadOnly)">
-        {{'common.save' | translate}}
-      </button>
-      <button class="btn btn-danger btn-sm btn-block"
-              (click)="delete(subCategory)"
-              [hidden]="subCategory | isNewEntity"
-              [disabled]="hasTransations() || ('' | isReadOnly)">
-        {{'common.delete' | translate}}
-      </button>
-    </div>
+    <action-buttons [disabledSaveButton]="!isValidForm() || ('' | isReadOnly)"
+                    (saveNotifier)="update(subCategory)"
+                    [hiddenDeleteButton]="subCategory | isNewEntity"
+                    [disabledDeleteButton]="hasTransations() || ('' | isReadOnly)"
+                    (deleteNotifier)="delete(subCategory)">
+    </action-buttons>
   </form>
 </div>

@@ -1,5 +1,5 @@
 <div class="clr-row clr-col-12 clr-col-lg-6">
-  <form class="clr-form no-top">
+  <form class="clr-form">
     <div class="clr-form-control clr-row no-top">
       <label>
         <span [hidden]="!(notepad | isNewEntity)">
@@ -21,18 +21,11 @@
     <div class="clr-form-control clr-row" [hidden]="notepad | isNewEntity">
       <label>{{'notepad.amount' | translate}}: {{notepad.noteAmount}}</label>
     </div>
-    <div class="clr-form-control clr-row">
-      <button class="btn btn-primary btn-sm btn-block"
-              (click)="update(notepad)"
-              [disabled]="!isValidForm() || ('' | isReadOnly)">
-        {{'common.save' | translate}}
-      </button>
-      <button class="btn btn-danger btn-sm btn-block"
-              (click)="delete(notepad)"
-              [hidden]="notepad | isNewEntity"
-              [disabled]="hasNotes() || ('' | isReadOnly)">
-        {{'common.delete' | translate}}
-      </button>
-    </div>
+    <action-buttons [disabledSaveButton]="!isValidForm() || ('' | isReadOnly)"
+                    (saveNotifier)="update(notepad)"
+                    [hiddenDeleteButton]="notepad | isNewEntity"
+                    [disabledDeleteButton]="hasNotes() || ('' | isReadOnly)"
+                    (deleteNotifier)="delete(notepad)">
+    </action-buttons>
   </form>
 </div>

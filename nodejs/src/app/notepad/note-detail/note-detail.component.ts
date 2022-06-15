@@ -2,10 +2,12 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { MarkdownService } from 'ngx-markdown';
 import { interval, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { AppMode, Note, Notepad } from '../../core/model/model';
+import { AppMode, File, Note, Notepad } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
+import { AlertService } from '../../utils/alert/alert.service';
 import { NoteWrapper } from './note-wrapper';
 
 @Component({
@@ -14,18 +16,32 @@ import { NoteWrapper } from './note-wrapper';
 })
 export class NoteDetailComponent implements OnInit, OnDestroy {
   constructor(private userdata: UserDataService,
+              private alertService: AlertService,
+              private markdownService: MarkdownService,
               private translate: TranslateService,
               private route: ActivatedRoute,
               private router: Router,
               private clipboard: Clipboard) {}
 
+  readonly allowedMimeTypes = new Map<string, string>([
+    ['image/jpeg', 'jpg'],
+    ['image/png', 'png'],
+    ['application/pdf', 'pdf'],
+    ['application/zip', 'zip'],
+    ['application/gzip', 'gz'],
+    ['application/msword', 'doc'],
+    ['application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'docx'],
+    ['application/vnd.ms-excel', 'xls'],
+    ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'xlsx'],
+  ]);
   private subscription: Subscription;
   private autosaveSubscription: Subscription;
   private noteWrapper = new NoteWrapper();
   private sourceNote = new Note();
-  @ViewChild('noteTextElement')
-  private noteTextElement: ElementRef;
+  @ViewChild('noteTextElementRef')
+  private noteTextElementRef: ElementRef;
   viewMode = true;
+  editMetaMode = false;
 
   set note(note: Note) {
     this.noteWrapper.note = note;
@@ -35,10 +51,13 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
     return this.noteWrapper.note;
   }
 
-  ngOnInit() {
-    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+  private noteTextElement(): HTMLTextAreaElement {
+    return this.noteTextElementRef.nativeElement as HTMLTextAreaElement;
+  }
 
-    this.userdata.appMode = AppMode.NOTES;
+  ngOnInit(): void {
+    this.userdata.localSettings.appMode = AppMode.NOTES;
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     const id = this.route.snapshot.paramMap.get('id');
     if (id != 'new') {
       const callback = () => {
@@ -56,9 +75,8 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
       if (!this.userdata.localSettings.currentNotepadId) {
         this.router.navigate(['/']);
       }
-      this.viewMode = false;
       this.note.notepadId = this.userdata.localSettings.currentNotepadId;
-      this.translate.get('note.new').subscribe(defaultName => {
+      this.translate.get('note.new').subscribe((defaultName: string) => {
         this.note.name = defaultName;
         this.updateSourceNote(this.note);
       });
@@ -84,8 +102,24 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
   onViewModeChange(): void {
     this.viewMode = !this.viewMode;
     if (!this.viewMode) {
-      (this.noteTextElement.nativeElement as HTMLTextAreaElement).value = this.note.text;
+      (this.noteTextElement()).value = this.note.text;
     }
+  }
+
+  onEditMetaModeChange(): void {
+    this.editMetaMode = !this.editMetaMode;
+  }
+
+  isEmptyNote(): boolean {
+    return this.note.text.length == 0;
+  }
+
+  isViewMode(): boolean {
+    return this.viewMode;
+  }
+
+  isEditMetaMode(): boolean {
+    return this.editMetaMode || this.isEmptyNote();
   }
 
   notepads(): Notepad[] {
@@ -93,15 +127,15 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
   }
 
   textForMarkdown(): string {
-    return this.noteWrapper.prepareForMarkdown();
+    return this.markdownService.compile(this.noteWrapper.prepareForMarkdown(this.markdownService));
   }
 
-  onClick(event: MouseEvent): void {
-    this.updateCursorPosition(event);
+  onClick(): void {
+    this.noteWrapper.update(this.noteTextElement());
   }
 
   onKeyDown(event: KeyboardEvent): void {
-    this.updateCursorPosition(event);
+    this.noteWrapper.update(this.noteTextElement());
     let isUpdated = true;
     if (event.ctrlKey || event.metaKey) {
       if (event.code == 'ArrowUp') {
@@ -110,74 +144,120 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
         this.noteWrapper.moveRowDown();
       } else if (event.key == 'b' || event.key == 'и') {
         this.noteWrapper.bold();
-      } else if (event.key == 'x' || event.key == 'ч') {
+      } else if (event.shiftKey && (event.key == 'x' || event.key == 'ч')) {
         this.clipboard.copy(this.noteWrapper.cut());
+      } else if (event.key == 'k' || event.key == 'л') {
+        this.noteWrapper.collasableSection();
       } else {
         isUpdated = false;
       }
     } else if (event.code == 'Enter') {
-        this.noteWrapper.enter();
+      this.noteWrapper.enter();
     } else {
       isUpdated = false;
     }
 
     if (isUpdated) {
-      this.afterChange(event.target as HTMLTextAreaElement);
+      this.afterChange();
     }
   }
 
-  private updateCursorPosition(event: KeyboardEvent | MouseEvent): void {
-    this.noteWrapper.update(event.target as HTMLTextAreaElement);
+  onKeyUp(): void {
+    this.noteWrapper.update(this.noteTextElement());
   }
 
-  private afterChange(noteTextElement: HTMLTextAreaElement): void {
+  onPaste(event: ClipboardEvent): void {
+    const items = event.clipboardData.items;
+    for (let i = 0; i < items.length; ++i) {
+      const file = new File();
+      file.contentType = items[i].type;
+      file.extension = this.allowedMimeTypes.get(file.contentType) || '';
+      if (file.extension.length == 0 || event.clipboardData.getData('text').length > 0) {
+        continue;
+      }
+
+      event.preventDefault();
+      const reader = new FileReader();
+      reader.onload = (event: ProgressEvent<FileReader>) => {
+        file.data = event.target.result.toString();
+        this.userdata.saveFile(file)
+          .then(fileUrl => {
+            this.noteWrapper.update(this.noteTextElement());
+            if (file.contentType.startsWith('image/')) {
+              this.noteWrapper.imageUrl(fileUrl);
+            } else {
+              this.noteWrapper.fileUrl(fileUrl);
+            }
+            this.afterChange();
+          })
+          .catch((error: Error) => {
+            this.alertService.error('error.save_file');
+            console.error(error.message);
+            console.error(`content type: ${file.contentType}`);
+          });
+      };
+      reader.readAsDataURL(items[i].getAsFile());
+      break;
+    }
+  }
+
+  private afterChange(): void {
     setTimeout(() => {
-      noteTextElement.value = this.note.text;
-      noteTextElement.setSelectionRange(
+      this.noteTextElement().value = this.note.text;
+      this.noteTextElement().setSelectionRange(
         this.noteWrapper.selectionStart,
         this.noteWrapper.selectionEnd
       );
-      noteTextElement.scrollTop = this.noteWrapper.scrollTop;
+      this.noteTextElement().scrollTop = this.noteWrapper.scrollTop;
     });
   }
 
-  isValidForm() {
+  isValidForm(): boolean {
     return this.noteWrapper.hasName()
       && this.userdata.findNotepad(this.note.notepadId)
-      && !this.noteWrapper.isEquals(this.sourceNote);
+      && !this.noteWrapper.isEquals(this.sourceNote)
+      && !(this.note.isPinned && this.note.isArchived);
   }
 
-  update(note: Note) {
+  update(note: Note): void {
     note.updated = new Date().getTime();
     if (note.id == 0) {
       note.created = new Date().getTime();
       this.userdata.saveNote(note)
         .then(() => {
           this.updateSourceNote(note);
-          this.router.navigate(['/note/' + note.id]);
+          this.router.navigate([`/note/${note.id}`]);
         })
-        .catch(error => {
+        .catch((error: Error) => {
+          this.alertService.error('error.save');
           console.error(error.message);
-          this.router.navigate(['/error']);
         });
     } else {
       this.userdata.updateNote(note)
-        .then(() => this.updateSourceNote(note))
-        .catch(error => {
+        .then(() => {
+          this.updateSourceNote(note);
+          if (note.isDeleted) {
+            this.router.navigate(['/']);
+          }
+        })
+        .catch((error: Error) => {
+          this.alertService.error(note.isDeleted ? 'error.delete' : 'error.update');
           note.isDeleted = false;
           console.error(error.message);
-          this.router.navigate(['/error']);
         });
     }
   }
 
-  private updateSourceNote(note: Note) {
+  private updateSourceNote(note: Note): void {
     this.sourceNote.notepadId = note.notepadId;
     this.sourceNote.name = note.name;
     this.sourceNote.text = note.text;
+    this.sourceNote.isPinned = note.isPinned;
+    this.sourceNote.isArchived = note.isArchived;
+    this.sourceNote.section = note.section;
   }
 
-  delete(note: Note) {
+  delete(note: Note): void {
     note.isDeleted = true;
     note.updated = new Date().getTime();
     this.update(note);

@@ -86,8 +86,8 @@ export class AuthService {
           } else if (this.loginTryCounter++ < 1) {
             this.signInGoogle();
           } else {
+            this.alertService.error('error.message');
             console.error(error);
-            this.router.navigate(['/error']);
           }
         });
     });
@@ -120,8 +120,8 @@ export class AuthService {
         })
         .then(() => clear())
         .catch(error => {
+          this.alertService.error('error.message');
           console.error(error.message);
-          this.router.navigate(['/error']);
         });
     }
   }

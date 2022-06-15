@@ -1,6 +1,6 @@
 <div class="clr-row clr-col-12 clr-col-lg-6">
   <form class="clr-form">
-    <div class="clr-form-control clr-row">
+    <div class="clr-form-control clr-row no-top">
       <label>
         <button type="button" class="btn btn-icon btn-link" routerLink="/category">
           <cds-icon shape="undo"></cds-icon>
@@ -13,7 +13,7 @@
         </span>
       </label>
     </div>
-    <div class="clr-form-control clr-row">
+    <div class="clr-form-control clr-row no-top">
       <label>{{'common.name' | translate}}</label>
       <div class="clr-control-container">
         <div class="clr-input-wrapper">
@@ -66,18 +66,11 @@
         {{'common.amount' | translate}}: {{category.transactionAmount}}
       </label>
     </div>
-    <div class="clr-form-control clr-row">
-      <button class="btn btn-primary btn-sm btn-block"
-              (click)="update(category)"
-              [disabled]="!isValidForm() || ('' | isReadOnly)">
-        {{'common.save' | translate}}
-      </button>
-      <button class="btn btn-danger btn-sm btn-block"
-              (click)="delete(category)"
-              [hidden]="category | isNewEntity"
-              [disabled]="hasLinkedEntities() || ('' | isReadOnly)">
-        {{'common.delete' | translate}}
-      </button>
-    </div>
+    <action-buttons [disabledSaveButton]="!isValidForm() || ('' | isReadOnly)"
+                    (saveNotifier)="update(category)"
+                    [hiddenDeleteButton]="category | isNewEntity"
+                    [disabledDeleteButton]="hasLinkedEntities() || ('' | isReadOnly)"
+                    (deleteNotifier)="delete(category)">
+    </action-buttons>
   </form>
 </div>

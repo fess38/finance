@@ -2,10 +2,12 @@ import { registerLocaleData } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import localeEn from '@angular/common/locales/en';
 import localeRu from '@angular/common/locales/ru';
-import { NgModule } from '@angular/core';
+import { NgModule, SecurityContext } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { ClarityIcons, cogIcon, fastForwardIcon, infoCircleIcon, pencilIcon, plusCircleIcon, rewindIcon, undoIcon } from '@cds/core/icon';
+import {
+  ClarityIcons, cogIcon, fastForwardIcon, infoCircleIcon, pencilIcon, plusCircleIcon, rewindIcon, undoIcon
+} from '@cds/core/icon';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { MarkdownModule, MarkedOptions, MarkedRenderer } from 'ngx-markdown';
@@ -23,7 +25,7 @@ import { TransactionModule } from './transaction/transaction.module';
 
 ClarityIcons.addIcons(cogIcon, fastForwardIcon, infoCircleIcon, pencilIcon, plusCircleIcon, rewindIcon, undoIcon);
 
-export function HttpLoaderFactory(http: HttpClient) {
+export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
@@ -32,10 +34,24 @@ registerLocaleData(localeEn, 'en');
 
 export function markedOptionsFactory(): MarkedOptions {
   const renderer = new MarkedRenderer();
+
+  const listRenderer = renderer.list;
+  renderer.list = (body: string, ordered: boolean, start: number) => {
+    return listRenderer.call(renderer, body, ordered, start)
+      .replace('<ol>', '<ol class="list">')
+      .replace('<ul>', '<ul class="list">');
+  };
+
+  const tableRenderer = renderer.table;
+  renderer.table = (header: string, body: string) => {
+    return tableRenderer.call(renderer, header, body)
+      .replace('<table>', '<table class="table table-compact">');
+  };
+
   const linkRenderer = renderer.link;
-  renderer.link = (href, title, text) => {
-    const html = linkRenderer.call(renderer, href, title, text);
-    return html.replace(/^<a /, '<a target="_blank" rel="nofollow" ');
+  renderer.link = (href: string, title: string, text: string) => {
+    return linkRenderer.call(renderer, href, title, text)
+      .replace(/^<a /, '<a target="_blank" rel="nofollow" ');
   };
 
   return {
@@ -54,11 +70,11 @@ export function markedOptionsFactory(): MarkedOptions {
   ],
   imports: [
     MarkdownModule.forRoot({
-      loader: HttpClient,
       markedOptions: {
         provide: MarkedOptions,
         useFactory: markedOptionsFactory
-      }
+      },
+      sanitize: SecurityContext.NONE
     }),
     ServiceWorkerModule.register('./ngsw-worker.js', {
       enabled: environment.production,

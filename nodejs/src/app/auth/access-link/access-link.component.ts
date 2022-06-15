@@ -12,7 +12,7 @@ export class AccessLinkComponent implements OnInit, OnDestroy {
               private router: Router) {}
 
   private subscription: Subscription;
-  link: String = '';
+  link = '';
 
   ngOnInit() {
     const token = this.route.snapshot.paramMap.get('token') || '';

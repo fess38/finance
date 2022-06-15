@@ -1,14 +1,18 @@
-import { Component } from '@angular/core';
-import { Category, SubCategory } from '../../core/model/model';
+import { Component, OnInit } from '@angular/core';
+import { AppMode, Category, SubCategory } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 
 @Component({
   templateUrl: 'sub-category-list.component.html'
 })
-export class SubCategoryListComponent {
+export class SubCategoryListComponent implements OnInit {
   constructor(private userdata: UserDataService) {}
 
   filterCategoryId: number;
+
+  ngOnInit(): void {
+    this.userdata.localSettings.appMode = AppMode.FINANCE;
+  }
 
   categories(): Category[] {
     return this.userdata.categories()

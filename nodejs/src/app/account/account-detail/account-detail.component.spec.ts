@@ -7,7 +7,7 @@ describe('AccountDetailComponent', () => {
   let accountTemplate;
 
   beforeEach(() => {
-    component = new AccountDetailComponent(null, null, null);
+    component = new AccountDetailComponent(null, null, null, null);
     accountTemplate = new Account({
       id: 101,
       name: 'foo',
@@ -25,7 +25,7 @@ describe('AccountDetailComponent', () => {
       amountTo: 10,
       categoryId: -1
     });
-    expect(expected).toEqual(component.createAccountBalanceCorrection(accountTemplate, 110));
+    expect(component.createAccountBalanceCorrection(accountTemplate, 110)).toEqual(expected);
   });
 
   it('should created transfer to decrease balance', () => {
@@ -37,7 +37,7 @@ describe('AccountDetailComponent', () => {
       amountTo: 0,
       categoryId: -1
     });
-    expect(expected).toEqual(component.createAccountBalanceCorrection(accountTemplate, 90));
+    expect(component.createAccountBalanceCorrection(accountTemplate, 90)).toEqual(expected);
   });
 });
 

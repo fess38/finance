@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { interval, Subject, Subscription } from 'rxjs';
-import { Transaction, TransactionTemplate } from '../../core/model/model';
+import { AppMode, Transaction, TransactionTemplate } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
+import { AlertService } from '../../utils/alert/alert.service';
 import { DateUtils } from '../../utils/date-utils';
 import { TransactionDetailContext } from '../transaction-detail/transaction-detail.component';
 import { TransactionMatcher } from '../transaction-matcher';
@@ -12,6 +13,7 @@ import { TransactionMatcher } from '../transaction-matcher';
 })
 export class TransactionTemplateDetailComponent implements OnInit, OnDestroy {
   constructor(private userdata: UserDataService,
+              private alertService: AlertService,
               private route: ActivatedRoute,
               private router: Router) {}
 
@@ -33,6 +35,7 @@ export class TransactionTemplateDetailComponent implements OnInit, OnDestroy {
   daysOfMonth = '';
 
   ngOnInit(): void {
+    this.userdata.localSettings.appMode = AppMode.FINANCE;
     this.transactionTemplate.transaction = new Transaction();
     this.childPingerSubscription = interval(500).subscribe(() => {
       this.transactionDetailContext.parentObservable.next(0);
@@ -79,16 +82,16 @@ export class TransactionTemplateDetailComponent implements OnInit, OnDestroy {
       this.userdata.saveTransactionTemplate(transactionTemplate)
         .then(() => this.router.navigate(['/transaction_template/' + this.transactionTemplate.id]))
         .catch(error => {
+          this.alertService.error('error.save');
           console.error(error.message);
-          this.router.navigate(['/error']);
         });
     } else {
       this.userdata.updateTransactionTemplate(transactionTemplate)
         .then(() => this.router.navigate(['/transaction_template']))
         .catch(error => {
+          this.alertService.error(transactionTemplate.isDeleted ? 'error.delete' : 'error.update');
           transactionTemplate.isDeleted = false;
           console.error(error.message);
-          this.router.navigate(['/error']);
         });
     }
   }

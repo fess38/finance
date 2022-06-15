@@ -1,10 +1,10 @@
 <div class="clr-row" *ngIf="('' | locale) as locale">
   <div class="clr-col-12 clr-col-sm-8 clr-col-md-6">
-    <table class="table table-noborder table-compact">
+    <table class="table table-compact">
       <tr>
         <th class="left">{{'common.date' | translate}}</th>
         <th class="left">
-          <select clrSelect name="security" [(ngModel)]="filterSecurityId">
+          <select class="no-top" name="security" clrSelect [(ngModel)]="filterSecurityId">
             <option [ngValue]="undefined" selected>{{'common.security' | translate}}</option>
             <option *ngFor="let security of securities()" [ngValue]="security.id">
               <span>{{security.name}}</span>

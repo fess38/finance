@@ -1,12 +1,32 @@
 <div class="clr-row clr-col-12 clr-col-lg-6">
-  <form class="clr-form no-top">
-    <div class="clr-form-control clr-row no-top" (click)="onViewModeChange()">
+  <form class="clr-form">
+    <div class="clr-form-control clr-row no-top">
       <label>
-        <cds-icon shape="pencil" [attr.solid]="!viewMode"></cds-icon>
-        <span>&nbsp;{{(viewMode ? 'note.view' : 'note.edit') | translate}}</span>
+        <clr-tooltip (click)="onViewModeChange()">
+          <cds-icon clrTooltipTrigger shape="pencil"></cds-icon>
+          <clr-tooltip-content clrPosition="bottom-right"
+                               clrSize="md"
+                               *clrIfOpen
+                               [hidden]="!isViewMode()">
+            <span>{{'note.edit_text' | translate}}</span>
+          </clr-tooltip-content>
+        </clr-tooltip>
+        <span>
+          &nbsp;{{(isViewMode() ? 'note.view' : 'note.edit') | translate}}&nbsp;
+        </span>
+        <clr-tooltip (click)="onEditMetaModeChange()"
+                     [hidden]="!isViewMode() || isEmptyNote()">
+          <cds-icon clrTooltipTrigger shape="info-circle"></cds-icon>
+          <clr-tooltip-content clrPosition="bottom-right"
+                               clrSize="md"
+                               *clrIfOpen
+                               [hidden]="isEditMetaMode()">
+            <span>{{'note.edit_meta' | translate}}</span>
+          </clr-tooltip-content>
+        </clr-tooltip>
       </label>
     </div>
-    <div *ngIf="viewMode">
+    <div *ngIf="isViewMode()" [hidden]="!isEditMetaMode()">
       <div class="clr-form-control clr-row">
         <label>{{'common.name' | translate}}</label>
         <div class="clr-control-container">
@@ -31,35 +51,60 @@
         </div>
       </div>
       <div class="clr-form-control clr-row">
-        <label>{{'note.text' | translate}}</label>
-        <markdown [data]="textForMarkdown()"></markdown>
+        <label>{{'note.section' | translate}}</label>
+        <div class="clr-control-container">
+          <div class="clr-input-wrapper">
+            <input type="text" name="section" class="clr-input" [(ngModel)]="note.section"/>
+          </div>
+        </div>
+      </div>
+      <div class="clr-form-control clr-row">
+        <div class="clr-control-container">
+          <div class="clr-checkbox-wrapper">
+            <input type="checkbox"
+                   id="note-is-pinned"
+                   name="noteIsPinned"
+                   class="clr-checkbox"
+                   [(ngModel)]="note.isPinned"/>
+            <label for="note-is-pinned">
+              {{'note.pin' | translate}}
+            </label>
+          </div>
+          <div class="clr-checkbox-wrapper">
+            <input type="checkbox"
+                   id="note-is-archived"
+                   name="noteIsArchived"
+                   class="clr-checkbox"
+                   [(ngModel)]="note.isArchived"/>
+            <label for="note-is-archived">
+              {{'note.archive' | translate}}
+            </label>
+          </div>
+        </div>
       </div>
     </div>
-    <div [hidden]="viewMode">
+    <div class="clr-form-control clr-row no-top" *ngIf="isViewMode()" [hidden]="isEditMetaMode()">
+      <markdown [data]="textForMarkdown()"></markdown>
+    </div>
+    <div [hidden]="isViewMode()">
       <div class="clr-form-control clr-row no-top">
         <textarea clrTextarea
                   id="note-text"
-                  #noteTextElement
+                  #noteTextElementRef
                   [cols]="120"
-                  (click)="onClick($event)"
-                  (keydown)="onKeyDown($event)">
+                  (click)="onClick()"
+                  (keydown)="onKeyDown($event)"
+                  (keyup)="onKeyUp()"
+                  (paste)="onPaste($event)">
         </textarea>
       </div>
     </div>
-    <div class="clr-form-control clr-row">
-      <div class="clr-control-container">
-        <button class="btn btn-primary btn-sm btn-block"
-                (click)="update(note)"
-                [disabled]="!isValidForm() || ('' | isReadOnly)">
-          {{'common.save' | translate}}
-        </button>
-        <button class="btn btn-danger btn-sm btn-block"
-                (click)="delete(note)"
-                [hidden]="note | isNewEntity"
-                [disabled]="'' | isReadOnly">
-          {{'common.delete' | translate}}
-        </button>
-      </div>
-    </div>
+    <action-buttons [hiddenSaveButton]="isViewMode() && !isEditMetaMode()"
+                    [disabledSaveButton]="!isValidForm() || ('' | isReadOnly)"
+                    (saveNotifier)="update(note)"
+                    [hiddenDeleteButton]="note | isNewEntity"
+                    [disabledDeleteButton]="'' | isReadOnly"
+                    (deleteNotifier)="delete(note)">
+    </action-buttons>
   </form>
 </div>

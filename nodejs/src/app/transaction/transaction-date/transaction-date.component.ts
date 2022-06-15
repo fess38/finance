@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Category, Currency, Date_, Month, SubCategory, Summary, Transaction } from '../../core/model/model';
+import { AppMode, Category, Currency, Date_, Month, SubCategory, Summary, Transaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 import { DateUtils } from '../../utils/date-utils';
 import { TransactionCriteriaService as Criteria } from '../transaction-criteria.service';
@@ -40,6 +40,7 @@ export class TransactionDateComponent implements OnInit, OnDestroy {
   expense: number;
 
   ngOnInit() {
+    this.userdata.localSettings.appMode = AppMode.FINANCE;
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.criteria.update(this.route.snapshot.queryParams);
     this.subscription = this.userdata.subscribeOnInit(() => this.onInitCallback());

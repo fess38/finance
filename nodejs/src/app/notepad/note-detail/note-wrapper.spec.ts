@@ -6,7 +6,7 @@ describe('NoteWrapper', () => {
 
   beforeEach(() => {
     noteWrapper = new NoteWrapper();
-    noteTextElement = document.createElement('textarea') as HTMLTextAreaElement;
+    noteTextElement = document.createElement('textarea');
   });
 
   it('updateCursorPosition1', () => {
@@ -203,9 +203,31 @@ describe('NoteWrapper', () => {
     noteTextElement.selectionEnd = 10;
     noteWrapper.update(noteTextElement);
     noteWrapper.bold();
-    expect(noteWrapper.note.text).toBe('foo bar\nvar');
+    expect(noteWrapper.note.text).toBe('foo **bar\nva**r');
     expect(noteWrapper.selectionStart).toBe(4);
-    expect(noteWrapper.selectionEnd).toBe(10);
+    expect(noteWrapper.selectionEnd).toBe(14);
+  });
+
+  it('bold4', () => {
+    noteTextElement.value = '**foo**';
+    noteTextElement.selectionStart = 0;
+    noteTextElement.selectionEnd = 7;
+    noteWrapper.update(noteTextElement);
+    noteWrapper.bold();
+    expect(noteWrapper.note.text).toBe('foo');
+    expect(noteWrapper.selectionStart).toBe(0);
+    expect(noteWrapper.selectionEnd).toBe(3);
+  });
+
+  it('bold5', () => {
+    noteTextElement.value = '****';
+    noteTextElement.selectionStart = 0;
+    noteTextElement.selectionEnd = 4;
+    noteWrapper.update(noteTextElement);
+    noteWrapper.bold();
+    expect(noteWrapper.note.text).toBe('');
+    expect(noteWrapper.selectionStart).toBe(0);
+    expect(noteWrapper.selectionEnd).toBe(0);
   });
 
   it('enter1', () => {
@@ -259,5 +281,48 @@ describe('NoteWrapper', () => {
     noteWrapper.enter();
     expect(noteWrapper.note.text).toBe('');
     expect(noteWrapper.selectionStart).toBe(0);
+  });
+
+  it('addImageUrl1', () => {
+    noteTextElement.value = '';
+    noteTextElement.selectionStart = 0;
+    noteWrapper.update(noteTextElement);
+    noteWrapper.imageUrl("http://image");
+    expect(noteWrapper.note.text).toBe('<img src="http://image" alt="image" width="100%"/>');
+    expect(noteWrapper.selectionStart).toBe(50);
+  });
+
+  it('addImageUrl2', () => {
+    noteTextElement.value = 'foo\n\nbar';
+    noteTextElement.selectionStart = 4;
+    noteWrapper.update(noteTextElement);
+    noteWrapper.imageUrl("http://image");
+    expect(noteWrapper.note.text).toBe('foo\n<img src="http://image" alt="image" width="100%"/>\nbar');
+    expect(noteWrapper.selectionStart).toBe(54);
+  });
+
+  it('addCollapsable1', () => {
+    noteTextElement.value = '<{foo\nbar\n}>';
+    noteWrapper.update(noteTextElement);
+    const expected = '\n<details><summary>foo</summary><div class="details-margin">\nbar\n</div></details>\n';
+    const actual = noteWrapper.expendCollapsable(noteWrapper.note.text, null);
+    expect(expected).toBe(actual);
+  });
+
+  it('addCollapsable2', () => {
+    noteTextElement.value = '123<{foo\nbar\n}>456';
+    noteWrapper.update(noteTextElement);
+    const expected = '123\n<details><summary>foo</summary><div class="details-margin">\nbar\n</div></details>\n456';
+    const actual = noteWrapper.expendCollapsable(noteWrapper.note.text, null);
+    expect(expected).toBe(actual);
+  });
+
+  it('addCollapsable3', () => {
+    noteTextElement.value = '123<{foo\nbar\n}>456<{as\ndf}>';
+    noteWrapper.update(noteTextElement);
+    const expected = '123\n<details><summary>foo</summary><div class="details-margin">\nbar\n</div></details>' +
+      '\n456\n<details><summary>as</summary><div class="details-margin">\ndf</div></details>\n';
+    const actual = noteWrapper.expendCollapsable(noteWrapper.note.text, null);
+    expect(expected).toBe(actual);
   });
 });

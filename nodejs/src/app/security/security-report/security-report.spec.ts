@@ -6,14 +6,14 @@ import Type = SecurityTransaction.Type;
 
 describe('SecurityRepoprtComponent', () => {
   const checkSecurityReport = (expected, actual) => {
-    expect(expected.buyDate).toEqual(actual.buyDate);
-    expect(expected.sellDate).toEqual(actual.sellDate);
-    expect(expected.days).toEqual(actual.days);
-    expect(expected.amount).toEqual(actual.amount);
-    expect(expected.income).toEqual(actual.income);
-    expect(expected.expense).toEqual(actual.expense);
-    expect(expected.profit).toEqual(actual.profit);
-    expect(expected.annualProfit).toBeCloseTo(actual.annualProfit, 2);
+    expect(actual.buyDate).toEqual(expected.buyDate);
+    expect(actual.sellDate).toEqual(expected.sellDate);
+    expect(actual.days).toEqual(expected.days);
+    expect(actual.amount).toEqual(expected.amount);
+    expect(actual.income).toEqual(expected.income);
+    expect(actual.expense).toEqual(expected.expense);
+    expect(actual.profit).toEqual(expected.profit);
+    expect(actual.annualProfit).toBeCloseTo(expected.annualProfit, 2);
   };
 
   it('should prepare security reports 1', () => {

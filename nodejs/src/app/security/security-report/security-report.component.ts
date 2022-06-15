@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { SecurityReport, SecurityTransaction } from '../../core/model/model';
+import { AppMode, SecurityReport, SecurityTransaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
 import { DateUtils } from '../../utils/date-utils';
 import { SecurityUtils } from '../security-utils';
@@ -17,6 +17,7 @@ export class SecurityReportComponent implements OnInit, OnDestroy {
   securityReports: SecurityReport[] = [];
 
   ngOnInit() {
+    this.userdata.localSettings.appMode = AppMode.FINANCE;
     this.subscription = this.userdata.subscribeOnInit(() => {
       this.securityReports = this.prepareSecurityReports();
       this.securityReports.unshift(

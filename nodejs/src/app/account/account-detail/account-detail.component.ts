@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Account, Currency, Transaction } from '../../core/model/model';
+import { Account, AppMode, Currency, Transaction } from '../../core/model/model';
 import { UserDataService } from '../../core/user-data/user-data.service';
+import { AlertService } from '../../utils/alert/alert.service';
 import { DateUtils } from '../../utils/date-utils';
 
 @Component({
@@ -10,6 +11,7 @@ import { DateUtils } from '../../utils/date-utils';
 })
 export class AccountDetailComponent implements OnInit, OnDestroy {
   constructor(private userdata: UserDataService,
+              private alertService: AlertService,
               private route: ActivatedRoute,
               private router: Router) {}
 
@@ -18,6 +20,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   updatedBalance: number = undefined;
 
   ngOnInit(): void {
+    this.userdata.localSettings.appMode = AppMode.FINANCE;
     const id = this.route.snapshot.paramMap.get('id');
     if (id != 'new') {
       const callback = () => {
@@ -47,23 +50,24 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
       this.userdata.saveAccount(account)
         .then(() => this.router.navigate(['/account/' + account.id]))
         .catch(error => {
+          this.alertService.error('error.save');
           console.error(error.message);
-          this.router.navigate(['/error']);
         });
     } else {
       if (this.updatedBalance != undefined && account.balance != this.updatedBalance) {
         const transaction = this.createAccountBalanceCorrection(account, this.updatedBalance);
-        this.userdata.saveTransaction(transaction).catch(error => {
-          console.error(error.message);
-          this.router.navigate(['/error']);
-        });
+        this.userdata.saveTransaction(transaction)
+          .catch(error => {
+            this.alertService.error('error.save');
+            console.error(error.message);
+          });
       }
       this.userdata.updateAccount(account)
         .then(() => this.router.navigate(['/account']))
         .catch(error => {
+          this.alertService.error(account.isDeleted ? 'error.delete' : 'error.update');
           account.isDeleted = false;
           console.error(error.message);
-          this.router.navigate(['/error']);
         });
     }
   }

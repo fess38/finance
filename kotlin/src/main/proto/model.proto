@@ -168,6 +168,9 @@ message Note {
     required int64 updated = 5;
     required string name = 6;
     optional string text = 7;
+    optional bool is_pinned = 8 [default = false];
+    optional bool is_archived = 9 [default = false];
+    optional string section = 10;
 }
 
 // new entity
@@ -185,7 +188,7 @@ message Settings {
 }
 
 message LocalSettings {
-    optional AppMode app_mode = 1 [default = FINANCE];
+    optional AppMode app_mode = 1 [default = NOTES];
     optional int64 current_notepad_id = 2 [default = 0];
 }
 
@@ -204,6 +207,12 @@ message RefreshToken {
         FACEBOOK = 2;
         VK = 3;
     }
+}
+
+message File {
+    optional string content_type = 1;
+    optional string extension = 2;
+    optional string data = 3;
 }
 
 message Date_ {

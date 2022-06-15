@@ -48,8 +48,7 @@ describe('TransactionTemplateResolver', () => {
     const expected: Transaction[] = [
       createTransaction(0, '2019-01-02', 1, 2, 0, 0, 3, 40, 5)
     ];
-    expect(resolver.resolveTransactionTemplate(transactionTemplate, transactions))
-      .toEqual(expected);
+    expect(resolver.resolveTransactionTemplate(transactionTemplate, transactions)).toEqual(expected);
   });
 
   it('should resolveTransactionTemplate 2', () => {
@@ -66,8 +65,7 @@ describe('TransactionTemplateResolver', () => {
       createTransaction(0, '2019-01-03', 1, 2, 0, 0, 3, 40, 5),
       createTransaction(0, '2019-01-04', 1, 2, 0, 0, 3, 40, 5)
     ];
-    expect(resolver.resolveTransactionTemplate(transactionTemplate, transactions))
-      .toEqual(expected);
+    expect(resolver.resolveTransactionTemplate(transactionTemplate, transactions)).toEqual(expected);
   });
 
   it('should resolveTransactionTemplate 3', () => {
@@ -86,8 +84,7 @@ describe('TransactionTemplateResolver', () => {
       createTransaction(0, '2019-01-04', 1, 2, 0, 0, 3, 40, 5),
       createTransaction(0, '2019-02-02', 1, 2, 0, 0, 3, 40, 5)
     ];
-    expect(resolver.resolveTransactionTemplate(transactionTemplate, transactions))
-      .toEqual(expected);
+    expect(resolver.resolveTransactionTemplate(transactionTemplate, transactions)).toEqual(expected);
   });
 
   it('should resolveTransactionTemplate 4', () => {
@@ -101,7 +98,6 @@ describe('TransactionTemplateResolver', () => {
     const expected: Transaction[] = [
       createTransaction(0, '2019-03-29', 1, 2, 0, 0, 3, 40, 5)
     ];
-    expect(resolver.resolveTransactionTemplate(transactionTemplate, transactions))
-      .toEqual(expected);
+    expect(resolver.resolveTransactionTemplate(transactionTemplate, transactions)).toEqual(expected);
   });
 });

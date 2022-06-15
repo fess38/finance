@@ -1,6 +1,6 @@
 <div class="clr-row clr-col-12 clr-col-lg-6">
   <form class="clr-form">
-    <div class="clr-form-control clr-row">
+    <div class="clr-form-control clr-row no-top">
       <label>
         <button type="button" class="btn btn-icon btn-link" (click)="viewTransactionTemplates()">
           <cds-icon shape="undo"></cds-icon>
@@ -13,7 +13,7 @@
         </span>
       </label>
     </div>
-    <div class="clr-form-control clr-row">
+    <div class="clr-form-control clr-row no-top">
       <label>{{'common.name' | translate}}</label>
       <div class="clr-control-container">
         <div class="clr-input-wrapper">
@@ -69,22 +69,15 @@
     </div>
     <div>
       <app-transaction-detail [context]="transactionDetailContext"
-                         [transaction]="transaction()"
-                         (notify)="onChildNotify($event)">
+                              [transaction]="transaction()"
+                              (notify)="onChildNotify($event)">
       </app-transaction-detail>
     </div>
-    <div class="clr-form-control clr-row">
-      <button class="btn btn-primary btn-sm btn-block"
-              (click)="update(transactionTemplate)"
-              [disabled]="!isValidForm() || ('' | isReadOnly)">
-        {{'common.save' | translate}}
-      </button>
-      <button class="btn btn-danger btn-sm btn-block"
-              (click)="delete(transactionTemplate)"
-              [hidden]="transactionTemplate | isNewEntity"
-              [disabled]="!isValidForm() || ('' | isReadOnly)">
-        {{'common.delete' | translate}}
-      </button>
-    </div>
+    <action-buttons [disabledSaveButton]="!isValidForm() || ('' | isReadOnly)"
+                    (saveNotifier)="update(transactionTemplate)"
+                    [hiddenDeleteButton]="transactionTemplate | isNewEntity"
+                    [disabledDeleteButton]="!isValidForm() || ('' | isReadOnly)"
+                    (deleteNotifier)="delete(transactionTemplate)">
+    </action-buttons>
   </form>
 </div>

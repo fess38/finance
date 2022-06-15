@@ -1,32 +1,32 @@
 <clr-vertical-nav [clr-nav-level]="2" [clrVerticalNavCollapsible]="false">
   <div class="nav-group-text">
-    <a class="notepad-link" [ngStyle]="{'text-decoration': showNotepads() ? 'underline' : 'none'}"
+    <a class="notepad-link" [ngStyle]="{'text-decoration': showNotepads ? 'underline' : 'none'}"
        (click)="clearState()">
       {{'notepad_sidenav.notepads' | translate}}
     </a>
-    <span *ngIf="showNotes()">&nbsp;/&nbsp;</span>
-    <a *ngIf="showNotes()"
+    <span *ngIf="showNotes">&nbsp;/&nbsp;</span>
+    <a *ngIf="showNotes"
        class="notepad-link"
-       routerLink="/notepad/{{currentNotepad().id}}">
-      {{currentNotepad().name}}
+       routerLink="/notepad/{{currentNotepad.id}}">
+      {{currentNotepad.name}}
     </a>
     <span>&nbsp;</span>
-    <a [routerLink]="[showNotepads() ? '/notepad' : '/note', 'new']">
+    <a [routerLink]="[showNotepads ? '/notepad' : '/note', 'new']">
       <clr-tooltip>
         <cds-icon clrTooltipTrigger shape="plus-circle"></cds-icon>
         <clr-tooltip-content clrPosition="bottom-right" clrSize="md" *clrIfOpen>
-          <span *ngIf="showNotepads()">
+          <span *ngIf="showNotepads">
             {{'notepad_sidenav.add_notepad' | translate}}
           </span>
-          <span *ngIf="showNotes()">
+          <span *ngIf="showNotes">
             {{'notepad_sidenav.add_note' | translate}}
           </span>
         </clr-tooltip-content>
       </clr-tooltip>
     </a>
   </div>
-  <clr-vertical-nav-group-children *ngIf="showNotepads()">
-    <a *ngFor="let notepad of notepads()"
+  <clr-vertical-nav-group-children *ngIf="showNotepads">
+    <a *ngFor="let notepad of notepads"
        class="notepad-link notepad-sidenav-item"
        (click)="updateCurrentNotepadId(notepad)">
       <span class="nav-text">
@@ -34,13 +34,19 @@
       </span>
     </a>
   </clr-vertical-nav-group-children>
-  <clr-vertical-nav-group-children *ngIf="showNotes()">
-    <a *ngFor="let note of notes()"
-       clrVerticalNavLink
-       routerLink="/note/{{note.id}}">
-      <span>
-        {{note.name}}
-      </span>
-    </a>
-  </clr-vertical-nav-group-children>
+  <div *ngIf="showNotes">
+    <div class="nav-divider"></div>
+    <div *ngFor="let value of sectionNotes">
+      <span class="nav-group-text">{{value.section | translate}}</span>
+      <clr-vertical-nav-group-children>
+        <a *ngFor="let note of value.notes"
+           clrVerticalNavLink
+           routerLink="/note/{{note.id}}"
+           routerLinkActive="active">
+          <span>{{note.name}}</span>
+        </a>
+      </clr-vertical-nav-group-children>
+      <div class="nav-divider"></div>
+    </div>
+  </div>
 </clr-vertical-nav>

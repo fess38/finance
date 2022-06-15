@@ -18,21 +18,21 @@ describe('TransactionUtilsService', () => {
 
   it('should be INCOME', () => {
     transactionTemplate.accountIdFrom = -1;
-    expect(Transaction.Type.INCOME).toEqual(TransactionUtils.type(transactionTemplate));
+    expect(TransactionUtils.type(transactionTemplate)).toEqual(Transaction.Type.INCOME);
   });
 
   it('should be EXPENSE', () => {
     transactionTemplate.accountIdTo = -1;
-    expect(Transaction.Type.EXPENSE).toEqual(TransactionUtils.type(transactionTemplate));
+    expect(TransactionUtils.type(transactionTemplate)).toEqual(Transaction.Type.EXPENSE);
   });
 
   it('should be TRANSFER', () => {
-    expect(Transaction.Type.TRANSFER).toEqual(TransactionUtils.type(transactionTemplate));
+    expect(TransactionUtils.type(transactionTemplate)).toEqual(Transaction.Type.TRANSFER);
   });
 
   it('should be UNDEFINED', () => {
     transactionTemplate.accountIdFrom = -1;
     transactionTemplate.accountIdTo = -1;
-    expect(Transaction.Type.UNDEFINED).toEqual(TransactionUtils.type(transactionTemplate));
+    expect(TransactionUtils.type(transactionTemplate)).toEqual(Transaction.Type.UNDEFINED);
   });
 });

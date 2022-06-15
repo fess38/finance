@@ -18,19 +18,26 @@
     "currency": "Currency",
     "date": "Date",
     "delete": "Delete",
+    "delete_confirm": "Delete?",
     "exchange_rate": "Exchange rate",
     "expense": "Expense",
     "income": "Income",
     "name": "Name",
+    "no": "No",
     "price": "Price",
     "save": "Save",
     "security": "Security paper",
     "sub_category": "Subcategory",
-    "use_in_transactions": "Use in transactions"
+    "use_in_transactions": "Use in transactions",
+    "yes": "Yes"
   },
   "error": {
+    "delete": "Delete error",
     "message": "Something goes wrong",
-    "popup_blocked": "Pop up blocked by browser"
+    "popup_blocked": "Pop up blocked by browser",
+    "save": "Save error",
+    "save_file": "Save file error",
+    "update": "Update error"
   },
   "family_member": {
     "add": "Add family member",
@@ -69,12 +76,18 @@
     "exit": "Sign out",
     "finance": "Finance",
     "notes": "Notes",
-    "settings": "Settings"
+    "settings": "Settings",
+    "title": "Notes | Finance"
   },
   "note": {
+    "archive": "Archive",
     "edit": "Edit note",
+    "edit_meta": "Edit attributes",
+    "edit_text": "Edit text",
     "new": "New note",
     "notepad": "Notepad",
+    "pin": "Pin",
+    "section": "Section",
     "text": "Note text",
     "view": "View note"
   },
@@ -84,8 +97,10 @@
     "edit": "Edit notepad"
   },
   "notepad_sidenav": {
+    "archived_notes": "Archive",
     "add_note": "Add note",
     "add_notepad": "Add notepad",
+    "bookmark_notes": "Bookmarks",
     "notepads": "Notepads",
     "notes": "Notes"
   },

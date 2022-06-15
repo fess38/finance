@@ -28,6 +28,9 @@ class Controller {
   @Autowired
   lateinit var validator: MessageValidator<Message>
 
+  @Autowired
+  lateinit var s3Service: S3Service
+
   @GetMapping("next_id")
   fun nextId(@RequestParam("amount", required = false) amount: Int?): ResponseEntity<Any> {
     var httpStatus: HttpStatus = HttpStatus.OK
@@ -215,6 +218,21 @@ class Controller {
 
   @PostMapping("note/save")
   fun save(@RequestBody value: Note) = saveMessage(value)
+
+  @PostMapping("file/save")
+  fun save(@RequestBody file: File): ResponseEntity<Any> {
+    var httpStatus: HttpStatus = HttpStatus.OK
+    var imageUrl = StringValue.getDefaultInstance()
+
+    try {
+      imageUrl = s3Service.save(file)
+    } catch (e: Exception) {
+      httpStatus = HttpStatus.INTERNAL_SERVER_ERROR
+      log.info {"Unable to save [image]: ${e.message}"}
+    }
+
+    return ResponseEntity(imageUrl, httpStatus)
+  }
 
   // new entity
 

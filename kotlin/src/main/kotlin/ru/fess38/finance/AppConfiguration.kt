@@ -1,5 +1,9 @@
 package ru.fess38.finance
 
+import com.amazonaws.auth.AWSStaticCredentialsProvider
+import com.amazonaws.auth.BasicAWSCredentials
+import com.amazonaws.client.builder.AwsClientBuilder
+import com.amazonaws.services.s3.AmazonS3ClientBuilder
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
@@ -82,6 +86,18 @@ class AppConfiguration {
   fun messageValidator(messageService: MessageService): MessageValidator<Message> {
     return CompositeValidator(messageService)
   }
+
+  @Bean
+  fun s3Client(config: Config) = AmazonS3ClientBuilder.standard()
+    .withCredentials(
+      AWSStaticCredentialsProvider(
+        BasicAWSCredentials(config.getString("s3.access_key"), config.getString("s3.secret_key"),)
+      )
+    )
+    .withEndpointConfiguration(
+      AwsClientBuilder.EndpointConfiguration(config.getString("s3.endpoint"), config.getString("s3.region"))
+    )
+    .build()!!
 }
 
 fun Config.toProperties(): Properties {

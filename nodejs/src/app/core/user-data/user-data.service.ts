@@ -3,13 +3,15 @@ import { Title } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import { del, get, set } from 'idb-keyval';
 import { Long } from 'protobufjs';
-import { AsyncSubject, Subscription } from 'rxjs';
+import { AsyncSubject, BehaviorSubject, Subscription } from 'rxjs';
 import { HttpService } from '../../utils/http.service';
 import {
-  Account, AppMode, Category, Currency, DataStorage, FamilyMember, IdHolder, LocalSettings, Note, Notepad, Security,
+  Account, Category, Currency, DataStorage, FamilyMember, File, IdHolder, LocalSettings, Note, Notepad, Security,
   SecurityTransaction, Settings, SubCategory, Transaction, TransactionTemplate
 } from '../model/model';
+import { google } from '../model/wrappers';
 import { UserDataEnricherService } from './user-data-enricher.service';
+import StringValue = google.protobuf.StringValue;
 import Language = Settings.Language;
 
 @Injectable()
@@ -21,13 +23,18 @@ export class UserDataService {
   }
 
   private enricher = new UserDataEnricherService();
-  private isInit = new AsyncSubject<boolean>();
+  private isInit = new AsyncSubject<void>();
   private ds = new DataStorage();
+  private dsSubject = new BehaviorSubject<void>(null);
   private isReadOnly_ = true;
   localSettings = new LocalSettings();
 
-  subscribeOnInit(callback): Subscription {
+  subscribeOnInit(callback: () => void): Subscription {
     return this.isInit.subscribe(() => callback());
+  }
+
+  subscribeOnDataUpdate(callback: () => void): Subscription {
+    return this.dsSubject.subscribe(() => callback());
   }
 
   isReadOnly(): boolean {
@@ -47,7 +54,7 @@ export class UserDataService {
     get('ts')
       .then(ts => {
         const modifiedAfter = (ts as number - 3600 * 1000) || 0;
-        return this.http.get('/api/data/storage/get?ts=' + modifiedAfter, 30000);
+        return this.http.get(`/api/data/storage/get?ts=${modifiedAfter}`, 600000);
       })
       .then(data => {
         const newDataStorage = DataStorage.decode(data);
@@ -57,7 +64,7 @@ export class UserDataService {
         this.isReadOnly_ = false;
         set('ts', new Date().getTime());
       })
-      .catch(error => {
+      .catch((error: Error) => {
         console.error(error.message);
         catchCallback();
       });
@@ -65,8 +72,9 @@ export class UserDataService {
 
   private setInit(): void {
     this.enricher.enrich(this.ds);
-    this.isInit.next(true);
+    this.isInit.next();
     this.isInit.complete();
+    this.dsSubject.next();
     this.setDefaultLang();
   }
 
@@ -74,12 +82,12 @@ export class UserDataService {
     if (this.translate) {
       this.translate.setDefaultLang('ru');
       this.translate.use(this.locale());
-      this.setTitle();
+      this.translate.get('main_page.title').subscribe(x => this.titleService.setTitle(x));
     }
   }
 
-  dataStorageJson(): any {
-    let result = new DataStorage(this.ds);
+  dataStorageJson(): Record<string, unknown> {
+    const result = new DataStorage(this.ds);
     result.currencies = [];
     result.settings = null;
     result.idHolder = null;
@@ -88,21 +96,6 @@ export class UserDataService {
 
   locale(): string {
     return Language[this.settings().language].toLowerCase();
-  }
-
-  set appMode(appMode: AppMode) {
-    this.localSettings.appMode = appMode;
-    this.setTitle();
-  }
-
-  private setTitle() {
-    let key = ''
-    if (this.localSettings.appMode == AppMode.FINANCE) {
-      key = 'main_page.finance';
-    } else if (this.localSettings.appMode == AppMode.NOTES) {
-      key = 'main_page.notes';
-    }
-    this.translate.get(key).subscribe(x => this.titleService.setTitle(x));
   }
 
   settings(): Settings {
@@ -216,9 +209,9 @@ export class UserDataService {
     return this.ds.idHolder.from++;
   }
 
-  private async nextIds(idsAmount?: number): Promise<any> {
-    const url = '/api/data/next_id' + (idsAmount ? '?amount=' + idsAmount : '');
-    await this.http.get(url, 30000).then(data => {
+  private async nextIds(idsAmount?: number): Promise<void> {
+    const url = '/api/data/next_id' + (idsAmount ? `?amount=${idsAmount}` : '');
+    await this.http.get(url, 60000).then(data => {
       const newIdHolder = IdHolder.decode(data);
       if (this.isObsoleteIdHolder()) {
         this.ds.idHolder = newIdHolder;
@@ -228,7 +221,7 @@ export class UserDataService {
     });
   }
 
-  async saveDataStorage(ds: DataStorage): Promise<any> {
+  async saveDataStorage(ds: DataStorage): Promise<void> {
     const nextIdSync = () => {
       if (this.isObsoleteIdHolder()) {
         throw new Error('ids out of range');
@@ -353,177 +346,199 @@ export class UserDataService {
     // new entity
 
     await this.http.post('/api/data/storage/save', DataStorage.encode(ds), 600000);
-    await this.refresh();
+    this.refresh();
   }
 
-  async saveAccount(account: Account): Promise<any> {
+  async saveAccount(account: Account): Promise<void> {
     await this.nextId().then(id => account.id = id);
     await this.http.post('/api/data/account/save', Account.encode(account));
     this.ds.accounts.push(account);
     this.updateCache();
   }
 
-  async saveCategory(category: Category): Promise<any> {
+  async saveCategory(category: Category): Promise<void> {
     await this.nextId().then(id => category.id = id);
     await this.http.post('/api/data/category/save', Category.encode(category));
     this.ds.categories.push(category);
     this.updateCache();
   }
 
-  async saveSubCategory(subCategory: SubCategory): Promise<any> {
+  async saveSubCategory(subCategory: SubCategory): Promise<void> {
     await this.nextId().then(id => subCategory.id = id);
     await this.http.post('/api/data/sub_category/save', SubCategory.encode(subCategory));
     this.ds.subCategories.push(subCategory);
     this.updateCache();
   }
 
-  async saveFamilyMember(familyMember: FamilyMember): Promise<any> {
+  async saveFamilyMember(familyMember: FamilyMember): Promise<void> {
     await this.nextId().then(id => familyMember.id = id);
     await this.http.post('/api/data/family_member/save', FamilyMember.encode(familyMember));
     this.ds.familyMembers.push(familyMember);
     this.updateCache();
   }
 
-  async saveTransaction(transaction: Transaction): Promise<any> {
+  async saveTransaction(transaction: Transaction): Promise<void> {
     await this.nextId().then(id => transaction.id = id);
     await this.http.post('/api/data/transaction/save', Transaction.encode(transaction));
     this.ds.transactions.push(transaction);
     this.enricher.enrich(this.ds);
+    this.dsSubject.next();
     this.updateCache();
   }
 
-  async saveTransactionTemplate(transactionTemplate: TransactionTemplate): Promise<any> {
+  async saveTransactionTemplate(transactionTemplate: TransactionTemplate): Promise<void> {
     await this.nextId().then(id => transactionTemplate.id = id);
     await this.http.post('/api/data/transaction_template/save', TransactionTemplate.encode(transactionTemplate));
     this.ds.transactionTemplates.push(transactionTemplate);
     this.enricher.enrich(this.ds);
+    this.dsSubject.next();
     this.updateCache();
   }
 
-  async saveSecurity(security: Security): Promise<any> {
+  async saveSecurity(security: Security): Promise<void> {
     await this.nextId().then(id => security.id = id);
     await this.http.post('/api/data/security/save', Security.encode(security));
     this.ds.securities.push(security);
     this.enricher.enrich(this.ds);
+    this.dsSubject.next();
     this.updateCache();
   }
 
-  async saveSecurityTransaction(securityTransaction: SecurityTransaction): Promise<any> {
+  async saveSecurityTransaction(securityTransaction: SecurityTransaction): Promise<void> {
     await this.nextId().then(id => securityTransaction.id = id);
     await this.http.post('/api/data/security_transaction/save', SecurityTransaction.encode(securityTransaction));
     this.ds.securityTransactions.push(securityTransaction);
     this.enricher.enrich(this.ds);
+    this.dsSubject.next();
     this.updateCache();
   }
 
-  async saveNotepad(notepad: Notepad): Promise<any> {
+  async saveNotepad(notepad: Notepad): Promise<void> {
     await this.nextId().then(id => notepad.id = id);
     await this.http.post('/api/data/notepad/save', Notepad.encode(notepad));
     this.ds.notepads.push(notepad);
     this.enricher.enrich(this.ds);
+    this.dsSubject.next();
     this.updateCache();
   }
 
-  async saveNote(note: Note): Promise<any> {
+  async saveNote(note: Note): Promise<void> {
     await this.nextId().then(id => note.id = id);
     await this.http.post('/api/data/note/save', Note.encode(note));
     this.ds.notes.push(note);
     this.enricher.enrich(this.ds);
+    this.dsSubject.next();
     this.updateCache();
+  }
+
+  saveFile(file: File): Promise<string> {
+    return this.http.post('/api/data/file/save', File.encode(file), 60000)
+      .then(data => StringValue.decode(data).value);
   }
 
   // new entity
 
-  async updateSettings(settings: Settings): Promise<any> {
+  async updateSettings(settings: Settings): Promise<void> {
     this.setDefaultLang();
     await this.http.post('/api/data/settings/update', Settings.encode(settings));
     this.ds.settings = settings;
+    this.dsSubject.next();
     this.updateCache();
   }
 
-  async updateAccount(account: Account): Promise<any> {
+  async updateAccount(account: Account): Promise<void> {
     await this.http.post('/api/data/account/update', Account.encode(account));
     this.ds.accounts = this.ds.accounts.filter(x => x.id != account.id);
     this.ds.accounts.push(account);
+    this.dsSubject.next();
     this.updateCache();
   }
 
-  async updateCategory(category: Category): Promise<any> {
+  async updateCategory(category: Category): Promise<void> {
     await this.http.post('/api/data/category/update', Category.encode(category));
     this.ds.categories = this.ds.categories.filter(x => x.id != category.id);
     this.ds.categories.push(category);
+    this.dsSubject.next();
     this.updateCache();
   }
 
-  async updateSubCategory(subCategory: SubCategory): Promise<any> {
+  async updateSubCategory(subCategory: SubCategory): Promise<void> {
     await this.http.post('/api/data/sub_category/update', SubCategory.encode(subCategory));
     this.ds.subCategories = this.ds.subCategories.filter(x => x.id != subCategory.id);
     this.ds.subCategories.push(subCategory);
+    this.dsSubject.next();
     this.updateCache();
   }
 
-  async updateFamilyMember(familyMember: FamilyMember): Promise<any> {
+  async updateFamilyMember(familyMember: FamilyMember): Promise<void> {
     await this.http.post('/api/data/family_member/update', FamilyMember.encode(familyMember));
     this.ds.familyMembers = this.ds.familyMembers.filter(x => x.id != familyMember.id);
     this.ds.familyMembers.push(familyMember);
+    this.dsSubject.next();
     this.updateCache();
   }
 
-  async updateTransaction(transaction: Transaction): Promise<any> {
+  async updateTransaction(transaction: Transaction): Promise<void> {
     await this.http.post('/api/data/transaction/update', Transaction.encode(transaction));
     this.ds.transactions = this.ds.transactions.filter(x => x.id != transaction.id);
     this.ds.transactions.push(transaction);
     this.enricher.enrich(this.ds);
+    this.dsSubject.next();
     this.updateCache();
   }
 
-  async updateTransactionTemplate(transactionTemplate: TransactionTemplate): Promise<any> {
+  async updateTransactionTemplate(transactionTemplate: TransactionTemplate): Promise<void> {
     await this.http.post('/api/data/transaction_template/update', TransactionTemplate.encode(transactionTemplate));
     this.ds.transactionTemplates = this.ds.transactionTemplates.filter(x => x.id != transactionTemplate.id);
     this.ds.transactionTemplates.push(transactionTemplate);
     this.enricher.enrich(this.ds);
+    this.dsSubject.next();
     this.updateCache();
   }
 
-  async updateSecurity(security: Security): Promise<any> {
+  async updateSecurity(security: Security): Promise<void> {
     await this.http.post('/api/data/security/update', Security.encode(security));
     this.ds.securities = this.ds.securities.filter(x => x.id != security.id);
     this.ds.securities.push(security);
     this.enricher.enrich(this.ds);
+    this.dsSubject.next();
     this.updateCache();
   }
 
-  async updateSecurityTransaction(securityTransaction: SecurityTransaction): Promise<any> {
+  async updateSecurityTransaction(securityTransaction: SecurityTransaction): Promise<void> {
     await this.http.post('/api/data/security_transaction/update', SecurityTransaction.encode(securityTransaction));
     this.ds.securityTransactions = this.ds.securityTransactions.filter(x => x.id != securityTransaction.id);
     this.ds.securityTransactions.push(securityTransaction);
     this.enricher.enrich(this.ds);
+    this.dsSubject.next();
     this.updateCache();
   }
 
-  async updateNotepad(notepad: Notepad): Promise<any> {
+  async updateNotepad(notepad: Notepad): Promise<void> {
     await this.http.post('/api/data/notepad/update', Notepad.encode(notepad));
     this.ds.notepads = this.ds.notepads.filter(x => x.id != notepad.id);
     this.ds.notepads.push(notepad);
     this.enricher.enrich(this.ds);
+    this.dsSubject.next();
     this.updateCache();
   }
 
-  async updateNote(note: Note): Promise<any> {
+  async updateNote(note: Note): Promise<void> {
     await this.http.post('/api/data/note/update', Note.encode(note));
     this.ds.notes = this.ds.notes.filter(x => x.id != note.id);
     this.ds.notes.push(note);
     this.enricher.enrich(this.ds);
+    this.dsSubject.next();
     this.updateCache();
   }
 
   // new entity
 
-  async deleteDataStorage(): Promise<any> {
+  async deleteDataStorage(): Promise<void> {
     await this.http.post('/api/data/storage/delete', Settings.encode(new Settings()), 600000);
     this.ds = new DataStorage();
     await del('ts');
-    await this.refresh();
+    this.refresh();
   }
 
   private updateCache(): void {
