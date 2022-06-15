@@ -432,7 +432,7 @@ export class UserDataService {
   }
 
   saveFile(file: File): Promise<string> {
-    return this.http.post('/api/data/file/save', File.encode(file))
+    return this.http.post('/api/data/file/save', File.encode(file), 60000)
       .then(data => StringValue.decode(data).value);
   }
 
