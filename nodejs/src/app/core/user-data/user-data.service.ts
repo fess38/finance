@@ -99,7 +99,7 @@ export class UserDataService {
   }
 
   settings(): Settings {
-    return this.ds.settings as Settings || new Settings({ language: Language.RU });
+    return this.ds.settings as Settings || new Settings({ language: Language.EN });
   }
 
   currencies(): Currency[] {
