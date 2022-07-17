@@ -4875,7 +4875,7 @@ export const Settings = $root.Settings = (() => {
      * @memberof Settings
      * @instance
      */
-    Settings.prototype.language = 0;
+    Settings.prototype.language = 1;
 
     /**
      * Settings currencyId.
@@ -5030,7 +5030,7 @@ export const Settings = $root.Settings = (() => {
                 object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
             } else
                 object.id = options.longs === String ? "0" : 0;
-            object.language = options.enums === String ? "RU" : 0;
+            object.language = options.enums === String ? "EN" : 1;
             if ($util.Long) {
                 let long = new $util.Long(1, 0, false);
                 object.currencyId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
