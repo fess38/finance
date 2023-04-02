@@ -11,9 +11,6 @@
           "/*.html",
           "/*.js",
           "/*.json"
-        ],
-        "urls": [
-          "https://apis.google.com/js/platform.js"
         ]
       }
     },
@@ -26,6 +23,7 @@
           "/assets/favicon.ico",
           "/assets/favicon-192.png",
           "/assets/favicon-512.png",
+          "/assets/google-login-handler.js",
           "/assets/i18n/en.json",
           "/assets/i18n/ru.json",
           "/assets/**",

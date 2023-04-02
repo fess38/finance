@@ -30,43 +30,32 @@ export class UserDataService {
   localSettings = new LocalSettings();
 
   subscribeOnInit(callback: () => void): Subscription {
-    return this.isInit.subscribe(() => callback());
+    return this.isInit.subscribe(callback);
   }
 
   subscribeOnDataUpdate(callback: () => void): Subscription {
-    return this.dsSubject.subscribe(() => callback());
+    return this.dsSubject.subscribe(callback);
   }
 
   isReadOnly(): boolean {
     return this.isReadOnly_;
   }
 
-  readCache(): void {
-    get('storage').then(dataStorage => {
-      if (dataStorage) {
-        this.ds = this.enricher.merge(this.ds, DataStorage.fromObject(dataStorage));
-        this.setInit();
-      }
-    });
-  }
-
-  refresh(catchCallback = () => {}): void {
+  refresh(callback = () => {}, errorCallback= () => {}): void {
     get('ts')
-      .then(ts => {
+      .then(async ts => {
         const modifiedAfter = (ts as number - 3600 * 1000) || 0;
-        return this.http.get(`/api/data/storage/get?ts=${modifiedAfter}`, 600000);
-      })
-      .then(data => {
-        const newDataStorage = DataStorage.decode(data);
-        this.ds = this.enricher.merge(this.ds, newDataStorage);
-        this.updateCache();
+        const data = await this.http.get(`/api/data/storage/get?ts=${modifiedAfter}`, 600000);
+        this.ds = this.enricher.merge(this.ds, DataStorage.decode(data));
+        await this.updateCache();
         this.setInit();
         this.isReadOnly_ = false;
-        set('ts', new Date().getTime());
+        await set('ts', new Date().getTime());
+        callback();
       })
       .catch((error: Error) => {
         console.error(error.message);
-        catchCallback();
+        errorCallback();
       });
   }
 
@@ -84,14 +73,6 @@ export class UserDataService {
       this.translate.use(this.locale());
       this.translate.get('main_page.title').subscribe(x => this.titleService.setTitle(x));
     }
-  }
-
-  dataStorageJson(): Record<string, unknown> {
-    const result = new DataStorage(this.ds);
-    result.currencies = [];
-    result.settings = null;
-    result.idHolder = null;
-    return DataStorage.toObject(result);
   }
 
   locale(): string {
@@ -353,28 +334,28 @@ export class UserDataService {
     await this.nextId().then(id => account.id = id);
     await this.http.post('/api/data/account/save', Account.encode(account));
     this.ds.accounts.push(account);
-    this.updateCache();
+    await this.updateCache();
   }
 
   async saveCategory(category: Category): Promise<void> {
     await this.nextId().then(id => category.id = id);
     await this.http.post('/api/data/category/save', Category.encode(category));
     this.ds.categories.push(category);
-    this.updateCache();
+    await this.updateCache();
   }
 
   async saveSubCategory(subCategory: SubCategory): Promise<void> {
     await this.nextId().then(id => subCategory.id = id);
     await this.http.post('/api/data/sub_category/save', SubCategory.encode(subCategory));
     this.ds.subCategories.push(subCategory);
-    this.updateCache();
+    await this.updateCache();
   }
 
   async saveFamilyMember(familyMember: FamilyMember): Promise<void> {
     await this.nextId().then(id => familyMember.id = id);
     await this.http.post('/api/data/family_member/save', FamilyMember.encode(familyMember));
     this.ds.familyMembers.push(familyMember);
-    this.updateCache();
+    await this.updateCache();
   }
 
   async saveTransaction(transaction: Transaction): Promise<void> {
@@ -383,7 +364,7 @@ export class UserDataService {
     this.ds.transactions.push(transaction);
     this.enricher.enrich(this.ds);
     this.dsSubject.next();
-    this.updateCache();
+    await this.updateCache();
   }
 
   async saveTransactionTemplate(transactionTemplate: TransactionTemplate): Promise<void> {
@@ -392,7 +373,7 @@ export class UserDataService {
     this.ds.transactionTemplates.push(transactionTemplate);
     this.enricher.enrich(this.ds);
     this.dsSubject.next();
-    this.updateCache();
+    await this.updateCache();
   }
 
   async saveSecurity(security: Security): Promise<void> {
@@ -401,7 +382,7 @@ export class UserDataService {
     this.ds.securities.push(security);
     this.enricher.enrich(this.ds);
     this.dsSubject.next();
-    this.updateCache();
+    await this.updateCache();
   }
 
   async saveSecurityTransaction(securityTransaction: SecurityTransaction): Promise<void> {
@@ -410,7 +391,7 @@ export class UserDataService {
     this.ds.securityTransactions.push(securityTransaction);
     this.enricher.enrich(this.ds);
     this.dsSubject.next();
-    this.updateCache();
+    await this.updateCache();
   }
 
   async saveNotepad(notepad: Notepad): Promise<void> {
@@ -419,7 +400,7 @@ export class UserDataService {
     this.ds.notepads.push(notepad);
     this.enricher.enrich(this.ds);
     this.dsSubject.next();
-    this.updateCache();
+    await this.updateCache();
   }
 
   async saveNote(note: Note): Promise<void> {
@@ -428,10 +409,10 @@ export class UserDataService {
     this.ds.notes.push(note);
     this.enricher.enrich(this.ds);
     this.dsSubject.next();
-    this.updateCache();
+    await this.updateCache();
   }
 
-  saveFile(file: File): Promise<string> {
+  async saveFile(file: File): Promise<string> {
     return this.http.post('/api/data/file/save', File.encode(file), 60000)
       .then(data => StringValue.decode(data).value);
   }
@@ -443,7 +424,7 @@ export class UserDataService {
     await this.http.post('/api/data/settings/update', Settings.encode(settings));
     this.ds.settings = settings;
     this.dsSubject.next();
-    this.updateCache();
+    await this.updateCache();
   }
 
   async updateAccount(account: Account): Promise<void> {
@@ -451,7 +432,7 @@ export class UserDataService {
     this.ds.accounts = this.ds.accounts.filter(x => x.id != account.id);
     this.ds.accounts.push(account);
     this.dsSubject.next();
-    this.updateCache();
+    await this.updateCache();
   }
 
   async updateCategory(category: Category): Promise<void> {
@@ -459,7 +440,7 @@ export class UserDataService {
     this.ds.categories = this.ds.categories.filter(x => x.id != category.id);
     this.ds.categories.push(category);
     this.dsSubject.next();
-    this.updateCache();
+    await this.updateCache();
   }
 
   async updateSubCategory(subCategory: SubCategory): Promise<void> {
@@ -467,7 +448,7 @@ export class UserDataService {
     this.ds.subCategories = this.ds.subCategories.filter(x => x.id != subCategory.id);
     this.ds.subCategories.push(subCategory);
     this.dsSubject.next();
-    this.updateCache();
+    await this.updateCache();
   }
 
   async updateFamilyMember(familyMember: FamilyMember): Promise<void> {
@@ -475,7 +456,7 @@ export class UserDataService {
     this.ds.familyMembers = this.ds.familyMembers.filter(x => x.id != familyMember.id);
     this.ds.familyMembers.push(familyMember);
     this.dsSubject.next();
-    this.updateCache();
+    await this.updateCache();
   }
 
   async updateTransaction(transaction: Transaction): Promise<void> {
@@ -484,7 +465,7 @@ export class UserDataService {
     this.ds.transactions.push(transaction);
     this.enricher.enrich(this.ds);
     this.dsSubject.next();
-    this.updateCache();
+    await this.updateCache();
   }
 
   async updateTransactionTemplate(transactionTemplate: TransactionTemplate): Promise<void> {
@@ -493,7 +474,7 @@ export class UserDataService {
     this.ds.transactionTemplates.push(transactionTemplate);
     this.enricher.enrich(this.ds);
     this.dsSubject.next();
-    this.updateCache();
+    await this.updateCache();
   }
 
   async updateSecurity(security: Security): Promise<void> {
@@ -502,7 +483,7 @@ export class UserDataService {
     this.ds.securities.push(security);
     this.enricher.enrich(this.ds);
     this.dsSubject.next();
-    this.updateCache();
+    await this.updateCache();
   }
 
   async updateSecurityTransaction(securityTransaction: SecurityTransaction): Promise<void> {
@@ -511,7 +492,7 @@ export class UserDataService {
     this.ds.securityTransactions.push(securityTransaction);
     this.enricher.enrich(this.ds);
     this.dsSubject.next();
-    this.updateCache();
+    await this.updateCache();
   }
 
   async updateNotepad(notepad: Notepad): Promise<void> {
@@ -520,7 +501,7 @@ export class UserDataService {
     this.ds.notepads.push(notepad);
     this.enricher.enrich(this.ds);
     this.dsSubject.next();
-    this.updateCache();
+    await this.updateCache();
   }
 
   async updateNote(note: Note): Promise<void> {
@@ -529,19 +510,41 @@ export class UserDataService {
     this.ds.notes.push(note);
     this.enricher.enrich(this.ds);
     this.dsSubject.next();
-    this.updateCache();
+    await this.updateCache();
   }
 
   // new entity
+
+  async readCache(): Promise<void> {
+    const dataStorage = await get('storage');
+    if (dataStorage) {
+      this.ds = this.enricher.merge(this.ds, DataStorage.fromObject(dataStorage));
+      this.setInit();
+    }
+  }
+
+  private async updateCache(): Promise<void> {
+    await set('storage', this.ds.toJSON());
+  }
+
+  dataStorageJson(): Record<string, unknown> {
+    const result = new DataStorage(this.ds);
+    result.currencies = [];
+    result.settings = null;
+    result.idHolder = null;
+    return DataStorage.toObject(result);
+  }
+
+  clearDataStorage(): void {
+    this.isReadOnly_ = true;
+    this.ds = new DataStorage();
+    this.dsSubject.next();
+  }
 
   async deleteDataStorage(): Promise<void> {
     await this.http.post('/api/data/storage/delete', Settings.encode(new Settings()), 600000);
     this.ds = new DataStorage();
     await del('ts');
     this.refresh();
-  }
-
-  private updateCache(): void {
-    set('storage', this.ds.toJSON()).catch(error => console.error(error));
   }
 }
