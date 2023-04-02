@@ -68,8 +68,8 @@ export class TransactionFutureListComponent implements OnInit, OnDestroy {
         this.updateNamedTransactions();
       })
       .catch(error => {
-        this.alertService.error(transaction.isDeleted ? 'error.delete' : 'error.save');
         console.error(error.message);
+        this.alertService.error(transaction.isDeleted ? 'error.delete' : 'error.save');
       });
   }
 

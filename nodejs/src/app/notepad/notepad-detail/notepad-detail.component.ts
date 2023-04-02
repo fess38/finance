@@ -56,16 +56,16 @@ export class NotepadDetailComponent implements OnInit, OnDestroy {
       this.userdata.saveNotepad(notepad)
         .then(() => this.router.navigate(['/notepad/' + notepad.id]))
         .catch(error => {
-          this.alertService.error('error.save');
           console.error(error.message);
+          this.alertService.error('error.save');
         });
     } else {
       this.userdata.updateNotepad(notepad)
         .then(() => this.router.navigate(['/']))
         .catch(error => {
+          console.error(error.message);
           this.alertService.error(notepad.isDeleted ? 'error.delete' : 'error.update');
           notepad.isDeleted = false;
-          console.error(error.message);
         });
     }
   }

@@ -113,16 +113,16 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
           this.transaction.familyMemberId = 0;
         })
         .catch(error => {
-          this.alertService.error('error.save');
           console.error(error.message);
+          this.alertService.error('error.save');
         });
     } else {
       this.userdata.updateTransaction(transaction)
         .then(() => this.router.navigate(['/transaction']))
         .catch(error => {
+          console.error(error.message);
           this.alertService.error(transaction.isDeleted ? 'error.delete' : 'error.update');
           transaction.isDeleted = false;
-          console.error(error.message);
         });
     }
   }
