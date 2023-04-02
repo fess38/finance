@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subscription, concatMap, delay, filter, of, range, takeWhile } from 'rxjs';
 import { AuthService } from '../../auth/auth.service';
 import { AppMode } from '../model/model';
 import { UserDataService } from '../user-data/user-data.service';
@@ -14,17 +14,9 @@ export class MainPageComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
   isOnline = false;
 
-  ngOnInit(): void {
-    let hasActiveAttempt = false;
-    this.userdata.readCache();
-    this.subscription = this.auth.subscribeOnSignIn(
-      () => {
-        hasActiveAttempt = true;
-        this.userdata.refresh(() => hasActiveAttempt = false);
-        this.isOnline = true;
-      },
-      () => hasActiveAttempt
-    );
+  async ngOnInit(): Promise<void> {
+    await this.userdata.readCache();
+    this.subscription = this.auth.subscribeOnSignIn(() => this.refresh());
   }
 
   ngOnDestroy(): void {
@@ -33,11 +25,23 @@ export class MainPageComponent implements OnInit, OnDestroy {
     }
   }
 
+  private refresh(): void {
+    let hasActiveAttempt = false;
+    range(0, 100)
+      .pipe(concatMap((x: number) => of(x).pipe(delay(Math.sqrt(x) * 1000))))
+      .pipe(takeWhile(() => !this.isOnline))
+      .pipe(filter(() => !hasActiveAttempt))
+      .subscribe(() => {
+        hasActiveAttempt = true;
+        this.userdata.refresh(() => this.isOnline = true, () => hasActiveAttempt = false);
+      });
+  }
+
   isFinance(): boolean {
     return this.userdata.localSettings.appMode == AppMode.FINANCE;
   }
 
-  setFinance() {
+  setFinance(): void {
     this.userdata.localSettings.appMode = AppMode.FINANCE;
   }
 
@@ -45,11 +49,13 @@ export class MainPageComponent implements OnInit, OnDestroy {
     return this.userdata.localSettings.appMode == AppMode.NOTES;
   }
 
-  setNotes() {
+  setNotes(): void {
     this.userdata.localSettings.appMode = AppMode.NOTES;
   }
 
-  signout(): void {
+  signOut(): void {
+    this.isOnline = false;
     this.auth.signOut();
+    this.userdata.clearDataStorage();
   }
 }

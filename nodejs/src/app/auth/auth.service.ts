@@ -1,20 +1,17 @@
-/// <reference path="../../../node_modules/@types/gapi/index.d.ts" />
-/// <reference path="../../../node_modules/@types/gapi.auth2/index.d.ts" />
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { clear } from 'idb-keyval';
 import { CookieService } from 'ngx-cookie';
-import { of, range, Subscription } from 'rxjs';
+import { Subject, Subscription, of, range } from 'rxjs';
 import { concatMap, delay, filter, takeWhile } from 'rxjs/operators';
 import { AccessToken, RefreshToken } from '../core/model/model';
 import { google } from '../core/model/wrappers';
 import { AlertService } from '../utils/alert/alert.service';
 import { HttpService } from '../utils/http.service';
+
 import BoolValue = google.protobuf.BoolValue;
 import StringValue = google.protobuf.StringValue;
 import AuthType = RefreshToken.AuthType;
-
-declare let gapi: any;
 
 @Injectable()
 export class AuthService {
@@ -22,43 +19,41 @@ export class AuthService {
               private http: HttpService,
               private router: Router,
               private alertService: AlertService) {
-    range(0, 100)
-      .pipe(concatMap(this.delayFunction))
-      .pipe(filter(() => this.hasToken()))
-      .pipe(takeWhile(() => !this.isSignIn()))
-      .subscribe(() => this.validateToken(this.token()));
+    this.subscribeOnGoogleSignIn();
+    this.subscribeOnValidateToken();
   }
 
-  private loginTryCounter = 0;
+  private tokenKey = 'token';
+  private googleTokenKey = 'g_csrf_token';
   private isValidToken = false;
-  private delayFunction = (x: number) => of(x).pipe(delay(Math.sqrt(x) * 1000));
+  private isSignInSubject = new Subject<void>();
 
-  subscribeOnSignIn(callback, hasActiveAttemptCallback = () => false): Subscription {
-    return range(1, 100)
-      .pipe(concatMap(this.delayFunction))
-      .pipe(filter(() => this.isSignIn() && !hasActiveAttemptCallback()))
-      .pipe(takeWhile(() => !hasActiveAttemptCallback()))
-      .subscribe(() => callback());
+  token(): string {
+    return this.cookie.get(this.tokenKey) || '';
   }
 
   hasToken(): boolean {
     return this.token().length > 0;
   }
 
-  validateToken(token): void {
+  validateToken(token: string, errorCallback = () => {}): void {
     if (!this.hasToken()) {
-      this.cookie.put('token', token);
+      this.cookie.put(this.tokenKey, token);
     }
-    const accessToken = new AccessToken({ value: token });
+
+    const accessToken = new AccessToken({ value: this.token() });
     this.http.post('/api/auth/validate', AccessToken.encode(accessToken))
       .then(data => {
         this.isValidToken = BoolValue.decode(data).value;
         if (!this.isValidToken) {
           this.signOut();
+        } else {
+          this.isSignInSubject.next();
         }
       })
       .catch(error => {
         console.error(error.message);
+        errorCallback();
       });
   }
 
@@ -66,67 +61,76 @@ export class AuthService {
     return this.hasToken() && this.isValidToken;
   }
 
-  signInGoogle(): void {
-    gapi.load('auth2', () => {
-      this.getGoogleClientConfig()
-        .then(clientConfig => gapi.auth2.init(clientConfig).signIn())
-        .then((googleUser: gapi.auth2.GoogleUser) => {
-          const token: string = googleUser.getAuthResponse().id_token;
-          return this.auth(new RefreshToken({ value: token, type: AuthType.GOOGLE }));
-        })
-        .then((accessToken: AccessToken) => {
-          const options = { expires: new Date(accessToken.expired as number) };
-          this.cookie.put('token', accessToken.value, options);
-          this.router.navigate(['']);
-        })
-        .catch(error => {
-          const message: string = error.error;
-          if (message == 'popup_blocked_by_browser') {
-            this.alertService.error('error.popup_blocked');
-          } else if (this.loginTryCounter++ < 1) {
-            this.signInGoogle();
-          } else {
-            this.alertService.error('error.message');
-            console.error(error);
-          }
-        });
-    });
+  async googleClientId(): Promise<string> {
+    return this.http.get('/api/auth/google-client-id')
+      .then(data => StringValue.decode(data).value);
   }
 
-  private getGoogleClientConfig(): Promise<gapi.auth2.ClientConfig> {
-    return this.http.get('/api/auth/google-client-id')
-      .then(data => {
-        return {
-          client_id: StringValue.decode(data).value,
-          fetch_basic_profile: false,
-          scope: 'profile',
-          ux_mode: 'popup'
-        } as gapi.auth2.ClientConfig;
+  private signInGoogle(errorCallback = () => {}): void {
+    const token = this.cookie.get(this.googleTokenKey);
+    const refreshToken = new RefreshToken({ value: token, type: AuthType.GOOGLE });
+
+    this.http.post('/api/auth', RefreshToken.encode(refreshToken))
+      .then(async (data) => {
+        const accessToken = AccessToken.decode(data);
+        const options = { expires: new Date(accessToken.expired) };
+        this.cookie.put(this.tokenKey, accessToken.value, options);
+        this.cookie.remove(this.googleTokenKey);
+        await this.router.navigate(['']);
+      })
+      .catch(error => {
+        console.error(error.message);
+        this.alertService.error('error.message');
+        errorCallback();
       });
   }
 
-  private auth(refreshToken: RefreshToken): Promise<AccessToken> {
-    return this.http.post('/api/auth', RefreshToken.encode(refreshToken))
-      .then(data => AccessToken.decode(data));
-  }
-
   signOut(): void {
-    if (this.hasToken()) {
-      const accessToken = new AccessToken({ value: this.token() });
-      this.http.post('/api/auth/revoke-token', AccessToken.encode(accessToken))
-        .then(() => {
-          this.cookie.remove('token');
-          this.router.navigate(['login']);
-        })
-        .then(() => clear())
-        .catch(error => {
-          this.alertService.error('error.message');
-          console.error(error.message);
-        });
+    if (!this.hasToken()) {
+      return;
     }
+
+    const accessToken = new AccessToken({ value: this.token() });
+    this.http.post('/api/auth/revoke-token', AccessToken.encode(accessToken))
+      .then(async () => {
+        this.isValidToken = false;
+        this.cookie.remove(this.tokenKey);
+        await clear();
+        this.subscribeOnGoogleSignIn();
+        this.subscribeOnValidateToken();
+        await this.router.navigate(['login']);
+      })
+      .catch(error => {
+        console.error(error.message);
+        this.alertService.error('error.message');
+      });
   }
 
-  token(): string {
-    return this.cookie.get('token') || '';
+  subscribeOnSignIn(callback: () => void): Subscription {
+    return this.isSignInSubject.subscribe(callback);
+  }
+
+  private subscribeOnGoogleSignIn(): void {
+    let hasActiveAttempt = false;
+    range(0, 100)
+      .pipe(concatMap((x: number) => of(x).pipe(delay(1000))))
+      .pipe(takeWhile(() => !this.hasToken()))
+      .pipe(filter(() => !hasActiveAttempt && this.cookie.hasKey(this.googleTokenKey)))
+      .subscribe(() => {
+        hasActiveAttempt = true;
+        this.signInGoogle(() => hasActiveAttempt = false);
+      });
+  }
+
+  private subscribeOnValidateToken(): void {
+    let hasActiveAttempt = false;
+    range(0, 100)
+      .pipe(concatMap((x: number) => of(x).pipe(delay(1000))))
+      .pipe(takeWhile(() => !this.isSignIn()))
+      .pipe(filter(() => !hasActiveAttempt && this.hasToken()))
+      .subscribe(() => {
+        hasActiveAttempt = true;
+        this.validateToken(this.token(), () => hasActiveAttempt = false);
+      });
   }
 }

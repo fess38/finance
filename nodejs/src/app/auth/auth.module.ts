@@ -7,11 +7,12 @@ import { HttpService } from '../utils/http.service';
 import { AccessLinkComponent } from './access-link/access-link.component';
 import { AuthGuardService } from './auth-guard.service';
 import { AuthService } from './auth.service';
+import { GoogleLoginComponent } from './login/google-login.component';
 import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
-    AccessLinkComponent, LoginComponent
+    AccessLinkComponent, GoogleLoginComponent, LoginComponent
   ],
   imports: [
     AlertModule, CookieModule.forRoot(), HttpClientModule, TranslateModule
