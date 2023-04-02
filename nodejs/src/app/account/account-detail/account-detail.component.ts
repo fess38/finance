@@ -50,24 +50,24 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
       this.userdata.saveAccount(account)
         .then(() => this.router.navigate(['/account/' + account.id]))
         .catch(error => {
-          this.alertService.error('error.save');
           console.error(error.message);
+          this.alertService.error('error.save');
         });
     } else {
       if (this.updatedBalance != undefined && account.balance != this.updatedBalance) {
         const transaction = this.createAccountBalanceCorrection(account, this.updatedBalance);
         this.userdata.saveTransaction(transaction)
           .catch(error => {
-            this.alertService.error('error.save');
             console.error(error.message);
+            this.alertService.error('error.save');
           });
       }
       this.userdata.updateAccount(account)
         .then(() => this.router.navigate(['/account']))
         .catch(error => {
+          console.error(error.message);
           this.alertService.error(account.isDeleted ? 'error.delete' : 'error.update');
           account.isDeleted = false;
-          console.error(error.message);
         });
     }
   }

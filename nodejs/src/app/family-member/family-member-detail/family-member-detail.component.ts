@@ -44,16 +44,16 @@ export class FamilyMemberDetailComponent implements OnInit, OnDestroy {
       this.userdata.saveFamilyMember(familyMember)
         .then(() => this.router.navigate(['/family_member/' + familyMember.id]))
         .catch(error => {
-          this.alertService.error('error.save');
           console.error(error.message);
+          this.alertService.error('error.save');
         });
     } else {
       this.userdata.updateFamilyMember(familyMember)
         .then(() => this.router.navigate(['/family_member']))
         .catch(error => {
+          console.error(error.message);
           this.alertService.error(familyMember.isDeleted ? 'error.delete' : 'error.update');
           familyMember.isDeleted = false;
-          console.error(error.message);
         });
     }
   }

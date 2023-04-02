@@ -82,16 +82,16 @@ export class TransactionTemplateDetailComponent implements OnInit, OnDestroy {
       this.userdata.saveTransactionTemplate(transactionTemplate)
         .then(() => this.router.navigate(['/transaction_template/' + this.transactionTemplate.id]))
         .catch(error => {
-          this.alertService.error('error.save');
           console.error(error.message);
+          this.alertService.error('error.save');
         });
     } else {
       this.userdata.updateTransactionTemplate(transactionTemplate)
         .then(() => this.router.navigate(['/transaction_template']))
         .catch(error => {
+          console.error(error.message);
           this.alertService.error(transactionTemplate.isDeleted ? 'error.delete' : 'error.update');
           transactionTemplate.isDeleted = false;
-          console.error(error.message);
         });
     }
   }

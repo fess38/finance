@@ -57,17 +57,17 @@ export class SecurityDetailComponent implements OnInit, OnDestroy {
         .then(() => this.userdata.saveSecurity(security))
         .then(() => this.router.navigate(['/security/' + security.id]))
         .catch(error => {
-          this.alertService.error('error.save');
           console.error(error.message);
+          this.alertService.error('error.save');
         });
     } else {
       this.updateSecuritiesExchangeRate(security)
         .then(() => this.userdata.updateSecurity(security))
         .then(() => this.router.navigate(['/security']))
         .catch(error => {
+          console.error(error.message);
           this.alertService.error(security.isDeleted ? 'error.delete' : 'error.update');
           security.isDeleted = false;
-          console.error(error.message);
         });
     }
   }

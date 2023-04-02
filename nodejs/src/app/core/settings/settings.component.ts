@@ -42,8 +42,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   updateSettings() {
     this.userdata.updateSettings(this.settings).catch(error => {
-      this.alertService.error('error.update');
       console.error(error.message);
+      this.alertService.error('error.update');
     });
   }
 
@@ -54,16 +54,17 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.userdata.saveDataStorage(DataStorage.fromObject(JSON.parse(data))).then(() => this.isDataImport = false);
       })
       .catch(error => {
+        console.error(error.message);
         this.alertService.error('error.update');
         this.isDataImport = false;
-        console.error(error.message);
       });
   }
 
   deleteData() {
-    this.userdata.deleteDataStorage().catch(error => {
-      this.alertService.error('error.delete');
-      console.error(error.message);
-    });
+    this.userdata.deleteDataStorage()
+      .catch(error => {
+        console.error(error.message);
+        this.alertService.error('error.delete');
+      });
   }
 }
