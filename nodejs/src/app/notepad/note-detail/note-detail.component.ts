@@ -191,9 +191,9 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
             this.afterChange();
           })
           .catch((error: Error) => {
-            this.alertService.error('error.save_file');
             console.error(error.message);
             console.error(`content type: ${file.contentType}`);
+            this.alertService.error('error.save_file');
           });
       };
       reader.readAsDataURL(items[i].getAsFile());
@@ -229,8 +229,8 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
           this.router.navigate([`/note/${note.id}`]);
         })
         .catch((error: Error) => {
-          this.alertService.error('error.save');
           console.error(error.message);
+          this.alertService.error('error.save');
         });
     } else {
       this.userdata.updateNote(note)
@@ -241,9 +241,9 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
           }
         })
         .catch((error: Error) => {
+          console.error(error.message);
           this.alertService.error(note.isDeleted ? 'error.delete' : 'error.update');
           note.isDeleted = false;
-          console.error(error.message);
         });
     }
   }

@@ -100,16 +100,16 @@ export class SecurityTransactionDetailComponent implements OnInit, OnDestroy {
       this.userdata.saveSecurityTransaction(securityTransaction)
         .then(() => this.router.navigate(['/security_transaction/' + securityTransaction.id]))
         .catch(error => {
-          this.alertService.error('error.save');
           console.error(error.message);
+          this.alertService.error('error.save');
         });
     } else {
       this.userdata.updateSecurityTransaction(securityTransaction)
         .then(() => this.router.navigate(['/security_transaction']))
         .catch(error => {
+          console.error(error.message);
           this.alertService.error(securityTransaction.isDeleted ? 'error.delete' : 'error.update');
           securityTransaction.isDeleted = false;
-          console.error(error.message);
         });
     }
   }
