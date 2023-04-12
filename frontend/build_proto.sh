@@ -12,7 +12,7 @@ node node_modules/protobufjs/cli/bin/pbjs \
   --no-verify \
   --force-number \
   --es6 \
-  ../kotlin/src/main/proto/model.proto
+  ../backend/src/main/proto/model.proto
 
 # build model.d.ts
 node node_modules/protobufjs/cli/bin/pbts -o ${workdir}/model.d.ts ${workdir}/model.js
